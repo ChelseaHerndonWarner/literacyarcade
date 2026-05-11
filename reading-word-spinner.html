@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Sight Word & Phonics Spinner | Literacy Arcade</title>
+  <meta name="description" content="Use this free Literacy Arcade reading word spinner for Science of Reading aligned phonics practice, Fry sight words, Dolch sight words, structured literacy activities, fluency practice, and reading intervention games." />
+  <meta name="keywords" content="sight word spinner, phonics spinner, Fry word games, Dolch games, Science of Reading games, SoR aligned tools, structured literacy activities, literacy wheel spinner, classroom spinner tool, reading intervention games, phonics games, sight word practice, literacy games, fluency practice, teacher tools" />
+  <meta name="author" content="Literacy Arcade" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2EC4B6" />
+  <link rel="canonical" href="https://literacyarcade.com/reading-word-spinner" />
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Literacy Arcade" />
+  <meta property="og:title" content="Free Sight Word & Phonics Spinner | Literacy Arcade" />
+  <meta property="og:description" content="A clean classroom spinner for Fry sight words, Dolch sight words, phonics patterns, structured literacy practice, fluency warm-ups, and reading intervention games." />
+  <meta property="og:url" content="https://literacyarcade.com/reading-word-spinner" />
+  <meta property="og:image" content="https://literacyarcade.com/images/reading-word-spinner-preview.png" />
+  <meta property="og:image:alt" content="Literacy Arcade reading word spinner for phonics and sight word practice" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Sight Word & Phonics Spinner | Literacy Arcade" />
+  <meta name="twitter:description" content="Spin Fry words, Dolch sight words, phonics patterns, and custom word lists with a Science of Reading aligned classroom reading tool." />
+  <meta name="twitter:image" content="https://literacyarcade.com/images/reading-word-spinner-preview.png" />
+  <meta name="twitter:image:alt" content="Classroom phonics and sight word spinner from Literacy Arcade" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Reading Word Spinner",
+    "alternateName": ["Sight Word Spinner", "Phonics Spinner", "Literacy Wheel Spinner"],
+    "url": "https://literacyarcade.com/reading-word-spinner",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "isAccessibleForFree": true,
+    "publisher": {
+      "@type": "Organization",
+      "name": "Literacy Arcade"
+    },
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": ["teacher", "tutor", "reading interventionist", "parent"]
+    },
+    "description": "A free classroom reading spinner for Science of Reading aligned phonics practice, structured literacy activities, Fry sight words, Dolch sight words, fluency practice, and reading intervention games.",
+    "keywords": [
+      "sight word spinner",
+      "phonics spinner",
+      "Fry sight words",
+      "Dolch sight words",
+      "Science of Reading games",
+      "SoR aligned tools",
+      "structured literacy",
+      "phonics games",
+      "fluency practice",
+      "classroom reading tools",
+      "reading intervention games"
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ── Core tool palette — calm instructional, aligned to Literacy Arcade ── */
+      --teal:        #2EC4B6;   /* homepage primary teal */
+      --teal-dk:     #1FA99C;   /* darker teal for hovers/active */
+      --teal-bg:     #EAF8F7;   /* soft mint panel background */
+      --teal-border: #A8DDD9;   /* teal-toned border */
+      --coral:       #FF6B6B;   /* homepage coral accent */
+      --coral-lt:    #FFF0EE;   /* soft coral hover background */
+      --lavender:    #EEE8F8;   /* subtle lavender for Dolch tag */
+      --lavender-dk: #7B5EA7;   /* lavender text */
+      --navy:        #1A1A2E;   /* homepage navy — primary text */
+      --navy-mid:    #4A4A6A;   /* mid navy for secondary text */
+      --navy-lt:     #9090A8;   /* light navy for hints/placeholders */
+      --bg:          #FDFBF7;   /* homepage cream background */
+      --border:      #E8E4F0;   /* soft border */
+      --amber:       #D8BE72;   /* pointer/wheel accent — unchanged */
+      /* Legacy aliases used throughout — mapped to new values */
+      --sage:        var(--teal);
+      --sage-bg:     var(--teal-bg);
+      --sage-dark:   var(--teal-dk);
+      --sage-border: var(--teal-border);
+      --text:        var(--navy);
+      --text-mid:    var(--navy-mid);
+      --text-lt:     var(--navy-lt);
+      --mustard:     var(--amber);
+    }
+
+    body {
+      font-family: 'Lexend', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #app {
+      background: var(--bg);
+      min-height: 100vh;
+      padding: 28px 18px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 1180px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      padding: 8px 0 8px;
+    }
+    h1 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 800;
+      color: var(--text);
+      font-size: clamp(34px, 4vw, 46px);
+      line-height: 1.02;
+      letter-spacing: -1.2px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-lt);
+      font-weight: 600;
+      letter-spacing: 0.1px;
+      margin-top: 8px;
+    }
+
+    /* ── TWO-COLUMN LAYOUT ── */
+    .layout-columns {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(390px, 0.95fr);
+      gap: 30px;
+      align-items: start;
+      width: 100%;
+    }
+    .col-left {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .col-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      position: sticky;
+      top: 20px;
+      padding-top: 8px;
+    }
+
+    /* ── CONTROL PANEL ── */
+    .panel {
+      background: var(--sage-bg);
+      border-radius: 12px;
+      padding: 8px 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: flex-start;
+      width: 100%;
+      border: 1px solid var(--sage-border);
+    }
+    .panel-group { display: flex; flex-direction: column; gap: 3px; }
+    .panel-group > label {
+      font-weight: 700;
+      font-size: 10px;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .tab-row {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--sage-border);
+    }
+    .tab {
+      background: white;
+      border: none;
+      padding: 6px 11px;
+      font-family: 'Lexend', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .tab:not(:last-child) { border-right: 1px solid var(--sage-border); }
+    .tab.active { background: var(--sage); color: white; }
+    .tab:hover:not(.active) { background: var(--teal-bg); }
+
+    select {
+      background: white;
+      border: 1px solid var(--sage-border);
+      border-radius: 8px;
+      padding: 6px 9px;
+      font-family: 'Lexend', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      min-width: 150px;
+    }
+    select:disabled { background: #f5f5f5; color: #bbb; cursor: not-allowed; }
+
+    .badge {
+      background: white;
+      color: var(--text-mid);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid var(--sage-border);
+      align-self: center;
+      white-space: nowrap;
+    }
+    .mute-btn {
+      background: white;
+      border: 1px solid var(--sage-border);
+      border-radius: 8px;
+      padding: 5px 9px;
+      font-size: 15px;
+      cursor: pointer;
+      line-height: 1;
+      align-self: center;
+      transition: background 0.1s;
+    }
+    .mute-btn:hover { background: var(--teal-bg); }
+
+    /* ── ACTION BUTTONS ── */
+    .chips-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-start; }
+    .btn {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-family: 'Lexend', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.1s, background 0.1s;
+    }
+    .btn:hover { transform: scale(1.03); background: var(--teal-bg); }
+    .btn.clr { color: #7a4545; border-color: #d8bcbc; }
+    .btn.clr:hover { background: var(--coral-lt); }
+
+    /* ── INSTRUCTIONAL TEXT ── */
+    .mix-tip {
+      width: 100%;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-mid);
+      background: white;
+      border: 1px solid var(--sage-border);
+      border-radius: 8px;
+      padding: 5px 10px;
+      letter-spacing: 0.1px;
+    }
+    .mix-tip strong { color: var(--sage-dark); font-weight: 700; }
+
+    /* ── WORD BANK ── */
+    .word-bank-outer { width: 100%; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .section-label {
+      font-weight: 700;
+      font-size: 10px;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding-left: 2px;
+    }
+    .section-hint { font-size: 10px; color: var(--text-lt); font-weight: 400; }
+    .word-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      width: 100%;
+      max-height: 135px;
+      overflow-y: auto;
+      padding: 9px;
+      background: var(--sage-bg);
+      border-radius: 8px;
+      border: 1px solid var(--sage-border);
+    }
+    .chip {
+      background: white;
+      color: var(--text);
+      border-radius: 20px;
+      padding: 4px 11px;
+      font-size: 13px;
+      font-family: 'Lexend', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      border: 2px solid var(--border);
+      line-height: 1.3;
+    }
+    .chip:hover { border-color: var(--coral); transform: scale(1.04); }
+    .chip.on-wheel {
+      background: var(--teal-bg);
+      color: var(--teal-dk);
+      border: 2px solid var(--teal);
+      box-shadow: 0 0 0 2px rgba(46,196,182,0.12);
+    }
+    .empty-chips {
+      color: var(--text-lt);
+      font-size: 13px;
+      font-weight: 400;
+      font-style: italic;
+      padding: 8px;
+    }
+
+    /* ── PHONICS SELECTS ── */
+    select optgroup { font-style: normal; font-weight: 700; color: var(--text-mid); }
+
+    /* ── CUSTOM INPUT ── */
+    .custom-wrap { width: 100%; }
+    .custom-textarea {
+      width: 100%; min-height: 60px;
+      border: 1px solid var(--sage-border); border-radius: 8px;
+      padding: 8px 10px; font-family: 'Lexend', sans-serif;
+      font-size: 13px; font-weight: 400; color: var(--text);
+      background: white; resize: vertical; outline: none;
+      transition: border-color 0.15s; line-height: 1.5; display: block; margin-bottom: 6px;
+    }
+    .custom-textarea:focus { border-color: var(--sage); }
+    .custom-textarea::placeholder { color: var(--text-lt); font-style: italic; }
+    .custom-btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .btn-sage { background: var(--sage); color: white; border-color: var(--sage); }
+    .btn-sage:hover { background: var(--sage-dark) !important; }
+
+    /* ── WORDS ON WHEEL SECTION ── */
+    .wheel-words-section {
+      width: 100%;
+      background: white;
+      border: 2px solid var(--sage);
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+    .wheel-words-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 6px; flex-wrap: wrap; gap: 4px;
+    }
+    .wheel-words-title {
+      font-weight: 700; font-size: 10px; color: var(--sage-dark);
+      text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    .wheel-words-count {
+      font-size: 10px; font-weight: 600;
+      background: var(--sage-bg); color: var(--sage-dark);
+      border: 1px solid var(--sage-border);
+      border-radius: 20px; padding: 2px 8px;
+    }
+    .wheel-words-body { display: flex; flex-direction: column; gap: 6px; max-height: 100px; overflow-y: auto; }
+    /* One row per source */
+    .source-group { display: flex; align-items: flex-start; gap: 6px; flex-wrap: wrap; }
+    .source-tag {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; border-radius: 4px;
+      padding: 2px 6px; white-space: nowrap; margin-top: 3px; flex-shrink: 0;
+    }
+    .source-tag.fry    { background: var(--teal-bg);  color: var(--teal-dk); }
+    .source-tag.dolch  { background: var(--lavender);  color: var(--lavender-dk); }
+    .source-tag.custom { background: #FEF5E2;           color: #7a4800; }
+    .source-tag.phonics{ background: var(--teal-bg);   color: var(--teal-dk); }
+    .source-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+    .wheel-chip {
+      background: var(--teal-bg); color: var(--teal-dk);
+      border: 2px solid var(--teal); border-radius: 20px;
+      padding: 2px 7px 2px 9px;
+      font-size: 12px; font-family: 'Lexend', sans-serif; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 3px;
+    }
+    .remove-x {
+      background: none; border: none; color: #b05858;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      padding: 0; line-height: 1; opacity: 0.65; transition: opacity 0.1s;
+      display: flex; align-items: center;
+    }
+    .remove-x:hover { opacity: 1; }
+    .wheel-empty-msg {
+      color: var(--text-lt); font-size: 12px; font-style: italic; font-weight: 400;
+    }
+
+    /* ── WHEEL ── */
+    .wheel-area {
+      position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px;
+      width: 100%;
+    }
+    .pointer {
+      position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 13px solid transparent; border-right: 13px solid transparent;
+      border-top: 26px solid var(--mustard);
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15)); z-index: 10;
+    }
+    #canvas {
+      border-radius: 50%;
+      box-shadow: 0 6px 28px rgba(78,120,90,0.2), 0 2px 8px rgba(0,0,0,0.08);
+      display: block;
+      aspect-ratio: 1;
+      /* size controlled per-mode via data-mode selectors */
+    }
+
+    /* ── SPIN BUTTON ── */
+    .spin-btn {
+      background: var(--sage); border: none; border-radius: 50px; padding: 13px 48px;
+      font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 20px;
+      color: white; cursor: pointer; box-shadow: 0 4px 16px rgba(111,155,122,0.38);
+      transition: transform 0.1s, background 0.1s; width: 100%; max-width: 280px;
+    }
+    .spin-btn:hover { transform: scale(1.04); background: var(--sage-dark); }
+    .spin-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    /* ── WINNER BANNER ── */
+    .winner-banner {
+      display: none; background: var(--sage); border-radius: 12px;
+      padding: 14px 22px; text-align: center; width: 100%;
+    }
+    .winner-banner p { font-weight: 700; color: white; font-size: 15px; }
+    .winner-banner .big-word { font-size: 42px; font-weight: 800; color: white; line-height: 1.1; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(26,26,46,0.48);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      align-items: flex-start; justify-content: center; z-index: 100;
+      padding-top: min(22vh, 150px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-overlay.open ~ #app #canvas,
+    body:has(.modal-overlay.open) #canvas {
+      filter: blur(1.5px) brightness(0.82);
+      transition: filter 0.2s ease;
+    }
+    .modal {
+      background: white; border-radius: 26px; overflow: hidden;
+      width: min(620px, 92vw);
+      box-shadow: 0 22px 70px rgba(0,0,0,0.28);
+      animation: popBounce 0.36s cubic-bezier(.22,1.35,.36,1);
+      transform-origin: center;
+    }
+    @keyframes popBounce {
+      0%   { transform: translateY(18px) scale(0.78); opacity: 0; }
+      62%  { transform: translateY(0) scale(1.055); opacity: 1; }
+      82%  { transform: translateY(0) scale(0.982); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    .modal-header { background: var(--sage); padding: 14px 28px 12px; text-align: center; }
+    .modal-header p { color: white; font-weight: 800; font-size: 20px; }
+    .modal-body { padding: 20px 26px 24px; text-align: center; }
+    .modal-word {
+      /* JS sets --modal-word-size so short words fill the space and long words still fit. */
+      font-size: var(--modal-word-size, clamp(72px, 10vw, 128px));
+      font-weight: 800; color: var(--text); line-height: 1;
+      margin-bottom: 20px; letter-spacing: var(--modal-letter-spacing, -1.5px);
+      white-space: nowrap;
+      max-width: 100%;
+    }
+    .modal-prompt { font-size: 18px; color: var(--text-mid); margin-bottom: 18px; font-weight: 600; }
+    .modal-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .modal-keep {
+      background: white; border: 2px solid var(--sage-border); border-radius: 14px;
+      padding: 15px 30px; font-family: 'Lexend', sans-serif;
+      font-size: 18px; font-weight: 700; color: var(--text); cursor: pointer; transition: background 0.1s, transform 0.1s;
+      min-width: 140px;
+    }
+    .modal-keep:hover { background: var(--sage-bg); transform: scale(1.03); }
+    .modal-remove {
+      background: #b05858; border: none; border-radius: 14px;
+      padding: 15px 30px; font-family: 'Lexend', sans-serif;
+      font-size: 18px; font-weight: 700; color: white; cursor: pointer; transition: background 0.1s, transform 0.1s;
+      min-width: 140px;
+    }
+    .modal-remove:hover { background: #8a3e3e; transform: scale(1.03); }
+
+    #app.modal-active #canvas {
+      filter: blur(1.5px) brightness(0.82);
+      transition: filter 0.2s ease;
+    }
+
+    /* ── CONFETTI ── */
+    #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 200; display: none; }
+
+    /* ── FOOTER ── */
+    footer { margin-top: 6px; font-size: 11px; color: var(--text-lt); text-align: center; padding-bottom: 12px; }
+
+    /* ── SEO CONTENT: available to search engines and assistive tech, hidden visually ── */
+    .seo-copy {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       BUILD / SPIN MODE SYSTEM
+       #app[data-mode="build"]  →  setup dashboard
+       #app[data-mode="spin"]   →  classroom spinner
+    ══════════════════════════════════════════════════════════ */
+
+    /* ── START SPINNING button (visible in Build Mode right col) ── */
+    .start-spin-btn {
+      background: var(--coral); border: none; border-radius: 50px;
+      padding: 11px 28px;
+      font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 15px;
+      color: white; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(255,107,107,0.35);
+      transition: transform 0.12s, background 0.12s, opacity 0.2s;
+      width: 100%; max-width: 280px;
+      display: none; /* shown by JS once ≥1 word exists */
+    }
+    .start-spin-btn:hover { transform: scale(1.04); background: #e05555; }
+
+    /* ── SUMMARY BAR (Spin Mode only) ── */
+    .spin-summary {
+      display: none;
+      width: 100%;
+      background: white;
+      border: 1.5px solid var(--sage-border);
+      border-radius: 12px;
+      padding: 8px 14px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .spin-summary-left {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .spin-word-count {
+      font-weight: 700; font-size: 13px; color: var(--sage-dark);
+      background: var(--teal-bg); border: 1px solid var(--teal-border);
+      border-radius: 20px; padding: 3px 12px; white-space: nowrap;
+    }
+    .spin-summary-right {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .edit-wheel-btn {
+      background: white; border: 1.5px solid var(--sage-border);
+      border-radius: 8px; padding: 5px 14px;
+      font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 600;
+      color: var(--text-mid); cursor: pointer; transition: background 0.1s;
+    }
+    .edit-wheel-btn:hover { background: var(--teal-bg); }
+
+    /* ── BUILD MODE: two-column layout ── */
+    #app[data-mode="build"] .layout-columns {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(390px, 0.95fr);
+      gap: 30px;
+    }
+    #app[data-mode="build"] .col-left { display: flex; }
+    #app[data-mode="build"] #canvas {
+      width: min(390px, 100%) !important;
+      height: min(390px, 100%) !important;
+    }
+    #app[data-mode="build"] .spin-btn { display: none; }
+    #app[data-mode="build"] .spin-summary { display: none; }
+    #app[data-mode="build"] .winner-banner { display: none !important; }
+
+    /* ── SPIN MODE: centred single-column ── */
+    #app[data-mode="spin"] .layout-columns {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    #app[data-mode="spin"] .col-left { display: none; }
+    #app[data-mode="spin"] .col-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 740px;
+      position: static;
+    }
+    #app[data-mode="spin"] #canvas {
+      width: min(640px, 92vw, calc(100vh - 150px)) !important;
+      height: min(640px, 92vw, calc(100vh - 150px)) !important;
+    }
+    #app[data-mode="spin"] .start-spin-btn { display: none !important; }
+    #app[data-mode="spin"] .spin-summary { display: flex; }
+    #app[data-mode="spin"] .spin-btn {
+      display: block;
+      font-size: 24px; padding: 16px 64px;
+      box-shadow: 0 6px 24px rgba(46,196,182,0.4);
+      max-width: 340px;
+    }
+    #app[data-mode="spin"] .header { display: none; }
+    #app[data-mode="spin"] footer  { display: none; }
+
+    /* ── Smooth canvas scale transition ── */
+    #canvas {
+      transition: width 0.35s cubic-bezier(.4,0,.2,1),
+                  height 0.35s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── Empty wheel placeholder ring style ── */
+    .wheel-placeholder-hint {
+      position: absolute;
+      bottom: -32px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; color: var(--text-lt); font-weight: 500;
+      white-space: nowrap; pointer-events: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      #app[data-mode="build"] .layout-columns { grid-template-columns: 1fr; }
+      .col-right { position: static !important; }
+      #app { padding: 18px 14px 24px; gap: 12px; }
+      .header { padding-top: 2px; }
+      h1 { font-size: 30px; letter-spacing: -0.7px; }
+      .subtitle { font-size: 12px; margin-top: 5px; }
+      .tab { padding: 5px 8px; font-size: 11px; }
+      select { min-width: 120px; }
+      .modal-word { font-size: var(--modal-word-size, clamp(54px, 16vw, 82px)); }
+      #app[data-mode="build"] #canvas { width: min(340px, 90vw) !important; height: min(340px, 90vw) !important; }
+      #app[data-mode="spin"]  #canvas { width: min(380px, 92vw) !important; height: min(380px, 92vw) !important; }
+      #app[data-mode="spin"] .spin-btn { font-size: 19px; padding: 14px 40px; }
+    }
+    @media (min-width: 701px) and (max-width: 950px) {
+      #app[data-mode="build"] .layout-columns { grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr); gap: 22px; }
+      #app[data-mode="build"] #canvas { width: min(330px, 100%) !important; height: min(330px, 100%) !important; }
+      #app[data-mode="spin"]  #canvas { width: min(560px, 92vw, calc(100vh - 155px)) !important; height: min(560px, 92vw, calc(100vh - 155px)) !important; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confettiCanvas"></canvas>
+
+<div id="app" data-mode="build">
+  <div class="header">
+    <h1>Reading Word Spinner</h1>
+    <div class="subtitle">Literacy Arcade · Sight Word &amp; Phonics Practice · Mix any lists · No login required</div>
+  </div>
+
+  <!-- ── SPIN MODE SUMMARY BAR (hidden in Build Mode) ── -->
+  <div class="spin-summary" id="spinSummary">
+    <div class="spin-summary-left">
+      <span class="spin-word-count" id="spinWordCount">0 words on wheel</span>
+    </div>
+    <div class="spin-summary-right">
+      <button class="edit-wheel-btn" onclick="enterBuildMode()">✏️ Edit Wheel</button>
+      <button class="mute-btn" id="muteBtnSpin" onclick="toggleMute()" title="Toggle sound">🔊</button>
+      <button class="btn clr" style="padding:4px 10px; font-size:11px;" onclick="clearWheel()">Clear</button>
+    </div>
+  </div>
+
+  <div class="layout-columns">
+    <!-- ══ LEFT COLUMN — word selection controls ══ -->
+    <div class="col-left">
+
+      <!-- Instructional tip -->
+      <div class="mix-tip">
+        <strong>Mix words from any list.</strong> Build quick Science of Reading-aligned phonics, sight word, and fluency practice with one classroom spinner.
+      </div>
+
+      <!-- ── WORD SELECTION PANEL ── -->
+      <div class="panel">
+        <div class="panel-group">
+          <label>Browse Word Lists</label>
+          <div class="tab-row">
+            <button class="tab active" id="tabFry"     onclick="switchTab('fry')">Fry</button>
+            <button class="tab"        id="tabDolch"   onclick="switchTab('dolch')">Dolch</button>
+            <button class="tab"        id="tabPhonics" onclick="switchTab('phonics')">Phonics</button>
+            <button class="tab"        id="tabCustom"  onclick="switchTab('custom')">Custom</button>
+          </div>
+        </div>
+        <div class="panel-group" id="levelGroup">
+          <label>Level</label>
+          <select id="levelSelect" onchange="loadWordBank()"></select>
+        </div>
+        <button class="mute-btn" id="muteBtn" onclick="toggleMute()" title="Toggle sound">🔊</button>
+      </div>
+
+      <!-- Bank action row (hidden on phonics tab) -->
+      <div class="chips-row" id="bankActions">
+        <button class="btn" onclick="selectAll()">Select All</button>
+        <button class="btn" onclick="selectNone()">Deselect All</button>
+      </div>
+
+      <!-- ── WORD BANK (current tab) ── -->
+      <div class="word-bank-outer" id="wordBankOuter">
+        <div class="section-header">
+          <span class="section-label" id="bankLabel">Word Bank</span>
+          <span class="section-hint">Tap to add · tap again to remove</span>
+        </div>
+        <div class="word-chips" id="wordChips"></div>
+      </div>
+
+      <!-- ── PHONICS SELECTS (only on phonics tab) ── -->
+      <div id="phonicsControls" style="display:none; width:100%;">
+        <div class="panel" style="justify-content:flex-start;">
+          <div class="panel-group">
+            <label>Phonics Category</label>
+            <select id="phonicsGroupSelect" onchange="onPhonicsGroupChange()"></select>
+          </div>
+          <div class="panel-group">
+            <label>Pattern</label>
+            <select id="phonicsPatternSelect" onchange="onPhonicsPatternChange()"></select>
+          </div>
+        </div>
+        <!-- Shown before a pattern is chosen; hidden once words load -->
+        <div id="phonicsPrompt" class="mix-tip" style="margin-top:4px;">
+          Choose a <strong>phonics category</strong> and <strong>pattern</strong> above, then click
+          <strong>Load Words</strong> for structured literacy practice words.
+        </div>
+        <div class="chips-row" id="phonicsLoadRow" style="display:none; margin-top:8px;">
+          <button class="btn btn-sage" onclick="loadPhonicsWords()">Load Words</button>
+          <button class="btn" onclick="clearPhonicsSelection()">Clear Selection</button>
+        </div>
+      </div>
+
+      <!-- ── CUSTOM WORDS INPUT (only on custom tab) ── -->
+      <div class="custom-wrap" id="customInput" style="display:none;">
+        <div class="section-header">
+          <span class="section-label">Type or Paste Your Words</span>
+          <span class="section-hint">Commas, spaces, or line breaks all work</span>
+        </div>
+        <textarea id="customTextarea" class="custom-textarea"
+          placeholder="Example: cat bat hat sat&#10;or: cat, bat, hat&#10;or one word per line"></textarea>
+        <div class="custom-btn-row">
+          <button class="btn btn-sage" onclick="addCustomWords()">Add to Wheel</button>
+          <button class="btn clr"      onclick="clearCustomWords()">Clear Custom</button>
+        </div>
+      </div>
+
+      <!-- ── WORDS ON WHEEL — left column bottom ── -->
+      <div class="wheel-words-section">
+        <div class="wheel-words-header">
+          <span class="wheel-words-title">Words on Wheel</span>
+          <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+            <span class="wheel-words-count" id="wheelCount">0 words</span>
+            <button class="btn clr" style="padding:3px 8px; font-size:11px;" onclick="clearWheel()">Clear All</button>
+          </div>
+        </div>
+        <div class="wheel-words-body" id="wheelWordsBody">
+          <span class="wheel-empty-msg">No words yet. Tap any word above to add it to the wheel.</span>
+        </div>
+      </div>
+
+    </div><!-- /col-left -->
+
+    <!-- ══ RIGHT COLUMN — wheel focal point ══ -->
+    <div class="col-right">
+
+      <!-- ── SPINNER ── -->
+      <div class="wheel-area">
+        <div class="pointer"></div>
+        <canvas id="canvas"></canvas>
+      </div>
+
+      <button class="start-spin-btn" id="startSpinBtn" onclick="enterSpinMode()">Start Spinning →</button>
+
+      <button class="spin-btn" id="spinBtn" onclick="spin()">SPIN!</button>
+
+      <div class="winner-banner" id="winnerBanner">
+        <p>Last word standing!</p>
+        <div class="big-word" id="winnerWord"></div>
+        <button class="btn" style="margin-top:10px;background:white;" onclick="clearWheel()">Start Over</button>
+      </div>
+
+    </div><!-- /col-right -->
+  </div><!-- /layout-columns -->
+
+  <section class="seo-copy" aria-label="About this Literacy Arcade reading spinner">
+    <h2>Free Sight Word and Phonics Spinner for Teachers</h2>
+    <p>
+      The Literacy Arcade Reading Word Spinner is a classroom reading tool for phonics practice,
+      sight word practice, Fry sight words, Dolch sight words, fluency practice, and reading
+      intervention games. Teachers, tutors, and reading interventionists can use the literacy wheel
+      spinner for quick Science of Reading aligned warm-ups, structured literacy activities,
+      phonics games, and small-group review.
+    </p>
+    <p>
+      This free phonics spinner supports educator searches for sight word spinner, phonics spinner,
+      Fry word games, Dolch games, Science of Reading games, SoR aligned tools, literacy games,
+      classroom spinner tool, and reading intervention games while keeping the student-facing
+      interface clean, simple, and projector-friendly.
+    </p>
+  </section>
+
+  <footer>Reading Word Spinner &bull; Free Science of Reading-aligned teacher tool &bull; Literacy Arcade</footer>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header"><p>Read this word!</p></div>
+    <div class="modal-body">
+      <div class="modal-word" id="modalWord"></div>
+      <div class="modal-prompt">Can you read it?</div>
+      <div class="modal-btns">
+        <button class="modal-keep"   onclick="closeModal(false)">Keep It</button>
+        <button class="modal-remove" onclick="closeModal(true)">Remove</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── WORD DATA ─────────────────────────────────────────────────────────
+
+const DOLCH = {
+  'Pre-K': ['a','and','away','big','blue','can','come','down','find','for','funny','go','help','here','I','in','is','it','jump','little','look','make','me','my','not','one','play','red','run','said','see','the','three','to','two','up','we','where','yellow','you'],
+  'Kindergarten': ['all','am','are','at','ate','be','black','brown','but','came','did','do','eat','four','get','good','have','he','into','like','must','new','no','now','on','our','out','please','pretty','ran','ride','saw','say','she','so','soon','that','there','they','this','too','under','want','was','well','went','what','white','who','will','with','yes'],
+  'First Grade': ['after','again','an','any','as','ask','by','could','every','fly','from','give','going','had','has','her','him','his','how','just','know','let','live','may','of','old','once','open','over','put','round','some','stop','take','thank','them','then','think','walk','were','when'],
+  'Second Grade': ['always','around','because','been','before','best','both','buy','call','cold','does',"don't",'fast','first','five','found','gave','goes','green','its','made','many','off','or','pull','read','right','sing','sit','sleep','tell','their','these','those','upon','us','use','very','wash','which','why','wish','work','would','write','your'],
+  'Third Grade': ['about','better','bring','carry','clean','cut','done','draw','drink','eight','fall','far','full','got','grow','hold','hot','hurt','if','keep','kind','laugh','light','long','much','myself','never','only','own','pick','seven','shall','show','six','small','start','ten','today','together','try','warm']
+};
+
+const FRY = {
+  '1st 100 Words': ['a','about','all','an','and','are','as','at','be','been','but','by','called','can','come','could','day','did','do','down','each','find','first','for','from','get','go','had','has','have','he','her','him','his','how','I','if','in','into','is','it','like','long','look','made','make','many','may','more','my','no','not','now','number','of','oil','on','one','or','other','out','part','people','said','see','she','sit','so','some','than','that','the','their','them','then','there','these','they','this','time','to','two','up','use','was','water','way','we','were','what','when','which','who','will','with','words','would','write','you','your'],
+  '2nd 100 Words': ['after','again','air','also','America','animal','another','answer','any','around','ask','away','back','because','before','big','boy','came','change','different','does','end','even','follow','form','found','give','good','great','hand','help','here','home','house','just','kind','know','land','large','learn','letter','line','little','live','man','me','means','men','most','mother','move','much','must','name','need','new','off','old','only','our','over','page','picture','place','play','point','put','read','right','same','say','sentence','set','should','show','small','sound','spell','still','study','such','take','tell','things','think','three','through','too','try','turn','us','very','want','well','went','where','why','work','world','years'],
+  '3rd 100 Words': ['above','add','almost','along','always','began','begin','being','below','between','book','both','car','carry','children','city','close','country','cut',"don't",'earth','eat','enough','every','example','eyes','face','family','far','father','feet','few','food','four','girl','got','group','grow','hard','head','hear','high','idea','important','Indian',"it's",'keep','last','late','leave','left','let','life','light','list','might','mile','miss','mountains','near','never','next','night','often','once','open','own','paper','plant','real','river','run','saw','school','sea','second','seem','side','something','sometimes','song','soon','start','state','stop','story','talk','those','thought','together','took','tree','under','until','walk','watch','while','white','without','young'],
+  '4th 100 Words': ['across','against','area','become','best','better','birds','black','body','certain','cold','color','complete','covered','cried',"didn't",'dog','door','draw','during','early','easy','ever','fall','farm','fast','field','figure','fire','fish','five','friends','ground','happened','heard','himself','hold','horse','hours','however','hundred',"I'll",'king','knew','listen','low','map','mark','measure','money','morning','music','north','notice','numeral','order','passed','pattern','piece','plan','problem','products','pulled','questions','reached','red','remember','rock','room','seen','several','ship','short','since','sing','slowly','south','space','stand','step','sun','sure','table','today','told','top','toward','town','travel','true','unit','upon','usually','voice','vowel','war','waves','whole','wind','wood'],
+  '5th 100 Words': ['able','ago','am','among','ball','base','became','behind','boat','box','bring','brought','building','built','cannot','carefully','check','circle','class','clear','common','contain','correct','course','dark','decided','deep','done','dry','English','equation','explain','fact','feel','filled','finally','fine','fly','force','front','full','game','gave','government','green','half','heat','heavy','hot','inches','include','inside','island','known','language','less','machine','material','minutes','note','nothing','noun','object','ocean','oh','pair','person','plane','power','produce','quickly','ran','rest','road','round','rule','scientists','shape','shown','six','size','special','stars','stay','stood','street','strong','surface','system','ten','though','thousands','understand','verb','wait','warm','week','wheels','yes','yet'],
+  '6th 100 Words': ['anything','arms','beautiful','believe','beside','bill','blue','brother',"can't",'cause','cells','center','clothes','dance','describe','developed','difference','direction','discovered','distance','divided','drive','drop','edge','eggs','energy','Europe','exercise','farmers','felt','finished','flowers','forest','general','gone','grass','happy','heart','held','instruments','interest','job','kept','lay','legs','length','love','main','matter','meet','members','million','mind','months','moon','paint','paragraph','past','perhaps','picked','present','probably','race','rain','raised','ready','reason','record','region','represent','return','root','sat','shall','sign','simple','site','sky','soft','square','store','subject','suddenly','sum','summer','syllables','teacher','test','third','train','wall','weather','west','whether','wide','wild','window','winter','wish','written'],
+  '7th 100 Words': ['act','Africa','age','already','although','amount','angle','appear','baby','bear','beat','bed','bottom','bright','broken','build','buy','care','case','cat','century','consonant','copy',"couldn't",'count','cross','dictionary','died','dress','either','everyone','everything','exactly','factors','fight','fingers','floor','fraction','free','French','gold','hair','hill','hole','hope','ice','instead','iron','jumped','killed','lake','laughed','lead',"let's",'lot','melody','metal','method','middle','milk','moment','nation','natural','outside','per','phrase','poor','possible','pounds','pushed','quiet','quite','remain','result','ride','rolled','sail','scale','section','sleep','smiled','snow','soil','solve','someone','son','speak','speed','spring','stone','surprise','tall','temperature','themselves','tiny','trip','type','village','within','wonder'],
+  '8th 100 Words': ['alone','art','bad','bank','bit','break','brown','burning','business','captain','catch','caught','cents','child','choose','clean','climbed','cloud','coast','continued','control','cool','cost','decimal','desert','design','direct','drawing','ears','east','else','engine','England','equal','experiment','express','feeling','fell','flow','foot','garden','gas','glass','God','grew','history','human','hunting','increase','information','itself','joined','key','lady','law','least','lost','maybe','mouth','party','pay','period','plains','please','practice','president','received','report','ring','rise','row','save','seeds','sent','separate','serve','shouted','single','skin','statement','stick','straight','strange','students','suppose','symbols','team','touch','trouble','uncle','valley','visit','wear','whose','wire','woman','wrote','yard',"you're",'yourself'],
+  '9th 100 Words': ['addition','army','bell','belong','block','blood','blow','board','bones','branches','cattle','chief','compare','compound','consider','cook','corner','crops','crowd','current','doctor','dollars','eight','electric','elements','enjoy','entered','except','exciting','expect','famous','fit','flat','fruit','fun','guess','hat','hit','indicate','industry','insects','interesting','Japanese','lie','lifted','loud','major','mall','meat','mine','modern','movement','necessary','observe','park','particular','planets','poem','pole','position','process','property','provide','rather','rhythm','rich','safe','sand','science','sell','send','sense','seven','sharp','shoulder','sight','silent','soldiers','spot','spread','stream','string','suggested','supply','swim','terms','thick','thin','thus','tied','tone','trade','tube','value','wash',"wasn't",'weight','wife','wings',"won't"],
+  '10th 100 Words': ['action','actually','adjective','afraid','agreed','ahead','allow','apple','arrived','born','bought','British','capital','chance','chart','church','column','company','conditions','corn','cotton','cows','create','dead','deal','death','details','determine','difficult','division',"doesn't",'effect','entire','especially','evening','experience','factories','fair','fear','fig','forward','France','fresh','Greek','gun','hoe','huge',"isn't",'led','level','located','march','match','molecules','northern','nose','office','opposite','oxygen','plural','prepared','pretty','printed','radio','repeated','rope','rose','score','seat','settled','shoes','shop','similar','sir','sister','smell','solution','southern','steel','stretched','substances','suffix','sugar','tools','total','track','triangle','truck','underline','various','view','Washington',"we'll",'western','win','women','workers',"wouldn't",'wrong','yellow']
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PHONICS DATABASE
+// Architecture: PHONICS_DB is an array of category GROUPS.
+// Each group has a label (shown in the group dropdown) and a `patterns` object
+// whose keys are the pattern names (shown in the pattern dropdown) and values
+// are the word arrays.
+//
+// This structure is intentionally REUSABLE across Literacy Arcade tools:
+//   - Reading Word Spinner  (this file)
+//   - Digital Reading Flashcards
+//   - Phonics Path Game
+//   - Future orthographic mapping / letterbox tools
+//
+// To add words: fill in the empty arrays below.
+// To add a new pattern: add a new key/array inside the matching group's `patterns`.
+// To add a new group: push a new { label, key, patterns } object to PHONICS_DB.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const PHONICS_DB = [
+
+  // ── SHORT VOWELS ─────────────────────────────────────────────────
+  {
+    label: 'Short Vowels',
+    key: 'short_vowels',
+    patterns: {
+      'Short /a/': ['cat' ,'hat' ,'mat' ,'sat' ,'bat' ,'fat' ,'nap' ,'rat' ,'fan' ,'shack' ,'chat' ,'rack' ,'sack' ,'mash' ,'cash' ,'bath' ,'map' ,'tap' ,'crab' ,'drab' ,'scab' ,'slab' ,'stab' ,'black' ,'crack' ,'smack' ,'snack' ,'snag' ,'flag' ,'glad' ,'track' ,'stack' ,'flap' ,'clap' ,'slap' ,'snap' ,'fact' ,'raft' ,'smash' ,'thrash' ,'trash' ,'brat' ,'flat' ,'vast' ,'brass' ,'trap' ,'brash' ,'clash' ,'crash' ,'flash' ,'slash' ,'shaft' ,'class' ,'glass' ,'grant' ,'plant' ,'slant' ,'flask' ,'blast' ,'scratch' ,'clasp' ,'scalp' ,'splat' ,'strand' ,'stand' ,'bland' ],
+      'Short /e/': ['bed' ,'leg' ,'bet' ,'set' ,'met' ,'den' ,'get' ,'men' ,'hen' ,'red' ,'vet' ,'web' ,'yes' ,'let' ,'ten' ,'jet' ,'beg' ,'wet' ,'bled' ,'fled' ,'shred' ,'sled' ,'sped' ,'smell' ,'spell' ,'swell' ,'bend' ,'lend' ,'mend' ,'send' ,'tend' ,'bent' ,'cent' ,'dent' ,'rent' ,'lent' ,'sent' ,'tent' ,'went' ,'best' ,'nest' ,'pest' ,'rest' ,'test' ,'vest' ,'west' ,'chest' ,'fret' ,'bless' ,'dress' ,'press' ,'left' ,'help' ,'next' ,'blend' ,'spend' ,'trend' ,'spent' ,'stress' ,'slept' ,'crept' ,'strength' ],
+      'Short /i/': ['rip' ,'sip' ,'lip' ,'tip' ,'fig' ,'bid' ,'dip' ,'fit' ,'pig' ,'pit' ,'rid' ,'lid' ,'kid' ,'hit' ,'sit' ,'sick' ,'fin' ,'brick' ,'click' ,'flick' ,'slick' ,'stick' ,'trick' ,'grid' ,'skid' ,'slid' ,'twig' ,'flip' ,'mint' ,'risk' ,'skill' ,'still' ,'thrill' ,'slim' ,'swim' ,'trim' ,'grin' ,'skin' ,'spin' ,'gift' ,'wilt' ,'cling' ,'fling' ,'sling' ,'sting' ,'swing' ,'link' ,'pink' ,'sink' ,'think' ,'hint' ,'shift' ,'skip' ,'spring' ,'string' ,'blink' ,'brink' ,'clink' ,'drink' ,'shrink' ,'stink' ,'print' ,'slink' ,'drift' ,'swift' ,'thrift' ,'brisk' ,'frisk' ,'twist' ,'blimp' ,'crisp' ,'sprint' ,'splint' ,'script' ,'scrimp' ],
+      'Short /o/': ['toss' ,'boss' ,'hog' ,'log' ,'hot' ,'got' ,'pot' ,'mop' ,'job' ,'fog' ,'sob' ,'rob' ,'blob' ,'slob' ,'snob' ,'block' ,'clock' ,'flock' ,'stock' ,'clog' ,'frog' ,'smog' ,'crop' ,'drop' ,'flop' ,'stop' ,'plot' ,'slot' ,'spot' ,'trot' ,'prop' ,'cross' ,'floss' ,'blotch' ,'strong' ,'stomp' ,'frost' ,'splotch' ,'clomp' ,'prompt' ],
+      'Short /u/': ['hut' ,'rut' ,'mud' ,'sub' ,'tub' ,'rub' ,'run' ,'bun' ,'sun' ,'cub' ,'fun' ,'sum' ,'gum' ,'sung' ,'club' ,'shrub' ,'grub' ,'stub' ,'cluck' ,'pluck' ,'stuck' ,'truck' ,'bluff' ,'fluff' ,'gruff' ,'scuff' ,'stuff' ,'drug' ,'plug' ,'shrug' ,'slug' ,'snug' ,'drum' ,'plum' ,'bump' ,'dump' ,'jump' ,'lump' ,'pump' ,'spun' ,'stun' ,'clung' ,'flung' ,'strum' ,'swung' ,'bunk' ,'dunk' ,'junk' ,'sunk' ,'chunk' ,'blush' ,'brush' ,'crush' ,'flush' ,'plush' ,'slush' ,'thrush' ,'spud' ,'grudge' ,'bunch' ,'hunch' ,'lunch' ,'munch' ,'punch' ,'bunt' ,'hunt' ,'punt' ,'runt' ,'plus' ,'bust' ,'dust' ,'just' ,'must' ,'rust' ,'scrub' ,'clump' ,'grump' ,'plump' ,'slump' ,'stump' ,'sprung' ,'strung' ,'shrunk' ,'skunk' ,'crunch' ,'blunt' ,'grunt' ,'thrust' ,'trust' ,'crust' ,'struck' ,'scrunch' ],
+    }
+  },
+
+  // ── LONG /Ā/ ─────────────────────────────────────────────────────
+  {
+    label: 'Long /ā/',
+    key: 'long_a',
+    patterns: {
+      'Long /ā/ — a_e': ['bake' ,'shake' ,'game' ,'chase' ,'shave' ,'brace' ,'grace' ,'place' ,'space' ,'trace' ,'blade' ,'grade' ,'spade' ,'stage' ,'snake' ,'stake' ,'blame' ,'flame' ,'crane' ,'plane' ,'slave' ,'grape' ,'scrape' ,'crate' ,'drake' ,'skate' ,'state' ,'flake' ,'craze' ,'blaze' ,'trade' ,'brake' ],
+      'Long /ā/ — ai': ['sail' ,'tail' ,'maid' ,'jail' ,'pail' ,'rail' ,'rain' ,'main' ,'chain' ,'pain' ,'mail' ,'frail' ,'snail' ,'trail' ,'brain' ,'grain' ,'drain' ,'plain' ,'stain' ,'train' ,'braid' ,'claim' ,'faint' ],
+      'Long /ā/ — ay': ['tray' ,'play' ,'pray' ,'fray' ,'stay' ,'sway' ,'slay' ,'clay' ,'spray' ,'stray' ,'splay' ,'day' ,'say' ,'may' ,'pay' ,'ray' ,'way' ,'hay' ,'bay' ,'lay' ,'gay' ,'jay' ,'okay' ,'away' ,'today' ,'delay' ,'relay' ,'betray' ,'portray' ,'display' ,'hooray' ,'repay' ,'decay' ,'essay' ,'array' ,'pathway' ,'highway' ,'halfway' ,'always' ,'birthday' ,'subway' ,'holiday' ,'crayon' ,'paycheck' ,'daylight' ,'maybe' ,'player' ,'layer' ,'mayor' ,'prayer' ,'payment' ],
+      'Long /ā/ — ea': ['break' ,'steak' ,'great' ],
+      'Long /ā/ — eigh': ['eight' ,'freight' ,'weight' ,'neighbor' ,'sleigh' ],
+      'Long /ā/ — ey': ['they' ,'prey' ,'obey' ,'convey' ,'survey' ],
+    }
+  },
+
+  // ── LONG /Ē/ ─────────────────────────────────────────────────────
+  {
+    label: 'Long /ē/',
+    key: 'long_e',
+    patterns: {
+      'Long /ē/ — e_e': ['theme' ,'these' ,'eve' ,'scheme' ,'gene' ],
+      'Long /ē/ — ee': ['seem' ,'meet' ,'feet' ,'beet' ,'keen' ,'seen' ,'sheep' ,'seed' ,'bleed' ,'breed' ,'creep' ,'greed' ,'speed' ,'steed' ,'sleep' ,'steep' ,'sweep' ,'fleet' ,'greet' ,'sleet' ,'sweet' ,'green' ],
+      'Long /ē/ — ea': ['team' ,'seam' ,'beam' ,'meat' ,'seat' ,'beat' ,'heat' ,'flea' ,'cheap' ,'creak' ,'sneak' ,'speak' ,'steal' ,'cream' ,'dream' ,'steam' ,'treat' ,'feast' ,'clean' ,'creek' ,'least' ,'streak' ,'stream' ,'scream' ,'screech' ],
+      'Long /ē/ — ey': ['key' ,'monkey' ,'hockey' ,'turkey' ,'valley' ,'chimney' ,'pulley' ,'donkey' ,'trolley' ,'parsley' ,'honey' ,'money' ],
+      'Long /ē/ — ie': ['chief' ,'field' ,'brief' ,'yield' ,'shriek' ,'priest' ],
+      'Long /ē/ — y': ['happy' ,'funny' ,'puppy' ,'silly' ,'sunny' ,'windy' ,'candy' ],
+    }
+  },
+
+  // ── LONG /Ī/ ─────────────────────────────────────────────────────
+  {
+    label: 'Long /ī/',
+    key: 'long_i',
+    patterns: {
+      'Long /ī/ — i_e': ['hide' ,'wide' ,'pile' ,'time' ,'fine' ,'ripe' ,'dive' ,'kite' ,'file' ,'bride' ,'glide' ,'pride' ,'slide' ,'crime' ,'grime' ,'prime' ,'slime' ,'brine' ,'shrine' ,'spine' ,'swine' ,'drive' ,'thrive' ,'bribe' ,'tribe' ,'spike' ,'smile' ,'gripe' ,'splice' ,'stride' ,'strive' ,'scribe' ,'strife' ,'strike' ,'stripe' ,'sprite' ],
+      'Long /ī/ — igh': ['light' ,'sight' ,'fight' ,'might' ,'tight' ,'bright' ,'flight' ,'fright' ,'slight' ],
+      'Long /ī/ — ie': ['pie' ,'tie' ,'die' ,'lie' ,'vie' ],
+      'Long /ī/ — i': ['idle' ,'item' ,'idea' ,'pilot' ,'tiger' ,'spider' ,'silent' ,'climate' ,'final' ,'minus' ],
+    }
+  },
+
+  // ── LONG /Ō/ ─────────────────────────────────────────────────────
+  {
+    label: 'Long /ō/',
+    key: 'long_o',
+    patterns: {
+      'Long /ō/ — o_e': ['nose' ,'rose' ,'cove' ,'phone' ,'rode' ,'broke' ,'smoke' ,'spoke' ,'clone' ,'crone' ,'drone' ,'stone' ,'grope' ,'slope' ,'scope' ,'globe' ,'clove' ,'trove' ,'stove' ,'probe' ,'stole' ,'close' ,'drove' ,'stroke' ,'strode' ],
+      'Long /ō/ — oa': ['road' ,'toad' ,'load' ,'soak' ,'coal' ,'goal' ,'foam' ,'soap' ,'goat' ,'coat' ,'moat' ,'cloak' ,'croak' ,'groan' ,'boast' ,'coast' ,'roast' ,'toast' ,'bloat' ,'float' ,'throat' ,'coach' ,'moan' ],
+      'Long /ō/ — ow': ['slow' ,'snow' ,'throw' ,'blow' ,'shown' ,'blown' ,'flown' ,'grown' ,'thrown' ],
+      'Long /ō/ — oe': ['toe' ,'hoe' ,'foe' ,'doe' ,'woe' ,'goes' ,'toes' ,'foes' ],
+      'Long /ō/ — ough': ['though' ,'dough' ,'although' ],
+    }
+  },
+
+  // ── LONG /Ū/ ─────────────────────────────────────────────────────
+  {
+    label: 'Long /ū/',
+    key: 'long_u',
+    patterns: {
+      'Long /ū/ — u_e': ['cube' ,'cute' ,'mule' ,'fume' ,'huge' ,'mute' ,'muse' ,'fuse' ],
+    }
+  },
+
+  // ── LONG /O͞O/ ───────────────────────────────────────────────────
+  {
+    label: 'Long /o͞o/',
+    key: 'long_oo',
+    patterns: {
+      'Long /o͞o/ — oo': ['moon' ,'soon' ,'tool' ,'food' ,'drool' ,'spool' ,'stool' ,'bloom' ,'gloom' ,'groom' ,'spoon' ,'droop' ,'scoop' ,'snoop' ,'swoop' ,'troop' ,'smooth' ,'snooze' ,'proof' ,'broom' ],
+      'Long /o͞o/ — ew': ['stew' ,'crew' ,'threw' ,'grew' ,'screw' ],
+      'Long /o͞o/ — ue': ['blue' ,'true' ,'clue' ,'glue' ],
+      'Long /o͞o/ — ui': ['suit' ,'fruit' ,'bruise' ,'juice' ,'cruise' ],
+      'Long /o͞o/ — ou': ['soup' ,'group' ,'you' ,'youth' ],
+    }
+  },
+
+  // ── VARIANT VOWELS ───────────────────────────────────────────────
+  {
+    label: 'Variant Vowels',
+    key: 'variant_vowels',
+    patterns: {
+      '/aw/ — aw': ['draw' ,'flaw' ,'claw' ,'dawn' ,'hawk' ,'lawn' ,'shawl' ,'drawn' ,'straw' ,'drawl' ,'scrawl' ],
+      '/aw/ — au': ['bawl' ,'fawn' ,'haul' ,'haunt' ,'fraud' ,'fault' ,'vault' ,'flaunt' ],
+      'Short /oo/': ['foot' ,'book' ,'took' ,'shook' ,'cook' ,'look' ,'hook' ,'good' ,'hoof' ,'hood' ,'nook' ,'crook' ,'stood' ,'brook' ],
+      '/oy/ — oi': ['boil' ,'foil' ,'toil' ,'coin' ,'join' ,'void' ,'soil' ,'joint' ,'hoist' ,'joist' ,'moist' ,'spoil' ,'coil' ,'broil' ,'oil' ,'point' ,'poise' ,'noise' ,'voice' ,'choice' ,'poison' ,'appoint' ,'exploit' ,'avoid' ,'anoint' ,'moisture' ,'ointment' ,'loiter' ,'sirloin' ,'turmoil' ],
+      '/oy/ — oy': ['boy' ,'toy' ,'joy' ,'coy' ,'soy' ,'ploy' ,'ahoy' ,'decoy' ,'annoy' ,'enjoy' ,'deploy' ,'employ' ,'destroy' ,'loyal' ,'royal' ,'voyage' ,'oyster' ,'boycott' ,'cowboy' ,'tomboy' ,'corduroy' ],
+      '/ow/ — ou': ['loud' ,'couch' ,'cloud' ,'grouch' ,'hound' ,'crouch' ,'found' ,'mount' ,'count' ],
+      '/ow/ — ow': ['cow' ,'chow' ,'down' ,'plow' ,'howl' ,'fowl' ,'town' ,'brow' ,'gown' ,'frown' ,'clown' ,'brown' ,'drown' ,'crowd' ,'crown' ,'prowl' ,'growl' ],
+    }
+  },
+
+  // ── R-CONTROLLED VOWELS ──────────────────────────────────────────
+  {
+    label: 'R-Controlled Vowels',
+    key: 'r_controlled',
+    patterns: {
+      '/ar/': ['car' ,'far' ,'star' ,'card' ,'harm' ,'mark' ,'sharp' ,'harp' ,'part' ,'mart' ,'cart' ,'dark' ,'park' ,'bark' ,'scarf' ,'smart' ,'spark' ],
+      '/or/ — or': ['horn' ,'born' ,'fork' ,'short' ,'sort' ,'fort' ,'port' ,'storm' ,'spork' ,'sport' ],
+      '/or/ — ore': ['core' ,'shore' ,'more' ,'bore' ,'tore' ,'sore' ,'score' ,'store' ],
+      '/er/ — er': ['her' ,'fern' ,'term' ,'herd' ,'verb' ,'stern' ,'perch' ,'nerve' ,'serve' ,'verse' ,'merge' ,'clerk' ,'jerk' ,'perk' ,'herb' ,'germ' ,'kern' ,'swerve' ,'insert' ,'person' ,'perfect' ,'perhaps' ,'serpent' ,'certain' ,'concern' ,'extern' ,'modern' ,'pattern' ,'butter' ,'sister' ,'winter' ,'summer' ,'ladder' ,'pepper' ,'center' ,'enter' ,'river' ,'silver' ,'tiger' ,'gather' ,'mother' ,'father' ,'other' ,'under' ,'over' ,'cover' ,'water' ,'never' ,'fever' ,'clever' ,'tower' ,'flower' ,'power' ,'wonder' ],
+      '/er/ — ir': ['dirt' ,'birth' ,'shirt' ,'bird' ,'thirst' ,'first' ,'girl' ,'sir' ,'stir' ,'firm' ,'third' ,'fir' ,'whirl' ,'twirl' ,'chirp' ,'squirt' ,'squirm' ,'circle' ,'circus' ,'confirm' ,'birch' ,'dirge' ,'smirk' ,'girth' ,'quirk' ],
+      '/er/ — ur': ['burn' ,'turn' ,'curl' ,'surf' ,'turf' ,'fur' ,'burp' ,'burr' ,'blur' ,'slur' ,'spur' ,'hurt' ,'curd' ,'curb' ,'lurk' ,'purr' ,'nurse' ,'purse' ,'curve' ,'surge' ,'church' ,'burst' ,'blurt' ,'churn' ,'spurt' ,'turkey' ,'turtle' ,'purple' ,'curtain' ,'surprise' ,'sturdy' ,'further' ,'murmur' ,'suburb' ,'urban' ,'urgent' ],
+      '/ear/': ['dear' ,'fear' ,'hear' ,'near' ,'year' ,'beard' ,'clear' ,'cheer' ,'spear' ,'sneer' ,'steer' ,'gear' ,'rear' ,'smear' ],
+      '/air/': ['chair' ,'hair' ,'fair' ,'pair' ,'stair' ,'bear' ,'wear' ,'pear' ,'care' ,'share' ,'glare' ,'square' ,'stare' ],
+      '/ire/': ['fire' ,'tire' ,'wire' ,'hire' ,'admire' ,'entire' ,'inspire' ,'expire' ,'wildfire' ],
+    }
+  },
+
+  // ── DIGRAPHS ─────────────────────────────────────────────────────
+  {
+    label: 'Digraphs',
+    key: 'digraphs',
+    patterns: {
+      'sh': ['blush' ,'brash' ,'brush' ,'cash' ,'clash' ,'crash' ,'crush' ,'flash' ,'flush' ,'mash' ,'plush' ,'shack' ,'shaft' ,'shake' ,'sharp' ,'shave' ,'shawl' ,'sheep' ,'shift' ,'shirt' ,'shook' ,'shore' ,'short' ,'shown' ,'shred' ,'shriek' ,'shrine' ,'shrink' ,'shrub' ,'shrug' ,'shrunk' ,'slash' ,'slush' ,'smash' ,'thrash' ,'thrush' ,'trash' ,'share' ],
+      'ch': ['blotch' ,'bunch' ,'chain' ,'chair' ,'chase' ,'chat' ,'cheap' ,'cheer' ,'chest' ,'chief' ,'chimney' ,'chow' ,'chunk' ,'coach' ,'couch' ,'crouch' ,'crunch' ,'grouch' ,'hunch' ,'lunch' ,'munch' ,'punch' ,'scratch' ,'screech' ,'scrunch' ,'splotch' ],
+      'th': ['although' ,'bath' ,'birth' ,'smooth' ,'strength' ,'they' ,'think' ,'thirst' ,'though' ,'thrash' ,'threw' ,'thrift' ,'thrill' ,'thrive' ,'throat' ,'throw' ,'thrown' ,'thrush' ,'thrust' ,'youth' ],
+      'ph': ['phone' ,'photo' ,'phrase' ,'phony' ,'graph' ,'trophy' ,'orphan' ,'dolphin' ,'alphabet' ,'phonics' ,'phantom' ,'sphere' ,'sphinx' ,'triumph' ,'pharmacy' ,'elephant' ,'phase' ,'physics' ,'nephew' ,'microphone' ,'headphone' ,'saxophone' ,'photograph' ,'paragraph' ,'philosophy' ,'typhoon' ,'prophet' ,'emphasis' ],
+      'wh': ['when' ,'whip' ,'whim' ,'whisk' ,'wheat' ,'while' ,'whale' ],
+      'ck': ['black' ,'block' ,'brick' ,'click' ,'clock' ,'cluck' ,'crack' ,'flick' ,'flock' ,'hockey' ,'pluck' ,'rack' ,'sack' ,'shack' ,'sick' ,'slick' ,'smack' ,'snack' ,'stack' ,'stick' ,'stock' ,'struck' ,'stuck' ,'track' ,'trick' ,'truck' ],
+    }
+  },
+
+  // ── TRIGRAPHS ────────────────────────────────────────────────────
+  {
+    label: 'Trigraphs',
+    key: 'trigraphs',
+    patterns: {
+      '-tch': ['blotch' ,'scratch' ,'splotch' ,'catch' ,'match' ,'fetch' ,'witch' ,'notch' ,'Dutch' ,'patch' ,'sketch' ,'switch' ,'snatch' ,'stretch' ,'thatch' ,'clutch' ],
+      '-dge': ['grudge' ,'bridge' ,'badge' ,'edge' ,'ridge' ,'lodge' ,'fudge' ,'hedge' ,'judge' ,'nudge' ,'pledge' ,'smudge' ,'wedge' ,'budge' ,'dodge' ],
+    }
+  },
+
+  // ── BEGINNING BLENDS ─────────────────────────────────────────────
+  {
+    label: 'Beginning Blends',
+    key: 'blends',
+    patterns: {
+      'R-Blends': ['brace' ,'braid' ,'brain' ,'brake' ,'brash' ,'brass' ,'brat' ,'break' ,'breed' ,'bribe' ,'brick' ,'bride' ,'brief' ,'bright' ,'brine' ,'brink' ,'brisk' ,'broke' ,'brook' ,'broom' ,'brow' ,'brown' ,'brush' ,'crab' ,'crack' ,'crane' ,'crash' ,'crate' ,'craze' ,'creak' ,'cream' ,'creek' ,'creep' ,'crept' ,'crew' ,'crime' ,'crisp' ,'croak' ,'crone' ,'crook' ,'crop' ,'cross' ,'crouch' ,'crowd' ,'crown' ,'crunch' ,'crush' ,'crust' ,'drab' ,'drain' ,'drake' ,'draw' ,'drawl' ,'drawn' ,'dream' ,'dress' ,'drift' ,'drink' ,'drive' ,'drone' ,'drool' ,'droop' ,'drop' ,'drove' ,'drown' ,'drug' ,'drum' ,'frail' ,'fraud' ,'fray' ,'freight' ,'fret' ,'fright' ,'frisk' ,'frog' ,'frost' ,'frown' ,'fruit' ,'grace' ,'grade' ,'grain' ,'grand' ,'grant' ,'grape' ,'great' ,'greed' ,'green' ,'greet' ,'grew' ,'grid' ,'grime' ,'grin' ,'gripe' ,'groan' ,'groom' ,'grope' ,'grouch' ,'group' ,'growl' ,'grown' ,'grub' ,'grudge' ,'gruff' ,'grump' ,'grunt' ,'pray' ,'press' ,'prey' ,'pride' ,'priest' ,'prime' ,'print' ,'probe' ,'prompt' ,'proof' ,'prop' ,'prowl' ,'trace' ,'track' ,'trade' ,'trail' ,'train' ,'trap' ,'trash' ,'tray' ,'treat' ,'trend' ,'tribe' ,'trick' ,'trim' ,'troop' ,'trot' ,'trove' ,'truck' ,'true' ,'trust' ],
+      'L-Blends': ['black' ,'blade' ,'blame' ,'bland' ,'blast' ,'blaze' ,'bled' ,'bleed' ,'blend' ,'bless' ,'blimp' ,'blink' ,'bloat' ,'blob' ,'block' ,'bloom' ,'blotch' ,'blow' ,'blown' ,'blue' ,'bluff' ,'blunt' ,'blush' ,'claim' ,'clap' ,'clash' ,'clasp' ,'class' ,'claw' ,'clay' ,'clean' ,'clear' ,'click' ,'cling' ,'clink' ,'cloak' ,'clock' ,'clog' ,'clomp' ,'clone' ,'close' ,'cloud' ,'clove' ,'clown' ,'club' ,'cluck' ,'clue' ,'clump' ,'clung' ,'flag' ,'flake' ,'flame' ,'flap' ,'flash' ,'flask' ,'flat' ,'flaunt' ,'flaw' ,'flea' ,'fled' ,'fleet' ,'flick' ,'flight' ,'fling' ,'flip' ,'float' ,'flock' ,'flop' ,'floss' ,'flown' ,'fluff' ,'flung' ,'flush' ,'glare' ,'glad' ,'glass' ,'glide' ,'globe' ,'gloom' ,'glue' ,'place' ,'plain' ,'plane' ,'plant' ,'play' ,'plot' ,'plow' ,'pluck' ,'plug' ,'plum' ,'plump' ,'plus' ,'plush' ,'slab' ,'slant' ,'slap' ,'slash' ,'slave' ,'slay' ,'sled' ,'sleep' ,'sleet' ,'sleigh' ,'slept' ,'slick' ,'slid' ,'slide' ,'slight' ,'slim' ,'slime' ,'sling' ,'slink' ,'slob' ,'slope' ,'slot' ,'slow' ,'slug' ,'slump' ,'slush' ],
+      'S-Blends': ['scab' ,'scalp' ,'scarf' ,'scoop' ,'scope' ,'score' ,'scrape' ,'scratch' ,'scrawl' ,'scream' ,'screech' ,'screw' ,'scribe' ,'scrimp' ,'script' ,'scrub' ,'scrunch' ,'scuff' ,'skate' ,'skid' ,'skill' ,'skin' ,'skip' ,'skunk' ,'smack' ,'smart' ,'smash' ,'smell' ,'smile' ,'smog' ,'smoke' ,'smooth' ,'snack' ,'snag' ,'snail' ,'snake' ,'snap' ,'sneak' ,'sneer' ,'snob' ,'snoop' ,'snooze' ,'snow' ,'snug' ,'space' ,'spade' ,'spark' ,'speak' ,'spear' ,'spider' ,'sped' ,'speed' ,'spell' ,'spend' ,'spent' ,'spike' ,'spin' ,'spine' ,'splat' ,'splay' ,'splice' ,'splint' ,'splotch' ,'spoil' ,'spoke' ,'spool' ,'spoon' ,'spork' ,'sport' ,'spot' ,'spray' ,'spring' ,'sprint' ,'sprite' ,'sprung' ,'spud' ,'spun' ,'stab' ,'stack' ,'stage' ,'stain' ,'stair' ,'stake' ,'stand' ,'star' ,'state' ,'stay' ,'steak' ,'steal' ,'steam' ,'steed' ,'steep' ,'steer' ,'stew' ,'stick' ,'still' ,'sting' ,'stink' ,'stock' ,'stole' ,'stomp' ,'stone' ,'stood' ,'stool' ,'stop' ,'store' ,'storm' ,'stove' ,'strand' ,'straw' ,'stray' ,'streak' ,'stream' ,'strength' ,'stress' ,'stride' ,'strife' ,'strike' ,'string' ,'stripe' ,'strive' ,'strode' ,'stroke' ,'strong' ,'struck' ,'strum' ,'strung' ,'stub' ,'stuck' ,'stuff' ,'stump' ,'stun' ,'sway' ,'sweep' ,'sweet' ,'swell' ,'swift' ,'swim' ,'swine' ,'swing' ,'swoop' ,'swung' ],
+      '3-Letter Blends': ['scrape' ,'scratch' ,'scrawl' ,'scream' ,'screech' ,'screw' ,'scribe' ,'scrimp' ,'script' ,'scrub' ,'scrunch' ,'splat' ,'splay' ,'splice' ,'splint' ,'splotch' ,'spray' ,'spring' ,'sprint' ,'sprite' ,'sprung' ,'strand' ,'straw' ,'stray' ,'streak' ,'stream' ,'strength' ,'stress' ,'stride' ,'strife' ,'strike' ,'string' ,'stripe' ,'strive' ,'strode' ,'stroke' ,'strong' ,'struck' ,'strum' ,'strung' ],
+    }
+  },
+
+  // ── ENDING BLENDS ────────────────────────────────────────────────
+  {
+    label: 'Ending Blends',
+    key: 'ending_blends',
+    patterns: {
+      '-nt': ['bent' ,'blunt' ,'bunt' ,'cent' ,'count' ,'dent' ,'faint' ,'flaunt' ,'grant' ,'grunt' ,'haunt' ,'hint' ,'hunt' ,'joint' ,'lent' ,'mint' ,'mount' ,'plant' ,'print' ,'punt' ,'rent' ,'runt' ,'sent' ,'slant' ,'spent' ,'splint' ,'sprint' ,'tent' ,'went' ],
+      '-mp': ['blimp' ,'bump' ,'clomp' ,'clump' ,'dump' ,'grump' ,'jump' ,'lump' ,'plump' ,'pump' ,'scrimp' ,'slump' ,'stomp' ,'stump' ],
+      '-nd': ['bend' ,'bland' ,'blend' ,'found' ,'hound' ,'lend' ,'mend' ,'send' ,'spend' ,'stand' ,'strand' ,'tend' ,'trend' ],
+      '-sk': ['brisk' ,'flask' ,'frisk' ,'risk' ],
+      '-st': ['best' ,'blast' ,'boast' ,'bust' ,'chest' ,'coast' ,'crust' ,'dust' ,'feast' ,'first' ,'frost' ,'hoist' ,'joist' ,'just' ,'least' ,'moist' ,'must' ,'nest' ,'pest' ,'priest' ,'rest' ,'roast' ,'rust' ,'test' ,'thirst' ,'thrust' ,'toast' ,'trust' ,'twist' ,'vast' ,'vest' ,'west' ],
+    }
+  },
+
+  // ── ADVANCED PATTERNS ────────────────────────────────────────────
+  {
+    label: 'Advanced Patterns',
+    key: 'advanced',
+    patterns: {
+      'Hard C': ['cat' ,'cut' ,'class' ,'clap' ,'crop' ,'camp' ,'clock' ,'crust' ,'cap' ,'cod' ,'cub' ,'cot' ,'cave' ,'coat' ,'cube' ,'cold' ,'cord' ,'curl' ,'came' ,'cone' ,'cure' ],
+      'Soft C': ['cent' ,'city' ,'race' ,'ice' ,'face' ,'cell' ,'cereal' ,'circle' ,'pencil' ,'prince' ,'place' ,'space' ,'trace' ,'grace' ,'dance' ,'fence' ,'since' ,'once' ,'twice' ,'mice' ,'price' ,'voice' ,'sauce' ],
+      'Hard G': ['game' ,'glad' ,'grip' ,'grab' ,'grin' ,'globe' ,'grand' ,'green' ,'got' ,'gun' ,'gap' ,'gust' ,'gift' ,'gold' ,'grub' ,'grow' ,'gloom' ,'glide' ,'glow' ],
+      'Soft G': ['gem' ,'giant' ,'gym' ,'cage' ,'page' ,'giraffe' ,'gentle' ,'magic' ,'stage' ,'age' ,'rage' ,'wage' ,'huge' ,'budge' ,'fudge' ,'hedge' ,'lodge' ,'judge' ,'badge' ,'edge' ],
+      'Irregular — -ild': ['wild' ,'child' ,'mild' ],
+      'Irregular — -ind': ['find' ,'kind' ,'mind' ,'blind' ,'bind' ,'grind' ,'wind' ,'rind' ],
+      'Irregular — -old': ['cold' ,'gold' ,'told' ,'sold' ,'fold' ,'bold' ,'hold' ,'mold' ,'old' ,'scold' ],
+      'Irregular — -ost': ['most' ,'post' ,'ghost' ,'host' ],
+      'Irregular — -olt': ['colt' ,'bolt' ,'jolt' ,'molt' ,'volt' ],
+    }
+  },
+
+  // ── SILENT LETTERS ───────────────────────────────────────────────
+  {
+    label: 'Silent Letters',
+    key: 'silent_letters',
+    patterns: {
+      'Silent kn-': ['knot' ,'knock' ,'know' ,'knee' ,'knife' ,'knight' ,'kneel' ,'knit' ,'knew' ,'knob' ,'knack' ,'known' ],
+      'Silent wr-': ['wrap' ,'write' ,'wrong' ,'wrist' ,'wreck' ,'wrote' ,'wring' ,'wrench' ,'wrath' ,'wrestle' ,'written' ,'wrapper' ],
+      'Silent gn-': ['gnaw' ,'gnome' ,'gnat' ,'gnu' ,'gnash' ],
+    }
+  },
+
+  // ── -LE ENDINGS ──────────────────────────────────────────────────
+  {
+    label: '-le Endings',
+    key: 'le_endings',
+    patterns: {
+      '-le Endings': ['table' ,'able' ,'cable' ,'fable' ,'stable' ,'bubble' ,'wobble' ,'gobble' ,'pebble' ,'nibble' ,'riddle' ,'middle' ,'muddle' ,'puddle' ,'handle' ,'candle' ,'bundle' ,'jungle' ,'single' ,'jingle' ,'mingle' ,'tingle' ,'wrinkle' ,'sprinkle' ,'twinkle' ,'little' ,'battle' ,'rattle' ,'cattle' ,'kettle' ,'bottle' ,'puzzle' ,'nozzle' ,'drizzle' ,'sizzle' ,'marble' ,'purple' ,'simple' ,'sample' ,'maple' ,'apple' ,'turtle' ,'circle' ,'pickle' ,'tickle' ,'buckle' ,'muscle' ,'uncle' ,'people' ,'title' ,'noble' ],
+    }
+  },
+
+  // ── -DGE VS -GE ──────────────────────────────────────────────────
+  {
+    label: '-dge vs -ge',
+    key: 'dge_vs_ge',
+    patterns: {
+      '-dge (after short vowel)': ['badge' ,'edge' ,'ridge' ,'lodge' ,'fudge' ,'bridge' ,'hedge' ,'judge' ,'nudge' ,'pledge' ,'smudge' ,'wedge' ,'budge' ,'dodge' ,'grudge' ,'ledge' ,'fidget' ],
+      '-ge (after long vowel or consonant)': ['age' ,'cage' ,'page' ,'rage' ,'sage' ,'wage' ,'stage' ,'huge' ,'urge' ,'surge' ,'merge' ,'purge' ,'hinge' ,'plunge' ,'range' ,'strange' ,'change' ,'mange' ,'charge' ,'large' ,'gorge' ],
+    }
+  },
+
+];
+
+// ── FLAT LOOKUP: PHONICS_DB → flat key→wordArray map (for DATA compatibility)
+// Key format: "groupKey__patternName"
+function buildPhonicsFlat() {
+  const flat = {};
+  PHONICS_DB.forEach(group => {
+    Object.entries(group.patterns).forEach(([patternName, words]) => {
+      flat[group.key + '__' + patternName] = words;
+    });
+  });
+  return flat;
+}
+const PHONICS = buildPhonicsFlat();
+const DATA = { fry: FRY, dolch: DOLCH, phonics: PHONICS };
+
+// ── WHEEL COLORS ──────────────────────────────────────────────────────
+const WHEEL_COLORS = [
+  '#6F9B7A','#5B9EB9','#C8855A','#A89030','#4FA69C',
+  '#8878B8','#B07070','#4A92A8','#78A870','#B09030',
+  '#7098B8','#B07888','#5A9890','#8878A8','#6AA880','#7898A8'
+];
+const CONFETTI_COLORS = ['#8FB89A','#89AFC4','#E7B8A2','#D8BE72','#7FAFA6','#B0A8C8','#C49898'];
+
+// ── SOURCE COLORS for "Words on Wheel" grouping ───────────────────────
+const SOURCE_META = {
+  fry:     { label: 'Fry',    cls: 'fry'    },
+  dolch:   { label: 'Dolch',  cls: 'dolch'  },
+  custom:  { label: 'Custom', cls: 'custom' },
+  phonics: { label: 'Phonics',cls: 'phonics'},
+};
+
+// For phonics entries we store the pattern name as source so the wheel
+// shows "Short /a/" etc. instead of just "Phonics".
+// Entries added from the phonics tab use source = 'phonics:PatternName'
+function phonicsSource() {
+  if (currentTab !== 'phonics') return 'phonics';
+  const patEl = document.getElementById('phonicsPatternSelect');
+  return patEl ? 'phonics:' + patEl.value : 'phonics';
+}
+
+function getSourceMeta(src) {
+  if (src.startsWith('phonics:')) {
+    return { label: src.slice(8), cls: 'phonics' };
+  }
+  return SOURCE_META[src] || { label: src, cls: 'custom' };
+}
+
+// ── HIGH-DPI CANVAS ───────────────────────────────────────────────────
+let VISUAL_SIZE = 420;
+let DPR = Math.min(window.devicePixelRatio || 1, 3);
+
+function getVisualSize() {
+  const canvas = document.getElementById('canvas');
+  // Use the CSS-rendered size (set by min() in CSS), fallback to 420
+  return canvas.getBoundingClientRect().width || VISUAL_SIZE;
+}
+
+function initCanvas() {
+  const canvas = document.getElementById('canvas');
+  VISUAL_SIZE = Math.round(getVisualSize());
+  // Re-check DPR every time so the wheel stays crisp after browser zooms,
+  // projector changes, or moving between regular/retina screens.
+  DPR = Math.min(window.devicePixelRatio || 1, 3);
+  const buf = Math.round(VISUAL_SIZE * DPR);
+  canvas.width = buf;
+  canvas.height = buf;
+  canvas.style.width = VISUAL_SIZE + 'px';
+  canvas.style.height = VISUAL_SIZE + 'px';
+}
+function getCtx() {
+  const ctx = document.getElementById('canvas').getContext('2d');
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  return ctx;
+}
+
+// ── STATE ─────────────────────────────────────────────────────────────
+let currentTab   = 'fry';
+// wheelEntries: [{word, source}] — preserves source for grouping
+let wheelEntries = [];
+let currentAngle = 0;
+let spinning     = false;
+let pendingEntry = null; // {word, source}
+let muted        = false;
+let customWords  = []; // typed/pasted words, persists across tab switches
+
+// Convenience getter
+function wheelWords() { return wheelEntries.map(e => e.word); }
+
+// ── AUDIO ─────────────────────────────────────────────────────────────
+let audioCtx = null, tickScheduler = null, nextTickTime = 0, tickIntervalMs = 70;
+function ensureAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function scheduleOneTick(ctx, when) {
+  const bufSize = Math.floor(ctx.sampleRate * 0.018);
+  const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = (Math.random()*2-1)*Math.pow(1-i/bufSize,6)*0.35;
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1200; bp.Q.value=1.5;
+  const gain = ctx.createGain(); gain.gain.value = muted ? 0 : 0.55;
+  src.connect(bp); bp.connect(gain); gain.connect(ctx.destination); src.start(when);
+}
+function startTicking(ms) {
+  stopTicking(); if (muted) return; ensureAudioCtx();
+  nextTickTime = audioCtx.currentTime + 0.05; tickIntervalMs = ms;
+  tickScheduler = setInterval(() => {
+    if (!audioCtx) return;
+    while (nextTickTime < audioCtx.currentTime + 0.08) {
+      if (!muted) scheduleOneTick(audioCtx, nextTickTime);
+      nextTickTime += tickIntervalMs / 1000;
+    }
+  }, 30);
+}
+function updateTickInterval(ms) { tickIntervalMs = ms; }
+function stopTicking() { if (tickScheduler) { clearInterval(tickScheduler); tickScheduler = null; } }
+function playCelebration() {
+  if (muted) return;
+  try {
+    const ctx = ensureAudioCtx();
+    [523,659,784,1047].forEach((freq,i) => {
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination); o.type='sine'; o.frequency.value=freq;
+      const t=ctx.currentTime+i*0.12;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.08,t+0.04);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.22); o.start(t); o.stop(t+0.25);
+    });
+  } catch(e) {}
+}
+function toggleMute() {
+  muted = !muted;
+  const label = muted ? '🔇' : '🔊';
+  document.getElementById('muteBtn').textContent = label;
+  const mb2 = document.getElementById('muteBtnSpin');
+  if (mb2) mb2.textContent = label;
+  if (!muted && spinning) startTicking(tickIntervalMs);
+}
+
+// ── CONFETTI ──────────────────────────────────────────────────────────
+let confParticles = [], confAnimId = null;
+function launchConfetti() {
+  const cv = document.getElementById('confettiCanvas');
+  cv.style.display = 'block'; cv.width = window.innerWidth; cv.height = window.innerHeight;
+  confParticles = [];
+  for (let i = 0; i < 80; i++) confParticles.push({
+    x:Math.random()*cv.width, y:-10-Math.random()*80,
+    w:6+Math.random()*6, h:8+Math.random()*6,
+    r:Math.random()*Math.PI*2, dr:(Math.random()-0.5)*0.15,
+    vx:(Math.random()-0.5)*2.5, vy:1.8+Math.random()*2.5,
+    color:CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)], op:1
+  });
+  if (confAnimId) cancelAnimationFrame(confAnimId);
+  animateConfetti();
+  setTimeout(() => { if(confAnimId){cancelAnimationFrame(confAnimId);confAnimId=null;} cv.style.display='none'; }, 3000);
+}
+function animateConfetti() {
+  const cv = document.getElementById('confettiCanvas');
+  const ctx = cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height);
+  let alive = false;
+  confParticles.forEach(p => {
+    p.x+=p.vx; p.y+=p.vy; p.r+=p.dr; p.vy+=0.04;
+    if(p.y>cv.height*0.72) p.op=Math.max(0,p.op-0.025);
+    if(p.op>0) alive=true;
+    ctx.save(); ctx.globalAlpha=p.op; ctx.translate(p.x,p.y); ctx.rotate(p.r);
+    ctx.fillStyle=p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+  });
+  if(alive) confAnimId=requestAnimationFrame(animateConfetti);
+  else { cv.style.display='none'; confAnimId=null; }
+}
+
+// ── BUILD / SPIN MODE ─────────────────────────────────────────────────
+let appMode = 'build'; // 'build' | 'spin'
+
+function enterSpinMode() {
+  if (!wheelEntries.length) {
+    alert('Add some words to the wheel first!');
+    return;
+  }
+  appMode = 'spin';
+  document.getElementById('app').dataset.mode = 'spin';
+  // Re-init canvas for larger spin-mode size
+  requestAnimationFrame(() => { initCanvas(); drawWheel(); });
+  updateModeUI();
+}
+
+function enterBuildMode() {
+  appMode = 'build';
+  document.getElementById('app').dataset.mode = 'build';
+  document.getElementById('winnerBanner').style.display = 'none';
+  // Re-init canvas for smaller build-mode preview size
+  requestAnimationFrame(() => { initCanvas(); drawWheel(); });
+  updateModeUI();
+}
+
+function updateModeUI() {
+  const count = wheelEntries.length;
+  const plural = count === 1 ? 'word' : 'words';
+
+  // Summary bar word count
+  document.getElementById('spinWordCount').textContent = `${count} ${plural} on wheel`;
+
+  // Sync both mute buttons
+  const muteLabel = muted ? '🔇' : '🔊';
+  const mb1 = document.getElementById('muteBtn');
+  const mb2 = document.getElementById('muteBtnSpin');
+  if (mb1) mb1.textContent = muteLabel;
+  if (mb2) mb2.textContent = muteLabel;
+
+  // Start Spinning button: show only in build mode when words exist
+  const ssBtn = document.getElementById('startSpinBtn');
+  if (ssBtn) ssBtn.style.display = (appMode === 'build' && count > 0) ? 'block' : 'none';
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  ['fry','dolch','phonics','custom'].forEach(t => {
+    const el = document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
+    if (el) el.classList.toggle('active', t===tab);
+  });
+
+  const levelGroup      = document.getElementById('levelGroup');
+  const phonicsControls = document.getElementById('phonicsControls');
+  const customInput     = document.getElementById('customInput');
+  const wordBankOuter   = document.getElementById('wordBankOuter');
+  const bankActions     = document.getElementById('bankActions');
+
+  // Reset all
+  levelGroup.style.display      = '';
+  phonicsControls.style.display = 'none';
+  customInput.style.display     = 'none';
+  wordBankOuter.style.display   = '';
+  bankActions.style.display     = '';
+
+  if (tab === 'phonics') {
+    levelGroup.style.display      = 'none';
+    phonicsControls.style.display = '';
+    wordBankOuter.style.display   = 'none';  // hide until pattern is loaded
+    bankActions.style.display     = 'none';  // hide Select All / Deselect All
+    populatePhonicsSelects();                // populate dropdowns but don't load words
+    // Reset to prompt state (in case user switched away and back)
+    showPhonicsPrompt();
+  } else if (tab === 'custom') {
+    levelGroup.style.display = 'none';
+    customInput.style.display = '';
+  } else {
+    populateSelect();
+  }
+
+  document.getElementById('bankLabel').textContent =
+    tab === 'custom' ? 'Your Custom Words' :
+    tab === 'fry'    ? 'Fry Word Bank' :
+    tab === 'dolch'  ? 'Dolch Word Bank' : 'Phonics Word Bank';
+
+  if (tab !== 'phonics') loadWordBank();
+}
+
+function populateSelect() {
+  const sel = document.getElementById('levelSelect');
+  sel.disabled = false;
+  sel.innerHTML = Object.keys(DATA[currentTab]).map(k=>`<option value="${k}">${k}</option>`).join('');
+}
+
+// ── PHONICS DROPDOWNS ────────────────────────────────────────────────
+function populatePhonicsSelects() {
+  const groupSel = document.getElementById('phonicsGroupSelect');
+  groupSel.innerHTML = PHONICS_DB.map((g,i) =>
+    `<option value="${i}">${g.label}</option>`
+  ).join('');
+  populatePhonicsPatterns();
+}
+
+// Changing the CATEGORY resets to prompt state (new category = new choice to make)
+function onPhonicsGroupChange() {
+  populatePhonicsPatterns();
+  showPhonicsPrompt();
+}
+
+// Changing the PATTERN within the same category also resets to prompt state
+function onPhonicsPatternChange() {
+  showPhonicsPrompt();
+}
+
+function populatePhonicsPatterns() {
+  const groupIdx = parseInt(document.getElementById('phonicsGroupSelect').value) || 0;
+  const group    = PHONICS_DB[groupIdx];
+  const patSel   = document.getElementById('phonicsPatternSelect');
+  patSel.innerHTML = Object.keys(group.patterns).map(p =>
+    `<option value="${p}">${p}</option>`
+  ).join('');
+}
+
+// Show the "choose a pattern" prompt; hide word bank and action buttons
+function showPhonicsPrompt() {
+  document.getElementById('phonicsPrompt').style.display  = '';
+  document.getElementById('phonicsLoadRow').style.display = '';   // always visible
+  document.getElementById('wordBankOuter').style.display  = 'none';
+  document.getElementById('bankActions').style.display    = 'none';
+  document.getElementById('wordChips').innerHTML          = '';
+}
+
+// Called when the teacher clicks "Load Words"
+function loadPhonicsWords() {
+  document.getElementById('phonicsPrompt').style.display  = 'none';
+  document.getElementById('phonicsLoadRow').style.display = '';
+  document.getElementById('wordBankOuter').style.display  = '';
+  document.getElementById('bankActions').style.display    = '';
+  document.getElementById('bankLabel').textContent        = 'Phonics Word Bank';
+  loadWordBank();
+}
+
+// "Clear Selection" returns to the prompt state without touching wheel contents
+function clearPhonicsSelection() {
+  showPhonicsPrompt();
+}
+
+// Returns the flat PHONICS key for the current phonics selection
+function currentPhonicsKey() {
+  const groupIdx = parseInt(document.getElementById('phonicsGroupSelect').value) || 0;
+  const group    = PHONICS_DB[groupIdx];
+  const pattern  = document.getElementById('phonicsPatternSelect').value;
+  return group.key + '__' + pattern;
+}
+
+function loadWordBank() {
+  const container = document.getElementById('wordChips');
+  container.innerHTML = '';
+
+  let words = [];
+  if (currentTab === 'custom') {
+    words = customWords;
+    if (!words.length) {
+      container.innerHTML = '<span class="empty-chips">Type your words above and click "Add Custom Words to Wheel" — they\'ll go straight onto the wheel.</span>';
+      return;
+    }
+  } else if (currentTab === 'phonics') {
+    const key = currentPhonicsKey();
+    words = PHONICS[key] || [];
+    if (!words.length) {
+      container.innerHTML = '<span class="empty-chips">Word list coming soon for this pattern. Add your own words using the Custom Words tab.</span>';
+      return;
+    }
+  } else {
+    const level = document.getElementById('levelSelect').value;
+    words = DATA[currentTab][level] || [];
+  }
+
+  const ww = wheelWords();
+  words.forEach(w => {
+    const chip = document.createElement('span');
+    chip.className = 'chip' + (ww.includes(w) ? ' on-wheel' : '');
+    chip.textContent = w;
+    chip.dataset.word = w;
+    chip.onclick = () => toggleWord(w, chip);
+    container.appendChild(chip);
+  });
+}
+
+// ── TOGGLE WORD ON/OFF WHEEL ──────────────────────────────────────────
+function toggleWord(w, chip) {
+  const idx = wheelEntries.findIndex(e => e.word === w);
+  if (idx !== -1) {
+    wheelEntries.splice(idx, 1);
+    if (chip) chip.classList.remove('on-wheel');
+  } else {
+    const src = currentTab === 'phonics' ? phonicsSource() : currentTab;
+    wheelEntries.push({ word: w, source: src });
+    if (chip) chip.classList.add('on-wheel');
+  }
+  updateWheelWords();
+  document.getElementById('winnerBanner').style.display = 'none';
+}
+
+function removeEntry(word) {
+  wheelEntries = wheelEntries.filter(e => e.word !== word);
+  // Un-highlight in bank if visible
+  document.querySelectorAll('#wordChips .chip').forEach(c => {
+    if (c.dataset.word === word) c.classList.remove('on-wheel');
+  });
+  updateWheelWords();
+  if (wheelEntries.length === 1) {
+    document.getElementById('winnerWord').textContent = wheelEntries[0].word;
+    document.getElementById('winnerBanner').style.display = 'block';
+  } else if (wheelEntries.length === 0) {
+    document.getElementById('winnerBanner').style.display = 'none';
+  }
+}
+
+function selectAll() {
+  let words;
+  if (currentTab === 'phonics') {
+    words = PHONICS[currentPhonicsKey()] || [];
+  } else if (currentTab === 'custom') {
+    words = customWords;
+  } else {
+    words = DATA[currentTab][document.getElementById('levelSelect').value] || [];
+  }
+  words.forEach(w => {
+    const src = currentTab === 'phonics' ? phonicsSource() : currentTab;
+    if (!wheelEntries.find(e => e.word === w)) wheelEntries.push({ word: w, source: src });
+  });
+  updateWheelWords();
+  document.getElementById('winnerBanner').style.display = 'none';
+  const ww = wheelWords();
+  document.querySelectorAll('#wordChips .chip').forEach(c => {
+    if (ww.includes(c.dataset.word)) c.classList.add('on-wheel');
+  });
+}
+
+function selectNone() {
+  let words;
+  if (currentTab === 'phonics') {
+    words = PHONICS[currentPhonicsKey()] || [];
+  } else if (currentTab === 'custom') {
+    words = customWords;
+  } else {
+    words = DATA[currentTab][document.getElementById('levelSelect').value] || [];
+  }
+  wheelEntries = wheelEntries.filter(e => !words.includes(e.word));
+  updateWheelWords();
+  document.querySelectorAll('#wordChips .chip').forEach(c => c.classList.remove('on-wheel'));
+}
+
+function clearWheel() {
+  wheelEntries = [];
+  updateWheelWords(); // will call enterBuildMode() since wheel is empty + mode check
+  document.getElementById('winnerBanner').style.display = 'none';
+  document.querySelectorAll('#wordChips .chip').forEach(c => c.classList.remove('on-wheel'));
+}
+
+// ── RENDER WORDS ON WHEEL (grouped by source) ─────────────────────────
+function updateWheelWords() {
+  drawWheel();
+  const body = document.getElementById('wheelWordsBody');
+  const count = document.getElementById('wheelCount');
+  count.textContent = wheelEntries.length + (wheelEntries.length === 1 ? ' word' : ' words');
+
+  // If wheel becomes empty while in spin mode, drop back to build mode
+  if (!wheelEntries.length && appMode === 'spin') {
+    enterBuildMode();
+  }
+
+  // Keep summary bar and start-spin button in sync
+  updateModeUI();
+
+  if (!wheelEntries.length) {
+    body.innerHTML = '<span class="wheel-empty-msg">No words yet. Tap any word above to add it to the wheel.</span>';
+    return;
+  }
+
+  // Group by source, preserving insertion order of first appearance
+  const groups = {};
+  const order  = [];
+  wheelEntries.forEach(e => {
+    if (!groups[e.source]) { groups[e.source] = []; order.push(e.source); }
+    groups[e.source].push(e.word);
+  });
+
+  body.innerHTML = '';
+  order.forEach(src => {
+    const meta   = getSourceMeta(src);
+    const row    = document.createElement('div');
+    row.className = 'source-group';
+
+    const tag    = document.createElement('span');
+    tag.className = 'source-tag ' + meta.cls;
+    tag.textContent = meta.label;
+    row.appendChild(tag);
+
+    const chips = document.createElement('div');
+    chips.className = 'source-chips';
+    groups[src].forEach(w => {
+      const chip = document.createElement('span');
+      chip.className = 'wheel-chip';
+      const txt = document.createElement('span'); txt.textContent = w;
+      const btn = document.createElement('button');
+      btn.className = 'remove-x'; btn.innerHTML = '&times;'; btn.title = 'Remove "' + w + '"';
+      btn.onclick = () => removeEntry(w);
+      chip.appendChild(txt); chip.appendChild(btn);
+      chips.appendChild(chip);
+    });
+    row.appendChild(chips);
+    body.appendChild(row);
+  });
+}
+
+// ── CUSTOM WORDS ──────────────────────────────────────────────────────
+function addCustomWords() {
+  const raw = document.getElementById('customTextarea').value;
+  if (!raw.trim()) return;
+  const parsed = raw.split(/[\n,\s]+/).map(w=>w.trim()).filter(w=>w.length>0);
+  parsed.forEach(w => {
+    // Add to custom word bank (deduped)
+    if (!customWords.includes(w)) customWords.push(w);
+    // Add directly to wheel (deduped), tagged as custom
+    if (!wheelEntries.find(e => e.word === w)) {
+      wheelEntries.push({ word: w, source: 'custom' });
+    }
+  });
+  document.getElementById('customTextarea').value = '';
+  document.getElementById('winnerBanner').style.display = 'none';
+  loadWordBank();       // refresh chip display (all chips shown as on-wheel)
+  updateWheelWords();   // refresh grouped wheel section
+}
+
+function clearCustomWords() {
+  wheelEntries = wheelEntries.filter(e => e.source !== 'custom');
+  customWords = [];
+  updateWheelWords();
+  document.getElementById('winnerBanner').style.display = 'none';
+  loadWordBank();
+}
+
+function isSpinModeForLines() {
+  const app = document.getElementById('app');
+  return app && app.dataset.mode === 'spin';
+}
+
+// ── DRAW WHEEL ────────────────────────────────────────────────────────
+const DEMO_WORDS = ['read', 'jump', 'the', 'play', 'look', 'run', 'said', 'big'];
+
+function drawWheel(hi = -1) {
+  const ctx = getCtx();
+  const cx = VISUAL_SIZE/2, cy = VISUAL_SIZE/2, r = VISUAL_SIZE/2 - 10;
+  ctx.clearRect(0, 0, VISUAL_SIZE, VISUAL_SIZE);
+
+  const entries = wheelEntries;
+  if (!entries.length) {
+    // ── Placeholder demo wheel — visible, low-opacity, with a prompt ──
+    const demoN = DEMO_WORDS.length;
+    const demoSlice = (Math.PI*2) / demoN;
+    const DEMO_COLORS = ['#C8E6E4','#D4ECE0','#C8DCF0','#E0D4EC','#F0DCC8','#E0ECC8','#ECE0C8','#D4C8EC'];
+    DEMO_WORDS.forEach((_, i) => {
+      const s = i * demoSlice, e = s + demoSlice;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+      ctx.fillStyle = DEMO_COLORS[i % DEMO_COLORS.length];
+      ctx.globalAlpha = 0.55;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 2; ctx.stroke();
+    });
+    // Demo word labels
+    ctx.globalAlpha = 0.4;
+    ctx.fillStyle = '#4A4A6A'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    DEMO_WORDS.forEach((word, i) => {
+      const mid = i * demoSlice + demoSlice / 2;
+      const tx = cx + Math.cos(mid) * r * 0.62;
+      const ty = cy + Math.sin(mid) * r * 0.62;
+      ctx.save(); ctx.translate(tx, ty);
+      const norm = ((mid % (Math.PI*2)) + Math.PI*2) % (Math.PI*2);
+      ctx.rotate(mid + (norm > Math.PI/2 && norm < Math.PI*1.5 ? Math.PI : 0));
+      ctx.font = `700 ${Math.round(VISUAL_SIZE * 0.038)}px Lexend, sans-serif`;
+      ctx.fillText(word, 0, 0);
+      ctx.restore();
+    });
+    ctx.globalAlpha = 1;
+    // Center hub
+    ctx.beginPath(); ctx.arc(cx,cy,16,0,Math.PI*2);
+    ctx.fillStyle='white'; ctx.fill();
+    ctx.strokeStyle='rgba(160,200,190,0.7)'; ctx.lineWidth=2; ctx.stroke();
+    // Centre prompt text
+    ctx.fillStyle = '#4A6A6A'; ctx.font = `600 ${Math.max(11, Math.round(VISUAL_SIZE * 0.032))}px Lexend, sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('← Tap words to add them', cx, cy - VISUAL_SIZE * 0.1);
+    return;
+  }
+
+  const n = entries.length;
+  const slice = (Math.PI*2)/n;
+
+  entries.forEach((_,i) => {
+    const s = currentAngle + i*slice, e = s+slice;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+    ctx.fillStyle = hi===i ? '#c8b040' : WHEEL_COLORS[i%WHEEL_COLORS.length];
+    ctx.fill(); ctx.strokeStyle='rgba(255,255,255,0.96)'; ctx.lineWidth=isSpinModeForLines()?3:2; ctx.stroke();
+  });
+
+  const isSpinMode = document.getElementById('app').dataset.mode === 'spin';
+  const baseFs = isSpinMode
+    ? (n <= 4 ? 40 : n <= 6 ? 36 : n <= 8 ? 31 : n <= 12 ? 26 : n <= 18 ? 21 : n <= 24 ? 17 : n <= 32 ? 14 : 12)
+    : (n <= 4 ? 22 : n <= 6 ? 20 : n <= 8 ? 18 : n <= 12 ? 15 : n <= 18 ? 12.5 : n <= 24 ? 10.5 : n <= 32 ? 9 : 7.8);
+  const fs = Math.max(isSpinMode ? 11 : 7, Math.min(baseFs, VISUAL_SIZE * (isSpinMode ? 0.067 : 0.052)));
+  const textRadius = r * (isSpinMode ? (n <= 8 ? 0.715 : n <= 12 ? 0.695 : 0.675) : 0.63);
+  const maxW = r * (isSpinMode ? (n <= 8 ? 0.64 : n <= 12 ? 0.58 : 0.52) : 0.52);
+  // Keep the contrast, but reduce blur so projected words look sharper.
+  ctx.shadowColor='rgba(0,0,0,0.34)';
+  ctx.shadowBlur=isSpinMode ? 1.4 : 1;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = isSpinMode ? 1.2 : 0.8;
+  ctx.fillStyle='white'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fontKerning = 'normal';
+
+  entries.forEach((entry,i) => {
+    const word = entry.word;
+    const mid = currentAngle + i*slice + slice/2;
+    const tx = cx + Math.cos(mid)*textRadius;
+    const ty = cy + Math.sin(mid)*textRadius;
+    ctx.save(); ctx.translate(tx,ty);
+    const norm = ((mid%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+    const flip = norm>Math.PI/2 && norm<Math.PI*1.5;
+    ctx.rotate(mid+(flip?Math.PI:0));
+    let fsCur=fs; ctx.font=`800 ${fsCur}px Lexend, sans-serif`;
+    while(fsCur>(isSpinMode?9:6) && ctx.measureText(word).width>maxW) { fsCur-=0.5; ctx.font=`800 ${fsCur}px Lexend, sans-serif`; }
+    let disp=word;
+    if(ctx.measureText(disp).width>maxW) {
+      while(disp.length>1 && ctx.measureText(disp+'…').width>maxW) disp=disp.slice(0,-1);
+      disp+='…';
+    }
+    // Stroke first gives white text extra contrast on lighter wheel colors.
+    ctx.lineWidth = isSpinMode ? Math.max(1.25, fsCur * 0.065) : Math.max(1.1, fsCur * 0.07);
+    ctx.strokeStyle = 'rgba(26,26,46,0.58)';
+    ctx.strokeText(disp,0,0);
+    ctx.fillText(disp,0,0); ctx.restore();
+  });
+  ctx.shadowBlur=0; ctx.shadowColor='transparent'; ctx.shadowOffsetX=0; ctx.shadowOffsetY=0;
+  ctx.beginPath(); ctx.arc(cx,cy,isSpinMode ? 13 : 16,0,Math.PI*2);
+  ctx.fillStyle='white'; ctx.fill(); ctx.strokeStyle='#b0cabb'; ctx.lineWidth=2; ctx.stroke();
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────
+function setModalWordSize(word) {
+  const modalWord = document.getElementById('modalWord');
+  const len = (word || '').length;
+
+  // Short words need to visually fill the popup; longer words need to fit cleanly.
+  let size = 'clamp(116px, 14vw, 170px)';
+  let tracking = '-2.25px';
+
+  if (len <= 2) {
+    // Large enough for SmartBoards, but capped so descenders like y/g do not overlap the prompt.
+    size = 'clamp(132px, 16.5vw, 188px)';
+    tracking = '-2.75px';
+  } else if (len <= 4) {
+    size = 'clamp(124px, 15.5vw, 178px)';
+    tracking = '-3px';
+  } else if (len <= 6) {
+    size = 'clamp(104px, 13vw, 156px)';
+    tracking = '-2.25px';
+  } else if (len <= 8) {
+    size = 'clamp(88px, 11vw, 132px)';
+    tracking = '-2px';
+  } else {
+    size = 'clamp(72px, 8.5vw, 112px)';
+    tracking = '-1.25px';
+  }
+
+  modalWord.style.setProperty('--modal-word-size', size);
+  modalWord.style.setProperty('--modal-letter-spacing', tracking);
+}
+
+function showModal(entry) {
+  pendingEntry = entry;
+  const modalWord = document.getElementById('modalWord');
+  modalWord.textContent = entry.word;
+  setModalWordSize(entry.word);
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('app').classList.add('modal-active');
+  launchConfetti(); playCelebration();
+}
+function closeModal(remove) {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('app').classList.remove('modal-active');
+  if (remove && pendingEntry) {
+    removeEntry(pendingEntry.word);
+    if (wheelEntries.length === 1) {
+      drawWheel();
+      document.getElementById('winnerWord').textContent = wheelEntries[0].word;
+      document.getElementById('winnerBanner').style.display = 'block';
+    } else { drawWheel(); }
+  } else { drawWheel(); }
+  pendingEntry = null;
+}
+
+// ── SPIN ──────────────────────────────────────────────────────────────
+function spin() {
+  if (spinning) return;
+  if (!wheelEntries.length) { alert('Tap some words to add them to the wheel first!'); return; }
+  // Auto-enter spin mode if still in build mode
+  if (appMode === 'build') {
+    appMode = 'spin';
+    document.getElementById('app').dataset.mode = 'spin';
+    updateModeUI();
+    // Give the CSS transition time to resize canvas before animating
+    requestAnimationFrame(() => {
+      initCanvas();
+      drawWheel();
+      setTimeout(_doSpin, 380);
+    });
+    return;
+  }
+  _doSpin();
+}
+
+function _doSpin() {
+  if (spinning) return;
+  if (wheelEntries.length === 1) { showModal(wheelEntries[0]); return; }
+  ensureAudioCtx();
+  spinning = true;
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('winnerBanner').style.display = 'none';
+
+  const total = (6+Math.random()*5)*Math.PI*2;
+  const dur   = 4000+Math.random()*2200;
+  const t0    = performance.now(), a0 = currentAngle;
+
+  function easeOut(t) {
+    if(t<0.92) return 1-Math.pow(1-t/0.92,3);
+    const s=(t-0.92)/0.08;
+    return 1+Math.sin(s*Math.PI*2.5)*0.0012*(1-s);
+  }
+
+  const FAST=50, SLOW=320;
+  startTicking(FAST);
+  let lastSeg=-1;
+
+  function frame(now) {
+    const raw = Math.min((now-t0)/dur,1);
+    const p   = easeOut(raw);
+    currentAngle = a0+total*Math.min(p,1);
+
+    const sl   = (Math.PI*2)/wheelEntries.length;
+    const norm = ((-currentAngle%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+    const adj  = (norm+Math.PI*1.5)%(Math.PI*2);
+    const seg  = Math.floor(adj/sl)%wheelEntries.length;
+    if(seg!==lastSeg) {
+      if(!muted&&audioCtx) scheduleOneTick(audioCtx,audioCtx.currentTime+0.01);
+      lastSeg=seg;
+    }
+    updateTickInterval(Math.round(FAST+(SLOW-FAST)*(1-(1-raw))));
+
+    drawWheel();
+    if(raw<1) { requestAnimationFrame(frame); return; }
+
+    stopTicking();
+    spinning=false;
+    document.getElementById('spinBtn').disabled=false;
+    const wi=Math.floor(adj/sl)%wheelEntries.length;
+    drawWheel(wi);
+    setTimeout(()=>showModal(wheelEntries[wi]),320);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+// Wait for layout to settle before reading canvas dimensions
+requestAnimationFrame(() => {
+  initCanvas();
+  populateSelect();
+  loadWordBank();
+  drawWheel();
+  updateWheelWords();
+  updateModeUI();
+});
+
+window.matchMedia(`(resolution: ${DPR}dppx)`).addEventListener('change', () => {
+  DPR = Math.min(window.devicePixelRatio||1,3);
+  initCanvas(); drawWheel();
+});
+
+// Re-init canvas if window resizes (column layout changes canvas size)
+let _resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(() => { initCanvas(); drawWheel(); }, 120);
+});
+</script>
+</body>
+</html>

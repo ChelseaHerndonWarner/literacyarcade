@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Literacy Arcade – Free Literacy Tools for Teachers</title>
+  <meta name="description" content="Literacy Arcade is a free hub of phonics games, fluency tools, and reading activities for K–5 teachers, tutors, interventionists, and parents. No login required. No prep needed." />
+  <meta name="keywords" content="Literacy Arcade, free literacy tools, phonics games, fluency tools, reading activities for teachers, sight word games, oral reading fluency, structured literacy, Science of Reading, decodable words, WCPM, fluency norms" />
+  <meta name="author" content="Literacy Arcade" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://literacyarcade.com/" />
+
+  <!-- ── Favicon (replace /favicon.ico with your actual file before launch) ── -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#2EC4B6" />
+
+  <!-- ── Open Graph / Facebook / LinkedIn ── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Literacy Arcade" />
+  <meta property="og:title" content="Literacy Arcade – Free Literacy Tools for Teachers" />
+  <meta property="og:description" content="Free phonics games, fluency tools, and reading activities for K–5 instruction. No login required. No prep needed." />
+  <meta property="og:url" content="https://literacyarcade.com/" />
+  <!-- Replace the image path below with your actual OG image (1200×630px recommended) before launch -->
+  <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Literacy Arcade – Free phonics games and fluency tools for K–5 teachers" />
+
+  <!-- ── Twitter / X Card ── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Literacy Arcade – Free Literacy Tools for Teachers" />
+  <meta name="twitter:description" content="Free phonics games, fluency tools, and reading activities for K–5 instruction. No login. No prep." />
+  <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta name="twitter:image:alt" content="Literacy Arcade – Free phonics games and fluency tools for K–5 teachers" />
+
+  <!-- ── Structured Data ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Literacy Arcade",
+    "url": "https://literacyarcade.com/",
+    "description": "Free phonics games, fluency tools, and reading activities for K–5 teachers, tutors, interventionists, and parents.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Literacy Arcade",
+      "url": "https://literacyarcade.com/"
+    },
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": ["teacher", "tutor", "reading interventionist", "parent"]
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & Variables ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #FDFBF7;
+      --white:    #FFFFFF;
+      --ink:      #1A1A2E;
+      --ink-soft: #4A4A6A;
+      --teal:     #2EC4B6;
+      --teal-dk:  #1FA99C;
+      --coral:    #FF6B6B;
+      --coral-dk: #E85555;
+      --amber:    #FFB830;
+      --violet:   #7B5EA7;
+      --mint:     #D8F5F2;
+      --blush:    #FFF0EE;
+      --lavender: #EEE8F8;
+      --sand:     #FEF5E2;
+      --border:   #E8E4F0;
+      --radius:   16px;
+      --radius-sm:10px;
+      --shadow:   0 4px 24px rgba(26,26,46,.07);
+      --shadow-hover: 0 8px 40px rgba(26,26,46,.14);
+      --font-head: 'Fraunces', Georgia, serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Utility ── */
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+
+    .section-sub {
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      max-width: 560px;
+      margin-top: 12px;
+    }
+
+    /* ── Navigation ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(253,251,247,.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-head);
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      transition: background .18s, color .18s;
+    }
+
+    .nav-links a:hover {
+      background: var(--mint);
+      color: var(--teal-dk);
+    }
+
+    .nav-cta {
+      background: var(--teal) !important;
+      color: var(--white) !important;
+      padding: 9px 20px !important;
+      border-radius: 100px !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--teal-dk) !important;
+    }
+
+    .nav-mobile-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-mobile-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: .2s;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 96px 0 88px;
+      background: linear-gradient(160deg, #E8F9F8 0%, var(--cream) 55%, #F3EEFB 100%);
+    }
+
+    /* Ambient glow blobs */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-shape { position: absolute; border-radius: 50%; }
+    .hs1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(46,196,182,.13), transparent 68%);
+      top: -140px; right: -60px;
+    }
+    .hs2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(123,94,167,.10), transparent 70%);
+      bottom: -60px; right: 30%;
+    }
+    .hs3 {
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(255,184,48,.12), transparent 70%);
+      top: 50%; left: -80px;
+    }
+
+    /* ── Two-column layout ── */
+    .hero-layout {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .hero-inner { position: relative; }
+
+    /* ══════════════════════════════════════════
+       RIGHT COLUMN — layered tool-preview stack
+       ══════════════════════════════════════════ */
+    .hero-stage {
+      position: relative;
+      height: 480px;    /* fixed height so cards can be absolutely positioned */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* shared card shell — matches real tool cards exactly */
+    .hc {
+      position: absolute;
+      background: rgba(255,255,255,.96);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(26,26,46,.09), 0 2px 8px rgba(26,26,46,.05);
+      overflow: hidden;
+      font-family: var(--font-body);
+    }
+
+    /* ── CARD 1: Spinner preview (back-left, largest) ── */
+    .hc-spinner {
+      width: 260px;
+      top: 12px;
+      left: 0;
+      transform: rotate(-4deg);
+      animation: floatA 7s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .hc-spinner-head {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hc-spinner-eyebrow {
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--teal-dk);
+      margin-bottom: 4px;
+    }
+    .hc-spinner-title {
+      font-size: .93rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    /* Mini wheel SVG area */
+    .hc-spinner-wheel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 0 14px;
+    }
+
+    .mini-wheel {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      position: relative;
+      animation: spinSlow 32s linear infinite;
+    }
+
+    @keyframes spinSlow {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Wheel pointer */
+    .mini-wheel-wrap {
+      position: relative;
+      width: 110px;
+      height: 110px;
+    }
+    .mini-pointer {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-top: 18px solid #D8BE72;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,.18));
+      z-index: 5;
+    }
+
+    .hc-spinner-foot {
+      padding: 8px 14px 12px;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    .hc-micro-tag {
+      font-size: .62rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 100px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      white-space: nowrap;
+    }
+    .hc-micro-tag.coral { background: var(--blush); color: #c94040; }
+    .hc-micro-tag.lav   { background: var(--lavender); color: var(--violet); }
+
+    /* ── CARD 2: ORF / WCPM preview (front-center, dominant) ── */
+    .hc-orf {
+      width: 290px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(1.5deg);
+      animation: floatB 8s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    .hc-orf-head {
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hc-orf-eyebrow {
+      font-size: .64rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 4px;
+    }
+    .hc-orf-title {
+      font-size: .95rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    /* WCPM metric row */
+    .hc-orf-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .hc-metric {
+      padding: 12px 10px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .hc-metric:last-child { border-right: none; }
+    .hc-metric-label {
+      font-size: .57rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 4px;
+    }
+    .hc-metric-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .hc-metric-val.teal  { color: var(--teal-dk); }
+    .hc-metric-val.coral { color: var(--coral); }
+    .hc-metric-sub {
+      font-size: .58rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin-top: 3px;
+    }
+
+    /* Norm bar */
+    .hc-orf-norm {
+      padding: 10px 14px 12px;
+    }
+    .hc-norm-label {
+      font-size: .6rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+    .hc-norm-bar-wrap {
+      background: #F0EEF8;
+      border-radius: 100px;
+      height: 7px;
+      overflow: hidden;
+      position: relative;
+    }
+    .hc-norm-bar-fill {
+      height: 100%;
+      width: 68%;
+      background: linear-gradient(90deg, var(--teal), #4dd8cc);
+      border-radius: 100px;
+      animation: normPulse 3.5s ease-in-out infinite;
+    }
+    @keyframes normPulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: .75; }
+    }
+    .hc-norm-note {
+      font-size: .6rem;
+      color: var(--ink-soft);
+      font-weight: 600;
+      margin-top: 5px;
+    }
+    .hc-norm-note strong { color: var(--teal-dk); }
+
+    /* ── CARD 3: Flashcard preview (back-right) ── */
+    .hc-flash {
+      width: 200px;
+      bottom: 10px;
+      right: 0;
+      transform: rotate(5deg);
+      animation: floatC 6s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    .hc-flash-inner {
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hc-flash-chip {
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: var(--lavender);
+      color: var(--violet);
+      align-self: flex-start;
+    }
+
+    /* The flashcard itself */
+    .hc-flashcard {
+      width: 100%;
+      background: var(--ink);
+      border-radius: 14px;
+      padding: 20px 12px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(26,26,46,.18);
+      position: relative;
+      overflow: hidden;
+    }
+    .hc-flashcard::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(46,196,182,.18) 0%, transparent 60%);
+    }
+    .hc-flashcard-word {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: white;
+      letter-spacing: .01em;
+      position: relative;
+      z-index: 1;
+    }
+    .hc-flashcard-hint {
+      font-size: .62rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.5);
+      margin-top: 4px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+    .hc-flash-dots {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+    .hc-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .hc-dot.active { background: var(--teal); }
+
+    /* ── CARD 4: Raceway mini-stat chip (floating top-right) ── */
+    .hc-raceway {
+      width: 178px;
+      top: 0;
+      right: 14px;
+      transform: rotate(2.5deg);
+      animation: floatD 9s ease-in-out infinite;
+      z-index: 4;
+    }
+
+    .hc-raceway-inner {
+      padding: 12px 14px;
+    }
+    .hc-raceway-eyebrow {
+      font-size: .6rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: #1677d2;
+      margin-bottom: 8px;
+    }
+    /* 3 read bars */
+    .hc-read-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .hc-read-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hc-read-label {
+      font-size: .62rem;
+      font-weight: 800;
+      color: var(--ink-soft);
+      width: 32px;
+      flex-shrink: 0;
+    }
+    .hc-read-bar-wrap {
+      flex: 1;
+      height: 6px;
+      background: #F0EEF8;
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .hc-read-bar {
+      height: 100%;
+      border-radius: 100px;
+    }
+    .bar-r1 { width: 52%; background: #1677d2; }
+    .bar-r2 { width: 68%; background: #f69a54; }
+    .bar-r3 { width: 84%; background: #4baa68; }
+    .hc-read-val {
+      font-size: .62rem;
+      font-weight: 800;
+      color: var(--ink);
+      width: 28px;
+      text-align: right;
+    }
+
+    .hc-raceway-foot {
+      margin-top: 9px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      font-size: .6rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+    }
+    .hc-raceway-foot strong { color: #4baa68; }
+
+    /* ── Float animations — each card slightly different ── */
+    @keyframes floatA {
+      0%,100% { transform: rotate(-4deg) translateY(0px); }
+      50%      { transform: rotate(-4deg) translateY(-10px); }
+    }
+    @keyframes floatB {
+      0%,100% { transform: translate(-50%,-50%) rotate(1.5deg) translateY(0px); }
+      50%      { transform: translate(-50%,-50%) rotate(1.5deg) translateY(-8px); }
+    }
+    @keyframes floatC {
+      0%,100% { transform: rotate(5deg) translateY(0px); }
+      50%      { transform: rotate(5deg) translateY(-12px); }
+    }
+    @keyframes floatD {
+      0%,100% { transform: rotate(2.5deg) translateY(0px); }
+      50%      { transform: rotate(2.5deg) translateY(-6px); }
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 7px 18px;
+      font-size: .8rem;
+      font-weight: 800;
+      color: var(--ink-soft);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-eyebrow-dot {
+      width: 8px; height: 8px;
+      background: var(--teal);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .6; transform: scale(1.3); }
+    }
+
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(3rem, 6vw, 4.6rem);
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.05;
+      margin-bottom: 18px;
+    }
+
+    .hero-title .accent  { color: var(--teal); }
+    .hero-title .accent2 {
+      color: #E8483A;
+      text-shadow: 0 2px 16px rgba(232,72,58,.18);
+    }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      color: var(--ink-soft);
+      max-width: 540px;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .hero-support {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      max-width: 480px;
+      margin-bottom: 32px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-support::before {
+      content: "⚡";
+      font-size: .9rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: .97rem;
+      font-weight: 800;
+      padding: 14px 28px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, background .2s;
+      border: none;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: var(--teal);
+      color: var(--white);
+    }
+    .btn-primary:hover { background: var(--teal-dk); }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--ink);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .btn-secondary:hover { border-color: var(--teal); color: var(--teal-dk); }
+
+    .hero-trust {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 24px;
+      font-size: .85rem;
+      color: var(--ink-soft);
+      font-weight: 700;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .trust-check {
+      width: 20px; height: 20px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem;
+      font-weight: 900;
+    }
+
+    /* ── Tool Grid ── */
+    .tools-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .tool-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      cursor: pointer;
+      transition: transform .22s, box-shadow .22s, border-color .22s;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      opacity: 0;
+      transition: opacity .22s;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+      border-color: transparent;
+    }
+
+    .tool-card:hover::before { opacity: 1; }
+
+    .card-teal::before  { background: linear-gradient(90deg, var(--teal), #5ee7df); }
+    .card-coral::before { background: linear-gradient(90deg, var(--coral), #ffb347); }
+    .card-violet::before { background: linear-gradient(90deg, var(--violet), #a78bfa); }
+    .card-amber::before { background: linear-gradient(90deg, var(--amber), #ffd166); }
+    .card-mint::before  { background: linear-gradient(90deg, #4ecdc4, var(--teal)); }
+
+    .tool-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .icon-teal   { background: var(--mint); }
+    .icon-coral  { background: var(--blush); }
+    .icon-violet { background: var(--lavender); }
+    .icon-amber  { background: var(--sand); }
+    .icon-mint   { background: #E2FAF8; }
+
+    .tool-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tool-label {
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background: var(--cream);
+      padding: 3px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+    }
+
+    .tool-arrow {
+      width: 30px; height: 30px;
+      background: var(--cream);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .9rem;
+      transition: background .2s, transform .2s;
+    }
+
+    .tool-card:hover .tool-arrow {
+      background: var(--teal);
+      color: white;
+      transform: translateX(3px);
+    }
+
+    .tool-name {
+      font-family: var(--font-head);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .tool-desc {
+      font-size: .95rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    .tool-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 4px;
+    }
+
+    .tag {
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: var(--cream);
+      color: var(--ink-soft);
+      border: 1px solid var(--border);
+    }
+
+    /* ── Features ── */
+    .features { background: var(--white); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .feature-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .feature-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 18px;
+    }
+
+    .feature-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: .9rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    /* ── Who It's For ── */
+    .audience { background: linear-gradient(160deg, #F0FBFA 0%, var(--cream) 100%); }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+
+    .audience-card {
+      text-align: center;
+      padding: 32px 20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .audience-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+
+    .audience-emoji {
+      font-size: 2.4rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .audience-role {
+      font-weight: 800;
+      font-size: .97rem;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .audience-note {
+      font-size: .83rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    /* ── Coming Soon ── */
+    .coming-soon { background: var(--cream); }
+
+    .soon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 44px;
+    }
+
+    .info-panel {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px 24px;
+    }
+
+    .info-panel h3 {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .info-panel p {
+      font-size: .92rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    .single-soon {
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .soon-card {
+      background: var(--white);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      opacity: .85;
+      transition: opacity .2s, border-color .2s;
+    }
+
+    .soon-card:hover { opacity: 1; border-color: var(--teal); }
+
+    .soon-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--amber);
+      background: var(--sand);
+      padding: 4px 10px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+
+    .soon-icon {
+      font-size: 1.7rem;
+    }
+
+    .soon-name {
+      font-family: var(--font-head);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .soon-desc {
+      font-size: .88rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+
+    /* ── CTA Banner ── */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--ink) 0%, #2D1B4E 100%);
+      padding: 80px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(46,196,182,.2), transparent 70%);
+    }
+
+    .cta-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 10%;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,107,107,.15), transparent 70%);
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .cta-inner .section-title {
+      color: var(--white);
+    }
+
+    .cta-inner .section-sub {
+      color: rgba(255,255,255,.7);
+      margin: 14px auto 36px;
+      text-align: center;
+    }
+
+    .cta-inner .hero-buttons {
+      justify-content: center;
+    }
+
+    .btn-light {
+      background: var(--white);
+      color: var(--ink);
+    }
+    .btn-light:hover { background: var(--cream); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid rgba(255,255,255,.3);
+    }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.08); }
+
+    /* ── Footer ── */
+    .footer {
+      background: var(--ink);
+      color: rgba(255,255,255,.6);
+      padding: 56px 0 32px;
+    }
+
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .footer-brand .nav-logo {
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+
+    .footer-desc {
+      font-size: .9rem;
+      line-height: 1.65;
+      max-width: 280px;
+      margin-bottom: 20px;
+    }
+
+    .footer-col-title {
+      font-size: .8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,.35);
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      font-size: .9rem;
+      color: rgba(255,255,255,.6);
+      transition: color .18s;
+    }
+
+    .footer-links a:hover { color: var(--teal); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 28px;
+      font-size: .83rem;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-legal a {
+      color: rgba(255,255,255,.4);
+      transition: color .18s;
+    }
+
+    .footer-legal a:hover { color: var(--teal); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 68px; left: 0; right: 0;
+        background: var(--cream);
+        border-bottom: 1px solid var(--border);
+        padding: 16px;
+        gap: 4px;
+        z-index: 99;
+      }
+      .nav-mobile-toggle { display: flex; }
+      .nav { position: sticky; }
+
+      .hero { padding: 72px 0 60px; }
+      .hero-layout { grid-template-columns: 1fr; gap: 0; }
+      .hero-stage { display: none; }
+      .hs1, .hs2, .hs3 { opacity: .15; }
+
+      .section { padding: 64px 0; }
+      .info-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .btn { padding: 13px 22px; font-size: .9rem; }
+      .hero-trust { gap: 14px; }
+      .tools-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Scroll animations ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <header>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-icon">🎯</div>
+          Literacy Arcade
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#tools">Games</a></li>
+          <li><a href="#tools">Fluency Tools</a></li>
+          <li><a href="#tools">Word Practice</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="#tools" class="nav-cta">Explore Free Tools</a></li>
+        </ul>
+
+        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ── Hero ── -->
+    <section class="hero" aria-label="Hero">
+      <div class="hero-bg">
+        <div class="hero-shape hs1"></div>
+        <div class="hero-shape hs2"></div>
+        <div class="hero-shape hs3"></div>
+      </div>
+
+      <div class="container">
+        <div class="hero-layout">
+
+          <!-- LEFT: Copy (unchanged) -->
+          <div class="hero-inner">
+            <div class="hero-eyebrow">
+              <div class="hero-eyebrow-dot"></div>
+              Free &amp; No Login Required
+            </div>
+
+            <h1 class="hero-title">
+              <span class="accent">Literacy</span><br />
+              <span class="accent2">Arcade</span>
+            </h1>
+
+            <p class="hero-sub">
+              Free phonics games, fluency tools, and reading activities for K–5 instruction.
+            </p>
+
+            <p class="hero-support">
+              Fast, no-prep literacy tools teachers can use immediately.
+            </p>
+
+            <div class="hero-buttons">
+              <a href="#tools" class="btn btn-primary">Explore Tools &nbsp;→</a>
+              <a href="#tools" class="btn btn-secondary">🎮 Try a Game</a>
+            </div>
+
+            <div class="hero-trust">
+              <div class="trust-item"><div class="trust-check">✓</div>Free teacher tools</div>
+              <div class="trust-item"><div class="trust-check">✓</div>No account needed</div>
+              <div class="trust-item"><div class="trust-check">✓</div>Science of Reading–aligned</div>
+              <div class="trust-item"><div class="trust-check">✓</div>Works on any device</div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Layered tool-preview card stack -->
+          <div class="hero-stage" aria-hidden="true">
+
+            <!-- CARD 1 — Word Spinner (back-left) -->
+            <div class="hc hc-spinner">
+              <div class="hc-spinner-head">
+                <div class="hc-spinner-eyebrow">🌀 Word Spinner</div>
+                <div class="hc-spinner-title">Phonics &amp; Sight Word Practice</div>
+              </div>
+              <div class="hc-spinner-wheel">
+                <div class="mini-wheel-wrap">
+                  <div class="mini-pointer"></div>
+                  <!-- Wheel as inline SVG for crisp rendering -->
+                  <svg class="mini-wheel" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 6 segments -->
+                    <path d="M55 55 L55 5 A50 50 0 0 1 98.3 30 Z" fill="#2EC4B6"/>
+                    <path d="M55 55 L98.3 30 A50 50 0 0 1 98.3 80 Z" fill="#FF6B6B"/>
+                    <path d="M55 55 L98.3 80 A50 50 0 0 1 55 105 Z" fill="#FFB830"/>
+                    <path d="M55 55 L55 105 A50 50 0 0 1 11.7 80 Z" fill="#7B5EA7"/>
+                    <path d="M55 55 L11.7 80 A50 50 0 0 1 11.7 30 Z" fill="#2EC4B6" opacity=".7"/>
+                    <path d="M55 55 L11.7 30 A50 50 0 0 1 55 5 Z" fill="#FF6B6B" opacity=".65"/>
+                    <!-- Center hub -->
+                    <circle cx="55" cy="55" r="13" fill="white" stroke="#E8E4F0" stroke-width="1.5"/>
+                    <text x="55" y="59" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" font-weight="800" fill="#1A1A2E">SPIN</text>
+                    <!-- Segment labels -->
+                    <text x="74" y="26" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white" transform="rotate(30,74,26)">sh</text>
+                    <text x="92" y="57" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white">ch</text>
+                    <text x="74" y="88" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white" transform="rotate(-30,74,88)">th</text>
+                    <text x="36" y="88" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white" transform="rotate(30,36,88)">igh</text>
+                    <text x="18" y="57" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white">oa</text>
+                    <text x="36" y="26" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white" transform="rotate(-30,36,26)">ai</text>
+                  </svg>
+                </div>
+              </div>
+              <div class="hc-spinner-foot">
+                <span class="hc-micro-tag">Fry Words</span>
+                <span class="hc-micro-tag coral">Dolch</span>
+                <span class="hc-micro-tag lav">Phonics</span>
+              </div>
+            </div>
+
+            <!-- CARD 2 — ORF Calculator (front-center, dominant) -->
+            <div class="hc hc-orf">
+              <div class="hc-orf-head">
+                <div class="hc-orf-eyebrow">📊 ORF Fluency Calculator</div>
+                <div class="hc-orf-title">Reading Fluency Assessment</div>
+              </div>
+              <div class="hc-orf-metrics">
+                <div class="hc-metric">
+                  <div class="hc-metric-label">WCPM</div>
+                  <div class="hc-metric-val teal">94</div>
+                  <div class="hc-metric-sub">words/min</div>
+                </div>
+                <div class="hc-metric">
+                  <div class="hc-metric-label">Accuracy</div>
+                  <div class="hc-metric-val">96%</div>
+                  <div class="hc-metric-sub">correct</div>
+                </div>
+                <div class="hc-metric">
+                  <div class="hc-metric-label">Errors</div>
+                  <div class="hc-metric-val coral">4</div>
+                  <div class="hc-metric-sub">total</div>
+                </div>
+              </div>
+              <div class="hc-orf-norm">
+                <div class="hc-norm-label">Hasbrouck &amp; Tindal Norms · Grade 3 · Spring</div>
+                <div class="hc-norm-bar-wrap">
+                  <div class="hc-norm-bar-fill"></div>
+                </div>
+                <div class="hc-norm-note">Score of <strong>94 WCPM</strong> is at the 50th percentile</div>
+              </div>
+            </div>
+
+            <!-- CARD 3 — Flashcard (back-right) -->
+            <div class="hc hc-flash">
+              <div class="hc-flash-inner">
+                <span class="hc-flash-chip">🃏 Flashcards</span>
+                <div class="hc-flashcard">
+                  <div class="hc-flashcard-word">through</div>
+                  <div class="hc-flashcard-hint">Fry · Set 2</div>
+                </div>
+                <div class="hc-flash-dots">
+                  <div class="hc-dot active"></div>
+                  <div class="hc-dot"></div>
+                  <div class="hc-dot"></div>
+                  <div class="hc-dot"></div>
+                  <div class="hc-dot"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 4 — Raceway reads (top-right) -->
+            <div class="hc hc-raceway">
+              <div class="hc-raceway-inner">
+                <div class="hc-raceway-eyebrow">🏁 Repeated Reading</div>
+                <div class="hc-read-bars">
+                  <div class="hc-read-row">
+                    <div class="hc-read-label">Read 1</div>
+                    <div class="hc-read-bar-wrap"><div class="hc-read-bar bar-r1"></div></div>
+                    <div class="hc-read-val">68</div>
+                  </div>
+                  <div class="hc-read-row">
+                    <div class="hc-read-label">Read 2</div>
+                    <div class="hc-read-bar-wrap"><div class="hc-read-bar bar-r2"></div></div>
+                    <div class="hc-read-val">81</div>
+                  </div>
+                  <div class="hc-read-row">
+                    <div class="hc-read-label">Read 3</div>
+                    <div class="hc-read-bar-wrap"><div class="hc-read-bar bar-r3"></div></div>
+                    <div class="hc-read-val">94</div>
+                  </div>
+                </div>
+                <div class="hc-raceway-foot">Growth: <strong>+26 WCPM</strong> 🎉</div>
+              </div>
+            </div>
+
+          </div><!-- /hero-stage -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Tool Grid ── -->
+    <section class="section" id="tools" aria-label="Tools">
+      <div class="container">
+        <div class="tools-header">
+          <div class="badge">🎲 Free Tools</div>
+          <h2 class="section-title">Ready-to-Use Literacy Tools</h2>
+          <p class="section-sub">
+            Grab a game, launch a tool — no signup, no setup. Just click and go.
+          </p>
+        </div>
+
+        <div class="tools-grid">
+
+          <!-- Tool 1 -->
+          <article class="tool-card card-teal fade-up" role="link" tabindex="0" aria-label="Reading Word Spinner" data-href="reading-word-spinner.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-teal">🌀</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Reading Word Spinner</h3>
+            <p class="tool-desc">Spin built-in word lists or add your own for quick reading practice.</p>
+            <div class="tool-tags">
+              <span class="tag">Fry Words</span>
+              <span class="tag">Dolch Words</span>
+              <span class="tag">Phonics Patterns</span>
+              <span class="tag">Custom Lists</span>
+            </div>
+            <div class="tool-label">Word Practice</div>
+          </article>
+
+          <!-- Tool 2 -->
+          <article class="tool-card card-violet fade-up" role="link" tabindex="0" aria-label="Repeated Reading Raceway" data-href="repeated-reading-raceway.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-violet">🏁</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Repeated Reading Raceway</h3>
+            <p class="tool-desc">Track WCPM, accuracy, and growth across three repeated reads with a student-friendly raceway game.</p>
+            <div class="tool-tags">
+              <span class="tag">Repeated Reading</span>
+              <span class="tag">WCPM</span>
+              <span class="tag">Accuracy</span>
+              <span class="tag">Fluency Growth</span>
+            </div>
+            <div class="tool-label">Fluency Game</div>
+          </article>
+
+          <!-- Tool 3 -->
+          <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="ORF Fluency Calculator" data-href="literacy_arcade_orf_fluency_calculator.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-coral">📊</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">ORF Fluency Calculator</h3>
+            <p class="tool-desc">Calculate WCPM and accuracy, save back-to-back student results, and compare scores to Hasbrouck &amp; Tindal Fluency Norms.</p>
+            <div class="tool-tags">
+              <span class="tag">ORF</span>
+              <span class="tag">WCPM</span>
+              <span class="tag">Accuracy</span>
+              <span class="tag">Norms</span>
+            </div>
+            <div class="tool-label">Teacher Tool</div>
+          </article>
+
+          <!-- Tool 4 -->
+          <article class="tool-card card-mint fade-up" role="link" tabindex="0" aria-label="Digital Reading Flashcards" data-href="digital-reading-flashcards.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-mint">🃏</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Digital Reading Flashcards</h3>
+            <p class="tool-desc">Display phonics words, sight words, vocabulary, or custom word lists as clean digital flashcards.</p>
+            <div class="tool-tags">
+              <span class="tag">Flashcards</span>
+              <span class="tag">Phonics</span>
+              <span class="tag">Sight Words</span>
+              <span class="tag">Custom Lists</span>
+            </div>
+            <div class="tool-label">Word Practice</div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SEO / Use Cases ── -->
+    <section class="section features" aria-label="How teachers use Literacy Arcade">
+      <div class="container">
+        <div style="text-align:center;">
+          <div class="badge">✨ Classroom Ready</div>
+          <h2 class="section-title">Simple Tools for Phonics and Fluency Practice</h2>
+          <p class="section-sub" style="margin: 12px auto 0;">
+            Literacy Arcade gives teachers, tutors, interventionists, and families fast digital tools for structured literacy instruction, reading fluency practice, word reading review, and progress monitoring.
+          </p>
+        </div>
+
+        <div class="info-grid fade-up">
+          <div class="info-panel">
+            <h3>For word reading practice</h3>
+            <p>Use built-in or custom word lists for phonics patterns, sight words, Fry words, Dolch words, vocabulary, and decodable word review.</p>
+          </div>
+          <div class="info-panel">
+            <h3>For oral reading fluency</h3>
+            <p>Track WCPM, accuracy, repeated reading growth, and oral reading fluency data using teacher-friendly fluency tools.</p>
+          </div>
+          <div class="info-panel">
+            <h3>For flexible instruction</h3>
+            <p>Use Literacy Arcade for whole-group instruction, whiteboards, small groups, tutoring, intervention, centers, and at-home practice.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Coming Soon ── -->
+    <section class="section coming-soon" aria-label="Coming Soon">
+      <div class="container">
+        <div style="text-align:center; margin-bottom:0;">
+          <div class="badge" style="background:var(--sand); color:#B07D00;">🚀 Coming Soon</div>
+          <h2 class="section-title">Next Tool in Progress</h2>
+          <p class="section-sub" style="margin: 12px auto 0;">
+            One more literacy game is already on the way.
+          </p>
+        </div>
+
+        <div class="soon-grid single-soon">
+          <div class="soon-card fade-up">
+            <div class="soon-chip">⏳ Coming Soon</div>
+            <div class="soon-icon">🛤️</div>
+            <div class="soon-name">Phonics Path Game</div>
+            <div class="soon-desc">A board-game-style path for decoding practice with built-in or custom word lists.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA Banner ── -->
+    <section class="cta-banner" aria-label="Call to Action">
+      <div class="container">
+        <div class="cta-inner">
+          <h2 class="section-title">Start Teaching with Better Tools — Today.</h2>
+          <p class="section-sub">
+            No login. No cost. No prep. Just open a tool and teach.
+          </p>
+          <div class="hero-buttons">
+            <a href="#tools" class="btn btn-primary">Explore All Tools</a>
+            <a href="#tools" class="btn btn-outline">🎮 Try a Free Game</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <div class="nav-logo-icon">🎯</div>
+            Literacy Arcade
+          </div>
+          <p class="footer-desc">
+            Free phonics games, fluency tools, and reading activities for K–5 instruction. Built for teachers, tutors, interventionists, and parents.
+          </p>
+          <p style="font-size:.8rem; color:rgba(255,255,255,.3);">Free teacher tools. No login required.</p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Site</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#tools">Games</a></li>
+            <li><a href="#tools">Fluency Tools</a></li>
+            <li><a href="#tools">Word Practice</a></li>
+            <li><a href="about.html">About</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Support</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About Literacy Arcade</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Use</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Literacy Arcade. Free literacy tools for teachers.</p>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    toggle.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') navLinks.classList.toggle('open');
+    });
+
+    // Clickable, keyboard-accessible tool cards
+    document.querySelectorAll('.tool-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const href = card.getAttribute('data-href');
+        if (href && href !== '#') window.location.href = href;
+      });
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.click();
+        }
+      });
+    });
+
+    // Scroll fade-up
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // stagger siblings
+          const siblings = [...entry.target.parentElement.querySelectorAll('.fade-up')];
+          const idx = siblings.indexOf(entry.target);
+          setTimeout(() => entry.target.classList.add('visible'), idx * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
