@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Digital Reading Flashcards – Sight Words &amp; Phonics | Literacy Arcade</title>
+  <meta name="description" content="Free digital reading flashcards for K–5 teachers. Practice Fry sight words, Dolch sight words, and phonics patterns with instant missed-word review, progress tracking, full-screen SmartBoard mode, and shuffle. Science of Reading aligned. No login required." />
+  <meta name="keywords" content="digital reading flashcards, sight word flashcards, Fry word flashcards, Dolch word flashcards, phonics flashcards, free teacher flashcards, Science of Reading flashcards, structured literacy flashcards, SmartBoard reading flashcards, reading intervention flashcards, literacy flashcards online, free classroom reading tools, phonics practice, sight word practice" />
+  <meta name="author" content="Literacy Arcade" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2EC4B6" />
+  <link rel="canonical" href="https://literacyarcade.com/digital-reading-flashcards.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Literacy Arcade" />
+  <meta property="og:title" content="Free Digital Reading Flashcards – Sight Words &amp; Phonics | Literacy Arcade" />
+  <meta property="og:description" content="Free digital flashcards for Fry sight words, Dolch sight words, and phonics patterns. Missed-word review, shuffle, full-screen SmartBoard mode. Science of Reading aligned. No login required." />
+  <meta property="og:url" content="https://literacyarcade.com/digital-reading-flashcards.html" />
+  <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta property="og:image:alt" content="Digital Reading Flashcards from Literacy Arcade — sight words and phonics practice for K–5" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Digital Reading Flashcards – Sight Words &amp; Phonics | Literacy Arcade" />
+  <meta name="twitter:description" content="Practice Fry words, Dolch sight words, and phonics with free digital flashcards. SmartBoard ready. Science of Reading aligned." />
+  <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Digital Reading Flashcards",
+    "alternateName": ["Sight Word Flashcards","Phonics Flashcards","Fry Word Flashcards","Dolch Flashcards"],
+    "url": "https://literacyarcade.com/digital-reading-flashcards.html",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "isAccessibleForFree": true,
+    "publisher": { "@type": "Organization", "name": "Literacy Arcade", "url": "https://literacyarcade.com/" },
+    "audience": { "@type": "EducationalAudience", "educationalRole": ["teacher","tutor","reading interventionist","parent"] },
+    "description": "Free digital reading flashcards for Fry sight words, Dolch sight words, and phonics patterns. Includes missed-word review, shuffle, full-screen SmartBoard mode. Science of Reading aligned. No login required."
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #2EC4B6;
+      --teal-dk:     #1FA99C;
+      --teal-bg:     #EAF8F7;
+      --teal-border: #A8DDD9;
+      --coral:       #E8483A;
+      --coral-lt:    #FFF0EE;
+      --coral-border:#F5A8A3;
+      --violet:      #7B5EA7;
+      --lavender:    #EEE8F8;
+      --amber:       #D8BE72;
+      --amber-bg:    #FFF8E6;
+      --navy:        #1A1A2E;
+      --navy-mid:    #4A4A6A;
+      --navy-lt:     #9090A8;
+      --bg:          #FDFBF7;
+      --border:      #E8E4F0;
+      --white:       #FFFFFF;
+      --shadow:      0 4px 20px rgba(26,26,46,.08);
+      --shadow-card: 0 8px 32px rgba(26,26,46,.10), 0 2px 8px rgba(26,26,46,.05);
+      --green-val:   #4baa68;
+      --green-dk:    #357a4c;
+    }
+
+    body { font-family:'Lexend',system-ui,sans-serif; background:var(--bg); color:var(--navy); min-height:100vh; }
+    button,input,select,textarea { font-family:inherit; }
+
+    /* ── NAV ── */
+    .navbar {
+      background:var(--white); border-bottom:1px solid var(--border);
+      padding:0 24px; height:60px;
+      display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:100;
+      box-shadow:0 1px 0 var(--border);
+    }
+    .nav-logo {
+      display:flex; align-items:center; gap:10px;
+      text-decoration:none; font-weight:800; font-size:1rem; color:var(--navy);
+    }
+    .nav-logo-icon { width:32px; height:32px; border-radius:9px; flex-shrink:0; overflow:hidden; }
+    .nav-back {
+      display:flex; align-items:center; gap:6px; text-decoration:none;
+      font-size:.8rem; font-weight:700; color:var(--navy-mid);
+      border:1px solid var(--border); border-radius:8px; padding:6px 14px;
+      transition:background .15s;
+    }
+    .nav-back:hover { background:var(--teal-bg); }
+
+    /* ── SETUP ── */
+    #setup { max-width:920px; margin:0 auto; padding:24px 20px 48px; }
+
+    .setup-hero { text-align:center; margin-bottom:22px; }
+    .setup-hero h1 {
+      font-size:clamp(28px,5vw,42px); font-weight:800;
+      letter-spacing:-1.5px; line-height:1.05; margin-bottom:6px;
+    }
+    .setup-hero h1 em { font-style:normal; color:var(--teal-dk); }
+    .setup-hero p { font-size:14px; color:var(--navy-mid); font-weight:500; }
+
+    .card {
+      background:var(--white); border:1px solid var(--border);
+      border-radius:20px; padding:20px; box-shadow:var(--shadow-card);
+      margin-bottom:12px;
+    }
+    .card-title {
+      font-size:11px; font-weight:800; letter-spacing:.08em;
+      text-transform:uppercase; color:var(--navy-lt); margin-bottom:12px;
+    }
+
+    /* Tab row */
+    .tab-row {
+      display:flex; border-radius:10px; overflow:hidden;
+      border:1px solid var(--border); margin-bottom:14px;
+    }
+    .tab {
+      flex:1; background:var(--white); border:none;
+      padding:8px 6px; font-family:'Lexend',sans-serif;
+      font-size:12px; font-weight:700; color:var(--navy-mid);
+      cursor:pointer; transition:background .15s;
+    }
+    .tab:not(:last-child) { border-right:1px solid var(--border); }
+    .tab.active { background:var(--teal); color:white; }
+    .tab:hover:not(.active) { background:var(--teal-bg); }
+
+    label {
+      display:block; font-size:11px; font-weight:700;
+      letter-spacing:.07em; text-transform:uppercase;
+      color:var(--navy-mid); margin-bottom:7px;
+    }
+    select {
+      width:100%; border:1px solid var(--border); background:var(--bg);
+      border-radius:10px; padding:10px 13px; font-size:14px;
+      font-weight:600; color:var(--navy); outline:none; cursor:pointer;
+      transition:border-color .15s;
+    }
+    select:focus { border-color:var(--teal); }
+    textarea {
+      width:100%; border:1px solid var(--border); background:var(--bg);
+      border-radius:10px; padding:10px 13px; font-size:14px;
+      font-weight:600; color:var(--navy); outline:none;
+      min-height:90px; resize:vertical; line-height:1.5;
+      transition:border-color .15s;
+    }
+    textarea:focus { border-color:var(--teal); }
+
+    .phonics-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:12px; }
+
+    /* Word bank */
+    .bank-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .bank-header-label { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--navy-mid); }
+    .bank-header-hint { font-size:10px; color:var(--navy-lt); font-weight:500; }
+
+    .word-bank {
+      display:flex; flex-wrap:wrap; gap:6px;
+      max-height:120px; overflow-y:auto; padding:10px;
+      background:var(--bg); border:1px solid var(--border); border-radius:12px;
+    }
+    /* Chips — unselected: white+navy (calm), selected: teal+white (activated) */
+    .chip {
+      border:1.5px solid var(--border); background:var(--white);
+      border-radius:100px; padding:5px 12px; font-size:12px;
+      font-weight:700; color:var(--navy-mid); cursor:pointer;
+      transition:all .15s; user-select:none;
+    }
+    .chip.sel {
+      background:var(--teal); border-color:var(--teal-dk);
+      color:white; box-shadow:0 2px 6px rgba(46,196,182,.25);
+    }
+    .chip:hover:not(.sel) { background:var(--teal-bg); border-color:var(--teal-border); color:var(--navy); }
+
+    .btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .btn {
+      background:var(--white); border:1px solid var(--border); border-radius:8px;
+      padding:7px 14px; font-family:'Lexend',sans-serif; font-size:12px;
+      font-weight:700; color:var(--navy); cursor:pointer; transition:background .15s;
+    }
+    .btn:hover { background:var(--teal-bg); }
+    .btn.red { color:#a03030; border-color:var(--coral-border); }
+    .btn.red:hover { background:var(--coral-lt); }
+
+    .count-line { font-size:12px; font-weight:700; color:var(--teal-dk); margin-top:8px; }
+    .hint-line  { font-size:11px; color:var(--navy-lt); font-weight:500; margin-top:5px; }
+
+    .start-btn {
+      width:100%; border:none; background:var(--navy); color:white;
+      border-radius:14px; padding:18px 24px; font-family:'Lexend',sans-serif;
+      font-size:20px; font-weight:800; cursor:pointer;
+      box-shadow:0 6px 0 #0d0d1a; transition:transform .1s, box-shadow .1s;
+    }
+    .start-btn:hover { transform:translateY(-2px); box-shadow:0 8px 0 #0d0d1a; }
+    .start-btn:active { transform:translateY(2px); box-shadow:0 3px 0 #0d0d1a; }
+
+    .kbd-hint { text-align:center; font-size:11px; color:var(--navy-lt); margin-top:10px; }
+    kbd {
+      background:var(--white); border:1px solid var(--border);
+      border-radius:4px; padding:1px 5px; font-family:inherit; font-size:10px;
+    }
+
+    /* ── FLASH SCREEN ── */
+    #flashScreen { display:none; flex-direction:column; min-height:calc(100vh - 60px); }
+
+    .flash-topbar {
+      background:var(--white); border-bottom:1px solid var(--border);
+      padding:10px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .prog-wrap { flex:1; max-width:480px; }
+    .prog-label { font-size:12px; font-weight:700; color:var(--navy-mid); margin-bottom:4px; display:flex; justify-content:space-between; }
+    .prog-track { height:8px; background:var(--teal-bg); border-radius:100px; overflow:hidden; border:1px solid var(--teal-border); }
+    .prog-fill  { height:100%; background:var(--teal); border-radius:100px; transition:width .3s ease; width:0%; }
+    .topbar-btns { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .tbar-btn {
+      background:var(--white); border:1px solid var(--border);
+      border-radius:8px; padding:6px 12px; font-family:'Lexend',sans-serif;
+      font-size:11px; font-weight:700; color:var(--navy-mid); cursor:pointer; transition:background .15s;
+    }
+    .tbar-btn:hover { background:var(--teal-bg); }
+    .tbar-btn.fs { background:var(--navy); color:white; border-color:var(--navy); }
+    .tbar-btn.fs:hover { background:#2a2a44; }
+
+    .flash-body { display:grid; grid-template-columns:1fr 270px; flex:1; min-height:0; }
+
+    .flash-stage {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:32px 24px; gap:28px;
+      background:linear-gradient(160deg,#E8F9F8 0%,var(--bg) 60%,#F3EEFB 100%);
+      min-height:480px;
+    }
+    .deck-lbl { font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--navy-lt); }
+
+    .flashcard {
+      background:var(--white); border:1.5px solid var(--border);
+      border-radius:28px; width:100%; max-width:600px; min-height:280px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      box-shadow:var(--shadow-card); padding:40px 32px; text-align:center;
+      position:relative; overflow:hidden; transition:transform .15s;
+    }
+    .flashcard::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:5px;
+      background:linear-gradient(90deg,var(--teal),var(--violet));
+      border-radius:28px 28px 0 0;
+    }
+    .flashcard:hover { transform:translateY(-2px); }
+    .flash-word {
+      font-size: clamp(64px, 12vw, 140px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1;
+      color: var(--navy);
+      white-space: nowrap;
+      word-break: normal;
+      overflow-wrap: normal;
+      max-width: 100%;
+      display: block;
+      text-align: center;
+    }
+    .flash-word.long-word  { font-size: clamp(42px,  8vw, 90px); letter-spacing: -1px; }
+    .flash-word.xlong-word { font-size: clamp(28px,  5vw, 60px); letter-spacing: 0;    }
+    .flash-subprompt { margin-top:14px; font-size:13px; font-weight:600; color:var(--navy-lt); }
+
+    .card-btns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; width:100%; max-width:600px; }
+    .card-btn {
+      border:none; border-radius:14px; padding:14px 10px;
+      font-family:'Lexend',sans-serif; font-size:14px; font-weight:800; color:white;
+      cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px;
+      transition:transform .1s;
+    }
+    .card-btn:hover { transform:translateY(-2px); }
+    .card-btn:active { transform:translateY(1px); }
+    .card-btn .k { font-size:9px; opacity:.65; letter-spacing:.04em; }
+    .btn-missed { background:var(--coral);          box-shadow:0 5px 0 #b03028; }
+    .btn-next   { background:var(--teal);           box-shadow:0 5px 0 var(--teal-dk); }
+    .btn-known  { background:var(--green-val);      box-shadow:0 5px 0 var(--green-dk); }
+
+    /* Sidebar */
+    .flash-sidebar {
+      background:var(--white); border-left:1px solid var(--border);
+      padding:16px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;
+    }
+    .sc { border:1px solid var(--border); border-radius:14px; padding:14px; }
+    .sc-lbl { font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--navy-lt); margin-bottom:8px; }
+    .sc-num { font-size:30px; font-weight:800; line-height:1; }
+    .sc-sub { font-size:12px; font-weight:600; color:var(--navy-mid); margin-top:3px; }
+    .missed-chips { display:flex; flex-wrap:wrap; gap:5px; max-height:130px; overflow-y:auto; margin-top:6px; }
+    .mc { background:var(--coral-lt); border:1px solid var(--coral-border); border-radius:100px; padding:3px 10px; font-size:11px; font-weight:700; color:var(--coral); }
+    .sb-btn {
+      width:100%; border:1px solid var(--border); background:var(--white);
+      border-radius:9px; padding:9px 12px; font-family:'Lexend',sans-serif;
+      font-size:12px; font-weight:700; color:var(--navy); cursor:pointer;
+      margin-top:6px; transition:background .15s;
+    }
+    .sb-btn:hover { background:var(--teal-bg); }
+    .sb-btn.pri { background:var(--teal); color:white; border-color:var(--teal-dk); }
+    .sb-btn.pri:hover { background:var(--teal-dk); }
+
+    /* ── FULLSCREEN ── */
+    #fsMode {
+      display:none; position:fixed; inset:0; background:#141428;
+      z-index:200; flex-direction:column; align-items:center; justify-content:center; gap:36px;
+    }
+    #fsMode.open { display:flex; }
+
+    /* Brighter deck/pattern label */
+    .fs-lbl {
+      font-size:12px; font-weight:800; letter-spacing:.10em;
+      text-transform:uppercase; color:rgba(255,255,255,.55);
+    }
+
+    .fs-word {
+      font-size: clamp(72px, 16vw, 176px);
+      font-weight: 800;
+      color: white;
+      letter-spacing: -3px;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      word-break: normal;
+      overflow-wrap: normal;
+      max-width: 100%;
+      padding: 0 40px;
+      display: block;
+      /* Subtle glow behind the word */
+      text-shadow: 0 0 80px rgba(46,196,182,.22), 0 4px 24px rgba(0,0,0,.4);
+    }
+    .fs-word.long-word  { font-size: clamp(48px, 11vw, 120px); letter-spacing: -2px; }
+    .fs-word.xlong-word { font-size: clamp(32px,  7vw,  80px); letter-spacing: -1px; }
+
+    .fs-prog { font-size:15px; font-weight:700; color:rgba(255,255,255,.38); }
+
+    .fs-btns { display:flex; gap:12px; }
+    .fs-btn {
+      border:none; border-radius:12px; padding:13px 28px;
+      font-family:'Lexend',sans-serif; font-size:15px; font-weight:700;
+      color:white; cursor:pointer; transition:opacity .15s, transform .1s;
+      letter-spacing:.01em;
+    }
+    .fs-btn:hover  { opacity:.88; transform:translateY(-1px); }
+    .fs-btn:active { opacity:.75; transform:translateY(0); }
+
+    /* Slightly desaturated / muted versions of each colour */
+    .fs-missed { background:#C84030; }   /* muted coral */
+    .fs-next   { background:#28A89C; }   /* muted teal  */
+    .fs-known  { background:#3E9458; }   /* muted green */
+
+    .fs-exit {
+      position:absolute; top:18px; right:22px;
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
+      border-radius:8px; padding:7px 14px; font-family:'Lexend',sans-serif;
+      font-size:11px; font-weight:700; color:rgba(255,255,255,.55); cursor:pointer;
+      letter-spacing:.03em;
+    }
+    .fs-exit:hover { background:rgba(255,255,255,.14); }
+
+    /* ── FINISH ── */
+    .finish-overlay { display:none; position:fixed; inset:0; background:rgba(26,26,46,.55); z-index:300; align-items:center; justify-content:center; }
+    .finish-overlay.open { display:flex; }
+    .finish-modal { background:var(--white); border-radius:24px; padding:34px 30px; max-width:410px; width:90%; text-align:center; box-shadow:0 24px 80px rgba(26,26,46,.25); }
+    .fi { font-size:52px; margin-bottom:6px; }
+    .finish-modal h2 { font-size:26px; font-weight:800; color:var(--navy); margin-bottom:8px; }
+    .finish-modal p { font-size:14px; color:var(--navy-mid); font-weight:500; line-height:1.5; margin-bottom:18px; }
+    .finish-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+    .fstat { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:12px; }
+    .fstat-n { font-size:26px; font-weight:800; line-height:1; }
+    .fstat-l { font-size:11px; font-weight:700; color:var(--navy-lt); margin-top:3px; }
+    .finish-btns { display:flex; flex-direction:column; gap:10px; }
+    .finish-btns .start-btn { font-size:16px; padding:14px; }
+    .finish-btns .btn { width:100%; padding:12px; font-size:14px; justify-content:center; }
+
+    .options-row {
+      display:flex; gap:24px; flex-wrap:wrap; margin-bottom:16px;
+    }
+    .toggle-label {
+      display:flex; align-items:center; gap:10px; cursor:pointer;
+      font-size:13px; font-weight:700; color:var(--navy-mid);
+      user-select:none;
+    }
+    .toggle-label input { display:none; }
+    .toggle-track {
+      width:38px; height:22px; border-radius:100px;
+      background:var(--border); position:relative; flex-shrink:0;
+      transition:background .2s;
+    }
+    .toggle-thumb {
+      position:absolute; top:3px; left:3px;
+      width:16px; height:16px; border-radius:50%;
+      background:white; box-shadow:0 1px 4px rgba(0,0,0,.2);
+      transition:transform .2s;
+    }
+    .toggle-label input:checked + .toggle-track { background:var(--teal); }
+    .toggle-label input:checked + .toggle-track .toggle-thumb { transform:translateX(16px); }
+
+    /* Countdown number animation */
+    @keyframes countPop {
+      0%   { transform:scale(.7); opacity:0; }
+      40%  { transform:scale(1.08); opacity:1; }
+      70%  { transform:scale(.96); }
+      100% { transform:scale(1); opacity:1; }
+    }
+    .count-pop { animation:countPop .35s cubic-bezier(.34,1.56,.64,1) forwards; }
+    .seo-section { max-width:920px; margin:0 auto; padding:20px 20px 32px; border-top:1px solid var(--border); }
+    .seo-section h2 { font-size:13px; font-weight:700; color:var(--navy-lt); margin-bottom:6px; }
+    .seo-section p  { font-size:12px; color:var(--navy-lt); line-height:1.6; max-width:680px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:800px) {
+      .flash-body { grid-template-columns:1fr; }
+      .flash-sidebar { display:none; }
+      .card-btns { grid-template-columns:1fr; gap:10px; }
+    }
+    @media (max-width:540px) {
+      .phonics-row { grid-template-columns:1fr; }
+      .tab { font-size:10px; padding:8px 4px; }
+      .topbar-btns .tbar-btn:not(.fs) { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <a href="https://literacyarcade.com/" class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-label="Literacy Arcade">
+      <defs>
+        <linearGradient id="ng" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#2EC4B6"/>
+          <stop offset="100%" stop-color="#7B5EA7"/>
+        </linearGradient>
+      </defs>
+      <rect width="32" height="32" rx="8" fill="url(#ng)"/>
+      <text x="3" y="24" font-family="Georgia,serif" font-size="18" font-weight="700" font-style="italic" fill="white">LA</text>
+      <path d="M 4 27 Q 16 30 28 27" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    Literacy Arcade
+  </a>
+  <a href="https://literacyarcade.com/#tools" class="nav-back">All Tools</a>
+</nav>
+
+<!-- ══════════════════════
+     SETUP SCREEN
+══════════════════════ -->
+<div id="setup">
+  <div class="setup-hero">
+    <h1>Digital Reading <em>Flashcards</em></h1>
+    <p>Fry sight words &nbsp;·&nbsp; Dolch sight words &nbsp;·&nbsp; Phonics patterns &nbsp;·&nbsp; Custom lists &nbsp;·&nbsp; SmartBoard ready</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Choose Your Word List</div>
+    <div class="tab-row">
+      <button class="tab active" id="tabFry"     onclick="switchTab('fry')">Fry Words</button>
+      <button class="tab"        id="tabDolch"   onclick="switchTab('dolch')">Dolch Words</button>
+      <button class="tab"        id="tabPhonics" onclick="switchTab('phonics')">Phonics</button>
+      <button class="tab"        id="tabCustom"  onclick="switchTab('custom')">Custom</button>
+    </div>
+
+    <!-- Fry / Dolch level -->
+    <div id="levelSection">
+      <label id="levelLabel">Fry Level</label>
+      <select id="levelSelect" onchange="loadWordBank()"></select>
+    </div>
+
+    <!-- Phonics -->
+    <div id="phonicsSection" style="display:none; margin-top:14px;">
+      <div class="phonics-row">
+        <div>
+          <label>Category</label>
+          <select id="phonicsGroup" onchange="onGroupChange()"></select>
+        </div>
+        <div>
+          <label>Pattern</label>
+          <select id="phonicsPattern" onchange="onPatternChange()"></select>
+        </div>
+      </div>
+      <p class="hint-line" style="margin-top:4px;">Words load automatically when you choose a pattern.</p>
+    </div>
+
+    <!-- Custom -->
+    <div id="customSection" style="display:none; margin-top:14px;">
+      <label>Type or paste your words</label>
+      <textarea id="customArea" placeholder="cat bat hat sat&#10;or: cat, bat, hat&#10;or one word per line" oninput="updateCustomPreview()"></textarea>
+      <p class="hint-line">Spaces, commas, or line breaks all work.</p>
+      <div id="customPreview" style="margin-top:10px; display:none;">
+        <div class="bank-header">
+          <span class="bank-header-label">Words in Deck</span>
+          <span class="bank-header-hint" id="customCountHint"></span>
+        </div>
+        <div class="word-bank" id="customWordBank" style="max-height:120px;"></div>
+      </div>
+    </div>
+
+    <!-- Word bank -->
+    <div id="bankSection" style="margin-top:16px;">
+      <div class="bank-header">
+        <span class="bank-header-label">Word Bank</span>
+        <span class="bank-header-hint">Selected words appear in the deck · tap to include or remove</span>
+      </div>
+      <div class="word-bank" id="wordBank"></div>
+      <div class="btn-row">
+        <button class="btn" onclick="selectAll()">Select All</button>
+        <button class="btn" onclick="selectNone()">Clear All</button>
+        <button class="btn" onclick="shuffleSetup()">Shuffle</button>
+      </div>
+      <p class="count-line" id="countLine">0 words selected</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="options-row">
+      <label class="toggle-label">
+        <input type="checkbox" id="countdownToggle" checked />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        Start with countdown
+      </label>
+      <label class="toggle-label">
+        <input type="checkbox" id="soundToggle" checked />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        Sound effects
+      </label>
+    </div>
+    <button class="start-btn" onclick="startFlashcards()">Start Flashcards</button>
+    <p class="kbd-hint">
+      <kbd>Space</kbd> / <kbd>→</kbd> Next &nbsp;·&nbsp;
+      <kbd>M</kbd> Need Practice &nbsp;·&nbsp;
+      <kbd>G</kbd> Got It &nbsp;·&nbsp;
+      <kbd>F</kbd> Fullscreen
+    </p>
+  </div>
+
+  <!-- Supporting info -->
+  <section class="seo-section" aria-label="About Digital Reading Flashcards">
+    <h2>Free Digital Reading Flashcards for K–5</h2>
+    <p>Practice Fry sight words, Dolch sight words, phonics patterns, and custom word lists with free digital reading flashcards from Literacy Arcade. Includes fullscreen SmartBoard mode, missed-word review, and shuffle tools for quick classroom practice.</p>
+  </section>
+</div>
+
+<!-- ══════════════════════
+     FLASH SCREEN
+══════════════════════ -->
+<div id="flashScreen">
+  <!-- Top bar -->
+  <div class="flash-topbar">
+    <div class="prog-wrap">
+      <div class="prog-label">
+        <span id="progLabel">Card 1 of 10</span>
+        <span id="missedBadge" style="color:var(--coral); font-weight:800;"></span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    </div>
+    <div class="topbar-btns">
+      <button class="tbar-btn" onclick="shuffleDeck()">Shuffle</button>
+      <button class="tbar-btn" onclick="restartDeck()">Restart</button>
+      <button class="tbar-btn" onclick="backToSetup()">Change List</button>
+      <button class="tbar-btn fs" onclick="openFS()">Fullscreen</button>
+    </div>
+  </div>
+
+  <div class="flash-body">
+    <!-- Stage -->
+    <div class="flash-stage">
+      <div class="deck-lbl" id="deckLbl">—</div>
+      <div class="flashcard">
+        <div class="flash-word" id="flashWord">the</div>
+        <div class="flash-subprompt">Read this word aloud</div>
+      </div>
+      <div class="card-btns">
+        <button class="card-btn btn-missed" onclick="markMissed()">
+          Need Practice
+          <span class="k">KEY: M · saves &amp; advances</span>
+        </button>
+        <button class="card-btn btn-next" onclick="nextCard()">
+          Skip
+          <span class="k">SPACE / ARROW</span>
+        </button>
+        <button class="card-btn btn-known" onclick="markKnown()">
+          Got It
+          <span class="k">KEY: G</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="flash-sidebar">
+      <div class="sc">
+        <div class="sc-lbl">Progress</div>
+        <div class="sc-num" id="sideProgress" style="color:var(--teal-dk);">1 / 10</div>
+        <div class="sc-sub" id="sideDeck">—</div>
+      </div>
+      <div class="sc">
+        <div class="sc-lbl">Got It</div>
+        <div class="sc-num" id="knownNum" style="color:var(--green-val);">0</div>
+        <div class="sc-sub">words mastered</div>
+      </div>
+      <div class="sc">
+        <div class="sc-lbl">Need Practice</div>
+        <div class="sc-num" id="missedNum" style="color:var(--coral);">0</div>
+        <div class="missed-chips" id="missedList"></div>
+        <button class="sb-btn" onclick="practiceMissed()">Practice Missed Words</button>
+      </div>
+      <div class="sc">
+        <div class="sc-lbl">Controls</div>
+        <button class="sb-btn" onclick="shuffleDeck()">Shuffle Deck</button>
+        <button class="sb-btn" onclick="restartDeck()">Restart Deck</button>
+        <button class="sb-btn" onclick="openFS()">Fullscreen / SmartBoard</button>
+        <button class="sb-btn pri" onclick="backToSetup()">Change List</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- FULLSCREEN -->
+<div id="fsMode">
+  <button class="fs-exit" onclick="closeFS()">Exit Fullscreen</button>
+  <div class="fs-lbl" id="fsLbl">—</div>
+  <div class="fs-word" id="fsWord">the</div>
+  <div class="fs-prog" id="fsProg">1 / 10</div>
+  <div class="fs-btns">
+    <button class="fs-btn fs-missed" onclick="fsMissed()">Need Practice</button>
+    <button class="fs-btn fs-next"   onclick="fsNext()">Skip</button>
+    <button class="fs-btn fs-known"  onclick="fsKnown()">Got It</button>
+  </div>
+</div>
+
+<!-- FINISH OVERLAY -->
+<div class="finish-overlay" id="finishOverlay">
+  <div class="finish-modal">
+    <div class="fi">🎉</div>
+    <h2>Deck Complete!</h2>
+    <p id="finishMsg">Great reading practice!</p>
+    <div class="finish-stats">
+      <div class="fstat">
+        <div class="fstat-n" id="finKnown" style="color:var(--green-val);">0</div>
+        <div class="fstat-l">Got It</div>
+      </div>
+      <div class="fstat">
+        <div class="fstat-n" id="finMissed" style="color:var(--coral);">0</div>
+        <div class="fstat-l">Need Practice</div>
+      </div>
+    </div>
+    <div class="finish-btns">
+      <button class="start-btn" onclick="practiceAgain()">Practice Again</button>
+      <button class="btn" onclick="doMissedFromFinish()">Practice Missed Words</button>
+      <button class="btn" onclick="backToSetupFromFinish()">Choose New List</button>
+    </div>
+  </div>
+</div>
+
+<!-- COUNTDOWN OVERLAY -->
+<div id="countdownOverlay" style="display:none; position:fixed; inset:0; background:#141428; z-index:250; flex-direction:column; align-items:center; justify-content:center; gap:16px;">
+  <div id="countdownDeckLabel" style="font-size:12px; font-weight:800; letter-spacing:.10em; text-transform:uppercase; color:rgba(255,255,255,.45);"></div>
+  <div id="countdownNumber" style="font-size:clamp(120px,22vw,200px); font-weight:800; color:white; line-height:1; text-shadow:0 0 80px rgba(46,196,182,.3);"></div>
+  <div id="countdownSub" style="font-size:20px; font-weight:700; color:rgba(255,255,255,.5); letter-spacing:.08em; text-transform:uppercase;"></div>
+</div>
+
+<!-- CONFETTI CANVAS -->
+<canvas id="confettiCanvas" style="display:none; position:fixed; inset:0; pointer-events:none; z-index:310;"></canvas>
+
+<script>
+// ═══════════════════════════════════════════════════
+// WORD DATA
+// ═══════════════════════════════════════════════════
+
+const DOLCH = {
+  'Pre-K': ['a','and','away','big','blue','can','come','down','find','for','funny','go','help','here','I','in','is','it','jump','little','look','make','me','my','not','one','play','red','run','said','see','the','three','to','two','up','we','where','yellow','you'],
+  'Kindergarten': ['all','am','are','at','ate','be','black','brown','but','came','did','do','eat','four','get','good','have','he','into','like','must','new','no','now','on','our','out','please','pretty','ran','ride','saw','say','she','so','soon','that','there','they','this','too','under','want','was','well','went','what','white','who','will','with','yes'],
+  'First Grade': ['after','again','an','any','as','ask','by','could','every','fly','from','give','going','had','has','her','him','his','how','just','know','let','live','may','of','old','once','open','over','put','round','some','stop','take','thank','them','then','think','walk','were','when'],
+  'Second Grade': ['always','around','because','been','before','best','both','buy','call','cold','does',"don't",'fast','first','five','found','gave','goes','green','its','made','many','off','or','pull','read','right','sing','sit','sleep','tell','their','these','those','upon','us','use','very','wash','which','why','wish','work','would','write','your'],
+  'Third Grade': ['about','better','bring','carry','clean','cut','done','draw','drink','eight','fall','far','full','got','grow','hold','hot','hurt','if','keep','kind','laugh','light','long','much','myself','never','only','own','pick','seven','shall','show','six','small','start','ten','today','together','try','warm']
+};
+
+const FRY = {
+  '1st 100 Words': ['a','about','all','an','and','are','as','at','be','been','but','by','called','can','come','could','day','did','do','down','each','find','first','for','from','get','go','had','has','have','he','her','him','his','how','I','if','in','into','is','it','like','long','look','made','make','many','may','more','my','no','not','now','number','of','oil','on','one','or','other','out','part','people','said','see','she','sit','so','some','than','that','the','their','them','then','there','these','they','this','time','to','two','up','use','was','water','way','we','were','what','when','which','who','will','with','words','would','write','you','your'],
+  '2nd 100 Words': ['after','again','air','also','America','animal','another','answer','any','around','ask','away','back','because','before','big','boy','came','change','different','does','end','even','follow','form','found','give','good','great','hand','help','here','home','house','just','kind','know','land','large','learn','letter','line','little','live','man','me','means','men','most','mother','move','much','must','name','need','new','off','old','only','our','over','page','picture','place','play','point','put','read','right','same','say','sentence','set','should','show','small','sound','spell','still','study','such','take','tell','things','think','three','through','too','try','turn','us','very','want','well','went','where','why','work','world','years'],
+  '3rd 100 Words': ['above','add','almost','along','always','began','begin','being','below','between','book','both','car','carry','children','city','close','country','cut',"don't",'earth','eat','enough','every','example','eyes','face','family','far','father','feet','few','food','four','girl','got','group','grow','hard','head','hear','high','idea','important','Indian',"it's",'keep','last','late','leave','left','let','life','light','list','might','mile','miss','mountains','near','never','next','night','often','once','open','own','paper','plant','real','river','run','saw','school','sea','second','seem','side','something','sometimes','song','soon','start','state','stop','story','talk','those','thought','together','took','tree','under','until','walk','watch','while','white','without','young'],
+  '4th 100 Words': ['across','against','area','become','best','better','birds','black','body','certain','cold','color','complete','covered','cried',"didn't",'dog','door','draw','during','early','easy','ever','fall','farm','fast','field','figure','fire','fish','five','friends','ground','happened','heard','himself','hold','horse','hours','however','hundred',"I'll",'king','knew','listen','low','map','mark','measure','money','morning','music','north','notice','numeral','order','passed','pattern','piece','plan','problem','products','pulled','questions','reached','red','remember','rock','room','seen','several','ship','short','since','sing','slowly','south','space','stand','step','sun','sure','table','today','told','top','toward','town','travel','true','unit','upon','usually','voice','vowel','war','waves','whole','wind','wood'],
+  '5th 100 Words': ['able','ago','am','among','ball','base','became','behind','boat','box','bring','brought','building','built','cannot','carefully','check','circle','class','clear','common','contain','correct','course','dark','decided','deep','done','dry','English','equation','explain','fact','feel','filled','finally','fine','fly','force','front','full','game','gave','government','green','half','heat','heavy','hot','inches','include','inside','island','known','language','less','machine','material','minutes','note','nothing','noun','object','ocean','oh','pair','person','plane','power','produce','quickly','ran','rest','road','round','rule','scientists','shape','shown','six','size','special','stars','stay','stood','street','strong','surface','system','ten','though','thousands','understand','verb','wait','warm','week','wheels','yes','yet'],
+  '6th 100 Words': ['anything','arms','beautiful','believe','beside','bill','blue','brother',"can't",'cause','cells','center','clothes','dance','describe','developed','difference','direction','discovered','distance','divided','drive','drop','edge','eggs','energy','Europe','exercise','farmers','felt','finished','flowers','forest','general','gone','grass','happy','heart','held','instruments','interest','job','kept','lay','legs','length','love','main','matter','meet','members','million','mind','months','moon','paint','paragraph','past','perhaps','picked','present','probably','race','rain','raised','ready','reason','record','region','represent','return','root','sat','shall','sign','simple','site','sky','soft','square','store','subject','suddenly','sum','summer','syllables','teacher','test','third','train','wall','weather','west','whether','wide','wild','window','winter','wish','written'],
+  '7th 100 Words': ['act','Africa','age','already','although','amount','angle','appear','baby','bear','beat','bed','bottom','bright','broken','build','buy','care','case','cat','century','consonant','copy',"couldn't",'count','cross','dictionary','died','dress','either','everyone','everything','exactly','factors','fight','fingers','floor','fraction','free','French','gold','hair','hill','hole','hope','ice','instead','iron','jumped','killed','lake','laughed','lead',"let's",'lot','melody','metal','method','middle','milk','moment','nation','natural','outside','per','phrase','poor','possible','pounds','pushed','quiet','quite','remain','result','ride','rolled','sail','scale','section','sleep','smiled','snow','soil','solve','someone','son','speak','speed','spring','stone','surprise','tall','temperature','themselves','tiny','trip','type','village','within','wonder'],
+  '8th 100 Words': ['alone','art','bad','bank','bit','break','brown','burning','business','captain','catch','caught','cents','child','choose','clean','climbed','cloud','coast','continued','control','cool','cost','decimal','desert','design','direct','drawing','ears','east','else','engine','England','equal','experiment','express','feeling','fell','flow','foot','garden','gas','glass','God','grew','history','human','hunting','increase','information','itself','joined','key','lady','law','least','lost','maybe','mouth','party','pay','period','plains','please','practice','president','received','report','ring','rise','row','save','seeds','sent','separate','serve','shouted','single','skin','statement','stick','straight','strange','students','suppose','symbols','team','touch','trouble','uncle','valley','visit','wear','whose','wire','woman','wrote','yard',"you're",'yourself'],
+  '9th 100 Words': ['addition','army','bell','belong','block','blood','blow','board','bones','branches','cattle','chief','compare','compound','consider','cook','corner','crops','crowd','current','doctor','dollars','eight','electric','elements','enjoy','entered','except','exciting','expect','famous','fit','flat','fruit','fun','guess','hat','hit','indicate','industry','insects','interesting','Japanese','lie','lifted','loud','major','mall','meat','mine','modern','movement','necessary','observe','park','particular','planets','poem','pole','position','process','property','provide','rather','rhythm','rich','safe','sand','science','sell','send','sense','seven','sharp','shoulder','sight','silent','soldiers','spot','spread','stream','string','suggested','supply','swim','terms','thick','thin','thus','tied','tone','trade','tube','value','wash',"wasn't",'weight','wife','wings',"won't"],
+  '10th 100 Words': ['action','actually','adjective','afraid','agreed','ahead','allow','apple','arrived','born','bought','British','capital','chance','chart','church','column','company','conditions','corn','cotton','cows','create','dead','deal','death','details','determine','difficult','division',"doesn't",'effect','entire','especially','evening','experience','factories','fair','fear','fig','forward','France','fresh','Greek','gun','hoe','huge',"isn't",'led','level','located','march','match','molecules','northern','nose','office','opposite','oxygen','plural','prepared','pretty','printed','radio','repeated','rope','rose','score','seat','settled','shoes','shop','similar','sir','sister','smell','solution','southern','steel','stretched','substances','suffix','sugar','tools','total','track','triangle','truck','underline','various','view','Washington',"we'll",'western','win','women','workers',"wouldn't",'wrong','yellow']
+};
+
+// ─────────────────────────────────────────────────────────────────────────
+// PHONICS DATABASE
+// Reusable across all Literacy Arcade tools.
+// Structure: array of { label, key, patterns: { patternName: [words] } }
+// ─────────────────────────────────────────────────────────────────────────
+const PHONICS_DB = [
+  { label:'Short Vowels', key:'short_vowels', patterns: {
+    'Short /a/': ['cat','hat','mat','sat','bat','fat','nap','rat','fan','shack','chat','rack','sack','mash','cash','bath','map','tap','crab','drab','scab','slab','stab','black','crack','smack','snack','snag','flag','glad','track','stack','flap','clap','slap','snap','fact','raft','smash','thrash','trash','brat','flat','vast','brass','trap','brash','clash','crash','flash','slash','shaft','class','glass','grant','plant','slant','flask','blast','scratch','clasp','scalp','splat','strand','stand','bland'],
+    'Short /e/': ['bed','leg','bet','set','met','den','get','men','hen','red','vet','web','yes','let','ten','jet','beg','wet','bled','fled','shred','sled','sped','smell','spell','swell','bend','lend','mend','send','tend','bent','cent','dent','rent','lent','sent','tent','went','best','nest','pest','rest','test','vest','west','chest','fret','bless','dress','press','left','help','next','blend','spend','trend','spent','stress','slept','crept','strength'],
+    'Short /i/': ['rip','sip','lip','tip','fig','bid','dip','fit','pig','pit','rid','lid','kid','hit','sit','sick','fin','brick','click','flick','slick','stick','trick','grid','skid','slid','twig','flip','mint','risk','skill','still','thrill','slim','swim','trim','grin','skin','spin','gift','wilt','cling','fling','sling','sting','swing','link','pink','sink','think','hint','shift','skip','spring','string','blink','brink','clink','drink','shrink','stink','print','slink','drift','swift','thrift','brisk','frisk','twist','blimp','crisp','sprint','splint','script','scrimp'],
+    'Short /o/': ['toss','boss','hog','log','hot','got','pot','mop','job','fog','sob','rob','blob','slob','snob','block','clock','flock','stock','clog','frog','smog','crop','drop','flop','stop','plot','slot','spot','trot','prop','cross','floss','blotch','strong','stomp','frost','splotch','clomp','prompt'],
+    'Short /u/': ['hut','rut','mud','sub','tub','rub','run','bun','sun','cub','fun','sum','gum','sung','club','shrub','grub','stub','cluck','pluck','stuck','truck','bluff','fluff','gruff','scuff','stuff','drug','plug','shrug','slug','snug','drum','plum','bump','dump','jump','lump','pump','spun','stun','clung','flung','strum','swung','bunk','dunk','junk','sunk','chunk','blush','brush','crush','flush','plush','slush','thrush','spud','grudge','bunch','hunch','lunch','munch','punch','bunt','hunt','punt','runt','plus','bust','dust','just','must','rust','scrub','clump','grump','plump','slump','stump','sprung','strung','shrunk','skunk','crunch','blunt','grunt','thrust','trust','crust','struck','scrunch']
+  }},
+  { label:'Long /ā/', key:'long_a', patterns: {
+    'Long /ā/ — a_e': ['bake','shake','game','chase','shave','brace','grace','place','space','trace','blade','grade','spade','stage','snake','stake','blame','flame','crane','plane','slave','grape','scrape','crate','drake','skate','state','flake','craze','blaze','trade','brake'],
+    'Long /ā/ — ai': ['sail','tail','maid','jail','pail','rail','rain','main','chain','pain','mail','frail','snail','trail','brain','grain','drain','plain','stain','train','braid','claim','faint'],
+    'Long /ā/ — ay': ['tray','play','pray','fray','stay','sway','slay','clay','spray','stray','splay','day','say','may','pay','ray','way','hay','bay','lay','okay','away','today','delay','relay','always','birthday','maybe','player','layer','payment'],
+    'Long /ā/ — eigh': ['eight','freight','weight','neighbor','sleigh'],
+    'Long /ā/ — ey': ['they','prey','obey','convey','survey']
+  }},
+  { label:'Long /ē/', key:'long_e', patterns: {
+    'Long /ē/ — ee': ['seem','meet','feet','beet','keen','seen','sheep','seed','bleed','breed','creep','greed','speed','steed','sleep','steep','sweep','fleet','greet','sleet','sweet','green'],
+    'Long /ē/ — ea': ['team','seam','beam','meat','seat','beat','heat','flea','cheap','creak','sneak','speak','steal','cream','dream','steam','treat','feast','clean','creek','least','streak','stream','scream'],
+    'Long /ē/ — ey': ['key','monkey','hockey','turkey','valley','chimney','honey','money'],
+    'Long /ē/ — ie': ['chief','field','brief','yield','shriek','priest'],
+    'Long /ē/ — y': ['happy','funny','puppy','silly','sunny','windy','candy']
+  }},
+  { label:'Long /ī/', key:'long_i', patterns: {
+    'Long /ī/ — i_e': ['hide','wide','pile','time','fine','ripe','dive','kite','file','bride','glide','pride','slide','crime','grime','prime','slime','brine','spine','drive','thrive','spike','smile','stride','strike','stripe'],
+    'Long /ī/ — igh': ['light','sight','fight','might','tight','bright','flight','fright','slight'],
+    'Long /ī/ — ie': ['pie','tie','die','lie','vie'],
+    'Long /ī/ — i': ['idle','item','idea','pilot','tiger','spider','silent','final','minus']
+  }},
+  { label:'Long /ō/', key:'long_o', patterns: {
+    'Long /ō/ — o_e': ['nose','rose','cove','phone','rode','broke','smoke','spoke','clone','stone','grope','slope','scope','globe','clove','trove','stove','probe','stole','close','drove','stroke'],
+    'Long /ō/ — oa': ['road','toad','load','soak','coal','goal','foam','soap','goat','coat','moat','cloak','croak','groan','boast','coast','roast','toast','bloat','float','throat','coach','moan'],
+    'Long /ō/ — ow': ['slow','snow','throw','blow','shown','blown','flown','grown','thrown'],
+    'Long /ō/ — oe': ['toe','hoe','foe','doe','woe','goes','toes']
+  }},
+  { label:'Long /ū/', key:'long_u', patterns: {
+    'Long /ū/ — u_e': ['cube','cute','mule','fume','huge','mute','muse','fuse']
+  }},
+  { label:'Long /o͞o/', key:'long_oo', patterns: {
+    'Long /o͞o/ — oo': ['moon','soon','tool','food','drool','spool','stool','bloom','gloom','groom','spoon','droop','scoop','snoop','swoop','troop','smooth','snooze','proof','broom'],
+    'Long /o͞o/ — ew': ['stew','crew','threw','grew','screw'],
+    'Long /o͞o/ — ue': ['blue','true','clue','glue'],
+    'Long /o͞o/ — ui': ['suit','fruit','bruise','juice','cruise'],
+    'Long /o͞o/ — ou': ['soup','group','you','youth']
+  }},
+  { label:'Variant Vowels', key:'variant_vowels', patterns: {
+    '/aw/ — aw': ['draw','flaw','claw','dawn','hawk','lawn','shawl','drawn','straw','drawl','scrawl'],
+    '/aw/ — au': ['bawl','fawn','haul','haunt','fraud','fault','vault','flaunt'],
+    'Short /oo/': ['foot','book','took','shook','cook','look','hook','good','hoof','hood','nook','crook','stood','brook'],
+    '/oy/ — oi': ['boil','foil','toil','coin','join','void','soil','joint','hoist','joist','moist','spoil','coil','broil','oil','point','noise','voice','choice','poison'],
+    '/oy/ — oy': ['boy','toy','joy','coy','soy','ploy','ahoy','decoy','annoy','enjoy','deploy','employ','destroy','loyal','royal','oyster','boycott','cowboy'],
+    '/ow/ — ou': ['loud','couch','cloud','grouch','hound','crouch','found','mount','count'],
+    '/ow/ — ow': ['cow','chow','down','plow','howl','fowl','town','brow','gown','frown','clown','brown','drown','crowd','crown','prowl','growl']
+  }},
+  { label:'R-Controlled Vowels', key:'r_controlled', patterns: {
+    '/ar/': ['car','far','star','card','harm','mark','sharp','harp','part','mart','cart','dark','park','bark','scarf','smart','spark'],
+    '/or/ — or': ['horn','born','fork','short','sort','fort','port','storm','spork','sport'],
+    '/or/ — ore': ['core','shore','more','bore','tore','sore','score','store'],
+    '/er/ — er': ['her','fern','term','herd','verb','stern','perch','nerve','serve','verse','merge','clerk','jerk','perk','herb','germ','butter','sister','winter','summer','pepper','center','river','silver','tiger','gather','mother','father','other','under','over','cover','water','never','fever','clever','tower','flower','power','wonder'],
+    '/er/ — ir': ['dirt','birth','shirt','bird','thirst','first','girl','sir','stir','firm','third','fir','whirl','twirl','chirp','squirt','circle','circus','confirm','birch'],
+    '/er/ — ur': ['burn','turn','curl','surf','turf','fur','burp','blur','slur','spur','hurt','curd','curb','lurk','nurse','purse','curve','surge','church','burst','blurt','churn','spurt','turkey','turtle','purple','curtain','surprise'],
+    '/ear/': ['dear','fear','hear','near','year','beard','clear','cheer','spear','sneer','steer','gear','rear','smear'],
+    '/air/': ['chair','hair','fair','pair','stair','bear','wear','pear','care','share','glare','square','stare']
+  }},
+  { label:'Consonant Digraphs', key:'digraphs', patterns: {
+    'sh-': ['ship','shop','shut','shelf','shell','shirt','share','shape','sharp','shark','shack','shout','shone','shred','shrug','shrub','shrink'],
+    'ch-': ['chip','chop','chin','chat','chain','chair','chase','chest','check','chick','chose','chore','chunk','church'],
+    'th-': ['thin','this','that','them','then','thick','think','thing','thank','three','throw','thrash','thrust','thrill','throb'],
+    'wh-': ['when','what','where','which','while','wheat','wheel','white','whack','whale','whip','whisper'],
+    '-sh': ['wish','fish','dish','rush','bush','cash','flash','crash','slash','trash','smash','flush','brush','crush','plush','blush','push','fresh','mesh','clash'],
+    '-ch / -tch': ['much','such','each','beach','reach','teach','peach','bench','bunch','lunch','punch','march','torch','catch','match','fetch','witch','notch','patch','sketch','switch'],
+    '-th': ['bath','math','path','cloth','broth','froth','teeth','teeth','booth','month','worth','north','south']
+  }},
+  { label:'Trigraphs', key:'trigraphs', patterns: {
+    '-tch': ['blotch','scratch','splotch','catch','match','fetch','witch','notch','patch','sketch','switch','snatch','stretch','thatch','clutch'],
+    '-dge': ['grudge','bridge','badge','edge','ridge','lodge','fudge','hedge','judge','nudge','pledge','smudge','wedge','budge','dodge']
+  }},
+  { label:'Beginning Blends', key:'blends', patterns: {
+    'R-Blends': ['brace','brain','brake','bread','breed','brick','bride','bright','broke','brook','brown','brush','crab','crack','crane','crash','crate','cream','creek','creep','crew','crime','crisp','croak','cross','crowd','crown','crunch','crush','drain','draw','dream','dress','drift','drink','drive','drone','drool','drop','drum','fray','frog','frost','frown','fruit','grace','grade','grain','grand','grape','great','greed','green','grew','grin','groan','groom','growl','grunt','pray','press','pride','prime','print','proof','trace','track','trade','trail','train','trap','treat','tribe','trick','trim','troop','trot','truck','trust'],
+    'L-Blends': ['black','blade','blame','blast','blaze','bleed','blend','bless','blink','bloat','block','bloom','blow','blue','bluff','blush','claim','clap','clash','class','claw','clay','clean','clear','click','cling','cloak','clock','cloud','clove','clown','club','clue','flag','flake','flame','flap','flash','flat','flaw','flea','fleet','flick','flight','flip','float','flock','flop','glare','glad','glass','glide','globe','gloom','glue','place','plain','plane','plant','play','plot','plow','pluck','plug','plum','plump','slab','slap','slash','slave','slay','sled','sleep','sleet','slick','slide','slight','slim','slime','sling','slink','slope','slug','slump'],
+    'S-Blends': ['scarf','scoop','scope','score','scrape','scratch','scrawl','scream','screw','scrub','skate','skid','skill','skin','skip','skunk','smack','smart','smash','smell','smile','smoke','snail','snake','snap','sneak','snow','snug','space','spark','speak','speed','spell','spin','spine','spot','spray','spring','sprint','stain','stand','star','state','stay','steam','steed','steep','stick','still','sting','stock','stole','stone','stop','store','storm','stove','streak','stream','stride','strike','string','stripe','strive','stroke','strong','struck','strum','stuck','stuff','stump','stun','swim','swing','swoop']
+  }},
+  { label:'Ending Blends', key:'ending_blends', patterns: {
+    '-nt': ['bent','blunt','bunt','cent','count','dent','faint','flaunt','grant','grunt','haunt','hint','hunt','joint','lent','mint','mount','plant','print','punt','rent','runt','sent','slant','spent','splint','sprint','tent','went'],
+    '-mp': ['blimp','bump','clomp','clump','dump','grump','jump','lump','plump','pump','scrimp','slump','stomp','stump'],
+    '-nd': ['bend','bland','blend','found','hound','lend','mend','send','spend','stand','strand','tend','trend'],
+    '-sk': ['brisk','flask','frisk','risk'],
+    '-st': ['best','blast','boast','bust','chest','coast','crust','dust','feast','first','frost','hoist','joist','just','least','moist','must','nest','pest','priest','rest','roast','rust','test','thirst','thrust','toast','trust','twist','vast','vest','west']
+  }},
+  { label:'Advanced Patterns', key:'advanced', patterns: {
+    'Hard C': ['cat','cut','class','clap','crop','camp','clock','crust','cap','cod','cub','cot','cave','coat','cube','cold','cord','curl','came','cone','cure'],
+    'Soft C': ['cent','city','race','ice','face','cell','cereal','circle','pencil','prince','place','space','trace','grace','dance','fence','since','once','twice','mice','price','voice','sauce'],
+    'Hard G': ['game','glad','grip','grab','grin','globe','grand','green','got','gun','gap','gust','gift','gold','grub','grow','gloom','glide','glow'],
+    'Soft G': ['gem','giant','gym','cage','page','giraffe','gentle','magic','stage','age','rage','wage','huge','budge','fudge','hedge','lodge','judge','badge','edge'],
+    'Irregular — -ild': ['wild','child','mild'],
+    'Irregular — -ind': ['find','kind','mind','blind','bind','grind','wind','rind'],
+    'Irregular — -old': ['cold','gold','told','sold','fold','bold','hold','mold','old','scold'],
+    'Irregular — -ost': ['most','post','ghost','host']
+  }},
+  { label:'Silent Letters', key:'silent_letters', patterns: {
+    'Silent kn-': ['knot','knock','know','knee','knife','knight','kneel','knit','knew','knob','known'],
+    'Silent wr-': ['wrap','write','wrong','wrist','wreck','wrote','wring','wrench','wrath','wrestle','written'],
+    'Silent gn-': ['gnaw','gnome','gnat','gnu','gnash']
+  }},
+  { label:'-le Endings', key:'le_endings', patterns: {
+    '-le Endings': ['table','able','cable','fable','stable','bubble','wobble','gobble','pebble','nibble','riddle','middle','muddle','puddle','handle','candle','bundle','jungle','single','jingle','mingle','tingle','wrinkle','sprinkle','twinkle','little','battle','rattle','cattle','kettle','bottle','puzzle','nozzle','drizzle','sizzle','marble','purple','simple','sample','maple','apple','turtle','circle','pickle','tickle','buckle','muscle','uncle','people','title','noble']
+  }},
+  { label:'-dge vs -ge', key:'dge_vs_ge', patterns: {
+    '-dge (after short vowel)': ['badge','edge','ridge','lodge','fudge','bridge','hedge','judge','nudge','pledge','smudge','wedge','budge','dodge','grudge','ledge'],
+    '-ge (after long vowel or consonant)': ['age','cage','page','rage','sage','wage','stage','huge','urge','surge','merge','purge','hinge','plunge','range','strange','change','charge','large','gorge']
+  }}
+];
+
+// ═══════════════════════════════════════════════════
+// AUDIO ENGINE  (Web Audio API — no external files)
+// ═══════════════════════════════════════════════════
+let audioCtx = null;
+
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function soundEnabled() { return $('soundToggle') && $('soundToggle').checked; }
+
+function playTone(freq, type, duration, volume, delay = 0) {
+  if (!soundEnabled()) return;
+  try {
+    const ctx = getAudio();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+    gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+    gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + delay + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+    osc.start(ctx.currentTime + delay);
+    osc.stop(ctx.currentTime + delay + duration + 0.05);
+  } catch(e) {}
+}
+
+// Soft card advance — brief neutral click
+function sndAdvance() {
+  playTone(520, 'sine', 0.08, 0.12);
+}
+
+// Got It — bright rising two-note chime
+function sndKnown() {
+  playTone(660, 'sine', 0.12, 0.14, 0);
+  playTone(880, 'sine', 0.14, 0.14, 0.10);
+}
+
+// Need Practice — soft low-dip tone
+function sndMissed() {
+  playTone(380, 'sine', 0.15, 0.10);
+}
+
+// Countdown beep — clean tick
+function sndCountTick() {
+  playTone(600, 'sine', 0.12, 0.15);
+}
+
+// Countdown GO! — bright triad
+function sndCountGo() {
+  playTone(660, 'sine', 0.18, 0.18, 0);
+  playTone(784, 'sine', 0.18, 0.18, 0.08);
+  playTone(1047,'sine', 0.22, 0.18, 0.16);
+}
+
+// Deck complete — ascending fanfare
+function sndComplete() {
+  const notes = [523, 659, 784, 1047];
+  notes.forEach((f, i) => playTone(f, 'sine', 0.25, 0.18, i * 0.1));
+}
+
+// ═══════════════════════════════════════════════════
+// CONFETTI
+// ═══════════════════════════════════════════════════
+function launchConfetti() {
+  const canvas = $('confettiCanvas');
+  canvas.style.display = 'block';
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const COLORS = ['#2EC4B6','#E8483A','#7B5EA7','#FFB830','#4baa68','#ffffff'];
+  const pieces = Array.from({length: 120}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * -canvas.height * 0.3 - 20,
+    w: Math.random() * 10 + 5,
+    h: Math.random() * 6 + 3,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    rot: Math.random() * Math.PI * 2,
+    vx: (Math.random() - 0.5) * 3,
+    vy: Math.random() * 3 + 2,
+    vr: (Math.random() - 0.5) * 0.15,
+    opacity: 1
+  }));
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    pieces.forEach(p => {
+      p.x  += p.vx;
+      p.y  += p.vy;
+      p.vy += 0.05;   // gravity
+      p.rot += p.vr;
+      if (frame > 80) p.opacity = Math.max(0, p.opacity - 0.015);
+      if (p.y < canvas.height + 20) alive = true;
+      ctx.save();
+      ctx.globalAlpha = p.opacity;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    frame++;
+    if (alive && frame < 200) requestAnimationFrame(draw);
+    else canvas.style.display = 'none';
+  }
+  draw();
+}
+
+// ═══════════════════════════════════════════════════
+// COUNTDOWN
+// ═══════════════════════════════════════════════════
+function runCountdown(label, onDone) {
+  const overlay = $('countdownOverlay');
+  const numEl   = $('countdownNumber');
+  const subEl   = $('countdownSub');
+  const lblEl   = $('countdownDeckLabel');
+  overlay.style.display = 'flex';
+  lblEl.textContent = label;
+  const steps = [
+    { text: '3', sub: '' },
+    { text: '2', sub: '' },
+    { text: '1', sub: '' },
+    { text: 'Read!', sub: '' }
+  ];
+  let i = 0;
+  function showStep() {
+    if (i >= steps.length) {
+      overlay.style.display = 'none';
+      onDone();
+      return;
+    }
+    const s = steps[i];
+    numEl.textContent = s.text;
+    subEl.textContent = s.sub;
+    // pop animation
+    numEl.classList.remove('count-pop');
+    void numEl.offsetWidth; // reflow
+    numEl.classList.add('count-pop');
+    if (i < 3) sndCountTick(); else sndCountGo();
+    i++;
+    setTimeout(showStep, i <= 3 ? 750 : 900);
+  }
+  showStep();
+}
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let currentTab = 'fry';
+let selectedWords = [];
+let deck = [], missed = [], knownCount = 0;
+let currentIndex = 0;
+let deckLabel = '';
+
+// ═══════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+}
+
+function updateCount() {
+  const n = currentTab === 'custom' ? getCustomWords().length : selectedWords.length;
+  const noun = n === 1 ? 'word' : 'words';
+  const verb = currentTab === 'custom' ? 'ready' : 'selected for deck';
+  $('countLine').textContent = n ? `${n} ${noun} ${verb}` : 'No words selected — tap words or use Select All';
+  $('countLine').style.color = n ? 'var(--teal-dk)' : 'var(--coral)';
+}
+
+function getCustomWords() {
+  return ($('customArea').value || '')
+    .split(/[\s,\n]+/)
+    .map(w => w.trim())
+    .filter(Boolean);
+}
+
+function updateCustomPreview() {
+  const words = getCustomWords();
+  const preview = $('customPreview');
+  const bank = $('customWordBank');
+  if (!words.length) { preview.style.display = 'none'; updateCount(); return; }
+  preview.style.display = 'block';
+  $('customCountHint').textContent = `${words.length} word${words.length === 1 ? '' : 's'}`;
+  bank.innerHTML = words.map(w =>
+    `<span style="border:1.5px solid var(--border);background:var(--white);border-radius:100px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--navy-mid);">${w}</span>`
+  ).join('');
+  updateCount();
+}
+
+function applyWordClass(word) {
+  const el  = $('flashWord');
+  const fEl = $('fsWord');
+  el.textContent  = word;
+  fEl.textContent = word;
+  const len = word.length;
+  const isLong  = len >= 8 && len <= 12;
+  const isXLong = len > 12;
+  el.classList.toggle('long-word',  isLong);
+  el.classList.toggle('xlong-word', isXLong);
+  fEl.classList.toggle('long-word',  isLong);
+  fEl.classList.toggle('xlong-word', isXLong);
+}
+
+// ═══════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════
+function switchTab(tab) {
+  currentTab = tab;
+  ['Fry','Dolch','Phonics','Custom'].forEach(t =>
+    $('tab' + t).classList.toggle('active', tab === t.toLowerCase())
+  );
+  $('levelSection').style.display   = (tab === 'fry' || tab === 'dolch') ? 'block' : 'none';
+  $('phonicsSection').style.display = tab === 'phonics' ? 'block' : 'none';
+  $('customSection').style.display  = tab === 'custom'  ? 'block' : 'none';
+  $('bankSection').style.display    = tab === 'custom'  ? 'none'  : 'block';
+
+  if (tab === 'fry' || tab === 'dolch') {
+    $('levelLabel').textContent = tab === 'fry' ? 'Fry Level' : 'Dolch Level';
+    populateLevels(tab);
+    loadWordBank();
+  } else if (tab === 'phonics') {
+    populatePhonicsGroups();
+  } else {
+    $('wordBank').innerHTML = '';
+    selectedWords = [];
+    $('customPreview').style.display = 'none';
+    updateCount();
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FRY / DOLCH
+// ═══════════════════════════════════════════════════
+function populateLevels(tab) {
+  const data = tab === 'fry' ? FRY : DOLCH;
+  $('levelSelect').innerHTML = Object.keys(data)
+    .map(k => `<option value="${k}">${k}</option>`).join('');
+}
+
+function loadWordBank() {
+  const data = currentTab === 'fry' ? FRY : DOLCH;
+  const level = $('levelSelect').value;
+  const words = data[level] || [];
+  renderChips(words);
+}
+
+// ═══════════════════════════════════════════════════
+// PHONICS — auto-load on every change
+// ═══════════════════════════════════════════════════
+function populatePhonicsGroups() {
+  $('phonicsGroup').innerHTML = PHONICS_DB.map(g =>
+    `<option value="${g.key}">${g.label}</option>`
+  ).join('');
+  populatePhonicsPatterns();
+}
+
+function populatePhonicsPatterns() {
+  const key = $('phonicsGroup').value;
+  const group = PHONICS_DB.find(g => g.key === key);
+  if (!group) return;
+  $('phonicsPattern').innerHTML = Object.keys(group.patterns)
+    .map(p => `<option value="${p}">${p}</option>`).join('');
+  autoLoadPhonics();
+}
+
+function autoLoadPhonics() {
+  const key = $('phonicsGroup').value;
+  const pat = $('phonicsPattern').value;
+  const group = PHONICS_DB.find(g => g.key === key);
+  if (!group) return;
+  const words = group.patterns[pat] || [];
+  renderChips(words);
+}
+
+function onGroupChange()   { populatePhonicsPatterns(); }
+function onPatternChange() { autoLoadPhonics(); }
+
+// ═══════════════════════════════════════════════════
+// WORD BANK CHIPS — default UNSELECTED
+// ═══════════════════════════════════════════════════
+function renderChips(words) {
+  const bank = $('wordBank');
+  bank.innerHTML = '';
+  selectedWords = []; // reset — teachers tap to select
+  words.forEach(word => {
+    const btn = document.createElement('button');
+    btn.className = 'chip'; // unselected by default
+    btn.textContent = word;
+    btn.onclick = () => {
+      const idx = selectedWords.indexOf(word);
+      if (idx > -1) {
+        selectedWords.splice(idx, 1);
+        btn.classList.remove('sel');
+      } else {
+        selectedWords.push(word);
+        btn.classList.add('sel');
+      }
+      updateCount();
+    };
+    bank.appendChild(btn);
+  });
+  updateCount();
+}
+
+function selectAll() {
+  const allWords = [];
+  $('wordBank').querySelectorAll('.chip').forEach(c => {
+    c.classList.add('sel');
+    allWords.push(c.textContent);
+  });
+  selectedWords = allWords;
+  updateCount();
+}
+
+function selectNone() {
+  selectedWords = [];
+  $('wordBank').querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  updateCount();
+}
+
+function shuffleSetup() {
+  const bank = $('wordBank');
+  const chips = [...bank.querySelectorAll('.chip')];
+  shuffle(chips);
+  chips.forEach(c => bank.appendChild(c));
+  updateCount();
+}
+
+// ═══════════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════════
+function startFlashcards() {
+  let words;
+  if (currentTab === 'custom') {
+    words = getCustomWords();
+    deckLabel = 'Custom Words';
+  } else {
+    words = [...selectedWords];
+    if (currentTab === 'fry') {
+      deckLabel = `Fry · ${$('levelSelect').value}`;
+    } else if (currentTab === 'dolch') {
+      deckLabel = `Dolch · ${$('levelSelect').value}`;
+    } else {
+      const gKey = $('phonicsGroup').value;
+      const pat  = $('phonicsPattern').value;
+      const group = PHONICS_DB.find(g => g.key === gKey);
+      deckLabel = `${group ? group.label : 'Phonics'} · ${pat}`;
+    }
+  }
+  if (!words.length) {
+    alert('Please select at least one word. Tap words in the Word Bank, or click Select All.');
+    return;
+  }
+  deck = [...words];
+  shuffle(deck);
+  missed = [];
+  knownCount = 0;
+  currentIndex = 0;
+
+  $('setup').style.display = 'none';
+
+  const useCountdown = $('countdownToggle') && $('countdownToggle').checked;
+  if (useCountdown) {
+    runCountdown(deckLabel, () => {
+      $('flashScreen').style.display = 'flex';
+      renderCard();
+    });
+  } else {
+    $('flashScreen').style.display = 'flex';
+    renderCard();
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FLASHCARD LOGIC
+// ═══════════════════════════════════════════════════
+function renderCard() {
+  if (currentIndex >= deck.length) { showFinish(); return; }
+  const word = deck[currentIndex];
+  applyWordClass(word);
+  const prog = `Card ${currentIndex + 1} of ${deck.length}`;
+  $('progLabel').textContent    = prog;
+  $('sideProgress').textContent = `${currentIndex + 1} / ${deck.length}`;
+  $('fsProg').textContent       = prog;
+  $('progFill').style.width     = `${(currentIndex / deck.length) * 100}%`;
+  $('deckLbl').textContent  = deckLabel;
+  $('sideDeck').textContent = deckLabel;
+  $('fsLbl').textContent    = deckLabel;
+  $('knownNum').textContent  = knownCount;
+  $('missedNum').textContent = missed.length;
+  $('missedBadge').textContent = missed.length ? `${missed.length} need practice` : '';
+  $('missedList').innerHTML = missed.map(w => `<span class="mc">${w}</span>`).join('');
+}
+
+function nextCard()  { sndAdvance(); currentIndex++; renderCard(); }
+function markKnown() { sndKnown();   knownCount++;   currentIndex++; renderCard(); }
+
+function markMissed() {
+  const w = deck[currentIndex];
+  if (w && !missed.includes(w)) missed.push(w);
+  sndMissed();
+  currentIndex++;
+  renderCard();
+}
+
+function shuffleDeck()  { shuffle(deck); currentIndex = 0; missed = []; knownCount = 0; renderCard(); }
+function restartDeck()  { currentIndex = 0; missed = []; knownCount = 0; renderCard(); }
+
+function practiceMissed() {
+  if (!missed.length) { alert('No missed words yet — great job!'); return; }
+  deck = [...missed];
+  shuffle(deck);
+  missed = [];
+  knownCount = 0;
+  currentIndex = 0;
+  deckLabel = 'Missed Words Practice';
+  renderCard();
+}
+
+function backToSetup() {
+  $('flashScreen').style.display = 'none';
+  $('setup').style.display = 'block';
+  closeFS();
+}
+
+// ═══════════════════════════════════════════════════
+// FULLSCREEN
+// ═══════════════════════════════════════════════════
+function openFS()  { $('fsMode').classList.add('open'); }
+function closeFS() { $('fsMode').classList.remove('open'); }
+function fsMissed(){ markMissed(); }
+function fsNext()  { nextCard(); }
+function fsKnown() { markKnown(); }
+
+// ═══════════════════════════════════════════════════
+// FINISH
+// ═══════════════════════════════════════════════════
+function showFinish() {
+  $('progFill').style.width = '100%';
+  $('finKnown').textContent  = knownCount;
+  $('finMissed').textContent = missed.length;
+  $('finishMsg').textContent = `You practiced ${deck.length} word${deck.length === 1 ? '' : 's'}. ${missed.length ? `${missed.length} word${missed.length === 1 ? ' needs' : 's need'} more practice.` : 'Great job — every word got it!'}`;
+  $('finishOverlay').classList.add('open');
+  closeFS();
+  // Celebration
+  sndComplete();
+  setTimeout(launchConfetti, 150);
+}
+
+function practiceAgain() {
+  $('finishOverlay').classList.remove('open');
+  currentIndex = 0; missed = []; knownCount = 0;
+  shuffle(deck); renderCard();
+}
+
+function doMissedFromFinish() {
+  if (!missed.length) { alert('No missed words — well done!'); return; }
+  $('finishOverlay').classList.remove('open');
+  practiceMissed();
+}
+
+function backToSetupFromFinish() {
+  $('finishOverlay').classList.remove('open');
+  backToSetup();
+}
+
+// ═══════════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if ($('flashScreen').style.display !== 'flex') return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.code === 'Space' || e.key === 'ArrowRight') { e.preventDefault(); nextCard(); }
+  if (e.key.toLowerCase() === 'm') markMissed();
+  if (e.key.toLowerCase() === 'g') markKnown();
+  if (e.key.toLowerCase() === 'f') {
+    $('fsMode').classList.contains('open') ? closeFS() : openFS();
+  }
+  if (e.key === 'Escape') closeFS();
+});
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  populateLevels('fry');
+  loadWordBank();
+});
+</script>
+</body>
+</html>
