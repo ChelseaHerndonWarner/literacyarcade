@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Read &amp; Race – Two-Player Phonics &amp; Sight Word Race Game | Literacy Arcade</title>
+<meta name="description" content="Read &amp; Race is a free two-player reading race game for K–5 classrooms. Build a custom word list from Fry words, Dolch sight words, structured phonics patterns, or your own words. Roll dice, read words, race to the finish! Perfect for reading fluency, phonics practice, and Science of Reading intervention."/>
+<meta name="keywords" content="phonics game, sight word game, reading fluency game, Science of Reading, structured literacy, reading intervention, Fry words, Dolch words, classroom reading game, K-5 literacy, two player reading game, race reading game, word reading game"/>
+<link rel="canonical" href="https://literacyarcade.com/read-and-race.html"/>
+<meta property="og:title" content="Read &amp; Race – Two-Player Phonics &amp; Sight Word Race Game"/>
+<meta property="og:description" content="Free classroom game: roll dice, read words, race to the finish! Fry words, Dolch sight words, full phonics patterns, or custom words."/>
+<meta property="og:url" content="https://literacyarcade.com/read-and-race.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://literacyarcade.com/og-read-and-race.png"/>
+<meta property="og:site_name" content="Literacy Arcade"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Read &amp; Race – Two-Player Phonics &amp; Sight Word Race Game"/>
+<meta name="twitter:description" content="Free classroom game: roll dice, read words, race to the finish! Fry, Dolch, phonics patterns, or custom words."/>
+<meta name="twitter:image" content="https://literacyarcade.com/og-read-and-race.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ─── TOKENS ─────────────────────────────────────────────────────────────── */
+:root{
+  --teal:#1ABEA8;  --teal-dk:#0E9F8E; --teal-bg:#E0F7F4;
+  --coral:#F47B5E; --coral-dk:#D95F3F;
+  --navy:#0F172A;  --navy-mid:#334155; --navy-lt:#64748B;
+  --cream:#F5F4EE; --white:#FFFFFF;   --border:#E2E0D8;
+  --track-bg:linear-gradient(180deg,#F8F4FF 0%,#EDE8FA 100%);
+  --track-border:#D4CCF0;
+  --shadow-sm:0 2px 8px rgba(15,23,42,.06);
+  --shadow-md:0 8px 24px rgba(15,23,42,.10);
+  --shadow-lg:0 16px 48px rgba(15,23,42,.14);
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;overflow-x:hidden}
+button,select,input,textarea{font-family:inherit}
+a{color:inherit;text-decoration:none}
+
+/* ─── HEADER ─────────────────────────────────────────────────────────────── */
+.la-header{
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:0 24px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+  box-shadow:var(--shadow-sm);
+}
+.la-logo-group{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.la-icon{width:36px;height:36px;border-radius:9px;overflow:hidden;flex-shrink:0;display:block}
+.la-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.la-wordmark{
+  font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;
+  color:var(--navy);letter-spacing:-.2px;line-height:1;
+}
+.la-pipe{width:1px;height:18px;background:var(--border);margin:0 4px;flex-shrink:0}
+.la-tool-name{
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;
+  color:var(--teal-dk);letter-spacing:-.1px;line-height:1;
+}
+.hdr-btns{display:flex;align-items:center;gap:6px}
+.icon-btn{
+  width:36px;height:36px;border-radius:var(--r-sm);
+  border:1.5px solid var(--border);background:#F8F7F3;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--navy-mid);transition:background .15s,border-color .15s;flex-shrink:0;
+  cursor:pointer;
+}
+.icon-btn:hover{background:var(--cream);border-color:var(--navy-lt)}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+
+/* ─── SETUP ──────────────────────────────────────────────────────────────── */
+#setup{max-width:740px;margin:0 auto;padding:28px 20px 64px}
+
+.hero{text-align:center;margin-bottom:26px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--teal-bg);color:var(--teal-dk);
+  border:1px solid rgba(14,159,142,.2);
+  border-radius:999px;padding:4px 14px;
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:12px;
+}
+.hero h1{
+  font-family:'Nunito',sans-serif;
+  font-size:clamp(1.9rem,5.5vw,2.8rem);font-weight:900;
+  color:var(--navy);letter-spacing:-.5px;line-height:1.05;
+}
+.hero h1 strong{font-style:normal;color:var(--teal-dk)}
+.hero p{color:var(--navy-lt);font-size:14px;font-weight:500;margin-top:7px}
+
+/* Cards */
+.card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:20px 22px;
+  box-shadow:var(--shadow-md);margin-bottom:14px;
+}
+.card-title{
+  font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--navy-lt);margin-bottom:12px;
+  display:flex;align-items:center;gap:7px;
+}
+.card-title::before{content:"";display:block;width:3px;height:13px;border-radius:2px;background:var(--teal)}
+
+/* Tabs */
+.tab-bar{
+  display:flex;gap:4px;background:var(--cream);
+  border:1px solid var(--border);border-radius:var(--r-md);
+  padding:4px;margin-bottom:0;flex-wrap:wrap;
+}
+.tab-btn{
+  flex:1;min-width:68px;border:none;border-radius:var(--r-sm);
+  background:transparent;color:var(--navy-lt);
+  font-size:13px;font-weight:800;padding:8px 10px;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.tab-btn.active{background:var(--white);color:var(--teal);box-shadow:var(--shadow-sm)}
+.tab-btn:hover:not(.active){background:rgba(255,255,255,.7);color:var(--navy)}
+
+/* Level row — compact two-column when shown */
+.level-row{
+  display:grid;grid-template-columns:1fr;gap:0;
+  overflow:hidden;max-height:0;
+  transition:max-height .28s ease, margin-top .28s ease, opacity .22s ease;
+  opacity:0;margin-top:0;
+}
+.level-row.visible{max-height:80px;opacity:1;margin-top:12px}
+
+/* Fields */
+.field{margin-bottom:0}
+.field label{display:block;font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--navy-lt);margin-bottom:5px}
+select,input{
+  width:100%;border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:9px 13px;font-size:14px;
+  font-weight:700;color:var(--navy);outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+select:focus,input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12)}
+textarea{
+  width:100%;border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:9px 13px;font-size:14px;
+  font-weight:700;color:var(--navy);outline:none;min-height:74px;resize:vertical;
+  transition:border-color .15s;
+}
+textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12)}
+
+/* Word bank accordion */
+.word-bank-accordion{
+  overflow:hidden;max-height:0;
+  transition:max-height .32s ease, opacity .25s ease, margin-top .28s ease;
+  opacity:0;margin-top:0;
+}
+.word-bank-accordion.open{max-height:340px;opacity:1;margin-top:14px}
+
+.builder-actions{display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.btn-ghost{
+  border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:7px 14px;
+  font-size:12px;font-weight:800;color:var(--navy-mid);
+  cursor:pointer;transition:all .13s;
+}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+.count-badge{
+  display:inline-flex;align-items:center;background:var(--teal);
+  color:white;border-radius:999px;padding:3px 12px;
+  font-size:11px;font-weight:800;margin-left:auto;
+}
+
+.word-bank-wrap{
+  border:1.5px solid var(--border);background:var(--cream);
+  border-radius:var(--r-lg);padding:12px;
+}
+.word-bank-head{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.word-bank-head h3{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--navy-lt)}
+.word-bank-hint{font-size:10px;color:var(--navy-lt);font-weight:600;margin-left:auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px;max-height:160px;overflow-y:auto;padding:2px}
+.chip{
+  border:1.5px solid var(--border);background:var(--white);
+  border-radius:999px;padding:5px 13px;
+  font-size:13px;font-weight:700;color:var(--navy);
+  cursor:pointer;transition:all .12s;
+}
+.chip:hover:not(.selected){border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+.chip.selected{background:var(--teal);color:white;border-color:var(--teal)}
+
+/* Custom tools */
+.custom-tools{display:none;margin-top:12px}
+.custom-tools.show{display:block}
+.custom-add-row{display:flex;gap:8px;align-items:flex-start}
+.custom-add-row textarea{flex:1}
+
+/* Player inputs */
+.player-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.player-input{display:flex;flex-direction:column;gap:7px}
+.player-input input{width:100%}
+.player-dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto}
+
+/* Color swatches */
+.color-swatches{display:flex;gap:6px;align-items:center}
+.color-swatch{
+  width:28px;height:28px;border-radius:50%;cursor:pointer;
+  border:3px solid transparent;
+  transition:transform .12s,border-color .12s,box-shadow .12s;
+  flex-shrink:0;
+}
+.color-swatch:hover{transform:scale(1.12)}
+.color-swatch.selected{border-color:var(--navy);box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 0 4px var(--navy)}
+.color-swatch-label{font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--navy-lt);margin-bottom:3px}
+
+/* Start button */
+.start-btn{
+  width:100%;background:var(--teal-dk);color:white;
+  border:none;border-radius:var(--r-md);
+  padding:15px 24px;font-size:17px;font-weight:900;
+  font-family:'Nunito',sans-serif;
+  cursor:pointer;
+  box-shadow:0 4px 0 #0a7a6e;
+  transition:transform .12s,box-shadow .12s;
+  letter-spacing:.01em;margin-top:6px;
+}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 #0a7a6e}
+.start-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #0a7a6e}
+
+/* ─── GAME SCREEN ────────────────────────────────────────────────────────── */
+#game{display:none;flex-direction:column;height:100vh}
+/* Game uses the same .la-header class — no separate topbar needed */
+.topbar{
+  height:58px;background:var(--white);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;box-shadow:var(--shadow-sm);flex-shrink:0;
+}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-icon{width:36px;height:36px;border-radius:9px;overflow:hidden;flex-shrink:0}
+.topbar-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.topbar-wordmark{
+  font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;
+  color:var(--navy);letter-spacing:-.2px;line-height:1;
+}
+.topbar-pipe{width:1px;height:18px;background:var(--border);margin:0 4px;flex-shrink:0}
+.topbar-tool{
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;
+  color:var(--teal-dk);letter-spacing:-.1px;line-height:1;
+}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.topbar-label{font-size:11px;font-weight:600;color:var(--navy-lt)}
+.topbar-btn{
+  border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:6px 13px;font-size:12px;
+  font-weight:600;color:var(--navy-mid);cursor:pointer;transition:all .13s;
+}
+.topbar-btn:hover{border-color:var(--teal-dk);color:var(--teal-dk);background:var(--teal-bg)}
+.topbar-snd{
+  width:34px;height:34px;border-radius:var(--r-sm);
+  border:1.5px solid var(--border);background:#F8F7F3;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--navy-mid);cursor:pointer;transition:all .13s;flex-shrink:0;
+}
+.topbar-snd:hover{background:var(--cream);border-color:var(--navy-lt)}
+.topbar-snd svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+
+/* Game layout */
+.game-layout{
+  display:flex;
+  flex:1;
+  min-height:0;
+  overflow:hidden;
+}
+.race-wrap{flex:1;min-width:0;position:relative;overflow:hidden}
+
+/* Sidebar */
+.sidebar{
+  width:220px;flex:0 0 220px;
+  background:var(--white);border-left:1px solid var(--border);
+  padding:14px 12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;
+}
+.side-card{
+  background:var(--cream);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:13px;
+}
+.side-label{
+  font-size:9px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--navy-lt);margin-bottom:8px;
+}
+.now-name{font-size:18px;font-weight:800;line-height:1.15}
+.now-sub{font-size:11px;font-weight:600;color:var(--navy-lt);margin-top:3px}
+
+.player-row{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 8px;border-radius:var(--r-sm);
+  font-size:13px;font-weight:700;transition:background .12s;
+}
+.player-row.active{background:var(--teal-bg)}
+.player-row .pdot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.player-row .pscore{margin-left:auto;font-size:10px;color:var(--navy-lt);font-weight:700}
+
+/* Dice */
+.dice-card{text-align:center}
+.dice-btn{
+  width:82px;height:82px;border:none;border-radius:17px;
+  background:var(--navy);color:white;
+  margin:5px auto 7px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  box-shadow:0 6px 0 #0a0a1a, 0 10px 22px rgba(0,0,0,.24);
+  transition:transform .08s,box-shadow .08s;
+}
+.dice-btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 #0a0a1a,0 14px 28px rgba(0,0,0,.28)}
+.dice-btn:active{transform:translateY(4px);box-shadow:0 2px 0 #0a0a1a,0 6px 12px rgba(0,0,0,.20)}
+.dice-btn:disabled{opacity:.38;cursor:not-allowed;transform:none!important}
+.dice-btn.rolling{animation:diceRoll .65s ease}
+@keyframes diceRoll{
+  0%  {transform:rotate(0)    scale(1)}
+  20% {transform:translateY(-5px) rotate(-18deg) scale(1.14)}
+  45% {transform:translateY(-3px) rotate(14deg)  scale(1.10)}
+  70% {transform:translateY(-2px) rotate(-8deg)  scale(1.05)}
+  100%{transform:rotate(0)    scale(1)}
+}
+.dice-svg{width:50px;height:50px;display:block}
+.dice-text{font-size:11px;font-weight:700;color:var(--navy-lt);margin-top:2px}
+
+/* ─── RACE STAGE ─────────────────────────────────────────────────────────── */
+.race-stage{
+  width:100%;height:100%;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#D6EEFF 0%,#E8F5FF 28%,#F0FAF0 58%,#D8F0C8 100%);
+}
+.race-stage::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 55% at 50% 0%,rgba(255,255,255,.28) 0%,transparent 68%);
+  pointer-events:none;z-index:1;
+}
+
+/* Clouds */
+.cloud{position:absolute;z-index:2;pointer-events:none}
+.cloud-shape{
+  position:relative;background:rgba(255,255,255,.88);
+  border-radius:50px;box-shadow:0 3px 12px rgba(100,160,200,.12);
+}
+
+/* Ground */
+.ground-strip{
+  position:absolute;left:0;right:0;bottom:0;height:60px;
+  background:linear-gradient(180deg,#9DBFA0 0%,#7FA882 60%,#6A9470 100%);z-index:2;
+}
+.ground-strip::before{
+  content:"";position:absolute;top:-12px;left:0;right:0;height:16px;
+  background:radial-gradient(ellipse at 50% 100%,#9DBFA0 0 56%,transparent 57%);
+}
+
+/* Track */
+.track-area{position:absolute;left:0;right:0;top:0;bottom:0;z-index:5}
+.race-track{
+  position:relative;border-radius:40px;
+  background:linear-gradient(180deg,#FEFCFF 0%,#F2EEF8 100%);
+  border:3px solid rgba(255,255,255,.95);
+  box-shadow:
+    0 0 0 2px var(--track-border),
+    inset 0 4px rgba(255,255,255,.50),
+    inset 0 -2px rgba(140,100,200,.08),
+    0 6px 0 rgba(100,80,180,.10),
+    0 10px 18px rgba(80,60,140,.12);
+  overflow:visible;
+}
+/* Dashed lane markers */
+.race-track::before{
+  content:"";
+  position:absolute;left:126px;right:66px;top:8px;bottom:8px;border-radius:24px;
+  background:repeating-linear-gradient(90deg,transparent 0 calc((100% / 12) - 2px),rgba(180,160,220,.45) calc((100% / 12) - 2px) calc(100%/12));
+  opacity:.78;
+}
+.track-label{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  color:white;border-radius:9px;padding:5px 12px;
+  font-size:12px;font-weight:800;
+  box-shadow:0 2px 7px rgba(0,0,0,.14);z-index:8;white-space:nowrap;
+}
+.finish-line{
+  position:absolute;right:26px;top:5px;bottom:5px;width:22px;border-radius:4px;
+  background:repeating-conic-gradient(#fff 0 25%,var(--navy) 0 50%) 0 0/11px 11px;
+  box-shadow:0 0 0 2.5px rgba(255,255,255,.88);z-index:7;
+}
+
+/* Car runner */
+.runner{
+  position:absolute;top:50%;
+  transform:translate(-50%,-50%);
+  width:108px;height:60px;
+  transition:left .65s cubic-bezier(.18,.85,.22,1.02);
+  z-index:10;
+  filter:drop-shadow(0 5px 5px rgba(0,0,0,.20));
+}
+.runner svg{width:108px;height:60px;display:block}
+.runner.bump{animation:carBump .55s ease}
+@keyframes carBump{
+  0%  {transform:translate(-50%,-50%) translateY(0)   scale(1)}
+  25% {transform:translate(-50%,-50%) translateY(-8px) scale(1.06)}
+  55% {transform:translate(-50%,-50%) translateY(2px)  scale(.97)}
+  80% {transform:translate(-50%,-50%) translateY(-2px) scale(1.01)}
+  100%{transform:translate(-50%,-50%) translateY(0)   scale(1)}
+}
+
+/* Signs — aligned symmetrically */
+.race-sign{
+  position:absolute;
+  background:var(--navy);color:#FFFFFF;
+  border:2.5px solid rgba(255,255,255,.20);border-radius:10px;
+  padding:5px 14px;font-size:13px;font-weight:900;
+  letter-spacing:.04em;
+  box-shadow:0 4px 0 rgba(10,10,30,.38),0 6px 16px rgba(0,0,0,.16);z-index:8;
+  font-family:'Nunito',sans-serif;
+  white-space:nowrap;
+}
+.race-sign::before,.race-sign::after{
+  content:"";position:absolute;bottom:-26px;
+  width:6px;height:26px;background:rgba(26,26,46,.55);border-radius:3px;
+}
+.race-sign::before{left:18px}
+.race-sign::after{right:18px}
+
+/* Scenery */
+.scenery{position:absolute;inset:0;pointer-events:none;z-index:3}
+
+/* ─── WORD CARD — compact slide-up panel ─────────────────────────────────── */
+.word-panel{
+  position:absolute;
+  left:50%;bottom:0;
+  transform:translateX(-50%) translateY(100%);
+  width:min(380px,58%);
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+  padding:14px 22px 18px;
+  text-align:center;
+  box-shadow:0 -8px 32px rgba(0,0,0,.14);
+  z-index:15;
+  transition:transform .32s cubic-bezier(.22,.88,.22,1);
+}
+.word-panel.visible{transform:translateX(-50%) translateY(0)}
+.word-panel-handle{
+  width:36px;height:4px;border-radius:2px;background:var(--border);
+  margin:0 auto 12px;
+}
+.word-label{
+  font-size:9px;font-weight:800;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--coral);margin-bottom:4px;
+}
+.big-word{
+  font-family:'Nunito',sans-serif;font-size:44px;
+  font-weight:900;line-height:1;margin:3px 0 6px;
+  color:var(--navy);letter-spacing:-1px;
+}
+.word-prompt{font-size:12px;color:var(--navy-lt);font-weight:600}
+.read-btn{
+  margin-top:10px;border:none;
+  background:var(--teal);color:white;
+  border-radius:var(--r-md);padding:10px 24px;
+  font-size:15px;font-weight:800;cursor:pointer;
+  box-shadow:0 4px 0 var(--teal-dk);
+  transition:transform .09s,box-shadow .09s;
+  display:block;width:100%;
+}
+.read-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 0 var(--teal-dk)}
+.read-btn:active:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 var(--teal-dk)}
+.read-btn:disabled{opacity:.40;cursor:not-allowed;box-shadow:none}
+
+/* Ready state — no word panel, compact prompt */
+.ready-prompt{
+  position:absolute;left:50%;bottom:18px;
+  transform:translateX(-50%);
+  background:rgba(255,255,255,.92);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:10px 20px;
+  font-size:13px;font-weight:700;color:var(--navy-lt);
+  text-align:center;
+  box-shadow:var(--shadow-sm);
+  z-index:14;
+  backdrop-filter:blur(4px);
+  transition:opacity .2s;
+  white-space:nowrap;
+}
+.ready-prompt.hidden{opacity:0;pointer-events:none}
+
+/* ─── WIN OVERLAY ────────────────────────────────────────────────────────── */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(26,26,46,.60);z-index:60;
+  align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);
+}
+.overlay.open{display:flex}
+.win-modal{
+  background:var(--white);border-radius:var(--r-xl);
+  width:400px;max-width:92vw;overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  animation:modalPop .22s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes modalPop{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+.win-header{
+  background:linear-gradient(135deg,var(--teal) 0%,#22d8c8 100%);
+  padding:28px 24px 22px;text-align:center;
+}
+.win-icon{font-size:48px;display:block;margin-bottom:8px}
+.win-title-sm{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.8)}
+.win-name{font-size:30px;font-weight:800;color:white;line-height:1.1;margin:4px 0}
+.win-sub{font-size:13px;color:rgba(255,255,255,.85);font-weight:600}
+.win-body{padding:20px;display:flex;flex-direction:column;gap:10px}
+.win-btn-primary{
+  width:100%;border:none;
+  background:var(--teal);color:white;
+  border-radius:var(--r-md);padding:13px;
+  font-size:15px;font-weight:800;cursor:pointer;
+  box-shadow:0 5px 0 var(--teal-dk);
+  transition:transform .1s,box-shadow .1s;
+}
+.win-btn-primary:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--teal-dk)}
+.win-btn-primary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--teal-dk)}
+.win-btn-secondary{
+  width:100%;border:1.5px solid var(--border);
+  background:var(--white);color:var(--navy-mid);
+  border-radius:var(--r-md);padding:11px;
+  font-size:14px;font-weight:800;cursor:pointer;
+  transition:all .13s;
+}
+.win-btn-secondary:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:70;display:none}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media(max-width:820px){
+  .game-layout{flex-direction:column}
+  .race-wrap{flex:1}
+  .sidebar{
+    width:100%;flex:0 0 auto;border-left:none;border-top:1px solid var(--border);
+    display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;
+  }
+  #game{height:auto;min-height:100vh}
+  .big-word{font-size:36px}
+  .word-panel{width:94%}
+  .tab-btn{font-size:11px;padding:7px 7px}
+}
+@media(max-width:520px){
+  .sidebar{grid-template-columns:1fr 1fr}
+  .player-grid{grid-template-columns:1fr}
+  .card{padding:16px 18px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- ═══ HEADER ═══ -->
+<header class="la-header" aria-label="Literacy Arcade navigation">
+  <a href="https://literacyarcade.com" class="la-logo-group" aria-label="Literacy Arcade home">
+    <div class="la-icon">
+      <img src="data:image/png;base64,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" alt="Literacy Arcade logo"/>
+    </div>
+    <span class="la-wordmark">Literacy Arcade</span>
+    <div class="la-pipe"></div>
+    <span class="la-tool-name">Read &amp; Race</span>
+  </a>
+  <div class="hdr-btns">
+    <button class="icon-btn" id="setupSoundBtn" aria-label="Toggle sound" title="Toggle sound">
+      <svg id="setupSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      <svg id="setupSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+    <button class="icon-btn" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'">
+      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ═══ SETUP ═══ -->
+<section id="setup">
+  <div class="hero">
+    <div class="hero-badge">Two-Player Race Game</div>
+    <h1>Read &amp; <strong>Race</strong></h1>
+    <p>Roll the dice · read a word · race to the finish line</p>
+  </div>
+
+  <!-- Step 1 + 2: List type + Level (progressive reveal) -->
+  <div class="card">
+    <div class="card-title">Choose Your Word List</div>
+    <div class="tab-bar" id="listTabs">
+      <button class="tab-btn active" data-type="fry">Fry Words</button>
+      <button class="tab-btn" data-type="dolch">Dolch Words</button>
+      <button class="tab-btn" data-type="phonics">Phonics Patterns</button>
+      <button class="tab-btn" data-type="custom">Custom Words</button>
+    </div>
+
+    <!-- Level dropdown — revealed after tab selection -->
+    <div class="level-row visible" id="levelRow">
+      <div class="field">
+        <label>Level / Category</label>
+        <select id="levelSelect"></select>
+      </div>
+    </div>
+
+    <!-- Custom word entry -->
+    <div class="custom-tools" id="customField">
+      <div class="field">
+        <label>Enter Custom Words</label>
+        <div class="custom-add-row">
+          <textarea id="customWords" placeholder="Type words separated by spaces, commas, or new lines…"></textarea>
+          <button type="button" class="btn-ghost" id="addCustomBtn" style="align-self:stretch;padding:10px 14px">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Word bank — slides open after level chosen -->
+    <div class="word-bank-accordion" id="wordBankAccordion">
+      <div class="builder-actions">
+        <button type="button" class="btn-ghost" id="selectAllBtn">Select All</button>
+        <button type="button" class="btn-ghost" id="deselectAllBtn">Deselect All</button>
+        <span class="count-badge" id="wordCount">0 selected</span>
+      </div>
+      <div class="word-bank-wrap">
+        <div class="word-bank-head">
+          <h3>Word Bank</h3>
+          <span class="word-bank-hint">Tap to select &mdash; tap again to remove</span>
+        </div>
+        <div class="chips" id="wordBank"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Player Setup (Names + Colors) -->
+  <div class="card">
+    <div class="card-title">Player Setup</div>
+    <div class="player-grid" id="playerSetup"></div>
+  </div>
+
+  <button class="start-btn" id="startBtn">Start the Race</button>
+</section>
+
+<!-- ═══ GAME ═══ -->
+<section id="game">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-icon">
+        <img src="data:image/png;base64,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" alt="Literacy Arcade logo"/>
+      </div>
+      <span class="topbar-wordmark">Literacy Arcade</span>
+      <div class="topbar-pipe"></div>
+      <span class="topbar-tool">Read &amp; Race</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-label" id="gameListLabel"></span>
+      <button class="topbar-btn" id="restartBtn">Restart</button>
+      <button class="topbar-btn" id="newGameBtn">Change List</button>
+      <button class="topbar-snd" id="gameSoundBtn" aria-label="Toggle sound" title="Toggle sound">
+        <svg id="gameSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg id="gameSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'" style="width:34px;height:34px">
+        <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="game-layout">
+    <div class="race-wrap">
+      <div class="race-stage" id="raceStage">
+        <div class="scenery" id="scenery"></div>
+        <div id="trackArea"></div>
+        <!-- Compact bottom prompt when waiting to roll -->
+        <div class="ready-prompt" id="readyPrompt">Roll the dice to begin</div>
+        <!-- Slide-up word panel during read phase -->
+        <div class="word-panel" id="wordPanel">
+          <div class="word-panel-handle"></div>
+          <div class="word-label" id="wordLabel">Read this word</div>
+          <div class="big-word" id="bigWord">Ready?</div>
+          <div class="word-prompt" id="wordPrompt"></div>
+          <button class="read-btn" id="readBtn" disabled>Waiting for dice roll</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="side-card">
+        <div class="side-label">Now Playing</div>
+        <div class="now-name" id="nowName">Player 1</div>
+        <div class="now-sub" id="nowSub">Roll the dice!</div>
+      </div>
+      <div class="side-card">
+        <div class="side-label">Racers</div>
+        <div id="playerList"></div>
+      </div>
+      <div class="side-card dice-card">
+        <div class="side-label">Dice</div>
+        <button class="dice-btn" id="diceBtn" aria-label="Roll dice">
+          <svg class="dice-svg" id="diceFace" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="64" height="64" rx="14" fill="#1A1A2E"/>
+            <rect x="1" y="1" width="62" height="62" rx="13" stroke="rgba(255,255,255,.10)" stroke-width="2" fill="none"/>
+            <circle id="p1" cx="20" cy="20" r="5.5" fill="white"/>
+            <circle id="p2" cx="44" cy="20" r="5.5" fill="white"/>
+            <circle id="p3" cx="20" cy="44" r="5.5" fill="white"/>
+            <circle id="p4" cx="44" cy="44" r="5.5" fill="white"/>
+            <circle id="p5" cx="32" cy="32" r="5.5" fill="white" style="display:none"/>
+            <circle id="p6" cx="32" cy="32" r="5.5" fill="white" style="display:none"/>
+          </svg>
+        </button>
+        <div class="dice-text" id="diceText">Click to roll</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- Win Overlay -->
+<div class="overlay" id="winOverlay">
+  <div class="win-modal">
+    <div class="win-header">
+      <span class="win-icon">🏆</span>
+      <div class="win-title-sm">Winner!</div>
+      <div class="win-name" id="winName">Player 1</div>
+      <div class="win-sub">crossed the finish line — amazing reading!</div>
+    </div>
+    <div class="win-body">
+      <button class="win-btn-primary" id="playAgainBtn">▶ Play Again</button>
+      <button class="win-btn-secondary" id="changeListBtn">Change Word List</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   DATA — Fry, Dolch, Full Phonics Master List
+═══════════════════════════════════════════════════════════════════════════ */
+const FRY={
+  '1st 100 Words':['a','about','all','an','and','are','as','at','be','been','but','by','called','can','come','could','day','did','do','down','each','find','first','for','from','get','go','had','has','have','he','her','him','his','how','I','if','in','into','is','it','like','long','look','made','make','many','may','more','my','no','not','now','number','of','oil','on','one','or','other','out','part','people','said','see','she','sit','so','some','than','that','the','their','them','then','there','these','they','this','time','to','two','up','use','was','water','way','we','were','what','when','which','who','will','with','words','would','write','you','your'],
+  '2nd 100 Words':['after','again','air','also','America','animal','another','answer','any','around','ask','away','back','because','before','big','boy','came','change','different','does','end','even','follow','form','found','give','good','great','hand','help','here','home','house','just','kind','know','land','large','learn','letter','line','little','live','man','me','means','men','most','mother','move','much','must','name','need','new','off','old','only','our','over','page','picture','place','play','point','put','read','right','same','say','sentence','set','should','show','small','sound','spell','still','study','such','take','tell','things','think','three','through','too','try','turn','us','very','want','well','went','where','why','work','world','years'],
+  '3rd 100 Words':['above','add','almost','along','always','began','begin','being','below','between','book','both','car','carry','children','city','close','country','cut',"don't",'earth','eat','enough','every','example','eyes','face','family','far','father','feet','few','food','four','girl','got','group','grow','hard','head','hear','high','idea','important','keep','last','late','leave','left','let','life','light','list','might','mile','miss','near','never','next','night','often','once','open','own','paper','plant','real','river','run','saw','school','sea','second','seem','side','something','sometimes','song','soon','start','state','stop','story','talk','those','thought','together','took','tree','under','until','walk','watch','while','white','without','young']
+};
+const DOLCH={
+  'Pre-Primer':['a','and','away','big','blue','can','come','down','find','for','funny','go','help','here','I','in','is','it','jump','little','look','make','me','my','not','one','play','red','run','said','see','the','three','to','two','up','we','where','yellow','you'],
+  'Primer':['all','am','are','at','ate','be','black','brown','but','came','did','do','eat','four','get','good','have','he','into','like','must','new','no','now','on','our','out','please','pretty','ran','ride','saw','say','she','so','soon','that','there','they','this','too','under','want','was','well','went','what','white','who','will','with','yes'],
+  'First Grade':['after','again','an','any','as','ask','by','could','every','fly','from','give','going','had','has','her','him','his','how','just','know','let','live','may','of','old','once','open','over','put','round','some','stop','take','thank','them','then','think','walk','were','when'],
+  'Second Grade':['always','around','because','been','before','best','both','buy','call','cold','does',"don't",'fast','first','five','found','gave','goes','green','its','made','many','off','or','pull','read','right','sing','sit','sleep','tell','their','these','those','upon','us','use','very','wash','which','why','wish','work','would','write','your']
+};
+const PHONICS={
+  'Short /a/':['cat','hat','mat','sat','bat','fat','nap','rat','fan','shack','chat','rack','sack','mash','cash','bath','map','tap','crab','drab','scab','slab','stab','black','crack','smack','snack','snag','flag','glad','track','stack','flap','clap','slap','snap','fact','raft','smash','thrash','trash','brat','flat','vast','brass','trap','brash','clash','crash','flash','slash','shaft','class','glass','grant','plant','slant','flask','blast','scratch','clasp','scalp','splat','strand','stand','bland'],
+  'Short /e/':['bed','leg','bet','set','met','den','get','men','hen','red','vet','web','yes','let','ten','jet','beg','wet','bled','fled','shred','sled','sped','smell','spell','swell','bend','lend','mend','send','tend','bent','cent','dent','rent','lent','sent','tent','went','best','nest','pest','rest','test','vest','west','chest','fret','bless','dress','press','left','help','next','blend','spend','trend','spent','stress','slept','crept','strength'],
+  'Short /i/':['rip','sip','lip','tip','fig','bid','dip','fit','pig','pit','rid','lid','kid','hit','sit','sick','fin','brick','click','flick','slick','stick','trick','grid','skid','slid','twig','flip','mint','risk','skill','still','thrill','slim','swim','trim','grin','skin','spin','gift','wilt','cling','fling','sling','sting','swing','link','pink','sink','think','hint','shift','skip','spring','string','blink','brink','clink','drink','shrink','stink','print','slink','drift','swift','thrift','brisk','frisk','twist','blimp','crisp','sprint','splint','script','scrimp'],
+  'Short /o/':['toss','boss','hog','log','hot','got','pot','mop','job','fog','sob','rob','blob','slob','snob','block','clock','flock','stock','clog','frog','smog','crop','drop','flop','stop','plot','slot','spot','trot','prop','cross','floss','blotch','strong','stomp','frost','splotch','clomp','prompt'],
+  'Short /u/':['hut','rut','mud','sub','tub','rub','run','bun','sun','cub','fun','sum','gum','sung','club','shrub','grub','stub','cluck','pluck','stuck','truck','bluff','fluff','gruff','scuff','stuff','drug','plug','shrug','slug','snug','drum','plum','bump','dump','jump','lump','pump','spun','stun','clung','flung','strum','swung','bunk','dunk','junk','sunk','chunk','blush','brush','crush','flush','plush','slush','thrush','spud','grudge','bunch','hunch','lunch','munch','punch','bunt','hunt','punt','runt','plus','bust','dust','just','must','rust','scrub','clump','grump','plump','slump','stump','sprung','strung','shrunk','skunk','crunch','blunt','grunt','thrust','trust','crust','struck','scrunch'],
+  'Long A (a_e)':['bake','shake','game','chase','shave','brace','grace','place','space','trace','blade','grade','spade','stage','snake','stake','blame','flame','crane','plane','slave','grape','scrape','crate','drake','skate','state','flake','craze','blaze','trade','brake'],
+  'Long A (ai/ay)':['sail','tail','maid','jail','pail','rail','rain','main','chain','pain','mail','frail','snail','trail','brain','grain','drain','plain','stain','train','braid','claim','faint','tray','play','pray','fray','stay','sway','slay','clay','spray','stray','splay','day','say','may','pay','ray','way','hay','bay'],
+  'Long A (ea/eigh/ey)':['break','steak','great','eight','freight','weight','neighbor','sleigh','they','prey','obey','convey','survey'],
+  'Long E (ee)':['seem','meet','feet','beet','keen','seen','sheep','seed','bleed','breed','creep','greed','speed','steed','sleep','steep','sweep','fleet','greet','sleet','sweet','green'],
+  'Long E (ea)':['team','seam','beam','meat','seat','beat','heat','flea','cheap','creak','sneak','speak','steal','cream','dream','steam','treat','feast','clean','creek','least','streak','stream','scream','screech'],
+  'Long E (y/ie/ey)':['happy','funny','puppy','silly','sunny','windy','candy','key','monkey','hockey','turkey','valley','chimney','pulley','donkey','trolley','parsley','honey','money','chief','field','brief','yield','shriek','priest'],
+  'Long E (e_e)':['theme','these','eve','gene'],
+  'Long I (i_e)':['hide','wide','pile','time','fine','ripe','dive','kite','file','bride','glide','pride','slide','crime','grime','prime','slime','brine','shrine','spine','swine','drive','thrive','bribe','tribe','spike','smile','gripe','splice','stride','strive','scribe','strike','stripe','sprite'],
+  'Long I (igh/ie)':['light','sight','fight','might','tight','bright','flight','fright','slight','pie','tie','die','lie'],
+  'Long I (open syllable)':['idle','item','idea','pilot','tiger','spider','silent','climate','final','minus'],
+  'Long O (o_e)':['nose','rose','cove','phone','rode','broke','smoke','spoke','clone','crone','drone','stone','grope','slope','scope','globe','clove','trove','stove','probe','stole','close','drove','stroke','strode'],
+  'Long O (oa/ow/oe)':['road','toad','load','soak','coal','goal','foam','soap','goat','coat','moat','cloak','croak','groan','boast','coast','roast','toast','bloat','float','throat','coach','moan','slow','snow','throw','blow','shown','blown','flown','grown','thrown','toe','foe','doe','woe','though','dough','although'],
+  'Long OO (oo/ew/ue/ui)':['moon','soon','tool','food','drool','spool','stool','bloom','gloom','groom','spoon','droop','scoop','snoop','swoop','troop','smooth','snooze','proof','broom','stew','crew','threw','grew','screw','blue','true','clue','glue','suit','fruit','bruise','juice','cruise','soup','group','you','youth'],
+  'Long U (u_e)':['cube','cute','mule','fume','huge','mute','muse','fuse'],
+  'Variant /aw/':['draw','flaw','claw','dawn','hawk','lawn','shawl','drawn','straw','drawl','scrawl','bawl','fawn','haul','haunt','fraud','fault','vault','flaunt'],
+  'Short OO':['foot','book','took','shook','cook','look','hook','good','hoof','hood','nook','crook','stood','brook'],
+  'Diphthong /oi/':['boil','foil','toil','coin','join','void','soil','joint','hoist','joist','moist','spoil','coil','broil','oil','point','poise','noise','voice','choice','boy','toy','joy','coy','soy','enjoy','deploy','employ','destroy','loyal','royal'],
+  'Diphthong /ow/':['loud','couch','cloud','grouch','hound','crouch','found','mount','count','cow','chow','down','plow','howl','fowl','town','brow','gown','frown','clown','brown','drown','crowd','crown','prowl','growl'],
+  'R-Controlled /ar/':['car','far','star','card','harm','mark','sharp','harp','part','mart','cart','dark','park','bark','scarf','smart','spark'],
+  'R-Controlled /or/':['horn','born','fork','short','sort','fort','port','storm','spork','sport','core','shore','more','bore','tore','sore','score','store'],
+  'R-Controlled /er/ir/ur/':['her','fern','term','herd','verb','stern','perch','nerve','serve','verse','merge','clerk','jerk','perk','herb','germ','dirt','birth','shirt','bird','thirst','first','girl','sir','stir','firm','third','fir','whirl','twirl','chirp','squirt','squirm','birch','smirk','quirk','burn','turn','curl','surf','turf','fur','burp','blur','spur','hurt','curd','curb','lurk','church','burst','blurt','churn','spurt'],
+  'R-Controlled /ear/air/':['dear','fear','hear','near','year','beard','clear','cheer','spear','sneer','steer','gear','rear','smear','chair','hair','fair','pair','stair','bear','wear','pear','care','share','glare','square','stare'],
+  'R-Controlled /ire/':['fire','tire','wire','hire','admire','entire','inspire','expire','wildfire'],
+  'Digraph sh':['blush','brash','brush','cash','clash','crash','crush','flash','flush','mash','plush','shack','shaft','shake','sharp','shave','shawl','sheep','shift','shirt','shook','shore','short','shown','shred','shriek','shrine','shrink','shrub','shrug','shrunk','slash','slush','smash','thrash','thrush','trash','share'],
+  'Digraph ch':['blotch','bunch','chain','chair','chase','chat','cheap','cheer','chest','chief','chimney','chow','chunk','coach','couch','crouch','crunch','grouch','hunch','lunch','munch','punch','scratch','screech','scrunch'],
+  'Digraph th':['although','bath','birth','smooth','strength','they','think','thirst','though','thrash','threw','thrift','thrill','thrive','throat','throw','thrown','thrush','thrust','youth','this','that','the','then','than'],
+  'Digraph ph/wh':['phone','photo','graph','phase','when','whip','whim','whisk','wheat','while','whale'],
+  'Digraph ck':['black','block','brick','click','clock','cluck','crack','flick','flock','hockey','pluck','rack','sack','shack','sick','slick','smack','snack','stack','stick','stock','struck','stuck','track','trick','truck'],
+  'Trigraph -tch/-dge':['blotch','scratch','splotch','catch','match','fetch','witch','notch','patch','sketch','switch','snatch','stretch','thatch','clutch','grudge','bridge','badge','edge','ridge','lodge','fudge','hedge','judge','nudge','pledge','smudge','wedge','budge','dodge'],
+  'L-Blends':['black','blade','blame','bland','blast','blaze','bled','bleed','blend','bless','blimp','blink','bloat','blob','block','bloom','blow','blue','bluff','blunt','blush','clap','clash','clasp','class','claw','clay','clean','clear','click','cling','clink','clog','clone','close','cloud','clove','clown','club','clue','clump','clung','flag','flake','flame','flap','flash','flask','flat','flaw','flea','fled','fleet','flick','fling','flip','float','flop','flush','glad','glass','glide','globe','gloom','glue','place','plain','plane','plant','play','plot','plow','pluck','plug','plum','plus','plush','slab','slant','slap','slash','slave','sled','sleep','sleet','slick','slid','slide','slim','slime','sling','slot','slug','slump','slush'],
+  'R-Blends':['brace','braid','brain','brake','brash','brass','brat','breed','bribe','brick','bride','bright','brine','brink','brisk','broke','brook','broom','brown','brush','crab','crack','crane','crash','crate','craze','creak','cream','creek','creep','crime','crisp','croak','crop','cross','crouch','crowd','crown','crunch','crush','crust','drab','drain','drake','draw','dream','drift','drink','drive','drone','drop','drug','drum','frail','fray','fright','frog','frost','frown','grace','grade','grain','grand','grant','grape','greed','green','grin','groan','groom','grub','grudge','gruff','grunt','pray','press','pride','prime','print','prop','trace','track','trail','train','trap','trash','tray','treat','tribe','trim','trot','truck','true','trust'],
+  'S-Blends':['scab','scarf','scoop','score','scrape','scratch','scream','screw','scrub','scrunch','skate','skill','skin','skip','skunk','smack','smart','smash','smell','smoke','snack','snag','snail','snake','snap','sneak','snow','snug','space','spark','speak','speed','spell','spend','spike','spin','spine','splat','splice','spoil','spoon','sport','spot','spud','spun','stab','stack','stage','stain','stake','stand','state','stay','steal','steam','steep','stick','still','sting','stock','stop','store','storm','strand','straw','stray','streak','stream','strength','stride','strike','string','stripe','strive','stroke','strong','struck','stump','stun','sweep','sweet','swim','swing','swoop'],
+  'Three-Letter Blends':['scrape','scratch','scream','screw','scrub','scrunch','splat','splice','splint','splotch','spray','spring','sprint','sprite','sprung','strand','straw','stray','streak','stream','strength','stride','strike','string','stripe','strive','stroke','strong','struck','strum','strung'],
+  'Ending Blends -nt/-mp':['bent','blunt','bunt','cent','count','dent','faint','grant','grunt','haunt','hint','hunt','joint','lent','mint','mount','plant','print','punt','rent','runt','sent','slant','spent','splint','sprint','tent','went','blimp','bump','clomp','clump','dump','grump','jump','lump','plump','pump','scrimp','slump','stomp','stump'],
+  'Ending Blends -nd/-sk/-st':['bend','bland','blend','found','hound','lend','mend','send','spend','stand','strand','tend','trend','brisk','flask','frisk','risk','best','blast','boast','bust','chest','coast','crust','dust','feast','first','frost','hoist','joist','just','least','moist','must','nest','pest','priest','rest','roast','rust','test','thirst','thrust','toast','trust','twist','vast','vest','west'],
+  'Silent Letters kn-/wr-/gn-':['knot','knock','know','knee','knife','knight','kneel','knit','knew','knob','knack','known','wrap','write','wrong','wrist','wreck','wrote','wring','wrench','wrath','wrestle','written','wrapper','gnaw','gnome','gnat','gnu','gnash'],
+  'Hard C / Soft C':['cat','cut','class','clap','crop','clock','crust','cap','cod','cub','cot','cave','coat','cube','cold','cord','curl','came','cone','cure','cent','city','race','ice','face','cell','cereal','circle','pencil','prince','place','space','trace','grace','dance','fence','since','once','twice','mice','price','voice','sauce'],
+  'Hard G / Soft G':['game','glad','grip','grab','grin','globe','grand','green','got','gun','gap','gust','gift','gold','grub','grow','gloom','glide','gem','giant','gym','cage','page','giraffe','gentle','magic','stage','age','rage','wage','huge','budge','fudge','hedge','lodge','judge','badge','edge'],
+  'Irregular Patterns':['wild','child','mild','find','kind','mind','blind','bind','grind','wind','rind','cold','gold','told','sold','fold','bold','hold','mold','old','scold','most','post','ghost','host','colt','bolt','jolt','molt','volt'],
+  '-le Endings':['table','able','cable','fable','stable','bubble','wobble','gobble','pebble','nibble','riddle','middle','muddle','puddle','handle','candle','bundle','jungle','single','jingle','mingle','tingle','wrinkle','sprinkle','twinkle','little','battle','rattle','cattle','kettle','bottle','puzzle','nozzle','drizzle','sizzle','marble','purple','simple','sample','maple','apple','turtle','circle','pickle','tickle','buckle','muscle','uncle','title','noble'],
+  '-dge vs -ge':['badge','edge','ridge','lodge','fudge','bridge','hedge','judge','nudge','pledge','smudge','wedge','budge','dodge','grudge','ledge','age','cage','page','rage','sage','wage','stage','huge','urge','surge','merge','hinge','plunge','range','strange','change','charge','large']
+};
+const DATA={fry:FRY,dolch:DOLCH,phonics:PHONICS};
+
+/* ─── CONFIG ─────────────────────────────────────────────────────────────── */
+const PLAYER_COLORS=['#2EC4B6','#FF6B6B','#1A1A2E','#F5C842'];
+const CAR_ACCENT   =['#1FA99C','#E85555','#0a0a1a','#C8A020'];
+// Race length — more steps = longer, more suspenseful race
+// Players can roll 1-6. With FINISH=20, avg ~10 turns per player before winning
+const FINISH = 20;
+
+const COLOR_OPTIONS=[
+  {name:'Blue',  value:'#2196D0'},
+  {name:'Coral', value:'#FF6B6B'},
+  {name:'Pink',  value:'#E040A0'},
+];
+// Default selections per player (different colors)
+let playerColors=['#2196D0','#FF6B6B'];
+
+/* ─── STATE ─────────────────────────────────────────────────────────────── */
+let currentListType='fry';
+let selectedWordsSet=new Set();
+let playerCount=2;
+let players=[],current=0,phase='roll',words=[],used=[],roll=0;
+let audioCtx=null;
+let wordBankRevealed=false;
+// selectedWords snapshot for Play Again
+let lastWordSnapshot=[];
+
+const $=id=>document.getElementById(id);
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+function escHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* ─── AUDIO ──────────────────────────────────────────────────────────────── */
+function getAudio(){
+  if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  return audioCtx;
+}
+function playTone(freq,type,duration,volume=0.16,delay=0){
+  try{
+    const ctx=getAudio(),osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type=type;osc.frequency.setValueAtTime(freq,ctx.currentTime+delay);
+    gain.gain.setValueAtTime(0,ctx.currentTime+delay);
+    gain.gain.linearRampToValueAtTime(volume,ctx.currentTime+delay+0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+delay+duration);
+    osc.start(ctx.currentTime+delay);osc.stop(ctx.currentTime+delay+duration+0.05);
+  }catch(e){}
+}
+function soundDice(){
+  if(!soundEnabled)return;
+  // Soft click-rattle: short noise bursts mimicking dice tumbling
+  try{
+    const ctx=getAudio();
+    [0, 80, 160, 240, 320].forEach(delayMs=>{
+      const buf=ctx.createBuffer(1,ctx.sampleRate*0.025,ctx.sampleRate);
+      const data=buf.getChannelData(0);
+      for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length)*0.55;
+      const src=ctx.createBufferSource();
+      const gain=ctx.createGain();
+      const filter=ctx.createBiquadFilter();
+      filter.type='bandpass';
+      filter.frequency.value=1800+Math.random()*800;
+      filter.Q.value=0.8;
+      src.buffer=buf;
+      src.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+      gain.gain.setValueAtTime(0.22,ctx.currentTime+delayMs/1000);
+      gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+delayMs/1000+0.06);
+      src.start(ctx.currentTime+delayMs/1000);
+    });
+  }catch(e){}
+}
+function soundMove(){
+  if(!soundEnabled)return;
+  try{
+    const ctx=getAudio();
+    const t=ctx.currentTime;
+
+    // ── Noise burst — the grit/texture of a real engine ──
+    const bufLen=ctx.sampleRate*0.28;
+    const buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let i=0;i<bufLen;i++) data[i]=(Math.random()*2-1);
+    const noise=ctx.createBufferSource();
+    noise.buffer=buf;
+
+    // Bandpass centred around engine rumble freq — cuts highs and lows
+    const bp=ctx.createBiquadFilter();
+    bp.type='bandpass';
+    bp.frequency.setValueAtTime(120,t);
+    bp.frequency.exponentialRampToValueAtTime(220,t+0.07);  // quick rev up
+    bp.frequency.exponentialRampToValueAtTime(80,t+0.22);   // fall back down
+    bp.Q.value=1.8;
+
+    // Noise envelope — punchy attack, fast decay
+    const noiseGain=ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.0,t);
+    noiseGain.gain.linearRampToValueAtTime(0.55,t+0.025);   // fast attack
+    noiseGain.gain.exponentialRampToValueAtTime(0.18,t+0.09);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001,t+0.26);
+
+    noise.connect(bp);bp.connect(noiseGain);noiseGain.connect(ctx.destination);
+    noise.start(t);noise.stop(t+0.28);
+
+   // ── Higher-pitched oscillator — realistic engine tone ──
+const osc=ctx.createOscillator();
+osc.type='triangle';  // Changed from 'sawtooth' for cleaner tone
+osc.frequency.setValueAtTime(180,t);  // Start higher (was 48)
+osc.frequency.exponentialRampToValueAtTime(280,t+0.08);   // Quick rev up to higher pitch
+osc.frequency.linearRampToValueAtTime(160,t+0.20);   // Drop back down
+
+// Reduce/remove the waveshaper for cleaner sound
+const oscGain=ctx.createGain();
+oscGain.gain.setValueAtTime(0.0,t);
+oscGain.gain.linearRampToValueAtTime(0.28,t+0.04);  // Snappier attack
+oscGain.gain.exponentialRampToValueAtTime(0.12,t+0.15);
+oscGain.gain.exponentialRampToValueAtTime(0.001,t+0.24);
+
+osc.connect(oscGain);oscGain.connect(ctx.destination);  // Skip waveshaper
+osc.start(t);osc.stop(t+0.26);
+  }catch(e){}
+}
+function soundWin(){
+  if(!soundEnabled)return;
+  [[523,0],[659,.17],[784,.34],[1047,.51],[784,.68],[1047,.85],[1175,1.02]]
+    .forEach(([f,d])=>playTone(f,'triangle',.2,.15,d));
+}
+function soundRead(){
+  if(!soundEnabled)return;
+  playTone(660,'sine',.10,.11);
+  playTone(880,'sine',.09,.09,.13);
+}
+
+/* ─── SETUP UI ───────────────────────────────────────────────────────────── */
+function populateLevels(){
+  if(currentListType==='custom') return;
+  $('levelSelect').innerHTML=Object.keys(DATA[currentListType])
+    .map(k=>`<option value="${k}">${k}</option>`).join('');
+}
+function visibleWords(){
+  if(currentListType==='custom'){
+    return $('customWords').value.split(/[\s,\n]+/).map(w=>w.trim()).filter(Boolean);
+  }
+  const level=$('levelSelect').value||Object.keys(DATA[currentListType])[0];
+  return DATA[currentListType][level]||[];
+}
+function openWordBank(){
+  wordBankRevealed=true;
+  $('wordBankAccordion').classList.add('open');
+  renderWordBank();
+}
+function renderWordBank(){
+  const bank=$('wordBank');if(!bank)return;
+  const ws=[...new Set(visibleWords())];
+  if(!ws.length){
+    bank.innerHTML='<span style="color:var(--navy-lt);font-size:12px;font-weight:600">Type custom words above, then click Add.</span>';
+    return;
+  }
+  bank.innerHTML=ws.map(w=>`<button type="button" class="chip ${selectedWordsSet.has(w)?'selected':''}" data-word="${escHtml(w)}">${escHtml(w)}</button>`).join('');
+  bank.querySelectorAll('.chip').forEach(chip=>chip.addEventListener('click',()=>toggleWord(chip.dataset.word)));
+}
+function toggleWord(w){
+  selectedWordsSet.has(w)?selectedWordsSet.delete(w):selectedWordsSet.add(w);
+  renderWordBank();updateWordCount();
+}
+function updateWordCount(){$('wordCount').textContent=`${selectedWordsSet.size} selected`;}
+function selectAllVisible(){visibleWords().forEach(w=>selectedWordsSet.add(w));renderWordBank();updateWordCount();}
+function deselectAllVisible(){visibleWords().forEach(w=>selectedWordsSet.delete(w));renderWordBank();updateWordCount();}
+function addCustomWords(){
+  $('customWords').value.split(/[\s,\n]+/).map(w=>w.trim()).filter(Boolean)
+    .forEach(w=>selectedWordsSet.add(w));
+  renderWordBank();updateWordCount();
+}
+function setListType(type){
+  currentListType=type;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===type));
+  const isCustom=type==='custom';
+  $('customField').classList.toggle('show',isCustom);
+  $('levelRow').classList.toggle('visible',!isCustom);
+  if(!isCustom){
+    populateLevels();
+    // Always open word bank once type + level chosen
+    openWordBank();
+  } else {
+    // Custom: open accordion so textarea is visible context
+    $('wordBankAccordion').classList.add('open');
+    wordBankRevealed=true;
+  }
+  renderWordBank();
+}
+function renderPlayerInputs(){
+  const wrap=$('playerSetup');wrap.innerHTML='';
+  for(let i=0;i<playerCount;i++){
+    const swatches=COLOR_OPTIONS.map(c=>`
+      <div class="color-swatch ${playerColors[i]===c.value?'selected':''}"
+           style="background:${c.value}"
+           title="${c.name}"
+           onclick="selectPlayerColor(${i},'${c.value}')"></div>
+    `).join('');
+    wrap.insertAdjacentHTML('beforeend',`
+      <div class="player-input">
+        <input id="p${i}" value="Player ${i+1}" placeholder="Player ${i+1}" aria-label="Player ${i+1} name"/>
+        <div>
+          <div class="color-swatch-label">Car Color</div>
+          <div class="color-swatches">${swatches}</div>
+        </div>
+      </div>`);
+  }
+}
+
+function selectPlayerColor(playerIdx, colorVal){
+  // Save current name values before re-rendering
+  const savedNames=[];
+  for(let i=0;i<playerCount;i++){
+    const inp=$('p'+i);
+    savedNames[i]=inp?inp.value:'Player '+(i+1);
+  }
+  // Prevent duplicate: swap the other player to a different color
+  const otherIdx = playerIdx===0?1:0;
+  if(playerColors[otherIdx]===colorVal){
+    const alt=COLOR_OPTIONS.find(c=>c.value!==colorVal);
+    if(alt) playerColors[otherIdx]=alt.value;
+  }
+  playerColors[playerIdx]=colorVal;
+  renderPlayerInputs();
+  // Restore names after re-render
+  for(let i=0;i<playerCount;i++){
+    const inp=$('p'+i);
+    if(inp&&savedNames[i]) inp.value=savedNames[i];
+  }
+}
+
+/* ─── RACE STAGE ─────────────────────────────────────────────────────────── */
+function buildScenery(){
+  const s=$('scenery');if(!s)return;
+  s.innerHTML='';
+  const stage=$('raceStage');
+  const sw=stage.clientWidth||900;
+
+  // Clouds — soft, minimal
+  [[5,44,.85],[30,36,1.0],[60,48,.75],[82,34,.65]].forEach(([lp,t,sc])=>{
+    const w=76*sc,h=26*sc;
+    const el=document.createElement('div');
+    el.className='cloud';
+    el.style.cssText=`left:${lp}%;top:${t}px;`;
+    el.innerHTML=`<div class="cloud-shape" style="width:${w}px;height:${h}px">
+      <div style="position:absolute;width:${w*.42}px;height:${w*.42}px;border-radius:50%;background:rgba(255,255,255,.82);left:${w*.08}px;top:${-w*.20}px"></div>
+      <div style="position:absolute;width:${w*.28}px;height:${w*.28}px;border-radius:50%;background:rgba(255,255,255,.82);right:${w*.10}px;top:${-w*.12}px"></div>
+    </div>`;
+    s.appendChild(el);
+  });
+
+  // Minimal rolling hills — soft gradient bands, no clip-art trees
+  // Left hill accent
+  const lHill=document.createElement('div');
+  lHill.style.cssText=`position:absolute;left:-5%;bottom:42px;width:18%;height:64px;border-radius:50% 50% 0 0/56px 56px 0 0;background:linear-gradient(180deg,#A4DC98 0%,#80C878 100%);opacity:.48;`;
+  s.appendChild(lHill);
+
+  // Right hill accent
+  const rHill=document.createElement('div');
+  rHill.style.cssText=`position:absolute;right:-4%;bottom:42px;width:18%;height:70px;border-radius:50% 50% 0 0/60px 60px 0 0;background:linear-gradient(180deg,#A4DC98 0%,#80C878 100%);opacity:.65;`;
+  s.appendChild(rHill);
+
+  // Ground strip
+  const g=document.createElement('div');g.className='ground-strip';s.appendChild(g);
+}
+
+function getTrackLayout(playerIdx,totalPlayers,stageH){
+  // Tracks occupy the middle band: 26%–76% of stage height
+  // Word panel slides up ~120px from bottom, so tracks stay clear
+  const BAND_TOP = stageH * 0.22;
+  const BAND_BOT = stageH * 0.72; // leave bottom 28% for word panel + ground
+  const tH = totalPlayers<=2 ? 78 : 70;
+  const gap = totalPlayers<=2 ? 20 : 14;
+  const totalH = totalPlayers*tH+(totalPlayers-1)*gap;
+  const bandH = BAND_BOT - BAND_TOP;
+  const startY = BAND_TOP + (bandH - totalH)/2;
+  return {top: Math.round(startY + playerIdx*(tH+gap)), trackH: tH};
+}
+
+function renderTracks(){
+  const area=$('trackArea');area.innerHTML='';
+  const stage=$('raceStage');
+  const sh=stage.clientHeight||620;
+
+  // Signs — positioned to align with track area start and end
+  const {top:firstTop} = getTrackLayout(0,players.length,sh);
+  const signY = firstTop - 48;
+
+  // START sign — aligned with left edge of track
+  const ss=document.createElement('div');
+  ss.className='race-sign';
+  ss.style.cssText=`left:44px;top:${signY}px;`;
+  ss.textContent='START';
+  area.appendChild(ss);
+
+  // FINISH sign — aligned with right edge of track
+  const fs=document.createElement('div');
+  fs.className='race-sign';
+  // We'll position it absolutely right-aligned matching track right edge (62px from right + 26px finish line width)
+  fs.style.cssText=`right:60px;top:${signY}px;`;
+  fs.textContent='FINISH';
+  area.appendChild(fs);
+
+  players.forEach((p,i)=>{
+    const {top,trackH} = getTrackLayout(i,players.length,sh);
+    const track=document.createElement('div');
+    track.className='race-track';
+    track.style.cssText=`position:absolute;left:44px;right:60px;top:${top}px;height:${trackH}px;border-radius:${trackH/2}px;`;
+    // Player label
+    track.insertAdjacentHTML('beforeend',`<div class="track-label" style="background:${p.color}">${escHtml(p.name)}</div>`);
+    // Finish line
+    track.insertAdjacentHTML('beforeend',`<div class="finish-line"></div>`);
+    // Checkpoints at quarter, half, three-quarter of track
+    [5,10,15].forEach(n=>{
+      if(n>=FINISH) return;
+      const pct=trackPct(n);
+      track.insertAdjacentHTML('beforeend',`<div style="position:absolute;left:${pct}%;top:8px;bottom:8px;width:1.5px;border-radius:1px;background:rgba(255,255,255,.60);z-index:6"></div>`);
+    });
+    // Runner
+    const runner=document.createElement('div');
+    runner.className='runner';
+    runner.id='runner'+i;
+    runner.style.left=trackPct(p.pos)+'%';
+    runner.style.top='50%';
+    runner.innerHTML=carSvg(p,i);
+    track.appendChild(runner);
+    area.appendChild(track);
+  });
+}
+
+// Map position (0–FINISH) to CSS left% within the track element
+// Track content: label takes ~120px on left, finish line ~60px on right
+// We animate across the inner space: 18% → 90% within the element
+function trackPct(pos){ return 18 + (Math.min(pos,FINISH)/FINISH)*72; }
+
+function moveRunner(i){
+  const r=$('runner'+i);if(!r)return;
+  r.style.left=trackPct(players[i].pos)+'%';
+  r.classList.remove('bump');
+  void r.offsetWidth;
+  r.classList.add('bump');
+  setTimeout(()=>r.classList.remove('bump'),600);
+}
+
+/* ─── CAR SVG (no numbers, polished) ────────────────────────────────────── */
+function carSvg(p,i){
+  const col=p.color;
+  return `<svg viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" aria-label="${escHtml(p.name)} race car">
+    <!-- Ground shadow -->
+    <ellipse cx="60" cy="63" rx="42" ry="5" fill="rgba(0,0,0,.15)"/>
+    <!-- Main body -->
+    <path d="M12 44 C16 31 28 24 48 23 H72 C92 23 106 33 112 45 L104 52 H18 Z"
+          fill="${col}" stroke="white" stroke-width="3.5" stroke-linejoin="round"/>
+    <!-- Cockpit -->
+    <path d="M46 24 C52 11 70 9 82 22 L88 34 H44 Z"
+          fill="${col}" stroke="white" stroke-width="3.5" stroke-linejoin="round"/>
+    <!-- Windshield glass -->
+    <path d="M60 16 C67 12 77 15 82 24 L83 32 H56 Z" fill="rgba(190,235,255,.72)"/>
+    <!-- Windshield highlight -->
+    <path d="M60 16 C67 13 76 15 80 22 L79 20 C75 14 67 12 60 16 Z" fill="rgba(255,255,255,.32)"/>
+    <!-- Undercarriage line -->
+    <path d="M16 44 H108" stroke="rgba(0,0,0,.10)" stroke-width="3" stroke-linecap="round"/>
+    <!-- Front wheel -->
+    <circle cx="34" cy="51" r="10.5" fill="#1A2530" stroke="#5A6670" stroke-width="3"/>
+    <circle cx="34" cy="51" r="3.5" fill="#D0DCE4"/>
+    <circle cx="34" cy="51" r="7.5" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1.5"/>
+    <!-- Rear wheel -->
+    <circle cx="88" cy="51" r="10.5" fill="#1A2530" stroke="#5A6670" stroke-width="3"/>
+    <circle cx="88" cy="51" r="3.5" fill="#D0DCE4"/>
+    <circle cx="88" cy="51" r="7.5" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1.5"/>
+    <!-- Front wing/spoiler -->
+    <path d="M18 34 L4 30 L4 22 L22 26 Z" fill="${col}" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M20 30 L7 27 L7 24 L20 28 Z" fill="rgba(255,255,255,.18)"/>
+  </svg>`;
+}
+
+/* ─── DICE ───────────────────────────────────────────────────────────────── */
+const PIPS={
+  1:[[32,32]],2:[[20,20],[44,44]],3:[[20,20],[32,32],[44,44]],
+  4:[[20,20],[44,20],[20,44],[44,44]],
+  5:[[20,20],[44,20],[32,32],[20,44],[44,44]],
+  6:[[20,20],[44,20],[20,32],[44,32],[20,44],[44,44]]
+};
+function showDiceFace(n){
+  for(let i=1;i<=6;i++){const el=$('p'+i);if(el)el.style.display='none';}
+  (PIPS[n]||PIPS[1]).forEach(([cx,cy],idx)=>{
+    let el=$('p'+(idx+1));
+    if(!el){
+      el=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      el.id='p'+(idx+1);el.setAttribute('r','5.5');el.setAttribute('fill','white');
+      $('diceFace').appendChild(el);
+    }
+    el.setAttribute('cx',cx);el.setAttribute('cy',cy);el.style.display='block';
+  });
+}
+function rollDice(){
+  if(phase!=='roll')return;
+  soundDice();
+  const btn=$('diceBtn');btn.disabled=true;btn.classList.add('rolling');
+  let t=setInterval(()=>showDiceFace(1+Math.floor(Math.random()*6)),70);
+  setTimeout(()=>{
+    clearInterval(t);btn.classList.remove('rolling');
+    roll=1+Math.floor(Math.random()*6);
+    showDiceFace(roll);
+    $('diceText').textContent=`Rolled a ${roll}`;
+    showReadWord();
+  },700);
+}
+
+/* ─── COUNTDOWN ─────────────────────────────────────────────────────────── */
+function startCountdown(callback){
+  const prompt=$('readyPrompt');
+  const steps=['3','2','1','Go!'];
+  let i=0;
+  prompt.classList.remove('hidden');
+  function tick(){
+    prompt.textContent=steps[i];
+    prompt.style.fontWeight='900';
+    prompt.style.fontSize='28px';
+    prompt.style.color='var(--teal-dk)';
+    i++;
+    if(i<steps.length){
+      setTimeout(tick,600);
+    } else {
+      setTimeout(()=>{
+        prompt.style.fontSize='';
+        prompt.style.fontWeight='';
+        prompt.style.color='';
+        callback();
+      },400);
+    }
+  }
+  tick();
+}
+
+/* ─── GAMEPLAY ───────────────────────────────────────────────────────────── */
+function showWordPanel(visible){
+  $('wordPanel').classList.toggle('visible',visible);
+  $('readyPrompt').classList.toggle('hidden',visible);
+}
+function renderSide(){
+  const p=players[current];
+  $('nowName').textContent=p.name;
+  $('nowName').style.color=p.color;
+  $('nowSub').textContent=phase==='roll'?'Roll the dice!':phase==='read'?'Read the word!':'Moving…';
+  $('playerList').innerHTML=players.map((pl,i)=>`
+    <div class="player-row ${i===current?'active':''}">
+      <span class="pdot" style="background:${pl.color}"></span>
+      <span>${escHtml(pl.name)}</span>
+      <span class="pscore">${pl.pos}/${FINISH}</span>
+    </div>`).join('');
+}
+function nextWord(){
+  if(!words.length){words=[...used];used=[];shuffle(words);}
+  const w=words.pop();used.push(w);return w;
+}
+function showReadWord(){
+  phase='read';
+  const p=players[current],w=nextWord();
+  $('wordLabel').textContent=`${p.name} — read this word:`;
+  $('bigWord').textContent=w;
+  $('wordPrompt').textContent=`Then tap the button to move ${roll} space${roll>1?'s':''}.`;
+  $('readBtn').disabled=false;
+  $('readBtn').textContent=`I Read It!  +${roll}`;
+  $('readyPrompt').textContent=`${p.name}'s turn — roll the dice!`;
+  showWordPanel(true);
+  renderSide();
+}
+function moveCurrent(){
+  if(phase!=='read')return;
+  soundRead();
+  phase='move';
+  $('readBtn').disabled=true;
+  showWordPanel(false);
+  animateMoveSteps(current, roll);
+}
+
+function animateMoveSteps(playerIdx, stepsLeft){
+  if(stepsLeft<=0){
+    // All steps done — check win or hand to next player
+    if(players[playerIdx].pos>=FINISH){ showWin(); return; }
+    current=(current+1)%players.length;
+    phase='roll';
+    $('diceBtn').disabled=false;
+    $('diceText').textContent='Click to roll';
+    showDiceFace(4);
+    $('readyPrompt').textContent=`${players[current].name}'s turn — roll the dice!`;
+    $('readyPrompt').classList.remove('hidden');
+    renderSide();
+    return;
+  }
+  // Advance one space
+  players[playerIdx].pos=Math.min(FINISH, players[playerIdx].pos+1);
+  moveRunner(playerIdx);
+  soundMove();
+  renderSide();
+  // If we just hit the finish mid-sequence, stop immediately
+  if(players[playerIdx].pos>=FINISH){
+    setTimeout(()=>showWin(), 520);
+    return;
+  }
+  // Schedule next step
+  setTimeout(()=>animateMoveSteps(playerIdx, stepsLeft-1), 480);
+}
+function showWin(){
+  soundWin();
+  launchConfetti();
+  $('winName').textContent=players[current].name;
+  $('winOverlay').classList.add('open');
+}
+
+/* ─── CONFETTI ───────────────────────────────────────────────────────────── */
+function launchConfetti(){
+  const c=$('confetti'),ctx=c.getContext('2d');
+  c.style.display='block';c.width=innerWidth;c.height=innerHeight;
+  const cols=['#2EC4B6','#FF6B6B','#F5C842','#1A1A2E','#6EE7DE','#FFB3B3'];
+  const shapes=['rect','circle','tri'];
+  const parts=Array.from({length:130},()=>({
+    x:Math.random()*c.width,y:-20-Math.random()*60,
+    vx:(Math.random()-.5)*5.5,vy:2.5+Math.random()*3.5,
+    s:5+Math.random()*7,col:cols[Math.floor(Math.random()*cols.length)],
+    a:1,rot:Math.random()*Math.PI*2,rv:(Math.random()-.5)*.17,
+    shape:shapes[Math.floor(Math.random()*3)]
+  }));
+  const start=Date.now();
+  function anim(){
+    ctx.clearRect(0,0,c.width,c.height);
+    parts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.vy+=.055;p.rot+=p.rv;p.a-=.005;
+      if(p.a<=0)return;
+      ctx.save();ctx.globalAlpha=Math.max(0,p.a);ctx.fillStyle=p.col;
+      ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+      if(p.shape==='rect'){ctx.fillRect(-p.s/2,-p.s*.8,p.s,p.s*1.5);}
+      else if(p.shape==='circle'){ctx.beginPath();ctx.arc(0,0,p.s/2,0,Math.PI*2);ctx.fill();}
+      else{ctx.beginPath();ctx.moveTo(0,-p.s);ctx.lineTo(p.s*.87,p.s*.5);ctx.lineTo(-p.s*.87,p.s*.5);ctx.closePath();ctx.fill();}
+      ctx.restore();
+    });
+    if(Date.now()-start<4500)requestAnimationFrame(anim);
+    else c.style.display='none';
+  }
+  anim();
+}
+
+/* ─── START / RESET ──────────────────────────────────────────────────────── */
+function startGame(){
+  playerCount=2;
+  words=[...selectedWordsSet];
+  if(!words.length){alert('Please select at least one word for the race.');return;}
+  shuffle(words);used=[];players=[];
+  lastWordSnapshot=[...selectedWordsSet]; // save for Play Again
+  for(let i=0;i<playerCount;i++){
+    players.push({name:($('p'+i).value||`Player ${i+1}`).trim(),color:playerColors[i],pos:0});
+  }
+  current=0;phase='roll';roll=0;
+  $('setup').style.display='none';
+  $('game').style.display='flex';
+  $('winOverlay').classList.remove('open');
+  $('diceBtn').disabled=true; // disabled until countdown finishes
+  $('diceBtn').classList.remove('rolling');
+  $('diceText').textContent='Get ready…';showDiceFace(4);
+  $('gameListLabel').textContent=`${words.length} word${words.length===1?'':'s'}`;
+  showWordPanel(false);
+  $('readyPrompt').classList.remove('hidden');
+  buildScenery();renderTracks();renderSide();
+  // Opening countdown — fires once when race begins
+  startCountdown(()=>{
+    $('diceBtn').disabled=false;
+    $('diceText').textContent='Click to roll';
+    $('readyPrompt').textContent=`${players[0].name}'s turn — roll the dice!`;
+  });
+}
+function resetToSetup(){
+  $('game').style.display='none';$('setup').style.display='block';
+  $('winOverlay').classList.remove('open');
+  phase='roll';roll=0;current=0;players=[];words=[];used=[];
+  $('trackArea').innerHTML='';$('scenery').innerHTML='';
+  $('diceBtn').disabled=false;showDiceFace(4);$('diceText').textContent='Click to roll';
+  showWordPanel(false);
+}
+function playAgain(){
+  // Keep same players + colors, reset positions, reuse same words
+  if(!players.length||!lastWordSnapshot.length)return;
+  words=[...lastWordSnapshot];shuffle(words);used=[];
+  players.forEach(p=>p.pos=0);
+  current=0;phase='roll';roll=0;
+  $('winOverlay').classList.remove('open');
+  $('diceBtn').disabled=true; // disabled until countdown finishes
+  $('diceBtn').classList.remove('rolling');
+  $('diceText').textContent='Get ready…';showDiceFace(4);
+  showWordPanel(false);
+  $('readyPrompt').classList.remove('hidden');
+  buildScenery();renderTracks();renderSide();
+  startCountdown(()=>{
+    $('diceBtn').disabled=false;
+    $('diceText').textContent='Click to roll';
+    $('readyPrompt').textContent=`${players[0].name}'s turn — roll the dice!`;
+  });
+}
+
+/* ─── SOUND TOGGLE ────────────────────────────────────────────────────────── */
+let soundEnabled=true;
+function toggleSound(){
+  soundEnabled=!soundEnabled;
+  ['setupSndOn','setupSndOff','gameSndOn','gameSndOff'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    if(id.endsWith('On'))  el.style.display=soundEnabled?'block':'none';
+    if(id.endsWith('Off')) el.style.display=soundEnabled?'none':'block';
+  });
+}
+// Sound guard — checked inside each sound function, no redeclaration needed
+
+/* ─── INIT ───────────────────────────────────────────────────────────────── */
+function init(){
+  playerCount=2;
+  populateLevels();
+  openWordBank();
+  updateWordCount();
+  renderPlayerInputs();
+  document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>setListType(btn.dataset.type)));
+  $('levelSelect').addEventListener('change',()=>{renderWordBank();});
+  $('selectAllBtn').addEventListener('click',selectAllVisible);
+  $('deselectAllBtn').addEventListener('click',deselectAllVisible);
+  $('addCustomBtn').addEventListener('click',addCustomWords);
+  $('startBtn').addEventListener('click',startGame);
+  $('newGameBtn').addEventListener('click',resetToSetup);
+  $('restartBtn').addEventListener('click',resetToSetup);
+  $('diceBtn').addEventListener('click',rollDice);
+  $('readBtn').addEventListener('click',moveCurrent);
+  $('playAgainBtn').addEventListener('click',playAgain);
+  $('changeListBtn').addEventListener('click',resetToSetup);
+  showDiceFace(4);
+  $('setupSoundBtn') && $('setupSoundBtn').addEventListener('click',toggleSound);
+  $('gameSoundBtn')  && $('gameSoundBtn').addEventListener('click',toggleSound);
+  document.addEventListener('click',()=>{try{getAudio();}catch(e){}},{once:true});
+}
+window.addEventListener('DOMContentLoaded',init);
+window.addEventListener('resize',()=>{
+  if($('game').style.display==='flex'&&players.length){
+    buildScenery();renderTracks();players.forEach((_,i)=>moveRunner(i));
+  }
+});
+</script>
+</body>
+</html>
