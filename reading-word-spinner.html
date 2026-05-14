@@ -8,7 +8,12 @@
   <meta name="keywords" content="sight word spinner, phonics spinner, Fry word games, Dolch games, Science of Reading games, SoR aligned tools, structured literacy activities, literacy wheel spinner, classroom spinner tool, reading intervention games, phonics games, sight word practice, literacy games, fluency practice, teacher tools" />
   <meta name="author" content="Literacy Arcade" />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#2EC4B6" />
+  <meta name="theme-color" content="#1D9E75" />
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  
   <link rel="canonical" href="https://literacyarcade.com/reading-word-spinner.html" />
 
   <!-- Open Graph / Facebook / LinkedIn -->
@@ -33,7 +38,7 @@
     "@type": "WebApplication",
     "name": "Reading Word Spinner",
     "alternateName": ["Sight Word Spinner", "Phonics Spinner", "Literacy Wheel Spinner"],
-    "url": "https://literacyarcade.com/reading-word-spinner",
+    "url": "https://literacyarcade.com/reading-word-spinner.html",
     "applicationCategory": "EducationalApplication",
     "operatingSystem": "Any",
     "isAccessibleForFree": true,
@@ -63,34 +68,39 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Inter:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* ── Core tool palette — calm instructional, aligned to Literacy Arcade ── */
-      --teal:        #2EC4B6;   /* homepage primary teal */
-      --teal-dk:     #1FA99C;   /* darker teal for hovers/active */
-      --teal-bg:     #EAF8F7;   /* soft mint panel background */
-      --teal-border: #A8DDD9;   /* teal-toned border */
-      --coral:       #FF6B6B;   /* homepage coral accent */
-      --coral-lt:    #FFF0EE;   /* soft coral hover background */
-      --lavender:    #EEE8F8;   /* subtle lavender for Dolch tag */
-      --lavender-dk: #7B5EA7;   /* lavender text */
-      --navy:        #1A1A2E;   /* homepage navy — primary text */
-      --navy-mid:    #4A4A6A;   /* mid navy for secondary text */
-      --navy-lt:     #9090A8;   /* light navy for hints/placeholders */
-      --bg:          #FDFBF7;   /* homepage cream background */
-      --border:      #E8E4F0;   /* soft border */
-      --amber:       #D8BE72;   /* pointer/wheel accent — unchanged */
-      /* Legacy aliases used throughout — mapped to new values */
+      /* ── Literacy Arcade brand colors ── */
+      --cream:       #FAF8F4;
+      --white:       #FFFFFF;
+      --teal:        #1D9E75;
+      --teal-mid:    #5DCAA5;
+      --teal-light:  #E1F5EE;
+      --teal-border: #A8DDD9;
+      --coral:       #D85A30;
+      --coral-light: #FFF0EE;
+      --navy:        #1a2340;
+      --navy-mid:    #6b7a99;
+      --navy-light:  #9090A8;
+      --border:      rgba(26,35,64,0.12);
+      --amber:       #D8BE72;   /* pointer/wheel accent */
+      
+      /* Legacy aliases for existing code */
+      --teal-dk:     #0F6E56;
+      --teal-bg:     var(--teal-light);
+      --lavender:    #EEE8F8;
+      --lavender-dk: #7B5EA7;
+      --bg:          var(--cream);
       --sage:        var(--teal);
       --sage-bg:     var(--teal-bg);
       --sage-dark:   var(--teal-dk);
       --sage-border: var(--teal-border);
       --text:        var(--navy);
       --text-mid:    var(--navy-mid);
-      --text-lt:     var(--navy-lt);
+      --text-lt:     var(--navy-light);
       --mustard:     var(--amber);
     }
 
@@ -115,24 +125,159 @@
     }
 
     /* ── HEADER ── */
-    .header {
-      text-align: center;
-      padding: 8px 0 8px;
+    .la-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 3px rgba(26,35,64,0.06);
+      margin: -28px -18px 20px -18px;
     }
-    h1 {
-      font-family: 'Lexend', sans-serif;
-      font-weight: 800;
-      color: var(--text);
-      font-size: clamp(34px, 4vw, 46px);
-      line-height: 1.02;
-      letter-spacing: -1.2px;
+    .la-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      text-decoration: none;
+      color: inherit;
     }
+    .la-logo-group:hover,
+    .la-logo-group:focus,
+    .la-logo-group:visited {
+      text-decoration: none;
+      color: inherit;
+    }
+    .la-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: block;
+    }
+    .la-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .la-wordmark {
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: -.2px;
+      line-height: 1;
+    }
+    .la-pipe {
+      width: 1px;
+      height: 18px;
+      background: var(--border);
+      margin: 0 4px;
+      flex-shrink: 0;
+    }
+    .la-tool-name {
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0F6E56;
+      letter-spacing: -.1px;
+      line-height: 1;
+    }
+
+    .la-logo-group span,
+    .la-logo-group div {
+      text-decoration: none;
+    }
+    .hdr-btns {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: #F8F7F3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy-mid);
+      transition: background .15s, border-color .15s;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .icon-btn:hover {
+      background: var(--cream);
+      border-color: var(--navy-light);
+    }
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .header-btn {
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--navy-mid);
+      transition: all .15s;
+      font-size: 16px;
+      line-height: 1;
+    }
+    
+    .header-btn:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-light);
+    }
+    
+    .header-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    
     .subtitle {
-      font-size: 14px;
-      color: var(--text-lt);
-      font-weight: 600;
+      font-size: 13px;
+      color: var(--navy-mid);
+      font-weight: 500;
+      text-align: center;
+      margin: -8px 0 16px 0;
       letter-spacing: 0.1px;
-      margin-top: 8px;
+    }
+    
+    /* ── PAGE TITLE ── */
+    .page-title {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    
+    .page-title h1 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      color: var(--navy);
+      font-size: 38px;
+      line-height: 1.1;
+      letter-spacing: -0.8px;
+      margin: 0;
     }
 
     /* ── TWO-COLUMN LAYOUT ── */
@@ -506,7 +651,14 @@
     #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 200; display: none; }
 
     /* ── FOOTER ── */
-    footer { margin-top: 6px; font-size: 11px; color: var(--text-lt); text-align: center; padding-bottom: 12px; }
+    footer { 
+      margin-top: 16px; 
+      font-size: 11px; 
+      color: var(--navy-light); 
+      text-align: center; 
+      padding: 12px 0 20px; 
+      opacity: 0.7;
+    }
 
     /* ── SEO CONTENT: available to search engines and assistive tech, hidden visually ── */
     .seo-copy {
@@ -549,7 +701,7 @@
       border-radius: 12px;
       padding: 8px 14px;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
     }
@@ -561,16 +713,6 @@
       background: var(--teal-bg); border: 1px solid var(--teal-border);
       border-radius: 20px; padding: 3px 12px; white-space: nowrap;
     }
-    .spin-summary-right {
-      display: flex; align-items: center; gap: 8px;
-    }
-    .edit-wheel-btn {
-      background: white; border: 1.5px solid var(--sage-border);
-      border-radius: 8px; padding: 5px 14px;
-      font-family: 'Lexend', sans-serif; font-size: 12px; font-weight: 600;
-      color: var(--text-mid); cursor: pointer; transition: background 0.1s;
-    }
-    .edit-wheel-btn:hover { background: var(--teal-bg); }
 
     /* ── BUILD MODE: two-column layout ── */
     #app[data-mode="build"] .layout-columns {
@@ -592,31 +734,32 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
     }
     #app[data-mode="spin"] .col-left { display: none; }
     #app[data-mode="spin"] .col-right {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       width: 100%;
-      max-width: 740px;
+      max-width: 620px;
       position: static;
     }
     #app[data-mode="spin"] #canvas {
-      width: min(640px, 92vw, calc(100vh - 150px)) !important;
-      height: min(640px, 92vw, calc(100vh - 150px)) !important;
+      width: min(525px, 82vw, calc(100vh - 230px)) !important;
+      height: min(525px, 82vw, calc(100vh - 230px)) !important;
     }
     #app[data-mode="spin"] .start-spin-btn { display: none !important; }
     #app[data-mode="spin"] .spin-summary { display: flex; }
     #app[data-mode="spin"] .spin-btn {
       display: block;
-      font-size: 24px; padding: 16px 64px;
+      font-size: 21px; padding: 13px 52px;
       box-shadow: 0 6px 24px rgba(46,196,182,0.4);
-      max-width: 340px;
+      max-width: 300px;
     }
-    #app[data-mode="spin"] .header { display: none; }
+    #app[data-mode="spin"] .page-title { display: none; }
+    #app[data-mode="spin"] .subtitle { display: none; }
     #app[data-mode="spin"] footer  { display: none; }
 
     /* ── Smooth canvas scale transition ── */
@@ -660,20 +803,36 @@
 <canvas id="confettiCanvas"></canvas>
 
 <div id="app" data-mode="build">
-  <div class="header">
+  <header class="la-header" aria-label="Literacy Arcade navigation">
+    <a href="https://literacyarcade.com" class="la-logo-group" aria-label="Literacy Arcade home">
+      <div class="la-icon">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAC0ALQDASIAAhEBAxEB/8QAHAAAAgEFAQAAAAAAAAAAAAAAAAECBAUGBwgD/8QASRAAAQMDAQQFBgkJBgcAAAAAAQACAwQFEQYHEiExQVFhcaETFCKBkdEIFTIzVXKCk8EjQlJikqKxstIXJFTC4fAWJzQ1U2Vz/8QAGwEAAQUBAQAAAAAAAAAAAAAAAwECBAUGAAf/xAAuEQADAAEDAwMCBgEFAAAAAAAAAQIDBBESITFRBRNBInEUUmGBsfDBMpGh0eH/2gAMAwEAAhEDEQA/AOMk2tc5wa0FzicAAcSUNa5zg1oLnE4AA4krprYhsqhsNLDfr/A193kG9FE8ZFKDy4fp9Z6OQ6SS4sTyPZFd6l6lj0GLnfVvsvP98mv9AbErxeI463UMr7VSuwWwNbmoeO0Hgz15PYtz6d2W6NszG+RsdNNI3nLVjy7yev0uAPcAs4a1rBhowgqyjDEdkYLVeq6vVv672XhdF/7+5SUtuoqZoZBTRRtHIMaGgexVG4wcmN9ikSooxCUgkcIKRXBZki5jDzY0+peb4Iz0EdxXqVElOQVQilkpnDi05VO4OacOBBVyUHhrhhwyE5Mf7a+C3EqJKqJ6ctyWcR1KmTl1HKdgSJQSokpwWZAlRcA4EOAIPQUyopdgsyWq7ab0/dWObcLNQ1GfznQN3h3O5j1Fa11jsVoJ2PqNM1TqSbmKadxdGewO+U3159S28SkShZMGPJ/qRPwanNhf0Ucc3u03Gy3CSgulJJS1DObHjmOsHkR2jgqJdZ630ra9V2p1HcIw2VoJgqGj04XdY6x1jp8VzFquwXDTV6mtdxjxIzix4+TIzoc3sP8AoqjU6V4Xv8Gl0etnULZ9KLShCFFJxuH4MujY7zqCXUlfCH0dscBA1wyHzkZB+yMHvLV00sO2LWVli2aWam3N2WeAVU3WXyelx7gQPUswKtsEcISPM/V9U9Vq6r4XRfZf99wKRKCVFHIEyCRQUiuCpAUigqJKcGmQJQhRJShUgJSKCkSlCzIEqlqoQQXsHHpCqCUkoVRuWwlIr2q49yTI5FU6ejlIJEoJSJTg0yBKiSglIlKGmQJWFbXNJM1Rpp7oIwblRgyUzhzd+kz1ge3CzNIptwrlyyRip46VT3RxkQQcHgULMtsNkFm15WxwRkQVWKqIAcAH53h+0HIWcuHFOX8Gqi1cql8nYdHC2no4adgAbFG1gA6ABhehKCVFXSR5Qlv1BIoKRXBEgKRQVElODTIykvSad0kcbHBoDBgYC8SUoVLwBKRTbguAJwCeJ6lVXSCmg8n5vLv7w4jeB9a75DzHTcoyVElBKScEmQSJQSolcFSPOqbvQns4q3kq5ScWO7lbCU+RzkCVElBKRKeEmQJUUJFKFmQKRKCVEpQ0yY/qTTdJea5lVPEHObEIwT1Ak/ihX9CG8MN7tEiclpbJmXJFBSKjGLSApFBUSU4NMgSso2b2W2Xq7zxXeUR00UJd86GZdkAcfasXUSUlLdNIk4aUWqa3S+Dd0GzvRtQSIHyylvPcqt7HsVe7Z9pl1N5v5o8MxjIfx789asWwej8nZq+uI4zTiMHsaM/5lshVWa7i+PJs2eiwYM2FZHjS3MEqNnOjafHnD5od7lv1W7n2rC9p1g01ZKCkNmlMk80p3vy4kAaB7yFU7eazymoKKiB4QU++e9x9zQtcKXp4upVun9is12XDjusMY19wSJQSolTirSApEoJSShZkhO7dicexZtsr2cwaot89zu81XT0m9uU/kHNa6Qj5R9IHgOXfnqWM6es1TqO/0tmpcgyu3pX44RsHNx/3zwunLVQ01st1Pb6OMRwU8YjY0dQ/FRtXneKNp7ssvT9Is18qX0r+TWV72O2Cns9ZUUVbdX1MUD3xNkljLS4AkAgMBx61osrspwDgQRkHgVyNqmhNs1HcbeRjzepewdwcceGEPQZ6unNvcleoaWMczULYtpSJQSolWhXzIFIoKRKUNMghRyhcE2MsikEjc9PSFIq3Ne5jt5p4qrimbIMcndSiNGMxvc9CUIUSVxISAlIoKI2ukkbG0Zc4gAdpSpbhUjoLZZR+Z6Gt7SMOla6Y/aJI8MLJ1T2umbR22lpG8oYWRj1ABes8jYYXyvOGsaXE9gCoc18rdG/0uP28MR4SOe9p9Z57rm5SA5bHIIh9kAHxBWMEr3uFS6rrqiqefSmldIe8nKpirzFHGFPgyOevcy1flsCkSglJEEmQXnNII2ZPqHWlPMyMceJ6Asp2RaYdqfUwqauPet9CRJNkcHu/NZ6+Z7B2rm1Muq7INEO6Uz3ZsPZbZ6bR+janU95/JVFRF5aQuHGOLm1g7TwOO0DoWWbP7+dTaYguz2Njkkkka5jfzcOIA9mFqzb7qwVVa3TNDJ+QpiH1RaeDpOhvcP4nsV6+DdX+UstztrncYJ2ytHY8Y/i3xVbkxVkxVnru+32LzFknDlnTx2Xf7m2Fzht5oPMtoE8wbhlZCyYd+N0+LV0etN/CWt+YLRdGt+S59O894Dm/wcgaKuOZfr0Jesjnhf6dTSpSKCkStCUkyBKiSglJKGmQQllCUJxL4jODlIpEqKYaZPeOpc3g70h4r3ZNG/k4Z7VbyUl225IhtFzJV50LSef6wtdNjINQ1zh2N9I+AWKNke35LiFsPYLBJV6zfUPALaWmc/OOkkNHgSmZHxl14J2llZMsx5aN8qw7QqzzHRd1qAcHzcxt73eiP4q/LXW324mk0hBTNI3qqqaCP1Wgk+OFRY55Wp8s3Ge/bxVXhM0oUiVROqZTyIHcF5Ple7m8rRcTGJldJLGz5Th3KmlqnEYYN0dfSqYlIlOUhFue1HT1FbWRUlNG6WeZ4Yxo5ucTgBb/AK2Wk2X7NWwwlj7hIN1p/wDLO4cXdzf4AdaxrYFpVuZNV3BgDGbzKTf5frSerkPWsuvt92Z3uSN13uFsrHQghnlHOO7nnhV2ry87WNJtLvt/H9/wXOgwcIeVtJvtv/P9/wAnONRNJPPJPM90ksji57nHJJPEkrYnwerh5treSjLsNrKVzQOtzSHDwDlm/wDya/8ATfvKrs9XsoobnBU2ye0w1jXYiewuDgTw4e1EvUq4c8H1Xg7HpHFq+a6PfubCWD7cbf5/s7rXhuX0rmTt9RwfAlZwqK/UTblZK63uGRU074v2mkKnmuFKvBdOeS4v5OPCVElSla6OR0bxhzSQR1EKC1K6lEp2BIoKiSnBpkeUKOULth/EvpKiSglJRjDzIJEoJUSUoaZAlbo+DnRbtuutxcPnJWQtP1QSf5grRojZbS37TNJdqq51FPJUBzhGyMEABxA59y2porTlPpeyC100z52+UdI6R4ALie7uCgavURwrGn1NB6X6flWWM1L6e/8Ax0L2tJfCNrt+72u3B3CKB0rh2uOB/Kt2rD9V7O7HqW7uudxqLg2YsazdilaGgDlgFpVfp7mMiqvgvdbivLhcR3ZzUSokroD+xvSn+Juv3zP6Ef2NaU/xN1+/Z/QrX8fhKRelZ14Md2Aaettyt90rrpbaStb5VkUXnELZA3AJdjIOOYWJy2NuqNqdZarVTxU1J529p8jGGsiiYcFwA4Dl7St+aS03QaYtDrZbHTGJ0jpC6Zwc4uIA6AOoKh0Loyg0qayaGeSrqqt+9JPK0A457ox0ZyVF/FpZayLx0LBaF+zGN+d2/wDcxTbNfqfTGlKfS1oxDLURCPdaeMUA4H1u5e1aFJW/9b7MqS7V1w1Bcr9V7246QtETd1jGjg0dgAXPx58OSlaBw4ez3fdgddF8lutp7L9gKGuLHhzTgtOQUitgbKtn0GsaGtq6qumpGU8jY2eTYDvHGTz6uHtU27WOeddkR8eN21K+ToHT9aLlYqCvaciop45fa0FVytmlrS2xWCktDKh9S2lZuNkeACRkkcurOFc1msnHm+PY0GNNQlXc5O2l2/4r15eKQN3WipdIwfqv9IeBWOFdKa72X23VN9deJ7lUUkjomse2NjSDu9PHsx7FzfWsijrJo4Hl8TJHNY483NB4FX2jzzkhSu6XUhZ8TVOvhniSkSglRJU0ZMjyhJC4JxL4kSglRJUYw8yBKRQV6UVO+rq4qWMtD5XhjS44GT1ruwaZ3PSO5XCKNscVfVMY0Ya1szgB6sqRu10+kqz793vV0rNIXqDJZFFUDrjf+BwrNV2+vpc+c0dREB0ujIHtSJxXYlcMkd9yZu10+kqz793vSN2un0lWffu96oiUiU/ivA+XXkrDdrr9J1v37vel8bXX6Trfv3e9USRXcV4DJ15K9t5vDM7l1rm7wwcVDxke1QN3uv0nW/fu96oiVEpeK8BU35KyS6XORjmPuNW5jhgtMziCO3iqIoKRKckkFSb7gSvanr62lYWU1ZUQtJyWxyloJ6+BVOSkl23DSit+N7r9KVv37vel8b3b6Urfv3e9UkcckrwyNjnuPINGSrnSabvlWR5O3TNB6ZBuD97CR8F3DymylN3upGPjOtx/93e9UJKvd80zcLRb21lXJT7rnhm6x5LgT6uxWIlLDlreQql/IEpISJTwsyCFFCULxL6SkUg4OAcDkEZCSjIwsyCWcckEpEpQ8yXCkvd2pMeQuE4A5Nc7eHsOQrtS63usWBNHTzjrLS0+Bx4LFyUiU145fdEmLuezMxOrLTVf9wsMbj0kBrz4gKJq9D1PGSimpyexw/lJCw5IpPZn46EhZafdJ/sZibfomfjHdJovtEfzNSOndMv+a1FGPrSs/wBFhxKiUvtv4phVa+ZRmR0nZ3fJ1FBjvYf8yR0jahz1FB7G/wBSw0pEpfbv8wWXP5TMv+F7Cz53UcA+2wfil8R6Pi+evz3/AFJW/gCsMJSXe3T70GlrwZmY9BU/OaepI6Pyn4AJfHukKX/pbGZSORkjaR7XElYYVElL7K+Wwqr9DMpdeSRsLKC1U8DejedkewAK1VmsL9UZAqxC09ETAPHn4qwkqJKcsML4CJ0z2qqqpqn79TUSzO65Hlx8V4ISJRUgiQEqJQUkoaZBCg+VjDhzgChd0CcT20Tcm3fSNquLXbxmpWF/1wMOH7QKu5K038HHUrX0lTpepkAkjJqKXJ5tPy2juPH1nqW4yVBwZPcxqjH6rTvDmqP7sBKiSglIlHGzIEqKEilCzIFIlBKiUoaZApFBSJShpkCVElBKSUNMgkUFRJShpkCUiUEqJKULMgSkhIlcGmQJUSgpJQ0yCRKCV5yyMjjdJI4MYwFznE4AA5lKGmTXO03V/wAR6giomEn+7Ne7A5Eud+ACFqnWt4N+1RXXME+TlkxED0Mbwb4AIWdzazI8jcvoKUNmuNXaLpT3KhlMVTTvD43dvUesHkR1FdT6E1VQ6ssUdwpCGTNw2ogz6UT+ruPQenvyuTVd9Kahuembsy42ubckHB7HcWSN6WuHSP8AYQ9LqXhrr2ZC1ujWondd0dckqKxHQm0CyaqhZEyUUlxx6dJK4ZJ/UP5w8esLLSryLm1yl9DP1irG+NLZgUiUEqJRB8yBSKCkSlDTIEqJKCUkoaZBIoKiSlDTIEpEoJUSUoWZAlJCRK4NMgSolBSShpkEiUErzlkZHG6SR7WMaMuc44AHWSlDTJIlau21avZTUj9N2+UGomH97e0/Ns/Q7z09nejX+0+npo5LfpuRs9QctfV4yyP6n6R7eXetOTSSTSvlle6SR7i5znHJcTzJKqddrls8eN/dj29iCEIVKNBCELjhtc5rg5ri1wOQQcEFZvpnabq61mKmNc2ugyGhlY3yhH2sh3ihCNgqptbMDniah7o3tpW8VV2oo5qlkLHObkiMEDxJV7KELRR2KFrqJRKEJ4RCSKEJwaRFRKELgsiKSEJQ0kSolCEoaRFQncWROcMZAQhKGk1vr/XV4seWUUNEcnG9JG4kfvYWqdQaov1+JFzuU00eciIHdjH2RwQhUXqF1y236BCzIQhVggIQhccf/9k=" alt="Literacy Arcade logo"/>
+      </div>
+      <span class="la-wordmark">Literacy Arcade</span>
+      <div class="la-pipe"></div>
+      <span class="la-tool-name">Reading Word Spinner</span>
+    </a>
+    <div class="hdr-btns">
+      <button class="icon-btn" id="setupSoundBtn" aria-label="Toggle sound" title="Toggle sound" onclick="toggleMute()">
+        <svg id="setupSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg id="setupSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'">
+        <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      </button>
+    </div>
+  </header>
+  
+  <div class="page-title">
     <h1>Reading Word Spinner</h1>
-    <div class="subtitle">Literacy Arcade · Sight Word &amp; Phonics Practice · Mix any lists · No login required</div>
   </div>
+  
+  <div class="subtitle">Fry sight words · Dolch sight words · Phonics patterns · Custom lists · SmartBoard ready</div>
 
   <!-- ── SPIN MODE SUMMARY BAR (hidden in Build Mode) ── -->
   <div class="spin-summary" id="spinSummary">
     <div class="spin-summary-left">
       <span class="spin-word-count" id="spinWordCount">0 words on wheel</span>
-    </div>
-    <div class="spin-summary-right">
-      <button class="edit-wheel-btn" onclick="enterBuildMode()">✏️ Edit Wheel</button>
-      <button class="mute-btn" id="muteBtnSpin" onclick="toggleMute()" title="Toggle sound">🔊</button>
-      <button class="btn clr" style="padding:4px 10px; font-size:11px;" onclick="clearWheel()">Clear</button>
     </div>
   </div>
 
@@ -811,7 +970,7 @@
     </p>
   </section>
 
-  <footer>Reading Word Spinner &bull; Free Science of Reading-aligned teacher tool &bull; Literacy Arcade</footer>
+  <footer>Literacy Arcade &bull; Reading Word Spinner</footer>
 </div>
 
 <!-- MODAL -->
@@ -1174,62 +1333,78 @@ let wheelEntries = [];
 let currentAngle = 0;
 let spinning     = false;
 let pendingEntry = null; // {word, source}
-let muted        = false;
+let soundEnabled  = true;
+let audioCtx      = null;
+let tickScheduler = null;
+let tickIntervalMs = 70;
 let customWords  = []; // typed/pasted words, persists across tab switches
 
 // Convenience getter
 function wheelWords() { return wheelEntries.map(e => e.word); }
 
 // ── AUDIO ─────────────────────────────────────────────────────────────
-let audioCtx = null, tickScheduler = null, nextTickTime = 0, tickIntervalMs = 70;
-function ensureAudioCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  return audioCtx;
-}
-function scheduleOneTick(ctx, when) {
-  const bufSize = Math.floor(ctx.sampleRate * 0.018);
-  const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
-  const data = buf.getChannelData(0);
-  for (let i = 0; i < bufSize; i++) data[i] = (Math.random()*2-1)*Math.pow(1-i/bufSize,6)*0.35;
-  const src = ctx.createBufferSource(); src.buffer = buf;
-  const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1200; bp.Q.value=1.5;
-  const gain = ctx.createGain(); gain.gain.value = muted ? 0 : 0.55;
-  src.connect(bp); bp.connect(gain); gain.connect(ctx.destination); src.start(when);
-}
 function startTicking(ms) {
-  stopTicking(); if (muted) return; ensureAudioCtx();
-  nextTickTime = audioCtx.currentTime + 0.05; tickIntervalMs = ms;
-  tickScheduler = setInterval(() => {
-    if (!audioCtx) return;
-    while (nextTickTime < audioCtx.currentTime + 0.08) {
-      if (!muted) scheduleOneTick(audioCtx, nextTickTime);
-      nextTickTime += tickIntervalMs / 1000;
-    }
-  }, 30);
+  // Keep timing state only. The actual tick plays once per segment change in the animation frame.
+  tickIntervalMs = ms;
 }
-function updateTickInterval(ms) { tickIntervalMs = ms; }
-function stopTicking() { if (tickScheduler) { clearInterval(tickScheduler); tickScheduler = null; } }
+function updateTickInterval(ms) {
+  tickIntervalMs = ms;
+}
+function stopTicking() {
+  if (tickScheduler) { clearInterval(tickScheduler); tickScheduler = null; }
+}
 function playCelebration() {
-  if (muted) return;
-  try {
-    const ctx = ensureAudioCtx();
-    [523,659,784,1047].forEach((freq,i) => {
-      const o=ctx.createOscillator(), g=ctx.createGain();
-      o.connect(g); g.connect(ctx.destination); o.type='sine'; o.frequency.value=freq;
-      const t=ctx.currentTime+i*0.12;
-      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.08,t+0.04);
-      g.gain.exponentialRampToValueAtTime(0.001,t+0.22); o.start(t); o.stop(t+0.25);
-    });
-  } catch(e) {}
+  playWinSound();
 }
 function toggleMute() {
-  muted = !muted;
-  const label = muted ? '🔇' : '🔊';
+  soundEnabled = !soundEnabled;
+  const label = soundEnabled ? '🔊' : '🔇';
   document.getElementById('muteBtn').textContent = label;
-  const mb2 = document.getElementById('muteBtnSpin');
-  if (mb2) mb2.textContent = label;
-  if (!muted && spinning) startTicking(tickIntervalMs);
+  
+  // Update Read & Race style header button with SVG icons
+  const setupSndOn = document.getElementById('setupSndOn');
+  const setupSndOff = document.getElementById('setupSndOff');
+  if (setupSndOn && setupSndOff) {
+    if (soundEnabled) {
+      setupSndOn.style.display = '';
+      setupSndOff.style.display = 'none';
+    } else {
+      setupSndOn.style.display = 'none';
+      setupSndOff.style.display = '';
+    }
+  }
+  if (soundEnabled && spinning) startTicking(tickIntervalMs);
+}
+
+// ── SOUND SYSTEM (from Read & Race) ──────────────────────────────────────
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq, type, duration, volume = 0.16, delay = 0) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudio(), osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+    gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+    gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + delay + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+    osc.start(ctx.currentTime + delay); osc.stop(ctx.currentTime + delay + duration + 0.05);
+  } catch (e) {}
+}
+
+function playTickSound() {
+  if (!soundEnabled) return;
+  // Soft click only when the pointer crosses a wheel segment.
+  playTone(520, 'triangle', 0.025, 0.035);
+}
+
+function playWinSound() {
+  if (!soundEnabled) return;
+  [[523, 0], [659, .17], [784, .34]]
+    .forEach(([f, d]) => playTone(f, 'triangle', .2, .15, d));
 }
 
 // ── CONFETTI ──────────────────────────────────────────────────────────
@@ -1296,7 +1471,7 @@ function updateModeUI() {
   document.getElementById('spinWordCount').textContent = `${count} ${plural} on wheel`;
 
   // Sync both mute buttons
-  const muteLabel = muted ? '🔇' : '🔊';
+  const muteLabel = soundEnabled ? '🔊' : '🔇';
   const mb1 = document.getElementById('muteBtn');
   const mb2 = document.getElementById('muteBtnSpin');
   if (mb1) mb1.textContent = muteLabel;
@@ -1790,7 +1965,7 @@ function spin() {
 function _doSpin() {
   if (spinning) return;
   if (wheelEntries.length === 1) { showModal(wheelEntries[0]); return; }
-  ensureAudioCtx();
+  getAudio();
   spinning = true;
   document.getElementById('spinBtn').disabled = true;
   document.getElementById('winnerBanner').style.display = 'none';
@@ -1819,7 +1994,7 @@ function _doSpin() {
     const adj  = (norm+Math.PI*1.5)%(Math.PI*2);
     const seg  = Math.floor(adj/sl)%wheelEntries.length;
     if(seg!==lastSeg) {
-      if(!muted&&audioCtx) scheduleOneTick(audioCtx,audioCtx.currentTime+0.01);
+      playTickSound();
       lastSeg=seg;
     }
     updateTickInterval(Math.round(FAST+(SLOW-FAST)*(1-(1-raw))));
