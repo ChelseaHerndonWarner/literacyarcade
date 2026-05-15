@@ -226,6 +226,7 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
 #game{display:none;flex-direction:column;height:100vh}
 /* Game uses the same .la-header class — no separate topbar needed */
 .topbar{
+  display:none !important;
   height:58px;background:var(--white);border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
   padding:0 24px;box-shadow:var(--shadow-sm);flex-shrink:0;
@@ -434,7 +435,7 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
   z-index:15;
   transition:transform .32s cubic-bezier(.22,.88,.22,1);
 }
-.word-panel.visible{transform:translateX(-50%) translateY(0)}
+.word-panel.visible{transform:translateX(-50%) translateY(-60px)}
 .word-panel-handle{
   width:36px;height:4px;border-radius:2px;background:var(--border);
   margin:0 auto 12px;
@@ -464,7 +465,7 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
 
 /* Ready state — no word panel, compact prompt */
 .ready-prompt{
-  position:absolute;left:50%;bottom:18px;
+  position:absolute;left:50%;bottom:78px;
   transform:translateX(-50%);
   background:rgba(255,255,255,.92);
   border:1px solid var(--border);
