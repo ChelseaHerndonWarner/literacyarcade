@@ -15,7 +15,7 @@
   <meta name="twitter:description" content="Free oral reading fluency calculator for WCPM, accuracy, and progress monitoring." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
       --teal:#2EC4B6;
@@ -47,29 +47,104 @@
       color:var(--navy);
     }
 
-    header{
-      height:58px;
-      padding:0 24px;
-      background:rgba(255,255,255,.92);
+
+    /* ─── LITERACY ARCADE HEADER ───────────────────────────────────────────── */
+    .la-header{
+      background:var(--white);
       border-bottom:1px solid var(--border);
+      padding:0 24px;
+      height:58px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       position:sticky;
       top:0;
-      z-index:10;
-      backdrop-filter:blur(6px);
+      z-index:50;
+      box-shadow:0 2px 8px rgba(15,23,42,.06);
     }
-
-    .brand{display:flex;align-items:center;gap:10px;}
-    .brand-icon{
-      width:34px;height:34px;border-radius:10px;
-      background:linear-gradient(135deg,var(--teal),#7B5EA7);
-      display:flex;align-items:center;justify-content:center;
-      color:white;font-weight:800;
+    .la-logo-group{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-shrink:0;
+      text-decoration:none;
+      color:inherit;
     }
-    h1{font-size:18px;font-weight:800;letter-spacing:-.35px;}
-    .header-note{font-size:12px;font-weight:700;color:var(--navy-lt);}
+    .la-logo-group:hover,
+    .la-logo-group:focus,
+    .la-logo-group:visited{
+      text-decoration:none;
+      color:inherit;
+    }
+    .la-icon{
+      width:36px;
+      height:36px;
+      border-radius:9px;
+      overflow:hidden;
+      flex-shrink:0;
+      display:block;
+    }
+    .la-icon svg{
+      width:100%;
+      height:100%;
+      display:block;
+    }
+    .la-wordmark{
+      font-family:'Nunito',sans-serif;
+      font-size:18px;
+      font-weight:900;
+      color:var(--navy);
+      letter-spacing:-.2px;
+      line-height:1;
+    }
+    .la-pipe{
+      width:1px;
+      height:18px;
+      background:var(--border);
+      margin:0 4px;
+      flex-shrink:0;
+    }
+    .la-tool-name{
+      font-family:'Nunito',sans-serif;
+      font-size:16px;
+      font-weight:700;
+      color:var(--teal-dk);
+      letter-spacing:-.1px;
+      line-height:1;
+    }
+    .hdr-btns{
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .icon-btn{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      border:1.5px solid var(--border);
+      background:#F8F7F3;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--navy-mid);
+      transition:background .15s,border-color .15s,color .15s;
+      flex-shrink:0;
+      cursor:pointer;
+    }
+    .icon-btn:hover{
+      background:var(--cream);
+      border-color:var(--navy-lt);
+      color:var(--navy);
+    }
+    .icon-btn svg{
+      width:18px;
+      height:18px;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:1.75;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
 
     main{
       width:min(1120px,calc(100% - 32px));
@@ -290,8 +365,7 @@
       main{grid-template-columns:1fr;margin-top:18px;}
       .quick-results{grid-template-columns:1fr 1fr;}
       .metric:last-child{grid-column:1/-1;}
-      header{padding:0 16px;}
-      .header-note{display:none;}
+      .la-header{padding:0 16px;}
     }
     @media(max-width:520px){
       main{width:calc(100% - 20px);}
@@ -304,12 +378,30 @@
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <div class="brand-icon">ORF</div>
-      <h1>ORF Fluency Calculator</h1>
+  <header class="la-header" aria-label="Literacy Arcade navigation">
+    <a href="https://literacyarcade.com" class="la-logo-group" aria-label="Literacy Arcade home">
+      <div class="la-icon">
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-label="Literacy Arcade">
+          <defs>
+            <linearGradient id="orfLaGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#2EC4B6"/>
+              <stop offset="100%" stop-color="#7B5EA7"/>
+            </linearGradient>
+          </defs>
+          <rect width="32" height="32" rx="8" fill="url(#orfLaGradient)"/>
+          <text x="3" y="24" font-family="Georgia,serif" font-size="18" font-weight="700" font-style="italic" fill="white">LA</text>
+          <path d="M 4 27 Q 16 30 28 27" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="la-wordmark">Literacy Arcade</span>
+      <div class="la-pipe"></div>
+      <span class="la-tool-name">ORF Fluency Calculator</span>
+    </a>
+    <div class="hdr-btns">
+      <button class="icon-btn" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'">
+        <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      </button>
     </div>
-    <div class="header-note">Literacy Arcade · Teacher Tools</div>
   </header>
 
   <main>
@@ -441,7 +533,7 @@
     </section>
   </main>
 
-  <p class="footer-note">Hasbrouck & Tindal Fluency Norms (2017) are included for instructional reference.</p>
+  <p class="footer-note">Literacy Arcade • ORF Fluency Calculator</p>
 
   <script>
     const $ = (id) => document.getElementById(id);
