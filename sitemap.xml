@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- Homepage -->
   <url>
     <loc>https://literacyarcade.com/</loc>
     <lastmod>2026-05-11</lastmod>
@@ -8,6 +9,7 @@
     <priority>1.0</priority>
   </url>
 
+  <!-- Tools -->
   <url>
     <loc>https://literacyarcade.com/reading-word-spinner.html</loc>
     <lastmod>2026-05-11</lastmod>
@@ -36,6 +38,7 @@
     <priority>0.9</priority>
   </url>
 
+  <!-- Support pages (add content before enabling) -->
   <url>
     <loc>https://literacyarcade.com/about.html</loc>
     <lastmod>2026-05-11</lastmod>
