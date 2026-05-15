@@ -20,7 +20,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Literacy Arcade" />
   <meta property="og:title" content="Literacy Arcade – Free Literacy Tools for Teachers" />
-  <meta property="og:description" content="Free phonics games, fluency tools, and reading activities for K–5 instruction. No login required. No prep needed." />
+  <meta property="og:description" content="Science of Reading–aligned literacy games and teacher tools. No login required. No prep needed." />
   <meta property="og:url" content="https://literacyarcade.com/" />
   <!-- Replace the image path below with your actual OG image (1200×630px recommended) before launch -->
   <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
@@ -31,7 +31,7 @@
   <!-- ── Twitter / X Card ── -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Literacy Arcade – Free Literacy Tools for Teachers" />
-  <meta name="twitter:description" content="Free phonics games, fluency tools, and reading activities for K–5 instruction. No login. No prep." />
+  <meta name="twitter:description" content="Science of Reading–aligned literacy games and teacher tools. No login. No prep." />
   <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
   <meta name="twitter:image:alt" content="Literacy Arcade – Free phonics games and fluency tools for K–5 teachers" />
 
@@ -57,7 +57,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     /* ── Reset & Variables ── */
@@ -83,8 +83,8 @@
       --radius-sm:10px;
       --shadow:   0 4px 24px rgba(26,26,46,.07);
       --shadow-hover: 0 8px 40px rgba(26,26,46,.14);
-      --font-head: 'Fraunces', Georgia, serif;
-      --font-body: 'Nunito', sans-serif;
+      --font-head: 'Nunito', sans-serif;
+      --font-body: 'Lexend', sans-serif;
     }
 
     html { scroll-behavior: smooth; }
@@ -162,20 +162,26 @@
       align-items: center;
       gap: 10px;
       font-family: var(--font-head);
-      font-size: 1.35rem;
+      font-size: 1.18rem;
       font-weight: 900;
+      letter-spacing: -.2px;
       color: var(--ink);
     }
 
     .nav-logo-icon {
       width: 36px;
       height: 36px;
-      background: linear-gradient(135deg, var(--teal), var(--violet));
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: block;
+      background: none;
+    }
+
+    .nav-logo-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     .nav-links {
@@ -197,6 +203,21 @@
     .nav-links a:hover {
       background: var(--mint);
       color: var(--teal-dk);
+    }
+
+
+    .nav-trust {
+      display: inline-flex;
+      align-items: center;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--teal-dk);
+      background: var(--mint);
+      padding: 8px 16px;
+      border-radius: 100px;
+      white-space: nowrap;
     }
 
     .nav-cta {
@@ -687,8 +708,8 @@
 
     .hero-title .accent  { color: var(--teal); }
     .hero-title .accent2 {
-      color: #E8483A;
-      text-shadow: 0 2px 16px rgba(232,72,58,.18);
+      color: var(--coral);
+      text-shadow: 0 2px 16px rgba(216,90,48,.16);
     }
 
     .hero-sub {
@@ -705,14 +726,6 @@
       max-width: 480px;
       margin-bottom: 32px;
       font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .hero-support::before {
-      content: "⚡";
-      font-size: .9rem;
     }
 
     .hero-buttons {
@@ -784,6 +797,18 @@
     .tools-header {
       text-align: center;
       margin-bottom: 56px;
+    }
+
+
+    .tools-header {
+      text-align: center;
+    }
+
+    .tools-header .section-sub {
+      max-width: 620px;
+      margin: 12px auto 0;
+      text-align: center;
+      line-height: 1.55;
     }
 
     .tools-grid {
@@ -1162,6 +1187,10 @@
       margin-bottom: 14px;
     }
 
+    .footer .nav-logo-icon {
+      box-shadow: 0 0 0 1px rgba(255,255,255,.12);
+    }
+
     .footer-desc {
       font-size: .9rem;
       line-height: 1.65;
@@ -1268,17 +1297,27 @@
     <nav class="nav">
       <div class="container nav-inner">
         <a href="index.html" class="nav-logo">
-          <div class="nav-logo-icon">🎯</div>
+          <div class="nav-logo-icon">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-label="Literacy Arcade">
+            <defs>
+              <linearGradient id="laSiteGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#2EC4B6"/>
+                <stop offset="100%" stop-color="#7B5EA7"/>
+              </linearGradient>
+            </defs>
+            <rect width="32" height="32" rx="8" fill="url(#laSiteGradient)"/>
+            <text x="3" y="24" font-family="Georgia,serif" font-size="18" font-weight="700" font-style="italic" fill="white">LA</text>
+            <path d="M 4 27 Q 16 30 28 27" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          </div>
           Literacy Arcade
         </a>
 
         <ul class="nav-links" id="navLinks">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="#tools">Games</a></li>
-          <li><a href="#tools">Fluency Tools</a></li>
-          <li><a href="#tools">Word Practice</a></li>
+          <li><a href="#games">Games</a></li>
+          <li><a href="#teacher-tools">Tools</a></li>
           <li><a href="about.html">About</a></li>
-          <li><a href="#tools" class="nav-cta">Explore Free Tools</a></li>
+          <li><span class="nav-trust">Free &amp; No Login Required</span></li>
         </ul>
 
         <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0">
@@ -1303,27 +1342,22 @@
 
           <!-- LEFT: Copy (unchanged) -->
           <div class="hero-inner">
-            <div class="hero-eyebrow">
-              <div class="hero-eyebrow-dot"></div>
-              Free &amp; No Login Required
-            </div>
-
             <h1 class="hero-title">
               <span class="accent">Literacy</span><br />
               <span class="accent2">Arcade</span>
             </h1>
 
             <p class="hero-sub">
-              Free phonics games, fluency tools, and reading activities for K–5 instruction.
+              Science of Reading–aligned literacy games and teacher tools.
             </p>
 
             <p class="hero-support">
-              Fast, no-prep literacy tools teachers can use immediately.
+              Designed for classrooms, intervention, and tutoring.
             </p>
 
             <div class="hero-buttons">
-              <a href="#tools" class="btn btn-primary">Explore Tools &nbsp;→</a>
-              <a href="#tools" class="btn btn-secondary">🎮 Try a Game</a>
+              <a href="#games" class="btn btn-primary">Explore Tools &nbsp;→</a>
+              <a href="#games" class="btn btn-secondary">Try a Game</a>
             </div>
 
             <div class="hero-trust">
@@ -1456,60 +1490,126 @@
     </section>
 
     <!-- ── Tool Grid ── -->
-    <section class="section" id="tools" aria-label="Tools">
+    
+    <!-- ── Games ── -->
+    <section class="section" id="games" aria-label="Games">
       <div class="container">
         <div class="tools-header">
-          <div class="badge">🎲 Free Tools</div>
-          <h2 class="section-title">Ready-to-Use Literacy Tools</h2>
+          <div class="badge">Literacy Games</div>
+          <h2 class="section-title">Interactive Literacy Games</h2>
           <p class="section-sub">
-            Grab a game, launch a tool — no signup, no setup. Just click and go.
+            Interactive literacy games for Science of Reading–aligned instruction and practice.
           </p>
         </div>
 
         <div class="tools-grid">
 
-          <!-- Tool 1 -->
+          <article class="tool-card card-violet fade-up" role="link" tabindex="0" aria-label="Read and Race" data-href="read-and-race.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-violet">🏎️</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Read & Race</h3>
+            <p class="tool-desc">Multiplayer reading races with preloaded Fry, Dolch, phonics, and custom word lists.</p>
+            <div class="tool-tags">
+              <span class="tag">2 Player</span>
+              <span class="tag">Sight Words</span>
+              <span class="tag">Phonics</span>
+              <span class="tag">Custom Lists</span>
+            </div>
+            <div class="tool-label">Game</div>
+          </article>
+
           <article class="tool-card card-teal fade-up" role="link" tabindex="0" aria-label="Reading Word Spinner" data-href="reading-word-spinner.html">
             <div class="tool-meta">
               <div class="tool-icon icon-teal">🌀</div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Reading Word Spinner</h3>
-            <p class="tool-desc">Spin built-in word lists or add your own for quick reading practice.</p>
+            <p class="tool-desc">Spin and read preloaded Fry, Dolch, phonics, or custom word lists.</p>
             <div class="tool-tags">
               <span class="tag">Fry Words</span>
-              <span class="tag">Dolch Words</span>
-              <span class="tag">Phonics Patterns</span>
+              <span class="tag">Dolch</span>
+              <span class="tag">Phonics</span>
               <span class="tag">Custom Lists</span>
             </div>
-            <div class="tool-label">Word Practice</div>
+            <div class="tool-label">Game</div>
           </article>
 
-          <!-- Tool 2 -->
-          <article class="tool-card card-violet fade-up" role="link" tabindex="0" aria-label="Repeated Reading Raceway" data-href="repeated-reading-raceway.html">
+          <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="Repeated Reading Raceway" data-href="repeated-reading-raceway.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-violet">🏁</div>
+              <div class="tool-icon icon-coral">🏁</div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Repeated Reading Raceway</h3>
-            <p class="tool-desc">Track WCPM, accuracy, and growth across three repeated reads with a student-friendly raceway game.</p>
+            <p class="tool-desc">Track repeated reading fluency across multiple reads.</p>
             <div class="tool-tags">
               <span class="tag">Repeated Reading</span>
+              <span class="tag">Fluency</span>
               <span class="tag">WCPM</span>
-              <span class="tag">Accuracy</span>
-              <span class="tag">Fluency Growth</span>
+              <span class="tag">Growth</span>
             </div>
-            <div class="tool-label">Fluency Game</div>
+            <div class="tool-label">Game</div>
           </article>
 
-          <!-- Tool 3 -->
-          <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="ORF Fluency Calculator" data-href="literacy_arcade_orf_fluency_calculator.html">
+        
+          <article class="tool-card card-teal fade-up" role="link" tabindex="0" aria-label="Phonemic Awareness Balloon Pop" data-href="phonemic-awareness-balloon-pop.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-teal">🎈</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Phonemic Awareness Balloon Pop</h3>
+            <p class="tool-desc">Pop balloons that match the phoneme students hear using teacher-selected phonemes and graphemes.</p>
+            <div class="tool-tags">
+              <span class="tag">Phonemic Awareness</span>
+              <span class="tag">Audio Practice</span>
+              <span class="tag">Phoneme Mapping</span>
+              <span class="tag">Customizable</span>
+            </div>
+            <div class="tool-label">Game</div>
+          </article>
+
+          <article class="tool-card card-violet fade-up" role="link" tabindex="0" aria-label="Multiplayer Path Game" data-href="multiplayer-path-game.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-violet">🎲</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Multiplayer Path Game</h3>
+            <p class="tool-desc">Multiplayer reading races with preloaded Fry, Dolch, phonics, and custom word lists.</p>
+            <div class="tool-tags">
+              <span class="tag">Multiplayer</span>
+              <span class="tag">Sight Words</span>
+              <span class="tag">Phonics</span>
+              <span class="tag">Custom Lists</span>
+            </div>
+            <div class="tool-label">Game</div>
+          </article>
+
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Teacher Tools ── -->
+    <section class="section features" id="teacher-tools" aria-label="Teacher Tools">
+      <div class="container">
+        <div class="tools-header">
+          <div class="badge">Teacher Tools</div>
+          <h2 class="section-title">Teacher Tools</h2>
+          <p class="section-sub">
+            Classroom tools for reading instruction, fluency tracking, and intervention support.
+          </p>
+        </div>
+
+        <div class="tools-grid">
+
+          <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="ORF Fluency Calculator" data-href="orf-fluency-calculator.html">
             <div class="tool-meta">
               <div class="tool-icon icon-coral">📊</div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">ORF Fluency Calculator</h3>
-            <p class="tool-desc">Calculate WCPM and accuracy, save back-to-back student results, and compare scores to Hasbrouck &amp; Tindal Fluency Norms.</p>
+            <p class="tool-desc">Calculate WCPM, reading accuracy, and compare to Hasbrouck &amp; Tindal Fluency Norms. Print or save student results as a PDF.</p>
             <div class="tool-tags">
               <span class="tag">ORF</span>
               <span class="tag">WCPM</span>
@@ -1519,93 +1619,42 @@
             <div class="tool-label">Teacher Tool</div>
           </article>
 
-          <!-- Tool 4 -->
           <article class="tool-card card-mint fade-up" role="link" tabindex="0" aria-label="Digital Reading Flashcards" data-href="digital-reading-flashcards.html">
             <div class="tool-meta">
               <div class="tool-icon icon-mint">🃏</div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Digital Reading Flashcards</h3>
-            <p class="tool-desc">Display phonics words, sight words, vocabulary, or custom word lists as clean digital flashcards.</p>
+            <p class="tool-desc">Display preloaded or custom word lists as fullscreen reading flashcards for SmartBoards and classroom displays.</p>
             <div class="tool-tags">
               <span class="tag">Flashcards</span>
               <span class="tag">Phonics</span>
               <span class="tag">Sight Words</span>
               <span class="tag">Custom Lists</span>
             </div>
-            <div class="tool-label">Word Practice</div>
+            <div class="tool-label">Teacher Tool</div>
           </article>
 
+          <article class="tool-card card-mint fade-up" role="link" tabindex="0" aria-label="Vocabulary Flashcards" data-href="vocabulary-flashcards.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-mint">📚</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Vocabulary Flashcards</h3>
+            <p class="tool-desc">Display vocabulary words and definitions as fullscreen classroom flashcards.</p>
+            <div class="tool-tags">
+              <span class="tag">Vocabulary</span>
+              <span class="tag">Flashcards</span>
+              <span class="tag">Fullscreen</span>
+              <span class="tag">Custom Lists</span>
+            </div>
+            <div class="tool-label">Teacher Tool</div>
+          </article>
+
+
         </div>
       </div>
     </section>
-
-    <!-- ── SEO / Use Cases ── -->
-    <section class="section features" aria-label="How teachers use Literacy Arcade">
-      <div class="container">
-        <div style="text-align:center;">
-          <div class="badge">✨ Classroom Ready</div>
-          <h2 class="section-title">Simple Tools for Phonics and Fluency Practice</h2>
-          <p class="section-sub" style="margin: 12px auto 0;">
-            Literacy Arcade gives teachers, tutors, interventionists, and families fast digital tools for structured literacy instruction, reading fluency practice, word reading review, and progress monitoring.
-          </p>
-        </div>
-
-        <div class="info-grid fade-up">
-          <div class="info-panel">
-            <h3>For word reading practice</h3>
-            <p>Use built-in or custom word lists for phonics patterns, sight words, Fry words, Dolch words, vocabulary, and decodable word review.</p>
-          </div>
-          <div class="info-panel">
-            <h3>For oral reading fluency</h3>
-            <p>Track WCPM, accuracy, repeated reading growth, and oral reading fluency data using teacher-friendly fluency tools.</p>
-          </div>
-          <div class="info-panel">
-            <h3>For flexible instruction</h3>
-            <p>Use Literacy Arcade for whole-group instruction, whiteboards, small groups, tutoring, intervention, centers, and at-home practice.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Coming Soon ── -->
-    <section class="section coming-soon" aria-label="Coming Soon">
-      <div class="container">
-        <div style="text-align:center; margin-bottom:0;">
-          <div class="badge" style="background:var(--sand); color:#B07D00;">🚀 Coming Soon</div>
-          <h2 class="section-title">Next Tool in Progress</h2>
-          <p class="section-sub" style="margin: 12px auto 0;">
-            One more literacy game is already on the way.
-          </p>
-        </div>
-
-        <div class="soon-grid single-soon">
-          <div class="soon-card fade-up">
-            <div class="soon-chip">⏳ Coming Soon</div>
-            <div class="soon-icon">🛤️</div>
-            <div class="soon-name">Phonics Path Game</div>
-            <div class="soon-desc">A board-game-style path for decoding practice with built-in or custom word lists.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── CTA Banner ── -->
-    <section class="cta-banner" aria-label="Call to Action">
-      <div class="container">
-        <div class="cta-inner">
-          <h2 class="section-title">Start Teaching with Better Tools — Today.</h2>
-          <p class="section-sub">
-            No login. No cost. No prep. Just open a tool and teach.
-          </p>
-          <div class="hero-buttons">
-            <a href="#tools" class="btn btn-primary">Explore All Tools</a>
-            <a href="#tools" class="btn btn-outline">🎮 Try a Free Game</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
   </main>
 
   <!-- ── Footer ── -->
@@ -1614,11 +1663,23 @@
       <div class="footer-inner">
         <div class="footer-brand">
           <div class="nav-logo">
-            <div class="nav-logo-icon">🎯</div>
+            <div class="nav-logo-icon">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-label="Literacy Arcade">
+                <defs>
+                  <linearGradient id="laFooterGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#2EC4B6"/>
+                    <stop offset="100%" stop-color="#7B5EA7"/>
+                  </linearGradient>
+                </defs>
+                <rect width="32" height="32" rx="8" fill="url(#laFooterGradient)"/>
+                <text x="3" y="24" font-family="Georgia,serif" font-size="18" font-weight="700" font-style="italic" fill="white">LA</text>
+                <path d="M 4 27 Q 16 30 28 27" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
             Literacy Arcade
           </div>
           <p class="footer-desc">
-            Free phonics games, fluency tools, and reading activities for K–5 instruction. Built for teachers, tutors, interventionists, and parents.
+            Science of Reading–aligned literacy games and teacher tools. Built for teachers, tutors, interventionists, and parents.
           </p>
           <p style="font-size:.8rem; color:rgba(255,255,255,.3);">Free teacher tools. No login required.</p>
         </div>
@@ -1626,10 +1687,8 @@
         <div>
           <div class="footer-col-title">Site</div>
           <ul class="footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="#tools">Games</a></li>
-            <li><a href="#tools">Fluency Tools</a></li>
-            <li><a href="#tools">Word Practice</a></li>
+            <li><a href="#games">Games</a></li>
+            <li><a href="#teacher-tools">Tools</a></li>
             <li><a href="about.html">About</a></li>
           </ul>
         </div>
