@@ -1301,6 +1301,77 @@
       opacity: 1;
       transform: translateY(0);
     }
+  
+/* ── Hero Founding Teacher sparkle CTA ── */
+.btn-founding-sparkle {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(46,196,182,.28) !important;
+  box-shadow:
+    0 4px 18px rgba(26,26,46,.08),
+    0 0 0 0 rgba(46,196,182,0);
+  isolation: isolate;
+}
+
+.btn-founding-sparkle::before {
+  content: "";
+  position: absolute;
+  inset: -40% -60%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 42%,
+    rgba(255,255,255,.95) 48%,
+    rgba(255,248,211,.75) 51%,
+    transparent 58%,
+    transparent 100%
+  );
+  transform: translateX(-120%) rotate(8deg);
+  animation: foundingShimmer 7.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.btn-founding-sparkle::after {
+  content: "✦";
+  position: absolute;
+  top: 8px;
+  right: 18px;
+  font-size: 13px;
+  color: rgba(46,196,182,.55);
+  text-shadow: 0 0 10px rgba(46,196,182,.35);
+  opacity: 0;
+  animation: foundingSpark 7.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.btn-founding-sparkle:hover {
+  border-color: var(--teal) !important;
+  color: var(--teal-dk) !important;
+  box-shadow:
+    0 8px 34px rgba(46,196,182,.18),
+    0 0 0 4px rgba(46,196,182,.08) !important;
+}
+
+.btn-founding-sparkle:hover::before,
+.btn-founding-sparkle:hover::after {
+  animation-play-state: paused;
+}
+
+@keyframes foundingShimmer {
+  0%, 68% { transform: translateX(-120%) rotate(8deg); opacity: 0; }
+  72% { opacity: .85; }
+  88% { transform: translateX(120%) rotate(8deg); opacity: .55; }
+  100% { transform: translateX(120%) rotate(8deg); opacity: 0; }
+}
+
+@keyframes foundingSpark {
+  0%, 70% { opacity: 0; transform: scale(.6) rotate(0deg); }
+  76% { opacity: .75; transform: scale(1.08) rotate(14deg); }
+  84% { opacity: .35; transform: scale(.92) rotate(28deg); }
+  100% { opacity: 0; transform: scale(.6) rotate(35deg); }
+}
+
   </style>
 </head>
 <body>
@@ -1329,6 +1400,7 @@
         <ul class="nav-links" id="navLinks">
           <li><a href="#games">Games</a></li>
           <li><a href="#teacher-tools">Tools</a></li>
+          <li><a href="founding-teacher.html" class="nav-cta">Become a Founding Teacher</a></li>
           <li><span class="nav-trust">Free &amp; No Login Required</span></li>
         </ul>
 
@@ -1370,6 +1442,7 @@
             <div class="hero-buttons">
               <a href="#games" class="btn btn-primary">Explore Tools &nbsp;→</a>
               <a href="#games" class="btn btn-secondary">Try a Game</a>
+              <a href="founding-teacher.html" class="btn btn-secondary btn-founding-sparkle">Become a Founding Teacher</a>
             </div>
 
             <div class="hero-trust">
