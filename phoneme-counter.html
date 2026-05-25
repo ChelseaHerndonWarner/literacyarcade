@@ -1,0 +1,4125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Phoneme Counter | Literacy Arcade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF8F4; --white:#FFFFFF; --teal:#1D9E75; --teal-mid:#5DCAA5; --teal-light:#E1F5EE; --teal-border:#A8DDD9;
+    --coral:#D85A30; --coral-light:#FFF0EE; --navy:#1a2340; --navy-mid:#6b7a99; --navy-light:#9090A8;
+    --border:rgba(26,35,64,.12); --line:#E4E6EE; --shadow:0 10px 34px rgba(26,35,64,.12);
+    --font-head:'Nunito',sans-serif; --font-body:'Lexend',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-body);background:var(--cream);color:var(--navy);min-height:100vh;}
+  .la-header{height:58px;background:#fff;border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(26,35,64,.06);position:sticky;top:0;z-index:20;}
+  .la-left{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+  .la-icon{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#43c6bd,#6975b8);display:grid;place-items:center;color:white;font-family:Georgia,serif;font-style:italic;font-size:18px;box-shadow:0 2px 8px rgba(26,35,64,.16);}
+  .la-wordmark{font-family:var(--font-head);font-size:18px;font-weight:900;color:var(--navy);letter-spacing:-.2px;}
+  .la-pipe{width:1px;height:20px;background:var(--border);margin:0 6px;}
+  .la-tool-name{font-family:var(--font-head);font-size:16px;font-weight:800;color:#0F6E56;}
+  .home-btn{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--border);background:#F8F7F3;display:grid;place-items:center;text-decoration:none;color:var(--navy-mid);font-size:17px;}
+  .home-btn:hover{background:var(--cream);border-color:var(--navy-light);}
+  main{max-width:1180px;margin:0 auto;padding:22px 18px 18px;}
+  .hero{text-align:center;margin:8px auto 18px;}
+  .kicker{display:inline-flex;padding:5px 14px;border:1.5px solid var(--teal-border);border-radius:999px;background:var(--teal-light);color:#0F6E56;font-family:var(--font-head);font-size:10px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:8px;}
+  h1{font-family:var(--font-head);font-weight:900;font-size:clamp(40px,5.4vw,62px);line-height:1;color:var(--navy);letter-spacing:.2px;margin-bottom:8px;}
+  .subtitle{font-size:15px;color:var(--navy-mid);font-weight:700;}
+  .workspace{display:grid;grid-template-columns:360px minmax(0,1fr);gap:18px;align-items:start;}
+  .card{background:white;border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;}
+  .panel{padding:16px;}
+  .label{font-family:var(--font-head);font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy-light);margin-bottom:8px;}
+  .search-row{display:flex;gap:8px;margin-bottom:10px;}
+  input[type="text"], select{width:100%;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--navy);font-family:var(--font-body);outline:none;transition:.15s;}
+  input[type="text"]{font-size:22px;padding:12px 14px;}
+  select{font-size:13px;padding:10px 12px;font-weight:600;}
+  input[type="text"]:focus, select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.12);}
+  button{font-family:var(--font-head);font-weight:900;cursor:pointer;border:none;transition:.15s;}
+  .go{width:54px;border-radius:10px;background:var(--teal);color:white;font-size:24px;box-shadow:0 4px 0 #0F6E56;}
+  .go:hover{transform:translateY(-1px)}
+  .hint{font-size:12px;line-height:1.5;color:var(--navy-mid);font-weight:500;margin-bottom:12px;}
+  .vowel-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px;}
+  .vtab{border:1.5px solid var(--border);background:#fff;border-radius:10px;padding:8px 4px;color:var(--navy);font-size:13px;}
+  .vtab.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+  .examples{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+  .chip{background:#fff;border:1.5px solid var(--border);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--navy);font-weight:800;}
+  .chip:hover{border-color:var(--teal);background:var(--teal-light);color:#0F6E56;}
+  .bank{border-top:1px solid var(--line);padding-top:12px;}
+  .bank-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;}
+  .bank-count{font-size:11px;font-weight:800;color:#0F6E56;background:var(--teal-light);border:1px solid var(--teal-border);border-radius:999px;padding:3px 8px;white-space:nowrap;}
+  .word-groups{max-height:345px;overflow:auto;border:1px solid var(--line);border-radius:14px;background:#FBFCFE;padding:10px;}
+  .group-title{font-family:var(--font-head);font-weight:900;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--navy-light);margin:8px 0 6px;}
+  .group-title:first-child{margin-top:0;}
+  .word-list{display:flex;flex-wrap:wrap;gap:6px;}
+  .bank-word{background:#fff;border:1px solid rgba(26,35,64,.10);border-radius:10px;padding:6px 9px;font-family:var(--font-body);font-size:12px;font-weight:700;color:var(--navy);}
+  .bank-word:hover{border-color:var(--teal);background:var(--teal-light);color:#0F6E56;}
+  .result{min-height:620px;display:flex;flex-direction:column;}
+  .result-top{background:var(--navy);color:white;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .result-title{font-family:var(--font-head);font-size:22px;font-weight:900;}
+  .pill-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+  .count-pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:8px 12px;font-family:var(--font-head);font-size:12px;font-weight:900;white-space:nowrap;}
+  .result-body{padding:18px;display:flex;flex-direction:column;gap:16px;flex:1;}
+  .empty{height:100%;min-height:400px;display:grid;place-items:center;text-align:center;color:var(--navy-mid);padding:40px 14px;}
+  .empty strong{display:block;font-family:var(--font-head);font-size:28px;color:var(--navy);margin-bottom:8px;}
+  .unsupported{border:2px dashed rgba(216,90,48,.45);background:var(--coral-light);border-radius:16px;padding:18px;line-height:1.6;color:var(--navy);}
+  .word-display{text-align:center;margin-top:2px;}
+  .big-word{display:inline-block;font-family:var(--font-head);font-size:clamp(48px,5.2vw,72px);font-weight:900;letter-spacing:2px;border:2px solid rgba(26,35,64,.12);border-radius:14px;padding:6px 30px;background:#fff;min-width:230px;}
+  .section-title{font-family:var(--font-head);font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--navy-light);}
+  .mapping-grid{display:grid;grid-template-columns:120px 1fr;gap:10px 14px;align-items:center;}
+  .row-label{font-family:var(--font-head);font-weight:900;font-size:16px;color:#0F6E56;text-align:right;}
+  .box-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .map-box{min-width:68px;min-height:60px;border:2px solid var(--line);border-radius:12px;background:#fff;display:grid;place-items:center;font-family:var(--font-head);font-size:34px;font-weight:900;padding:5px 12px;}
+  .phoneme-box{background:#ffb084;border-color:#ffb084;box-shadow:0 6px 14px rgba(216,90,48,.14);font-size:28px;}
+  .letterbox-preview{background:linear-gradient(180deg,#fff,#fbfcfe);border:1.5px solid var(--line);border-radius:18px;padding:16px;}
+  .sound-box-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0;margin:10px 0 12px;}
+  .sound-box{width:110px;height:72px;border:3px solid #08729a;border-right-width:1.5px;background:#fff;display:grid;place-items:center;font-family:var(--font-head);font-size:38px;font-weight:900;color:#06638A;}
+  .sound-box:first-child{border-radius:8px 0 0 8px;}
+  .sound-box.last-sound{border-right-width:3px;border-radius:0 8px 8px 0;}
+  .silent-e-space{height:72px;min-width:64px;display:grid;place-items:center;font-family:var(--font-head);font-size:38px;font-weight:900;color:#06638A;margin-left:14px;position:relative;}
+  .silent-e-space::after{content:'silent';position:absolute;bottom:-16px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--navy-light);font-family:var(--font-head);font-weight:900;}
+  .tile-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:12px;}
+  .tile{width:58px;height:48px;border-radius:12px;background:#F9B6AE;border:2px solid #FFD1CA;display:grid;place-items:center;font-family:var(--font-head);font-size:29px;font-weight:900;color:#111;box-shadow:0 5px 0 rgba(216,90,48,.18);}
+  .note{background:#F2FBFA;border:1px solid rgba(29,158,117,.23);border-radius:14px;padding:12px 14px;color:#334;line-height:1.5;font-size:13px;}
+  .note strong{color:#0F6E56;font-family:var(--font-head);}
+  .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:auto;}
+  .primary,.secondary{border-radius:10px;padding:10px 13px;font-size:13px;}
+  .primary{background:var(--teal);color:white;}.primary:hover{background:#0F6E56;}
+  .secondary{background:#EEF0F6;color:var(--navy);}.secondary:hover{background:#E1E5EF;}
+  .copy-msg{font-size:12px;color:#0F6E56;font-weight:900;display:none;}
+
+  .ready-badge{display:inline-flex;align-items:center;gap:6px;margin:0 auto 4px;padding:7px 12px;border-radius:999px;background:var(--teal-light);border:1px solid var(--teal-border);color:#0F6E56;font-family:var(--font-head);font-size:12px;font-weight:900;letter-spacing:.3px;}
+  .lesson-tray{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;}
+  .tray-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+  .tray-title{font-family:var(--font-head);font-size:10px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:var(--navy-light);}
+  .tray-count{font-size:11px;font-weight:900;color:#0F6E56;background:var(--teal-light);border:1px solid var(--teal-border);border-radius:999px;padding:3px 8px;white-space:nowrap;}
+  .tray-words{min-height:42px;background:#FBFCFE;border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start;}
+  .tray-empty{font-size:12px;color:var(--navy-light);font-weight:600;line-height:1.45;}
+  .tray-word{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:var(--teal-light);border:1.5px solid var(--teal-border);color:#0F6E56;padding:5px 8px 5px 10px;font-family:var(--font-body);font-size:12px;font-weight:800;}
+  .tray-remove{background:transparent;color:#9a4d4d;font-size:14px;line-height:1;padding:0 1px;}
+  .tray-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+  .small-secondary{border-radius:9px;padding:7px 10px;background:#EEF0F6;color:var(--navy);font-size:12px;}
+  .small-secondary:hover{background:#E1E5EF;}
+  .lesson-msg{font-size:12px;color:var(--navy-mid);font-weight:700;line-height:1.45;margin-top:7px;display:none;}
+  footer{text-align:center;color:var(--navy-light);font-family:var(--font-head);font-size:11px;font-weight:700;padding:14px 0 4px;opacity:.7;}
+  @media (max-width:900px){.workspace{grid-template-columns:1fr}.result{min-height:500px}.mapping-grid{grid-template-columns:1fr}.row-label{text-align:left}.word-groups{max-height:260px}.big-word{width:100%;min-width:0}.sound-box{width:88px;height:62px;font-size:31px}.map-box{min-width:58px;min-height:54px;font-size:29px}.la-wordmark{font-size:16px}.la-tool-name{font-size:14px}}
+
+/* ─── Printable Letterbox Lesson PDF button ───────────────────────────── */
+#downloadLessonPdfBtn,
+.pdf-download-btn {
+  background: var(--teal, #1D9E75);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--teal-dk, #0F6E56);
+}
+#downloadLessonPdfBtn:hover,
+.pdf-download-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(.98);
+}
+.pdf-helper-text {
+  font-size: 11px;
+  color: var(--navy-mid, #6B7A99);
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
+
+/* Collapsible supported-word bank */
+.bank summary.bank-top {
+  cursor: pointer;
+  list-style: none;
+}
+.bank summary.bank-top::-webkit-details-marker {
+  display: none;
+}
+.bank summary.bank-top::after {
+  content: "⌄";
+  color: var(--navy-mid);
+  font-weight: 900;
+  margin-left: 8px;
+}
+.bank:not([open]) summary.bank-top::after {
+  content: "›";
+}
+
+
+/* ─── ORF-style teacher tool layout pass ───────────────────────────── */
+body {
+  background: linear-gradient(160deg,#E8F9F8 0%, var(--cream, #FAF8F4) 52%, #F3EEFB 100%) !important;
+}
+
+.la-header {
+  height: 58px !important;
+  background: var(--white, #fff) !important;
+  border-bottom: 1px solid var(--border, rgba(26,35,64,.12)) !important;
+  padding: 0 24px !important;
+  box-shadow: 0 2px 8px rgba(15,23,42,.06) !important;
+  margin: 0 !important;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.la-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.la-icon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 9px !important;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.la-wordmark {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: var(--navy, #1a2340) !important;
+  letter-spacing: -.2px;
+}
+
+.la-pipe {
+  width: 1px;
+  height: 18px;
+  background: var(--border, rgba(26,35,64,.12));
+  margin: 0 4px;
+}
+
+.la-tool-name {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--teal-dk, #0F6E56) !important;
+}
+
+.hdr-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid var(--border, rgba(26,35,64,.12)) !important;
+  background: #F8F7F3 !important;
+  color: var(--navy-mid, #6b7a99) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Compact the page so it behaves more like the ORF tool at 100% zoom. */
+.app-shell,
+#app,
+main.tool-wrap,
+.tool-wrap {
+  max-width: 1120px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+main,
+.main-grid,
+.tool-grid,
+.workspace,
+.content-grid {
+  margin-top: 18px !important;
+}
+
+/* Hide/remove the large standalone page title block if present.
+   The header already names the tool, matching ORF's visual hierarchy. */
+.hero-title,
+.page-title,
+.title-wrap,
+.intro,
+.intro-block {
+  margin-bottom: 10px !important;
+}
+
+/* Keep the main title, but make it less tall if the HTML still uses it. */
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem) !important;
+  line-height: 1.05 !important;
+  margin-bottom: 6px !important;
+}
+
+/* Remove top "Teacher Tool" badge if CSS/HTML missed it. */
+.eyebrow:has(+ h1),
+.tool-pill,
+.teacher-tool,
+.kicker {
+  display: none !important;
+}
+
+/* More compact cards and spacing */
+.input-card,
+.controls-card,
+.result-card,
+.panel,
+.card {
+  border-radius: 22px !important;
+}
+
+.layout,
+.two-col,
+.main-layout,
+.counter-layout {
+  gap: 14px !important;
+  align-items: start !important;
+}
+
+.left-panel,
+.sidebar,
+.controls,
+.input-card {
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+}
+
+.result-panel,
+.result-card {
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+}
+
+/* Condense result area. */
+.word-display,
+.big-word,
+.result-word {
+  padding: 14px 22px !important;
+  margin-bottom: 12px !important;
+}
+
+.mapping-section,
+.letterbox-preview,
+.lesson-preview {
+  padding: 14px !important;
+  margin-top: 10px !important;
+}
+
+.teacher-note {
+  margin-top: 10px !important;
+  padding: 10px 12px !important;
+}
+
+.actions,
+.button-row {
+  margin-top: 10px !important;
+}
+
+/* Make browse section less tall now that it starts collapsed. */
+.bank:not([open]) {
+  padding-bottom: 12px !important;
+}
+
+footer,
+.footer-note {
+  margin-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+
+/* Specific Phoneme Counter compaction */
+.app-main {
+  width: min(1120px, calc(100% - 32px));
+  margin: 18px auto 0;
+}
+.tool-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.setup-card {
+  padding: 14px 16px !important;
+}
+.result-shell {
+  padding: 0 !important;
+}
+.result-body {
+  padding: 16px 22px 18px !important;
+}
+.supported-scroll {
+  max-height: 190px;
+  overflow-y: auto;
+}
+@media(max-width: 900px){
+  .tool-layout {
+    grid-template-columns: 1fr;
+  }
+  .left-panel,
+  .sidebar,
+  .controls,
+  .input-card,
+  .result-panel,
+  .result-card {
+    max-height: none;
+  }
+}
+
+
+/* ─── v11 viewport-fit refinement ─────────────────────────────
+   Goal: match the ORF teacher tool feel and reduce page-level scrolling.
+   The left planning panel scrolls internally when needed. */
+html, body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+}
+
+main {
+  width: min(1120px, calc(100% - 32px)) !important;
+  max-width: 1120px !important;
+  height: calc(100vh - 58px) !important;
+  margin: 0 auto !important;
+  padding: 16px 0 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.workspace {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 345px minmax(0, 1fr) !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+}
+
+.workspace > aside.card.panel {
+  height: 100% !important;
+  max-height: calc(100vh - 92px) !important;
+  overflow-y: auto !important;
+  padding: 14px !important;
+  scrollbar-width: thin;
+}
+
+.workspace > aside.card.panel::-webkit-scrollbar {
+  width: 8px;
+}
+.workspace > aside.card.panel::-webkit-scrollbar-thumb {
+  background: rgba(26,35,64,.18);
+  border-radius: 999px;
+}
+
+.result {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: calc(100vh - 92px) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.result-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding: 14px 18px 16px !important;
+  gap: 12px !important;
+}
+
+.result-top {
+  padding: 12px 16px !important;
+  flex-shrink: 0 !important;
+}
+
+.result-title {
+  font-size: 20px !important;
+}
+
+.count-pill {
+  padding: 6px 10px !important;
+}
+
+/* Left panel compression */
+.search-row {
+  margin-bottom: 8px !important;
+}
+input[type="text"] {
+  font-size: 19px !important;
+  padding: 10px 12px !important;
+}
+.go {
+  width: 50px !important;
+}
+.hint {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+  margin-bottom: 10px !important;
+}
+.label {
+  margin-bottom: 6px !important;
+}
+.vowel-tabs {
+  gap: 6px !important;
+  margin-bottom: 10px !important;
+}
+.vtab {
+  padding: 7px 4px !important;
+}
+.filters {
+  gap: 7px !important;
+  margin-bottom: 10px !important;
+}
+select {
+  padding: 9px 10px !important;
+}
+.examples {
+  gap: 5px !important;
+  margin-bottom: 10px !important;
+}
+.chip,
+.bank-word {
+  padding: 5px 9px !important;
+  font-size: 11px !important;
+}
+
+/* Keep supported words collapsed by default and compact if opened. */
+.bank {
+  padding-top: 10px !important;
+}
+.bank-top {
+  margin-bottom: 6px !important;
+}
+.word-groups {
+  max-height: 210px !important;
+  padding: 8px !important;
+}
+.group-title {
+  margin: 6px 0 5px !important;
+}
+.word-list {
+  gap: 5px !important;
+}
+
+/* Tray compression */
+.lesson-tray {
+  margin-top: 10px !important;
+  padding-top: 10px !important;
+}
+.tray-words {
+  min-height: 38px !important;
+  padding: 7px !important;
+}
+.tray-actions {
+  gap: 6px !important;
+  margin-top: 7px !important;
+}
+.small-secondary,
+#downloadLessonPdfBtn {
+  padding: 8px 10px !important;
+  font-size: 11px !important;
+  border-radius: 9px !important;
+}
+.pdf-helper-text {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+}
+
+/* Result compression */
+.word-display {
+  margin-top: 0 !important;
+}
+.big-word {
+  font-size: clamp(40px, 4.5vw, 60px) !important;
+  padding: 4px 24px !important;
+  min-width: 190px !important;
+}
+.ready-badge {
+  padding: 6px 10px !important;
+  margin-bottom: 0 !important;
+}
+.mapping-grid {
+  grid-template-columns: 105px 1fr !important;
+  gap: 8px 12px !important;
+}
+.row-label {
+  font-size: 14px !important;
+}
+.map-box {
+  min-width: 58px !important;
+  min-height: 50px !important;
+  font-size: 28px !important;
+  border-radius: 10px !important;
+}
+.phoneme-box {
+  font-size: 24px !important;
+}
+.letterbox-preview {
+  padding: 12px !important;
+  border-radius: 16px !important;
+}
+.sound-box-row {
+  margin: 8px 0 10px !important;
+}
+.sound-box {
+  width: 92px !important;
+  height: 60px !important;
+  font-size: 32px !important;
+}
+.silent-e-space {
+  height: 60px !important;
+  font-size: 32px !important;
+}
+.tile-row {
+  gap: 8px !important;
+  margin-top: 9px !important;
+}
+.tile {
+  width: 48px !important;
+  height: 40px !important;
+  font-size: 24px !important;
+  border-radius: 10px !important;
+}
+.note {
+  padding: 10px 12px !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+.actions {
+  margin-top: 2px !important;
+}
+
+/* Minimal footer like other tools */
+footer {
+  flex: 0 0 auto !important;
+  padding: 8px 0 0 !important;
+  margin: 0 !important;
+}
+
+/* Standard home icon styling */
+.home-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 900px) {
+  body {
+    overflow: auto;
+  }
+  main {
+    height: auto !important;
+    padding: 14px 12px 18px !important;
+  }
+  .workspace {
+    grid-template-columns: 1fr !important;
+  }
+  .workspace > aside.card.panel,
+  .result,
+  .result-body {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+
+/* ─── v12 right-panel fit + stronger CTA ───────────────────────────── */
+.result {
+  max-height: calc(100vh - 88px) !important;
+}
+
+.result-body {
+  overflow: hidden !important;
+  display: grid !important;
+  grid-template-rows: auto auto auto auto auto;
+  align-content: start !important;
+  row-gap: 9px !important;
+  padding: 12px 18px 12px !important;
+}
+
+.word-display {
+  display: flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+.big-word,
+.result-word {
+  font-size: clamp(38px, 4vw, 54px) !important;
+  padding: 6px 26px !important;
+  line-height: 1 !important;
+}
+
+.ready-badge {
+  justify-self: center !important;
+  margin: 0 !important;
+  padding: 5px 10px !important;
+  font-size: 12px !important;
+}
+
+.mapping-section,
+.word-mapping {
+  margin: 0 !important;
+}
+
+.mapping-grid {
+  grid-template-columns: 115px 1fr !important;
+  gap: 6px 10px !important;
+}
+
+.map-box {
+  min-width: 52px !important;
+  min-height: 44px !important;
+  font-size: 25px !important;
+}
+
+.phoneme-box {
+  font-size: 22px !important;
+}
+
+.letterbox-preview {
+  margin: 0 !important;
+  padding: 10px 14px !important;
+  min-height: 0 !important;
+}
+
+.letterbox-preview .label,
+.letterbox-preview h3 {
+  margin-bottom: 5px !important;
+}
+
+.sound-box-row {
+  margin: 5px 0 7px !important;
+  justify-content: center !important;
+}
+
+.sound-box {
+  width: clamp(82px, 9vw, 110px) !important;
+  height: 52px !important;
+  font-size: 28px !important;
+}
+
+.silent-e-space {
+  height: 52px !important;
+  font-size: 28px !important;
+}
+
+.tile-row {
+  gap: 7px !important;
+  margin-top: 6px !important;
+  justify-content: center !important;
+}
+
+.tile {
+  width: 42px !important;
+  height: 34px !important;
+  font-size: 21px !important;
+}
+
+.note {
+  margin: 0 !important;
+  padding: 8px 11px !important;
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+}
+
+.actions {
+  margin: 0 !important;
+  display: flex !important;
+  gap: 9px !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+}
+
+/* Stronger Add to Letterbox Lesson CTA */
+button[onclick="addToLesson()"],
+#addToLessonBtn,
+.add-lesson-btn {
+  background: var(--coral, #D85A30) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 0 #A94224 !important;
+  font-weight: 900 !important;
+}
+
+button[onclick="addToLesson()"]:hover,
+#addToLessonBtn:hover,
+.add-lesson-btn:hover {
+  filter: brightness(.98);
+  transform: translateY(-1px);
+}
+
+/* Let the result card use more horizontal space for a less tall layout. */
+.workspace {
+  grid-template-columns: 330px minmax(0, 1fr) !important;
+  gap: 16px !important;
+}
+
+/* Slightly shorter footer so right card has more usable height */
+footer {
+  font-size: 10px !important;
+  padding-top: 4px !important;
+}
+
+/* On shorter laptop screens, compress even more. */
+@media (max-height: 760px) {
+  .result-body {
+    row-gap: 7px !important;
+    padding: 10px 16px 10px !important;
+  }
+  .big-word,
+  .result-word {
+    font-size: 40px !important;
+    padding: 5px 22px !important;
+  }
+  .sound-box {
+    height: 46px !important;
+    font-size: 25px !important;
+  }
+  .tile {
+    width: 38px !important;
+    height: 30px !important;
+    font-size: 18px !important;
+  }
+  .letterbox-preview {
+    padding: 8px 12px !important;
+  }
+  .map-box {
+    min-height: 38px !important;
+    font-size: 22px !important;
+  }
+  .phoneme-box {
+    font-size: 19px !important;
+  }
+  .note {
+    font-size: 10px !important;
+  }
+}
+
+
+/* ─── v13 focus word + standout lesson CTA ───────────────────────────── */
+/* Move the readiness badge out of the visual center so the word remains the focus. */
+.ready-badge,
+.letterbox-ready,
+.lesson-ready-badge {
+  position: absolute !important;
+  top: 82px !important;
+  right: 24px !important;
+  margin: 0 !important;
+  z-index: 2 !important;
+}
+
+/* Give the result body a positioning context for the badge. */
+.result-body {
+  position: relative !important;
+}
+
+/* Keep the displayed word visually centered and primary. */
+.word-display {
+  margin-top: 18px !important;
+  margin-bottom: 8px !important;
+}
+
+.big-word,
+.result-word {
+  font-size: clamp(44px, 4.8vw, 62px) !important;
+  padding: 8px 34px !important;
+}
+
+/* Make Add to Letterbox Lesson stand out from the green/teal system colors. */
+button[onclick="addToLesson()"],
+#addToLessonBtn,
+.add-lesson-btn {
+  background: var(--coral, #D85A30) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 0 #A94224 !important;
+  font-weight: 900 !important;
+}
+
+button[onclick="addToLesson()"]:hover,
+#addToLessonBtn:hover,
+.add-lesson-btn:hover {
+  background: #C94E28 !important;
+  filter: none !important;
+  transform: translateY(-1px);
+}
+
+/* On shorter screens, keep badge tucked right without crowding. */
+@media (max-height: 760px) {
+  .ready-badge,
+  .letterbox-ready,
+  .lesson-ready-badge {
+    top: 74px !important;
+    right: 20px !important;
+    font-size: 11px !important;
+    padding: 5px 9px !important;
+  }
+
+  .word-display {
+    margin-top: 12px !important;
+  }
+}
+
+
+/* ─── v14 final override: Add to Letterbox Lesson button color ───────── */
+/* This is intentionally last so it wins over the default green primary button. */
+.result button.add-lesson-btn,
+.result #addToLessonBtn,
+.result button[onclick*="addToLesson"],
+button.add-lesson-btn,
+#addToLessonBtn,
+button[onclick*="addToLesson"] {
+  background: #D85A30 !important;
+  background-color: #D85A30 !important;
+  color: #FFFFFF !important;
+  border-color: #D85A30 !important;
+  box-shadow: 0 5px 0 #A94224 !important;
+}
+
+.result button.add-lesson-btn:hover,
+.result #addToLessonBtn:hover,
+.result button[onclick*="addToLesson"]:hover,
+button.add-lesson-btn:hover,
+#addToLessonBtn:hover,
+button[onclick*="addToLesson"]:hover {
+  background: #C94E28 !important;
+  background-color: #C94E28 !important;
+  border-color: #C94E28 !important;
+}
+
+
+/* ─── v15 actual Add to Letterbox Lesson CTA override ────────────────── */
+/* Dedicated class is added to the exact button text so this cannot miss. */
+button.add-lesson-cta,
+.result button.add-lesson-cta,
+.actions button.add-lesson-cta {
+  background: #D85A30 !important;
+  background-color: #D85A30 !important;
+  color: #FFFFFF !important;
+  border-color: #D85A30 !important;
+  box-shadow: 0 5px 0 #A94224 !important;
+}
+
+button.add-lesson-cta:hover,
+.result button.add-lesson-cta:hover,
+.actions button.add-lesson-cta:hover {
+  background: #C94E28 !important;
+  background-color: #C94E28 !important;
+  border-color: #C94E28 !important;
+}
+
+
+/* ─── v19 stable long-vowel controls ───────────────────────────────── */
+.vowel-type-tabs {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 7px !important;
+  margin: 0 0 10px !important;
+}
+.type-tab {
+  border: 1.5px solid var(--border, #E8E4F0) !important;
+  background: #fff !important;
+  color: var(--navy, #1A1A2E) !important;
+  border-radius: 12px !important;
+  padding: 8px 8px !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+}
+.type-tab.active {
+  background: var(--teal, #1D9E75) !important;
+  color: #fff !important;
+  border-color: var(--teal, #1D9E75) !important;
+}
+.silent-e-space {
+  border: none !important;
+  background: transparent !important;
+  color: var(--navy, #1A1A2E) !important;
+  box-shadow: none !important;
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 52px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 28px !important;
+  font-weight: 900 !important;
+  position: relative !important;
+}
+.silent-e-space::after {
+  content: "silent e";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -16px;
+  font-size: 9px;
+  color: var(--navy-lt, #9090A8);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+
+
+/* ─── v26 final CTA and logo polish ─────────────────────────────────── */
+.la-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+button.add-lesson-cta,
+.result button.add-lesson-cta,
+.actions button.add-lesson-cta,
+button[onclick*="addToLesson"] {
+  background: #D85A30 !important;
+  background-color: #D85A30 !important;
+  color: #fff !important;
+  border-color: #D85A30 !important;
+  box-shadow: 0 5px 0 #A94224 !important;
+}
+button.add-lesson-cta:hover,
+.result button.add-lesson-cta:hover,
+.actions button.add-lesson-cta:hover,
+button[onclick*="addToLesson"]:hover {
+  background: #C94E28 !important;
+  background-color: #C94E28 !important;
+}
+
+
+/* ─── v27 exact uploaded logo override ──────────────────────────────── */
+.la-icon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 9px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 36px !important;
+}
+.la-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+
+/* ─── v28 vowel-team controls ───────────────────────────────────────── */
+.vowel-type-tabs {
+  grid-template-columns: 1fr 1fr 1fr !important;
+}
+.type-tab {
+  font-size: 10px !important;
+  padding: 8px 5px !important;
+}
+
+
+/* ─── v31 r-controlled and expanded vowel-team controls ─────────────── */
+.vowel-type-tabs {
+  grid-template-columns: repeat(4, 1fr) !important;
+}
+.type-tab {
+  font-size: 9.5px !important;
+  padding: 8px 4px !important;
+}
+@media(max-width: 900px){
+  .vowel-type-tabs {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+
+/* ─── v32 cleaner Word Spinner-style selection controls ─────────────── */
+.spinner-style-selects {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 12px;
+  margin: 0 0 12px;
+  border: 1.5px solid rgba(29,158,117,.22);
+  background: rgba(229, 250, 247, .62);
+  border-radius: 16px;
+}
+
+.spinner-style-selects .label {
+  margin: 0 0 6px !important;
+}
+
+.category-select,
+.pattern-select {
+  width: 100%;
+  height: 46px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border, #E8E4F0);
+  background: #fff;
+  color: var(--navy, #1A1A2E);
+  font-family: inherit;
+  font-weight: 900;
+  font-size: 14px;
+  padding: 0 12px;
+}
+
+.category-select:focus,
+.pattern-select:focus {
+  outline: none;
+  border-color: var(--teal, #1D9E75);
+  box-shadow: 0 0 0 3px rgba(29,158,117,.13);
+}
+
+.legacy-vowel-controls {
+  display: none !important;
+}
+
+@media(max-width: 900px) {
+  .spinner-style-selects {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ─── v33 cleaner grouped phonics-category dropdowns ────────────────── */
+.spinner-style-selects {
+  grid-template-columns: 1fr 1fr !important;
+}
+.category-select,
+.pattern-select {
+  font-size: 13px !important;
+}
+
+
+/* ─── v42 stable SEO/home polish ───────────────────────────────────── */
+.home-btn {
+  text-decoration: none;
+}
+
+</style>
+
+  <meta name="description" content="Count phonemes and map regular words into sound boxes for letterbox lessons. Includes vowel teams, r-controlled vowels, and diphthongs.">
+  <meta name="keywords" content="phoneme counter, word mapper, phoneme mapping, sound boxes, letter boxes, letterbox lesson, elkonin boxes, phoneme grapheme mapping, phonics teacher tool, small group planning, phonics lesson plan, vowel teams, r-controlled vowels, diphthongs, Literacy Arcade">
+  <meta name="author" content="Literacy Arcade">
+  <meta name="robots" content="index, follow">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Phoneme Counter | Literacy Arcade">
+  <meta name="twitter:description" content="Count phonemes and map regular words into sound boxes for letterbox lessons. Includes vowel teams, r-controlled vowels, and diphthongs.">
+  <meta property="og:title" content="Phoneme Counter | Literacy Arcade">
+  <meta property="og:description" content="Count phonemes and map regular words into sound boxes for letterbox lessons. Includes vowel teams, r-controlled vowels, and diphthongs.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://literacyarcade.com/phoneme-counter.html">
+  <meta property="og:site_name" content="Literacy Arcade">
+  <meta property="og:image" content="https://literacyarcade.com/images/phoneme-counter-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Literacy Arcade Phoneme Counter — map words into sound boxes for letterbox lessons">
+  <meta name="twitter:image" content="https://literacyarcade.com/images/phoneme-counter-preview.png">
+  <link rel="canonical" href="https://literacyarcade.com/phoneme-counter.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Phoneme Counter",
+    "url": "https://literacyarcade.com/phoneme-counter.html",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web",
+    "description": "Count phonemes and map regular words into sound boxes for letterbox lessons. Includes vowel teams, r-controlled vowels, and diphthongs.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Literacy Arcade",
+      "url": "https://literacyarcade.com/"
+    },
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": "teacher"
+    }
+  }
+  </script>
+</head>
+<body>
+<header class="la-header">
+  <a class="la-left" href="https://literacyarcade.com" aria-label="Literacy Arcade home">
+    <span class="la-icon"><img src="data:image/jpeg;base64,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" alt="Literacy Arcade logo"></span><span class="la-wordmark">Literacy Arcade</span><span class="la-pipe"></span><span class="la-tool-name">Phoneme Counter</span>
+  </a>
+  <a class="home-btn" href="https://literacyarcade.com/" title="Home" aria-label="All tools">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+  </a>
+</header>
+<main>
+
+  <section class="workspace">
+    <aside class="card panel">
+      <p class="label">Enter or choose a word</p>
+      <div class="search-row">
+        <input id="wordInput" type="text" value="" placeholder="type a word..." autocomplete="off" />
+        <button class="go" id="goBtn" title="Map word">→</button>
+      </div>
+      <p class="hint">Choose a phonics category and pattern. The built-in bank avoids words with extra spelling complications when possible.</p>
+
+      
+      <div class="spinner-style-selects">
+        <div class="select-group">
+          <p class="label">Phonics Category</p>
+          <select id="phonicsCategorySelect" class="category-select">
+            <option value="short">Short Vowels</option>
+            <option value="long">Silent-e Long Vowels</option>
+            <option value="team-a">Long A Teams</option>
+            <option value="team-e">Long E Teams</option>
+            <option value="team-i">Long I Teams</option>
+            <option value="team-o">Long O Teams</option>
+            <option value="team-u">Long U Teams</option>
+            <option value="rcontrolled">R-Controlled Vowels</option>
+            <option value="diphthongs">Diphthongs</option>
+          </select>
+        </div>
+
+        <div class="select-group">
+          <p class="label">Pattern</p>
+          <select id="phonicsPatternSelect" class="pattern-select"></select>
+        </div>
+      </div>
+
+      <div class="legacy-vowel-controls" aria-hidden="true">
+        <div class="vowel-type-tabs" id="vowelTypeTabs">
+          <button class="type-tab active" data-type="short" type="button">Short vowels</button>
+          <button class="type-tab" data-type="long" type="button">Long vowels</button>
+          <button class="type-tab" data-type="teams" type="button">Vowel teams</button>
+          <button class="type-tab" data-type="rcontrolled" type="button">R-controlled</button>
+        </div>
+        <div class="vowel-tabs" id="vowelTabs"></div>
+      </div>
+
+      <div class="filters">
+        <select id="countFilter" aria-label="Filter by phoneme count">
+          <option value="all">All counts</option>
+          <option value="3">3 phonemes</option>
+          <option value="4">4 phonemes</option>
+          <option value="5">5 phonemes</option>
+          <option value="6">6+ phonemes</option>
+        </select>
+        <select id="patternFilter" aria-label="Filter by pattern">
+          <option value="all">All patterns</option>
+          <option value="digraph">Includes digraph</option>
+          <option value="blend">Includes blend</option>
+          <option value="flsz">FLSZ ending</option>
+          <option value="tchdge">-tch / -dge</option>
+        </select>
+      </div>
+
+      <p class="label">Quick examples</p>
+      <div class="examples" id="exampleChips"></div>
+
+      <details class="bank">
+        <summary class="bank-top"><p class="label" style="margin:0">Browse supported words</p><span class="bank-count" id="bankCount">0 words</span></summary>
+        <div class="word-groups" id="wordGroups"></div>
+      </details>
+
+      <div class="lesson-tray" aria-label="Words selected for Letterbox Lesson Builder">
+        <div class="tray-top"><span class="tray-title">Words for Letterbox Lesson</span><span class="tray-count" id="trayCount">0 words</span></div>
+        <div class="tray-words" id="lessonTray"><span class="tray-empty">Add mapped words here. Words are auto-sequenced by phoneme count, spelling complexity, and rhyme spacing when possible.</span></div>
+        <div class="tray-actions">
+          <button class="small-secondary" id="clearLessonBtn" type="button">Clear lesson list</button>
+          <button class="small-secondary" id="buildLessonBtn" type="button">Build lesson soon</button>
+          <button class="tray-action primary" id="downloadLessonPdfBtn" onclick="downloadLessonPdf()">Download Lesson PDF</button>
+          <div class="pdf-helper-text">Includes word maps, phoneme counts, sound boxes, and letter tiles.</div>
+        </div>
+        <div class="lesson-msg" id="lessonMsg">This list is ready to connect to Letterbox Lesson Builder in the next phase.</div>
+      </div>
+</aside>
+
+    <section class="card result">
+      <div class="result-top">
+        <div class="result-title">Result</div>
+        <div class="pill-row"><div class="count-pill" id="vowelPill">Short /a/</div><div class="count-pill" id="countPill">— phonemes</div></div>
+      </div>
+      <div class="result-body" id="resultBody"></div>
+    </section>
+  </section>
+  <footer>Literacy Arcade • Phoneme Counter</footer>
+</main>
+
+<script>
+const SHORT_VOWEL_WORDS = {
+  'short-a': ['cat','hat','mat','sat','bat','fat','nap','rat','fan','shack','chat','rack','sack','mash','cash','bath','map','tap','crab','drab','scab','slab','stab','black','crack','smack','snack','snag','flag','glad','track','stack','flap','clap','slap','snap','fact','raft','smash','thrash','trash','brat','flat','vast','brass','trap','brash','clash','crash','flash','slash','shaft','class','glass','grant','plant','slant','flask','blast','scratch','clasp','scalp','splat','strand','stand','bland'],
+  'short-e': ['bed','leg','bet','set','met','den','get','men','hen','red','vet','web','yes','let','ten','jet','beg','wet','bled','fled','shred','sled','sped','smell','spell','swell','bend','lend','mend','send','tend','bent','dent','rent','lent','sent','tent','went','best','nest','pest','rest','test','vest','west','chest','fret','bless','dress','press','left','help','blend','spend','trend','spent','stress','slept','crept'],
+  'short-i': ['rip','sip','lip','tip','fig','bid','dip','fit','pig','pit','rid','lid','kid','hit','sit','sick','fin','brick','click','flick','slick','stick','trick','grid','skid','slid','twig','flip','mint','risk','skill','still','thrill','slim','swim','trim','grin','skin','spin','gift','wilt','cling','fling','sling','sting','swing','link','pink','sink','think','hint','shift','skip','spring','string','blink','brink','clink','drink','shrink','stink','print','slink','drift','swift','thrift','brisk','frisk','twist','blimp','crisp','sprint','splint','script','scrimp'],
+  'short-o': ['toss','boss','hog','log','hot','got','pot','mop','job','fog','sob','rob','blob','slob','snob','block','clock','flock','stock','clog','frog','smog','crop','drop','flop','stop','plot','slot','spot','trot','prop','cross','floss','blotch','stomp','frost','splotch','clomp','prompt'],
+  'short-u': ['hut','rut','mud','sub','tub','rub','run','bun','sun','cub','fun','sum','gum','sung','club','shrub','grub','stub','cluck','pluck','stuck','truck','bluff','fluff','gruff','scuff','stuff','drug','plug','shrug','slug','snug','drum','plum','bump','dump','jump','lump','pump','spun','stun','clung','flung','strum','swung','bunk','dunk','junk','sunk','chunk','blush','brush','crush','flush','plush','slush','thrush','spud','grudge','bunch','hunch','lunch','munch','punch','bunt','hunt','punt','runt','plus','bust','dust','just','must','rust','scrub','clump','grump','plump','slump','stump','sprung','strung','shrunk','skunk','crunch','blunt','grunt','thrust','trust','crust','struck','scrunch']
+};
+
+
+
+
+
+const LONG_I_VOWEL_TEAM_WORDS = {
+  'long-i-igh': [
+    'bright','fight','flight','fright','high','light','might','night','right','sigh',
+    'sight','slight','thigh','tight'
+  ],
+  'long-i-ie': [
+    'die','dried','flies','fried','fries','lie','lies','pie','pies','tie','tried'
+  ]
+};
+
+const LONG_U_VOWEL_TEAM_WORDS = {
+  'long-u-ue': [
+    'blue','clue','cue','due','flue','glue','hue','Sue','true'
+  ],
+  'long-u-ew': [
+    'blew','brew','chew','crew','dew','drew','few','flew','grew','new','pew','screw',
+    'skew','slew','stew','threw'
+  ],
+  'long-u-ui': [
+    'bruise','cruise','fruit','juice','suit'
+  ]
+};
+
+
+const DIPHTHONG_WORDS = {
+  'diph-aw-aw': [
+    'caw','claw','crawl','dawn','draw','fawn','hawk','jaw','lawn','paw','raw','saw',
+    'shawl','straw','thaw','yawn'
+  ],
+  'diph-aw-au': [
+    'haul','haunt','launch','taunt'
+  ],
+  'diph-oy-oi': [
+    'boil','broil','coin','foil','join','joint','moist','oil','point','soil',
+    'spoil','toil'
+  ],
+  'diph-oy-oy': [
+    'boy','coy','joy','ploy','roy','soy','toy'
+  ]
+};
+
+const R_CONTROLLED_WORDS = {
+  'r-ar': [
+    'arm','art','bar','bark','barn','cart','car','card','dark','far','farm','hard',
+    'harm','jar','mark','park','part','scar','shark','smart','spark','star','start','yard'
+  ],
+  'r-or': [
+    'born','corn','fork','form','fort','horn','north','or','porch','pork','short','sort',
+    'sport','storm','thorn','torch'
+  ],
+  'r-er': [
+    'fern','her','herd','jerk','perch','term','verb'
+  ],
+  'r-ir': [
+    'bird','birth','chirp','dirt','firm','first','girl','shirt','sir','skirt','stir','third'
+  ],
+  'r-ur': [
+    'blur','burn','burst','church','curl','fur','hurt','surf','turn','turf'
+  ]
+};
+
+const LONG_E_VOWEL_TEAM_WORDS = {
+  'long-e-ee': [
+    'bee','beep','beet','bleed','breeze','cheek','cheep','deed','deep','feed','feel',
+    'feet','free','freeze','green','greet','heel','jeep','keep','keen','meet','need',
+    'peek','peel','queen','reef','seed','seem','seen','sheep','sheet','sleep','speed',
+    'speech','street','sweep','sweet','teeth','three','tree','week','weed','wheel'
+  ],
+  'long-e-ea': [
+    'beach','bead','beak','beam','bean','beast','beat','clean','cream','dream','east',
+    'eat','feast','heap','heat','leaf','leak','lean','leap','mean','meat','neat','peach',
+    'peak','plead','reach','read','seal','seat','speak','steam','team','teach','treat',
+    'weak','wheat','year'
+  ]
+};
+
+
+const LONG_O_VOWEL_TEAM_WORDS = {
+  'long-o-oa': [
+    'bloat','boat','boast','cloak','coach','coal','coat','coast','foam','goat','groan',
+    'load','loaf','moan','oak','oat','road','roam','roast','soap','soak','toad','toast'
+  ],
+  'long-o-ow': [
+    'blow','crow','flow','glow','grow','low','mow','row','show','slow','snow','stow','throw','tow'
+  ]
+};
+
+const LONG_A_VOWEL_TEAM_WORDS = {
+  'long-a-ai': [
+    'aid','aim','ail','bail','bait','brain','chain','claim','fail','faint','gain','grain',
+    'hail','jail','mail','main','nail','paid','paint','pain','plain','rain','rail','sail',
+    'snail','stain','tail','train','trail','wait'
+  ],
+  'long-a-ay': [
+    'bay','clay','day','gray','hay','jay','lay','may','pay','play','pray','ray','say',
+    'slay','spray','stay','stray','sway','tray','way'
+  ]
+};
+
+const LONG_SILENT_E_WORDS = {
+  'long-a': [
+    'babe','bake','base','brave','blame','blade','brace','brake','cage','cake','came','cape','case','cave','chase','crane','date','drape','face','fade','fake','fame','gate','game','gave','glade','grade','grape','hate','jade','lake','lane','late','made','make','mane','maze','name','page','pale','plane','plate','rake','rate','safe','same','save','shade','shake','shape','shave','skate','slate','snake','space','spade','stage','take','tape','trade','wake','wave'
+  ],
+  'long-i': [
+    'bike','bite','bride','chime','dime','dive','drive','fine','five','hide','hike','kite','life','like','lime','line','mine','nine','pine','pipe','pride','prize','quite','ride','ripe','rise','shine','side','slide','slime','smile','spike','spine','stripe','time','tire','vine','while','white','wide','wife','wipe','wire'
+  ],
+  'long-o': [
+    'bone','broke','choke','chose','cone','cope','cove','dome','doze','froze','globe','home','hope','hose','joke','lobe','lone','mode','note','phone','pole','poke','pose','robe','rode','role','rope','rose','slope','smoke','spoke','stone','stove','those','throne','tone','vote','woke'
+  ],
+  'long-u': [
+    'brute','cube','cute','dune','duke','flute','fume','fuse','huge','june','mule','mute','prune','rude','rule','tube','tune','use'
+  ]
+};
+const VOWEL_TYPE_KEYS = {
+  short: ['short-a','short-e','short-i','short-o','short-u'],
+  long: ['long-a','long-i','long-o','long-u'],
+  teams: ['long-a-ai','long-a-ay','long-e-ee','long-e-ea','long-o-oa','long-o-ow','long-i-igh','long-i-ie','long-u-ue','long-u-ew','long-u-ui'],
+  rcontrolled: ['r-ar','r-or','r-er','r-ir','r-ur'],
+  diphthongs: ['diph-aw-aw','diph-aw-au','diph-oy-oi','diph-oy-oy']
+};
+let currentVowelType = 'short';
+
+const VOWELS = {
+  'short-a': {label:'Short /a/', letter:'a', phoneme:'/ă/'},
+  'short-e': {label:'Short /e/', letter:'e', phoneme:'/ĕ/'},
+  'short-i': {label:'Short /i/', letter:'i', phoneme:'/ĭ/'},
+  'short-o': {label:'Short /o/', letter:'o', phoneme:'/ŏ/', type:'short'},
+  'short-u': {label:'Short /u/', letter:'u', phoneme:'/ŭ/', type:'short'},
+  'long-a': {label:'Long /ā/ silent e', letter:'a', phoneme:'/ā/', type:'long'},
+  'long-i': {label:'Long /ī/ silent e', letter:'i', phoneme:'/ī/', type:'long'},
+  'long-o': {label:'Long /ō/ silent e', letter:'o', phoneme:'/ō/', type:'long'},
+  'long-u': {label:'Long /ū/ silent e', letter:'u', phoneme:'/ū/', type:'long'},
+  'long-a-ai': {label:'Long /ā/ spelled ai', letter:'ai', phoneme:'/ā/', type:'team'},
+  'long-a-ay': {label:'Long /ā/ spelled ay', letter:'ay', phoneme:'/ā/', type:'team'},
+  'long-e-ee': {label:'Long /ē/ spelled ee', letter:'ee', phoneme:'/ē/', type:'team'},
+  'long-e-ea': {label:'Long /ē/ spelled ea', letter:'ea', phoneme:'/ē/', type:'team'},
+  'long-o-oa': {label:'Long /ō/ spelled oa', letter:'oa', phoneme:'/ō/', type:'team'},
+  'long-o-ow': {label:'Long /ō/ spelled ow', letter:'ow', phoneme:'/ō/', type:'team'},
+  'long-i-igh': {label:'Long /ī/ spelled igh', letter:'igh', phoneme:'/ī/', type:'team'},
+  'long-i-ie': {label:'Long /ī/ spelled ie', letter:'ie', phoneme:'/ī/', type:'team'},
+  'long-u-ue': {label:'Long /ū/ spelled ue', letter:'ue', phoneme:'/ū/', type:'team'},
+  'long-u-ew': {label:'Long /ū/ spelled ew', letter:'ew', phoneme:'/ū/', type:'team'},
+  'long-u-ui': {label:'Long /ū/ spelled ui', letter:'ui', phoneme:'/ū/', type:'team'},
+  'r-ar': {label:'R-controlled /ar/ spelled ar', letter:'ar', phoneme:'/ar/', type:'rcontrolled'},
+  'r-or': {label:'R-controlled /or/ spelled or', letter:'or', phoneme:'/or/', type:'rcontrolled'},
+  'r-er': {label:'R-controlled /er/ spelled er', letter:'er', phoneme:'/er/', type:'rcontrolled'},
+  'r-ir': {label:'R-controlled /er/ spelled ir', letter:'ir', phoneme:'/er/', type:'rcontrolled'},
+  'r-ur': {label:'R-controlled /er/ spelled ur', letter:'ur', phoneme:'/er/', type:'rcontrolled'},
+  'diph-aw-aw': {label:'Diphthong /aw/ spelled aw', letter:'aw', phoneme:'/aw/', type:'diphthong'},
+  'diph-aw-au': {label:'Diphthong /aw/ spelled au', letter:'au', phoneme:'/aw/', type:'diphthong'},
+  'diph-oy-oi': {label:'Diphthong /oy/ spelled oi', letter:'oi', phoneme:'/oy/', type:'diphthong'},
+  'diph-oy-oy': {label:'Diphthong /oy/ spelled oy', letter:'oy', phoneme:'/oy/', type:'diphthong'}
+};
+const PHONEME = {b:'/b/',c:'/k/',d:'/d/',f:'/f/',g:'/g/',h:'/h/',j:'/j/',k:'/k/',l:'/l/',m:'/m/',n:'/n/',p:'/p/',r:'/r/',s:'/s/',t:'/t/',v:'/v/',w:'/w/',y:'/y/',z:'/z/'};
+const DIGRAPHS = {sh:'/sh/', ch:'/ch/', th:'/th/', wh:'/w/', ck:'/k/', ng:'/ŋ/',
+  ph:'/f/'};
+const TRIGRAPHS = {tch:'/ch/', dge:'/j/'};
+const FLSZ = {ff:'/f/', ll:'/l/', ss:'/s/', zz:'/z/'};
+let currentVowel = 'short-a';
+let currentMap = null;
+let lessonWords = [];
+
+function graphemeToPhoneme(g, vowelKey){
+  if(TRIGRAPHS[g]) return TRIGRAPHS[g];
+  if(DIGRAPHS[g]) return DIGRAPHS[g];
+  if(FLSZ[g]) return FLSZ[g];
+  if(g === VOWELS[vowelKey].letter) return VOWELS[vowelKey].phoneme;
+  return PHONEME[g] || `/${g}/`;
+}
+function mapShortWord(word){
+  const w = word.toLowerCase().replace(/[^a-z]/g,'');
+  if(!w) return null;
+  let vowelKey = Object.keys(SHORT_VOWEL_WORDS).find(k => SHORT_VOWEL_WORDS[k].includes(w));
+  if(!vowelKey){
+    // allow known short-vowel words typed if exactly one short vowel is present
+    const hits = Object.entries(VOWELS).filter(([k,v]) => w.includes(v.letter));
+    if(hits.length === 1) vowelKey = hits[0][0];
+  }
+  if(!vowelKey) return null;
+  const graphemes = [];
+  for(let i=0;i<w.length;){
+    const three = w.slice(i,i+3);
+    const two = w.slice(i,i+2);
+    if(TRIGRAPHS[three]){graphemes.push(three); i+=3; continue;}
+    if(DIGRAPHS[two]){graphemes.push(two); i+=2; continue;}
+    // FLSZ endings are one grapheme/one phoneme in this instructional map.
+    if(i === w.length-2 && FLSZ[two]){graphemes.push(two); i+=2; continue;}
+    graphemes.push(w[i]); i++;
+  }
+  const phonemes = graphemes.map(g=>graphemeToPhoneme(g,vowelKey));
+  const tiles = w.split('');
+  return {
+    word:w, vowelKey, vowelLabel:VOWELS[vowelKey].label, graphemes, phonemes,
+    phonemeCount:phonemes.length, letterboxes:graphemes, tiles,
+    tags: getTags(w, graphemes), note: makeNote(w, graphemes, vowelKey)
+  };
+}
+
+function getLongVowelKeyForWord(w){
+  return Object.keys(LONG_SILENT_E_WORDS).find(k => LONG_SILENT_E_WORDS[k].includes(w));
+}
+function segmentConsonants(chunk){
+  const out=[];
+  for(let i=0;i<chunk.length;){
+    const three=chunk.slice(i,i+3);
+    const two=chunk.slice(i,i+2);
+    if(TRIGRAPHS[three]){out.push(three); i+=3; continue;}
+    if(DIGRAPHS[two]){out.push(two); i+=2; continue;}
+    if(i === chunk.length-2 && FLSZ[two]){out.push(two); i+=2; continue;}
+    out.push(chunk[i]); i++;
+  }
+  return out;
+}
+
+
+
+function getVowelTeamKeyFromBank(w, bank){
+  return Object.keys(bank).find(k => bank[k].map(x => x.toLowerCase()).includes(w));
+}
+
+function mapGenericVowelUnitWord(word, bank, unitType){
+  const w = word.toLowerCase().replace(/[^a-z]/g,'');
+  const vowelKey = getVowelTeamKeyFromBank(w, bank);
+  if(!vowelKey) return null;
+
+  const vowelUnit = VOWELS[vowelKey].letter;
+  const vowelIndex = w.indexOf(vowelUnit);
+  if(vowelIndex < 0) return null;
+
+  const before = segmentConsonants(w.slice(0, vowelIndex));
+  const after = segmentConsonants(w.slice(vowelIndex + vowelUnit.length));
+  const letterboxes = [...before, vowelUnit, ...after];
+  const graphemes = [...letterboxes];
+  const phonemes = [
+    ...before.map(g=>graphemeToPhoneme(g, vowelKey)),
+    VOWELS[vowelKey].phoneme,
+    ...after.map(g=>graphemeToPhoneme(g, vowelKey))
+  ];
+  const tiles = w.split('');
+  const phonemeCount = phonemes.length;
+  const readableType = unitType === 'rcontrolled' ? 'r-controlled vowel' : 'vowel team';
+
+  return {
+    word:w,
+    vowelKey,
+    vowelLabel:VOWELS[vowelKey].label,
+    graphemes,
+    phonemes,
+    phonemeCount,
+    letterboxes,
+    tiles,
+    silentOutsideBoxes:[],
+    tags: [...getTags(w, letterboxes), unitType === 'rcontrolled' ? 'r-controlled' : 'vowel-team', vowelUnit],
+    note: `Vowel focus: ${VOWELS[vowelKey].label.replace('Long','long').replace('R-controlled','r-controlled')}. The ${readableType} ${vowelUnit} represents one sound, so it goes in one sound box. Use ${phonemeCount} sound boxes.`
+  };
+}
+
+function mapLongIVowelTeamWord(word){
+  return mapGenericVowelUnitWord(word, LONG_I_VOWEL_TEAM_WORDS, 'vowel-team');
+}
+function mapLongUVowelTeamWord(word){
+  return mapGenericVowelUnitWord(word, LONG_U_VOWEL_TEAM_WORDS, 'vowel-team');
+}
+
+function mapDiphthongWord(word){
+  return mapGenericVowelUnitWord(word, DIPHTHONG_WORDS, 'diphthong');
+}
+
+function mapRControlledWord(word){
+  return mapGenericVowelUnitWord(word, R_CONTROLLED_WORDS, 'rcontrolled');
+}
+
+function getLongEVowelTeamKeyForWord(w){
+  return Object.keys(LONG_E_VOWEL_TEAM_WORDS).find(k => LONG_E_VOWEL_TEAM_WORDS[k].includes(w));
+}
+function mapLongEVowelTeamWord(word){
+  const w = word.toLowerCase().replace(/[^a-z]/g,'');
+  const vowelKey = getLongEVowelTeamKeyForWord(w);
+  if(!vowelKey) return null;
+
+  const vowelTeam = VOWELS[vowelKey].letter;
+  const vowelIndex = w.indexOf(vowelTeam);
+  if(vowelIndex < 0) return null;
+
+  const before = segmentConsonants(w.slice(0, vowelIndex));
+  const after = segmentConsonants(w.slice(vowelIndex + vowelTeam.length));
+  const letterboxes = [...before, vowelTeam, ...after];
+  const graphemes = [...letterboxes];
+  const phonemes = [
+    ...before.map(g=>graphemeToPhoneme(g, vowelKey)),
+    VOWELS[vowelKey].phoneme,
+    ...after.map(g=>graphemeToPhoneme(g, vowelKey))
+  ];
+  const tiles = w.split('');
+  const phonemeCount = phonemes.length;
+
+  return {
+    word:w,
+    vowelKey,
+    vowelLabel:VOWELS[vowelKey].label,
+    graphemes,
+    phonemes,
+    phonemeCount,
+    letterboxes,
+    tiles,
+    silentOutsideBoxes:[],
+    tags: [...getTags(w, letterboxes), 'vowel-team', vowelTeam],
+    note: `Vowel focus: ${VOWELS[vowelKey].label.replace('Long','long')}. The vowel team ${vowelTeam} represents one sound, so it goes in one sound box. Use ${phonemeCount} sound boxes.`
+  };
+}
+
+
+function getLongOVowelTeamKeyForWord(w){
+  return Object.keys(LONG_O_VOWEL_TEAM_WORDS).find(k => LONG_O_VOWEL_TEAM_WORDS[k].includes(w));
+}
+function mapLongOVowelTeamWord(word){
+  const w = word.toLowerCase().replace(/[^a-z]/g,'');
+  const vowelKey = getLongOVowelTeamKeyForWord(w);
+  if(!vowelKey) return null;
+
+  const vowelTeam = VOWELS[vowelKey].letter;
+  const vowelIndex = w.indexOf(vowelTeam);
+  if(vowelIndex < 0) return null;
+
+  const before = segmentConsonants(w.slice(0, vowelIndex));
+  const after = segmentConsonants(w.slice(vowelIndex + vowelTeam.length));
+  const letterboxes = [...before, vowelTeam, ...after];
+  const graphemes = [...letterboxes];
+  const phonemes = [
+    ...before.map(g=>graphemeToPhoneme(g, vowelKey)),
+    VOWELS[vowelKey].phoneme,
+    ...after.map(g=>graphemeToPhoneme(g, vowelKey))
+  ];
+  const tiles = w.split('');
+  const phonemeCount = phonemes.length;
+
+  return {
+    word:w,
+    vowelKey,
+    vowelLabel:VOWELS[vowelKey].label,
+    graphemes,
+    phonemes,
+    phonemeCount,
+    letterboxes,
+    tiles,
+    silentOutsideBoxes:[],
+    tags: [...getTags(w, letterboxes), 'vowel-team', vowelTeam],
+    note: `Vowel focus: ${VOWELS[vowelKey].label.replace('Long','long')}. The vowel team ${vowelTeam} represents one sound, so it goes in one sound box. Use ${phonemeCount} sound boxes.`
+  };
+}
+
+function getLongAVowelTeamKeyForWord(w){
+  return Object.keys(LONG_A_VOWEL_TEAM_WORDS).find(k => LONG_A_VOWEL_TEAM_WORDS[k].includes(w));
+}
+function mapLongAVowelTeamWord(word){
+  const w = word.toLowerCase().replace(/[^a-z]/g,'');
+  const vowelKey = getLongAVowelTeamKeyForWord(w);
+  if(!vowelKey) return null;
+
+  const vowelTeam = VOWELS[vowelKey].letter;
+  const vowelIndex = w.indexOf(vowelTeam);
+  if(vowelIndex < 0) return null;
+
+  const before = segmentConsonants(w.slice(0, vowelIndex));
+  const after = segmentConsonants(w.slice(vowelIndex + vowelTeam.length));
+  const letterboxes = [...before, vowelTeam, ...after];
+  const graphemes = [...letterboxes];
+  const phonemes = [
+    ...before.map(g=>graphemeToPhoneme(g, vowelKey)),
+    VOWELS[vowelKey].phoneme,
+    ...after.map(g=>graphemeToPhoneme(g, vowelKey))
+  ];
+  const tiles = w.split('');
+  const phonemeCount = phonemes.length;
+
+  return {
+    word:w,
+    vowelKey,
+    vowelLabel:VOWELS[vowelKey].label,
+    graphemes,
+    phonemes,
+    phonemeCount,
+    letterboxes,
+    tiles,
+    silentOutsideBoxes:[],
+    tags: [...getTags(w, letterboxes), 'vowel-team', vowelTeam],
+    note: `Vowel focus: ${VOWELS[vowelKey].label.replace('Long','long')}. The vowel team ${vowelTeam} represents one sound, so it goes in one sound box. Use ${phonemeCount} sound boxes.`
+  };
+}
+
+function mapLongWord(word){
+  const w = word.toLowerCase().replace(/[^a-z]/g,'');
+  const vowelKey = getLongVowelKeyForWord(w);
+  if(!vowelKey) return null;
+  const base = w.endsWith('e') ? w.slice(0,-1) : w;
+  const vowelLetter = VOWELS[vowelKey].letter;
+  const vowelIndex = base.indexOf(vowelLetter);
+  if(vowelIndex < 0) return null;
+
+  const before = segmentConsonants(base.slice(0, vowelIndex));
+  const after = segmentConsonants(base.slice(vowelIndex + 1));
+  const letterboxes = [...before, vowelLetter, ...after];
+  const graphemes = [...letterboxes, 'e'];
+  const phonemes = [
+    ...before.map(g=>graphemeToPhoneme(g, vowelKey)),
+    VOWELS[vowelKey].phoneme,
+    ...after.map(g=>graphemeToPhoneme(g, vowelKey)),
+    'silent e'
+  ];
+  const tiles = w.split('');
+  const phonemeCount = phonemes.filter(p=>p !== 'silent e').length;
+  return {
+    word:w, vowelKey, vowelLabel:VOWELS[vowelKey].label, graphemes, phonemes,
+    phonemeCount, letterboxes, tiles, silentOutsideBoxes:['e'],
+    tags: [...getTags(base, letterboxes), 'silent-e'],
+    note: `Vowel focus: ${VOWELS[vowelKey].label.replace('Long','long')}. Final e is silent and sits outside the sound boxes in a letterbox lesson. Use ${phonemeCount} sound boxes plus silent e.`
+  };
+}
+function mapWord(word){
+  const w = word.toLowerCase().replace(/[^a-z]/g,'');
+  return mapLongWord(w) || mapShortWord(w);
+}
+
+function getTags(word, graphemes){
+  const tags = [];
+  if(graphemes.some(g=>DIGRAPHS[g] || TRIGRAPHS[g])) tags.push('digraph');
+  if(graphemes.some(g=>FLSZ[g])) tags.push('flsz');
+  if(graphemes.some(g=>TRIGRAPHS[g])) tags.push('tchdge');
+  const cleaned = word.replace(/(ck|ng|sh|ch|th|ph|tch|dge|ll|ss|ff|zz)$/,'');
+  if(/^(bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|sc|sk|sl|sm|sn|sp|st|sw|tr|scr|spl|spr|str|thr)/.test(word) || /[bcdfghjklmnpqrstvwxyz]{2,}$/.test(cleaned)) tags.push('blend');
+  return [...new Set(tags)];
+}
+function makeNote(word, graphemes, vowelKey){
+  const parts=[];
+  const digs = graphemes.filter(g=>DIGRAPHS[g] || TRIGRAPHS[g]);
+  const flsz = graphemes.filter(g=>FLSZ[g]);
+  if(digs.length) parts.push(`${digs.join(', ')} ${digs.length===1?'is a grapheme that represents one sound':'are graphemes that each represent one sound'}.`);
+  if(flsz.length) parts.push(`${flsz.join(', ')} is mapped as one sound in the final position.`);
+  parts.push(`Vowel focus: ${VOWELS[vowelKey].label.replace('Short','short')}.`);
+  parts.push(`For a letterbox lesson, use ${graphemes.length} sound ${graphemes.length===1?'box':'boxes'}.`);
+  return parts.join(' ');
+}
+function allWords(){
+  return [...Object.values(SHORT_VOWEL_WORDS).flat(), ...Object.values(LONG_SILENT_E_WORDS).flat(), ...Object.values(LONG_A_VOWEL_TEAM_WORDS).flat(), ...Object.values(LONG_E_VOWEL_TEAM_WORDS).flat(), ...Object.values(LONG_O_VOWEL_TEAM_WORDS).flat(), ...Object.values(LONG_I_VOWEL_TEAM_WORDS).flat(), ...Object.values(LONG_U_VOWEL_TEAM_WORDS).flat(), ...Object.values(R_CONTROLLED_WORDS).flat(), ...Object.values(DIPHTHONG_WORDS).flat()];
+}
+function renderVowelTypeTabs(){
+  const el=document.getElementById('vowelTypeTabs');
+  if(!el) return;
+  el.querySelectorAll('.type-tab').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.type===currentVowelType);
+    btn.addEventListener('click',()=>{
+      currentVowelType=btn.dataset.type;
+      currentVowel=VOWEL_TYPE_KEYS[currentVowelType][0];
+      updatePatternOptions();
+      renderVowelTypeTabs();
+      renderVowelTabs();
+      renderExamples();
+      renderBank();
+      showEmptyState();
+    }, {once:false});
+  });
+}
+function updatePatternOptions(){
+  const el=document.getElementById('patternFilter');
+  if(!el) return;
+  const current=el.value;
+  const options = [
+    ['all','All patterns'],
+    ['digraph','Includes digraph'],
+    ['blend','Includes blend'],
+    ['flsz','FLSZ ending'],
+    ['tchdge','-tch / -dge']
+  ];
+  if(currentVowelType === 'teams') options.push(['vowel-team','Vowel team']);
+  if(currentVowelType === 'rcontrolled') options.push(['r-controlled','R-controlled']);
+  if(currentVowelType === 'diphthongs') options.push(['diphthong','Diphthong']);
+  el.innerHTML=options.map(([v,t])=>`<option value="${v}">${t}</option>`).join('');
+  el.value = options.some(([v])=>v===current) ? current : 'all';
+}
+function renderVowelTabs(){
+  const el=document.getElementById('vowelTabs');
+  const keys=VOWEL_TYPE_KEYS[currentVowelType];
+  if(!keys.includes(currentVowel)) currentVowel=keys[0];
+  el.innerHTML = keys.map(key=>`<button class="vtab ${key===currentVowel?'active':''}" data-vowel="${key}">${VOWELS[key].label.replace(/^(Short|Long) /,'').replace(' silent e','')}</button>`).join('');
+  el.querySelectorAll('.vtab').forEach(btn=>btn.addEventListener('click',()=>{
+    currentVowel=btn.dataset.vowel;
+    renderVowelTabs();
+    renderExamples();
+    renderBank();
+    showEmptyState();
+  }));
+}
+function getFilteredMaps(){
+  const countFilter=document.getElementById('countFilter').value;
+  const patternFilter=document.getElementById('patternFilter').value;
+  const source = currentVowelType === 'long' ? LONG_SILENT_E_WORDS[currentVowel] : currentVowelType === 'teams' ? ({...LONG_A_VOWEL_TEAM_WORDS, ...LONG_E_VOWEL_TEAM_WORDS, ...LONG_O_VOWEL_TEAM_WORDS, ...LONG_I_VOWEL_TEAM_WORDS, ...LONG_U_VOWEL_TEAM_WORDS})[currentVowel] : currentVowelType === 'rcontrolled' ? R_CONTROLLED_WORDS[currentVowel] : currentVowelType === 'diphthongs' ? DIPHTHONG_WORDS[currentVowel] : SHORT_VOWEL_WORDS[currentVowel];
+  return (source || []).map(mapWord).filter(Boolean).filter(m=>{
+    const countOk = countFilter==='all' || (countFilter==='6' ? m.phonemeCount>=6 : m.phonemeCount===Number(countFilter));
+    const tagOk = patternFilter==='all' || m.tags.includes(patternFilter);
+    return countOk && tagOk;
+  }).sort((a,b)=>a.phonemeCount-b.phonemeCount || a.word.localeCompare(b.word));
+}
+function renderExamples(){
+  const maps = getFilteredMaps();
+
+  // Important: examples should match the selected filters.
+  // If no words match, do not fall back to unrelated examples.
+  const examples = maps.slice(0,8).map(m=>m.word);
+
+  document.getElementById('exampleChips').innerHTML =
+    examples.map(w=>`<button class="chip" data-word="${w}">${w}</button>`).join('') ||
+    '<span class="tray-empty">No quick examples match those filters.</span>';
+
+  document.querySelectorAll('#exampleChips .chip').forEach(c=>c.addEventListener('click',()=>mapAndRender(c.dataset.word)));
+}
+function renderBank(){
+  const words=getFilteredMaps();
+  document.getElementById('bankCount').textContent=`${words.length} words`;
+  const groups={};
+  for(const m of words){ const k=m.phonemeCount>=6?'6+ phonemes':`${m.phonemeCount} phonemes`; (groups[k] ||= []).push(m); }
+  const html = Object.entries(groups).map(([k,arr])=>`<div class="group-title">${k}</div><div class="word-list">${arr.map(m=>`<button class="bank-word" data-word="${m.word}">${m.word}</button>`).join('')}</div>`).join('') || `<p class="hint">No supported words match those filters.</p>`;
+  document.getElementById('wordGroups').innerHTML=html;
+  document.querySelectorAll('.bank-word').forEach(b=>b.addEventListener('click',()=>mapAndRender(b.dataset.word)));
+}
+function mapAndRender(word){
+  document.getElementById('wordInput').value=word;
+  const m=mapWord(word);
+  currentMap=m;
+  if(!m){renderUnsupported(word);return;}
+  document.getElementById('countPill').textContent=`${m.phonemeCount} phonemes`;
+  document.getElementById('vowelPill').textContent=m.vowelLabel;
+  const body=document.getElementById('resultBody');
+  body.innerHTML=`
+    <div class="word-display"><div class="big-word">${m.word}</div></div>
+    <div class="ready-badge">✓ Letterbox lesson ready</div>
+    <div>
+      <div class="section-title">Word Mapping</div>
+      <div class="mapping-grid">
+        <div class="row-label">Graphemes</div>
+        <div class="box-row">${m.graphemes.map(g=>`<div class="map-box">${g}</div>`).join('')}</div>
+        <div class="row-label">Phonemes</div>
+        <div class="box-row">${m.phonemes.map(p=>`<div class="map-box phoneme-box">${p}</div>`).join('')}</div>
+      </div>
+    </div>
+    <div class="letterbox-preview">
+      <div class="section-title">Letterbox Preview</div>
+      <div class="sound-box-row">${m.letterboxes.map((g,i)=>`<div class="sound-box ${i===m.letterboxes.length-1?'last-sound':''}">${g}</div>`).join('')}${m.silentOutsideBoxes ? m.silentOutsideBoxes.map(e=>`<div class="silent-e-space">${e}</div>`).join('') : ''}</div>
+      <div class="section-title" style="text-align:center;margin-top:6px">Student Letter Tiles</div>
+      <div class="tile-row">${shuffle([...m.tiles]).map(t=>`<div class="tile">${t}</div>`).join('')}</div>
+    </div>
+    <div class="note"><strong>Teacher note:</strong> ${m.note}</div>
+    <div class="actions"><button class="primary add-lesson-cta" id="addLessonBtn">Add to Letterbox Lesson</button><button class="secondary" id="clearBtn">Clear</button><span class="copy-msg" id="copyMsg">Copied!</span></div>`;
+  document.getElementById('addLessonBtn').addEventListener('click',addCurrentToLesson);
+  document.getElementById('clearBtn').addEventListener('click',()=>{document.getElementById('wordInput').value=''; renderEmpty();});
+}
+function renderUnsupported(word){
+  document.getElementById('countPill').textContent='Not mapped yet';
+  document.getElementById('vowelPill').textContent='Not in word bank';
+  document.getElementById('resultBody').innerHTML=`<div class="unsupported"><strong>${word || 'This word'} is not in the current mapping bank yet.</strong><br><br>Try choosing a supported word from the bank on the left, or switch the phonics category and pattern.</div>`;
+}
+function renderEmpty(){
+  document.getElementById('countPill').textContent='— phonemes';
+  document.getElementById('vowelPill').textContent='Choose a word';
+  document.getElementById('resultBody').innerHTML=`<div class="empty"><div><strong>Choose a supported word</strong><p>Search or select a word to map phonemes to graphemes and plan a letterbox lesson.</p></div></div>`;
+}
+function shuffle(arr){
+  // Deterministic enough for repeated redraws but still scrambled for students.
+  return arr.map((v,i)=>({v,sort:((v.charCodeAt(0)*(i+3)+7)%17)})).sort((a,b)=>a.sort-b.sort).map(x=>x.v);
+}
+
+function renderLessonTray(){
+  const tray=document.getElementById('lessonTray');
+  const count=document.getElementById('trayCount');
+  const mapped=getSequencedLessonWordStrings(lessonWords).map(mapWord).filter(Boolean).sort((a,b)=>a.phonemeCount-b.phonemeCount || a.word.localeCompare(b.word));
+  lessonWords=mapped.map(m=>m.word);
+  count.textContent=`${lessonWords.length} ${lessonWords.length===1?'word':'words'}`;
+  if(!lessonWords.length){
+    tray.innerHTML='<span class="tray-empty">Add mapped words here. Words are auto-sequenced by phoneme count, spelling complexity, and rhyme spacing when possible.</span>';
+    return;
+  }
+  tray.innerHTML=mapped.map(m=>`<span class="tray-word" title="${m.phonemeCount} phonemes">${m.word}<button class="tray-remove" type="button" data-word="${m.word}" aria-label="Remove ${m.word}">×</button></span>`).join('');
+  tray.querySelectorAll('.tray-remove').forEach(btn=>btn.addEventListener('click',()=>{lessonWords=lessonWords.filter(w=>w!==btn.dataset.word);renderLessonTray();}));
+}
+function addCurrentToLesson(){
+  if(!currentMap) return;
+  if(!lessonWords.includes(currentMap.word)) lessonWords.push(currentMap.word);
+  renderLessonTray();
+  const msg=document.getElementById('copyMsg');
+  msg.textContent='Added!'; msg.style.display='inline';
+  setTimeout(()=>{msg.style.display='none'; msg.textContent='Copied!';},1300);
+}
+function clearLessonList(){ lessonWords=[]; renderLessonTray(); }
+function showBuildLessonMessage(){
+  const msg=document.getElementById('lessonMsg');
+  msg.style.display='block';
+  setTimeout(()=>msg.style.display='none',3000);
+}
+
+function copyMapping(){
+  if(!currentMap) return;
+  const m=currentMap;
+  const text = `${m.word}\nPhoneme count: ${m.phonemeCount}\nGraphemes: ${m.graphemes.join(' | ')}\nPhonemes: ${m.phonemes.join(' | ')}\nLetterboxes: [ ${m.letterboxes.join(' ] [ ')} ]\nStudent tiles: ${m.tiles.join(' ')}`;
+  navigator.clipboard?.writeText(text);
+  const msg=document.getElementById('copyMsg'); msg.style.display='inline'; setTimeout(()=>msg.style.display='none',1300);
+}
+document.getElementById('goBtn').addEventListener('click',()=>mapAndRender(document.getElementById('wordInput').value));
+document.getElementById('wordInput').addEventListener('keydown',e=>{if(e.key==='Enter') mapAndRender(e.target.value)});
+document.getElementById('countFilter').addEventListener('change',()=>{renderExamples();renderBank();showEmptyState();});
+document.getElementById('patternFilter').addEventListener('change',()=>{renderExamples();renderBank();showEmptyState();});
+document.getElementById('clearLessonBtn').addEventListener('click',clearLessonList);
+document.getElementById('buildLessonBtn').addEventListener('click',showBuildLessonMessage);
+updatePatternOptions(); renderVowelTypeTabs(); renderVowelTabs(); renderExamples(); renderBank(); renderLessonTray(); showEmptyState();
+
+
+// ── LETTERBOX LESSON SEQUENCING ───────────────────────────────────────
+// Sequence rules:
+// 1. Phoneme count order.
+// 2. Simpler spelling patterns before digraphs/blends.
+// 3. Avoid consecutive rhymes when possible.
+function getRimeKeyForLesson(word){
+  const w = String(word || '').toLowerCase();
+
+  // Remove common final silent e for rhyme spacing.
+  const base = w.replace(/e$/, '');
+
+  // Use the vowel and everything after it as a simple short-vowel rime key.
+  const match = base.match(/[aeiou].*$/);
+  return match ? match[0] : base;
+}
+
+function getComplexityScoreForLesson(map){
+  const word = String(map.word || '').toLowerCase();
+  const graphemes = map.graphemes || map.letterboxes || map.soundBoxes || [];
+  const boxes = map.letterboxes || map.soundBoxes || map.boxes || graphemes;
+
+  const digraphs = ['sh','ch','th','wh','ck','tch'];
+  const hasDigraph = graphemes.some(g => digraphs.includes(String(g).toLowerCase())) ||
+                     boxes.some(g => digraphs.includes(String(g).toLowerCase()));
+
+  // Beginning/final consonant blends are multiple adjacent consonant phonemes,
+  // not digraphs. This is a simple short-vowel approximation.
+  const vowelIndex = word.search(/[aeiou]/);
+  let hasBlend = false;
+  if (vowelIndex > 1) hasBlend = true; // beginning blend, e.g., stop, trap, crop
+  const afterVowel = vowelIndex >= 0 ? word.slice(vowelIndex + 1) : '';
+  const afterNoDigraphs = afterVowel.replace(/sh|ch|th|wh|ck|tch/g, 'X');
+  if ((afterNoDigraphs.match(/[bcdfghjklmnpqrstvwxyz]/g) || []).length > 1 && !hasDigraph) {
+    hasBlend = true;
+  }
+
+  // FLSZ/ck are slightly more complex than plain CVC but usually easier than initial blends.
+  const hasFLSZorCK = /(ff|ll|ss|zz|ck)$/.test(word);
+
+  // lower score = earlier in the lesson
+  if (!hasDigraph && !hasBlend && !hasFLSZorCK) return 0;  // plain CVC/simple
+  if (hasFLSZorCK && !hasBlend && !hasDigraph) return 1;   // FLSZ/ck
+  if (hasDigraph && !hasBlend) return 2;                   // digraphs
+  if (hasBlend && !hasDigraph) return 3;                   // blends
+  return 4;                                                // blends + digraphs
+}
+
+function avoidAdjacentRhymesInGroup(group){
+  const remaining = [...group];
+  const ordered = [];
+
+  while (remaining.length) {
+    const last = ordered[ordered.length - 1];
+    const lastRime = last ? getRimeKeyForLesson(last.word) : null;
+
+    let pickIndex = 0;
+
+    if (lastRime) {
+      const nonRhymingIndex = remaining.findIndex(item => getRimeKeyForLesson(item.word) !== lastRime);
+      if (nonRhymingIndex !== -1) pickIndex = nonRhymingIndex;
+    }
+
+    ordered.push(remaining.splice(pickIndex, 1)[0]);
+  }
+
+  return ordered;
+}
+
+function sequenceLessonMaps(lessonMaps){
+  const maps = [...lessonMaps];
+
+  maps.sort((a, b) => {
+    const countDiff = (a.phonemeCount || 0) - (b.phonemeCount || 0);
+    if (countDiff) return countDiff;
+
+    const complexityDiff = getComplexityScoreForLesson(a) - getComplexityScoreForLesson(b);
+    if (complexityDiff) return complexityDiff;
+
+    return String(a.word || '').localeCompare(String(b.word || ''));
+  });
+
+  const groups = new Map();
+  maps.forEach(map => {
+    const key = `${map.phonemeCount || 0}|${getComplexityScoreForLesson(map)}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(map);
+  });
+
+  const sequenced = [];
+  [...groups.keys()]
+    .sort((a, b) => {
+      const [ac, ax] = a.split('|').map(Number);
+      const [bc, bx] = b.split('|').map(Number);
+      return (ac - bc) || (ax - bx);
+    })
+    .forEach(key => {
+      sequenced.push(...avoidAdjacentRhymesInGroup(groups.get(key)));
+    });
+
+  // Final pass: if a rhyme still lands next to another because of group boundaries,
+  // try a local swap with the next non-rhyming word of the same phoneme count.
+  for (let i = 1; i < sequenced.length; i++) {
+    if (getRimeKeyForLesson(sequenced[i].word) === getRimeKeyForLesson(sequenced[i - 1].word)) {
+      const swapIndex = sequenced.findIndex((item, idx) =>
+        idx > i &&
+        item.phonemeCount === sequenced[i].phonemeCount &&
+        getRimeKeyForLesson(item.word) !== getRimeKeyForLesson(sequenced[i - 1].word)
+      );
+      if (swapIndex !== -1) {
+        const temp = sequenced[i];
+        sequenced[i] = sequenced[swapIndex];
+        sequenced[swapIndex] = temp;
+      }
+    }
+  }
+
+  return sequenced;
+}
+
+// ── PRINTABLE LETTERBOX LESSON PDF EXPORT ───────────────────────────────
+function getCurrentWordMapForPdf(word){
+  if (!word) return null;
+  const key = String(word).toLowerCase().trim();
+
+  // Support the data structures used across the Phoneme Counter prototypes.
+  if (typeof WORD_MAPS !== 'undefined' && WORD_MAPS[key]) return WORD_MAPS[key];
+  if (typeof WORD_BANK !== 'undefined') {
+    if (Array.isArray(WORD_BANK)) {
+      return WORD_BANK.find(item => item.word === key || item.word === word) || null;
+    }
+    if (WORD_BANK[key]) return WORD_BANK[key];
+  }
+  if (typeof wordBank !== 'undefined') {
+    if (Array.isArray(wordBank)) {
+      return wordBank.find(item => item.word === key || item.word === word) || null;
+    }
+    if (wordBank[key]) return wordBank[key];
+  }
+  if (typeof ALL_WORDS !== 'undefined') {
+    if (Array.isArray(ALL_WORDS)) {
+      return ALL_WORDS.find(item => item.word === key || item.word === word) || null;
+    }
+    if (ALL_WORDS[key]) return ALL_WORDS[key];
+  }
+
+  // Use this tool's own mapping engine for any supported short-vowel word.
+  if (typeof mapWord === 'function') {
+    const mapped = mapWord(key);
+    if (mapped) return mapped;
+  }
+
+  // Last resort: use the currently displayed map if the selected tray word is current.
+  if (typeof currentMap !== 'undefined' && currentMap && currentMap.word === key) return currentMap;
+  if (typeof currentWordData !== 'undefined' && currentWordData && currentWordData.word === key) return currentWordData;
+  return null;
+}
+
+function normalizeWordMapForPdf(item){
+  if (!item) return null;
+
+  const word = item.word || item.spelling || '';
+  const graphemes = item.graphemes || item.boxes || item.soundBoxes || item.letterboxes || [];
+  const phonemes = item.phonemes || [];
+  const letterboxes = item.letterboxes || item.soundBoxes || item.boxes || graphemes.filter((g, i) => {
+    const ph = phonemes[i] || '';
+    return !String(ph).toLowerCase().includes('silent');
+  });
+  const tiles = item.tiles || (word ? word.split('') : []);
+  const note = item.note || item.teacherNote || '';
+  const vowelFocus = item.vowelFocus || item.vowelLabel || item.vowel || item.focus || '';
+  const phonemeCount = item.phonemeCount || item.count || letterboxes.length || phonemes.filter(p => !String(p).toLowerCase().includes('silent')).length;
+
+  const silentOutsideBoxes = item.silentOutsideBoxes || [];
+  return { word, graphemes, phonemes, letterboxes, tiles, note, vowelFocus, phonemeCount, silentOutsideBoxes };
+}
+
+
+function getLessonWordsForPdf(){
+
+  const candidates = [];
+
+  // ── 1. Pull directly from JS lesson arrays if available ─────────────
+  const lessonArrays = [
+    typeof lessonWords !== 'undefined' ? lessonWords : null,
+    typeof selectedLessonWords !== 'undefined' ? selectedLessonWords : null,
+    typeof letterboxLessonWords !== 'undefined' ? letterboxLessonWords : null,
+    typeof lessonTray !== 'undefined' ? lessonTray : null
+  ];
+
+  lessonArrays.forEach(arr => {
+    if (Array.isArray(arr)) {
+      arr.forEach(item => {
+        if (!item) return;
+        if (typeof item === 'string') {
+          candidates.push(item);
+        } else if (item.word) {
+          candidates.push(item.word);
+        }
+      });
+    }
+  });
+
+  // ── 2. Pull visible lesson tray chips from DOM ──────────────────────
+  document.querySelectorAll(
+    '.lesson-word-chip, .tray-word, .selected-word-chip, [data-lesson-word]'
+  ).forEach(el => {
+
+    const datasetWord =
+      el.dataset.lessonWord ||
+      el.dataset.word ||
+      '';
+
+    let textWord = el.textContent || '';
+
+    // Remove x/× delete icon text
+    textWord = textWord.replace(/[×x✕]/g, '').trim();
+
+    const finalWord = datasetWord || textWord;
+
+    if (finalWord) candidates.push(finalWord);
+  });
+
+  // ── 3. Fallback to current word ONLY if tray is empty ───────────────
+  if (!candidates.length) {
+
+    const currentWordElement =
+      document.querySelector('.result-word') ||
+      document.querySelector('#currentWord') ||
+      document.querySelector('.word-title');
+
+    if (currentWordElement && currentWordElement.textContent.trim()) {
+      candidates.push(currentWordElement.textContent.trim());
+    }
+  }
+
+  // ── 4. Remove duplicates ────────────────────────────────────────────
+  const unique = [
+    ...new Set(
+      candidates
+        .map(w => String(w).toLowerCase().trim())
+        .filter(Boolean)
+    )
+  ];
+
+  // ── 5. Convert to full word map objects ─────────────────────────────
+  return unique
+    .map(w => normalizeWordMapForPdf(getCurrentWordMapForPdf(w)))
+    .filter(Boolean);
+}
+
+
+function escapePdfHtml(value){
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[ch]));
+}
+
+function renderPdfBoxes(items, className){
+  if (!items || !items.length) return '<span class="empty">—</span>';
+  return `<div class="${className}">` + items.map(item => `<span>${escapePdfHtml(item)}</span>`).join('') + '</div>';
+}
+
+
+function getSequencedLessonWordStrings(words){
+  const maps = words
+    .map(w => normalizeWordMapForPdf(getCurrentWordMapForPdf(w)))
+    .filter(Boolean);
+  return sequenceLessonMaps(maps).map(m => m.word);
+}
+
+function downloadLessonPdf(){
+  let lessonMaps = getLessonWordsForPdf();
+
+  if (!lessonMaps.length) {
+    alert('Add at least one word to the Letterbox Lesson tray before downloading a PDF.');
+    return;
+  }
+
+  // Sort for lesson usefulness: phoneme-count order, simpler patterns first,
+  // and avoid consecutive rhymes when possible.
+  lessonMaps = sequenceLessonMaps(lessonMaps);
+
+  const focusList = [...new Set(lessonMaps.map(m => m.vowelFocus).filter(Boolean))];
+  const focusText = focusList.length ? focusList.join(', ') : 'Short vowel word mapping';
+
+  // Combined teacher tile inventory.
+  // Show each letter tile only once. This is a planning list of which tiles
+  // are needed for the lesson, not a count of every repeated letter across words.
+  const tileInventory = [...new Set(
+    lessonMaps.flatMap(m => (m.tiles || []).map(tile => String(tile).toLowerCase()))
+  )].sort((a, b) => a.localeCompare(b));
+
+  const groupedByCount = lessonMaps.reduce((acc, m) => {
+    const key = `${m.phonemeCount || 0} phonemes`;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(m.word);
+    return acc;
+  }, {});
+  const groupedSummary = Object.entries(groupedByCount)
+    .map(([label, words]) => `<span><strong>${escapePdfHtml(label)}:</strong> ${words.map(escapePdfHtml).join(', ')}</span>`)
+    .join('');
+
+  const wordCards = lessonMaps.map((m, index) => `
+    <section class="word-card">
+      <div class="word-card-header">
+        <div class="word-title-line">
+          <span class="word-number">Word ${index + 1}</span>
+          <h2>${escapePdfHtml(m.word)}</h2>
+        </div>
+        <div class="count-pill">${escapePdfHtml(m.phonemeCount)} phonemes</div>
+      </div>
+
+      <div class="map-grid compact">
+        <div class="map-label">Graphemes</div>
+        <div>${renderPdfBoxes(m.graphemes, 'mini-boxes')}</div>
+
+        <div class="map-label">Phonemes</div>
+        <div>${renderPdfBoxes(m.phonemes, 'mini-boxes phoneme-boxes')}</div>
+
+        <div class="map-label">Sound boxes</div>
+        <div>${renderPdfBoxes(m.letterboxes, 'sound-boxes')}${m.silentOutsideBoxes && m.silentOutsideBoxes.length ? `<span class="silent-e-print">${m.silentOutsideBoxes.map(escapePdfHtml).join(' ')}</span>` : ''}</div>
+
+      </div>
+    </section>
+  `).join('');
+
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    alert('Your browser blocked the print window. Please allow pop-ups for this site and try again.');
+    return;
+  }
+
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>Letterbox Lesson Plan</title>
+      <style>
+        @page { margin: 0.35in; }
+        * { box-sizing: border-box; }
+        body {
+          font-family: Arial, sans-serif;
+          color: #1A2340;
+          padding: 0;
+          margin: 0;
+          background: #fff;
+        }
+        .header {
+          border-bottom: 3px solid #1D9E75;
+          padding-bottom: 10px;
+          margin-bottom: 10px;
+        }
+        .brand {
+          font-size: 13px;
+          font-weight: 700;
+          color: #0F6E56;
+          letter-spacing: .04em;
+          text-transform: uppercase;
+          margin-bottom: 6px;
+        }
+        h1 {
+          font-size: 24px;
+          line-height: 1.1;
+          margin: 0 0 4px;
+        }
+        .subtitle {
+          color: #5f6b84;
+          font-size: 12px;
+          line-height: 1.3;
+          margin: 0 0 8px;
+        }
+        .meta {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          font-size: 12px;
+          color: #5f6b84;
+          margin-top: 7px;
+        }
+        .meta span {
+          border: 1px solid #d9dee8;
+          border-radius: 999px;
+          padding: 4px 8px;
+          background: #FAF8F4;
+        }
+
+        .lesson-summary {
+          display: grid;
+          grid-template-columns: .9fr 1.1fr;
+          gap: 8px;
+          margin: 0 0 8px;
+        }
+        .summary-block {
+          border: 1px solid #d9dee8;
+          border-radius: 12px;
+          padding: 8px 10px;
+          background: #FAF8F4;
+          break-inside: avoid;
+        }
+        .summary-block h2 {
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          color: #0F6E56;
+          margin: 0 0 5px;
+        }
+        .summary-block p {
+          margin: 0;
+          font-size: 11px;
+          line-height: 1.35;
+          color: #3c465f;
+        }
+        .summary-block p span {
+          display: block;
+          margin-bottom: 2px;
+        }
+        .tile-inventory {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+        .tile-inventory span {
+          border: 1px solid #D85A30;
+          background: #FFF0EE;
+          color: #9D3E22;
+          border-radius: 7px;
+          padding: 3px 7px;
+          font-size: 12px;
+          font-weight: 700;
+        }
+        .small-note {
+          margin-top: 5px !important;
+          font-size: 9px !important;
+          color: #6B7A99 !important;
+        }
+        .word-title-line {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+        }
+
+        .word-card {
+          border: 1px solid #d9dee8;
+          border-radius: 14px;
+          padding: 9px 10px;
+          margin: 0 0 8px;
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+        .word-card-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 6px;
+        }
+        .word-number {
+          font-size: 10px;
+          font-weight: 700;
+          color: #6B7A99;
+          text-transform: uppercase;
+          letter-spacing: .08em;
+          margin-bottom: 2px;
+        }
+        h2 {
+          font-size: 20px;
+          margin: 0;
+          letter-spacing: .02em;
+        }
+        .count-pill {
+          background: #E1F5EE;
+          color: #0F6E56;
+          border: 1px solid #A8DDD9;
+          border-radius: 999px;
+          padding: 5px 9px;
+          font-size: 12px;
+          font-weight: 700;
+          white-space: nowrap;
+        }
+        .map-grid {
+          display: grid;
+          grid-template-columns: 95px 1fr;
+          gap: 5px 8px;
+          align-items: center;
+        }
+        .map-label {
+          font-size: 10px;
+          color: #6B7A99;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+        }
+        .mini-boxes,
+        .sound-boxes,
+        .tile-row {
+          display: flex;
+          gap: 6px;
+          flex-wrap: wrap;
+          align-items: center;
+        }
+        .mini-boxes span,
+        .sound-boxes span,
+        .tile-row span {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 32px;
+          min-height: 26px;
+          border-radius: 8px;
+          padding: 4px 8px;
+          font-weight: 700;
+          font-size: 17px;
+        }
+        .mini-boxes span {
+          background: #F7F8FA;
+          border: 1px solid #D9DEE8;
+        }
+        .phoneme-boxes span {
+          color: #0F6E56;
+        }
+        .sound-boxes span {
+          border: 2px solid #1A2340;
+          background: #fff;
+        }
+        .tile-row span {
+          min-width: 28px;
+          min-height: 24px;
+          border: 1.5px solid #D85A30;
+          background: #FFF0EE;
+          color: #9D3E22;
+          font-size: 13px;
+        }
+        .teacher-note {
+          margin: 7px 0 0;
+          padding: 7px 9px;
+          background: #FAF8F4;
+          border-radius: 10px;
+          color: #3c465f;
+          font-size: 10px;
+          line-height: 1.3;
+        }
+
+        .silent-e-print {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 28px;
+          min-height: 24px;
+          padding: 2px 6px;
+          font-size: 13px;
+          font-weight: 700;
+          border: none;
+          background: transparent;
+          color: #1A2340;
+        }
+
+        .empty { color: #888; }
+        .footer {
+          margin-top: 22px;
+          text-align: center;
+          color: #777;
+          font-size: 10px;
+        }
+
+        .word-card-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+          align-items: start;
+        }
+        .word-card {
+          width: 100%;
+          min-height: 0;
+        }
+        .word-card-header {
+          align-items: center;
+        }
+        .map-grid.compact {
+          grid-template-columns: 82px 1fr;
+          gap: 4px 7px;
+        }
+        .mini-boxes span,
+        .sound-boxes span {
+          min-width: 28px;
+          min-height: 24px;
+          padding: 2px 6px;
+          font-size: 13px;
+        }
+        .count-pill {
+          font-size: 10px;
+          padding: 4px 7px;
+        }
+        .word-number {
+          font-size: 9px;
+        }
+        h2 {
+          font-size: 18px;
+        }
+        @media print {
+          .word-card-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+          .word-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
+          }
+        }
+
+        @media print {
+          .word-card { break-inside: avoid; page-break-inside: avoid; }
+        }
+      
+/* Collapsible supported-word bank */
+.bank summary.bank-top {
+  cursor: pointer;
+  list-style: none;
+}
+.bank summary.bank-top::-webkit-details-marker {
+  display: none;
+}
+.bank summary.bank-top::after {
+  content: "⌄";
+  color: var(--navy-mid);
+  font-weight: 900;
+  margin-left: 8px;
+}
+.bank:not([open]) summary.bank-top::after {
+  content: "›";
+}
+
+
+/* ─── ORF-style teacher tool layout pass ───────────────────────────── */
+body {
+  background: linear-gradient(160deg,#E8F9F8 0%, var(--cream, #FAF8F4) 52%, #F3EEFB 100%) !important;
+}
+
+.la-header {
+  height: 58px !important;
+  background: var(--white, #fff) !important;
+  border-bottom: 1px solid var(--border, rgba(26,35,64,.12)) !important;
+  padding: 0 24px !important;
+  box-shadow: 0 2px 8px rgba(15,23,42,.06) !important;
+  margin: 0 !important;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.la-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.la-icon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 9px !important;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.la-wordmark {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: var(--navy, #1a2340) !important;
+  letter-spacing: -.2px;
+}
+
+.la-pipe {
+  width: 1px;
+  height: 18px;
+  background: var(--border, rgba(26,35,64,.12));
+  margin: 0 4px;
+}
+
+.la-tool-name {
+  font-family: 'Nunito', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--teal-dk, #0F6E56) !important;
+}
+
+.hdr-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid var(--border, rgba(26,35,64,.12)) !important;
+  background: #F8F7F3 !important;
+  color: var(--navy-mid, #6b7a99) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Compact the page so it behaves more like the ORF tool at 100% zoom. */
+.app-shell,
+#app,
+main.tool-wrap,
+.tool-wrap {
+  max-width: 1120px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+main,
+.main-grid,
+.tool-grid,
+.workspace,
+.content-grid {
+  margin-top: 18px !important;
+}
+
+/* Hide/remove the large standalone page title block if present.
+   The header already names the tool, matching ORF's visual hierarchy. */
+.hero-title,
+.page-title,
+.title-wrap,
+.intro,
+.intro-block {
+  margin-bottom: 10px !important;
+}
+
+/* Keep the main title, but make it less tall if the HTML still uses it. */
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem) !important;
+  line-height: 1.05 !important;
+  margin-bottom: 6px !important;
+}
+
+/* Remove top "Teacher Tool" badge if CSS/HTML missed it. */
+.eyebrow:has(+ h1),
+.tool-pill,
+.teacher-tool,
+.kicker {
+  display: none !important;
+}
+
+/* More compact cards and spacing */
+.input-card,
+.controls-card,
+.result-card,
+.panel,
+.card {
+  border-radius: 22px !important;
+}
+
+.layout,
+.two-col,
+.main-layout,
+.counter-layout {
+  gap: 14px !important;
+  align-items: start !important;
+}
+
+.left-panel,
+.sidebar,
+.controls,
+.input-card {
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+}
+
+.result-panel,
+.result-card {
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+}
+
+/* Condense result area. */
+.word-display,
+.big-word,
+.result-word {
+  padding: 14px 22px !important;
+  margin-bottom: 12px !important;
+}
+
+.mapping-section,
+.letterbox-preview,
+.lesson-preview {
+  padding: 14px !important;
+  margin-top: 10px !important;
+}
+
+.teacher-note {
+  margin-top: 10px !important;
+  padding: 10px 12px !important;
+}
+
+.actions,
+.button-row {
+  margin-top: 10px !important;
+}
+
+/* Make browse section less tall now that it starts collapsed. */
+.bank:not([open]) {
+  padding-bottom: 12px !important;
+}
+
+footer,
+.footer-note {
+  margin-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+
+/* Specific Phoneme Counter compaction */
+.app-main {
+  width: min(1120px, calc(100% - 32px));
+  margin: 18px auto 0;
+}
+.tool-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.setup-card {
+  padding: 14px 16px !important;
+}
+.result-shell {
+  padding: 0 !important;
+}
+.result-body {
+  padding: 16px 22px 18px !important;
+}
+.supported-scroll {
+  max-height: 190px;
+  overflow-y: auto;
+}
+@media(max-width: 900px){
+  .tool-layout {
+    grid-template-columns: 1fr;
+  }
+  .left-panel,
+  .sidebar,
+  .controls,
+  .input-card,
+  .result-panel,
+  .result-card {
+    max-height: none;
+  }
+}
+
+
+/* ─── v11 viewport-fit refinement ─────────────────────────────
+   Goal: match the ORF teacher tool feel and reduce page-level scrolling.
+   The left planning panel scrolls internally when needed. */
+html, body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+}
+
+main {
+  width: min(1120px, calc(100% - 32px)) !important;
+  max-width: 1120px !important;
+  height: calc(100vh - 58px) !important;
+  margin: 0 auto !important;
+  padding: 16px 0 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.workspace {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: 345px minmax(0, 1fr) !important;
+  gap: 16px !important;
+  align-items: stretch !important;
+}
+
+.workspace > aside.card.panel {
+  height: 100% !important;
+  max-height: calc(100vh - 92px) !important;
+  overflow-y: auto !important;
+  padding: 14px !important;
+  scrollbar-width: thin;
+}
+
+.workspace > aside.card.panel::-webkit-scrollbar {
+  width: 8px;
+}
+.workspace > aside.card.panel::-webkit-scrollbar-thumb {
+  background: rgba(26,35,64,.18);
+  border-radius: 999px;
+}
+
+.result {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: calc(100vh - 92px) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.result-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding: 14px 18px 16px !important;
+  gap: 12px !important;
+}
+
+.result-top {
+  padding: 12px 16px !important;
+  flex-shrink: 0 !important;
+}
+
+.result-title {
+  font-size: 20px !important;
+}
+
+.count-pill {
+  padding: 6px 10px !important;
+}
+
+/* Left panel compression */
+.search-row {
+  margin-bottom: 8px !important;
+}
+input[type="text"] {
+  font-size: 19px !important;
+  padding: 10px 12px !important;
+}
+.go {
+  width: 50px !important;
+}
+.hint {
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+  margin-bottom: 10px !important;
+}
+.label {
+  margin-bottom: 6px !important;
+}
+.vowel-tabs {
+  gap: 6px !important;
+  margin-bottom: 10px !important;
+}
+.vtab {
+  padding: 7px 4px !important;
+}
+.filters {
+  gap: 7px !important;
+  margin-bottom: 10px !important;
+}
+select {
+  padding: 9px 10px !important;
+}
+.examples {
+  gap: 5px !important;
+  margin-bottom: 10px !important;
+}
+.chip,
+.bank-word {
+  padding: 5px 9px !important;
+  font-size: 11px !important;
+}
+
+/* Keep supported words collapsed by default and compact if opened. */
+.bank {
+  padding-top: 10px !important;
+}
+.bank-top {
+  margin-bottom: 6px !important;
+}
+.word-groups {
+  max-height: 210px !important;
+  padding: 8px !important;
+}
+.group-title {
+  margin: 6px 0 5px !important;
+}
+.word-list {
+  gap: 5px !important;
+}
+
+/* Tray compression */
+.lesson-tray {
+  margin-top: 10px !important;
+  padding-top: 10px !important;
+}
+.tray-words {
+  min-height: 38px !important;
+  padding: 7px !important;
+}
+.tray-actions {
+  gap: 6px !important;
+  margin-top: 7px !important;
+}
+.small-secondary,
+#downloadLessonPdfBtn {
+  padding: 8px 10px !important;
+  font-size: 11px !important;
+  border-radius: 9px !important;
+}
+.pdf-helper-text {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+}
+
+/* Result compression */
+.word-display {
+  margin-top: 0 !important;
+}
+.big-word {
+  font-size: clamp(40px, 4.5vw, 60px) !important;
+  padding: 4px 24px !important;
+  min-width: 190px !important;
+}
+.ready-badge {
+  padding: 6px 10px !important;
+  margin-bottom: 0 !important;
+}
+.mapping-grid {
+  grid-template-columns: 105px 1fr !important;
+  gap: 8px 12px !important;
+}
+.row-label {
+  font-size: 14px !important;
+}
+.map-box {
+  min-width: 58px !important;
+  min-height: 50px !important;
+  font-size: 28px !important;
+  border-radius: 10px !important;
+}
+.phoneme-box {
+  font-size: 24px !important;
+}
+.letterbox-preview {
+  padding: 12px !important;
+  border-radius: 16px !important;
+}
+.sound-box-row {
+  margin: 8px 0 10px !important;
+}
+.sound-box {
+  width: 92px !important;
+  height: 60px !important;
+  font-size: 32px !important;
+}
+.silent-e-space {
+  height: 60px !important;
+  font-size: 32px !important;
+}
+.tile-row {
+  gap: 8px !important;
+  margin-top: 9px !important;
+}
+.tile {
+  width: 48px !important;
+  height: 40px !important;
+  font-size: 24px !important;
+  border-radius: 10px !important;
+}
+.note {
+  padding: 10px 12px !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+.actions {
+  margin-top: 2px !important;
+}
+
+/* Minimal footer like other tools */
+footer {
+  flex: 0 0 auto !important;
+  padding: 8px 0 0 !important;
+  margin: 0 !important;
+}
+
+/* Standard home icon styling */
+.home-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 900px) {
+  body {
+    overflow: auto;
+  }
+  main {
+    height: auto !important;
+    padding: 14px 12px 18px !important;
+  }
+  .workspace {
+    grid-template-columns: 1fr !important;
+  }
+  .workspace > aside.card.panel,
+  .result,
+  .result-body {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+
+/* ─── v12 right-panel fit + stronger CTA ───────────────────────────── */
+.result {
+  max-height: calc(100vh - 88px) !important;
+}
+
+.result-body {
+  overflow: hidden !important;
+  display: grid !important;
+  grid-template-rows: auto auto auto auto auto;
+  align-content: start !important;
+  row-gap: 9px !important;
+  padding: 12px 18px 12px !important;
+}
+
+.word-display {
+  display: flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+.big-word,
+.result-word {
+  font-size: clamp(38px, 4vw, 54px) !important;
+  padding: 6px 26px !important;
+  line-height: 1 !important;
+}
+
+.ready-badge {
+  justify-self: center !important;
+  margin: 0 !important;
+  padding: 5px 10px !important;
+  font-size: 12px !important;
+}
+
+.mapping-section,
+.word-mapping {
+  margin: 0 !important;
+}
+
+.mapping-grid {
+  grid-template-columns: 115px 1fr !important;
+  gap: 6px 10px !important;
+}
+
+.map-box {
+  min-width: 52px !important;
+  min-height: 44px !important;
+  font-size: 25px !important;
+}
+
+.phoneme-box {
+  font-size: 22px !important;
+}
+
+.letterbox-preview {
+  margin: 0 !important;
+  padding: 10px 14px !important;
+  min-height: 0 !important;
+}
+
+.letterbox-preview .label,
+.letterbox-preview h3 {
+  margin-bottom: 5px !important;
+}
+
+.sound-box-row {
+  margin: 5px 0 7px !important;
+  justify-content: center !important;
+}
+
+.sound-box {
+  width: clamp(82px, 9vw, 110px) !important;
+  height: 52px !important;
+  font-size: 28px !important;
+}
+
+.silent-e-space {
+  height: 52px !important;
+  font-size: 28px !important;
+}
+
+.tile-row {
+  gap: 7px !important;
+  margin-top: 6px !important;
+  justify-content: center !important;
+}
+
+.tile {
+  width: 42px !important;
+  height: 34px !important;
+  font-size: 21px !important;
+}
+
+.note {
+  margin: 0 !important;
+  padding: 8px 11px !important;
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+}
+
+.actions {
+  margin: 0 !important;
+  display: flex !important;
+  gap: 9px !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+}
+
+/* Stronger Add to Letterbox Lesson CTA */
+button[onclick="addToLesson()"],
+#addToLessonBtn,
+.add-lesson-btn {
+  background: var(--coral, #D85A30) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 0 #A94224 !important;
+  font-weight: 900 !important;
+}
+
+button[onclick="addToLesson()"]:hover,
+#addToLessonBtn:hover,
+.add-lesson-btn:hover {
+  filter: brightness(.98);
+  transform: translateY(-1px);
+}
+
+/* Let the result card use more horizontal space for a less tall layout. */
+.workspace {
+  grid-template-columns: 330px minmax(0, 1fr) !important;
+  gap: 16px !important;
+}
+
+/* Slightly shorter footer so right card has more usable height */
+footer {
+  font-size: 10px !important;
+  padding-top: 4px !important;
+}
+
+/* On shorter laptop screens, compress even more. */
+@media (max-height: 760px) {
+  .result-body {
+    row-gap: 7px !important;
+    padding: 10px 16px 10px !important;
+  }
+  .big-word,
+  .result-word {
+    font-size: 40px !important;
+    padding: 5px 22px !important;
+  }
+  .sound-box {
+    height: 46px !important;
+    font-size: 25px !important;
+  }
+  .tile {
+    width: 38px !important;
+    height: 30px !important;
+    font-size: 18px !important;
+  }
+  .letterbox-preview {
+    padding: 8px 12px !important;
+  }
+  .map-box {
+    min-height: 38px !important;
+    font-size: 22px !important;
+  }
+  .phoneme-box {
+    font-size: 19px !important;
+  }
+  .note {
+    font-size: 10px !important;
+  }
+}
+
+
+/* ─── v13 focus word + standout lesson CTA ───────────────────────────── */
+/* Move the readiness badge out of the visual center so the word remains the focus. */
+.ready-badge,
+.letterbox-ready,
+.lesson-ready-badge {
+  position: absolute !important;
+  top: 82px !important;
+  right: 24px !important;
+  margin: 0 !important;
+  z-index: 2 !important;
+}
+
+/* Give the result body a positioning context for the badge. */
+.result-body {
+  position: relative !important;
+}
+
+/* Keep the displayed word visually centered and primary. */
+.word-display {
+  margin-top: 18px !important;
+  margin-bottom: 8px !important;
+}
+
+.big-word,
+.result-word {
+  font-size: clamp(44px, 4.8vw, 62px) !important;
+  padding: 8px 34px !important;
+}
+
+/* Make Add to Letterbox Lesson stand out from the green/teal system colors. */
+button[onclick="addToLesson()"],
+#addToLessonBtn,
+.add-lesson-btn {
+  background: var(--coral, #D85A30) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 0 #A94224 !important;
+  font-weight: 900 !important;
+}
+
+button[onclick="addToLesson()"]:hover,
+#addToLessonBtn:hover,
+.add-lesson-btn:hover {
+  background: #C94E28 !important;
+  filter: none !important;
+  transform: translateY(-1px);
+}
+
+/* On shorter screens, keep badge tucked right without crowding. */
+@media (max-height: 760px) {
+  .ready-badge,
+  .letterbox-ready,
+  .lesson-ready-badge {
+    top: 74px !important;
+    right: 20px !important;
+    font-size: 11px !important;
+    padding: 5px 9px !important;
+  }
+
+  .word-display {
+    margin-top: 12px !important;
+  }
+}
+
+
+/* ─── v14 final override: Add to Letterbox Lesson button color ───────── */
+/* This is intentionally last so it wins over the default green primary button. */
+.result button.add-lesson-btn,
+.result #addToLessonBtn,
+.result button[onclick*="addToLesson"],
+button.add-lesson-btn,
+#addToLessonBtn,
+button[onclick*="addToLesson"] {
+  background: #D85A30 !important;
+  background-color: #D85A30 !important;
+  color: #FFFFFF !important;
+  border-color: #D85A30 !important;
+  box-shadow: 0 5px 0 #A94224 !important;
+}
+
+.result button.add-lesson-btn:hover,
+.result #addToLessonBtn:hover,
+.result button[onclick*="addToLesson"]:hover,
+button.add-lesson-btn:hover,
+#addToLessonBtn:hover,
+button[onclick*="addToLesson"]:hover {
+  background: #C94E28 !important;
+  background-color: #C94E28 !important;
+  border-color: #C94E28 !important;
+}
+
+
+/* ─── v15 actual Add to Letterbox Lesson CTA override ────────────────── */
+/* Dedicated class is added to the exact button text so this cannot miss. */
+button.add-lesson-cta,
+.result button.add-lesson-cta,
+.actions button.add-lesson-cta {
+  background: #D85A30 !important;
+  background-color: #D85A30 !important;
+  color: #FFFFFF !important;
+  border-color: #D85A30 !important;
+  box-shadow: 0 5px 0 #A94224 !important;
+}
+
+button.add-lesson-cta:hover,
+.result button.add-lesson-cta:hover,
+.actions button.add-lesson-cta:hover {
+  background: #C94E28 !important;
+  background-color: #C94E28 !important;
+  border-color: #C94E28 !important;
+}
+
+
+/* ─── v19 stable long-vowel controls ───────────────────────────────── */
+.vowel-type-tabs {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 7px !important;
+  margin: 0 0 10px !important;
+}
+.type-tab {
+  border: 1.5px solid var(--border, #E8E4F0) !important;
+  background: #fff !important;
+  color: var(--navy, #1A1A2E) !important;
+  border-radius: 12px !important;
+  padding: 8px 8px !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+}
+.type-tab.active {
+  background: var(--teal, #1D9E75) !important;
+  color: #fff !important;
+  border-color: var(--teal, #1D9E75) !important;
+}
+.silent-e-space {
+  border: none !important;
+  background: transparent !important;
+  color: var(--navy, #1A1A2E) !important;
+  box-shadow: none !important;
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 52px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 28px !important;
+  font-weight: 900 !important;
+  position: relative !important;
+}
+.silent-e-space::after {
+  content: "silent e";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -16px;
+  font-size: 9px;
+  color: var(--navy-lt, #9090A8);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+
+
+/* ─── v26 final CTA and logo polish ─────────────────────────────────── */
+.la-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+button.add-lesson-cta,
+.result button.add-lesson-cta,
+.actions button.add-lesson-cta,
+button[onclick*="addToLesson"] {
+  background: #D85A30 !important;
+  background-color: #D85A30 !important;
+  color: #fff !important;
+  border-color: #D85A30 !important;
+  box-shadow: 0 5px 0 #A94224 !important;
+}
+button.add-lesson-cta:hover,
+.result button.add-lesson-cta:hover,
+.actions button.add-lesson-cta:hover,
+button[onclick*="addToLesson"]:hover {
+  background: #C94E28 !important;
+  background-color: #C94E28 !important;
+}
+
+
+/* ─── v27 exact uploaded logo override ──────────────────────────────── */
+.la-icon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 9px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 36px !important;
+}
+.la-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+
+/* ─── v28 vowel-team controls ───────────────────────────────────────── */
+.vowel-type-tabs {
+  grid-template-columns: 1fr 1fr 1fr !important;
+}
+.type-tab {
+  font-size: 10px !important;
+  padding: 8px 5px !important;
+}
+
+
+/* ─── v31 r-controlled and expanded vowel-team controls ─────────────── */
+.vowel-type-tabs {
+  grid-template-columns: repeat(4, 1fr) !important;
+}
+.type-tab {
+  font-size: 9.5px !important;
+  padding: 8px 4px !important;
+}
+@media(max-width: 900px){
+  .vowel-type-tabs {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+
+/* ─── v32 cleaner Word Spinner-style selection controls ─────────────── */
+.spinner-style-selects {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 12px;
+  margin: 0 0 12px;
+  border: 1.5px solid rgba(29,158,117,.22);
+  background: rgba(229, 250, 247, .62);
+  border-radius: 16px;
+}
+
+.spinner-style-selects .label {
+  margin: 0 0 6px !important;
+}
+
+.category-select,
+.pattern-select {
+  width: 100%;
+  height: 46px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border, #E8E4F0);
+  background: #fff;
+  color: var(--navy, #1A1A2E);
+  font-family: inherit;
+  font-weight: 900;
+  font-size: 14px;
+  padding: 0 12px;
+}
+
+.category-select:focus,
+.pattern-select:focus {
+  outline: none;
+  border-color: var(--teal, #1D9E75);
+  box-shadow: 0 0 0 3px rgba(29,158,117,.13);
+}
+
+.legacy-vowel-controls {
+  display: none !important;
+}
+
+@media(max-width: 900px) {
+  .spinner-style-selects {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ─── v33 cleaner grouped phonics-category dropdowns ────────────────── */
+.spinner-style-selects {
+  grid-template-columns: 1fr 1fr !important;
+}
+.category-select,
+.pattern-select {
+  font-size: 13px !important;
+}
+
+
+/* ─── v42 stable SEO/home polish ───────────────────────────────────── */
+.home-btn {
+  text-decoration: none;
+}
+
+</style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="brand">Literacy Arcade</div>
+        <h1>Letterbox Lesson Plan</h1>
+        
+        <div class="meta">
+          <span>${lessonMaps.length} words</span>
+          <span>Focus: ${escapePdfHtml(focusText)}</span>
+          <span>Generated ${new Date().toLocaleDateString()}</span>
+        </div>
+      </div>
+
+      <section class="lesson-summary">
+        <div class="summary-block">
+          <h2>Lesson sequence</h2>
+          <p>${groupedSummary}</p>
+        </div>
+        <div class="summary-block">
+          <h2>Total letter tiles needed</h2>
+          <div class="tile-inventory">${tileInventory.map(tile => `<span>${escapePdfHtml(tile)}</span>`).join('')}</div>
+          <p class="small-note">Shows each letter tile needed for the full lesson list.</p>
+        </div>
+      </section>
+
+      <div class="word-card-grid">${wordCards}</div>
+
+      <div class="footer">Literacy Arcade • literacyarcade.com</div>
+    </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+  printWindow.focus();
+
+  // A small delay helps images/fonts/styles settle before print opens.
+  setTimeout(() => printWindow.print(), 250);
+}
+
+
+function showEmptyState(){
+  const input = document.getElementById('wordInput');
+  if (input) input.value = '';
+
+  const resultWord = document.querySelector('.big-word, .result-word, #resultWord, #currentWord');
+  if (resultWord) resultWord.textContent = 'type a word';
+
+  const countPills = document.querySelectorAll('.count-pill, .phoneme-count-pill');
+  countPills.forEach((pill, index) => {
+    if (index === 0 && /short|long|\/[aeiou]/i.test(pill.textContent)) return;
+    if (/phoneme/i.test(pill.textContent)) pill.textContent = '— phonemes';
+  });
+
+  const ready = document.querySelector('.ready-badge, .letterbox-ready, .lesson-ready-badge');
+  if (ready) ready.style.display = 'none';
+
+  const note = document.querySelector('.note, .teacher-note');
+  if (note) note.innerHTML = '<strong>Teacher note:</strong> Enter or choose a supported short-vowel word to see the phoneme count and sound boxes.';
+
+  // Clear mapping/box/tile rows while preserving labels.
+  document.querySelectorAll('.mapping-grid .box-row, .grapheme-row, .phoneme-row, .sound-box-row, .tile-row').forEach(row => {
+    row.innerHTML = '';
+  });
+}
+
+
+// ── v21 phoneme-count correction for ph words ─────────────────────────
+// phone should map as ph | o | n | e and count as 3 phonemes.
+function segmentConsonantsV21(chunk){
+  const out = [];
+  const text = String(chunk || '').toLowerCase();
+  let i = 0;
+  while (i < text.length) {
+    const three = text.slice(i, i + 3);
+    const two = text.slice(i, i + 2);
+
+    if (typeof TRIGRAPHS !== 'undefined' && TRIGRAPHS[three]) {
+      out.push(three);
+      i += 3;
+      continue;
+    }
+
+    if (['sh','ch','th','wh','ck','ph'].includes(two)) {
+      out.push(two);
+      i += 2;
+      continue;
+    }
+
+    if (i === text.length - 2 && typeof FLSZ !== 'undefined' && FLSZ[two]) {
+      out.push(two);
+      i += 2;
+      continue;
+    }
+
+    out.push(text[i]);
+    i++;
+  }
+  return out;
+}
+
+const mapLongWordV20 = typeof mapLongWord === 'function' ? mapLongWord : null;
+mapLongWord = function(word){
+  const w = String(word || '').toLowerCase().replace(/[^a-z]/g,'');
+  const vowelKey = getLongVowelKeyForWord(w);
+  if(!vowelKey) return null;
+
+  const base = w.endsWith('e') ? w.slice(0,-1) : w;
+  const vowelLetter = VOWELS[vowelKey].letter;
+  const vowelIndex = base.indexOf(vowelLetter);
+  if(vowelIndex < 0) return null;
+
+  const before = segmentConsonantsV21(base.slice(0, vowelIndex));
+  const after = segmentConsonantsV21(base.slice(vowelIndex + 1));
+  const letterboxes = [...before, vowelLetter, ...after];
+  const graphemes = [...letterboxes, 'e'];
+
+  const phonemes = [
+    ...before.map(g => graphemeToPhoneme(g, vowelKey)),
+    VOWELS[vowelKey].phoneme,
+    ...after.map(g => graphemeToPhoneme(g, vowelKey)),
+    'silent e'
+  ];
+
+  const phonemeCount = phonemes.filter(p => p !== 'silent e').length;
+
+  return {
+    word: w,
+    vowelKey,
+    vowelLabel: VOWELS[vowelKey].label,
+    graphemes,
+    phonemes,
+    phonemeCount,
+    letterboxes,
+    tiles: w.split(''),
+    silentOutsideBoxes: ['e'],
+    tags: [...getTags(base, letterboxes), 'silent-e'],
+    note: `Vowel focus: ${VOWELS[vowelKey].label.replace('Long','long')}. Final e is silent and sits outside the sound boxes in a letterbox lesson. Use ${phonemeCount} sound boxes plus silent e.`
+  };
+};
+
+mapWord = function(word){
+  const w = String(word || '').toLowerCase().replace(/[^a-z]/g,'');
+  return mapLongWord(w) || mapShortWord(w);
+};
+
+
+
+// ── v26 clean teacher-facing corrections ──────────────────────────────
+// Correct words where grapheme s represents /z/. Keep the grapheme as "s"
+// but show the actual phoneme as /z/.
+const LA_VOICED_S_WORDS_V26 = new Set([
+  'chose','rose','those','use','fuse','hose','pose','rise','prize','wise','nose'
+]);
+
+function applyTeacherFacingCorrectionsV26(map){
+  if (!map || !map.word || !Array.isArray(map.graphemes) || !Array.isArray(map.phonemes)) return map;
+
+  const word = String(map.word).toLowerCase();
+  const corrected = {
+    ...map,
+    phonemes: [...map.phonemes],
+    tags: [...new Set([...(map.tags || [])])]
+  };
+
+  if (LA_VOICED_S_WORDS_V26.has(word)) {
+    corrected.graphemes.forEach((g, index) => {
+      if (g === 's' && corrected.phonemes[index] === '/s/') {
+        corrected.phonemes[index] = '/z/';
+      }
+    });
+
+    corrected.tags.push('s-says-z');
+
+    const noteAdd = ' In this word, s represents the /z/ sound.';
+    if (!String(corrected.note || '').includes('s represents the /z/')) {
+      corrected.note = (corrected.note || 'Teacher note:') + noteAdd;
+    }
+  }
+
+  // Final silent e should display as a grapheme/phoneme, but not be inside
+  // letterboxes. This is what the Letterbox Lesson preview needs.
+  if (word.endsWith('e') && corrected.phonemes.some(p => String(p).toLowerCase().includes('silent'))) {
+    corrected.silentOutsideBoxes = ['e'];
+    corrected.letterboxes = corrected.graphemes.filter((g, i) => {
+      return !String(corrected.phonemes[i] || '').toLowerCase().includes('silent');
+    });
+    corrected.phonemeCount = corrected.phonemes.filter(p => !String(p).toLowerCase().includes('silent')).length;
+  }
+
+  return corrected;
+}
+
+const mapWordBeforeV26Corrections = typeof mapWord === 'function' ? mapWord : null;
+if (mapWordBeforeV26Corrections) {
+  mapWord = function(word){
+    return applyTeacherFacingCorrectionsV26(mapWordBeforeV26Corrections(word));
+  };
+}
+
+
+// ── v34 final mapper override for vowel teams, r-controlled, diphthongs ─
+const mapWordBeforeV34AdvancedVowels = typeof mapWord === 'function' ? mapWord : null;
+mapWord = function(word){
+  const w = String(word || '').toLowerCase().replace(/[^a-z]/g,'');
+  const advancedMap =
+    (typeof mapLongAVowelTeamWord === 'function' ? mapLongAVowelTeamWord(w) : null) ||
+    (typeof mapLongEVowelTeamWord === 'function' ? mapLongEVowelTeamWord(w) : null) ||
+    (typeof mapLongOVowelTeamWord === 'function' ? mapLongOVowelTeamWord(w) : null) ||
+    (typeof mapLongIVowelTeamWord === 'function' ? mapLongIVowelTeamWord(w) : null) ||
+    (typeof mapLongUVowelTeamWord === 'function' ? mapLongUVowelTeamWord(w) : null) ||
+    (typeof mapRControlledWord === 'function' ? mapRControlledWord(w) : null) ||
+    (typeof mapDiphthongWord === 'function' ? mapDiphthongWord(w) : null);
+
+  if (advancedMap) {
+    return typeof applyTeacherFacingCorrectionsV26 === 'function'
+      ? applyTeacherFacingCorrectionsV26(advancedMap)
+      : advancedMap;
+  }
+  return mapWordBeforeV34AdvancedVowels ? mapWordBeforeV34AdvancedVowels(w) : null;
+};
+// ── v28 clearer vowel team tab labels ─────────────────────────────────
+const renderVowelTabsBeforeV28 = typeof renderVowelTabs === 'function' ? renderVowelTabs : null;
+renderVowelTabs = function(){
+  const el=document.getElementById('vowelTabs');
+  if(!el || typeof VOWEL_TYPE_KEYS === 'undefined') return;
+
+  const keys=VOWEL_TYPE_KEYS[currentVowelType] || VOWEL_TYPE_KEYS.short;
+  if(!keys.includes(currentVowel)) currentVowel=keys[0];
+
+  el.innerHTML = keys.map(key => {
+    let label = VOWELS[key].label;
+    if(key === 'long-a-ai') label = '/ā/ ai';
+    else if(key === 'long-a-ay') label = '/ā/ ay';
+    else if(key === 'long-e-ee') label = '/ē/ ee';
+    else if(key === 'long-e-ea') label = '/ē/ ea';
+    else if(key === 'long-o-oa') label = '/ō/ oa';
+    else if(key === 'long-o-ow') label = '/ō/ ow';
+    else if(key === 'long-i-igh') label = '/ī/ igh';
+    else if(key === 'long-i-ie') label = '/ī/ ie';
+    else if(key === 'long-u-ue') label = '/ū/ ue';
+    else if(key === 'long-u-ew') label = '/ū/ ew';
+    else if(key === 'long-u-ui') label = '/ū/ ui';
+    else if(key === 'r-ar') label = '/ar/ — ar';
+    else if(key === 'r-or') label = '/or/ — or';
+    else if(key === 'r-er') label = '/er/ — er';
+    else if(key === 'r-ir') label = '/er/ — ir';
+    else if(key === 'r-ur') label = '/er/ — ur';
+    else if(key === 'diph-aw-aw') label = '/aw/ — aw';
+    else if(key === 'diph-aw-au') label = '/aw/ — au';
+    else if(key === 'diph-oy-oi') label = '/oy/ — oi';
+    else if(key === 'diph-oy-oy') label = '/oy/ — oy';
+    else label = label.replace(/^(Short|Long) /,'').replace(' silent e','');
+    return `<button class="vtab ${key===currentVowel?'active':''}" data-vowel="${key}">${label}</button>`;
+  }).join('');
+
+  el.querySelectorAll('.vtab').forEach(btn=>btn.addEventListener('click',()=>{
+    currentVowel=btn.dataset.vowel;
+    renderVowelTabs();
+    renderExamples();
+    renderBank();
+    showEmptyState();
+  }));
+};
+
+
+// ── v32 dropdown phonics selection controls ───────────────────────────
+const PHONICS_PATTERN_LABELS_V32 = {
+  'short-a': 'Short /a/',
+  'short-e': 'Short /e/',
+  'short-i': 'Short /i/',
+  'short-o': 'Short /o/',
+  'short-u': 'Short /u/',
+  'long-a': 'Long /ā/ — a_e',
+  'long-i': 'Long /ī/ — i_e',
+  'long-o': 'Long /ō/ — o_e',
+  'long-u': 'Long /ū/ — u_e',
+  'long-a-ai': 'Long /ā/ — ai',
+  'long-a-ay': 'Long /ā/ — ay',
+  'long-e-ee': 'Long /ē/ — ee',
+  'long-e-ea': 'Long /ē/ — ea',
+  'long-o-oa': 'Long /ō/ — oa',
+  'long-o-ow': 'Long /ō/ — ow',
+  'long-i-igh': 'Long /ī/ — igh',
+  'long-i-ie': 'Long /ī/ — ie',
+  'long-u-ue': 'Long /ū/ — ue',
+  'long-u-ew': 'Long /ū/ — ew',
+  'long-u-ui': 'Long /ū/ — ui',
+  'r-ar': '/ar/ — ar',
+  'r-or': '/or/ — or',
+  'r-er': '/er/ — er',
+  'r-ir': '/er/ — ir',
+  'r-ur': '/er/ — ur',
+  'diph-aw-aw': '/aw/ — aw',
+  'diph-aw-au': '/aw/ — au',
+  'diph-oy-oi': '/oy/ — oi',
+  'diph-oy-oy': '/oy/ — oy'
+};
+
+function renderDropdownPatternOptionsV32(){
+  const categorySelect = document.getElementById('phonicsCategorySelect');
+  const patternSelect = document.getElementById('phonicsPatternSelect');
+  if (!categorySelect || !patternSelect || typeof VOWEL_TYPE_KEYS === 'undefined') return;
+
+  categorySelect.value = currentVowelType || 'short';
+  const keys = VOWEL_TYPE_KEYS[currentVowelType] || VOWEL_TYPE_KEYS.short;
+
+  if (!keys.includes(currentVowel)) currentVowel = keys[0];
+
+  patternSelect.innerHTML = keys.map(key => {
+    const label = PHONICS_PATTERN_LABELS_V32[key] || (VOWELS[key]?.label || key);
+    return `<option value="${key}" ${key === currentVowel ? 'selected' : ''}>${label}</option>`;
+  }).join('');
+}
+
+function syncDropdownSelectionV32(){
+  const categorySelect = document.getElementById('phonicsCategorySelect');
+  const patternSelect = document.getElementById('phonicsPatternSelect');
+  if (!categorySelect || !patternSelect) return;
+
+  categorySelect.onchange = () => {
+    currentVowelType = categorySelect.value;
+    const keys = VOWEL_TYPE_KEYS[currentVowelType] || VOWEL_TYPE_KEYS.short;
+    currentVowel = keys[0];
+
+    if (typeof updatePatternOptions === 'function') updatePatternOptions();
+    renderDropdownPatternOptionsV32();
+    if (typeof renderExamples === 'function') renderExamples();
+    if (typeof renderBank === 'function') renderBank();
+    if (typeof showEmptyState === 'function') showEmptyState();
+  };
+
+  patternSelect.onchange = () => {
+    currentVowel = patternSelect.value;
+
+    if (typeof renderExamples === 'function') renderExamples();
+    if (typeof renderBank === 'function') renderBank();
+    if (typeof showEmptyState === 'function') showEmptyState();
+  };
+}
+
+// Wrap old renderVowelTabs so any code path that changes state also updates dropdowns.
+const renderVowelTabsBeforeV32Dropdowns = typeof renderVowelTabs === 'function' ? renderVowelTabs : null;
+renderVowelTabs = function(){
+  if (renderVowelTabsBeforeV32Dropdowns) renderVowelTabsBeforeV32Dropdowns();
+  renderDropdownPatternOptionsV32();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderDropdownPatternOptionsV32();
+  syncDropdownSelectionV32();
+});
+
+setTimeout(() => {
+  renderDropdownPatternOptionsV32();
+  syncDropdownSelectionV32();
+}, 50);
+
+
+// ── v33 grouped dropdown controller ───────────────────────────────────
+const PHONICS_GROUPS_V33 = {
+  short: {
+    type: 'short',
+    label: 'Short Vowels',
+    keys: ['short-a','short-e','short-i','short-o','short-u']
+  },
+  long: {
+    type: 'long',
+    label: 'Silent-e Long Vowels',
+    keys: ['long-a','long-i','long-o','long-u']
+  },
+  'team-a': {
+    type: 'teams',
+    label: 'Long A Teams',
+    keys: ['long-a-ai','long-a-ay']
+  },
+  'team-e': {
+    type: 'teams',
+    label: 'Long E Teams',
+    keys: ['long-e-ee','long-e-ea']
+  },
+  'team-i': {
+    type: 'teams',
+    label: 'Long I Teams',
+    keys: ['long-i-igh','long-i-ie']
+  },
+  'team-o': {
+    type: 'teams',
+    label: 'Long O Teams',
+    keys: ['long-o-oa','long-o-ow']
+  },
+  'team-u': {
+    type: 'teams',
+    label: 'Long U Teams',
+    keys: ['long-u-ue','long-u-ew','long-u-ui']
+  },
+  rcontrolled: {
+    type: 'rcontrolled',
+    label: 'R-Controlled Vowels',
+    keys: ['r-ar','r-or','r-er','r-ir','r-ur']
+  },
+  diphthongs: {
+    type: 'diphthongs',
+    label: 'Diphthongs',
+    keys: ['diph-aw-aw','diph-aw-au','diph-oy-oi','diph-oy-oy']
+  }
+};
+
+let currentPhonicsGroupV33 = 'short';
+
+const PHONICS_PATTERN_LABELS_V33B = {
+  'short-a': 'Short /a/',
+  'short-e': 'Short /e/',
+  'short-i': 'Short /i/',
+  'short-o': 'Short /o/',
+  'short-u': 'Short /u/',
+  'long-a': 'Long /ā/ — a_e',
+  'long-i': 'Long /ī/ — i_e',
+  'long-o': 'Long /ō/ — o_e',
+  'long-u': 'Long /ū/ — u_e',
+  'long-a-ai': 'Long /ā/ — ai',
+  'long-a-ay': 'Long /ā/ — ay',
+  'long-e-ee': 'Long /ē/ — ee',
+  'long-e-ea': 'Long /ē/ — ea',
+  'long-i-igh': 'Long /ī/ — igh',
+  'long-i-ie': 'Long /ī/ — ie',
+  'long-o-oa': 'Long /ō/ — oa',
+  'long-o-ow': 'Long /ō/ — ow',
+  'long-u-ue': 'Long /ū/ — ue',
+  'long-u-ew': 'Long /ū/ — ew',
+  'long-u-ui': 'Long /ū/ — ui',
+  'r-ar': '/ar/ — ar',
+  'r-or': '/or/ — or',
+  'r-er': '/er/ — er',
+  'r-ir': '/er/ — ir',
+  'r-ur': '/er/ — ur',
+  'diph-aw-aw': '/aw/ — aw',
+  'diph-aw-au': '/aw/ — au',
+  'diph-oy-oi': '/oy/ — oi',
+  'diph-oy-oy': '/oy/ — oy'
+};
+
+function getGroupForCurrentStateV33(){
+  if (currentVowelType === 'short') return 'short';
+  if (currentVowelType === 'long') return 'long';
+  if (currentVowelType === 'rcontrolled') return 'rcontrolled';
+
+  for (const [group, config] of Object.entries(PHONICS_GROUPS_V33)) {
+    if (config.keys.includes(currentVowel)) return group;
+  }
+  return currentPhonicsGroupV33 || 'short';
+}
+
+function applyPhonicsGroupV33(groupKey, preferredPattern){
+  const config = PHONICS_GROUPS_V33[groupKey] || PHONICS_GROUPS_V33.short;
+  currentPhonicsGroupV33 = groupKey;
+  currentVowelType = config.type;
+  currentVowel = preferredPattern && config.keys.includes(preferredPattern)
+    ? preferredPattern
+    : config.keys[0];
+
+  if (typeof updatePatternOptions === 'function') updatePatternOptions();
+}
+
+function renderGroupedDropdownsV33(){
+  const categorySelect = document.getElementById('phonicsCategorySelect');
+  const patternSelect = document.getElementById('phonicsPatternSelect');
+  if (!categorySelect || !patternSelect) return;
+
+  currentPhonicsGroupV33 = getGroupForCurrentStateV33();
+  const config = PHONICS_GROUPS_V33[currentPhonicsGroupV33] || PHONICS_GROUPS_V33.short;
+
+  categorySelect.value = currentPhonicsGroupV33;
+
+  if (!config.keys.includes(currentVowel)) {
+    currentVowel = config.keys[0];
+  }
+
+  patternSelect.innerHTML = config.keys.map(key => {
+    const label = PHONICS_PATTERN_LABELS_V33B[key] || (VOWELS[key]?.label || key);
+    return `<option value="${key}" ${key === currentVowel ? 'selected' : ''}>${label}</option>`;
+  }).join('');
+}
+
+function bindGroupedDropdownsV33(){
+  const categorySelect = document.getElementById('phonicsCategorySelect');
+  const patternSelect = document.getElementById('phonicsPatternSelect');
+  if (!categorySelect || !patternSelect || categorySelect.dataset.v33Bound) return;
+
+  categorySelect.dataset.v33Bound = 'true';
+  patternSelect.dataset.v33Bound = 'true';
+
+  categorySelect.addEventListener('change', () => {
+    applyPhonicsGroupV33(categorySelect.value);
+    renderGroupedDropdownsV33();
+    if (typeof renderExamples === 'function') renderExamples();
+    if (typeof renderBank === 'function') renderBank();
+    if (typeof showEmptyState === 'function') showEmptyState();
+  });
+
+  patternSelect.addEventListener('change', () => {
+    applyPhonicsGroupV33(currentPhonicsGroupV33, patternSelect.value);
+    renderGroupedDropdownsV33();
+    if (typeof renderExamples === 'function') renderExamples();
+    if (typeof renderBank === 'function') renderBank();
+    if (typeof showEmptyState === 'function') showEmptyState();
+  });
+}
+
+// Override the earlier v32 dropdown renderer so it uses grouped categories.
+renderDropdownPatternOptionsV32 = renderGroupedDropdownsV33;
+syncDropdownSelectionV32 = bindGroupedDropdownsV33;
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderGroupedDropdownsV33();
+  bindGroupedDropdownsV33();
+});
+
+setTimeout(() => {
+  renderGroupedDropdownsV33();
+  bindGroupedDropdownsV33();
+}, 75);
+
+
+// ── v43 printable lesson total letter tiles fix ───────────────────────
+// For the top "Total Letter Tiles Needed" summary, teachers need one tile
+// for each unique letter used across the lesson, not a count of every repeated
+// occurrence across all words.
+function getUniqueLessonLetterTilesV43(words){
+  const letters = new Set();
+  (words || []).forEach(item => {
+    const word = String(item.word || '').toLowerCase().replace(/[^a-z]/g, '');
+    word.split('').forEach(letter => letters.add(letter));
+  });
+  return Array.from(letters).sort((a, b) => a.localeCompare(b));
+}
+
+function renderTotalLetterTilesV43(words){
+  const letters = getUniqueLessonLetterTilesV43(words);
+  if (!letters.length) return '<span class="empty">No letter tiles selected.</span>';
+  return letters.map(letter => `<span class="tile">${escapePdfHtml(letter)}</span>`).join('');
+}
+
+// Patch the lesson PDF renderer after it creates the print window content.
+const downloadLessonPdfBeforeV43 = typeof downloadLessonPdf === 'function' ? downloadLessonPdf : null;
+if (downloadLessonPdfBeforeV43) {
+  downloadLessonPdf = function(){
+    const words = typeof getLessonWordsForPdf === 'function' ? getLessonWordsForPdf() : [];
+    downloadLessonPdfBeforeV43();
+
+    // The print window is written inside the original function, so this patch is mainly
+    // a safety fallback for future versions. The direct replacement below updates the
+    // actual template before this function runs.
+  };
+}
+
+
+// ── v43 final override for total tile summary function names ──────────
+if (typeof renderLessonLetterTileTotals === 'function') {
+  renderLessonLetterTileTotals = function(words){
+    return renderTotalLetterTilesV43(words);
+  };
+}
+if (typeof renderTotalLetterTiles === 'function') {
+  renderTotalLetterTiles = function(words){
+    return renderTotalLetterTilesV43(words);
+  };
+}
+if (typeof renderTotalTiles === 'function') {
+  renderTotalTiles = function(words){
+    return renderTotalLetterTilesV43(words);
+  };
+}
+
+
+// ── v46 initial empty-state fix ───────────────────────────────────────
+function forceInitialEmptyStateV46(){
+  // Only show the empty directions when no word has been mapped yet.
+  const input = document.getElementById('wordInput');
+  const hasTypedWord = input && input.value && input.value.trim().length > 0;
+  if (!hasTypedWord && !currentMap && typeof showEmptyState === 'function') {
+    showEmptyState();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  forceInitialEmptyStateV46();
+  setTimeout(forceInitialEmptyStateV46, 50);
+  setTimeout(forceInitialEmptyStateV46, 200);
+});
+
+window.addEventListener('load', () => {
+  forceInitialEmptyStateV46();
+  setTimeout(forceInitialEmptyStateV46, 100);
+});
+
+
+// ── v47 initial empty-state fix ───────────────────────────────────────
+// The visible directions live in renderEmpty(), not showEmptyState().
+function forceInitialEmptyStateV47(){
+  const input = document.getElementById('wordInput');
+  const resultBody = document.getElementById('resultBody');
+  const hasTypedWord = input && input.value && input.value.trim().length > 0;
+
+  if (!hasTypedWord && !currentMap && resultBody && typeof renderEmpty === 'function') {
+    renderEmpty();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  forceInitialEmptyStateV47();
+  setTimeout(forceInitialEmptyStateV47, 50);
+  setTimeout(forceInitialEmptyStateV47, 200);
+  setTimeout(forceInitialEmptyStateV47, 500);
+});
+
+window.addEventListener('load', () => {
+  forceInitialEmptyStateV47();
+  setTimeout(forceInitialEmptyStateV47, 100);
+});
+
+</script>
+</body>
+</html>
