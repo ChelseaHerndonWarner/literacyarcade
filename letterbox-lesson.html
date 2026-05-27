@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Letterbox Lesson | Sound Boxes & Letter Tiles | Literacy Arcade</title>
+<meta name="description" content="Use a teacher-led letterbox lesson tool with sound boxes and letter tiles for phoneme-grapheme mapping, small group phonics instruction, intervention, and spelling practice." />
+<meta name="keywords" content="letterbox lesson, letter box lesson, sound boxes, letter tiles, phoneme grapheme mapping, phoneme mapping, word mapping, phonics intervention, small group phonics, spelling lesson, orthographic mapping, Elkonin boxes, Literacy Arcade" />
+<meta name="author" content="Literacy Arcade" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://literacyarcade.com/letterbox-lesson.html" />
+
+<meta property="og:title" content="Letterbox Lesson | Literacy Arcade" />
+<meta property="og:description" content="A teacher-led sound box and letter tile tool for phoneme-grapheme mapping, phonics intervention, and letterbox lessons." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://literacyarcade.com/letterbox-lesson.html" />
+<meta property="og:site_name" content="Literacy Arcade" />
+<meta property="og:image" content="https://literacyarcade.com/images/letterbox-lesson-preview.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Literacy Arcade Letterbox Lesson tool with sound boxes and letter tiles" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Letterbox Lesson | Literacy Arcade" />
+<meta name="twitter:description" content="Build teacher-led letterbox lessons with sound boxes and letter tiles for phoneme-grapheme mapping." />
+<meta name="twitter:image" content="https://literacyarcade.com/images/letterbox-lesson-preview.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Letterbox Lesson",
+  "url": "https://literacyarcade.com/letterbox-lesson.html",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web",
+  "description": "A teacher-led letterbox lesson tool with sound boxes and letter tiles for phoneme-grapheme mapping, phonics intervention, and small group spelling instruction.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Literacy Arcade",
+    "url": "https://literacyarcade.com/"
+  },
+  "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": "teacher"
+  },
+  "educationalUse": [
+    "phonics instruction",
+    "spelling instruction",
+    "phoneme-grapheme mapping",
+    "intervention",
+    "small group instruction"
+  ],
+  "learningResourceType": "InteractiveResource",
+  "isAccessibleForFree": true
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#F9F7F2;
+  --white:#FFFFFF;
+  --navy:#1B2A4A;
+  --navy-soft:#4B5875;
+  --teal:#2EC4B6;
+  --teal-dark:#087A70;
+  --teal-light:#D9F8F5;
+  --coral:#FF6B6B;
+  --coral-dark:#D94949;
+  --gold:#FFD166;
+  --lav:#E9E3FF;
+  --purple:#6E55B7;
+  --border:#E1E4EA;
+  --shadow:0 8px 30px rgba(27,42,74,.10);
+  --shadow-hover:0 14px 40px rgba(27,42,74,.16);
+  --radius:18px;
+  --font-head:'Nunito',sans-serif;
+  --font-body:'Lexend',sans-serif;
+}
+
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:var(--font-body);
+  background:
+    radial-gradient(circle at top left, rgba(46,196,182,.18), transparent 32%),
+    radial-gradient(circle at top right, rgba(255,107,107,.16), transparent 30%),
+    var(--cream);
+  color:#fff;
+  min-height:100vh;
+}
+
+/* ── Header ── */
+.la-header {
+  height:60px;
+  background:rgba(255,255,255,.92);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 22px;
+  gap:14px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter: blur(10px);
+}
+.la-brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:var(--navy);
+}
+.la-logo {
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--teal),#5D5FEF);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-family:Georgia,serif;
+  font-weight:700;
+  font-style:italic;
+}
+.la-logo img { width:100%; height:100%; object-fit:cover; display:block; }
+.la-wordmark { font-family:var(--font-head); font-weight:900; font-size:18px; }
+.la-divider { width:1px; height:24px; background:var(--border); }
+.la-page-title { font-family:var(--font-head); font-weight:800; color:var(--teal-dark); }
+.header-spacer { flex:1; }
+.header-btn {
+  height:36px;
+  border:1px solid rgba(27,42,74,.12);
+  background:#fff;
+  border-radius:10px;
+  color:var(--navy);
+  padding:0 12px;
+  font-family:var(--font-head);
+  font-weight:800;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+.header-btn:hover { background:#F4F7F8; }
+
+.icon-btn{
+  width:36px;
+  padding:0;
+  font-size:15px;
+}
+
+/* ── App shell ── */
+/* The body is a flex column so the footer can pin to the bottom
+   without forcing the main lesson area to scroll. The main
+   .app fills the remaining viewport height. */
+body {
+  display:flex;
+  flex-direction:column;
+}
+
+.app {
+  max-width:1320px;
+  width:100%;
+  margin:14px auto 0;
+  padding:0 18px 14px;
+  /* Fill the space between header and footer.
+     The shell inside this constrains itself to viewport height
+     so the main board does not require scrolling. */
+  flex:1;
+  min-height:0;
+}
+
+.lesson-shell {
+  display:grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0,1fr);
+  gap:16px;
+  align-items:stretch;
+  /* Constrain shell height so panels can scroll internally
+     instead of pushing the page taller. */
+  height:calc(100vh - 60px - 28px - 56px); /* header - app v-padding - footer */
+  min-height:540px;
+}
+
+.side-panel,
+.lesson-panel {
+  background:rgba(255,255,255,.92);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+/* Side panel can scroll independently if the teacher word list is long. */
+.side-panel {
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  overflow-y:auto;
+  min-height:0;
+}
+
+/* Lesson panel uses all available height for the board, no scroll. */
+.lesson-panel {
+  padding:16px 22px 14px;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  min-height:0;
+  overflow:hidden;
+}
+
+/* ── Side panel ── */
+.badge {
+  display:inline-flex;
+  width:max-content;
+  align-items:center;
+  border:1.5px solid var(--teal);
+  background:var(--teal-light);
+  color:var(--teal-dark);
+  border-radius:999px;
+  padding:4px 12px;
+  font-family:var(--font-head);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1.4px;
+  font-weight:900;
+}
+
+.side-title {
+  font-family:var(--font-head);
+  font-size:20px;
+  font-weight:900;
+  line-height:1.15;
+  margin:6px 0 4px;
+  color:var(--navy);
+}
+.side-copy {
+  color:var(--navy-soft);
+  font-size:12px;
+  line-height:1.45;
+  margin:0;
+}
+
+.side-section-label {
+  font-family:var(--font-head);
+  font-weight:900;
+  text-transform:uppercase;
+  color:rgba(27,42,74,.55);
+  font-size:11px;
+  letter-spacing:1.4px;
+  margin-bottom:8px;
+}
+
+.word-list {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  overflow:auto;
+  padding-right:4px;
+  max-height:230px;
+}
+
+.word-pill {
+  border:1.5px solid rgba(27,42,74,.12);
+  background:#fff;
+  border-radius:12px;
+  padding:9px 12px;
+  text-align:left;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-family:var(--font-head);
+  font-weight:800;
+  color:var(--navy);
+  font-size:13px;
+}
+.word-pill.active {
+  background:var(--navy);
+  color:white;
+  border-color:var(--navy);
+}
+.word-pill.done {
+  border-color:var(--teal);
+}
+.word-pill .meta {
+  font-size:10px;
+  font-weight:800;
+  opacity:.65;
+}
+
+.side-actions {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:7px;
+  margin-top:auto;
+}
+
+/* ── Buttons ── */
+.btn {
+  border:none;
+  border-radius:12px;
+  padding:11px 14px;
+  font-family:var(--font-head);
+  font-weight:900;
+  cursor:pointer;
+  font-size:14px;
+}
+.btn-primary { background:var(--teal-dark); color:white; }
+.btn-primary:hover { background:#066b62; }
+.btn-coral { background:var(--coral); color:white; }
+.btn-coral:hover { background:var(--coral-dark); }
+.btn-ghost { background:#EBEEF4; color:var(--navy); }
+.btn-ghost:hover { background:#DDE3EC; }
+.btn-soft { background:#fff; color:var(--navy); border:1.5px solid rgba(27,42,74,.14); }
+.btn-soft:hover { background:#F4F7F8; }
+.btn:disabled { opacity:.45; cursor:not-allowed; }
+
+/* ── Main lesson area ── */
+.top-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:8px;
+}
+.top-row .word-cue {
+  font-family:var(--font-head);
+  font-weight:900;
+  font-size:24px;
+  color:var(--navy);
+  line-height:1;
+}
+.progress {
+  font-family:var(--font-head);
+  font-weight:900;
+  color:var(--teal-dark);
+  background:var(--teal-light);
+  border:1px solid rgba(46,196,182,.35);
+  padding:6px 12px;
+  border-radius:999px;
+  white-space:nowrap;
+  font-size:12px;
+}
+
+.play-row {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:4px;
+  flex-wrap:wrap;
+}
+.play-word-btn {
+  padding:9px 20px;
+  font-size:14px;
+  min-width:160px;
+}
+.teacher-hint {
+  color:var(--navy-soft);
+  font-size:12px;
+  line-height:1.4;
+  font-style:italic;
+  max-width:380px;
+}
+
+/* ── BOARD — the main instructional surface ── */
+.board {
+  flex:1;
+  background:#FFFDF8;
+  border:1px solid #F1E2BC;
+  border-radius:22px;
+  padding:12px 24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:22px;
+  min-height:0;
+}
+
+.boxes-row {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:18px;
+  min-height:140px;
+}
+
+/* Sound boxes — the dominant elements */
+.sound-box {
+  width:140px;
+  min-height:120px;
+  border:4px dashed #B9C0CE;
+  background:white;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:10px;
+  transition:.15s;
+  position:relative;
+}
+.sound-box.drag-over {
+  border-color:var(--teal);
+  background:var(--teal-light);
+  transform:translateY(-2px);
+}
+.sound-box.filled {
+  border-style:solid;
+  border-color:var(--teal);
+}
+.sound-box.correct {
+  border-color:var(--teal-dark);
+  background:#EAFBF8;
+}
+.sound-box.wrong {
+  border-color:var(--coral);
+  background:#FFF1F1;
+}
+
+/* Outside-letter area — hidden by default, visually secondary */
+.outside-area {
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  margin-left:6px;
+  padding-left:18px;
+  border-left:2px dotted rgba(27,42,74,.18);
+}
+.outside-area.show { display:flex; }
+.outside-label {
+  font-family:var(--font-head);
+  font-size:10px;
+  font-weight:900;
+  text-transform:uppercase;
+  color:rgba(27,42,74,.5);
+  letter-spacing:1.2px;
+  white-space:nowrap;
+}
+.outside-spot {
+  min-width:84px;
+  min-height:80px;
+  border:3px dashed #D1D6E0;
+  background:#FAFBFD;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:5px;
+  padding:8px;
+  transition:.15s;
+}
+.outside-spot.drag-over {
+  border-color:var(--teal);
+  background:var(--teal-light);
+}
+.outside-spot.filled {
+  border-style:solid;
+  border-color:#B9C0CE;
+}
+
+/* ── Tile bank ── */
+.tile-bank-wrap {
+  border-top:1px solid #F1E2BC;
+  padding-top:16px;
+}
+.tile-bank-title {
+  font-family:var(--font-head);
+  font-weight:900;
+  text-transform:uppercase;
+  color:rgba(27,42,74,.55);
+  font-size:11px;
+  letter-spacing:1.4px;
+  margin-bottom:10px;
+  text-align:center;
+}
+.tile-bank {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  min-height:74px;
+}
+
+/* Letter tiles — also a dominant element */
+.tile {
+  min-width:64px;
+  height:64px;
+  padding:0 14px;
+  border:2px solid rgba(27,42,74,.14);
+  background:#fff;
+  border-radius:14px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font-head);
+  font-size:30px;
+  font-weight:900;
+  color:var(--navy);
+  cursor:grab;
+  box-shadow:0 5px 0 rgba(27,42,74,.12);
+  user-select:none;
+  touch-action:none;
+}
+.tile:active {
+  cursor:grabbing;
+  transform:translateY(2px);
+  box-shadow:0 2px 0 rgba(27,42,74,.12);
+}
+.tile.selected {
+  outline:4px solid rgba(46,196,182,.36);
+  border-color:var(--teal);
+  background:var(--teal-light);
+}
+.tile.in-box {
+  cursor:pointer;
+  box-shadow:none;
+  transform:none;
+  min-width:44px;
+  height:48px;
+  padding:0 9px;
+  font-size:26px;
+  border-radius:11px;
+}
+
+/* ── Teacher controls under the board ── */
+.lesson-controls {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+  justify-content:center;
+}
+.lesson-controls .btn {
+  flex:1 1 auto;
+  min-width:120px;
+  max-width:210px;
+  padding:9px 14px;
+  font-size:13px;
+}
+.lesson-controls .btn-add-outside {
+  background:var(--gold);
+  color:var(--navy);
+  border:1.5px solid rgba(27,42,74,.12);
+}
+.lesson-controls .btn-add-outside:hover { background:#FFC548; }
+.lesson-controls .btn-add-outside.active {
+  background:#fff;
+  color:var(--navy-soft);
+  border-color:rgba(27,42,74,.12);
+  font-weight:700;
+}
+
+.feedback {
+  min-height:22px;
+  text-align:center;
+  font-family:var(--font-head);
+  font-weight:900;
+  color:var(--teal-dark);
+  margin-top:6px;
+  font-size:13px;
+}
+.feedback.error { color:var(--coral-dark); }
+
+/* ── Finished overlay ── */
+.finished {
+  display:none;
+  position:absolute;
+  inset:0;
+  background:rgba(249,247,242,.96);
+  z-index:20;
+  border-radius:var(--radius);
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:28px;
+}
+.finished.show { display:flex; }
+.finished-card {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:var(--shadow-hover);
+  padding:34px;
+  max-width:520px;
+}
+.finished-icon { font-size:60px; }
+.finished-title {
+  font-family:var(--font-head);
+  font-size:32px;
+  font-weight:900;
+  margin:8px 0;
+}
+.finished-copy { color:var(--navy-soft); }
+
+/* ── Responsive ── */
+@media (max-width: 980px) {
+  /* On smaller widths the side panel stacks above the board, and
+     we let the page scroll naturally (no more viewport pinning). */
+  .lesson-shell {
+    grid-template-columns:1fr;
+    height:auto;
+    min-height:0;
+  }
+  .side-panel, .lesson-panel {
+    min-height:auto;
+    overflow:visible;
+  }
+  .side-panel { padding-bottom:12px; }
+  .word-list { max-height:160px; }
+  .lesson-panel { overflow:visible; }
+}
+
+@media (max-width: 700px) {
+  .board { padding:18px 14px; gap:18px; }
+  .sound-box { width:118px; min-height:104px; border-width:3px; }
+  .tile { min-width:54px; height:54px; font-size:26px; }
+  .tile.in-box { min-width:38px; height:42px; font-size:22px; }
+  .play-word-btn { min-width:140px; padding:9px 16px; }
+  .lesson-controls .btn { min-width:100px; font-size:12px; }
+}
+
+/* ── Site footer ── */
+.la-footer {
+  border-top:1px solid rgba(255,255,255,.08);
+  background:var(--navy);
+  color:rgba(255,255,255,.78);
+  padding:14px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  font-size:13px;
+  color:var(--navy-soft);
+}
+.la-footer .footer-brand {
+  font-family:var(--font-head);
+  font-weight:900;
+  color:var(--navy);
+}
+.la-footer nav {
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.la-footer nav a {
+  color:rgba(255,255,255,.78);
+  text-decoration:none;
+  font-weight:600;
+}
+.la-footer nav a:hover {
+  color:#fff;
+  text-decoration:underline;
+}
+.la-footer .footer-copy {
+  font-size:12px;
+  opacity:.75;
+}
+@media (max-width: 700px) {
+  .la-footer { padding:12px 16px; font-size:12px; }
+  .la-footer nav { gap:12px; }
+}
+
+/* ── Final polish: Literacy Arcade header, light footer, compact teacher panel ── */
+.la-header {
+  height: 56px;
+  background: #fff;
+  border-bottom: 1px solid rgba(27,42,74,.10);
+  padding: 0 20px;
+  gap: 12px;
+  backdrop-filter: none;
+}
+
+.la-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+
+.la-wordmark {
+  font-size: 17px;
+}
+
+.la-page-title {
+  font-size: 15px;
+}
+
+.header-btn {
+  height: 34px;
+  min-height: 34px;
+  border: 1.5px solid #DDE2EA;
+  background: #fff;
+  border-radius: 10px;
+  color: #7C879D;
+  padding: 0 12px;
+  box-shadow: none;
+}
+
+.header-btn:hover {
+  background: #F6F8FB;
+  border-color: #C9D1DE;
+  color: var(--navy);
+}
+
+.icon-btn {
+  width: 34px;
+  padding: 0;
+}
+
+.fullscreen-btn {
+  font-size: 13px;
+  font-family: var(--font-head);
+  font-weight: 900;
+  color: var(--navy);
+  padding: 0 16px;
+}
+
+.header-svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.side-panel {
+  padding: 14px 14px 12px;
+  gap: 10px;
+}
+
+.side-panel > .badge {
+  display: none;
+}
+
+.side-title {
+  font-size: 16.5px;
+  margin: 2px 0 4px;
+}
+
+.side-copy {
+  font-size: 11.5px;
+  line-height: 1.38;
+}
+
+.word-list {
+  max-height: 220px;
+}
+
+.side-actions {
+  gap: 6px;
+}
+
+.side-actions .btn {
+  padding: 10px 12px;
+}
+
+.play-row {
+  margin-bottom: 4px;
+}
+
+.play-word-btn {
+  padding: 10px 22px;
+  min-width: 150px;
+}
+
+.teacher-hint {
+  display: none !important;
+}
+
+.top-row {
+  display: none !important;
+}
+
+.board {
+  padding-top: 24px;
+  padding-bottom: 22px;
+}
+
+.la-footer {
+  background: transparent !important;
+  border-top: 0 !important;
+  color: rgba(27,42,74,.34) !important;
+  min-height: 32px;
+  height: 32px;
+  padding: 0 18px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+.la-footer,
+.la-footer * {
+  color: rgba(27,42,74,.34) !important;
+}
+
+.la-footer nav,
+.la-footer .footer-brand,
+.la-footer .footer-copy {
+  display: none !important;
+}
+
+.la-footer::before {
+  content: "Literacy Arcade • Letterbox Lesson";
+}
+
+
+/* ── Presentation mode + branded completion polish ── */
+.side-title {
+  font-size: 16.5px !important;
+  line-height: 1.08 !important;
+  letter-spacing: -.15px;
+}
+
+.celebration-badge {
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 18px;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.85), transparent 24%),
+    linear-gradient(135deg, var(--teal), #7B5EA7);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 16px 34px rgba(27,42,74,.18);
+  position: relative;
+  overflow: hidden;
+}
+.celebration-badge::before,
+.celebration-badge::after {
+  content: "";
+  position: absolute;
+  width: 44px;
+  height: 10px;
+  background: rgba(255,255,255,.85);
+  border-radius: 999px;
+  transform: rotate(-12deg);
+}
+.celebration-badge::before { top: 26px; left: 20px; }
+.celebration-badge::after { bottom: 25px; right: 18px; transform: rotate(12deg); }
+.celebration-star {
+  width: 44px;
+  height: 44px;
+  background: #FFD166;
+  clip-path: polygon(50% 0%,61% 34%,98% 35%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,2% 35%,39% 34%);
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 4px 0 rgba(27,42,74,.16));
+}
+
+.confetti-piece {
+  position: fixed;
+  top: -12px;
+  width: 10px;
+  height: 16px;
+  border-radius: 3px;
+  z-index: 9999;
+  pointer-events: none;
+  animation: confettiFall 1.9s ease-in forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-12px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(620deg); opacity: 0; }
+}
+
+.presentation-overlay {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(46,196,182,.18), transparent 34%),
+    radial-gradient(circle at top right, rgba(255,107,107,.14), transparent 34%),
+    var(--cream);
+  z-index: 5000;
+  display: none;
+  padding: 18px;
+}
+.presentation-overlay.show {
+  display: flex;
+  flex-direction: column;
+}
+.presentation-top {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.presentation-title {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--navy);
+}
+.presentation-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.presentation-content {
+  flex: 1;
+  min-height: 0;
+  background: rgba(255,255,255,.92);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.presentation-content .play-row {
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.presentation-content .board {
+  flex: 1;
+  min-height: 0;
+}
+.presentation-content .lesson-controls {
+  margin-top: 12px;
+}
+.presentation-content .feedback {
+  min-height: 26px;
+}
+.presentation-mode .la-header,
+.presentation-mode .side-panel,
+.presentation-mode .la-footer {
+  display: none !important;
+}
+
+
+/* Use uploaded Literacy Arcade celebration SVG instead of CSS-generated badge */
+.custom-party-popper {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+}
+.custom-party-popper svg {
+  width: 96px;
+  height: 96px;
+  display: block;
+}
+.celebration-badge,
+.celebration-star {
+  display: none !important;
+}
+
+</style>
+</head>
+<body>
+<header class="la-header">
+  <a class="la-brand" href="https://literacyarcade.com/" aria-label="Literacy Arcade home">
+    <span class="la-logo"><img src="data:image/png;base64,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" alt="Literacy Arcade logo" /></span>
+    <span class="la-wordmark">Literacy Arcade</span>
+  </a>
+  <span class="la-divider"></span>
+  <span class="la-page-title">Letterbox Lesson</span>
+  <span class="header-spacer"></span>
+  <button class="header-btn icon-btn" id="soundBtn" type="button" title="Sound" aria-label="Sound"><svg class="header-svg" viewBox="0 0 24 24" aria-hidden="true">
+  <path d="M4 9v6h4l5 4V5L8 9H4z"></path>
+  <path d="M16 9.5a4 4 0 0 1 0 5"></path>
+  <path d="M18.5 7a7 7 0 0 1 0 10"></path>
+</svg></button>
+  <button class="header-btn fullscreen-btn" id="fullscreenBtn" type="button">Present</button>
+  <a class="header-btn icon-btn" href="https://literacyarcade.com/" title="Home" aria-label="Home"><svg class="header-svg" viewBox="0 0 24 24" aria-hidden="true">
+  <path d="M3 11.5 12 4l9 7.5"></path>
+  <path d="M5.5 10.5V20h13v-9.5"></path>
+  <path d="M9.5 20v-6h5v6"></path>
+</svg></a>
+</header>
+
+<main class="app">
+  <div class="lesson-shell">
+
+    <!-- ── Side panel: title, word list, teacher actions ── -->
+    <aside class="side-panel">
+      <div>
+        <h1 class="side-title" id="lessonTitle">Teacher-Led Letterbox Lesson</h1>
+        <p class="side-copy">Say each word aloud. Students segment the sounds and build the word with letter tiles in sound boxes — one box per sound.</p>
+      </div>
+
+      <div>
+        <div class="side-section-label">Lesson Words</div>
+        <div class="word-list" id="wordList"></div>
+      </div>
+
+      <div class="side-actions">
+        <button class="btn btn-soft" id="resetWordBtn" type="button">Reset Word</button>
+        <button class="btn btn-primary" id="showAnswerBtn" type="button">Show Answer</button>
+        <button class="btn btn-coral" id="restartLessonBtn" type="button">Restart Lesson</button>
+        <a class="btn btn-ghost" href="phoneme-counter.html" style="text-decoration:none;text-align:center;">Back to Phoneme Counter</a>
+      </div>
+    </aside>
+
+    <!-- ── Lesson panel: the board is the visual focus ── -->
+    <section class="lesson-panel">
+
+      <!-- Play button + hint, kept small so the board dominates -->
+      <div class="play-row">
+        <button class="btn btn-primary play-word-btn" id="playWordBtn" type="button">Play Word</button>
+        
+      </div>
+
+      <!-- THE BOARD — the dominant visual element -->
+      <div class="board">
+
+        <!-- Sound boxes row. Outside-letter area is hidden by default. -->
+        <div class="boxes-row" id="boxesRow">
+          <div class="sound-box-area" id="soundBoxArea" style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center;"></div>
+          <div class="outside-area" id="outsideArea">
+            <div class="outside-spot" id="outsideSpot"></div>
+            <div class="outside-label">Letters outside the boxes</div>
+          </div>
+        </div>
+
+        <!-- Tile bank -->
+        <div class="tile-bank-wrap">
+          <div class="tile-bank-title">Letter Tiles</div>
+          <div class="tile-bank" id="tileBank"></div>
+        </div>
+      </div>
+
+      <!-- Teacher controls below the board -->
+      <div class="lesson-controls">
+        <button class="btn btn-ghost" id="prevBtn" type="button">← Previous</button>
+        <button class="btn btn-ghost" id="clearBoxesBtn" type="button">Clear Boxes</button>
+        <button class="btn btn-add-outside" id="addOutsideBtn" type="button">+ Reveal Outside Letter Area</button>
+        <button class="btn btn-ghost" id="checkBtn" type="button">Check</button>
+        <button class="btn btn-primary" id="nextBtn" type="button">Next →</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+
+      <!-- Finished overlay -->
+      <div class="finished" id="finishedScreen">
+        <div class="finished-card">
+          <div class="finished-icon custom-party-popper" aria-hidden="true"><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--twemoji" preserveAspectRatio="xMidYMid meet"><path fill="#DD2E44" d="M11.626 7.488a1.413 1.413 0 0 0-.268.395l-.008-.008L.134 33.141l.011.011c-.208.403.14 1.223.853 1.937c.713.713 1.533 1.061 1.936.853l.01.01L28.21 24.735l-.008-.009c.147-.07.282-.155.395-.269c1.562-1.562-.971-6.627-5.656-11.313c-4.687-4.686-9.752-7.218-11.315-5.656z"></path><path fill="#EA596E" d="M13 12L.416 32.506l-.282.635l.011.011c-.208.403.14 1.223.853 1.937c.232.232.473.408.709.557L17 17l-4-5z"></path><path fill="#A0041E" d="M23.012 13.066c4.67 4.672 7.263 9.652 5.789 11.124c-1.473 1.474-6.453-1.118-11.126-5.788c-4.671-4.672-7.263-9.654-5.79-11.127c1.474-1.473 6.454 1.119 11.127 5.791z"></path><path fill="#AA8DD8" d="M18.59 13.609a.99.99 0 0 1-.734.215c-.868-.094-1.598-.396-2.109-.873c-.541-.505-.808-1.183-.735-1.862c.128-1.192 1.324-2.286 3.363-2.066c.793.085 1.147-.17 1.159-.292c.014-.121-.277-.446-1.07-.532c-.868-.094-1.598-.396-2.11-.873c-.541-.505-.809-1.183-.735-1.862c.13-1.192 1.325-2.286 3.362-2.065c.578.062.883-.057 1.012-.134c.103-.063.144-.123.148-.158c.012-.121-.275-.446-1.07-.532a.998.998 0 0 1-.886-1.102a.997.997 0 0 1 1.101-.886c2.037.219 2.973 1.542 2.844 2.735c-.13 1.194-1.325 2.286-3.364 2.067c-.578-.063-.88.057-1.01.134c-.103.062-.145.123-.149.157c-.013.122.276.446 1.071.532c2.037.22 2.973 1.542 2.844 2.735c-.129 1.192-1.324 2.286-3.362 2.065c-.578-.062-.882.058-1.012.134c-.104.064-.144.124-.148.158c-.013.121.276.446 1.07.532a1 1 0 0 1 .52 1.773z"></path><path fill="#77B255" d="M30.661 22.857c1.973-.557 3.334.323 3.658 1.478c.324 1.154-.378 2.615-2.35 3.17c-.77.216-1.001.584-.97.701c.034.118.425.312 1.193.095c1.972-.555 3.333.325 3.657 1.479c.326 1.155-.378 2.614-2.351 3.17c-.769.216-1.001.585-.967.702c.033.117.423.311 1.192.095a1 1 0 1 1 .54 1.925c-1.971.555-3.333-.323-3.659-1.479c-.324-1.154.379-2.613 2.353-3.169c.77-.217 1.001-.584.967-.702c-.032-.117-.422-.312-1.19-.096c-1.974.556-3.334-.322-3.659-1.479c-.325-1.154.378-2.613 2.351-3.17c.768-.215.999-.585.967-.701c-.034-.118-.423-.312-1.192-.096a1 1 0 1 1-.54-1.923z"></path><path fill="#AA8DD8" d="M23.001 20.16a1.001 1.001 0 0 1-.626-1.781c.218-.175 5.418-4.259 12.767-3.208a1 1 0 1 1-.283 1.979c-6.493-.922-11.187 2.754-11.233 2.791a.999.999 0 0 1-.625.219z"></path><path fill="#77B255" d="M5.754 16a1 1 0 0 1-.958-1.287c1.133-3.773 2.16-9.794.898-11.364c-.141-.178-.354-.353-.842-.316c-.938.072-.849 2.051-.848 2.071a1 1 0 1 1-1.994.149c-.103-1.379.326-4.035 2.692-4.214c1.056-.08 1.933.287 2.552 1.057c2.371 2.951-.036 11.506-.542 13.192a1 1 0 0 1-.958.712z"></path><circle fill="#5C913B" cx="25.5" cy="9.5" r="1.5"></circle><circle fill="#9266CC" cx="2" cy="18" r="2"></circle><circle fill="#5C913B" cx="32.5" cy="19.5" r="1.5"></circle><circle fill="#5C913B" cx="23.5" cy="31.5" r="1.5"></circle><circle fill="#FFCC4D" cx="28" cy="4" r="2"></circle><circle fill="#FFCC4D" cx="32.5" cy="8.5" r="1.5"></circle><circle fill="#FFCC4D" cx="29.5" cy="12.5" r="1.5"></circle><circle fill="#FFCC4D" cx="7.5" cy="23.5" r="1.5"></circle></svg></div>
+          <div class="finished-title">Lesson Complete!</div>
+          <p class="finished-copy">You finished the letterbox lesson. You can restart the lesson or return to Phoneme Counter to build a new one.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;">
+            <button class="btn btn-primary" id="finishedRestartBtn" type="button">Restart</button>
+            <button class="btn btn-ghost" id="finishedCloseBtn" type="button">Back to Lesson</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+
+<div class="presentation-overlay" id="presentationOverlay" aria-hidden="true">
+  <div class="presentation-top">
+    <div class="presentation-title">Letterbox Lesson</div>
+    <div class="presentation-actions">
+      <button class="header-btn" id="presentationPlayBtn" type="button">Play Word</button>
+      <button class="header-btn" id="closePresentationBtn" type="button">Exit Presentation</button>
+    </div>
+  </div>
+  <div class="presentation-content" id="presentationContent"></div>
+</div>
+
+<footer class="la-footer" aria-label="Site footer"></footer>
+
+<script>
+/* ============================================================
+   Sample lesson data — only used when no sessionStorage payload
+   has been sent from the Phoneme Counter / Word Mapper.
+   ============================================================ */
+const SAMPLE_LESSON = {
+  title: "Letterbox Lesson",
+  words: [
+    {
+      word: "cat",
+      phonemes: ["/k/", "/ă/", "/t/"],
+      boxes: ["c", "a", "t"],
+      outsideLetters: []
+    },
+    {
+      word: "ship",
+      phonemes: ["/sh/", "/ĭ/", "/p/"],
+      boxes: ["sh", "i", "p"],
+      outsideLetters: []
+    },
+    {
+      word: "cake",
+      phonemes: ["/k/", "/ā/", "/k/"],
+      boxes: ["c", "a", "k"],
+      outsideLetters: ["e"]
+    },
+    {
+      word: "boat",
+      phonemes: ["/b/", "/ō/", "/t/"],
+      boxes: ["b", "oa", "t"],
+      outsideLetters: []
+    }
+  ]
+};
+
+/* ============================================================
+   State
+   ============================================================ */
+let lesson = loadLessonData();
+let currentIndex = 0;
+let selectedTileId = null;
+let tileIdCounter = 0;
+let soundOn = true;
+const completedWords = new Set();
+
+/* Per-word teacher state: tracks whether the outside-letter spot
+   has been revealed for the current word. Stored per word so the
+   teacher's reveal persists if they navigate away and back. */
+const outsideRevealed = new Set();
+
+/* ============================================================
+   Lesson loading & normalization
+   ============================================================ */
+function loadLessonData() {
+  try {
+    const raw = sessionStorage.getItem("letterboxLessonData");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.words) && parsed.words.length) {
+        return normalizeLesson(parsed);
+      }
+    }
+  } catch (e) {
+    console.warn("Could not load session lesson data.", e);
+  }
+  return normalizeLesson(SAMPLE_LESSON);
+}
+
+/* Normalize and prepare the lesson.
+   IMPORTANT: boxes may contain grapheme groups like "sh" or "oa"
+   because those belong in one sound box. But the student-facing
+   tile bank ALWAYS splits these into individual letter tiles. */
+function normalizeLesson(data) {
+  const words = (data.words || []).map(w => {
+    const boxes = w.boxes || w.graphemes || [];
+    return {
+      word: String(w.word || "").trim(),
+      phonemes: Array.isArray(w.phonemes) ? w.phonemes : boxes.map(() => ""),
+      boxes: boxes.map(b => String(b)),
+      outsideLetters: Array.isArray(w.outsideLetters)
+        ? w.outsideLetters.map(o => String(o))
+        : []
+    };
+  }).filter(w => w.word && w.boxes.length);
+
+  const normalized = {
+    title: data.title || "Letterbox Lesson",
+    words,
+    /* Note: lesson-level tiles array, if present, is intentionally
+       not used. The tile bank is built from the letters every word
+       in the lesson actually needs (boxes + outside letters), split
+       into individual letters, with duplicates as needed for the
+       word that requires the most copies of a given letter. */
+    rawTiles: Array.isArray(data.tiles) ? data.tiles : null,
+    tileBank: []
+  };
+  normalized.tileBank = buildTilesForLesson(normalized);
+  return normalized;
+}
+
+/* Build the lesson-level tile set.
+
+   IMPORTANT: This is the full set of letters needed across the
+   ENTIRE lesson — not just the current word. Showing only the
+   current word's letters makes the task trivial (students would
+   only ever see the answer's letters). A real letterbox lesson
+   requires students to choose from available tiles.
+
+   For duplicates, we use the MAX count any single word needs.
+   Example: in a lesson with {cat, bell, cake}, the bank gets
+   two `l` tiles (bell needs two) but only one `c` (no single
+   word needs more than one). This way the student always has
+   enough tiles for any one word without being given the answer
+   via duplicate counts that match the current word exactly.
+
+   Grapheme groups like "sh" or "oa" are split into individual
+   letters here too — students never see pre-joined digraph tiles. */
+function buildTilesForLesson(lessonData) {
+  const maxCounts = new Map();
+
+  lessonData.words.forEach(word => {
+    const wordCounts = new Map();
+    const tally = ch => wordCounts.set(ch, (wordCounts.get(ch) || 0) + 1);
+
+    word.boxes.forEach(g => String(g).split("").forEach(tally));
+    word.outsideLetters.forEach(g => String(g).split("").forEach(tally));
+
+    wordCounts.forEach((count, letter) => {
+      const current = maxCounts.get(letter) || 0;
+      if (count > current) maxCounts.set(letter, count);
+    });
+  });
+
+  // Expand to an array with duplicates as needed, then sort alphabetically.
+  const letters = [];
+  maxCounts.forEach((count, letter) => {
+    for (let i = 0; i < count; i++) letters.push(letter);
+  });
+  return letters.sort((a, b) => a.localeCompare(b));
+}
+
+/* ============================================================
+   Helpers
+   ============================================================ */
+function $(id) { return document.getElementById(id); }
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, s => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+  }[s]));
+}
+
+
+function toggleOutsideArea() {
+  const outsideSpot = $("outsideSpot");
+
+  if (outsideRevealed.has(currentIndex)) {
+    while (outsideSpot.firstChild) {
+      const tile = outsideSpot.firstChild;
+      tile.classList.remove("in-box", "selected");
+      $("tileBank").appendChild(tile);
+    }
+    outsideRevealed.delete(currentIndex);
+  } else {
+    outsideRevealed.add(currentIndex);
+  }
+
+  renderOutsideArea(lesson.words[currentIndex]);
+}
+
+/* ============================================================
+   Rendering
+   ============================================================ */
+function renderLesson() {
+  $("lessonTitle").textContent = "Teacher-Led Letterbox Lesson";
+  renderWordList();
+  renderCurrentWord();
+}
+
+function renderWordList() {
+  const wrap = $("wordList");
+  wrap.innerHTML = "";
+  lesson.words.forEach((w, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "word-pill"
+      + (idx === currentIndex ? " active" : "")
+      + (completedWords.has(idx) ? " done" : "");
+    btn.type = "button";
+    // Student-facing label: generic "Word N" + box count only.
+    // The target word is NEVER placed on the page — not as text,
+    // not as a tooltip, not as a data attribute. The teacher
+    // works from a separate lesson plan / planning tool.
+    btn.innerHTML = `<span>Word ${idx + 1}</span><span class="meta">${w.boxes.length} ${w.boxes.length === 1 ? "box" : "boxes"}</span>`;
+    btn.addEventListener("click", () => {
+      currentIndex = idx;
+      selectedTileId = null;
+      renderCurrentWord();
+      renderWordList();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
+function renderCurrentWord() {
+  const word = lesson.words[currentIndex];
+  if (!word) return;
+
+  // STUDENT-FACING: the main board no longer shows word number/progress.
+  // Keep this defensive in case a future layout adds those elements back.
+  const currentWordEl = $("currentWord");
+  if (currentWordEl) currentWordEl.textContent = `Word ${currentIndex + 1}`;
+  const progressEl = $("progressPill");
+  if (progressEl) progressEl.textContent = `Word ${currentIndex + 1} of ${lesson.words.length}`;
+
+  $("feedback").textContent = "";
+  $("feedback").classList.remove("error");
+
+  renderBoxes(word);
+  renderTiles();
+  renderOutsideArea(word);
+  updateNavButtons();
+}
+
+/* Sound boxes — one box per phoneme. No phoneme labels are
+   rendered on the student-facing board. Students segment the
+   word with teacher support, not by reading sound labels. */
+function renderBoxes(word) {
+  const area = $("soundBoxArea");
+  area.innerHTML = "";
+  word.boxes.forEach((expected, index) => {
+    const box = document.createElement("div");
+    box.className = "sound-box";
+    box.dataset.index = index;
+    box.dataset.expected = expected;
+    box.addEventListener("dragover", onDragOver);
+    box.addEventListener("dragleave", onDragLeave);
+    box.addEventListener("drop", onDrop);
+    box.addEventListener("click", () => placeSelectedTileInBox(box));
+    area.appendChild(box);
+  });
+}
+
+/* Outside-letter area: hidden by default. Revealed only when the
+   teacher clicks "Add Outside Letter Spot". This prevents cueing
+   silent-e or other extra letters before the teacher decides it's
+   instructionally appropriate. */
+function renderOutsideArea(word) {
+  const outsideArea = $("outsideArea");
+  const outsideSpot = $("outsideSpot");
+  const addBtn = $("addOutsideBtn");
+
+  // Clear the outside spot
+  outsideSpot.innerHTML = "";
+  outsideSpot.classList.remove("filled", "drag-over", "correct", "wrong");
+
+  // Re-wire the spot's listeners (innerHTML reset doesn't drop them, but be safe)
+  outsideSpot.onclick = () => placeSelectedTileInBox(outsideSpot);
+  outsideSpot.ondragover = onDragOver;
+  outsideSpot.ondragleave = onDragLeave;
+  outsideSpot.ondrop = onDrop;
+  outsideSpot.dataset.outside = "true";
+
+  if (outsideRevealed.has(currentIndex)) {
+    outsideArea.classList.add("show");
+    addBtn.textContent = "− Remove Outside Letter Area";
+    addBtn.classList.add("active");
+  } else {
+    outsideArea.classList.remove("show");
+    addBtn.textContent = "+ Reveal Outside Letter Area";
+    addBtn.classList.remove("active");
+  }
+}
+
+/* Tile bank: ALWAYS individual letter tiles drawn from the FULL
+   lesson's letter set. This is the same set for every word in
+   the lesson, so the student has to actually choose. */
+function renderTiles() {
+  const bank = $("tileBank");
+  bank.innerHTML = "";
+  const letters = Array.isArray(lesson.tileBank) && lesson.tileBank.length
+    ? lesson.tileBank
+    : buildTilesForLesson(lesson);
+
+  letters.forEach(letter => {
+    const tile = createTile(letter);
+    bank.appendChild(tile);
+  });
+}
+
+function createTile(text) {
+  const tile = document.createElement("div");
+  tile.className = "tile";
+  tile.textContent = text;
+  tile.draggable = true;
+  tile.dataset.value = text;
+  tile.id = "tile-" + (++tileIdCounter);
+  tile.addEventListener("dragstart", e => {
+    selectedTileId = tile.id;
+    e.dataTransfer.setData("text/plain", tile.id);
+    e.dataTransfer.effectAllowed = "move";
+  });
+  tile.addEventListener("click", () => selectTile(tile));
+  return tile;
+}
+
+/* ============================================================
+   Tile interactions — click-to-place and drag-and-drop.
+   Multiple tiles can go into a single sound box (needed for
+   digraphs and vowel teams).
+   ============================================================ */
+function selectTile(tile) {
+  // Click a tile already in a box → return it to the tile bank.
+  if (tile.classList.contains("in-box")) {
+    const parent = tile.parentElement;
+    tile.classList.remove("in-box", "selected");
+    $("tileBank").appendChild(tile);
+    if (parent && !parent.querySelector(".tile")) {
+      parent.classList.remove("filled", "correct", "wrong");
+    }
+    selectedTileId = null;
+    return;
+  }
+
+  document.querySelectorAll(".tile").forEach(t => t.classList.remove("selected"));
+  selectedTileId = tile.id;
+  tile.classList.add("selected");
+}
+
+function placeSelectedTileInBox(box) {
+  if (!selectedTileId) return;
+  const tile = document.getElementById(selectedTileId);
+  if (!tile) return;
+  placeTile(tile, box);
+}
+
+function placeTile(tile, box) {
+  tile.classList.remove("selected");
+  tile.classList.add("in-box");
+  tile.draggable = true;
+  box.appendChild(tile);
+  box.classList.add("filled");
+  box.classList.remove("correct", "wrong");
+  selectedTileId = null;
+  playTone(520, .08);
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add("drag-over");
+}
+function onDragLeave(e) {
+  e.currentTarget.classList.remove("drag-over");
+}
+function onDrop(e) {
+  e.preventDefault();
+  const box = e.currentTarget;
+  box.classList.remove("drag-over");
+  const id = e.dataTransfer.getData("text/plain") || selectedTileId;
+  const tile = document.getElementById(id);
+  if (tile) placeTile(tile, box);
+}
+
+/* ============================================================
+   Teacher actions
+   ============================================================ */
+function clearBoxes() {
+  document.querySelectorAll(".sound-box, .outside-spot").forEach(box => {
+    while (box.firstElementChild) {
+      const tile = box.firstElementChild;
+      tile.classList.remove("in-box", "selected");
+      $("tileBank").appendChild(tile);
+    }
+    box.classList.remove("filled", "drag-over", "correct", "wrong");
+  });
+  selectedTileId = null;
+  $("feedback").textContent = "";
+  $("feedback").classList.remove("error");
+}
+
+function resetWord() {
+  // Also un-reveals outside area for this word so the teacher
+  // can demonstrate the reveal step again if needed.
+  outsideRevealed.delete(currentIndex);
+  renderCurrentWord();
+}
+
+function addOutsideSpot() {
+  const outsideSpot = $("outsideSpot");
+
+  if (outsideRevealed.has(currentIndex)) {
+    // Return any placed outside-letter tiles to the tile bank before hiding.
+    if (outsideSpot) {
+      while (outsideSpot.firstChild) {
+        const tile = outsideSpot.firstChild;
+        if (tile.classList) tile.classList.remove("in-box", "selected");
+        $("tileBank").appendChild(tile);
+      }
+      outsideSpot.classList.remove("filled", "drag-over", "correct", "wrong");
+    }
+    outsideRevealed.delete(currentIndex);
+  } else {
+    outsideRevealed.add(currentIndex);
+  }
+
+  renderOutsideArea(lesson.words[currentIndex]);
+}
+
+function showAnswer() {
+  const word = lesson.words[currentIndex];
+  clearBoxes();
+
+  // If the word has outside letters, make sure the outside area is shown.
+  if (word.outsideLetters && word.outsideLetters.length) {
+    outsideRevealed.add(currentIndex);
+    renderOutsideArea(word);
+  }
+
+  const boxes = Array.from(document.querySelectorAll(".sound-box"));
+  word.boxes.forEach((expected, index) => {
+    String(expected).split("").forEach(letter => {
+      const tile = createTile(letter);
+      tile.classList.add("in-box");
+      boxes[index].appendChild(tile);
+    });
+    boxes[index].classList.add("filled", "correct");
+  });
+
+  if (word.outsideLetters && word.outsideLetters.length) {
+    const spot = $("outsideSpot");
+    word.outsideLetters.forEach(letterGroup => {
+      String(letterGroup).split("").forEach(letter => {
+        const tile = createTile(letter);
+        tile.classList.add("in-box");
+        spot.appendChild(tile);
+      });
+    });
+    spot.classList.add("filled", "correct");
+  }
+  $("feedback").textContent = "Answer shown. Talk through each sound and its spelling.";
+  $("feedback").classList.remove("error");
+}
+
+/* Check: concatenate the values of all tiles inside each sound box
+   and compare to the expected grapheme. Outside letters are
+   compared as a single concatenated string. */
+function checkAnswer() {
+  const word = lesson.words[currentIndex];
+  const boxes = Array.from(document.querySelectorAll(".sound-box"));
+
+  const values = boxes.map(b =>
+    Array.from(b.querySelectorAll(".tile"))
+      .map(tile => tile.dataset.value)
+      .join("")
+  );
+
+  const expectedOutside = (word.outsideLetters || []).join("");
+  const spot = $("outsideSpot");
+  const outsideValue = spot
+    ? Array.from(spot.querySelectorAll(".tile")).map(t => t.dataset.value).join("")
+    : "";
+
+  const allBoxesFilled = values.every(Boolean);
+  if (!allBoxesFilled) {
+    setFeedback("Some sound boxes are still empty.", true);
+    return false;
+  }
+
+  // If the word actually needs outside letters but the teacher
+  // hasn't revealed the outside area, do NOT tell the student
+  // "this word has an outside letter" — that gives the answer.
+  // Instead, prompt them to think about the spelling.
+  if (expectedOutside && !outsideRevealed.has(currentIndex)) {
+    setFeedback("The sound boxes are filled. Now decide whether any letter belongs outside the boxes.", true);
+    return false;
+  }
+
+  // Mark each box individually so students see which ones are right.
+  let boxesCorrect = true;
+  values.forEach((v, i) => {
+    if (v === word.boxes[i]) {
+      boxes[i].classList.add("correct");
+      boxes[i].classList.remove("wrong");
+    } else {
+      boxes[i].classList.add("wrong");
+      boxes[i].classList.remove("correct");
+      boxesCorrect = false;
+    }
+  });
+
+  let outsideCorrect = true;
+  if (expectedOutside) {
+    if (outsideValue === expectedOutside) {
+      spot.classList.add("correct");
+      spot.classList.remove("wrong");
+    } else {
+      spot.classList.add("wrong");
+      spot.classList.remove("correct");
+      outsideCorrect = false;
+    }
+  } else if (outsideValue) {
+    // Teacher revealed the spot and the student put something in it,
+    // but this word doesn't need an outside letter.
+    spot.classList.add("wrong");
+    outsideCorrect = false;
+  }
+
+  const correct = boxesCorrect && outsideCorrect;
+  if (correct) {
+    completedWords.add(currentIndex);
+    setFeedback("Correct! The graphemes match the sounds.", false);
+    renderWordList();
+    playSuccess();
+  } else {
+    setFeedback("Take another look. One or more tiles needs to change.", true);
+    playTone(180, .12);
+  }
+  return correct;
+}
+
+function setFeedback(text, isError) {
+  const fb = $("feedback");
+  fb.textContent = text;
+  if (isError) fb.classList.add("error");
+  else fb.classList.remove("error");
+}
+
+function nextWord() {
+  if (currentIndex < lesson.words.length - 1) {
+    currentIndex++;
+    selectedTileId = null;
+    renderCurrentWord();
+    renderWordList();
+  } else {
+    showFinished();
+  }
+}
+
+function prevWord() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    selectedTileId = null;
+    renderCurrentWord();
+    renderWordList();
+  }
+}
+
+function restartLesson() {
+  completedWords.clear();
+  outsideRevealed.clear();
+  currentIndex = 0;
+  selectedTileId = null;
+  $("finishedScreen").classList.remove("show");
+  renderLesson();
+}
+
+function showFinished() {
+  $("finishedScreen").classList.add("show");
+  playSuccess();
+  launchConfetti();
+}
+
+function updateNavButtons() {
+  $("prevBtn").disabled = currentIndex === 0;
+  $("nextBtn").textContent = currentIndex === lesson.words.length - 1 ? "Finish →" : "Next →";
+}
+
+/* ============================================================
+   Audio
+   ============================================================ */
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq, dur=.08) {
+  if (!soundOn) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(.001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.18, ctx.currentTime + .01);
+    gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + dur);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + dur + .02);
+  } catch(e) {}
+}
+
+function playSuccess() {
+  playTone(523, .08);
+  setTimeout(() => playTone(659, .08), 90);
+  setTimeout(() => playTone(784, .12), 180);
+}
+
+/* The audio is the student's access point to the target word.
+   The word text is never shown on the student-facing board. */
+function playCurrentWord() {
+  const word = lesson.words[currentIndex]?.word || "";
+  if (!word) return;
+
+  try {
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(`Build the word ${word}.`);
+    utterance.rate = 0.62;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    const voices = window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : [];
+    const preferredVoice =
+      voices.find(v => /Google US English|Microsoft Aria|Samantha|Alex/i.test(v.name) && /^en/i.test(v.lang)) ||
+      voices.find(v => /^en-US/i.test(v.lang)) ||
+      voices.find(v => /^en/i.test(v.lang));
+
+    if (preferredVoice) utterance.voice = preferredVoice;
+
+    window.speechSynthesis.speak(utterance);
+  } catch(e) {
+    playTone(440, .12);
+  }
+}
+
+function setSoundButtonIcon() {
+  const btn = $("soundBtn");
+  if (!btn) return;
+  btn.innerHTML = soundOn ? `<svg class="header-svg" viewBox="0 0 24 24" aria-hidden="true">
+  <path d="M4 9v6h4l5 4V5L8 9H4z"></path>
+  <path d="M16 9.5a4 4 0 0 1 0 5"></path>
+  <path d="M18.5 7a7 7 0 0 1 0 10"></path>
+</svg>` : `<svg class="header-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"></path><path d="M19 9l-5 5"></path><path d="M14 9l5 5"></path></svg>`;
+}
+
+
+let originalLessonPanelParent = null;
+let originalLessonPanelNext = null;
+
+function openPresentationMode() {
+  const overlay = $("presentationOverlay");
+  const content = $("presentationContent");
+  const lessonPanel = document.querySelector(".lesson-panel");
+  if (!overlay || !content || !lessonPanel) return;
+
+  originalLessonPanelParent = lessonPanel.parentNode;
+  originalLessonPanelNext = lessonPanel.nextSibling;
+
+  document.body.classList.add("presentation-mode");
+  content.appendChild(lessonPanel);
+  overlay.classList.add("show");
+  overlay.setAttribute("aria-hidden", "false");
+
+  const btn = $("fullscreenBtn");
+  if (btn) btn.textContent = "Exit Presentation";
+}
+
+function closePresentationMode() {
+  const overlay = $("presentationOverlay");
+  const lessonPanel = document.querySelector(".lesson-panel");
+  if (!overlay || !lessonPanel || !originalLessonPanelParent) return;
+
+  if (originalLessonPanelNext) {
+    originalLessonPanelParent.insertBefore(lessonPanel, originalLessonPanelNext);
+  } else {
+    originalLessonPanelParent.appendChild(lessonPanel);
+  }
+
+  overlay.classList.remove("show");
+  overlay.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("presentation-mode");
+
+  const btn = $("fullscreenBtn");
+  if (btn) btn.textContent = "Present";
+}
+
+function togglePresentationMode() {
+  const overlay = $("presentationOverlay");
+  if (overlay && overlay.classList.contains("show")) closePresentationMode();
+  else openPresentationMode();
+}
+
+function launchConfetti() {
+  const colors = ["#2EC4B6", "#FFD166", "#FF6B6B", "#7B5EA7", "#1B2A4A"];
+  for (let i = 0; i < 42; i++) {
+    const piece = document.createElement("div");
+    piece.className = "confetti-piece";
+    piece.style.left = Math.random() * 100 + "vw";
+    piece.style.background = colors[i % colors.length];
+    piece.style.animationDelay = (Math.random() * .35) + "s";
+    piece.style.transform = "rotate(" + (Math.random() * 180) + "deg)";
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 2400);
+  }
+}
+
+/* ============================================================
+   Wire up controls
+   ============================================================ */
+$("fullscreenBtn").addEventListener("click", togglePresentationMode);
+$("playWordBtn").addEventListener("click", playCurrentWord);
+$("presentationPlayBtn")?.addEventListener("click", playCurrentWord);
+$("closePresentationBtn")?.addEventListener("click", closePresentationMode);
+$("showAnswerBtn").addEventListener("click", showAnswer);
+$("resetWordBtn").addEventListener("click", resetWord);
+$("restartLessonBtn").addEventListener("click", restartLesson);
+$("prevBtn").addEventListener("click", prevWord);
+$("checkBtn").addEventListener("click", checkAnswer);
+$("clearBoxesBtn").addEventListener("click", clearBoxes);
+$("addOutsideBtn").addEventListener("click", addOutsideSpot);
+$("nextBtn").addEventListener("click", nextWord);
+$("finishedRestartBtn").addEventListener("click", restartLesson);
+$("finishedCloseBtn").addEventListener("click", () => $("finishedScreen").classList.remove("show"));
+$("soundBtn").addEventListener("click", () => {
+  soundOn = !soundOn;
+  setSoundButtonIcon();
+});
+
+renderLesson();
+</script>
+</body>
+</html>
