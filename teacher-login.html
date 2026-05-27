@@ -77,7 +77,7 @@ const provider = new GoogleAuthProvider();
 function getPostLoginDestination() {
   const pending = sessionStorage.getItem('pendingActivityData');
   if (pending) {
-    return 'phoneme-counter.html?savePendingActivity=1';
+    return 'phoneme-counter.html?autoSavePendingActivity=1';
   }
   return 'teacher-dashboard.html';
 }
