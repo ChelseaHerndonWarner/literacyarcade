@@ -1134,6 +1134,18 @@ button[onclick*="addToLesson"]:hover {
   transform: translateY(-1px);
 }
 
+
+/* Saved Activity account button */
+.save-activity-btn {
+  background: #1A2340 !important;
+  color: #fff !important;
+  box-shadow: 0 3px 0 rgba(26,35,64,.35) !important;
+}
+.save-activity-btn:hover {
+  background: #11182E !important;
+  transform: translateY(-1px);
+}
+
 </style>
 
   <meta name="description" content="Count phonemes and map regular words into sound boxes for letterbox lessons. Includes vowel teams, r-controlled vowels, and diphthongs.">
@@ -1260,6 +1272,7 @@ button[onclick*="addToLesson"]:hover {
         <div class="tray-actions">
           <button class="small-secondary" id="clearLessonBtn" type="button">Clear lesson list</button>
           <button class="small-secondary launch-lesson-btn" id="buildLessonBtn" type="button">Start Letterbox Lesson</button>
+          <button class="small-secondary save-activity-btn" id="saveActivityBtn" type="button">Save Activity</button>
           <button class="tray-action primary" id="downloadLessonPdfBtn" onclick="downloadLessonPdf()">Download Lesson PDF</button>
           <div class="pdf-helper-text">Includes word maps, phoneme counts, sound boxes, and letter tiles.</div>
         </div>
@@ -1884,23 +1897,14 @@ function addCurrentToLesson(){
 }
 function clearLessonList(){ lessonWords=[]; renderLessonTray(); }
 
-function startLetterboxLesson() {
+
+function buildLetterboxActivityData(customTitle) {
   const mapped = getSequencedLessonWordStrings(lessonWords)
     .map(mapWord)
     .filter(Boolean)
     .sort((a,b) => a.phonemeCount - b.phonemeCount || a.word.localeCompare(b.word));
 
-  if (!mapped.length) {
-    const msg = document.getElementById('lessonMsg');
-    if (msg) {
-      msg.textContent = 'Add mapped words to the lesson list first.';
-      msg.style.display = 'block';
-      setTimeout(() => msg.style.display = 'none', 3000);
-    } else {
-      alert('Add mapped words to the lesson list first.');
-    }
-    return;
-  }
+  if (!mapped.length) return null;
 
   const words = mapped.map(m => ({
     word: m.word,
@@ -1912,12 +1916,94 @@ function startLetterboxLesson() {
                     Array.isArray(m.outsideLetters) ? m.outsideLetters.map(String) : []
   }));
 
-  const lessonData = {
-    title: 'Letterbox Lesson',
+  return {
+    title: customTitle || 'Letterbox Lesson',
+    toolType: 'letterbox-lesson',
+    activityType: 'letterbox-lesson',
     source: 'phoneme-counter',
     generatedAt: new Date().toISOString(),
     words
   };
+}
+
+async function saveCurrentActivity() {
+  const msg = document.getElementById('lessonMsg');
+
+  const activityPreview = buildLetterboxActivityData('Letterbox Lesson');
+  if (!activityPreview) {
+    if (msg) {
+      msg.textContent = 'Add mapped words to the lesson list first.';
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    } else {
+      alert('Add mapped words to the lesson list first.');
+    }
+    return;
+  }
+
+  const title = prompt('Name this saved activity:', activityPreview.title || 'Letterbox Lesson');
+  if (!title) return;
+
+  try {
+    const [{ auth, db }, firestore] = await Promise.all([
+      import('./firebase-config.js'),
+      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js')
+    ]);
+
+    const user = auth.currentUser;
+
+    if (!user) {
+      sessionStorage.setItem('pendingActivityData', JSON.stringify(buildLetterboxActivityData(title.trim())));
+      alert('Sign in with Google to save this activity. Your lesson will be waiting when you return.');
+      window.location.href = 'teacher-login.html';
+      return;
+    }
+
+    const activityData = buildLetterboxActivityData(title.trim());
+    activityData.createdAt = firestore.serverTimestamp();
+    activityData.updatedAt = firestore.serverTimestamp();
+    activityData.ownerUid = user.uid;
+    activityData.shareEnabled = false;
+
+    await firestore.addDoc(
+      firestore.collection(db, `users/${user.uid}/activities`),
+      activityData
+    );
+
+    if (msg) {
+      msg.textContent = 'Activity saved to your dashboard!';
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    } else {
+      alert('Activity saved!');
+    }
+  } catch (error) {
+    console.error(error);
+    if (msg) {
+      msg.textContent = 'Activity could not be saved. Check your Firebase setup and try again.';
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 4500);
+    } else {
+      alert('Activity could not be saved.');
+    }
+  }
+}
+
+
+function startLetterboxLesson() {
+  const lessonData = buildLetterboxActivityData('Letterbox Lesson');
+
+  if (!lessonData) {
+    const msg = document.getElementById('lessonMsg');
+    if (msg) {
+      msg.textContent = 'Add mapped words to the lesson list first.';
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    } else {
+      alert('Add mapped words to the lesson list first.');
+    }
+    return;
+  }
 
   sessionStorage.setItem('letterboxLessonData', JSON.stringify(lessonData));
   window.location.href = 'letterbox-lesson.html';
@@ -1941,7 +2027,82 @@ document.getElementById('wordInput').addEventListener('keydown',e=>{if(e.key==='
 document.getElementById('countFilter').addEventListener('change',()=>{renderExamples();renderBank();showEmptyState();});
 document.getElementById('patternFilter').addEventListener('change',()=>{renderExamples();renderBank();showEmptyState();});
 document.getElementById('clearLessonBtn').addEventListener('click',clearLessonList);
+
+async function savePendingActivityAfterLogin() {
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has('savePendingActivity')) return;
+
+  const msg = document.getElementById('lessonMsg');
+  const pendingRaw = sessionStorage.getItem('pendingActivityData');
+
+  if (!pendingRaw) {
+    if (msg) {
+      msg.textContent = 'No pending activity was found.';
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    }
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return;
+  }
+
+  try {
+    const [{ auth, db }, authSdk, firestore] = await Promise.all([
+      import('./firebase-config.js'),
+      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js'),
+      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js')
+    ]);
+
+    authSdk.onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = 'teacher-login.html';
+        return;
+      }
+
+      try {
+        const activityData = JSON.parse(pendingRaw);
+        activityData.createdAt = firestore.serverTimestamp();
+        activityData.updatedAt = firestore.serverTimestamp();
+        activityData.ownerUid = user.uid;
+        activityData.shareEnabled = false;
+
+        await firestore.addDoc(
+          firestore.collection(db, `users/${user.uid}/activities`),
+          activityData
+        );
+
+        sessionStorage.removeItem('pendingActivityData');
+
+        if (msg) {
+          msg.textContent = 'Activity saved to your dashboard!';
+          msg.style.display = 'block';
+          setTimeout(() => msg.style.display = 'none', 3500);
+        }
+
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } catch (saveError) {
+        console.error(saveError);
+        if (msg) {
+          msg.textContent = 'Activity could not be saved after sign-in. Try Save Activity again.';
+          msg.style.display = 'block';
+          setTimeout(() => msg.style.display = 'none', 4500);
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error(error);
+    if (msg) {
+      msg.textContent = 'Sign-in save setup could not load. Try Save Activity again.';
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 4500);
+    }
+  }
+}
+
+
 document.getElementById('buildLessonBtn').addEventListener('click',startLetterboxLesson);
+document.getElementById('saveActivityBtn').addEventListener('click',saveCurrentActivity);
+savePendingActivityAfterLogin();
 updatePatternOptions(); renderVowelTypeTabs(); renderVowelTabs(); renderExamples(); renderBank(); renderLessonTray(); showEmptyState();
 
 
@@ -3558,6 +3719,18 @@ button[onclick*="addToLesson"]:hover {
 }
 .launch-lesson-btn:hover {
   background: #0F6E56 !important;
+  transform: translateY(-1px);
+}
+
+
+/* Saved Activity account button */
+.save-activity-btn {
+  background: #1A2340 !important;
+  color: #fff !important;
+  box-shadow: 0 3px 0 rgba(26,35,64,.35) !important;
+}
+.save-activity-btn:hover {
+  background: #11182E !important;
   transform: translateY(-1px);
 }
 
