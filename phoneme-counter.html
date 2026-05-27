@@ -1146,6 +1146,27 @@ button[onclick*="addToLesson"]:hover {
   transform: translateY(-1px);
 }
 
+
+.account-btn {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border, rgba(26,35,64,.12));
+  border-radius: 10px;
+  background: #fff;
+  color: var(--navy, #1a2340);
+  padding: 0 12px;
+  font-family: var(--font-head, 'Nunito', sans-serif);
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.account-btn:hover {
+  background: #F8F7F3;
+}
+
 </style>
 
   <meta name="description" content="Count phonemes and map regular words into sound boxes for letterbox lessons. Includes vowel teams, r-controlled vowels, and diphthongs.">
@@ -1193,6 +1214,8 @@ button[onclick*="addToLesson"]:hover {
   <a class="la-left" href="https://literacyarcade.com" aria-label="Literacy Arcade home">
     <span class="la-icon"><img src="data:image/jpeg;base64,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" alt="Literacy Arcade logo"></span><span class="la-wordmark">Literacy Arcade</span><span class="la-pipe"></span><span class="la-tool-name">Phoneme Counter</span>
   </a>
+  
+    <a class="account-btn" href="teacher-dashboard.html" title="My Activities">My Activities</a>
   <a class="home-btn" href="https://literacyarcade.com/" title="Home" aria-label="All tools">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
   </a>
@@ -1954,7 +1977,7 @@ async function saveCurrentActivity() {
 
     if (!user) {
       sessionStorage.setItem('pendingActivityData', JSON.stringify(buildLetterboxActivityData(title.trim())));
-      alert('Sign in with Google to save this activity. Your lesson will be waiting when you return.');
+      alert('Sign in with Google to save this activity. After sign-in, it will be saved and you will go to My Activities.');
       window.location.href = 'teacher-login.html';
       return;
     }
@@ -2030,7 +2053,7 @@ document.getElementById('clearLessonBtn').addEventListener('click',clearLessonLi
 
 async function savePendingActivityAfterLogin() {
   const params = new URLSearchParams(window.location.search);
-  if (!params.has('savePendingActivity')) return;
+  if (!params.has('savePendingActivity') && !params.has('autoSavePendingActivity')) return;
 
   const msg = document.getElementById('lessonMsg');
   const pendingRaw = sessionStorage.getItem('pendingActivityData');
@@ -2075,10 +2098,9 @@ async function savePendingActivityAfterLogin() {
         if (msg) {
           msg.textContent = 'Activity saved to your dashboard!';
           msg.style.display = 'block';
-          setTimeout(() => msg.style.display = 'none', 3500);
         }
 
-        window.history.replaceState({}, document.title, window.location.pathname);
+        window.location.href = 'teacher-dashboard.html';
       } catch (saveError) {
         console.error(saveError);
         if (msg) {
@@ -3732,6 +3754,27 @@ button[onclick*="addToLesson"]:hover {
 .save-activity-btn:hover {
   background: #11182E !important;
   transform: translateY(-1px);
+}
+
+
+.account-btn {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border, rgba(26,35,64,.12));
+  border-radius: 10px;
+  background: #fff;
+  color: var(--navy, #1a2340);
+  padding: 0 12px;
+  font-family: var(--font-head, 'Nunito', sans-serif);
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.account-btn:hover {
+  background: #F8F7F3;
 }
 
 </style>
