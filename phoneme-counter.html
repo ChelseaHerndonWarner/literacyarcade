@@ -1123,6 +1123,17 @@ button[onclick*="addToLesson"]:hover {
   text-decoration: none;
 }
 
+
+.launch-lesson-btn {
+  background: var(--teal, #1D9E75) !important;
+  color: #fff !important;
+  box-shadow: 0 3px 0 #0F6E56 !important;
+}
+.launch-lesson-btn:hover {
+  background: #0F6E56 !important;
+  transform: translateY(-1px);
+}
+
 </style>
 
   <meta name="description" content="Count phonemes and map regular words into sound boxes for letterbox lessons. Includes vowel teams, r-controlled vowels, and diphthongs.">
@@ -1248,7 +1259,7 @@ button[onclick*="addToLesson"]:hover {
         <div class="tray-words" id="lessonTray"><span class="tray-empty">Add mapped words here. Words are auto-sequenced by phoneme count, spelling complexity, and rhyme spacing when possible.</span></div>
         <div class="tray-actions">
           <button class="small-secondary" id="clearLessonBtn" type="button">Clear lesson list</button>
-          <button class="small-secondary" id="buildLessonBtn" type="button">Build lesson soon</button>
+          <button class="small-secondary launch-lesson-btn" id="buildLessonBtn" type="button">Start Letterbox Lesson</button>
           <button class="tray-action primary" id="downloadLessonPdfBtn" onclick="downloadLessonPdf()">Download Lesson PDF</button>
           <div class="pdf-helper-text">Includes word maps, phoneme counts, sound boxes, and letter tiles.</div>
         </div>
@@ -1872,6 +1883,46 @@ function addCurrentToLesson(){
   setTimeout(()=>{msg.style.display='none'; msg.textContent='Copied!';},1300);
 }
 function clearLessonList(){ lessonWords=[]; renderLessonTray(); }
+
+function startLetterboxLesson() {
+  const mapped = getSequencedLessonWordStrings(lessonWords)
+    .map(mapWord)
+    .filter(Boolean)
+    .sort((a,b) => a.phonemeCount - b.phonemeCount || a.word.localeCompare(b.word));
+
+  if (!mapped.length) {
+    const msg = document.getElementById('lessonMsg');
+    if (msg) {
+      msg.textContent = 'Add mapped words to the lesson list first.';
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    } else {
+      alert('Add mapped words to the lesson list first.');
+    }
+    return;
+  }
+
+  const words = mapped.map(m => ({
+    word: m.word,
+    phonemes: Array.isArray(m.phonemes) ? m.phonemes : [],
+    boxes: Array.isArray(m.letterboxes) ? m.letterboxes.map(String) :
+           Array.isArray(m.boxes) ? m.boxes.map(String) :
+           Array.isArray(m.graphemes) ? m.graphemes.map(String) : [],
+    outsideLetters: Array.isArray(m.silentOutsideBoxes) ? m.silentOutsideBoxes.map(String) :
+                    Array.isArray(m.outsideLetters) ? m.outsideLetters.map(String) : []
+  }));
+
+  const lessonData = {
+    title: 'Letterbox Lesson',
+    source: 'phoneme-counter',
+    generatedAt: new Date().toISOString(),
+    words
+  };
+
+  sessionStorage.setItem('letterboxLessonData', JSON.stringify(lessonData));
+  window.location.href = 'letterbox-lesson.html';
+}
+
 function showBuildLessonMessage(){
   const msg=document.getElementById('lessonMsg');
   msg.style.display='block';
@@ -1890,7 +1941,7 @@ document.getElementById('wordInput').addEventListener('keydown',e=>{if(e.key==='
 document.getElementById('countFilter').addEventListener('change',()=>{renderExamples();renderBank();showEmptyState();});
 document.getElementById('patternFilter').addEventListener('change',()=>{renderExamples();renderBank();showEmptyState();});
 document.getElementById('clearLessonBtn').addEventListener('click',clearLessonList);
-document.getElementById('buildLessonBtn').addEventListener('click',showBuildLessonMessage);
+document.getElementById('buildLessonBtn').addEventListener('click',startLetterboxLesson);
 updatePatternOptions(); renderVowelTypeTabs(); renderVowelTabs(); renderExamples(); renderBank(); renderLessonTray(); showEmptyState();
 
 
@@ -3497,6 +3548,17 @@ button[onclick*="addToLesson"]:hover {
 /* ─── v42 stable SEO/home polish ───────────────────────────────────── */
 .home-btn {
   text-decoration: none;
+}
+
+
+.launch-lesson-btn {
+  background: var(--teal, #1D9E75) !important;
+  color: #fff !important;
+  box-shadow: 0 3px 0 #0F6E56 !important;
+}
+.launch-lesson-btn:hover {
+  background: #0F6E56 !important;
+  transform: translateY(-1px);
 }
 
 </style>
