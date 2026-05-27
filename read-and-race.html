@@ -553,6 +553,43 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
   .player-grid{grid-template-columns:1fr}
   .card{padding:16px 18px}
 }
+
+/* ─── SAVE / LOAD SYSTEM ──────────────────────────────────────────────────── */
+.save-bar{
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--border);
+}
+.save-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1.5px solid var(--teal);background:var(--teal-bg);
+  border-radius:var(--r-sm);padding:8px 16px;
+  font-size:13px;font-weight:800;color:var(--teal-dk);
+  cursor:pointer;transition:all .13s;white-space:nowrap;
+}
+.save-btn:hover{background:var(--teal);color:white}
+.save-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.auth-bar{
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  font-size:12px;font-weight:700;color:var(--navy-lt);
+}
+.auth-avatar{
+  width:26px;height:26px;border-radius:50%;
+  object-fit:cover;border:2px solid var(--teal);flex-shrink:0;
+}
+.auth-name{color:var(--navy);font-weight:800}
+/* Load from saved banner */
+.loaded-banner{
+  background:linear-gradient(135deg,var(--teal-bg),#fff);
+  border:1.5px solid rgba(14,159,142,.3);
+  border-radius:var(--r-md);padding:10px 14px;
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.loaded-banner svg{width:18px;height:18px;stroke:var(--teal-dk);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.loaded-banner-text{font-size:13px;font-weight:700;color:var(--teal-dk)}
+.loaded-banner-clear{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--navy-lt);font-size:11px;font-weight:800;padding:0;font-family:inherit}
+.loaded-banner-clear:hover{color:var(--navy)}
 </style>
 </head>
 <body>
@@ -574,6 +611,9 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
       <svg id="setupSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
       <svg id="setupSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
     </button>
+    <button class="icon-btn" id="dashboardBtn" aria-label="My saved activities" title="Teacher Dashboard" style="display:none" onclick="window.location.href='teacher-dashboard.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </button>
     <button class="icon-btn" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'">
       <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
     </button>
@@ -582,6 +622,13 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
 
 <!-- ═══ SETUP ═══ -->
 <section id="setup">
+  <!-- Loaded-from-dashboard banner (hidden by default) -->
+  <div class="loaded-banner" id="loadedBanner" style="display:none">
+    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    <span class="loaded-banner-text" id="loadedBannerText">Activity loaded from your dashboard</span>
+    <button class="loaded-banner-clear" id="loadedBannerClear" title="Clear and start fresh">✕ Clear</button>
+  </div>
+
   <div class="hero">
     <div class="hero-badge">Two-Player Race Game</div>
     <h1>Read &amp; <strong>Race</strong></h1>
@@ -641,7 +688,17 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
   </div>
 
   <button class="start-btn" id="startBtn">Start the Race</button>
-</section>
+
+  <!-- Save / Auth bar -->
+  <div class="save-bar">
+    <button class="save-btn" id="saveActivityBtn">
+      <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save Activity
+    </button>
+    <div class="auth-bar" id="authBar">
+      <span id="authStatus" style="color:var(--navy-lt)">Loading…</span>
+    </div>
+  </div>
 
 <!-- ═══ GAME ═══ -->
 <section id="game">
@@ -969,6 +1026,7 @@ function addCustomWords(){
 }
 function setListType(type){
   currentListType=type;
+  window.currentListType=type; // keep module in sync
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===type));
   const isCustom=type==='custom';
   $('customField').classList.toggle('show',isCustom);
@@ -1429,12 +1487,202 @@ function init(){
   $('setupSoundBtn') && $('setupSoundBtn').addEventListener('click',toggleSound);
   $('gameSoundBtn')  && $('gameSoundBtn').addEventListener('click',toggleSound);
   document.addEventListener('click',()=>{try{getAudio();}catch(e){}},{once:true});
+  // Expose globals for Firebase module
+  window.selectedWordsSet = selectedWordsSet;
+  window.currentListType  = currentListType;
+  window.setListType      = setListType;
+  window.renderWordBank   = renderWordBank;
+  window.updateWordCount  = updateWordCount;
 }
 window.addEventListener('DOMContentLoaded',init);
 window.addEventListener('resize',()=>{
   if($('game').style.display==='flex'&&players.length){
     buildScenery();renderTracks();players.forEach((_,i)=>moveRunner(i));
   }
+});
+</script>
+
+<!-- ═══ FIREBASE SAVE / LOAD ═══ -->
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
+  authDomain: "literacy-arcade.firebaseapp.com",
+  projectId: "literacy-arcade",
+  storageBucket: "literacy-arcade.firebasestorage.app",
+  messagingSenderId: "628621471724",
+  appId: "1:628621471724:web:7ddfd231d1261b6c781ac9"
+};
+
+// Reuse existing app if already initialized — avoids duplicate-app error
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let currentUser = null;
+
+/* ── Auth state ──────────────────────────────────────────────────────────── */
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  updateAuthBar(user);
+  const dashBtn = document.getElementById('dashboardBtn');
+  if (dashBtn) dashBtn.style.display = user ? 'flex' : 'none';
+});
+
+function escStr(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+function updateAuthBar(user) {
+  const bar = document.getElementById('authStatus');
+  if (!bar) return;
+  if (user) {
+    const name = user.displayName || user.email || 'Teacher';
+    bar.innerHTML = `
+      ${user.photoURL ? `<img class="auth-avatar" src="${user.photoURL}" alt=""/>` : ''}
+      <span class="auth-name">${escStr(name)}</span>
+      &nbsp;·&nbsp;
+      <a href="teacher-dashboard.html" style="color:var(--teal-dk);font-weight:800;font-size:12px">My Dashboard</a>`;
+  } else {
+    bar.innerHTML = `<span style="color:var(--navy-lt)">Sign in to save activities</span>`;
+  }
+}
+
+/* ── Save button — prompt() style matching Phoneme Counter ──────────────── */
+document.getElementById('saveActivityBtn').addEventListener('click', async () => {
+  // Not signed in → redirect to login page (same as Phoneme Counter)
+  if (!currentUser) {
+    window.location.href = 'teacher-login.html';
+    return;
+  }
+
+  // Check words are selected
+  const wordsArr = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
+  if (!wordsArr.length) {
+    alert('Please select at least one word before saving.');
+    return;
+  }
+
+  // Prompt for activity name — matches Phoneme Counter UX exactly
+  const defaultTitle = buildDefaultTitle();
+  const title = prompt('Name this saved activity:', defaultTitle);
+  if (title === null) return; // user cancelled
+  const cleanTitle = title.trim();
+  if (!cleanTitle) { alert('Please enter a name for this activity.'); return; }
+
+  // Build the activity document
+  const listType = window.currentListType || 'custom';
+  const level    = document.getElementById('levelSelect')?.value || '';
+
+  const activityData = {
+    title:        cleanTitle,
+    toolType:     'read-and-race',
+    activityType: 'read-and-race',
+    words:        wordsArr,
+    settings: {
+      listType,
+      level,
+      playerCount: 2
+    },
+    url:       'read-and-race.html',
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    userId:    currentUser.uid
+  };
+
+  try {
+    await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
+    // Brief success state on the button
+    const btn = document.getElementById('saveActivityBtn');
+    const orig = btn.innerHTML;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Saved!`;
+    btn.style.background = 'var(--teal)';
+    btn.style.color = 'white';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2500);
+  } catch (err) {
+    console.error('Save error:', err);
+    alert('Save failed. Please check your connection and try again.');
+  }
+});
+
+function buildDefaultTitle() {
+  const listType = window.currentListType || 'fry';
+  const level = document.getElementById('levelSelect')?.value || '';
+  const count = window.selectedWordsSet ? window.selectedWordsSet.size : 0;
+  const parts = [];
+  if (listType === 'fry')         parts.push('Fry Words');
+  else if (listType === 'dolch')  parts.push('Dolch Words');
+  else if (listType === 'phonics') parts.push('Phonics');
+  else                             parts.push('Custom Words');
+  if (level) parts.push(level);
+  if (count) parts.push(`(${count} words)`);
+  return parts.join(' — ');
+}
+
+/* ── Load from dashboard (sessionStorage) ────────────────────────────────── */
+function tryLoadSavedActivity() {
+  const raw = sessionStorage.getItem('savedActivityData');
+  if (!raw) return;
+
+  let activity;
+  try { activity = JSON.parse(raw); } catch { return; }
+  if (!activity || activity.toolType !== 'read-and-race') return;
+
+  // Clear so refreshing doesn't re-load
+  sessionStorage.removeItem('savedActivityData');
+  sessionStorage.removeItem('savedActivityId');
+
+  const words    = activity.words || [];
+  const settings = activity.settings || {};
+  const title    = activity.title || 'Saved Activity';
+
+  if (!words.length) return;
+
+  // Restore list type + level
+  const listType = settings.listType || 'custom';
+  if (window.setListType) window.setListType(listType);
+
+  if (settings.level && document.getElementById('levelSelect')) {
+    setTimeout(() => {
+      const sel = document.getElementById('levelSelect');
+      const opt = [...sel.options].find(o => o.value === settings.level);
+      if (opt) { sel.value = settings.level; if (window.renderWordBank) window.renderWordBank(); }
+    }, 50);
+  }
+
+  // Restore selected words
+  if (window.selectedWordsSet) {
+    window.selectedWordsSet.clear();
+    words.forEach(w => window.selectedWordsSet.add(w));
+    if (window.renderWordBank) window.renderWordBank();
+    if (window.updateWordCount) window.updateWordCount();
+  }
+
+  // Show loaded banner
+  const banner = document.getElementById('loadedBanner');
+  const bannerText = document.getElementById('loadedBannerText');
+  if (banner) {
+    bannerText.textContent = `"${title}" loaded — ${words.length} word${words.length===1?'':'s'} ready`;
+    banner.style.display = 'flex';
+  }
+}
+
+document.getElementById('loadedBannerClear')?.addEventListener('click', () => {
+  document.getElementById('loadedBanner').style.display = 'none';
+  if (window.selectedWordsSet) {
+    window.selectedWordsSet.clear();
+    if (window.renderWordBank) window.renderWordBank();
+    if (window.updateWordCount) window.updateWordCount();
+  }
+});
+
+// Run after main init so globals are ready
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(tryLoadSavedActivity, 80);
 });
 </script>
 </body>
