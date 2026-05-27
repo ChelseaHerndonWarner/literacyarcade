@@ -826,6 +826,9 @@
         <svg id="setupSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         <svg id="setupSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
       </button>
+      <button class="icon-btn" id="dashboardBtn" aria-label="My saved activities" title="Teacher Dashboard" style="display:none" onclick="window.location.href='teacher-dashboard.html'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </button>
       <button class="icon-btn" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'">
         <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
       </button>
@@ -936,6 +939,15 @@
         <div class="wheel-words-body" id="wheelWordsBody">
           <span class="wheel-empty-msg">No words yet. Tap any word above to add it to the wheel.</span>
         </div>
+      </div>
+
+      <!-- ── SAVE BAR (build mode only — hidden in spin mode via col-left) ── -->
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0 2px;border-top:1px solid rgba(26,35,64,0.10);margin-top:4px;">
+        <button id="saveActivityBtn" style="display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--teal);background:var(--teal-light);border-radius:8px;padding:6px 13px;font-size:12px;font-weight:700;color:var(--teal-dk);cursor:pointer;font-family:'Lexend',sans-serif;transition:all .13s;white-space:nowrap;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save Activity
+        </button>
+        <div id="authStatus" style="font-size:11px;font-weight:600;color:var(--navy-mid);font-family:'Lexend',sans-serif;">Loading…</div>
       </div>
 
     </div><!-- /col-left -->
@@ -2030,6 +2042,19 @@ requestAnimationFrame(() => {
   drawWheel();
   updateWheelWords();
   updateModeUI();
+  // Expose globals for Firebase module
+  window._spinner = {
+    getWheelEntries: () => wheelEntries,
+    setWheelEntries: (entries) => { wheelEntries = entries; },
+    getCurrentTab: () => currentTab,
+    switchTab,
+    populateSelect,
+    loadWordBank,
+    updateWheelWords,
+    drawWheel,
+    customWords: () => customWords,
+    setCustomWords: (w) => { customWords = w; },
+  };
 });
 
 window.matchMedia(`(resolution: ${DPR}dppx)`).addEventListener('change', () => {
@@ -2043,6 +2068,189 @@ window.addEventListener('resize', () => {
   clearTimeout(_resizeTimer);
   _resizeTimer = setTimeout(() => { initCanvas(); drawWheel(); }, 120);
 });
+</script>
+
+<!-- ═══ FIREBASE SAVE / LOAD ═══ -->
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
+  authDomain: "literacy-arcade.firebaseapp.com",
+  projectId: "literacy-arcade",
+  storageBucket: "literacy-arcade.firebasestorage.app",
+  messagingSenderId: "628621471724",
+  appId: "1:628621471724:web:7ddfd231d1261b6c781ac9"
+};
+
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+let currentUser = null;
+
+/* ── Auth state ──────────────────────────────────────────────────────── */
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  updateAuthBar(user);
+  const dashBtn = document.getElementById('dashboardBtn');
+  if (dashBtn) dashBtn.style.display = user ? 'flex' : 'none';
+});
+
+function escStr(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+function updateAuthBar(user) {
+  const bar = document.getElementById('authStatus');
+  if (!bar) return;
+  if (user) {
+    const name = user.displayName || user.email || 'Teacher';
+    bar.innerHTML = `<strong style="color:#1a2340">${escStr(name)}</strong>&nbsp;·&nbsp;<a href="teacher-dashboard.html" style="color:#0F6E56;font-weight:700;font-size:12px">My Dashboard</a>`;
+  } else {
+    bar.innerHTML = `<span style="color:#6b7a99">Sign in to save activities</span>`;
+  }
+}
+
+/* ── Save button ─────────────────────────────────────────────────────── */
+document.getElementById('saveActivityBtn').addEventListener('click', async () => {
+  if (!currentUser) {
+    window.location.href = 'teacher-login.html';
+    return;
+  }
+
+  const sp = window._spinner;
+  const entries = sp ? sp.getWheelEntries() : [];
+  if (!entries.length) {
+    alert('Please add at least one word to the wheel before saving.');
+    return;
+  }
+
+  const defaultTitle = buildDefaultTitle(entries);
+  const title = prompt('Name this saved activity:', defaultTitle);
+  if (title === null) return;
+  const cleanTitle = title.trim();
+  if (!cleanTitle) { alert('Please enter a name for this activity.'); return; }
+
+  const tab   = sp ? sp.getCurrentTab() : 'custom';
+  const level = document.getElementById('levelSelect')?.value || '';
+  const phonicsGroup   = document.getElementById('phonicsGroupSelect')?.value || '';
+  const phonicsPattern = document.getElementById('phonicsPatternSelect')?.value || '';
+
+  const activityData = {
+    title:        cleanTitle,
+    toolType:     'word-spinner',
+    activityType: 'word-spinner',
+    words:        entries.map(e => e.word),
+    settings: {
+      tab,
+      level,
+      phonicsGroup,
+      phonicsPattern,
+      wheelEntries: entries  // full entries with source info
+    },
+    url:       'reading-word-spinner.html',
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    userId:    currentUser.uid
+  };
+
+  try {
+    await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
+    const btn = document.getElementById('saveActivityBtn');
+    const orig = btn.innerHTML;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Saved!`;
+    btn.style.background = 'var(--teal)';
+    btn.style.color = 'white';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2500);
+  } catch (err) {
+    console.error('Save error:', err);
+    alert('Save failed. Please check your connection and try again.');
+  }
+});
+
+function buildDefaultTitle(entries) {
+  const tab = window._spinner ? window._spinner.getCurrentTab() : 'custom';
+  const level = document.getElementById('levelSelect')?.value || '';
+  const pattern = document.getElementById('phonicsPatternSelect')?.value || '';
+  const count = entries.length;
+  const parts = [];
+  if (tab === 'fry')         parts.push('Fry Words');
+  else if (tab === 'dolch')  parts.push('Dolch Words');
+  else if (tab === 'phonics') parts.push(pattern || 'Phonics');
+  else                        parts.push('Custom Words');
+  if (level && tab !== 'phonics') parts.push(level);
+  if (count) parts.push(`(${count} words)`);
+  return parts.join(' — ');
+}
+
+/* ── Load from dashboard (sessionStorage) ────────────────────────────── */
+function tryLoadSavedActivity() {
+  const raw = sessionStorage.getItem('savedActivityData');
+  if (!raw) return;
+  let activity;
+  try { activity = JSON.parse(raw); } catch { return; }
+  if (!activity || activity.toolType !== 'word-spinner') return;
+
+  sessionStorage.removeItem('savedActivityData');
+  sessionStorage.removeItem('savedActivityId');
+
+  const settings = activity.settings || {};
+  const sp = window._spinner;
+  if (!sp) return;
+
+  // Restore wheel entries (with source info if available)
+  const savedEntries = settings.wheelEntries || (activity.words || []).map(w => ({ word: w, source: 'custom' }));
+  if (!savedEntries.length) return;
+
+  // Switch to the right tab first
+  const tab = settings.tab || 'custom';
+  sp.switchTab(tab);
+
+  // Restore level / phonics selectors
+  if (settings.level && document.getElementById('levelSelect')) {
+    setTimeout(() => {
+      const sel = document.getElementById('levelSelect');
+      const opt = [...sel.options].find(o => o.value === settings.level);
+      if (opt) { sel.value = settings.level; sp.loadWordBank(); }
+    }, 60);
+  }
+  if (settings.phonicsGroup && document.getElementById('phonicsGroupSelect')) {
+    setTimeout(() => {
+      document.getElementById('phonicsGroupSelect').value = settings.phonicsGroup;
+      if (settings.phonicsPattern) {
+        document.getElementById('phonicsPatternSelect').value = settings.phonicsPattern;
+      }
+    }, 60);
+  }
+
+  // Restore custom words if any
+  const customEntries = savedEntries.filter(e => e.source === 'custom');
+  if (customEntries.length) {
+    const cw = sp.customWords();
+    customEntries.forEach(e => { if (!cw.includes(e.word)) cw.push(e.word); });
+  }
+
+  // Restore wheel
+  sp.setWheelEntries(savedEntries);
+  setTimeout(() => {
+    sp.updateWheelWords();
+    sp.drawWheel();
+    // Show brief loaded notice on save button
+    const btn = document.getElementById('saveActivityBtn');
+    if (btn) {
+      const orig = btn.innerHTML;
+      btn.innerHTML = `✓ "${activity.title || 'Activity'}" loaded`;
+      btn.style.background = 'var(--teal)';
+      btn.style.color = 'white';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 3000);
+    }
+  }, 100);
+}
+
+window.addEventListener('load', () => setTimeout(tryLoadSavedActivity, 150));
 </script>
 </body>
 </html>
