@@ -14,15 +14,13 @@
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Literacy Arcade – Free Literacy Tools for Teachers</title>
-  <meta name="description" content="Literacy Arcade is a free hub of phonics games, fluency tools, word mappers, phoneme counters, and reading activities for K–5 teachers, tutors, interventionists, and parents. No login required. No prep needed." />
-  <meta name="keywords" content="Literacy Arcade, free literacy tools, phonics games, fluency tools, word mapper, phoneme counter, letterbox lesson, sound boxes, reading activities for teachers, sight word games, oral reading fluency, structured literacy, Science of Reading, decodable words, WCPM, fluency norms" />
+  <title>Literacy Arcade – Free Literacy Games &amp; Teacher Tools</title>
+  <meta name="description" content="Free Science of Reading-aligned literacy games and teacher tools for phonemic awareness, phonics, fluency, word reading, vocabulary, Elkonin boxes, and letterbox lessons." />
   <meta name="author" content="Literacy Arcade" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://literacyarcade.com/" />
 
-  <!-- ── Favicon (replace /favicon.ico with your actual file before launch) ── -->
+  <!-- ── Favicon and app icons ── -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <meta name="theme-color" content="#2EC4B6" />
@@ -30,21 +28,20 @@
   <!-- ── Open Graph / Facebook / LinkedIn ── -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Literacy Arcade" />
-  <meta property="og:title" content="Literacy Arcade – Free Literacy Tools for Teachers" />
-  <meta property="og:description" content="Science of Reading–aligned literacy games, word mappers, and teacher tools for real reading practice. No login required. No prep needed." />
+  <meta property="og:title" content="Literacy Arcade – Free Literacy Games &amp; Teacher Tools" />
+  <meta property="og:description" content="Free Science of Reading-aligned literacy games and teacher tools for phonemic awareness, phonics, fluency, word reading, vocabulary, Elkonin boxes, and letterbox lessons." />
   <meta property="og:url" content="https://literacyarcade.com/" />
-  <!-- Replace the image path below with your actual OG image (1200×630px recommended) before launch -->
   <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Literacy Arcade – Free phonics games and fluency tools for K–5 teachers" />
+  <meta property="og:image:alt" content="Literacy Arcade – Free Science of Reading-aligned literacy games and teacher tools" />
 
   <!-- ── Twitter / X Card ── -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Literacy Arcade – Free Literacy Tools for Teachers" />
-  <meta name="twitter:description" content="Science of Reading–aligned literacy games, word mappers, and teacher tools for real reading practice. No login. No prep." />
+  <meta name="twitter:title" content="Literacy Arcade – Free Literacy Games &amp; Teacher Tools" />
+  <meta name="twitter:description" content="Free Science of Reading-aligned literacy games and teacher tools for phonemic awareness, phonics, fluency, word reading, vocabulary, Elkonin boxes, and letterbox lessons." />
   <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
-  <meta name="twitter:image:alt" content="Literacy Arcade – Free phonics games and fluency tools for K–5 teachers" />
+  <meta name="twitter:image:alt" content="Literacy Arcade – Free Science of Reading-aligned literacy games and teacher tools" />
 
   <!-- ── Structured Data ── -->
   <script type="application/ld+json">
@@ -53,11 +50,16 @@
     "@type": "WebSite",
     "name": "Literacy Arcade",
     "url": "https://literacyarcade.com/",
-    "description": "Free phonics games, fluency tools, word mappers, phoneme counters, and reading activities for K–5 teachers, tutors, interventionists, and parents.",
+    "description": "Free Science of Reading-aligned literacy games and teacher tools for phonemic awareness, phonics, fluency, word reading, vocabulary, Elkonin boxes, and letterbox lessons.",
     "publisher": {
       "@type": "Organization",
       "name": "Literacy Arcade",
-      "url": "https://literacyarcade.com/"
+      "url": "https://literacyarcade.com/",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "hello@literacyarcade.com",
+        "contactType": "customer support"
+      }
     },
     "audience": {
       "@type": "EducationalAudience",
@@ -166,6 +168,12 @@
       align-items: center;
       justify-content: space-between;
       height: 68px;
+    }
+
+    .nav .container {
+      max-width: none;
+      padding-left: 18px;
+      padding-right: 18px;
     }
 
     .nav-logo {
@@ -325,22 +333,176 @@
       font-family: var(--font-body);
     }
 
-    /* ── CARD 1: Spinner preview (back-left, largest) ── */
-    .hc-spinner {
-      width: 260px;
-      top: 12px;
-      left: 0;
-      transform: rotate(-4deg);
-      animation: floatA 7s ease-in-out infinite;
-      z-index: 1;
+    /* ── CARD 1: ORF Calculator (front-center, dominant) ── */
+    .hc-orf {
+      width: 310px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -48%) rotate(1deg);
+      animation: floatB 8s ease-in-out infinite;
+      z-index: 4;
+    }
+    .hc-orf-head {
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, #FFF8F8 0%, #FFFFFF 100%);
+    }
+    .hc-orf-eyebrow {
+      font-size: .64rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--coral-dk);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .hc-orf-eyebrow-dot {
+      width: 6px; height: 6px;
+      background: var(--coral);
+      border-radius: 50%;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    .hc-orf-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--ink);
+      font-family: var(--font-head);
+      line-height: 1.2;
+    }
+    .hc-orf-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--border);
+    }
+    .hc-metric {
+      padding: 11px 6px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .hc-metric:last-child { border-right: none; }
+    .hc-metric-label {
+      font-size: .52rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 3px;
+      white-space: nowrap;
+    }
+    .hc-metric-val {
+      font-size: 1.3rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--ink);
+      font-family: var(--font-head);
+    }
+    .hc-metric-val.teal   { color: var(--teal-dk); }
+    .hc-metric-val.coral  { color: var(--coral); }
+    .hc-metric-val.violet { color: var(--violet); }
+    .hc-metric-sub {
+      font-size: .52rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin-top: 3px;
+    }
+    .hc-orf-norm { padding: 10px 14px 13px; }
+    .hc-norm-label {
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .hc-norm-label-tag {
+      font-size: .53rem;
+      font-weight: 800;
+      background: var(--sand);
+      color: #8a6a10;
+      border-radius: 999px;
+      padding: 2px 6px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .hc-norm-bar-wrap {
+      background: #F0EEF8;
+      border-radius: 100px;
+      height: 8px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 6px;
+    }
+    .hc-norm-track-mark {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: rgba(255,255,255,.7);
+      border-radius: 1px;
+    }
+    .hc-norm-track-mark.m25 { left: 30%; }
+    .hc-norm-track-mark.m50 { left: 55%; }
+    .hc-norm-track-mark.m75 { left: 78%; }
+    .hc-norm-bar-fill {
+      height: 100%;
+      width: 62%;
+      background: linear-gradient(90deg, var(--teal), #4dd8cc);
+      border-radius: 100px;
+      animation: normPulse 3.5s ease-in-out infinite;
+      position: relative;
+    }
+    .hc-norm-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 8px;
+      background: rgba(255,255,255,.4);
+      border-radius: 100px;
+    }
+    .hc-norm-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hc-norm-note {
+      font-size: .6rem;
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+    .hc-norm-note strong { color: var(--teal-dk); }
+    .hc-norm-percentile {
+      font-size: .58rem;
+      font-weight: 900;
+      color: white;
+      background: var(--teal-dk);
+      border-radius: 999px;
+      padding: 2px 7px;
+      letter-spacing: .03em;
+    }
+    @keyframes normPulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: .8; }
     }
 
+    /* ── CARD 2: Word Spinner (back-left) ── */
+    .hc-spinner {
+      width: 248px;
+      top: 20px;
+      left: 4px;
+      transform: rotate(-4.5deg);
+      animation: floatA 7s ease-in-out infinite;
+      z-index: 2;
+    }
     .hc-spinner-head {
-      padding: 14px 16px 10px;
+      padding: 13px 15px 9px;
       border-bottom: 1px solid var(--border);
     }
     .hc-spinner-eyebrow {
-      font-size: .65rem;
+      font-size: .62rem;
       font-weight: 800;
       letter-spacing: .08em;
       text-transform: uppercase;
@@ -348,59 +510,51 @@
       margin-bottom: 4px;
     }
     .hc-spinner-title {
-      font-size: .93rem;
+      font-size: .92rem;
       font-weight: 800;
       color: var(--ink);
       line-height: 1.2;
+      font-family: var(--font-head);
     }
-
-    /* Mini wheel SVG area */
     .hc-spinner-wheel {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 18px 0 14px;
-    }
-
-    .mini-wheel {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
+      padding: 16px 0 12px;
       position: relative;
-      animation: spinSlow 32s linear infinite;
     }
-
-    @keyframes spinSlow {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Wheel pointer */
     .mini-wheel-wrap {
       position: relative;
-      width: 110px;
-      height: 110px;
+      width: 114px;
+      height: 114px;
     }
     .mini-pointer {
       position: absolute;
-      top: -10px;
+      top: -11px;
       left: 50%;
       transform: translateX(-50%);
       width: 0; height: 0;
       border-left: 9px solid transparent;
       border-right: 9px solid transparent;
-      border-top: 18px solid #D8BE72;
-      filter: drop-shadow(0 2px 3px rgba(0,0,0,.18));
+      border-top: 19px solid #D8BE72;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.2));
       z-index: 5;
     }
-
+    .mini-wheel {
+      width: 114px;
+      height: 114px;
+      border-radius: 50%;
+      animation: spinSlow 28s linear infinite;
+    }
+    @keyframes spinSlow { to { transform: rotate(360deg); } }
     .hc-spinner-foot {
-      padding: 8px 14px 12px;
+      padding: 8px 13px 13px;
       display: flex;
       gap: 5px;
       flex-wrap: wrap;
     }
     .hc-micro-tag {
-      font-size: .62rem;
+      font-size: .6rem;
       font-weight: 700;
       padding: 3px 8px;
       border-radius: 100px;
@@ -410,273 +564,187 @@
     }
     .hc-micro-tag.coral { background: var(--blush); color: #c94040; }
     .hc-micro-tag.lav   { background: var(--lavender); color: var(--violet); }
+    .hc-micro-tag.sand  { background: var(--sand); color: #8a6a10; }
 
-    /* ── CARD 2: ORF / WCPM preview (front-center, dominant) ── */
-    .hc-orf {
-      width: 290px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(1.5deg);
-      animation: floatB 8s ease-in-out infinite;
+    /* ── CARD 3: My Activities (top-right, small) ── */
+    .hc-activities {
+      width: 186px;
+      top: 8px;
+      right: 8px;
+      transform: rotate(3deg);
+      animation: floatD 9.5s ease-in-out infinite;
       z-index: 3;
     }
-
-    .hc-orf-head {
-      padding: 14px 18px 10px;
+    .hc-activities-head {
+      padding: 10px 12px 8px;
       border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .hc-orf-eyebrow {
-      font-size: .64rem;
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--coral);
-      margin-bottom: 4px;
-    }
-    .hc-orf-title {
-      font-size: .95rem;
-      font-weight: 800;
+    .hc-activities-title {
+      font-size: .78rem;
+      font-weight: 900;
       color: var(--ink);
+      font-family: var(--font-head);
     }
-
-    /* WCPM metric row */
-    .hc-orf-metrics {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .hc-metric {
-      padding: 12px 10px;
-      text-align: center;
-      border-right: 1px solid var(--border);
-    }
-    .hc-metric:last-child { border-right: none; }
-    .hc-metric-label {
-      font-size: .57rem;
-      font-weight: 800;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-      margin-bottom: 4px;
-    }
-    .hc-metric-val {
-      font-size: 1.35rem;
-      font-weight: 800;
-      line-height: 1;
-      color: var(--ink);
-    }
-    .hc-metric-val.teal  { color: var(--teal-dk); }
-    .hc-metric-val.coral { color: var(--coral); }
-    .hc-metric-sub {
-      font-size: .58rem;
-      font-weight: 700;
-      color: var(--ink-soft);
-      margin-top: 3px;
-    }
-
-    /* Norm bar */
-    .hc-orf-norm {
-      padding: 10px 14px 12px;
-    }
-    .hc-norm-label {
-      font-size: .6rem;
-      font-weight: 800;
+    .hc-activities-pill {
+      font-size: .52rem;
+      font-weight: 900;
       letter-spacing: .06em;
       text-transform: uppercase;
-      color: var(--ink-soft);
-      margin-bottom: 6px;
+      color: var(--teal-dk);
+      background: var(--mint);
+      border-radius: 999px;
+      padding: 3px 7px;
+      white-space: nowrap;
     }
-    .hc-norm-bar-wrap {
-      background: #F0EEF8;
-      border-radius: 100px;
-      height: 7px;
-      overflow: hidden;
-      position: relative;
-    }
-    .hc-norm-bar-fill {
-      height: 100%;
-      width: 68%;
-      background: linear-gradient(90deg, var(--teal), #4dd8cc);
-      border-radius: 100px;
-      animation: normPulse 3.5s ease-in-out infinite;
-    }
-    @keyframes normPulse {
-      0%,100% { opacity: 1; }
-      50% { opacity: .75; }
-    }
-    .hc-norm-note {
-      font-size: .6rem;
-      color: var(--ink-soft);
-      font-weight: 600;
-      margin-top: 5px;
-    }
-    .hc-norm-note strong { color: var(--teal-dk); }
-
-    /* ── CARD 3: Flashcard preview (back-right) ── */
-    .hc-flash {
-      width: 200px;
-      bottom: 10px;
-      right: 0;
-      transform: rotate(5deg);
-      animation: floatC 6s ease-in-out infinite;
-      z-index: 2;
-    }
-
-    .hc-flash-inner {
-      padding: 18px 16px;
+    .hc-saved-list {
+      padding: 8px 10px 10px;
       display: flex;
       flex-direction: column;
+      gap: 5px;
+    }
+    .hc-saved-row {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
+      padding: 6px 7px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #FBFCFE;
     }
-
-    .hc-flash-chip {
-      font-size: .62rem;
-      font-weight: 800;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 100px;
-      background: var(--lavender);
-      color: var(--violet);
-      align-self: flex-start;
+    .hc-saved-icon {
+      width: 22px; height: 22px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: var(--mint);
+      font-size: .72rem;
     }
-
-    /* The flashcard itself */
-    .hc-flashcard {
-      width: 100%;
-      background: var(--ink);
-      border-radius: 14px;
-      padding: 20px 12px;
-      text-align: center;
-      box-shadow: 0 6px 20px rgba(26,26,46,.18);
-      position: relative;
+    .hc-saved-name {
+      font-size: .63rem;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.2;
+      white-space: nowrap;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .hc-flashcard::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(46,196,182,.18) 0%, transparent 60%);
-    }
-    .hc-flashcard-word {
-      font-size: 1.55rem;
+    .hc-saved-badge {
+      font-size: .48rem;
       font-weight: 900;
       color: white;
-      letter-spacing: .01em;
-      position: relative;
-      z-index: 1;
+      background: var(--teal-dk);
+      border-radius: 999px;
+      padding: 2px 5px;
+      white-space: nowrap;
+      letter-spacing: .02em;
     }
-    .hc-flashcard-hint {
-      font-size: .62rem;
-      font-weight: 700;
-      color: rgba(255,255,255,.5);
-      margin-top: 4px;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 1;
-    }
-    .hc-flash-dots {
-      display: flex;
-      gap: 5px;
-      justify-content: center;
-    }
-    .hc-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--border);
-    }
-    .hc-dot.active { background: var(--teal); }
-
-    /* ── CARD 4: Raceway mini-stat chip (floating top-right) ── */
-    .hc-raceway {
-      width: 178px;
-      top: 0;
-      right: 14px;
-      transform: rotate(2.5deg);
-      animation: floatD 9s ease-in-out infinite;
-      z-index: 4;
-    }
-
-    .hc-raceway-inner {
-      padding: 12px 14px;
-    }
-    .hc-raceway-eyebrow {
-      font-size: .6rem;
-      font-weight: 800;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      color: #1677d2;
-      margin-bottom: 8px;
-    }
-    /* 3 read bars */
-    .hc-read-bars {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .hc-read-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .hc-read-label {
-      font-size: .62rem;
-      font-weight: 800;
-      color: var(--ink-soft);
-      width: 32px;
-      flex-shrink: 0;
-    }
-    .hc-read-bar-wrap {
-      flex: 1;
-      height: 6px;
-      background: #F0EEF8;
-      border-radius: 100px;
-      overflow: hidden;
-    }
-    .hc-read-bar {
-      height: 100%;
-      border-radius: 100px;
-    }
-    .bar-r1 { width: 52%; background: #1677d2; }
-    .bar-r2 { width: 68%; background: #f69a54; }
-    .bar-r3 { width: 84%; background: #4baa68; }
-    .hc-read-val {
-      font-size: .62rem;
-      font-weight: 800;
-      color: var(--ink);
-      width: 28px;
-      text-align: right;
-    }
-
-    .hc-raceway-foot {
-      margin-top: 9px;
-      padding-top: 8px;
+    .hc-saved-badge.reopen { background: var(--violet); }
+    .hc-activities-foot {
+      padding: 6px 10px 9px;
       border-top: 1px solid var(--border);
-      font-size: .6rem;
+      font-size: .56rem;
       font-weight: 700;
       color: var(--ink-soft);
+      text-align: center;
+      line-height: 1.4;
     }
-    .hc-raceway-foot strong { color: #4baa68; }
 
-    /* ── Float animations — each card slightly different ── */
+    /* ── CARD 4: Letterbox Lesson (bottom-right) ── */
+    .hc-letterbox {
+      width: 218px;
+      bottom: 14px;
+      right: 4px;
+      transform: rotate(4.5deg);
+      animation: floatC 6.5s ease-in-out infinite;
+      z-index: 2;
+    }
+    .hc-letterbox-inner { padding: 14px 15px 15px; }
+    .hc-letterbox-eyebrow {
+      font-size: .6rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 6px;
+    }
+    .hc-letterbox-title {
+      font-family: var(--font-head);
+      font-size: .95rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+    .hc-letterbox-word {
+      font-family: var(--font-head);
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: .02em;
+    }
+    .hc-box-row {
+      display: grid;
+      grid-template-columns: 1.15fr 0.7fr 0.7fr;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .hc-sound-box {
+      min-height: 44px;
+      border: 2px solid var(--violet);
+      border-radius: 10px;
+      background: var(--lavender);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    .hc-sound-box-grapheme {
+      font-family: var(--font-head);
+      font-size: .95rem;
+      font-weight: 900;
+      color: var(--violet);
+    }
+    .hc-sound-box-phoneme {
+      position: absolute;
+      bottom: 3px;
+      font-size: .5rem;
+      font-weight: 700;
+      color: rgba(123,94,167,.6);
+      letter-spacing: .03em;
+    }
+    .hc-letterbox-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .63rem;
+      font-weight: 900;
+      color: var(--violet);
+      background: var(--lavender);
+      padding: 5px 10px;
+      border-radius: 999px;
+      letter-spacing: .01em;
+    }
+
+    /* ── Float animations ── */
     @keyframes floatA {
-      0%,100% { transform: rotate(-4deg) translateY(0px); }
-      50%      { transform: rotate(-4deg) translateY(-10px); }
+      0%,100% { transform: rotate(-4.5deg) translateY(0px); }
+      50%      { transform: rotate(-4.5deg) translateY(-11px); }
     }
     @keyframes floatB {
-      0%,100% { transform: translate(-50%,-50%) rotate(1.5deg) translateY(0px); }
-      50%      { transform: translate(-50%,-50%) rotate(1.5deg) translateY(-8px); }
+      0%,100% { transform: translate(-50%, -48%) rotate(1deg) translateY(0px); }
+      50%      { transform: translate(-50%, -48%) rotate(1deg) translateY(-9px); }
     }
     @keyframes floatC {
-      0%,100% { transform: rotate(5deg) translateY(0px); }
-      50%      { transform: rotate(5deg) translateY(-12px); }
+      0%,100% { transform: rotate(4.5deg) translateY(0px); }
+      50%      { transform: rotate(4.5deg) translateY(-13px); }
     }
     @keyframes floatD {
-      0%,100% { transform: rotate(2.5deg) translateY(0px); }
-      50%      { transform: rotate(2.5deg) translateY(-6px); }
+      0%,100% { transform: rotate(3deg) translateY(0px); }
+      50%      { transform: rotate(3deg) translateY(-7px); }
     }
 
     .hero-eyebrow {
@@ -1120,7 +1188,7 @@
     /* ── CTA Banner ── */
     .cta-banner {
       background: linear-gradient(135deg, var(--ink) 0%, #2D1B4E 100%);
-      padding: 80px 0;
+      padding: 44px 0;
       position: relative;
       overflow: hidden;
     }
@@ -1147,22 +1215,29 @@
       position: relative;
       z-index: 2;
       text-align: center;
-      max-width: 620px;
+      max-width: 720px;
       margin: 0 auto;
     }
 
     .cta-inner .section-title {
       color: var(--white);
+      font-size: clamp(1.55rem, 3vw, 2.05rem);
     }
 
     .cta-inner .section-sub {
       color: rgba(255,255,255,.7);
-      margin: 14px auto 36px;
+      margin: 10px auto 22px;
       text-align: center;
+      font-size: .98rem;
     }
 
     .cta-inner .hero-buttons {
       justify-content: center;
+    }
+
+    .cta-inner .btn {
+      padding: 11px 22px;
+      font-size: .9rem;
     }
 
     .btn-light {
@@ -1255,6 +1330,127 @@
 
     .footer-legal a:hover { color: var(--teal); }
 
+
+
+    /* ── Use Paths / Workflow ── */
+    .use-paths { background: var(--white); }
+
+    .use-path-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 42px;
+    }
+
+    .use-path-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 22px;
+      min-height: 230px;
+    }
+
+    .use-path-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-head);
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .use-path-title {
+      font-family: var(--font-head);
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .use-path-copy {
+      font-size: .88rem;
+      color: var(--ink-soft);
+      line-height: 1.58;
+    }
+
+    .use-path-copy a {
+      color: var(--teal-dk);
+      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .account-note {
+      margin: 42px auto 0;
+      max-width: 760px;
+      background: linear-gradient(135deg, var(--mint), #F6FFFE);
+      border: 1px solid rgba(46,196,182,.28);
+      border-radius: 22px;
+      padding: 24px 28px;
+      text-align: center;
+      color: var(--ink-soft);
+      font-size: .98rem;
+      line-height: 1.6;
+    }
+
+    .account-note strong { color: var(--ink); }
+
+    .account-note .account-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .letterbox-callout {
+      margin-top: 30px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .letterbox-callout h3 {
+      font-family: var(--font-head);
+      font-size: 1.4rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .letterbox-callout p {
+      color: var(--ink-soft);
+      font-size: .95rem;
+      line-height: 1.6;
+    }
+
+    .letterbox-steps {
+      display: grid;
+      gap: 8px;
+      font-size: .86rem;
+      font-weight: 800;
+      color: var(--ink-soft);
+    }
+
+    .letterbox-step {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       .nav-links { display: none; }
@@ -1279,6 +1475,8 @@
 
       .section { padding: 64px 0; }
       .info-grid { grid-template-columns: 1fr; }
+      .use-path-grid { grid-template-columns: 1fr; }
+      .letterbox-callout { grid-template-columns: 1fr; }
       .footer-inner { grid-template-columns: 1fr; gap: 32px; }
       .footer-bottom { flex-direction: column; text-align: center; }
     }
@@ -1300,6 +1498,7 @@
       transform: translateY(0);
     }
   
+
 /* ── Hero Founding Teacher sparkle CTA ── */
 .btn-founding-sparkle {
   position: relative;
@@ -1398,8 +1597,7 @@
         <ul class="nav-links" id="navLinks">
           <li><a href="#games">Games</a></li>
           <li><a href="#teacher-tools">Tools</a></li>
-          <li><a href="founding-teacher.html" class="nav-cta">Become a Founding Teacher</a></li>
-          <li><span class="nav-trust">Free &amp; No Login Required</span></li>
+          <li><a href="teacher-dashboard.html">My Activities</a></li>
         </ul>
 
         <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0">
@@ -1422,7 +1620,7 @@
       <div class="container">
         <div class="hero-layout">
 
-          <!-- LEFT: Copy (unchanged) -->
+          <!-- LEFT: Copy -->
           <div class="hero-inner">
             <h1 class="hero-title">
               <span class="accent">Literacy</span><br />
@@ -1430,73 +1628,72 @@
             </h1>
 
             <p class="hero-sub">
-              Science of Reading–aligned literacy games and teacher tools for real reading practice.
+              Science of Reading–aligned games and teacher tools for phonemic awareness, phonics, fluency, word reading, and vocabulary practice.
             </p>
 
             <p class="hero-support">
-              Built for real reading instruction.
+              Use the tools for free, no account required. Create an optional teacher/parent account when you want to save and reopen selected activities.
             </p>
 
             <div class="hero-buttons">
-              <a href="#games" class="btn btn-primary">Explore Tools &nbsp;→</a>
-              <a href="#games" class="btn btn-secondary">Try a Game</a>
-              <a href="founding-teacher.html" class="btn btn-secondary btn-founding-sparkle">Become a Founding Teacher</a>
-            </div>
-
-            <div class="hero-trust">
-              <div class="trust-item"><div class="trust-check">✓</div>Free teacher tools</div>
-              <div class="trust-item"><div class="trust-check">✓</div>No account needed</div>
-              <div class="trust-item"><div class="trust-check">✓</div>Science of Reading–aligned</div>
-              <div class="trust-item"><div class="trust-check">✓</div>Works on any device</div>
+              <a href="#games" class="btn btn-primary">Explore Games &nbsp;→</a>
+              <a href="#teacher-tools" class="btn btn-secondary">Browse Teacher Tools</a>
+              <a href="teacher-dashboard.html" class="btn btn-secondary">Sign In / My Activities</a>
             </div>
           </div>
 
           <!-- RIGHT: Layered tool-preview card stack -->
           <div class="hero-stage" aria-hidden="true">
 
-            <!-- CARD 1 — Word Spinner (back-left) -->
+            <!-- CARD 2 — Word Spinner (back-left) -->
             <div class="hc hc-spinner">
               <div class="hc-spinner-head">
                 <div class="hc-spinner-eyebrow">🌀 Word Spinner</div>
-                <div class="hc-spinner-title">Phonics &amp; Sight Word Practice</div>
+                <div class="hc-spinner-title">Phonics &amp; Word Reading Wheel</div>
               </div>
               <div class="hc-spinner-wheel">
                 <div class="mini-wheel-wrap">
                   <div class="mini-pointer"></div>
-                  <!-- Wheel as inline SVG for crisp rendering -->
-                  <svg class="mini-wheel" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
-                    <!-- 6 segments -->
-                    <path d="M55 55 L55 5 A50 50 0 0 1 98.3 30 Z" fill="#2EC4B6"/>
-                    <path d="M55 55 L98.3 30 A50 50 0 0 1 98.3 80 Z" fill="#FF6B6B"/>
-                    <path d="M55 55 L98.3 80 A50 50 0 0 1 55 105 Z" fill="#FFB830"/>
-                    <path d="M55 55 L55 105 A50 50 0 0 1 11.7 80 Z" fill="#7B5EA7"/>
-                    <path d="M55 55 L11.7 80 A50 50 0 0 1 11.7 30 Z" fill="#2EC4B6" opacity=".7"/>
-                    <path d="M55 55 L11.7 30 A50 50 0 0 1 55 5 Z" fill="#FF6B6B" opacity=".65"/>
-                    <!-- Center hub -->
-                    <circle cx="55" cy="55" r="13" fill="white" stroke="#E8E4F0" stroke-width="1.5"/>
-                    <text x="55" y="59" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" font-weight="800" fill="#1A1A2E">SPIN</text>
-                    <!-- Segment labels -->
-                    <text x="74" y="26" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white" transform="rotate(30,74,26)">sh</text>
-                    <text x="92" y="57" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white">ch</text>
-                    <text x="74" y="88" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white" transform="rotate(-30,74,88)">th</text>
-                    <text x="36" y="88" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white" transform="rotate(30,36,88)">igh</text>
-                    <text x="18" y="57" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white">oa</text>
-                    <text x="36" y="26" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" font-weight="800" fill="white" transform="rotate(-30,36,26)">ai</text>
+                  <svg class="mini-wheel" viewBox="0 0 114 114" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M57 57 L57 4 A53 53 0 0 1 103.9 30.5 Z" fill="#2EC4B6"/>
+                    <path d="M57 57 L103.9 30.5 A53 53 0 0 1 103.9 83.5 Z" fill="#FF6B6B"/>
+                    <path d="M57 57 L103.9 83.5 A53 53 0 0 1 57 110 Z" fill="#FFB830"/>
+                    <path d="M57 57 L57 110 A53 53 0 0 1 10.1 83.5 Z" fill="#7B5EA7"/>
+                    <path d="M57 57 L10.1 83.5 A53 53 0 0 1 10.1 30.5 Z" fill="#2EC4B6" opacity=".68"/>
+                    <path d="M57 57 L10.1 30.5 A53 53 0 0 1 57 4 Z" fill="#FF6B6B" opacity=".62"/>
+                    <line x1="57" y1="57" x2="57" y2="4" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+                    <line x1="57" y1="57" x2="103.9" y2="30.5" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+                    <line x1="57" y1="57" x2="103.9" y2="83.5" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+                    <line x1="57" y1="57" x2="57" y2="110" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+                    <line x1="57" y1="57" x2="10.1" y2="83.5" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+                    <line x1="57" y1="57" x2="10.1" y2="30.5" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+                    <circle cx="57" cy="57" r="15" fill="white" stroke="#E8E4F0" stroke-width="1.5"/>
+                    <text x="57" y="61.5" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" font-weight="900" fill="#1A1A2E">SPIN</text>
+                    <text x="78" y="26" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9.5" font-weight="800" fill="white" transform="rotate(30,78,26)">sh</text>
+                    <text x="97" y="59" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9.5" font-weight="800" fill="white">ch</text>
+                    <text x="78" y="92" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9.5" font-weight="800" fill="white" transform="rotate(-30,78,92)">th</text>
+                    <text x="36" y="92" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9.5" font-weight="800" fill="white" transform="rotate(30,36,92)">igh</text>
+                    <text x="17" y="59" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9.5" font-weight="800" fill="white">oa</text>
+                    <text x="36" y="26" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9.5" font-weight="800" fill="white" transform="rotate(-30,36,26)">ai</text>
                   </svg>
                 </div>
               </div>
               <div class="hc-spinner-foot">
-                <span class="hc-micro-tag">Fry Words</span>
+                <span class="hc-micro-tag">Fry</span>
                 <span class="hc-micro-tag coral">Dolch</span>
                 <span class="hc-micro-tag lav">Phonics</span>
+                <span class="hc-micro-tag sand">Custom</span>
               </div>
             </div>
 
-            <!-- CARD 2 — ORF Calculator (front-center, dominant) -->
+            <!-- CARD 1 — Oral Reading Fluency Calculator (front-center, dominant) -->
             <div class="hc hc-orf">
               <div class="hc-orf-head">
-                <div class="hc-orf-eyebrow">📊 ORF Fluency Calculator</div>
-                <div class="hc-orf-title">Reading Fluency Assessment</div>
+                <div class="hc-orf-eyebrow">
+                  <div class="hc-orf-eyebrow-dot"></div>
+                  Teacher Tool
+                </div>
+                <div class="hc-orf-title">Oral Reading Fluency Calculator</div>
               </div>
               <div class="hc-orf-metrics">
                 <div class="hc-metric">
@@ -1514,56 +1711,81 @@
                   <div class="hc-metric-val coral">4</div>
                   <div class="hc-metric-sub">total</div>
                 </div>
+                <div class="hc-metric">
+                  <div class="hc-metric-label">Grade</div>
+                  <div class="hc-metric-val violet">3</div>
+                  <div class="hc-metric-sub">Spring</div>
+                </div>
               </div>
               <div class="hc-orf-norm">
-                <div class="hc-norm-label">Hasbrouck &amp; Tindal Norms · Grade 3 · Spring</div>
+                <div class="hc-norm-label">
+                  Hasbrouck &amp; Tindal Norms
+                  <span class="hc-norm-label-tag">Gr 3 · Spring</span>
+                </div>
                 <div class="hc-norm-bar-wrap">
+                  <div class="hc-norm-track-mark m25"></div>
+                  <div class="hc-norm-track-mark m50"></div>
+                  <div class="hc-norm-track-mark m75"></div>
                   <div class="hc-norm-bar-fill"></div>
                 </div>
-                <div class="hc-norm-note">Score of <strong>94 WCPM</strong> is at the 50th percentile</div>
-              </div>
-            </div>
-
-            <!-- CARD 3 — Flashcard (back-right) -->
-            <div class="hc hc-flash">
-              <div class="hc-flash-inner">
-                <span class="hc-flash-chip">🃏 Flashcards</span>
-                <div class="hc-flashcard">
-                  <div class="hc-flashcard-word">through</div>
-                  <div class="hc-flashcard-hint">Fry · Set 2</div>
-                </div>
-                <div class="hc-flash-dots">
-                  <div class="hc-dot active"></div>
-                  <div class="hc-dot"></div>
-                  <div class="hc-dot"></div>
-                  <div class="hc-dot"></div>
-                  <div class="hc-dot"></div>
+                <div class="hc-norm-footer">
+                  <div class="hc-norm-note">Score of <strong>94 WCPM</strong> · 50th percentile</div>
+                  <div class="hc-norm-percentile">50th %ile</div>
                 </div>
               </div>
             </div>
 
-            <!-- CARD 4 — Raceway reads (top-right) -->
-            <div class="hc hc-raceway">
-              <div class="hc-raceway-inner">
-                <div class="hc-raceway-eyebrow">🏁 Repeated Reading</div>
-                <div class="hc-read-bars">
-                  <div class="hc-read-row">
-                    <div class="hc-read-label">Read 1</div>
-                    <div class="hc-read-bar-wrap"><div class="hc-read-bar bar-r1"></div></div>
-                    <div class="hc-read-val">68</div>
+            <!-- CARD 3 — My Activities / Saved (top-right, small) -->
+            <div class="hc hc-activities">
+              <div class="hc-activities-head">
+                <div class="hc-activities-title">My Activities</div>
+                <div class="hc-activities-pill">Optional Account</div>
+              </div>
+              <div class="hc-saved-list">
+                <div class="hc-saved-row">
+                  <div class="hc-saved-icon">🔤</div>
+                  <div class="hc-saved-name">Letterbox Lesson</div>
+                  <div class="hc-saved-badge reopen">Saved</div>
+                </div>
+                <div class="hc-saved-row">
+                  <div class="hc-saved-icon" style="background:var(--blush);">🏎️</div>
+                  <div class="hc-saved-name">Read &amp; Race</div>
+                  <div class="hc-saved-badge reopen">Saved</div>
+                </div>
+                <div class="hc-saved-row">
+                  <div class="hc-saved-icon" style="background:var(--lavender);">📚</div>
+                  <div class="hc-saved-name">Vocabulary Flashcards</div>
+                  <div class="hc-saved-badge">Reopen</div>
+                </div>
+              </div>
+              <div class="hc-activities-foot">
+                Teacher &amp; parent dashboard
+              </div>
+            </div>
+
+            <!-- CARD 4 — Letterbox Lesson (bottom-right) -->
+            <div class="hc hc-letterbox">
+              <div class="hc-letterbox-inner">
+                <div class="hc-letterbox-eyebrow">📦 Elkonin Boxes</div>
+                <div class="hc-letterbox-title">Letterbox Lesson</div>
+                <div class="hc-letterbox-word">ship</div>
+                <div class="hc-box-row">
+                  <div class="hc-sound-box">
+                    <span class="hc-sound-box-grapheme">sh</span>
+                    <span class="hc-sound-box-phoneme">/ʃ/</span>
                   </div>
-                  <div class="hc-read-row">
-                    <div class="hc-read-label">Read 2</div>
-                    <div class="hc-read-bar-wrap"><div class="hc-read-bar bar-r2"></div></div>
-                    <div class="hc-read-val">81</div>
+                  <div class="hc-sound-box">
+                    <span class="hc-sound-box-grapheme">i</span>
+                    <span class="hc-sound-box-phoneme">/ɪ/</span>
                   </div>
-                  <div class="hc-read-row">
-                    <div class="hc-read-label">Read 3</div>
-                    <div class="hc-read-bar-wrap"><div class="hc-read-bar bar-r3"></div></div>
-                    <div class="hc-read-val">94</div>
+                  <div class="hc-sound-box">
+                    <span class="hc-sound-box-grapheme">p</span>
+                    <span class="hc-sound-box-phoneme">/p/</span>
                   </div>
                 </div>
-                <div class="hc-raceway-foot">Growth: <strong>+26 WCPM</strong> 🎉</div>
+                <div class="hc-letterbox-action">
+                  Launch Lesson →
+                </div>
               </div>
             </div>
 
@@ -1572,8 +1794,60 @@
       </div>
     </section>
 
-    <!-- ── Tool Grid ── -->
-    
+
+
+    <!-- ── Use Paths ── -->
+    <section class="section use-paths" id="how-it-works" aria-label="How to use Literacy Arcade">
+      <div class="container">
+        <div class="tools-header">
+          <div class="badge">How It Works</div>
+          <h2 class="section-title">Choose how you want to use Literacy Arcade</h2>
+          <p class="section-sub">
+            Open a quick game, customize word-based practice, build a teacher-led letterbox lesson, or save selected activities for later.
+          </p>
+        </div>
+
+        <div class="use-path-grid">
+          <div class="use-path-card fade-up">
+            <div class="use-path-num">1</div>
+            <h3 class="use-path-title">Play a ready-to-use game</h3>
+            <p class="use-path-copy">Start with ready-to-play games like Spellbound and Word Wizard Quest for quick phonics, spelling, and word-solving practice. More ready-to-play word study games are coming soon.</p>
+          </div>
+
+          <div class="use-path-card fade-up">
+            <div class="use-path-num">2</div>
+            <h3 class="use-path-title">Customize word-based practice</h3>
+            <p class="use-path-copy">Use customizable tools when you want to choose the exact words, skills, or practice format.</p>
+          </div>
+
+          <div class="use-path-card fade-up">
+            <div class="use-path-num">3</div>
+            <h3 class="use-path-title">Build and teach a letterbox lesson</h3>
+            <p class="use-path-copy">Start in the <a href="phoneme-counter.html">Phoneme Counter</a> to choose words, map graphemes to phonemes in Elkonin boxes, and launch a teacher-led Letterbox Lesson.</p>
+          </div>
+
+          <div class="use-path-card fade-up">
+            <div class="use-path-num">4</div>
+            <h3 class="use-path-title">Save selected activities</h3>
+            <p class="use-path-copy">Create an optional teacher/parent account when you want to save supported activities and reopen them from your dashboard.</p>
+          </div>
+        </div>
+
+        <div class="letterbox-callout fade-up">
+          <div>
+            <h3>Looking for Letterbox Lessons?</h3>
+            <p>Start with the Phoneme Counter. It helps you choose or enter words, count phonemes, map graphemes to phonemes in Elkonin boxes, and then open the Letterbox Lesson for teacher-led instruction.</p>
+          </div>
+          <div class="letterbox-steps">
+            <div class="letterbox-step">1. Choose words</div>
+            <div class="letterbox-step">2. Map phonemes</div>
+            <div class="letterbox-step">3. Launch lesson</div>
+            <a href="phoneme-counter.html" class="btn btn-primary" style="justify-content:center;margin-top:6px;">Build a Letterbox Lesson</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ── Games ── -->
     <section class="section" id="games" aria-label="Games">
       <div class="container">
@@ -1581,7 +1855,7 @@
           <div class="badge">Literacy Games</div>
           <h2 class="section-title">Interactive Literacy Games</h2>
           <p class="section-sub">
-            Interactive literacy games for Science of Reading–aligned instruction and practice.
+            Ready-to-use and customizable games for phonemic awareness, phonics, spelling, word reading, fluency, and word study practice.
           </p>
         </div>
 
@@ -1596,11 +1870,10 @@
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Spellbound</h3>
-            <p class="tool-desc">Spell the word before the baby dragon wakes in this magical phonics spelling game.</p>
+            <p class="tool-desc">Practice spelling short-vowel words by choosing the letters that match each spoken word.</p>
             <div class="tool-tags">
-              <span class="tag">Phonics</span>
               <span class="tag">Spelling</span>
-              <span class="tag">CVC Words</span>
+              <span class="tag">Phonics</span>
               <span class="tag">Short Vowels</span>
             </div>
             <div class="tool-label">Game</div>
@@ -1612,11 +1885,10 @@
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Word Wizard Quest</h3>
-            <p class="tool-desc">Use spelling knowledge and strategic thinking to solve hidden words in a magical literacy challenge.</p>
+            <p class="tool-desc">Use phonics knowledge and word-solving strategy to uncover the hidden word.</p>
             <div class="tool-tags">
+              <span class="tag">Word Solving</span>
               <span class="tag">Spelling</span>
-              <span class="tag">Phonics</span>
-              <span class="tag">Word Study</span>
               <span class="tag">Strategy</span>
             </div>
             <div class="tool-label">Game</div>
@@ -1628,11 +1900,10 @@
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Read & Race</h3>
-            <p class="tool-desc">Multiplayer reading races with preloaded Fry, Dolch, phonics, and custom word lists.</p>
+            <p class="tool-desc">Race to read words from preloaded or custom lists in a multiplayer classroom game.</p>
             <div class="tool-tags">
-              <span class="tag">2 Player</span>
-              <span class="tag">Sight Words</span>
-              <span class="tag">Phonics</span>
+              <span class="tag">Multiplayer</span>
+              <span class="tag">Word Reading</span>
               <span class="tag">Custom Lists</span>
             </div>
             <div class="tool-label">Game</div>
@@ -1644,11 +1915,10 @@
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Reading Word Spinner</h3>
-            <p class="tool-desc">Spin and read preloaded Fry, Dolch, phonics, or custom word lists.</p>
+            <p class="tool-desc">Spin and read words from Fry, Dolch, phonics, or custom word lists.</p>
             <div class="tool-tags">
-              <span class="tag">Fry Words</span>
-              <span class="tag">Dolch</span>
-              <span class="tag">Phonics</span>
+              <span class="tag">Word Reading</span>
+              <span class="tag">Fry/Dolch</span>
               <span class="tag">Custom Lists</span>
             </div>
             <div class="tool-label">Game</div>
@@ -1660,14 +1930,28 @@
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Repeated Reading Raceway</h3>
-            <p class="tool-desc">Track repeated reading fluency across multiple reads.</p>
+            <p class="tool-desc">Track fluency growth across repeated readings with rate and accuracy.</p>
             <div class="tool-tags">
               <span class="tag">Repeated Reading</span>
-              <span class="tag">Fluency</span>
-              <span class="tag">WCPM</span>
-              <span class="tag">Growth</span>
+              <span class="tag">Rate</span>
+              <span class="tag">Accuracy</span>
             </div>
             <div class="tool-label">Game</div>
+          </article>
+
+          <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="Repeated Reading Rockets" data-href="">
+            <div class="tool-meta">
+              <div class="tool-icon icon-coral">🚀</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Repeated Reading Rockets</h3>
+            <p class="tool-desc">Track accuracy, rate, and prosody across repeated readings.</p>
+            <div class="tool-tags">
+              <span class="tag">Coming Soon</span>
+              <span class="tag">Prosody</span>
+              <span class="tag">Fluency</span>
+            </div>
+            <div class="tool-label" style="background:var(--sand);color:#8a6000;">Coming Soon</div>
           </article>
 
         
@@ -1677,16 +1961,30 @@
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Phonemic Awareness Balloon Pop</h3>
-            <p class="tool-desc">Pop balloons that match the phoneme students hear using teacher-selected phonemes and graphemes.</p>
+            <p class="tool-desc">Students hear a sound and pop the balloon that matches that sound or letter.</p>
             <div class="tool-tags">
+              <span class="tag">Coming Soon</span>
               <span class="tag">Phonemic Awareness</span>
-              <span class="tag">Audio Practice</span>
-              <span class="tag">Phoneme Mapping</span>
-              <span class="tag">Customizable</span>
+              <span class="tag">Alphabetic Knowledge</span>
             </div>
-            <div class="tool-label" style="background:var(--sand);color:#8a6000;">In Progress</div>
+            <div class="tool-label" style="background:var(--sand);color:#8a6000;">Coming Soon</div>
           </article>
 
+
+          <article class="tool-card card-amber fade-up" role="link" tabindex="0" aria-label="Prefix and Suffix Game" data-href="">
+            <div class="tool-meta">
+              <div class="tool-icon icon-amber">🧩</div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Prefix &amp; Suffix Game</h3>
+            <p class="tool-desc">Practice prefixes, suffixes, and meaningful word parts in a word study game.</p>
+            <div class="tool-tags">
+              <span class="tag">Coming Soon</span>
+              <span class="tag">Prefixes</span>
+              <span class="tag">Suffixes</span>
+            </div>
+            <div class="tool-label" style="background:var(--sand);color:#8a6000;">Coming Soon</div>
+          </article>
 
 
 
@@ -1701,24 +1999,23 @@
           <div class="badge">Teacher Tools</div>
           <h2 class="section-title">Teacher Tools</h2>
           <p class="section-sub">
-            Classroom tools for phonics planning, reading instruction, fluency tracking, and intervention support.
+            Simple classroom tools for word work, fluency, SmartBoard-ready flashcards, and small-group instruction.
           </p>
         </div>
 
         <div class="tools-grid">
 
-          <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="ORF Fluency Calculator" data-href="orf-fluency-calculator.html">
+          <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="Oral Reading Fluency Calculator" data-href="orf-fluency-calculator.html">
             <div class="tool-meta">
               <div class="tool-icon icon-coral">📊</div>
               <div class="tool-arrow">→</div>
             </div>
-            <h3 class="tool-name">ORF Fluency Calculator</h3>
-            <p class="tool-desc">Calculate WCPM, reading accuracy, and compare to Hasbrouck &amp; Tindal Fluency Norms. Print or save student results as a PDF.</p>
+            <h3 class="tool-name">Oral Reading Fluency Calculator</h3>
+            <p class="tool-desc">Calculate oral reading fluency with WCPM, accuracy, and Hasbrouck &amp; Tindal Fluency Norms. Print or save student results as a PDF.</p>
             <div class="tool-tags">
-              <span class="tag">ORF</span>
+              <span class="tag">ORF Calculator</span>
               <span class="tag">WCPM</span>
               <span class="tag">Accuracy</span>
-              <span class="tag">Norms</span>
             </div>
             <div class="tool-label">Teacher Tool</div>
           </article>
@@ -1729,13 +2026,12 @@
               <div class="tool-icon icon-teal">🔤</div>
               <div class="tool-arrow">→</div>
             </div>
-            <h3 class="tool-name">Phoneme Counter</h3>
-            <p class="tool-desc">Count phonemes and map regular words into sound boxes for letterbox lessons and small-group phonics planning.</p>
+            <h3 class="tool-name">Phoneme Counter + Letterbox Builder</h3>
+            <p class="tool-desc">Count phonemes, map graphemes to phonemes in Elkonin boxes, and launch a teacher-led letterbox lesson from the words you choose.</p>
             <div class="tool-tags">
-              <span class="tag">Word Mapper</span>
-              <span class="tag">Phonics</span>
+              <span class="tag">Elkonin Boxes</span>
+              <span class="tag">Phoneme-Grapheme Mapping</span>
               <span class="tag">Letterbox Lessons</span>
-              <span class="tag">Small Groups</span>
             </div>
             <div class="tool-label">Teacher Tool</div>
           </article>
@@ -1746,12 +2042,11 @@
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Digital Reading Flashcards</h3>
-            <p class="tool-desc">Display preloaded or custom word lists as fullscreen reading flashcards for SmartBoards and classroom displays.</p>
+            <p class="tool-desc">Project Fry, Dolch, phonics, or custom word lists as fullscreen reading flashcards for SmartBoards and classroom displays.</p>
             <div class="tool-tags">
-              <span class="tag">Flashcards</span>
-              <span class="tag">Phonics</span>
-              <span class="tag">Sight Words</span>
-              <span class="tag">Custom Lists</span>
+              <span class="tag">Fry/Dolch</span>
+              <span class="tag">Word Reading</span>
+              <span class="tag">SmartBoard</span>
             </div>
             <div class="tool-label">Teacher Tool</div>
           </article>
@@ -1762,12 +2057,11 @@
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Vocabulary Flashcards</h3>
-            <p class="tool-desc">Display vocabulary words and definitions as fullscreen classroom flashcards.</p>
+            <p class="tool-desc">Use preloaded Lexile vocabulary lists or add your own words and definitions for any subject or study set.</p>
             <div class="tool-tags">
-              <span class="tag">Vocabulary</span>
-              <span class="tag">Flashcards</span>
-              <span class="tag">Fullscreen</span>
-              <span class="tag">Custom Lists</span>
+              <span class="tag">Lexile Vocabulary</span>
+              <span class="tag">Definitions</span>
+              <span class="tag">SmartBoard</span>
             </div>
             <div class="tool-label">Teacher Tool</div>
           </article>
@@ -1776,6 +2070,21 @@
         </div>
       </div>
     </section>
+
+    <!-- ── Founding Teacher CTA ── -->
+    <section class="cta-banner" aria-label="Founding Teacher invitation">
+      <div class="container">
+        <div class="cta-inner">
+          <h2 class="section-title">Want to help shape Literacy Arcade?</h2>
+          <p class="section-sub">Become a Founding Teacher to share feedback, request features, and help guide new classroom-ready literacy tools as they are built.</p>
+          <div class="hero-buttons">
+            <a href="founding-teacher.html" class="btn btn-light btn-founding-sparkle">Become a Founding Teacher</a>
+            <a href="mailto:hello@literacyarcade.com" class="btn btn-outline">Contact Literacy Arcade</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- ── Footer ── -->
@@ -1800,9 +2109,9 @@
             Literacy Arcade
           </div>
           <p class="footer-desc">
-            Science of Reading–aligned literacy games and teacher tools for real reading practice. Built for teachers, tutors, interventionists, and parents.
+            Free Science of Reading–aligned literacy tools for teachers, tutors, interventionists, and parents.
           </p>
-          <p style="font-size:.8rem; color:rgba(255,255,255,.3);">Free teacher tools. No login required.</p>
+          <p style="font-size:.8rem; color:rgba(255,255,255,.3);">Free tools. Optional accounts for saving selected activities.</p>
         </div>
 
         <div>
@@ -1810,6 +2119,7 @@
           <ul class="footer-links">
             <li><a href="#games">Games</a></li>
             <li><a href="#teacher-tools">Tools</a></li>
+            <li><a href="teacher-dashboard.html">My Activities</a></li>
           </ul>
         </div>
 
@@ -1817,8 +2127,8 @@
           <div class="footer-col-title">Support</div>
           <ul class="footer-links">
             <li><span style="color:inherit;opacity:.7">About Literacy Arcade</span></li>
-            <li><span>Contact</span></li>
-            <li><span style="color:inherit;opacity:.7">Privacy Policy</span></li>
+            <li><a href="mailto:hello@literacyarcade.com">Contact</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
             <li><span style="color:inherit;opacity:.7">Terms of Use</span></li>
           </ul>
         </div>
@@ -1827,9 +2137,9 @@
       <div class="footer-bottom">
         <p>© 2026 Literacy Arcade. Free literacy tools for teachers.</p>
         <div class="footer-legal">
-          <span>Privacy Policy</span>
+          <a href="privacy.html">Privacy Policy</a>
           <span>Terms of Use</span>
-          <span>Contact</span>
+          <a href="mailto:hello@literacyarcade.com">Contact</a>
         </div>
       </div>
     </div>
