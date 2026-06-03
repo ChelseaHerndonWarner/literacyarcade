@@ -1128,19 +1128,6 @@ const PHONICS_DB = [
     }
   },
 
-  // ── LONG /O͞O/ ───────────────────────────────────────────────────
-  {
-    label: 'Long /o͞o/',
-    key: 'long_oo',
-    patterns: {
-      'Long /o͞o/ — oo': ['moon' ,'soon' ,'tool' ,'food' ,'drool' ,'spool' ,'stool' ,'bloom' ,'gloom' ,'groom' ,'spoon' ,'droop' ,'scoop' ,'snoop' ,'swoop' ,'troop' ,'smooth' ,'snooze' ,'proof' ,'broom' ],
-      'Long /o͞o/ — ew': ['stew' ,'crew' ,'threw' ,'grew' ,'screw' ],
-      'Long /o͞o/ — ue': ['blue' ,'true' ,'clue' ,'glue' ],
-      'Long /o͞o/ — ui': ['suit' ,'fruit' ,'bruise' ,'juice' ,'cruise' ],
-      'Long /o͞o/ — ou': ['soup' ,'group' ,'you' ,'youth' ],
-    }
-  },
-
   // ── VARIANT VOWELS ───────────────────────────────────────────────
   {
     label: 'Variant Vowels',
@@ -1148,7 +1135,20 @@ const PHONICS_DB = [
     patterns: {
       '/aw/ — aw': ['draw' ,'flaw' ,'claw' ,'dawn' ,'hawk' ,'lawn' ,'shawl' ,'drawn' ,'straw' ,'drawl' ,'scrawl' ],
       '/aw/ — au': ['bawl' ,'fawn' ,'haul' ,'haunt' ,'fraud' ,'fault' ,'vault' ,'flaunt' ],
-      'Short /oo/': ['foot' ,'book' ,'took' ,'shook' ,'cook' ,'look' ,'hook' ,'good' ,'hoof' ,'hood' ,'nook' ,'crook' ,'stood' ,'brook' ],
+      '/OO/ — oo': ['moon' ,'soon' ,'tool' ,'food' ,'drool' ,'spool' ,'stool' ,'bloom' ,'gloom' ,'groom' ,'spoon' ,'droop' ,'scoop' ,'snoop' ,'swoop' ,'troop' ,'smooth' ,'snooze' ,'proof' ,'broom' ],
+      '/OO/ — ew': ['stew' ,'crew' ,'threw' ,'grew' ,'screw' ],
+      '/OO/ — ue': ['blue' ,'true' ,'clue' ,'glue' ],
+      '/OO/ — ui': ['suit' ,'fruit' ,'bruise' ,'juice' ,'cruise' ],
+      '/OO/ — ou': ['soup' ,'group' ,'you' ,'youth' ],
+      '/oo/ — oo': ['foot' ,'book' ,'took' ,'shook' ,'cook' ,'look' ,'hook' ,'good' ,'hoof' ,'hood' ,'nook' ,'crook' ,'stood' ,'brook' ],
+    }
+  },
+
+  // ── DIPHTHONGS ───────────────────────────────────────────────────
+  {
+    label: 'Diphthongs',
+    key: 'diphthongs',
+    patterns: {
       '/oy/ — oi': ['boil' ,'foil' ,'toil' ,'coin' ,'join' ,'void' ,'soil' ,'joint' ,'hoist' ,'joist' ,'moist' ,'spoil' ,'coil' ,'broil' ,'oil' ,'point' ,'poise' ,'noise' ,'voice' ,'choice' ,'poison' ,'appoint' ,'exploit' ,'avoid' ,'anoint' ,'moisture' ,'ointment' ,'loiter' ,'sirloin' ,'turmoil' ],
       '/oy/ — oy': ['boy' ,'toy' ,'joy' ,'coy' ,'soy' ,'ploy' ,'ahoy' ,'decoy' ,'annoy' ,'enjoy' ,'deploy' ,'employ' ,'destroy' ,'loyal' ,'royal' ,'voyage' ,'oyster' ,'boycott' ,'cowboy' ,'tomboy' ,'corduroy' ],
       '/ow/ — ou': ['loud' ,'couch' ,'cloud' ,'grouch' ,'hound' ,'crouch' ,'found' ,'mount' ,'count' ],
