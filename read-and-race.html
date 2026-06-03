@@ -1053,7 +1053,7 @@ function renderPlayerInputs(){
     `).join('');
     wrap.insertAdjacentHTML('beforeend',`
       <div class="player-input">
-        <input id="p${i}" value="Player ${i+1}" placeholder="Player ${i+1}" aria-label="Player ${i+1} name"/>
+        <input id="player${i}" value="Player ${i+1}" placeholder="Player ${i+1}" aria-label="Player ${i+1} name"/>
         <div>
           <div class="color-swatch-label">Car Color</div>
           <div class="color-swatches">${swatches}</div>
@@ -1066,7 +1066,7 @@ function selectPlayerColor(playerIdx, colorVal){
   // Save current name values before re-rendering
   const savedNames=[];
   for(let i=0;i<playerCount;i++){
-    const inp=$('p'+i);
+    const inp=$('player'+i);
     savedNames[i]=inp?inp.value:'Player '+(i+1);
   }
   // Prevent duplicate: swap the other player to a different color
@@ -1079,7 +1079,7 @@ function selectPlayerColor(playerIdx, colorVal){
   renderPlayerInputs();
   // Restore names after re-render
   for(let i=0;i<playerCount;i++){
-    const inp=$('p'+i);
+    const inp=$('player'+i);
     if(inp&&savedNames[i]) inp.value=savedNames[i];
   }
 }
@@ -1404,7 +1404,7 @@ function startGame(){
   shuffle(words);used=[];players=[];
   lastWordSnapshot=[...selectedWordsSet]; // save for Play Again
   for(let i=0;i<playerCount;i++){
-    players.push({name:($('p'+i).value||`Player ${i+1}`).trim(),color:playerColors[i],pos:0});
+    players.push({name:($('player'+i).value||`Player ${i+1}`).trim(),color:playerColors[i],pos:0});
   }
   current=0;phase='roll';roll=0;
   $('setup').style.display='none';
