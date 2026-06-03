@@ -1508,6 +1508,9 @@ import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+let auth, db, currentUser = null;
+
+try {
 const firebaseConfig = {
   apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
   authDomain: "literacy-arcade.firebaseapp.com",
@@ -1519,10 +1522,8 @@ const firebaseConfig = {
 
 // Reuse existing app if already initialized — avoids duplicate-app error
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
-
-let currentUser = null;
+auth = getAuth(app);
+db   = getFirestore(app);
 
 /* ── Auth state ──────────────────────────────────────────────────────────── */
 onAuthStateChanged(auth, user => {
@@ -1553,7 +1554,8 @@ function updateAuthBar(user) {
 }
 
 /* ── Save button — prompt() style matching Phoneme Counter ──────────────── */
-document.getElementById('saveActivityBtn').addEventListener('click', async () => {
+const _saveBtn = document.getElementById('saveActivityBtn');
+if (_saveBtn) _saveBtn.addEventListener('click', async () => {
   // Not signed in → redirect to login page (same as Phoneme Counter)
   if (!currentUser) {
     window.location.href = 'teacher-login.html';
@@ -1671,7 +1673,8 @@ function tryLoadSavedActivity() {
   }
 }
 
-document.getElementById('loadedBannerClear')?.addEventListener('click', () => {
+const _bannerClear = document.getElementById('loadedBannerClear');
+if (_bannerClear) _bannerClear.addEventListener('click', () => {
   document.getElementById('loadedBanner').style.display = 'none';
   if (window.selectedWordsSet) {
     window.selectedWordsSet.clear();
@@ -1682,8 +1685,16 @@ document.getElementById('loadedBannerClear')?.addEventListener('click', () => {
 
 // Run after main init so globals are ready
 window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(tryLoadSavedActivity, 80);
+  setTimeout(() => { try { tryLoadSavedActivity(); } catch(e) { console.warn('Load saved activity failed:', e); } }, 80);
 });
+
+} catch (firebaseErr) {
+  // Firebase failed to init (blocked network, ad blocker, etc.)
+  // Game still works — save/load features just won't be available.
+  console.warn('Firebase unavailable — save features disabled:', firebaseErr);
+  const bar = document.getElementById('authStatus');
+  if (bar) bar.innerHTML = '<span style="color:var(--navy-lt)">Save unavailable</span>';
+}
 </script>
 </body>
 </html>
