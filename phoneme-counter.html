@@ -1267,6 +1267,7 @@ button[onclick*="addToLesson"]:hover {
             <option value="team-i">Long I Teams</option>
             <option value="team-o">Long O Teams</option>
             <option value="team-u">Long U Teams</option>
+            <option value="variant">Variant Vowels</option>
             <option value="rcontrolled">R-Controlled Vowels</option>
             <option value="diphthongs">Diphthongs</option>
           </select>
@@ -1362,16 +1363,12 @@ const LONG_I_VOWEL_TEAM_WORDS = {
 };
 
 const LONG_U_VOWEL_TEAM_WORDS = {
-  'long-u-ue': [
-    'blue','clue','cue','due','flue','glue','hue','Sue','true'
-  ],
-  'long-u-ew': [
-    'blew','brew','chew','crew','dew','drew','few','flew','grew','new','pew','screw',
-    'skew','slew','stew','threw'
-  ],
-  'long-u-ui': [
-    'bruise','cruise','fruit','juice','suit'
-  ]
+  // Intentionally blank for the built-in Letterbox bank.
+  // These spellings often represent /OO/ (chew, fruit) or can vary by dialect (new, few).
+  // /OO/ examples live under Variant Vowels instead so the category and phoneme label do not contradict each other.
+  'long-u-ue': [],
+  'long-u-ew': [],
+  'long-u-ui': []
 };
 
 
@@ -1461,13 +1458,13 @@ const LONG_SILENT_E_WORDS = {
     'bone','broke','choke','chose','cone','cope','cove','dome','doze','froze','globe','home','hope','hose','joke','lobe','lone','mode','note','phone','pole','poke','pose','robe','rode','role','rope','rose','slope','smoke','spoke','stone','stove','those','throne','tone','vote','woke'
   ],
   'long-u': [
-    'brute','cube','cute','dune','duke','flute','fume','fuse','huge','june','mule','mute','prune','rude','rule','tube','tune','use'
+    'cube','cute','fume','fuse','huge','mule','mute','use'
   ]
 };
 const VOWEL_TYPE_KEYS = {
   short: ['short-a','short-e','short-i','short-o','short-u'],
   long: ['long-a','long-i','long-o','long-u'],
-  teams: ['long-a-ai','long-a-ay','long-e-ee','long-e-ea','long-o-oa','long-o-ow','long-i-igh','long-i-ie','long-u-ue','long-u-ew','long-u-ui'],
+  teams: ['long-a-ai','long-a-ay','long-e-ee','long-e-ea','long-o-oa','long-o-ow','long-i-igh','long-i-ie'],
   rcontrolled: ['r-ar','r-or','r-er','r-ir','r-ur'],
   diphthongs: ['diph-aw-aw','diph-aw-au','diph-oy-oi','diph-oy-oy']
 };
@@ -4195,7 +4192,7 @@ const PHONICS_GROUPS_V33 = {
   'team-u': {
     type: 'teams',
     label: 'Long U Teams',
-    keys: ['long-u-ue','long-u-ew','long-u-ui']
+    keys: ['long-u-ew','long-u-ui']
   },
   rcontrolled: {
     type: 'rcontrolled',
@@ -4323,6 +4320,211 @@ setTimeout(() => {
   renderGroupedDropdownsV33();
   bindGroupedDropdownsV33();
 }, 75);
+
+
+
+
+// ── v44 Variant Vowels + Diphthongs category cleanup ─────────────────
+// Category correction: /aw/ and /oo/ patterns belong under Variant Vowels;
+// true diphthongs stay under Diphthongs (/oy/ and /ow/).
+// The /OO/ — ew set intentionally avoids ambiguous /yoo/ words such as few, new, and dew.
+const VARIANT_VOWEL_WORDS = {
+  'variant-aw-aw': [
+    'caw','claw','crawl','dawn','draw','fawn','hawk','jaw','lawn','paw','raw','saw',
+    'shawl','straw','thaw','yawn'
+  ],
+  'variant-aw-au': [
+    'haul','haunt','launch','taunt'
+  ],
+  'variant-oo-long-oo': [
+    'boot','broom','cool','food','fool','moon','noon','pool','room','root','soon','spoon','tool','tooth','zoo'
+  ],
+  'variant-oo-short-oo': [
+    'book','brook','cook','foot','good','hood','hook','look','shook','stood','took','wood','wool'
+  ],
+  'variant-oo-ew': [
+    'blew','brew','chew','crew','drew','flew','grew','screw','threw'
+  ],
+  'variant-oo-ue': [
+    
+  ],
+  'variant-oo-ui': [
+    'fruit','suit'
+  ],
+  'variant-oo-ou': [
+    'group','soup','you','youth'
+  ]
+};
+
+// Add /ow/ diphthong words while keeping /aw/ out of the Diphthongs category.
+DIPHTHONG_WORDS['diph-ow-ou'] = [
+  'cloud','count','found','ground','loud','mouth','out','pouch','pound','round','shout','sound','south'
+];
+DIPHTHONG_WORDS['diph-ow-ow'] = [
+  'brown','clown','cow','crowd','down','frown','growl','how','now','owl','plow','town'
+];
+
+Object.assign(VOWELS, {
+  'variant-aw-aw': {label:'Variant vowel /aw/ spelled aw', letter:'aw', phoneme:'/aw/', type:'variant'},
+  'variant-aw-au': {label:'Variant vowel /aw/ spelled au', letter:'au', phoneme:'/aw/', type:'variant'},
+  'variant-oo-long-oo': {label:'Variant vowel /OO/ spelled oo', letter:'oo', phoneme:'/OO/', type:'variant'},
+  'variant-oo-short-oo': {label:'Variant vowel /oo/ spelled oo', letter:'oo', phoneme:'/oo/', type:'variant'},
+  'variant-oo-ew': {label:'Variant vowel /OO/ spelled ew', letter:'ew', phoneme:'/OO/', type:'variant'},
+  'variant-oo-ue': {label:'Variant vowel /OO/ spelled ue', letter:'ue', phoneme:'/OO/', type:'variant'},
+  'variant-oo-ui': {label:'Variant vowel /OO/ spelled ui', letter:'ui', phoneme:'/OO/', type:'variant'},
+  'variant-oo-ou': {label:'Variant vowel /OO/ spelled ou', letter:'ou', phoneme:'/OO/', type:'variant'},
+  'diph-ow-ou': {label:'Diphthong /ow/ spelled ou', letter:'ou', phoneme:'/ow/', type:'diphthong'},
+  'diph-ow-ow': {label:'Diphthong /ow/ spelled ow', letter:'ow', phoneme:'/ow/', type:'diphthong'}
+});
+
+VOWEL_TYPE_KEYS.variant = [
+  'variant-aw-aw','variant-aw-au','variant-oo-long-oo','variant-oo-short-oo',
+  'variant-oo-ew','variant-oo-ui','variant-oo-ou'
+];
+VOWEL_TYPE_KEYS.diphthongs = ['diph-oy-oi','diph-oy-oy','diph-ow-ou','diph-ow-ow'];
+
+const PHONICS_CATEGORY_ORDER_V44 = ['short','long','team-a','team-e','team-i','team-o','variant','rcontrolled','diphthongs'];
+PHONICS_GROUPS_V33.variant = {
+  type: 'variant',
+  label: 'Variant Vowels',
+  keys: VOWEL_TYPE_KEYS.variant
+};
+PHONICS_GROUPS_V33.diphthongs.keys = VOWEL_TYPE_KEYS.diphthongs;
+
+// Remove Long U Teams from the visible category dropdown for now.
+// The built-in bank was mixing /ū/ and /OO/ examples, which is confusing for letterbox mapping.
+// Clean /OO/ spellings remain available under Variant Vowels.
+delete PHONICS_GROUPS_V33['team-u'];
+
+
+Object.assign(PHONICS_PATTERN_LABELS_V32, {
+  'variant-aw-aw': '/aw/ — aw',
+  'variant-aw-au': '/aw/ — au',
+  'variant-oo-long-oo': '/OO/ — oo',
+  'variant-oo-short-oo': '/oo/ — oo',
+  'variant-oo-ew': '/OO/ — ew',
+  'variant-oo-ui': '/OO/ — ui',
+  'variant-oo-ou': '/OO/ — ou',
+  'diph-ow-ou': '/ow/ — ou',
+  'diph-ow-ow': '/ow/ — ow'
+});
+Object.assign(PHONICS_PATTERN_LABELS_V33B, PHONICS_PATTERN_LABELS_V32);
+
+graphemeToPhoneme = (function(original){
+  return function(g, vowelKey){
+    if (VOWELS[vowelKey] && g === VOWELS[vowelKey].letter) return VOWELS[vowelKey].phoneme;
+    return original(g, vowelKey);
+  };
+})(graphemeToPhoneme);
+
+function mapVariantVowelWord(word){
+  const mapped = mapGenericVowelUnitWord(word, VARIANT_VOWEL_WORDS, 'variant-vowel');
+  if (!mapped) return null;
+  mapped.tags = [...new Set([...(mapped.tags || []), 'variant-vowel'])];
+  mapped.note = `Vowel focus: ${VOWELS[mapped.vowelKey].label.replace('Variant vowel','variant vowel')}. The spelling ${VOWELS[mapped.vowelKey].letter} represents one vowel sound, so it goes in one sound box. Use ${mapped.phonemeCount} sound boxes.`;
+  return mapped;
+}
+
+const mapWordBeforeV44VariantCleanup = typeof mapWord === 'function' ? mapWord : null;
+mapWord = function(word){
+  const w = String(word || '').toLowerCase().replace(/[^a-z]/g,'');
+  const variantMap = mapVariantVowelWord(w);
+  if (variantMap) {
+    return typeof applyTeacherFacingCorrectionsV26 === 'function'
+      ? applyTeacherFacingCorrectionsV26(variantMap)
+      : variantMap;
+  }
+  return mapWordBeforeV44VariantCleanup ? mapWordBeforeV44VariantCleanup(w) : null;
+};
+
+allWords = function(){
+  return [
+    ...Object.values(SHORT_VOWEL_WORDS).flat(),
+    ...Object.values(LONG_SILENT_E_WORDS).flat(),
+    ...Object.values(LONG_A_VOWEL_TEAM_WORDS).flat(),
+    ...Object.values(LONG_E_VOWEL_TEAM_WORDS).flat(),
+    ...Object.values(LONG_O_VOWEL_TEAM_WORDS).flat(),
+    ...Object.values(LONG_I_VOWEL_TEAM_WORDS).flat(),
+    ...Object.values(LONG_U_VOWEL_TEAM_WORDS).flat(),
+    ...Object.values(VARIANT_VOWEL_WORDS).flat(),
+    ...Object.values(R_CONTROLLED_WORDS).flat(),
+    ...Object.values(DIPHTHONG_WORDS).flat()
+  ];
+};
+
+const getFilteredMapsBeforeV44 = typeof getFilteredMaps === 'function' ? getFilteredMaps : null;
+getFilteredMaps = function(){
+  const countFilter=document.getElementById('countFilter').value;
+  const patternFilter=document.getElementById('patternFilter').value;
+  const teamBank = {...LONG_A_VOWEL_TEAM_WORDS, ...LONG_E_VOWEL_TEAM_WORDS, ...LONG_O_VOWEL_TEAM_WORDS, ...LONG_I_VOWEL_TEAM_WORDS, ...LONG_U_VOWEL_TEAM_WORDS};
+  const source = currentVowelType === 'long' ? LONG_SILENT_E_WORDS[currentVowel]
+    : currentVowelType === 'teams' ? teamBank[currentVowel]
+    : currentVowelType === 'variant' ? VARIANT_VOWEL_WORDS[currentVowel]
+    : currentVowelType === 'rcontrolled' ? R_CONTROLLED_WORDS[currentVowel]
+    : currentVowelType === 'diphthongs' ? DIPHTHONG_WORDS[currentVowel]
+    : SHORT_VOWEL_WORDS[currentVowel];
+  return (source || []).map(mapWord).filter(Boolean).filter(m=>{
+    const countOk = countFilter==='all' || (countFilter==='6' ? m.phonemeCount>=6 : m.phonemeCount===Number(countFilter));
+    const tagOk = patternFilter==='all' || m.tags.includes(patternFilter);
+    return countOk && tagOk;
+  }).sort((a,b)=>a.phonemeCount-b.phonemeCount || a.word.localeCompare(b.word));
+};
+
+updatePatternOptions = (function(original){
+  return function(){
+    const el=document.getElementById('patternFilter');
+    if(!el) return;
+    original && original();
+    if(currentVowelType === 'variant') {
+      const current=el.value;
+      const options = [
+        ['all','All patterns'],
+        ['digraph','Includes digraph'],
+        ['blend','Includes blend'],
+        ['flsz','FLSZ ending'],
+        ['tchdge','-tch / -dge'],
+        ['variant-vowel','Variant vowel']
+      ];
+      el.innerHTML=options.map(([v,t])=>`<option value="${v}">${t}</option>`).join('');
+      el.value = options.some(([v])=>v===current) ? current : 'all';
+    }
+  };
+})(updatePatternOptions);
+
+const renderGroupedDropdownsBeforeV44 = typeof renderGroupedDropdownsV33 === 'function' ? renderGroupedDropdownsV33 : null;
+renderGroupedDropdownsV33 = function(){
+  const categorySelect = document.getElementById('phonicsCategorySelect');
+  const patternSelect = document.getElementById('phonicsPatternSelect');
+  if (!categorySelect || !patternSelect) return;
+
+  categorySelect.innerHTML = PHONICS_CATEGORY_ORDER_V44.map(key => {
+    const label = PHONICS_GROUPS_V33[key]?.label || key;
+    return `<option value="${key}">${label}</option>`;
+  }).join('');
+
+  currentPhonicsGroupV33 = getGroupForCurrentStateV33();
+  if (!PHONICS_CATEGORY_ORDER_V44.includes(currentPhonicsGroupV33)) currentPhonicsGroupV33 = 'short';
+  const config = PHONICS_GROUPS_V33[currentPhonicsGroupV33] || PHONICS_GROUPS_V33.short;
+  categorySelect.value = currentPhonicsGroupV33;
+
+  if (!config.keys.includes(currentVowel)) currentVowel = config.keys[0];
+
+  patternSelect.innerHTML = config.keys.map(key => {
+    const label = PHONICS_PATTERN_LABELS_V33B[key] || (VOWELS[key]?.label || key);
+    return `<option value="${key}" ${key === currentVowel ? 'selected' : ''}>${label}</option>`;
+  }).join('');
+};
+renderDropdownPatternOptionsV32 = renderGroupedDropdownsV33;
+
+// Keep the dropdowns accurate after the page initializes.
+document.addEventListener('DOMContentLoaded', () => {
+  renderGroupedDropdownsV33();
+  bindGroupedDropdownsV33();
+});
+setTimeout(() => {
+  renderGroupedDropdownsV33();
+  bindGroupedDropdownsV33();
+}, 125);
 
 
 // ── v43 printable lesson total letter tiles fix ───────────────────────
