@@ -192,6 +192,27 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
 }
 .chip:hover:not(.selected){border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
 .chip.selected{background:var(--teal);color:white;border-color:var(--teal)}
+.selected-words-wrap{
+  border:1.5px solid rgba(14,159,142,.24);
+  background:linear-gradient(180deg,#F7FFFE 0%,#FFFFFF 100%);
+  border-radius:var(--r-lg);padding:12px;margin-top:12px;
+}
+.selected-words-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap}
+.selected-words-head h3{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--teal-dk)}
+.selected-words-head .btn-ghost{margin-left:auto;padding:5px 10px;font-size:11px}
+.selected-word-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1.5px solid var(--teal);background:var(--teal-bg);
+  border-radius:999px;padding:5px 8px 5px 12px;
+  font-size:13px;font-weight:800;color:var(--navy);
+}
+.selected-word-chip button{
+  width:18px;height:18px;border:none;border-radius:50%;
+  background:rgba(14,159,142,.16);color:var(--teal-dk);
+  cursor:pointer;font-size:14px;font-weight:900;line-height:18px;
+}
+.selected-word-chip button:hover{background:var(--teal);color:white}
+.selected-empty{color:var(--navy-lt);font-size:12px;font-weight:600;padding:2px}
 
 /* Custom tools */
 .custom-tools{display:none;margin-top:12px}
@@ -429,41 +450,50 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
 /* Scenery */
 .scenery{position:absolute;inset:0;pointer-events:none;z-index:3}
 
-/* ─── WORD CARD — compact slide-up panel ─────────────────────────────────── */
+/* ─── WORD CARD — centered classroom modal ───────────────────────────────── */
 .word-panel{
   position:absolute;
-  left:50%;bottom:0;
-  transform:translateX(-50%) translateY(100%);
-  width:min(380px,58%);
+  inset:0;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  opacity:0;
+  pointer-events:none;
+  background:rgba(15,23,42,.34);
+  backdrop-filter:blur(2px);
+  z-index:15;
+  transition:opacity .2s ease;
+}
+.word-panel.visible{opacity:1;pointer-events:auto}
+.word-card{
+  width:min(620px,92vw);
   background:var(--white);
   border:1px solid var(--border);
-  border-radius:var(--r-xl) var(--r-xl) 0 0;
-  padding:14px 22px 18px;
+  border-radius:var(--r-xl);
+  padding:28px 32px 30px;
   text-align:center;
-  box-shadow:0 -8px 32px rgba(0,0,0,.14);
-  z-index:15;
-  transition:transform .32s cubic-bezier(.22,.88,.22,1);
+  box-shadow:var(--shadow-lg);
+  transform:scale(.94) translateY(10px);
+  transition:transform .2s cubic-bezier(.22,.88,.22,1);
 }
-.word-panel.visible{transform:translateX(-50%) translateY(-60px)}
-.word-panel-handle{
-  width:36px;height:4px;border-radius:2px;background:var(--border);
-  margin:0 auto 12px;
-}
+.word-panel.visible .word-card{transform:scale(1) translateY(0)}
 .word-label{
-  font-size:9px;font-weight:800;letter-spacing:.09em;
-  text-transform:uppercase;color:var(--coral);margin-bottom:4px;
+  font-size:13px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--coral);margin-bottom:12px;
 }
 .big-word{
-  font-family:'Nunito',sans-serif;font-size:44px;
-  font-weight:900;line-height:1;margin:3px 0 6px;
-  color:var(--navy);letter-spacing:-1px;
+  font-family:'Nunito',sans-serif;font-size:clamp(64px,9vw,112px);
+  font-weight:900;line-height:.95;margin:8px 0 16px;
+  color:var(--navy);
 }
-.word-prompt{font-size:12px;color:var(--navy-lt);font-weight:600}
+.word-prompt{font-size:24px;color:var(--navy-mid);font-weight:900}
 .read-btn{
-  margin-top:10px;border:none;
+  margin-top:22px;border:none;
   background:var(--teal);color:white;
-  border-radius:var(--r-md);padding:10px 24px;
-  font-size:15px;font-weight:800;cursor:pointer;
+  border-radius:var(--r-md);padding:16px 28px;
+  font-size:22px;font-weight:900;cursor:pointer;
   box-shadow:0 4px 0 var(--teal-dk);
   transition:transform .09s,box-shadow .09s;
   display:block;width:100%;
@@ -544,8 +574,11 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
     display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;
   }
   #game{height:auto;min-height:100vh}
-  .big-word{font-size:36px}
-  .word-panel{width:94%}
+  .big-word{font-size:clamp(48px,16vw,72px)}
+  .word-panel{padding:16px}
+  .word-card{padding:22px 18px}
+  .word-prompt{font-size:18px}
+  .read-btn{font-size:18px}
   .tab-btn{font-size:11px;padding:7px 7px}
 }
 @media(max-width:520px){
@@ -674,9 +707,20 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
       <div class="word-bank-wrap">
         <div class="word-bank-head">
           <h3>Word Bank</h3>
-          <span class="word-bank-hint">Tap to select &mdash; tap again to remove</span>
+          <span class="word-bank-hint">Tap to add &mdash; tap again to remove</span>
         </div>
         <div class="chips" id="wordBank"></div>
+      </div>
+    </div>
+
+    <div class="selected-words-wrap">
+      <div class="selected-words-head">
+        <h3>Selected Words for This Game</h3>
+        <span class="count-badge" id="selectedWordCount">0 selected</span>
+        <button type="button" class="btn-ghost" id="clearSelectedBtn">Clear All</button>
+      </div>
+      <div class="chips" id="selectedWordBank">
+        <span class="selected-empty">Choose words from any list or add custom words.</span>
       </div>
     </div>
   </div>
@@ -733,13 +777,14 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
         <div id="trackArea"></div>
         <!-- Compact bottom prompt when waiting to roll -->
         <div class="ready-prompt" id="readyPrompt">Roll the dice to begin</div>
-        <!-- Slide-up word panel during read phase -->
+        <!-- Centered word modal during read phase -->
         <div class="word-panel" id="wordPanel">
-          <div class="word-panel-handle"></div>
-          <div class="word-label" id="wordLabel">Read this word</div>
-          <div class="big-word" id="bigWord">Ready?</div>
-          <div class="word-prompt" id="wordPrompt"></div>
-          <button class="read-btn" id="readBtn" disabled>Waiting for dice roll</button>
+          <div class="word-card">
+            <div class="word-label" id="wordLabel">Read this word</div>
+            <div class="big-word" id="bigWord">Ready?</div>
+            <div class="word-prompt" id="wordPrompt"></div>
+            <button class="read-btn" id="readBtn" disabled>Waiting for dice roll</button>
+          </div>
         </div>
       </div>
     </div>
@@ -993,16 +1038,25 @@ function populateLevels(){
 }
 function visibleWords(){
   if(currentListType==='custom'){
-    const typedWords = $('customWords').value
+    return $('customWords').value
       .split(/[\s,\n]+/)
       .map(w=>w.trim())
       .filter(Boolean);
-
-    // Include words already selected, especially when loaded from the dashboard.
-    return [...new Set([...typedWords, ...selectedWordsSet])];
   }
   const level=$('levelSelect').value||Object.keys(DATA[currentListType])[0];
   return DATA[currentListType][level]||[];
+}
+function selectedWordFor(word){
+  const key=String(word).trim().toLowerCase();
+  return [...selectedWordsSet].find(w=>String(w).toLowerCase()===key);
+}
+function addSelectedWord(word){
+  const clean=String(word).trim();
+  if(clean && !selectedWordFor(clean)) selectedWordsSet.add(clean);
+}
+function removeSelectedWord(word){
+  const existing=selectedWordFor(word);
+  if(existing) selectedWordsSet.delete(existing);
 }
 function openWordBank(){
   wordBankRevealed=true;
@@ -1016,29 +1070,55 @@ function renderWordBank(){
     bank.innerHTML='<span style="color:var(--navy-lt);font-size:12px;font-weight:600">Type custom words above, then click Add.</span>';
     return;
   }
-  bank.innerHTML=ws.map(w=>`<button type="button" class="chip ${selectedWordsSet.has(w)?'selected':''}" data-word="${escHtml(w)}">${escHtml(w)}</button>`).join('');
+  bank.innerHTML=ws.map(w=>`<button type="button" class="chip ${selectedWordFor(w)?'selected':''}" data-word="${escHtml(w)}">${escHtml(w)}</button>`).join('');
   bank.querySelectorAll('.chip').forEach(chip=>chip.addEventListener('click',()=>toggleWord(chip.dataset.word)));
 }
-function toggleWord(w){
-  selectedWordsSet.has(w)?selectedWordsSet.delete(w):selectedWordsSet.add(w);
-  renderWordBank();updateWordCount();
+function renderSelectedWords(){
+  const bank=$('selectedWordBank');if(!bank)return;
+  const selected=[...selectedWordsSet];
+  if(!selected.length){
+    bank.innerHTML='<span class="selected-empty">Choose words from any list or add custom words.</span>';
+    return;
+  }
+  bank.innerHTML=selected.map(w=>`
+    <span class="selected-word-chip">
+      ${escHtml(w)}
+      <button type="button" data-word="${escHtml(w)}" aria-label="Remove ${escHtml(w)}">×</button>
+    </span>`).join('');
+  bank.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{
+    removeSelectedWord(btn.dataset.word);
+    refreshWordSelectionUI();
+  }));
 }
-function updateWordCount(){$('wordCount').textContent=`${selectedWordsSet.size} selected`;}
-function selectAllVisible(){visibleWords().forEach(w=>selectedWordsSet.add(w));renderWordBank();updateWordCount();}
-function deselectAllVisible(){visibleWords().forEach(w=>selectedWordsSet.delete(w));renderWordBank();updateWordCount();}
+function refreshWordSelectionUI(){
+  renderWordBank();
+  renderSelectedWords();
+  updateWordCount();
+}
+function toggleWord(w){
+  selectedWordFor(w)?removeSelectedWord(w):addSelectedWord(w);
+  refreshWordSelectionUI();
+}
+function updateWordCount(){
+  $('wordCount').textContent=`${selectedWordsSet.size} selected`;
+  const selectedCount=$('selectedWordCount');
+  if(selectedCount) selectedCount.textContent=`${selectedWordsSet.size} selected`;
+}
+function selectAllVisible(){visibleWords().forEach(addSelectedWord);refreshWordSelectionUI();}
+function deselectAllVisible(){visibleWords().forEach(removeSelectedWord);refreshWordSelectionUI();}
 function addCustomWords(){
   $('customWords').value.split(/[\s,\n]+/).map(w=>w.trim()).filter(Boolean)
-    .forEach(w=>selectedWordsSet.add(w));
-  renderWordBank();updateWordCount();
+    .forEach(addSelectedWord);
+  refreshWordSelectionUI();
+}
+function clearSelectedWords(){
+  selectedWordsSet.clear();
+  refreshWordSelectionUI();
 }
 function setListType(type, options = {}){
   const previousType = currentListType;
   currentListType=type;
   window.currentListType=type; // keep module in sync
-
-  if(!options.keepSelected && previousType !== type){
-    selectedWordsSet.clear();
-  }
 
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===type));
   const isCustom=type==='custom';
@@ -1053,8 +1133,7 @@ function setListType(type, options = {}){
     $('wordBankAccordion').classList.add('open');
     wordBankRevealed=true;
   }
-  renderWordBank();
-  updateWordCount();
+  refreshWordSelectionUI();
 }
 function renderPlayerInputs(){
   const wrap=$('playerSetup');wrap.innerHTML='';
@@ -1328,9 +1407,9 @@ function showReadWord(){
   const p=players[current],w=nextWord();
   $('wordLabel').textContent=`${p.name} — read this word:`;
   $('bigWord').textContent=w;
-  $('wordPrompt').textContent=`Then tap the button to move ${roll} space${roll>1?'s':''}.`;
+  $('wordPrompt').textContent=`Move ${roll} space${roll>1?'s':''}.`;
   $('readBtn').disabled=false;
-  $('readBtn').textContent=`I Read It!  +${roll}`;
+  $('readBtn').textContent=`I Read It! Move ${roll}`;
   $('readyPrompt').textContent=`${p.name}'s turn — roll the dice!`;
   showWordPanel(true);
   renderSide();
@@ -1483,17 +1562,16 @@ function init(){
   playerCount=2;
   populateLevels();
   openWordBank();
-  updateWordCount();
+  refreshWordSelectionUI();
   renderPlayerInputs();
   document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>setListType(btn.dataset.type)));
   $('levelSelect').addEventListener('change',()=>{
-    selectedWordsSet.clear();
-    renderWordBank();
-    updateWordCount();
+    refreshWordSelectionUI();
   });
   $('selectAllBtn').addEventListener('click',selectAllVisible);
   $('deselectAllBtn').addEventListener('click',deselectAllVisible);
   $('addCustomBtn').addEventListener('click',addCustomWords);
+  $('clearSelectedBtn').addEventListener('click',clearSelectedWords);
   $('startBtn').addEventListener('click',startGame);
   $('newGameBtn').addEventListener('click',resetToSetup);
   $('restartBtn').addEventListener('click',resetToSetup);
@@ -1511,6 +1589,7 @@ function init(){
   window.setListType      = setListType;
   window.renderWordBank   = renderWordBank;
   window.updateWordCount  = updateWordCount;
+  window.refreshWordSelectionUI = refreshWordSelectionUI;
 }
 window.addEventListener('DOMContentLoaded',init);
 window.addEventListener('resize',()=>{
@@ -1678,7 +1757,7 @@ function tryLoadSavedActivity() {
     setTimeout(() => {
       const sel = document.getElementById('levelSelect');
       const opt = [...sel.options].find(o => o.value === settings.level);
-      if (opt) { sel.value = settings.level; if (window.renderWordBank) window.renderWordBank(); }
+      if (opt) { sel.value = settings.level; if (window.refreshWordSelectionUI) window.refreshWordSelectionUI(); }
     }, 50);
   }
 
@@ -1686,8 +1765,7 @@ function tryLoadSavedActivity() {
   if (window.selectedWordsSet) {
     window.selectedWordsSet.clear();
     words.forEach(w => window.selectedWordsSet.add(w));
-    if (window.renderWordBank) window.renderWordBank();
-    if (window.updateWordCount) window.updateWordCount();
+    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
   }
 
   // Show loaded banner
@@ -1703,8 +1781,7 @@ document.getElementById('loadedBannerClear')?.addEventListener('click', () => {
   document.getElementById('loadedBanner').style.display = 'none';
   if (window.selectedWordsSet) {
     window.selectedWordsSet.clear();
-    if (window.renderWordBank) window.renderWordBank();
-    if (window.updateWordCount) window.updateWordCount();
+    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
   }
 });
 
