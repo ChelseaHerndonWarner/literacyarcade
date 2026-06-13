@@ -1,0 +1,2314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CL8QW5CGB2');
+</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Magic Word Road | 2-Player Word Reading Game | Literacy Arcade</title>
+<meta name="description" content="Roll the dice, read a word, and follow the golden road in Magic Word Road, a 2-player classroom reading game for sight words, phonics patterns, and custom word lists."/>
+<meta name="keywords" content="word reading game, classroom reading game, sight word game, phonics game, Fry words, Dolch words, custom word list game, Science of Reading, Literacy Arcade"/>
+<link rel="canonical" href="https://literacyarcade.com/magic-word-road.html"/>
+<meta property="og:title" content="Magic Word Road | 2-Player Word Reading Game"/>
+<meta property="og:description" content="A 2-player word reading game where students roll the dice, read words aloud, and follow the golden road to the Emerald Castle."/>
+<meta property="og:url" content="https://literacyarcade.com/magic-word-road.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://literacyarcade.com/og-magic-word-road.png"/>
+<meta property="og:site_name" content="Literacy Arcade"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Magic Word Road | 2-Player Word Reading Game"/>
+<meta name="twitter:description" content="Roll the dice, read a word, and follow the golden road in Magic Word Road, a 2-player classroom reading game for sight words, phonics patterns, and custom word lists."/>
+<meta name="twitter:image" content="https://literacyarcade.com/og-magic-word-road.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@600;700;800&family=Nunito:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ─── TOKENS ─────────────────────────────────────────────────────────────── */
+:root{
+  /* Brand chrome (kept consistent with Literacy Arcade) */
+  --teal:#1ABEA8;  --teal-dk:#0E9F8E; --teal-bg:#E0F7F4;
+  --coral:#F47B5E; --coral-dk:#D95F3F;
+  --navy:#0F172A;  --navy-mid:#334155; --navy-lt:#64748B;
+  --cream:#F5F4EE; --white:#FFFFFF;   --border:#E2E0D8;
+  --shadow-sm:0 2px 8px rgba(15,23,42,.06);
+  --shadow-md:0 8px 24px rgba(15,23,42,.10);
+  --shadow-lg:0 16px 48px rgba(15,23,42,.14);
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
+
+  /* Fantasy board scene palette — bold Oz / Emerald City direction */
+  --gold:#FFC928;   --gold-lt:#FFE7A0; --gold-dk:#C88A16; --gold-edge:#A86E0E;
+  --emerald:#00A96B; --emerald-dk:#007A4D; --emerald-lt:#36D69A; --crystal:#9CF1D2;
+  --flower:#F77CA8; --flower-dk:#D85488;
+  --sky-1:#C8C1F0; --sky-2:#DCD8FF; --sky-glow:#F3F1FF;
+  --peri:#7E8CE8; --ruby:#B80E3A;
+  --olive:#36511F; --stone:#A99CA8; --stone-lt:#C5BAC4; --brown:#4A321F;
+  --meadow-1:#A7D98C; --meadow-2:#7FC06A; --meadow-3:#4E8C3E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;overflow-x:hidden}
+button,select,input,textarea{font-family:inherit}
+a{color:inherit;text-decoration:none}
+
+/* ─── HEADER (Literacy Arcade master header) ─────────────────────────────── */
+.la-header{
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:0 24px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+  box-shadow:var(--shadow-sm);
+}
+.la-logo-group{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.la-icon{width:36px;height:36px;border-radius:9px;overflow:hidden;flex-shrink:0;display:block}
+.la-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.la-wordmark{
+  font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;
+  color:var(--navy);letter-spacing:-.2px;line-height:1;
+}
+.la-pipe{width:1px;height:18px;background:var(--border);margin:0 4px;flex-shrink:0}
+.la-tool-name{
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;
+  color:var(--teal-dk);letter-spacing:-.1px;line-height:1;
+}
+.hdr-btns{display:flex;align-items:center;gap:6px}
+.icon-btn{
+  width:36px;height:36px;border-radius:var(--r-sm);
+  border:1.5px solid var(--border);background:#F8F7F3;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--navy-mid);transition:background .15s,border-color .15s;flex-shrink:0;
+  cursor:pointer;
+}
+.icon-btn:hover{background:var(--cream);border-color:var(--navy-lt)}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+/* Game-only header buttons (revealed during play) */
+.hdr-game-btn{
+  border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:7px 13px;font-size:12px;
+  font-weight:700;color:var(--navy-mid);cursor:pointer;transition:all .13s;display:none;
+}
+.hdr-game-btn:hover{border-color:var(--teal-dk);color:var(--teal-dk);background:var(--teal-bg)}
+.hdr-label{font-size:11px;font-weight:600;color:var(--navy-lt);display:none}
+body.in-game .hdr-game-btn{display:inline-block}
+body.in-game .hdr-label{display:inline}
+
+/* ─── SETUP ──────────────────────────────────────────────────────────────── */
+#setup{max-width:740px;margin:0 auto;padding:28px 20px 64px}
+
+.hero{text-align:center;margin-bottom:26px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--teal-bg);color:var(--teal-dk);
+  border:1px solid rgba(14,159,142,.2);
+  border-radius:999px;padding:4px 14px;
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:12px;
+}
+.hero h1{
+  font-family:'Nunito',sans-serif;
+  font-size:clamp(1.9rem,5.5vw,2.8rem);font-weight:900;
+  color:var(--navy);letter-spacing:-.5px;line-height:1.05;
+}
+.hero h1 strong{font-style:normal;color:var(--emerald)}
+.hero p{color:var(--navy-lt);font-size:14px;font-weight:500;margin-top:7px}
+
+/* Cards */
+.card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:20px 22px;
+  box-shadow:var(--shadow-md);margin-bottom:14px;
+}
+.card-title{
+  font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--navy-lt);margin-bottom:12px;
+  display:flex;align-items:center;gap:7px;
+}
+.card-title::before{content:"";display:block;width:3px;height:13px;border-radius:2px;background:var(--teal)}
+
+.word-selection-card{
+  transition:padding .2s ease,box-shadow .2s ease;
+}
+.word-rollup{
+  display:none;align-items:center;justify-content:space-between;gap:12px;
+  border:1.5px solid rgba(0,169,107,.18);
+  background:linear-gradient(135deg,rgba(224,247,244,.86),rgba(255,255,255,.92));
+  border-radius:var(--r-lg);padding:11px 12px;margin:-2px 0 12px;
+}
+.word-rollup.visible{display:flex}
+.word-rollup-text{min-width:0}
+.word-rollup-count{
+  display:block;font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;
+  color:var(--emerald-dk);line-height:1.05;
+}
+.word-rollup-hint{display:block;font-size:11px;font-weight:700;color:var(--navy-lt);margin-top:2px}
+.word-rollup .btn-ghost{flex-shrink:0;background:#fff}
+.word-selection-card.collapsed .tab-bar,
+.word-selection-card.collapsed .level-row,
+.word-selection-card.collapsed .custom-tools,
+.word-selection-card.collapsed .word-bank-accordion{
+  display:none;
+}
+.word-selection-card.collapsed .selected-words-wrap{
+  margin-top:0;padding:10px 12px;background:linear-gradient(180deg,#FFFFFF,#F7FFFE);
+}
+.word-selection-card.collapsed .selected-words-head{margin-bottom:0}
+.word-selection-card.collapsed .selected-words-head h3{display:none}
+.word-selection-card.collapsed #selectedWordBank{display:none}
+
+/* Tabs */
+.tab-bar{
+  display:flex;gap:4px;background:var(--cream);
+  border:1px solid var(--border);border-radius:var(--r-md);
+  padding:4px;margin-bottom:0;flex-wrap:wrap;
+}
+.tab-btn{
+  flex:1;min-width:68px;border:none;border-radius:var(--r-sm);
+  background:transparent;color:var(--navy-lt);
+  font-size:13px;font-weight:800;padding:8px 10px;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.tab-btn.active{background:var(--white);color:var(--teal);box-shadow:var(--shadow-sm)}
+.tab-btn:hover:not(.active){background:rgba(255,255,255,.7);color:var(--navy)}
+
+/* Level row */
+.level-row{
+  display:grid;grid-template-columns:1fr;gap:0;
+  overflow:hidden;max-height:0;
+  transition:max-height .28s ease, margin-top .28s ease, opacity .22s ease;
+  opacity:0;margin-top:0;
+}
+.level-row.visible{max-height:80px;opacity:1;margin-top:12px}
+
+/* Fields */
+.field{margin-bottom:0}
+.field label{display:block;font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--navy-lt);margin-bottom:5px}
+select,input{
+  width:100%;border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:9px 13px;font-size:14px;
+  font-weight:700;color:var(--navy);outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+select:focus,input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12)}
+textarea{
+  width:100%;border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:9px 13px;font-size:14px;
+  font-weight:700;color:var(--navy);outline:none;min-height:74px;resize:vertical;
+  transition:border-color .15s;
+}
+textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12)}
+
+/* Word bank accordion */
+.word-bank-accordion{
+  overflow:hidden;max-height:0;
+  transition:max-height .32s ease, opacity .25s ease, margin-top .28s ease;
+  opacity:0;margin-top:0;
+}
+.word-bank-accordion.open{max-height:340px;opacity:1;margin-top:14px}
+
+.builder-actions{display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.btn-ghost{
+  border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:7px 14px;
+  font-size:12px;font-weight:800;color:var(--navy-mid);
+  cursor:pointer;transition:all .13s;
+}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+.count-badge{
+  display:inline-flex;align-items:center;background:var(--teal);
+  color:white;border-radius:999px;padding:3px 12px;
+  font-size:11px;font-weight:800;margin-left:auto;
+}
+
+.word-bank-wrap{
+  border:1.5px solid var(--border);background:var(--cream);
+  border-radius:var(--r-lg);padding:12px;
+}
+.word-bank-head{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.word-bank-head h3{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--navy-lt)}
+.word-bank-hint{font-size:10px;color:var(--navy-lt);font-weight:600;margin-left:auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px;max-height:160px;overflow-y:auto;padding:2px}
+.chip{
+  border:1.5px solid var(--border);background:var(--white);
+  border-radius:999px;padding:5px 13px;
+  font-size:13px;font-weight:700;color:var(--navy);
+  cursor:pointer;transition:all .12s;
+}
+.chip:hover:not(.selected){border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+.chip.selected{background:var(--teal);color:white;border-color:var(--teal)}
+.selected-words-wrap{
+  border:1.5px solid rgba(14,159,142,.24);
+  background:linear-gradient(180deg,#F7FFFE 0%,#FFFFFF 100%);
+  border-radius:var(--r-lg);padding:12px;margin-top:12px;
+}
+.selected-words-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap}
+.selected-words-head h3{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--teal-dk)}
+.selected-words-head .btn-ghost{margin-left:auto;padding:5px 10px;font-size:11px}
+.selected-word-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1.5px solid var(--teal);background:var(--teal-bg);
+  border-radius:999px;padding:5px 8px 5px 12px;
+  font-size:13px;font-weight:800;color:var(--navy);
+}
+.selected-word-chip button{
+  width:18px;height:18px;border:none;border-radius:50%;
+  background:rgba(14,159,142,.16);color:var(--teal-dk);
+  cursor:pointer;font-size:14px;font-weight:900;line-height:18px;
+}
+.selected-word-chip button:hover{background:var(--teal);color:white}
+.selected-empty{color:var(--navy-lt);font-size:12px;font-weight:600;padding:2px}
+
+/* Custom tools */
+.custom-tools{display:none;margin-top:12px}
+.custom-tools.show{display:block}
+.custom-add-row{display:flex;gap:8px;align-items:flex-start}
+.custom-add-row textarea{flex:1}
+
+/* Player count segmented control */
+.seg{display:flex;gap:6px;margin-bottom:14px}
+.seg-btn{
+  flex:1;border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:10px;font-size:14px;font-weight:800;
+  color:var(--navy-mid);cursor:pointer;transition:all .13s;
+}
+.seg-btn.active{border-color:var(--teal);background:var(--teal-bg);color:var(--teal-dk)}
+.seg-btn:hover:not(.active){border-color:var(--navy-lt)}
+
+/* Player inputs */
+.player-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.player-grid.solo{grid-template-columns:1fr}
+.player-note{font-size:12px;font-weight:700;color:var(--navy-lt);margin:-2px 0 10px}
+.player-input{display:flex;flex-direction:column;gap:7px}
+.player-input input{width:100%}
+
+/* Color swatches */
+.color-swatches{display:flex;gap:6px;align-items:center}
+.color-swatch{
+  width:28px;height:28px;border-radius:50%;cursor:pointer;
+  border:3px solid transparent;
+  transition:transform .12s,border-color .12s,box-shadow .12s;
+  flex-shrink:0;
+}
+.color-swatch:hover{transform:scale(1.12)}
+.color-swatch.selected{border-color:var(--navy);box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 0 4px var(--navy)}
+.color-swatch-label{font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--navy-lt);margin-bottom:3px}
+
+/* Start button */
+.start-btn{
+  width:100%;background:var(--emerald-dk);color:white;
+  border:none;border-radius:var(--r-md);
+  padding:15px 24px;font-size:17px;font-weight:900;
+  font-family:'Nunito',sans-serif;
+  cursor:pointer;
+  box-shadow:0 4px 0 #0a5e44;
+  transition:transform .12s,box-shadow .12s;
+  letter-spacing:.01em;margin-top:6px;
+}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 #0a5e44}
+.start-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #0a5e44}
+
+/* ─── GAME SCREEN ────────────────────────────────────────────────────────── */
+#game{display:none;flex-direction:column;height:calc(100vh - 58px)}
+.game-layout{display:flex;flex:1;min-height:0;overflow:hidden}
+.board-wrap{
+  flex:1;min-width:0;position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse at 50% 12%,rgba(255,255,255,.86) 0%,rgba(255,255,255,.30) 24%,transparent 56%),
+    radial-gradient(ellipse at 86% 78%,rgba(126,140,232,.18) 0%,transparent 46%),
+    radial-gradient(ellipse at 14% 84%,rgba(0,169,107,.14) 0%,transparent 50%),
+    linear-gradient(180deg,var(--sky-1) 0%,var(--sky-2) 38%,#D9EAC8 64%,#C2DEA6 100%);
+}
+.board-wrap::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 30%,rgba(255,233,157,.22) 0 2px,transparent 3px),
+    radial-gradient(circle at 72% 18%,rgba(255,255,255,.42) 0 2px,transparent 3px),
+    linear-gradient(90deg,rgba(54,81,31,.13),transparent 10%,transparent 90%,rgba(54,81,31,.10));
+  opacity:.8;
+}
+.board-wrap::after{
+  content:"";position:absolute;left:-4%;right:-4%;bottom:-8%;height:24%;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 100%,rgba(54,81,31,.32),transparent 68%);
+  filter:blur(15px);opacity:.38;
+}
+.ambient-layer{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.magic-wisp{
+  position:absolute;width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle,#fff 0 22%,#FFE99D 34%,rgba(126,140,232,.65) 54%,transparent 72%);
+  box-shadow:0 0 14px rgba(255,233,157,.85),0 0 30px rgba(126,140,232,.42);
+  opacity:0;animation:wispDrift var(--dur,13s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);left:var(--x,12%);top:var(--y,62%);
+}
+.magic-wisp::before,.magic-wisp::after{
+  content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+}
+.magic-wisp::before{
+  width:18px;height:18px;background:rgba(255,255,255,.82);
+  clip-path:polygon(50% 0,58% 40%,100% 50%,58% 60%,50% 100%,42% 60%,0 50%,42% 40%);
+  filter:drop-shadow(0 0 6px rgba(255,255,255,.7));
+}
+.magic-wisp::after{
+  width:6px;height:6px;border-radius:50%;background:#fff;
+  box-shadow:0 0 10px rgba(255,255,255,.9),0 0 18px rgba(255,233,157,.8);
+}
+@keyframes wispDrift{
+  0%{opacity:0;transform:translate(0,26px) scale(.62)}
+  12%{opacity:.72}
+  48%{opacity:.9;transform:translate(var(--dx,180px),var(--dy,-62px)) scale(1)}
+  82%{opacity:.54}
+  100%{opacity:0;transform:translate(calc(var(--dx,180px) + 54px),calc(var(--dy,-62px) - 20px)) scale(.55)}
+}
+.ambient-twinkle{
+  position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;
+  box-shadow:0 0 10px #fff,0 0 18px rgba(255,233,157,.7);
+  opacity:.35;left:var(--x);top:var(--y);animation:ambientTwinkle var(--dur,4s) ease-in-out infinite;animation-delay:var(--delay,0s);
+}
+@keyframes ambientTwinkle{0%,100%{opacity:.15;transform:scale(.55)}50%{opacity:.95;transform:scale(1.45)}}
+
+/* The board SVG fills the wrap and scales */
+#boardSvg{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:3}
+
+/* Sidebar */
+.sidebar{
+  width:220px;flex:0 0 220px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(255,233,157,.15),transparent 42%),linear-gradient(180deg,#fffefa 0%,#f7f3e8 100%);
+  border-left:1px solid rgba(200,138,22,.24);
+  padding:14px 12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;
+  box-shadow:inset 12px 0 30px rgba(15,23,42,.05);
+}
+.side-card{
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,252,242,.96),rgba(242,239,226,.94));
+  border:1.5px solid rgba(200,138,22,.18);
+  border-radius:var(--r-lg);padding:13px;
+  box-shadow:0 8px 22px rgba(74,50,31,.07),inset 0 1px 0 rgba(255,255,255,.72);
+}
+.side-label{
+  font-size:9px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--navy-lt);margin-bottom:8px;
+}
+.now-name{font-size:18px;font-weight:800;line-height:1.15}
+.now-sub{font-size:11px;font-weight:600;color:var(--navy-lt);margin-top:3px}
+
+.player-row{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 8px;border-radius:var(--r-sm);
+  font-size:13px;font-weight:700;transition:background .12s;
+}
+.player-row.active{background:rgba(0,169,107,.11);box-shadow:inset 3px 0 0 var(--emerald)}
+.player-row .pdot{width:13px;height:13px;border-radius:50%;flex-shrink:0;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.player-row .pscore{margin-left:auto;font-size:10px;color:var(--navy-lt);font-weight:700}
+
+/* Dice */
+.dice-card{text-align:center}
+.dice-btn{
+  width:82px;height:82px;border:none;border-radius:17px;
+  background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.22),transparent 34%),linear-gradient(145deg,#071225,#111B38 56%,#050A18);
+  color:white;
+  margin:5px auto 7px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  box-shadow:0 6px 0 #050814,0 0 0 3px rgba(255,255,255,.08),0 12px 26px rgba(7,18,37,.28),0 0 28px rgba(126,140,232,.22);
+  transition:transform .08s,box-shadow .08s;
+}
+.dice-btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 #050814,0 0 0 3px rgba(255,255,255,.10),0 16px 30px rgba(7,18,37,.32),0 0 36px rgba(126,140,232,.30)}
+.dice-btn:active{transform:translateY(4px);box-shadow:0 2px 0 #0a0a1a,0 6px 12px rgba(0,0,0,.20)}
+.dice-btn:disabled{opacity:.38;cursor:not-allowed;transform:none!important}
+.dice-btn.rolling{animation:diceRoll .65s ease}
+@keyframes diceRoll{
+  0%  {transform:rotate(0)    scale(1)}
+  20% {transform:translateY(-5px) rotate(-18deg) scale(1.14)}
+  45% {transform:translateY(-3px) rotate(14deg)  scale(1.10)}
+  70% {transform:translateY(-2px) rotate(-8deg)  scale(1.05)}
+  100%{transform:rotate(0)    scale(1)}
+}
+.dice-svg{width:50px;height:50px;display:block}
+.dice-text{font-size:11px;font-weight:700;color:var(--navy-lt);margin-top:2px}
+
+/* Quest progress legend in sidebar */
+.legend{font-size:11px;font-weight:600;color:var(--navy-lt);line-height:1.45}
+
+/* ─── PLAYER TOKEN (SVG) ─────────────────────────────────────────────────── */
+/* Outer group carries POSITION (smoothly transitioned along the path).
+   Inner .token-art carries the hop/scale so position is never overwritten. */
+.token{transition:transform .42s cubic-bezier(.34,1.1,.4,1)}
+.token-art{transform-box:fill-box;transform-origin:center bottom}
+.token-art.hop{animation:tokenHop .42s ease}
+@keyframes tokenHop{
+  0%{transform:translateY(0) scale(1)}
+  40%{transform:translateY(-12px) scale(1.07)}
+  100%{transform:translateY(0) scale(1)}
+}
+.token-art.victory{animation:tokenVictory 1.1s ease}
+@keyframes tokenVictory{
+  0%{transform:translateY(0) scale(1)}
+  20%{transform:translateY(-22px) scale(1.18)}
+  45%{transform:translateY(0) scale(1)}
+  62%{transform:translateY(-12px) scale(1.1)}
+  80%{transform:translateY(0) scale(1)}
+  100%{transform:translateY(0) scale(1)}
+}
+.token-glow{transform-box:fill-box;transform-origin:center;opacity:.32;animation:tokenGlow 2.4s ease-in-out infinite}
+@keyframes tokenGlow{0%,100%{opacity:.26;transform:scale(.96)}50%{opacity:.48;transform:scale(1.12)}}
+/* Active player: brighter glow + pulsing ring so it's obvious whose turn it is */
+.token-ring{transform-box:fill-box;transform-origin:center;opacity:0}
+.token.active-token .token-glow{animation:tokenGlowActive 1.5s ease-in-out infinite}
+@keyframes tokenGlowActive{0%,100%{opacity:.45;transform:scale(1.05)}50%{opacity:.75;transform:scale(1.28)}}
+.token.active-token .token-ring{animation:tokenRing 1.5s ease-out infinite}
+@keyframes tokenRing{0%{opacity:.7;transform:scale(.7)}70%{opacity:0;transform:scale(1.5)}100%{opacity:0}}
+
+/* Board FX — sparkle trail, landing glow, firework bursts */
+.fx-spark{transform-box:fill-box;transform-origin:center;animation:fxSpark .6s ease forwards;pointer-events:none}
+@keyframes fxSpark{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-16px) scale(.3)}}
+.fx-land{transform-box:fill-box;transform-origin:center;animation:fxLand .58s ease-out forwards;pointer-events:none}
+@keyframes fxLand{0%{opacity:.9;transform:scale(.45)}100%{opacity:0;transform:scale(2)}}
+.fx-burst{transform-box:fill-box;transform-origin:center;animation:fxBurst .9s ease-out forwards;pointer-events:none}
+@keyframes fxBurst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(.4)}}
+
+/* Castle aura + magical sparkle twinkle on the board */
+#castleAura{opacity:.5;transform-box:fill-box;transform-origin:center;animation:auraPulse 3.4s ease-in-out infinite}
+@keyframes auraPulse{0%,100%{opacity:.42;transform:scale(1)}50%{opacity:.7;transform:scale(1.07)}}
+.sparkle{transform-box:fill-box;transform-origin:center;animation:twinkle 2.8s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}
+.castle-flag{
+  transform-box:fill-box;transform-origin:left center;
+  animation:flagWave 2.4s ease-in-out infinite;
+}
+.castle-flag.side{animation-duration:2.8s}
+@keyframes flagWave{
+  0%,100%{transform:skewY(0deg) scaleX(1)}
+  45%{transform:skewY(-5deg) scaleX(1.07)}
+  70%{transform:skewY(3deg) scaleX(.98)}
+}
+/* When a player wins, the whole board lifts into celebration */
+.board-wrap.celebrating #castleAura{animation:auraWin 1.6s ease-in-out infinite}
+@keyframes auraWin{0%,100%{opacity:.7;transform:scale(1.05)}50%{opacity:1;transform:scale(1.3)}}
+.board-wrap.celebrating .sparkle{animation-duration:.9s}
+
+/* ─── WORD CARD — centered classroom modal ───────────────────────────────── */
+.word-panel{
+  position:absolute;inset:0;width:100%;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;opacity:0;pointer-events:none;
+  background:rgba(15,23,42,.34);backdrop-filter:blur(2px);
+  z-index:15;transition:opacity .2s ease;
+}
+.word-panel.visible{opacity:1;pointer-events:auto}
+.word-card{
+  width:min(620px,92vw);background:var(--white);
+  border:1px solid var(--border);border-radius:var(--r-xl);
+  padding:28px 32px 30px;text-align:center;box-shadow:var(--shadow-lg);
+  transform:scale(.94) translateY(10px);
+  transition:transform .2s cubic-bezier(.22,.88,.22,1);
+}
+.word-panel.visible .word-card{transform:scale(1) translateY(0);animation:cardPop .42s cubic-bezier(.22,1.2,.36,1)}
+@keyframes cardPop{0%{transform:scale(.8) translateY(14px)}60%{transform:scale(1.04) translateY(0)}100%{transform:scale(1) translateY(0)}}
+.word-card::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;overflow:hidden;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.55) 50%,transparent 62%);
+  background-size:240% 100%;animation:cardShimmer 1.1s ease-out 1;
+}
+.word-card{position:relative;overflow:hidden}
+@keyframes cardShimmer{0%{background-position:130% 0;opacity:0}30%{opacity:1}100%{background-position:-30% 0;opacity:0}}
+.word-label{
+  font-size:13px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--coral);margin-bottom:12px;
+}
+.big-word{
+  font-family:'Lexend',sans-serif;font-size:clamp(64px,9vw,112px);
+  font-weight:800;line-height:1;letter-spacing:var(--modal-letter-spacing,-1.5px);margin:8px 0 16px;color:var(--navy);
+}
+.word-prompt{font-size:24px;color:var(--navy-mid);font-weight:900}
+.read-btn{
+  margin-top:22px;border:none;background:var(--teal);color:white;
+  border-radius:var(--r-md);padding:16px 28px;
+  font-size:22px;font-weight:900;cursor:pointer;
+  box-shadow:0 4px 0 var(--teal-dk);
+  transition:transform .09s,box-shadow .09s;display:block;width:100%;
+}
+.read-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 0 var(--teal-dk)}
+.read-btn:active:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 var(--teal-dk)}
+.read-btn:disabled{opacity:.40;cursor:not-allowed;box-shadow:none}
+
+/* ─── MAGIC SPACE POPUP ─────────────────────────────────────────────────── */
+.magic-panel{
+  position:absolute;inset:0;z-index:26;display:flex;align-items:center;justify-content:center;
+  padding:24px;opacity:0;pointer-events:none;
+  background:radial-gradient(circle at 50% 45%,rgba(0,169,107,.24),rgba(15,23,42,.42));
+  backdrop-filter:blur(3px);transition:opacity .2s ease;
+}
+.magic-panel.visible{opacity:1;pointer-events:auto}
+.magic-card{
+  width:min(430px,92vw);position:relative;overflow:hidden;text-align:center;
+  background:radial-gradient(circle at 50% 0%,rgba(255,233,157,.34),transparent 34%),linear-gradient(180deg,#FFFCF0,#F3EEDC);
+  border:2px solid rgba(200,138,22,.42);border-radius:24px;
+  box-shadow:0 24px 80px rgba(15,23,42,.28),0 0 54px rgba(0,169,107,.32);
+  padding:26px 26px 24px;transform:scale(.92) translateY(10px);
+  transition:transform .22s cubic-bezier(.2,1.25,.35,1);
+}
+.magic-panel.visible .magic-card{transform:scale(1) translateY(0)}
+.magic-card::before{
+  content:"";position:absolute;inset:-40%;pointer-events:none;
+  background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.42),transparent,rgba(126,140,232,.20),transparent);
+  animation:magicSweep 5s linear infinite;opacity:.55;
+}
+@keyframes magicSweep{to{transform:rotate(360deg)}}
+.magic-gem{
+  width:58px;height:58px;margin:0 auto 10px;position:relative;z-index:1;
+  filter:drop-shadow(0 0 18px rgba(126,140,232,.52));
+}
+.magic-title{
+  position:relative;z-index:1;font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;
+  color:var(--emerald-dk);line-height:1;margin-bottom:8px;
+}
+.magic-effect{
+  position:relative;z-index:1;font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;
+  color:var(--navy);margin-bottom:8px;
+}
+.magic-instruction{position:relative;z-index:1;font-size:15px;font-weight:700;color:var(--navy-mid);line-height:1.35;margin-bottom:18px}
+.magic-btn{
+  position:relative;z-index:1;width:100%;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--emerald-dk),var(--emerald));color:white;
+  padding:13px 18px;font-size:16px;font-weight:900;cursor:pointer;
+  box-shadow:0 5px 0 #07573A,0 0 22px rgba(0,169,107,.24);
+  transition:transform .1s,box-shadow .1s;
+}
+.magic-btn:hover{transform:translateY(-2px);box-shadow:0 7px 0 #07573A,0 0 28px rgba(0,169,107,.32)}
+.magic-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #07573A}
+
+/* Turn message — pinned to the TOP of the board (over the sky, never the path) */
+.ready-prompt{
+  position:absolute;left:50%;top:56px;transform:translateX(-50%);
+  background:rgba(255,255,255,.96);border:1.5px solid var(--peri);
+  border-radius:999px;padding:9px 22px;
+  font-size:14px;font-weight:800;color:var(--navy);text-align:center;
+  box-shadow:0 6px 18px rgba(80,70,160,.22);z-index:14;backdrop-filter:blur(4px);
+  transition:opacity .2s,transform .2s;white-space:nowrap;max-width:calc(100% - 32px);
+}
+.ready-prompt.hidden{opacity:0;pointer-events:none}
+.ready-prompt.count{font-size:30px;padding:6px 30px;color:var(--emerald-dk);border-color:var(--emerald-lt)}
+/* subtle magical shimmer sweep across the turn banner */
+.ready-prompt::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.65) 50%,transparent 70%);
+  background-size:220% 100%;animation:bannerShimmer 3.2s linear infinite;
+}
+@keyframes bannerShimmer{0%{background-position:140% 0}100%{background-position:-40% 0}}
+
+/* ─── WIN OVERLAY ────────────────────────────────────────────────────────── */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(26,26,46,.60);z-index:60;
+  align-items:center;justify-content:center;backdrop-filter:blur(6px);
+}
+.overlay.open{display:flex}
+.win-modal{
+  background:var(--white);border-radius:var(--r-xl);
+  width:400px;max-width:92vw;overflow:hidden;
+  box-shadow:0 0 0 3px rgba(54,214,154,.5), 0 22px 60px rgba(0,80,50,.35);
+  animation:winPop .5s cubic-bezier(.18,1.25,.4,1);
+}
+@keyframes winPop{0%{transform:scale(.6) translateY(20px);opacity:0}60%{transform:scale(1.05) translateY(0);opacity:1}100%{transform:scale(1) translateY(0)}}
+@keyframes modalPop{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+.win-header{
+  background:linear-gradient(135deg,var(--emerald) 0%,var(--emerald-lt) 100%);
+  padding:24px 24px 22px;text-align:center;position:relative;overflow:hidden;
+}
+.win-header::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.5),transparent 60%);pointer-events:none}
+.win-icon{display:block;margin:0 auto 8px;width:74px;height:74px;position:relative;z-index:1}
+.win-icon svg{display:block;filter:drop-shadow(0 4px 8px rgba(0,60,40,.35));animation:iconBob 2.2s ease-in-out infinite}
+@keyframes iconBob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.04)}}
+.win-title-sm{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.9);position:relative;z-index:1}
+.win-name{font-size:30px;font-weight:800;color:white;line-height:1.1;margin:4px 0;position:relative;z-index:1}
+.win-sub{font-size:13px;color:rgba(255,255,255,.92);font-weight:600;position:relative;z-index:1}
+.win-body{padding:20px;display:flex;flex-direction:column;gap:10px}
+.win-btn-primary{
+  width:100%;border:none;background:var(--emerald-dk);color:white;
+  border-radius:var(--r-md);padding:13px;
+  font-size:15px;font-weight:800;cursor:pointer;
+  box-shadow:0 5px 0 #0a5e44;transition:transform .1s,box-shadow .1s;
+}
+.win-btn-primary:hover{transform:translateY(-2px);box-shadow:0 7px 0 #0a5e44}
+.win-btn-primary:active{transform:translateY(2px);box-shadow:0 2px 0 #0a5e44}
+.win-btn-secondary{
+  width:100%;border:1.5px solid var(--border);background:var(--white);
+  color:var(--navy-mid);border-radius:var(--r-md);padding:11px;
+  font-size:14px;font-weight:800;cursor:pointer;transition:all .13s;
+}
+.win-btn-secondary:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:70;display:none}
+
+/* ─── COUNTDOWN OVERLAY (magical intro) ──────────────────────────────────── */
+.countdown{
+  position:absolute;inset:0;z-index:30;display:none;
+  align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 45%,rgba(126,140,232,.30),rgba(15,23,42,.42));
+  backdrop-filter:blur(3px);overflow:hidden;
+}
+.countdown.show{display:flex}
+.countdown-word{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:clamp(48px,11vw,116px);line-height:1;
+  color:#fff;text-align:center;letter-spacing:-.5px;
+  text-shadow:0 0 24px rgba(124,241,210,.9),0 6px 20px rgba(0,80,50,.5);
+  animation:cdPop .56s cubic-bezier(.2,1.3,.4,1);
+}
+.countdown-word.go{color:var(--gold-lt);text-shadow:0 0 28px rgba(255,201,40,.95),0 6px 22px rgba(120,80,0,.5)}
+@keyframes cdPop{0%{transform:scale(.3);opacity:0}55%{transform:scale(1.12);opacity:1}100%{transform:scale(1);opacity:1}}
+.cd-ring{position:absolute;width:160px;height:160px;border-radius:50%;border:4px solid rgba(255,255,255,.7);animation:cdRing .6s ease-out forwards;pointer-events:none}
+@keyframes cdRing{0%{opacity:.8;transform:scale(.4)}100%{opacity:0;transform:scale(2.6)}}
+
+/* ─── QUEST COMPLETE moment (before winner popup) ────────────────────────── */
+.questmoment{
+  position:fixed;inset:0;z-index:62;display:none;
+  align-items:center;justify-content:center;pointer-events:none;
+}
+.questmoment.show{display:flex}
+.questmoment-text{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:clamp(40px,9vw,92px);color:#fff;text-align:center;
+  text-shadow:0 0 30px rgba(255,201,40,.95),0 8px 26px rgba(0,60,40,.55);
+  animation:questPop .8s cubic-bezier(.2,1.3,.35,1);
+}
+@keyframes questPop{0%{transform:scale(.4) rotate(-4deg);opacity:0}55%{transform:scale(1.12) rotate(1deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+
+@media(prefers-reduced-motion:reduce){
+  .token-glow,.token-ring,.sparkle,#castleAura,.ready-prompt::after,.word-card::before,.win-icon svg,.magic-wisp,.ambient-twinkle{animation:none!important}
+}
+
+/* ─── SAVE / LOAD SYSTEM ──────────────────────────────────────────────────── */
+.save-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.save-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1.5px solid var(--teal);background:var(--teal-bg);
+  border-radius:var(--r-sm);padding:8px 16px;
+  font-size:13px;font-weight:800;color:var(--teal-dk);
+  cursor:pointer;transition:all .13s;white-space:nowrap;
+}
+.save-btn:hover{background:var(--teal);color:white}
+.save-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.auth-bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:12px;font-weight:700;color:var(--navy-lt)}
+.auth-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;border:2px solid var(--teal);flex-shrink:0}
+.auth-name{color:var(--navy);font-weight:800}
+.loaded-banner{
+  background:linear-gradient(135deg,var(--teal-bg),#fff);
+  border:1.5px solid rgba(14,159,142,.3);
+  border-radius:var(--r-md);padding:10px 14px;
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.loaded-banner svg{width:18px;height:18px;stroke:var(--teal-dk);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.loaded-banner-text{font-size:13px;font-weight:700;color:var(--teal-dk)}
+.loaded-banner-clear{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--navy-lt);font-size:11px;font-weight:800;padding:0;font-family:inherit}
+.loaded-banner-clear:hover{color:var(--navy)}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media(max-width:820px){
+  .game-layout{flex-direction:column}
+  .board-wrap{flex:1;min-height:340px}
+  .sidebar{
+    width:100%;flex:0 0 auto;border-left:none;border-top:1px solid var(--border);
+    display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;
+  }
+  #game{height:auto;min-height:calc(100vh - 58px)}
+  .big-word{font-size:clamp(48px,16vw,72px)}
+  .word-panel{padding:16px}
+  .word-card{padding:22px 18px}
+  .word-prompt{font-size:18px}
+  .read-btn{font-size:18px}
+  .tab-btn{font-size:11px;padding:7px 7px}
+  .legend{display:none}
+}
+@media(max-width:520px){
+  .sidebar{grid-template-columns:1fr 1fr}
+  .player-grid{grid-template-columns:1fr}
+  .card{padding:16px 18px}
+}
+@media(max-width:640px){
+  .la-header{padding:0 14px}
+  body.in-game .hdr-label{display:none}
+  .hdr-game-btn{padding:7px 10px;font-size:11px}
+  .la-wordmark{display:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- ═══ HEADER ═══ -->
+<header class="la-header" aria-label="Literacy Arcade navigation">
+  <a href="https://literacyarcade.com" class="la-logo-group" aria-label="Literacy Arcade home">
+    <div class="la-icon">
+      <img src="data:image/png;base64,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" alt="Literacy Arcade logo"/>
+    </div>
+    <span class="la-wordmark">Literacy Arcade</span>
+    <div class="la-pipe"></div>
+    <span class="la-tool-name">Magic Word Road</span>
+  </a>
+  <div class="hdr-btns">
+    <span class="hdr-label" id="gameListLabel"></span>
+    <button class="hdr-game-btn" id="restartBtn">Restart</button>
+    <button class="hdr-game-btn" id="newGameBtn">Change List</button>
+    <button class="icon-btn" id="dashboardBtn" aria-label="My saved activities" title="Teacher Dashboard" style="display:none" onclick="window.location.href='teacher-dashboard.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </button>
+    <button class="icon-btn" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'">
+      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ═══ SETUP ═══ -->
+<section id="setup">
+  <!-- Loaded-from-dashboard banner -->
+  <div class="loaded-banner" id="loadedBanner" style="display:none">
+    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    <span class="loaded-banner-text" id="loadedBannerText">Activity loaded from your dashboard</span>
+    <button class="loaded-banner-clear" id="loadedBannerClear" title="Clear and start fresh">✕ Clear</button>
+  </div>
+
+  <div class="hero">
+    <div class="hero-badge">2-Player Reading Quest</div>
+    <h1>Magic <strong>Word Road</strong></h1>
+    <p>Roll the dice · read a word · follow the golden road</p>
+  </div>
+
+  <!-- Step 1 + 2: List type + Level -->
+  <div class="card word-selection-card" id="wordSelectionCard">
+    <div class="card-title">Choose Your Word List</div>
+    <div class="word-rollup" id="wordRollup">
+      <div class="word-rollup-text">
+        <span class="word-rollup-count" id="wordRollupCount">0 selected</span>
+        <span class="word-rollup-hint" id="wordRollupHint">Words stay selected while you browse other lists.</span>
+      </div>
+      <button type="button" class="btn-ghost" id="toggleWordBuilderBtn">Hide Word Bank</button>
+    </div>
+    <div class="tab-bar" id="listTabs">
+      <button class="tab-btn active" data-type="fry">Fry Words</button>
+      <button class="tab-btn" data-type="dolch">Dolch Words</button>
+      <button class="tab-btn" data-type="phonics">Phonics Patterns</button>
+      <button class="tab-btn" data-type="custom">Custom Words</button>
+    </div>
+
+    <div class="level-row visible" id="levelRow">
+      <div class="field">
+        <label>Level / Category</label>
+        <select id="levelSelect"></select>
+      </div>
+    </div>
+
+    <div class="custom-tools" id="customField">
+      <div class="field">
+        <label>Enter Custom Words</label>
+        <div class="custom-add-row">
+          <textarea id="customWords" placeholder="Type words separated by spaces, commas, or new lines…"></textarea>
+          <button type="button" class="btn-ghost" id="addCustomBtn" style="align-self:stretch;padding:10px 14px">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="word-bank-accordion" id="wordBankAccordion">
+      <div class="builder-actions">
+        <button type="button" class="btn-ghost" id="selectAllBtn">Select All</button>
+        <button type="button" class="btn-ghost" id="deselectAllBtn">Deselect All</button>
+        <span class="count-badge" id="wordCount">0 selected</span>
+      </div>
+      <div class="word-bank-wrap">
+        <div class="word-bank-head">
+          <h3>Word Bank</h3>
+          <span class="word-bank-hint">Tap to add &mdash; tap again to remove</span>
+        </div>
+        <div class="chips" id="wordBank"></div>
+      </div>
+    </div>
+
+    <div class="selected-words-wrap">
+      <div class="selected-words-head">
+        <h3>Selected Words for This Game</h3>
+        <span class="count-badge" id="selectedWordCount">0 selected</span>
+        <button type="button" class="btn-ghost" id="clearSelectedBtn">Clear All</button>
+      </div>
+      <div class="chips" id="selectedWordBank">
+        <span class="selected-empty">Choose words from any list or add custom words.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Players -->
+  <div class="card">
+    <div class="card-title">2 Players</div>
+    <p class="player-note">Two adventurers take turns reading and moving along the path.</p>
+    <div class="player-grid" id="playerSetup"></div>
+  </div>
+
+  <button class="start-btn" id="startBtn">Begin the Quest</button>
+
+  <!-- Save / Auth bar -->
+  <div class="save-bar">
+    <button class="save-btn" id="saveActivityBtn">
+      <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save Activity
+    </button>
+    <div class="auth-bar" id="authBar">
+      <span id="authStatus" style="color:var(--navy-lt)">Loading…</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GAME ═══ -->
+<section id="game">
+  <div class="game-layout">
+    <div class="board-wrap">
+      <svg id="boardSvg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" aria-label="Magic Word Road game board"></svg>
+      <div class="ambient-layer" aria-hidden="true">
+        <span class="magic-wisp" style="--x:8%;--y:70%;--dx:220px;--dy:-82px;--dur:14s;--delay:-2s"></span>
+        <span class="magic-wisp" style="--x:68%;--y:35%;--dx:-185px;--dy:70px;--dur:16s;--delay:-8s"></span>
+        <span class="magic-wisp" style="--x:34%;--y:82%;--dx:165px;--dy:-118px;--dur:18s;--delay:-12s"></span>
+        <span class="ambient-twinkle" style="--x:16%;--y:24%;--dur:3.4s;--delay:-.4s"></span>
+        <span class="ambient-twinkle" style="--x:42%;--y:16%;--dur:4.2s;--delay:-2s"></span>
+        <span class="ambient-twinkle" style="--x:62%;--y:26%;--dur:3.7s;--delay:-1s"></span>
+        <span class="ambient-twinkle" style="--x:84%;--y:48%;--dur:4.8s;--delay:-3s"></span>
+        <span class="ambient-twinkle" style="--x:28%;--y:58%;--dur:4.5s;--delay:-1.8s"></span>
+      </div>
+      <!-- Turn message — pinned to the top of the board -->
+      <div class="ready-prompt" id="readyPrompt">Roll the dice to begin</div>
+      <!-- Magical opening countdown overlay -->
+      <div class="countdown" id="countdown"><div class="countdown-word" id="countdownWord">Ready</div></div>
+      <!-- Centered word modal during read phase -->
+      <div class="word-panel" id="wordPanel">
+        <div class="word-card">
+          <div class="word-label" id="wordLabel">Read this word</div>
+          <div class="big-word" id="bigWord">Ready?</div>
+          <div class="word-prompt" id="wordPrompt"></div>
+          <button class="read-btn" id="readBtn" disabled>Waiting for dice roll</button>
+        </div>
+      </div>
+      <div class="magic-panel" id="magicPanel" role="dialog" aria-modal="true" aria-labelledby="magicTitle">
+        <div class="magic-card">
+          <svg class="magic-gem" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M32 4 L54 24 L32 60 L10 24 Z" fill="#7E8CE8" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M32 4 L54 24 L32 24 Z" fill="#DCD8FF" opacity=".8"/>
+            <path d="M32 24 L54 24 L32 60 Z" fill="#00A96B" opacity=".5"/>
+            <path d="M32 4 L10 24 L32 24 Z" fill="#FFFFFF" opacity=".38"/>
+            <circle cx="48" cy="13" r="3" fill="#FFE99D"/>
+            <path d="M12 10 L15 17 L22 20 L15 23 L12 30 L9 23 L2 20 L9 17 Z" fill="#FFFFFF" opacity=".9"/>
+          </svg>
+          <div class="magic-title" id="magicTitle">Magic Space!</div>
+          <div class="magic-effect" id="magicEffectName">Sparkle Boost</div>
+          <div class="magic-instruction" id="magicInstruction">Move ahead 2 spaces.</div>
+          <button class="magic-btn" id="magicContinueBtn">Cast Magic</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="side-card">
+        <div class="side-label">Now Playing</div>
+        <div class="now-name" id="nowName">Player 1</div>
+        <div class="now-sub" id="nowSub">Roll the dice!</div>
+      </div>
+      <div class="side-card">
+        <div class="side-label">Adventurers</div>
+        <div id="playerList"></div>
+      </div>
+      <div class="side-card dice-card">
+        <div class="side-label" style="display:flex;align-items:center;justify-content:space-between">
+          <span>Dice</span>
+          <button id="soundToggle" aria-label="Toggle sound" title="Toggle sound"
+                  style="border:none;background:none;cursor:pointer;color:var(--navy-lt);padding:0;display:flex">
+            <svg id="sndOn" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <svg id="sndOff" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          </button>
+        </div>
+        <button class="dice-btn" id="diceBtn" aria-label="Roll dice">
+          <svg class="dice-svg" id="diceFace" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="64" height="64" rx="14" fill="#1A1A2E"/>
+            <rect x="1" y="1" width="62" height="62" rx="13" stroke="rgba(255,255,255,.10)" stroke-width="2" fill="none"/>
+            <circle id="p1" cx="20" cy="20" r="5.5" fill="white"/>
+            <circle id="p2" cx="44" cy="20" r="5.5" fill="white"/>
+            <circle id="p3" cx="20" cy="44" r="5.5" fill="white"/>
+            <circle id="p4" cx="44" cy="44" r="5.5" fill="white"/>
+            <circle id="p5" cx="32" cy="32" r="5.5" fill="white" style="display:none"/>
+            <circle id="p6" cx="32" cy="32" r="5.5" fill="white" style="display:none"/>
+          </svg>
+        </button>
+        <div class="dice-text" id="diceText">Click to roll</div>
+      </div>
+      <div class="side-card">
+        <div class="side-label">Quest</div>
+        <div class="legend">Read each word, then move along the golden path. First to reach the <strong style="color:var(--emerald-dk)">Emerald Castle</strong> wins!</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- Quest Complete celebration moment (shows briefly before the popup) -->
+<div class="questmoment" id="questMoment"><div class="questmoment-text">Quest Complete!</div></div>
+
+<!-- Win Overlay -->
+<div class="overlay" id="winOverlay">
+  <div class="win-modal">
+    <div class="win-header">
+      <span class="win-icon">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <ellipse cx="32" cy="58" rx="22" ry="4" fill="#003a28" opacity=".4"/>
+          <!-- towers -->
+          <rect x="10" y="26" width="12" height="30" rx="3" fill="#00C27E"/>
+          <rect x="42" y="26" width="12" height="30" rx="3" fill="#00C27E"/>
+          <rect x="22" y="20" width="20" height="36" rx="3" fill="#00A96B"/>
+          <!-- spires -->
+          <path d="M9 26 L16 12 L23 26 Z" fill="#9CF1D2" stroke="#007A4D" stroke-width="1.5"/>
+          <path d="M41 26 L48 12 L55 26 Z" fill="#9CF1D2" stroke="#007A4D" stroke-width="1.5"/>
+          <path d="M20 20 L32 4 L44 20 Z" fill="#D6FBEC" stroke="#007A4D" stroke-width="1.5"/>
+          <!-- crown gem on keep -->
+          <path d="M32 24 L38 31 L32 39 L26 31 Z" fill="#FFE7A0" stroke="#fff" stroke-width="1.5"/>
+          <!-- gate -->
+          <path d="M28 56 L28 44 a4 4 0 0 1 8 0 L36 56 Z" fill="#FFC928"/>
+          <!-- flags -->
+          <path d="M32 4 L40 7 L32 10 Z" fill="#F77CA8"/>
+          <circle cx="16" cy="12" r="2.4" fill="#9CF1D2"/>
+          <circle cx="48" cy="12" r="2.4" fill="#9CF1D2"/>
+        </svg>
+      </span>
+      <div class="win-title-sm">Quest Complete!</div>
+      <div class="win-name" id="winName">Player 1</div>
+      <div class="win-sub" id="winSub">reached the Emerald Castle — wonderful reading!</div>
+    </div>
+    <div class="win-body">
+      <button class="win-btn-primary" id="playAgainBtn">▶ Play Again</button>
+      <button class="win-btn-secondary" id="changeListBtn">Change Word List</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   ENCHANTED PATH — Literacy Arcade
+   Gameplay structure adapted from Read & Race (roll → read → move → win).
+   Visual wrapper: a single shared winding golden path to the Emerald Castle.
+
+   ── EASY-TO-CHANGE SETTINGS ──────────────────────────────────────────────
+   GAME_NAME / DESTINATION_NAME — rename the game or the end destination here.
+   (Also update the <title>, <meta>, the .la-tool-name in the header, and the
+    win-sub text if you want the rename reflected everywhere.)
+   FINISH — number of spaces on the path (board redraws automatically).
+   TOOL_TYPE / TOOL_URL — used by the save system (keep in sync with filename).
+═══════════════════════════════════════════════════════════════════════════ */
+const GAME_NAME        = 'Magic Word Road';
+const DESTINATION_NAME = 'Emerald Castle';
+const FINISH           = 18;          // spaces from START (0) to the castle (FINISH)
+const TOOL_TYPE        = 'magic-word-road';
+const TOOL_URL         = 'magic-word-road.html';
+const MAGIC_SPACE_INDEXES = [5,10,15]; // Existing diamond spaces on the golden path.
+const MAGIC_EFFECTS = [
+  {key:'boost', name:'Sparkle Boost', instruction:'Move ahead 2 spaces.', delta:2},
+  {key:'twist', name:'Twist in the Path', instruction:'Go back 2 spaces.', delta:-2},
+  {key:'extra', name:'Lucky Gem', instruction:'Take an extra turn.', extraTurn:true},
+  {key:'rest', name:'Rest Stop', instruction:'Lose a turn.', loseTurn:true}
+];
+
+/* ═══ WORD DATA (Fry / Dolch / Phonics) — shared Literacy Arcade lists ═══ */
+const FRY={
+  '1st 100 Words':['a','about','all','an','and','are','as','at','be','been','but','by','called','can','come','could','day','did','do','down','each','find','first','for','from','get','go','had','has','have','he','her','him','his','how','I','if','in','into','is','it','like','long','look','made','make','many','may','more','my','no','not','now','number','of','oil','on','one','or','other','out','part','people','said','see','she','sit','so','some','than','that','the','their','them','then','there','these','they','this','time','to','two','up','use','was','water','way','we','were','what','when','which','who','will','with','words','would','write','you','your'],
+  '2nd 100 Words':['after','again','air','also','America','animal','another','answer','any','around','ask','away','back','because','before','big','boy','came','change','different','does','end','even','follow','form','found','give','good','great','hand','help','here','home','house','just','kind','know','land','large','learn','letter','line','little','live','man','me','means','men','most','mother','move','much','must','name','need','new','off','old','only','our','over','page','picture','place','play','point','put','read','right','same','say','sentence','set','should','show','small','sound','spell','still','study','such','take','tell','things','think','three','through','too','try','turn','us','very','want','well','went','where','why','work','world','years'],
+  '3rd 100 Words':['above','add','almost','along','always','began','begin','being','below','between','book','both','car','carry','children','city','close','country','cut',"don't",'earth','eat','enough','every','example','eyes','face','family','far','father','feet','few','food','four','girl','got','group','grow','hard','head','hear','high','idea','important','keep','last','late','leave','left','let','life','light','list','might','mile','miss','near','never','next','night','often','once','open','own','paper','plant','real','river','run','saw','school','sea','second','seem','side','something','sometimes','song','soon','start','state','stop','story','talk','those','thought','together','took','tree','under','until','walk','watch','while','white','without','young']
+};
+const DOLCH={
+  'Pre-Primer':['a','and','away','big','blue','can','come','down','find','for','funny','go','help','here','I','in','is','it','jump','little','look','make','me','my','not','one','play','red','run','said','see','the','three','to','two','up','we','where','yellow','you'],
+  'Primer':['all','am','are','at','ate','be','black','brown','but','came','did','do','eat','four','get','good','have','he','into','like','must','new','no','now','on','our','out','please','pretty','ran','ride','saw','say','she','so','soon','that','there','they','this','too','under','want','was','well','went','what','white','who','will','with','yes'],
+  'First Grade':['after','again','an','any','as','ask','by','could','every','fly','from','give','going','had','has','her','him','his','how','just','know','let','live','may','of','old','once','open','over','put','round','some','stop','take','thank','them','then','think','walk','were','when'],
+  'Second Grade':['always','around','because','been','before','best','both','buy','call','cold','does',"don't",'fast','first','five','found','gave','goes','green','its','made','many','off','or','pull','read','right','sing','sit','sleep','tell','their','these','those','upon','us','use','very','wash','which','why','wish','work','would','write','your']
+};
+const PHONICS={
+  'Short /a/':['cat','hat','mat','sat','bat','fat','nap','rat','fan','shack','chat','rack','sack','mash','cash','bath','map','tap','crab','drab','scab','slab','stab','black','crack','smack','snack','snag','flag','glad','track','stack','flap','clap','slap','snap','fact','raft','smash','thrash','trash','brat','flat','vast','brass','trap','brash','clash','crash','flash','slash','shaft','class','glass','grant','plant','slant','flask','blast','scratch','clasp','scalp','splat','strand','stand','bland'],
+  'Short /e/':['bed','leg','bet','set','met','den','get','men','hen','red','vet','web','yes','let','ten','jet','beg','wet','bled','fled','shred','sled','sped','smell','spell','swell','bend','lend','mend','send','tend','bent','cent','dent','rent','lent','sent','tent','went','best','nest','pest','rest','test','vest','west','chest','fret','bless','dress','press','left','help','next','blend','spend','trend','spent','stress','slept','crept','strength'],
+  'Short /i/':['rip','sip','lip','tip','fig','bid','dip','fit','pig','pit','rid','lid','kid','hit','sit','sick','fin','brick','click','flick','slick','stick','trick','grid','skid','slid','twig','flip','mint','risk','skill','still','thrill','slim','swim','trim','grin','skin','spin','gift','wilt','cling','fling','sling','sting','swing','link','pink','sink','think','hint','shift','skip','spring','string','blink','brink','clink','drink','shrink','stink','print','slink','drift','swift','thrift','brisk','frisk','twist','blimp','crisp','sprint','splint','script','scrimp'],
+  'Short /o/':['toss','boss','hog','log','hot','got','pot','mop','job','fog','sob','rob','blob','slob','snob','block','clock','flock','stock','clog','frog','smog','crop','drop','flop','stop','plot','slot','spot','trot','prop','cross','floss','blotch','strong','stomp','frost','splotch','clomp','prompt'],
+  'Short /u/':['hut','rut','mud','sub','tub','rub','run','bun','sun','cub','fun','sum','gum','sung','club','shrub','grub','stub','cluck','pluck','stuck','truck','bluff','fluff','gruff','scuff','stuff','drug','plug','shrug','slug','snug','drum','plum','bump','dump','jump','lump','pump','spun','stun','clung','flung','strum','swung','bunk','dunk','junk','sunk','chunk','blush','brush','crush','flush','plush','slush','thrush','spud','grudge','bunch','hunch','lunch','munch','punch','bunt','hunt','punt','runt','plus','bust','dust','just','must','rust','scrub','clump','grump','plump','slump','stump','sprung','strung','shrunk','skunk','crunch','blunt','grunt','thrust','trust','crust','struck','scrunch'],
+  'Long A (a_e)':['bake','shake','game','chase','shave','brace','grace','place','space','trace','blade','grade','spade','stage','snake','stake','blame','flame','crane','plane','slave','grape','scrape','crate','drake','skate','state','flake','craze','blaze','trade','brake'],
+  'Long A (ai/ay)':['sail','tail','maid','jail','pail','rail','rain','main','chain','pain','mail','frail','snail','trail','brain','grain','drain','plain','stain','train','braid','claim','faint','tray','play','pray','fray','stay','sway','slay','clay','spray','stray','splay','day','say','may','pay','ray','way','hay','bay'],
+  'Long A (ea/eigh/ey)':['break','steak','great','eight','freight','weight','neighbor','sleigh','they','prey','obey','convey','survey'],
+  'Long E (ee)':['seem','meet','feet','beet','keen','seen','sheep','seed','bleed','breed','creep','greed','speed','steed','sleep','steep','sweep','fleet','greet','sleet','sweet','green'],
+  'Long E (ea)':['team','seam','beam','meat','seat','beat','heat','flea','cheap','creak','sneak','speak','steal','cream','dream','steam','treat','feast','clean','creek','least','streak','stream','scream','screech'],
+  'Long E (y/ie/ey)':['happy','funny','puppy','silly','sunny','windy','candy','key','monkey','hockey','turkey','valley','chimney','pulley','donkey','trolley','parsley','honey','money','chief','field','brief','yield','shriek','priest'],
+  'Long E (e_e)':['theme','these','eve','gene'],
+  'Long I (i_e)':['hide','wide','pile','time','fine','ripe','dive','kite','file','bride','glide','pride','slide','crime','grime','prime','slime','brine','shrine','spine','swine','drive','thrive','bribe','tribe','spike','smile','gripe','splice','stride','strive','scribe','strike','stripe','sprite'],
+  'Long I (igh/ie)':['light','sight','fight','might','tight','bright','flight','fright','slight','pie','tie','die','lie'],
+  'Long I (open syllable)':['idle','item','idea','pilot','tiger','spider','silent','climate','final','minus'],
+  'Long O (o_e)':['nose','rose','cove','phone','rode','broke','smoke','spoke','clone','crone','drone','stone','grope','slope','scope','globe','clove','trove','stove','probe','stole','close','drove','stroke','strode'],
+  'Long O (oa/ow/oe)':['road','toad','load','soak','coal','goal','foam','soap','goat','coat','moat','cloak','croak','groan','boast','coast','roast','toast','bloat','float','throat','coach','moan','slow','snow','throw','blow','shown','blown','flown','grown','thrown','toe','foe','doe','woe','though','dough','although'],
+  'Long OO (oo/ew/ue/ui)':['moon','soon','tool','food','drool','spool','stool','bloom','gloom','groom','spoon','droop','scoop','snoop','swoop','troop','smooth','snooze','proof','broom','stew','crew','threw','grew','screw','blue','true','clue','glue','suit','fruit','bruise','juice','cruise','soup','group','you','youth'],
+  'Long U (u_e)':['cube','cute','mule','fume','huge','mute','muse','fuse'],
+  'Variant /aw/':['draw','flaw','claw','dawn','hawk','lawn','shawl','drawn','straw','drawl','scrawl','bawl','fawn','haul','haunt','fraud','fault','vault','flaunt'],
+  'Short OO':['foot','book','took','shook','cook','look','hook','good','hoof','hood','nook','crook','stood','brook'],
+  'Diphthong /oi/':['boil','foil','toil','coin','join','void','soil','joint','hoist','joist','moist','spoil','coil','broil','oil','point','poise','noise','voice','choice','boy','toy','joy','coy','soy','enjoy','deploy','employ','destroy','loyal','royal'],
+  'Diphthong /ow/':['loud','couch','cloud','grouch','hound','crouch','found','mount','count','cow','chow','down','plow','howl','fowl','town','brow','gown','frown','clown','brown','drown','crowd','crown','prowl','growl'],
+  'R-Controlled /ar/':['car','far','star','card','harm','mark','sharp','harp','part','mart','cart','dark','park','bark','scarf','smart','spark'],
+  'R-Controlled /or/':['horn','born','fork','short','sort','fort','port','storm','spork','sport','core','shore','more','bore','tore','sore','score','store'],
+  'R-Controlled /er/ir/ur/':['her','fern','term','herd','verb','stern','perch','nerve','serve','verse','merge','clerk','jerk','perk','herb','germ','dirt','birth','shirt','bird','thirst','first','girl','sir','stir','firm','third','fir','whirl','twirl','chirp','squirt','squirm','birch','smirk','quirk','burn','turn','curl','surf','turf','fur','burp','blur','spur','hurt','curd','curb','lurk','church','burst','blurt','churn','spurt'],
+  'R-Controlled /ear/air/':['dear','fear','hear','near','year','beard','clear','cheer','spear','sneer','steer','gear','rear','smear','chair','hair','fair','pair','stair','bear','wear','pear','care','share','glare','square','stare'],
+  'R-Controlled /ire/':['fire','tire','wire','hire','admire','entire','inspire','expire','wildfire'],
+  'Digraph sh':['blush','brash','brush','cash','clash','crash','crush','flash','flush','mash','plush','shack','shaft','shake','sharp','shave','shawl','sheep','shift','shirt','shook','shore','short','shown','shred','shriek','shrine','shrink','shrub','shrug','shrunk','slash','slush','smash','thrash','thrush','trash','share'],
+  'Digraph ch':['blotch','bunch','chain','chair','chase','chat','cheap','cheer','chest','chief','chimney','chow','chunk','coach','couch','crouch','crunch','grouch','hunch','lunch','munch','punch','scratch','screech','scrunch'],
+  'Digraph th':['although','bath','birth','smooth','strength','they','think','thirst','though','thrash','threw','thrift','thrill','thrive','throat','throw','thrown','thrush','thrust','youth','this','that','the','then','than'],
+  'Digraph ph/wh':['phone','photo','graph','phase','when','whip','whim','whisk','wheat','while','whale'],
+  'Digraph ck':['black','block','brick','click','clock','cluck','crack','flick','flock','hockey','pluck','rack','sack','shack','sick','slick','smack','snack','stack','stick','stock','struck','stuck','track','trick','truck'],
+  'Trigraph -tch/-dge':['blotch','scratch','splotch','catch','match','fetch','witch','notch','patch','sketch','switch','snatch','stretch','thatch','clutch','grudge','bridge','badge','edge','ridge','lodge','fudge','hedge','judge','nudge','pledge','smudge','wedge','budge','dodge'],
+  'L-Blends':['black','blade','blame','bland','blast','blaze','bled','bleed','blend','bless','blimp','blink','bloat','blob','block','bloom','blow','blue','bluff','blunt','blush','clap','clash','clasp','class','claw','clay','clean','clear','click','cling','clink','clog','clone','close','cloud','clove','clown','club','clue','clump','clung','flag','flake','flame','flap','flash','flask','flat','flaw','flea','fled','fleet','flick','fling','flip','float','flop','flush','glad','glass','glide','globe','gloom','glue','place','plain','plane','plant','play','plot','plow','pluck','plug','plum','plus','plush','slab','slant','slap','slash','slave','sled','sleep','sleet','slick','slid','slide','slim','slime','sling','slot','slug','slump','slush'],
+  'R-Blends':['brace','braid','brain','brake','brash','brass','brat','breed','bribe','brick','bride','bright','brine','brink','brisk','broke','brook','broom','brown','brush','crab','crack','crane','crash','crate','craze','creak','cream','creek','creep','crime','crisp','croak','crop','cross','crouch','crowd','crown','crunch','crush','crust','drab','drain','drake','draw','dream','drift','drink','drive','drone','drop','drug','drum','frail','fray','fright','frog','frost','frown','grace','grade','grain','grand','grant','grape','greed','green','grin','groan','groom','grub','grudge','gruff','grunt','pray','press','pride','prime','print','prop','trace','track','trail','train','trap','trash','tray','treat','tribe','trim','trot','truck','true','trust'],
+  'S-Blends':['scab','scarf','scoop','score','scrape','scratch','scream','screw','scrub','scrunch','skate','skill','skin','skip','skunk','smack','smart','smash','smell','smoke','snack','snag','snail','snake','snap','sneak','snow','snug','space','spark','speak','speed','spell','spend','spike','spin','spine','splat','splice','spoil','spoon','sport','spot','spud','spun','stab','stack','stage','stain','stake','stand','state','stay','steal','steam','steep','stick','still','sting','stock','stop','store','storm','strand','straw','stray','streak','stream','strength','stride','strike','string','stripe','strive','stroke','strong','struck','stump','stun','sweep','sweet','swim','swing','swoop'],
+  'Three-Letter Blends':['scrape','scratch','scream','screw','scrub','scrunch','splat','splice','splint','splotch','spray','spring','sprint','sprite','sprung','strand','straw','stray','streak','stream','strength','stride','strike','string','stripe','strive','stroke','strong','struck','strum','strung'],
+  'Ending Blends -nt/-mp':['bent','blunt','bunt','cent','count','dent','faint','grant','grunt','haunt','hint','hunt','joint','lent','mint','mount','plant','print','punt','rent','runt','sent','slant','spent','splint','sprint','tent','went','blimp','bump','clomp','clump','dump','grump','jump','lump','plump','pump','scrimp','slump','stomp','stump'],
+  'Ending Blends -nd/-sk/-st':['bend','bland','blend','found','hound','lend','mend','send','spend','stand','strand','tend','trend','brisk','flask','frisk','risk','best','blast','boast','bust','chest','coast','crust','dust','feast','first','frost','hoist','joist','just','least','moist','must','nest','pest','priest','rest','roast','rust','test','thirst','thrust','toast','trust','twist','vast','vest','west'],
+  'Silent Letters kn-/wr-/gn-':['knot','knock','know','knee','knife','knight','kneel','knit','knew','knob','knack','known','wrap','write','wrong','wrist','wreck','wrote','wring','wrench','wrath','wrestle','written','wrapper','gnaw','gnome','gnat','gnu','gnash'],
+  'Hard C / Soft C':['cat','cut','class','clap','crop','clock','crust','cap','cod','cub','cot','cave','coat','cube','cold','cord','curl','came','cone','cure','cent','city','race','ice','face','cell','cereal','circle','pencil','prince','place','space','trace','grace','dance','fence','since','once','twice','mice','price','voice','sauce'],
+  'Hard G / Soft G':['game','glad','grip','grab','grin','globe','grand','green','got','gun','gap','gust','gift','gold','grub','grow','gloom','glide','gem','giant','gym','cage','page','giraffe','gentle','magic','stage','age','rage','wage','huge','budge','fudge','hedge','lodge','judge','badge','edge'],
+  'Irregular Patterns':['wild','child','mild','find','kind','mind','blind','bind','grind','wind','rind','cold','gold','told','sold','fold','bold','hold','mold','old','scold','most','post','ghost','host','colt','bolt','jolt','molt','volt'],
+  '-le Endings':['table','able','cable','fable','stable','bubble','wobble','gobble','pebble','nibble','riddle','middle','muddle','puddle','handle','candle','bundle','jungle','single','jingle','mingle','tingle','wrinkle','sprinkle','twinkle','little','battle','rattle','cattle','kettle','bottle','puzzle','nozzle','drizzle','sizzle','marble','purple','simple','sample','maple','apple','turtle','circle','pickle','tickle','buckle','muscle','uncle','title','noble'],
+  '-dge vs -ge':['badge','edge','ridge','lodge','fudge','bridge','hedge','judge','nudge','pledge','smudge','wedge','budge','dodge','grudge','ledge','age','cage','page','rage','sage','wage','stage','huge','urge','surge','merge','hinge','plunge','range','strange','change','charge','large']
+};
+const DATA={fry:FRY,dolch:DOLCH,phonics:PHONICS};
+
+/* ─── PLAYER COLOR OPTIONS (gem tokens) ──────────────────────────────────── */
+const COLOR_OPTIONS=[
+  {name:'Sapphire', value:'#2F6FED'},
+  {name:'Ruby',     value:'#E8444C'},
+  {name:'Amethyst', value:'#8B5CF6'},
+  {name:'Rose',     value:'#E040A0'},
+];
+let playerColors=['#2F6FED','#E8444C'];
+
+/* ─── STATE ──────────────────────────────────────────────────────────────── */
+let currentListType='fry';
+let selectedWordsSet=new Set();
+let playerCount=2;
+let players=[],current=0,phase='roll',words=[],used=[],roll=0;
+let wordBankRevealed=false;
+let wordSelectionCollapsed=false;
+let lastWordSnapshot=[];
+let spacePoints=[];          // [{x,y}] in SVG viewBox coords, index 0..FINISH
+let pendingMagic=null;
+
+const $=id=>document.getElementById(id);
+const SVGNS='http://www.w3.org/2000/svg';
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+function escHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   WORD SELECTION SYSTEM  (lifted verbatim from Read & Race — proven & tested)
+═══════════════════════════════════════════════════════════════════════════ */
+function populateLevels(){
+  if(currentListType==='custom') return;
+  $('levelSelect').innerHTML=Object.keys(DATA[currentListType])
+    .map(k=>`<option value="${k}">${k}</option>`).join('');
+}
+function visibleWords(){
+  if(currentListType==='custom'){
+    return $('customWords').value.split(/[\s,\n]+/).map(w=>w.trim()).filter(Boolean);
+  }
+  const level=$('levelSelect').value||Object.keys(DATA[currentListType])[0];
+  return DATA[currentListType][level]||[];
+}
+function selectedWordFor(word){
+  const key=String(word).trim().toLowerCase();
+  return [...selectedWordsSet].find(w=>String(w).toLowerCase()===key);
+}
+function addSelectedWord(word){
+  const clean=String(word).trim();
+  if(clean && !selectedWordFor(clean)) selectedWordsSet.add(clean);
+}
+function removeSelectedWord(word){
+  const existing=selectedWordFor(word);
+  if(existing) selectedWordsSet.delete(existing);
+}
+function openWordBank(){
+  wordBankRevealed=true;
+  $('wordBankAccordion').classList.add('open');
+  renderWordBank();
+}
+function setWordSelectionCollapsed(collapsed){
+  wordSelectionCollapsed=Boolean(collapsed && selectedWordsSet.size);
+  const card=$('wordSelectionCard');
+  if(card) card.classList.toggle('collapsed',wordSelectionCollapsed);
+  const btn=$('toggleWordBuilderBtn');
+  if(btn) btn.textContent=wordSelectionCollapsed?'Edit Words':'Hide Word Bank';
+  syncWordRollup();
+}
+function syncWordRollup(){
+  const count=selectedWordsSet.size;
+  const rollup=$('wordRollup');
+  if(rollup) rollup.classList.toggle('visible',count>0);
+  const rollupCount=$('wordRollupCount');
+  if(rollupCount) rollupCount.textContent=`${count} selected`;
+  const hint=$('wordRollupHint');
+  if(hint) hint.textContent=count
+    ? 'Words stay selected while you browse other lists.'
+    : 'Choose words from Fry, Dolch, phonics, or your own list.';
+  const btn=$('toggleWordBuilderBtn');
+  if(btn) btn.disabled=count===0;
+}
+function renderWordBank(){
+  const bank=$('wordBank');if(!bank)return;
+  const ws=[...new Set(visibleWords())];
+  if(!ws.length){
+    bank.innerHTML='<span style="color:var(--navy-lt);font-size:12px;font-weight:600">Type custom words above, then click Add.</span>';
+    return;
+  }
+  bank.innerHTML=ws.map(w=>`<button type="button" class="chip ${selectedWordFor(w)?'selected':''}" data-word="${escHtml(w)}">${escHtml(w)}</button>`).join('');
+  bank.querySelectorAll('.chip').forEach(chip=>chip.addEventListener('click',()=>toggleWord(chip.dataset.word)));
+}
+function renderSelectedWords(){
+  const bank=$('selectedWordBank');if(!bank)return;
+  const selected=[...selectedWordsSet];
+  if(!selected.length){
+    bank.innerHTML='<span class="selected-empty">Choose words from any list or add custom words.</span>';
+    return;
+  }
+  bank.innerHTML=selected.map(w=>`
+    <span class="selected-word-chip">
+      ${escHtml(w)}
+      <button type="button" data-word="${escHtml(w)}" aria-label="Remove ${escHtml(w)}">×</button>
+    </span>`).join('');
+  bank.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{
+    removeSelectedWord(btn.dataset.word);
+    refreshWordSelectionUI();
+  }));
+}
+function refreshWordSelectionUI(){
+  renderWordBank();
+  renderSelectedWords();
+  updateWordCount();
+}
+function toggleWord(w){
+  selectedWordFor(w)?removeSelectedWord(w):addSelectedWord(w);
+  refreshWordSelectionUI();
+}
+function updateWordCount(){
+  $('wordCount').textContent=`${selectedWordsSet.size} selected`;
+  const selectedCount=$('selectedWordCount');
+  if(selectedCount) selectedCount.textContent=`${selectedWordsSet.size} selected`;
+  if(!selectedWordsSet.size) wordSelectionCollapsed=false;
+  syncWordRollup();
+  const card=$('wordSelectionCard');
+  if(card) card.classList.toggle('collapsed',wordSelectionCollapsed);
+  const btn=$('toggleWordBuilderBtn');
+  if(btn) btn.textContent=wordSelectionCollapsed?'Edit Words':'Hide Word Bank';
+}
+function selectAllVisible(){visibleWords().forEach(addSelectedWord);refreshWordSelectionUI();}
+function deselectAllVisible(){visibleWords().forEach(removeSelectedWord);refreshWordSelectionUI();}
+function addCustomWords(){
+  $('customWords').value.split(/[\s,\n]+/).map(w=>w.trim()).filter(Boolean)
+    .forEach(addSelectedWord);
+  refreshWordSelectionUI();
+}
+function clearSelectedWords(){
+  selectedWordsSet.clear();
+  wordSelectionCollapsed=false;
+  refreshWordSelectionUI();
+}
+function setListType(type, options = {}){
+  currentListType=type;
+  wordSelectionCollapsed=false;
+  window.currentListType=type;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===type));
+  const isCustom=type==='custom';
+  $('customField').classList.toggle('show',isCustom);
+  $('levelRow').classList.toggle('visible',!isCustom);
+  if(!isCustom){
+    populateLevels();
+    openWordBank();
+  } else {
+    $('wordBankAccordion').classList.add('open');
+    wordBankRevealed=true;
+  }
+  refreshWordSelectionUI();
+}
+
+/* ─── PLAYER SETUP (names + gem colors; 2-player game) ───────────────────── */
+function renderPlayerInputs(){
+  playerCount=2;
+  const wrap=$('playerSetup');wrap.innerHTML='';
+  wrap.classList.remove('solo');
+  for(let i=0;i<playerCount;i++){
+    const swatches=COLOR_OPTIONS.map(c=>`
+      <div class="color-swatch ${playerColors[i]===c.value?'selected':''}"
+           style="background:${c.value}" title="${c.name}"
+           onclick="selectPlayerColor(${i},'${c.value}')"></div>
+    `).join('');
+    wrap.insertAdjacentHTML('beforeend',`
+      <div class="player-input">
+        <input id="player${i}" value="Player ${i+1}" placeholder="Player ${i+1}" aria-label="Player ${i+1} name"/>
+        <div>
+          <div class="color-swatch-label">Token Color</div>
+          <div class="color-swatches">${swatches}</div>
+        </div>
+      </div>`);
+  }
+}
+function selectPlayerColor(playerIdx, colorVal){
+  const savedNames=[];
+  for(let i=0;i<playerCount;i++){
+    const inp=$('player'+i);
+    savedNames[i]=inp?inp.value:'Player '+(i+1);
+  }
+  // With 2 players, prevent both choosing the same color
+  if(playerCount===2){
+    const otherIdx = playerIdx===0?1:0;
+    if(playerColors[otherIdx]===colorVal){
+      const alt=COLOR_OPTIONS.find(c=>c.value!==colorVal);
+      if(alt) playerColors[otherIdx]=alt.value;
+    }
+  }
+  playerColors[playerIdx]=colorVal;
+  renderPlayerInputs();
+  for(let i=0;i<playerCount;i++){
+    const inp=$('player'+i);
+    if(inp&&savedNames[i]) inp.value=savedNames[i];
+  }
+}
+function setPlayerCount(n){
+  playerCount=2;
+  // Ensure two distinct default colors.
+  if(playerColors[1]===playerColors[0]){
+    const alt=COLOR_OPTIONS.find(c=>c.value!==playerColors[0]);
+    if(alt) playerColors[1]=alt.value;
+  }
+  renderPlayerInputs();
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BOARD — single shared winding golden path to the Emerald Castle
+═══════════════════════════════════════════════════════════════════════════ */
+// Serpentine path through the meadow (viewBox 0 0 1000 640).
+const PATH_D = 'M 95 560 '
+             + 'L 770 560 '
+             + 'C 875 560 905 470 868 426 '
+             + 'C 846 400 805 394 760 394 '
+             + 'L 240 394 '
+             + 'C 128 394 92 300 124 256 '
+             + 'C 148 224 192 218 240 218 '
+             + 'L 735 218';
+
+function el(tag,attrs){
+  const e=document.createElementNS(SVGNS,tag);
+  for(const k in attrs) e.setAttribute(k,attrs[k]);
+  return e;
+}
+
+function buildBoard(){
+  const svg=$('boardSvg');
+  svg.innerHTML='';
+
+  // ── Defs: gradients & filters ──
+  const defs=el('defs',{});
+  defs.innerHTML=`
+    <radialGradient id="skyGlow" cx="50%" cy="12%" r="72%">
+      <stop offset="0%" stop-color="var(--sky-glow)" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="var(--sky-glow)" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="meadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--meadow-1)"/>
+      <stop offset="55%" stop-color="var(--meadow-2)"/>
+      <stop offset="100%" stop-color="var(--meadow-3)"/>
+    </linearGradient>
+    <linearGradient id="hillBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9FCF8A"/><stop offset="100%" stop-color="#6FA85C"/>
+    </linearGradient>
+    <linearGradient id="roadGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--gold-lt)"/>
+      <stop offset="45%" stop-color="var(--gold)"/>
+      <stop offset="100%" stop-color="var(--gold-dk)"/>
+    </linearGradient>
+    <radialGradient id="pathGlow" cx="50%" cy="50%" r="58%">
+      <stop offset="0%" stop-color="#FFE99D" stop-opacity=".48"/>
+      <stop offset="70%" stop-color="#FFC928" stop-opacity=".16"/>
+      <stop offset="100%" stop-color="#FFC928" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="stoneGrad" cx="38%" cy="30%" r="78%">
+      <stop offset="0%" stop-color="#FFF3C8"/>
+      <stop offset="58%" stop-color="var(--gold)"/>
+      <stop offset="100%" stop-color="var(--gold-dk)"/>
+    </radialGradient>
+    <linearGradient id="towerGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--emerald-lt)"/>
+      <stop offset="100%" stop-color="var(--emerald-dk)"/>
+    </linearGradient>
+    <linearGradient id="spireGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D6FBEC"/>
+      <stop offset="100%" stop-color="var(--emerald-lt)"/>
+    </linearGradient>
+    <radialGradient id="castleAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="var(--crystal)" stop-opacity="0.9"/>
+      <stop offset="45%" stop-color="var(--emerald-lt)" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="var(--emerald-lt)" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#243a18" flood-opacity="0.25"/>
+    </filter>
+    <filter id="pathShadow" x="-12%" y="-30%" width="124%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#4A321F" flood-opacity=".22"/>
+    </filter>
+    <filter id="spaceGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#FFE99D" flood-opacity=".55"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#4A321F" flood-opacity=".20"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>`;
+  svg.appendChild(defs);
+
+  // ── Sky glow ──
+  svg.appendChild(el('rect',{x:0,y:0,width:1000,height:320,fill:'url(#skyGlow)'}));
+
+  // ── Distant layered hills ──
+  svg.appendChild(el('path',{d:'M0 270 Q 180 205 380 250 T 760 240 T 1000 248 L1000 360 L0 360 Z',fill:'url(#hillBack)',opacity:.55}));
+  svg.appendChild(el('path',{d:'M0 300 Q 250 250 520 288 T 1000 286 L1000 380 L0 380 Z',fill:'var(--meadow-1)',opacity:.7}));
+
+  // ── Soft clouds ──
+  [[160,66,1],[770,52,.82],[470,40,.6],[610,96,.5]].forEach(([cx,cy,s])=>{
+    const g=el('g',{opacity:0.9});
+    [[0,0,34],[34,8,26],[-30,8,24],[14,-12,22]].forEach(([dx,dy,r])=>
+      g.appendChild(el('circle',{cx:cx+dx*s,cy:cy+dy*s,r:r*s,fill:'#FFFFFF',opacity:0.9})));
+    svg.appendChild(g);
+  });
+
+  // ── Meadow ground ──
+  svg.appendChild(el('path',{d:'M0 250 C 220 215 360 240 520 232 C 700 224 840 250 1000 235 L1000 640 L0 640 Z',fill:'url(#meadow)'}));
+  svg.appendChild(el('ellipse',{cx:120,cy:300,rx:240,ry:70,fill:'var(--meadow-1)',opacity:.45}));
+  svg.appendChild(el('ellipse',{cx:880,cy:330,rx:260,ry:80,fill:'var(--meadow-1)',opacity:.4}));
+  svg.appendChild(el('path',{d:'M0 414 C 120 386 220 404 330 374 C 430 348 520 386 610 360 C 736 326 860 352 1000 332 L1000 640 L0 640 Z',fill:'#EAF6E0',opacity:.20}));
+  svg.appendChild(el('path',{d:'M0 560 C 180 516 330 548 510 526 C 680 506 820 530 1000 486 L1000 640 L0 640 Z',fill:'var(--olive)',opacity:.08}));
+
+  // ── Stone cliffs / rocks ──
+  [[150,470,28,17],[638,468,32,19],[842,470,23,15],[330,300,18,11],[110,248,18,12],[925,338,20,13],[515,520,16,10]].forEach(([x,y,rx,ry])=>{
+    svg.appendChild(el('ellipse',{cx:x,cy:y+ry*0.7,rx:rx*1.08,ry:ry*0.5,fill:'#000',opacity:.10}));
+    svg.appendChild(el('path',{d:`M ${x-rx} ${y+ry} Q ${x-rx*1.1} ${y-ry*0.4} ${x-rx*0.3} ${y-ry} Q ${x+rx*0.4} ${y-ry*1.2} ${x+rx} ${y-ry*0.2} Q ${x+rx*1.05} ${y+ry*0.6} ${x+rx*0.6} ${y+ry} Z`,fill:'var(--stone)'}));
+    svg.appendChild(el('path',{d:`M ${x-rx*0.5} ${y-ry*0.7} Q ${x} ${y-ry*1.05} ${x+rx*0.4} ${y-ry*0.5} L ${x} ${y} Z`,fill:'var(--stone-lt)',opacity:.7}));
+  });
+
+  // ── Trees ──
+  [[60,360,1],[955,370,.95],[300,250,.7]].forEach(([x,y,s])=>drawTree(svg,x,y,s));
+
+  // ── Ground crystals (peri / emerald), sparingly ──
+  [[210,336,.82,'var(--peri)'],[452,520,.78,'var(--peri)'],[760,505,.9,'var(--emerald-lt)'],[902,292,.58,'var(--emerald-lt)']]
+    .forEach(([x,y,s,c])=>drawCrystal(svg,x,y,s,c));
+
+  // ── Pink flower clusters ──
+  [[80,330],[260,500],[420,470],[560,300],[700,330],[905,505],[180,470],[820,300],[610,512],[360,520],[520,470]]
+    .forEach(([x,y])=>drawFlower(svg,x,y));
+
+  // ── The winding golden path ──
+  // Under-shadow, dark edge, gradient road, bright top sheen, dashed center guide.
+  svg.appendChild(el('path',{d:PATH_D,fill:'none',stroke:'#3a2c08','stroke-width':62,'stroke-linecap':'round','stroke-linejoin':'round',opacity:.18,transform:'translate(0,9)'}));
+  svg.appendChild(el('path',{d:PATH_D,fill:'none',stroke:'url(#pathGlow)','stroke-width':74,'stroke-linecap':'round','stroke-linejoin':'round',opacity:.48}));
+  svg.appendChild(el('path',{d:PATH_D,fill:'none',stroke:'var(--gold-edge)','stroke-width':52,'stroke-linecap':'round','stroke-linejoin':'round',filter:'url(#pathShadow)'}));
+  svg.appendChild(el('path',{d:PATH_D,fill:'none',stroke:'url(#roadGrad)','stroke-width':40,'stroke-linecap':'round','stroke-linejoin':'round'}));
+  svg.appendChild(el('path',{d:PATH_D,fill:'none',stroke:'#FFF6D8','stroke-width':9,'stroke-linecap':'round','stroke-linejoin':'round',opacity:.55,transform:'translate(0,-9)'}));
+  svg.appendChild(el('path',{d:PATH_D,fill:'none',stroke:'var(--gold-dk)','stroke-width':3,'stroke-linecap':'round',opacity:.45,'stroke-dasharray':'2 16'}));
+
+  // ── Measure the path & compute evenly spaced space points (unchanged) ──
+  const measure=el('path',{d:PATH_D,fill:'none',stroke:'none'});
+  svg.appendChild(measure);
+  const total=measure.getTotalLength();
+  spacePoints=[];
+  for(let i=0;i<=FINISH;i++){
+    const p=measure.getPointAtLength(total*(i/FINISH));
+    spacePoints.push({x:p.x,y:p.y});
+  }
+  drawPathMarks(svg, measure, total);
+  measure.remove();
+
+  // ── Stepping-stone tiles — crisp, clearly divided spaces ──
+  for(let i=1;i<FINISH;i++){
+    const {x,y}=spacePoints[i];
+    const milestone=isMagicSpace(i);
+    svg.appendChild(el('ellipse',{cx:x,cy:y+16,rx:20,ry:7,fill:'#000',opacity:.16}));
+    svg.appendChild(el('circle',{cx:x,cy:y,r:21,fill:'var(--gold-edge)',filter:'url(#spaceGlow)'})); // rim
+    svg.appendChild(el('circle',{cx:x,cy:y,r:17.5,fill:'url(#stoneGrad)'}));                   // tile face
+    svg.appendChild(el('circle',{cx:x,cy:y,r:17,fill:'none',stroke:'#FFFBE6','stroke-width':1.4,opacity:.6})); // inner ring
+    svg.appendChild(el('ellipse',{cx:x-5,cy:y-6,rx:6,ry:4.5,fill:'#FFFFFF',opacity:.5}));     // sheen
+    if(milestone){
+      svg.appendChild(el('path',{d:`M ${x} ${y-8} L ${x+8} ${y} L ${x} ${y+8} L ${x-8} ${y} Z`,fill:'var(--crystal)',stroke:'#fff','stroke-width':1.5,opacity:.95}));
+      svg.appendChild(el('circle',{cx:x-2,cy:y-2,r:1.8,fill:'#fff'}));
+    }
+  }
+
+  // ── Twinkling sparkles (sky + meadow), subtle ──
+  [[120,130,5],[300,90,4],[520,150,6],[700,110,5],[870,150,4],[420,300,4],[650,420,5],[180,380,4],[800,420,5],[560,540,4]]
+    .forEach(([x,y,s],idx)=>drawSparkle(svg,x,y,s,idx*0.28));
+
+  // ── START platform (space 0) ──
+  drawStart(svg, spacePoints[0]);
+
+  // ── Emerald Castle at the end (space FINISH) ──
+  drawCastle(svg, spacePoints[FINISH]);
+
+  // ── Token layer (on top) ──
+  svg.appendChild(el('g',{id:'tokenLayer'}));
+}
+
+function drawPathMarks(svg, measure, total){
+  const seams=el('g',{opacity:.46});
+  for(let len=36;len<total-26;len+=52){
+    const p=measure.getPointAtLength(len);
+    const p2=measure.getPointAtLength(Math.min(total,len+8));
+    const a=Math.atan2(p2.y-p.y,p2.x-p.x)+Math.PI/2;
+    const dx=Math.cos(a)*16,dy=Math.sin(a)*16;
+    seams.appendChild(el('line',{x1:p.x-dx,y1:p.y-dy,x2:p.x+dx,y2:p.y+dy,stroke:'rgba(120,78,8,.45)','stroke-width':2.6,'stroke-linecap':'round'}));
+    seams.appendChild(el('line',{x1:p.x-dx*.6,y1:p.y-dy*.6-4,x2:p.x+dx*.6,y2:p.y+dy*.6-4,stroke:'rgba(255,255,255,.24)','stroke-width':1.2,'stroke-linecap':'round'}));
+  }
+  svg.appendChild(seams);
+
+  const glints=el('g',{});
+  [total*.12,total*.31,total*.52,total*.73,total*.88].forEach((len,i)=>{
+    const p=measure.getPointAtLength(len);
+    const s=el('circle',{cx:p.x,cy:p.y-22,r:3.2,fill:'#FFF6D8',class:'sparkle',style:`animation-delay:${i*.45}s`});
+    glints.appendChild(s);
+  });
+  svg.appendChild(glints);
+}
+
+function drawTree(svg,x,y,s){
+  const g=el('g',{filter:'url(#soft)'});
+  g.appendChild(el('ellipse',{cx:x,cy:y+4*s,rx:16*s,ry:5*s,fill:'#000',opacity:.10}));
+  g.appendChild(el('rect',{x:x-4*s,y:y-14*s,width:8*s,height:22*s,rx:3*s,fill:'var(--brown)'}));
+  [[0,-58*s,30*s],[0,-40*s,36*s],[0,-22*s,42*s]].forEach(([dx,dy,w])=>{
+    g.appendChild(el('path',{d:`M ${x+dx-w/2} ${y+dy+w*0.5} L ${x+dx} ${y+dy-w*0.55} L ${x+dx+w/2} ${y+dy+w*0.5} Z`,fill:'var(--emerald)',stroke:'var(--emerald-dk)','stroke-width':1.5*s,'stroke-linejoin':'round'}));
+  });
+  g.appendChild(el('circle',{cx:x,cy:y-66*s,r:3*s,fill:'var(--crystal)'}));
+  svg.appendChild(g);
+}
+
+function drawCrystal(svg,x,y,s,color){
+  const g=el('g',{filter:'url(#soft)'});
+  g.appendChild(el('ellipse',{cx:x,cy:y+2*s,rx:14*s,ry:4*s,fill:'#000',opacity:.10}));
+  g.appendChild(el('path',{d:`M ${x} ${y-26*s} L ${x+9*s} ${y} L ${x} ${y+4*s} L ${x-9*s} ${y} Z`,fill:color,stroke:'#fff','stroke-width':1.4*s,opacity:.92}));
+  g.appendChild(el('path',{d:`M ${x} ${y-26*s} L ${x+9*s} ${y} L ${x} ${y} Z`,fill:'#fff',opacity:.25}));
+  g.appendChild(el('path',{d:`M ${x-12*s} ${y-12*s} L ${x-6*s} ${y+3*s} L ${x-15*s} ${y+3*s} Z`,fill:color,stroke:'#fff','stroke-width':1.2*s,opacity:.85}));
+  g.appendChild(el('path',{d:`M ${x+13*s} ${y-9*s} L ${x+7*s} ${y+3*s} L ${x+17*s} ${y+3*s} Z`,fill:color,stroke:'#fff','stroke-width':1.2*s,opacity:.85}));
+  svg.appendChild(g);
+}
+
+function drawSparkle(svg,x,y,s,delay){
+  const g=el('g',{class:'sparkle',style:`animation-delay:${delay}s`});
+  g.appendChild(el('path',{d:`M ${x} ${y-s} C ${x+s*0.18} ${y-s*0.18} ${x+s*0.18} ${y-s*0.18} ${x+s} ${y} C ${x+s*0.18} ${y+s*0.18} ${x+s*0.18} ${y+s*0.18} ${x} ${y+s} C ${x-s*0.18} ${y+s*0.18} ${x-s*0.18} ${y+s*0.18} ${x-s} ${y} C ${x-s*0.18} ${y-s*0.18} ${x-s*0.18} ${y-s*0.18} ${x} ${y-s} Z`,fill:'#FFFFFF'}));
+  svg.appendChild(g);
+}
+
+function drawFlower(svg,x,y){
+  const g=el('g',{});
+  // little green stem cluster base
+  g.appendChild(el('ellipse',{cx:x,cy:y+6,rx:13,ry:4,fill:'var(--meadow-3)',opacity:.6}));
+  const petals=5,R=7;
+  for(let k=0;k<petals;k++){
+    const a=(k/petals)*Math.PI*2;
+    g.appendChild(el('circle',{cx:x+Math.cos(a)*R,cy:y+Math.sin(a)*R,r:5,fill:'var(--flower)'}));
+  }
+  g.appendChild(el('circle',{cx:x,cy:y,r:4.5,fill:'var(--gold-lt)',stroke:'var(--gold-dk)','stroke-width':1}));
+  svg.appendChild(g);
+}
+
+function drawStart(svg,pt){
+  const {x,y}=pt;
+  const g=el('g',{});
+  g.appendChild(el('ellipse',{cx:x,cy:y+18,rx:34,ry:9,fill:'#000',opacity:.14}));
+  g.appendChild(el('rect',{x:x-34,y:y-16,width:68,height:34,rx:11,fill:'var(--brown)'}));
+  g.appendChild(el('rect',{x:x-34,y:y-16,width:68,height:30,rx:11,fill:'#8A7551'}));
+  const t=el('text',{x:x,y:y+5,'text-anchor':'middle','font-family':'Nunito, sans-serif','font-weight':900,'font-size':16,fill:'#FFF7E6','letter-spacing':'1'});
+  t.textContent='START';
+  g.appendChild(t);
+  svg.appendChild(g);
+}
+
+function drawCastle(svg,pt){
+  const {x,y}=pt;
+  const baseY=y+6;
+
+  // ── Glowing aura behind the castle (animated) ──
+  const aura=el('circle',{id:'castleAura',cx:x,cy:baseY-70,r:118,fill:'url(#castleAura)'});
+  svg.appendChild(aura);
+  svg.appendChild(el('circle',{cx:x,cy:baseY-58,r:82,fill:'none',stroke:'var(--gold-lt)','stroke-width':2,opacity:.20,class:'sparkle',style:'animation-delay:.4s'}));
+  svg.appendChild(el('path',{d:`M ${x-128} ${baseY+36} C ${x-84} ${baseY+12} ${x-32} ${baseY+16} ${x-8} ${baseY+29} C ${x+22} ${baseY+45} ${x+78} ${baseY+24} ${x+128} ${baseY+36}`,fill:'none',stroke:'var(--gold-lt)','stroke-width':8,'stroke-linecap':'round',opacity:.24}));
+
+  const g=el('g',{filter:'url(#soft)'});
+  // ground shadow + emerald base mound
+  g.appendChild(el('ellipse',{cx:x,cy:baseY+36,rx:92,ry:16,fill:'#000',opacity:.18}));
+  g.appendChild(el('path',{d:`M ${x-86} ${baseY+30} Q ${x-70} ${baseY+6} ${x-40} ${baseY+10} Q ${x} ${baseY-2} ${x+40} ${baseY+10} Q ${x+74} ${baseY+6} ${x+86} ${baseY+30} Z`,fill:'var(--emerald-dk)'}));
+
+  const wallGrad='url(#towerGrad)', spire='url(#spireGrad)';
+  const stroke={stroke:'var(--emerald-dk)','stroke-width':2,'stroke-linejoin':'round'};
+
+  // back curtain wall
+  g.appendChild(el('rect',Object.assign({x:x-72,y:baseY-58,width:144,height:90,rx:6,fill:wallGrad},stroke)));
+  // wall crenellations
+  for(let c=0;c<7;c++) g.appendChild(el('rect',{x:x-72+c*21,y:baseY-66,width:12,height:12,fill:'var(--emerald)'}));
+
+  // helper to draw a tower
+  function tower(dx,topY,w){
+    const tx=x+dx;
+    g.appendChild(el('rect',Object.assign({x:tx-w/2,y:topY,width:w,height:baseY+32-topY,rx:5,fill:wallGrad},stroke)));
+    for(let c=0;c<3;c++) g.appendChild(el('rect',{x:tx-w/2+c*(w/3),y:topY-8,width:w/3-3,height:9,fill:'var(--emerald)'}));
+    // crystal spire roof
+    g.appendChild(el('path',Object.assign({d:`M ${tx-w/2-3} ${topY} L ${tx} ${topY-w*1.5} L ${tx+w/2+3} ${topY} Z`,fill:spire},stroke)));
+    g.appendChild(el('path',{d:`M ${tx} ${topY-w*1.5} L ${tx+w/2+3} ${topY} L ${tx} ${topY} Z`,fill:'#fff',opacity:.22}));
+    // flag
+    g.appendChild(el('line',{x1:tx,y1:topY-w*1.5,x2:tx,y2:topY-w*1.5-16,stroke:'var(--brown)','stroke-width':2}));
+    g.appendChild(el('path',{d:`M ${tx} ${topY-w*1.5-16} C ${tx+7} ${topY-w*1.5-19} ${tx+12} ${topY-w*1.5-10} ${tx+16} ${topY-w*1.5-11} C ${tx+10} ${topY-w*1.5-8} ${tx+5} ${topY-w*1.5-5} ${tx} ${topY-w*1.5-6} Z`,fill:'var(--flower)',class:'castle-flag side'}));
+    // lit window
+    g.appendChild(el('rect',{x:tx-4,y:topY+14,width:8,height:12,rx:3,fill:'var(--gold-lt)',opacity:.95}));
+  }
+  tower(-58, baseY-92, 28);
+  tower( 58, baseY-92, 28);
+
+  // central tall keep
+  g.appendChild(el('rect',Object.assign({x:x-22,y:baseY-128,width:44,height:160,rx:6,fill:'var(--emerald)'},stroke)));
+  for(let c=0;c<3;c++) g.appendChild(el('rect',{x:x-22+c*15,y:baseY-136,width:11,height:10,fill:'var(--emerald-dk)'}));
+  // keep crystal spire
+  g.appendChild(el('path',Object.assign({d:`M ${x-30} ${baseY-128} L ${x} ${baseY-186} L ${x+30} ${baseY-128} Z`,fill:spire},stroke)));
+  g.appendChild(el('path',{d:`M ${x} ${baseY-186} L ${x+30} ${baseY-128} L ${x} ${baseY-128} Z`,fill:'#fff',opacity:.25}));
+  // spire finial gem (glowing)
+  g.appendChild(el('circle',{cx:x,cy:baseY-188,r:6,fill:'var(--crystal)',filter:'url(#glow)'}));
+  // keep flag
+  g.appendChild(el('line',{x1:x,y1:baseY-186,x2:x,y2:baseY-206,stroke:'var(--brown)','stroke-width':2.5}));
+  g.appendChild(el('path',{d:`M ${x} ${baseY-206} C ${x+9} ${baseY-210} ${x+15} ${baseY-198} ${x+20} ${baseY-200} C ${x+13} ${baseY-196} ${x+6} ${baseY-192} ${x} ${baseY-194} Z`,fill:'var(--flower)',class:'castle-flag'}));
+
+  // big glowing emerald gem on the keep face
+  g.appendChild(el('path',{d:`M ${x} ${baseY-100} L ${x+13} ${baseY-82} L ${x} ${baseY-62} L ${x-13} ${baseY-82} Z`,fill:'var(--crystal)',stroke:'#fff','stroke-width':2,filter:'url(#glow)'}));
+  g.appendChild(el('path',{d:`M ${x} ${baseY-100} L ${x+13} ${baseY-82} L ${x} ${baseY-82} Z`,fill:'#fff',opacity:.4}));
+  // lit keep windows
+  [[-1,-44],[ -1,-22]].forEach(([dx,dy])=>g.appendChild(el('rect',{x:x-5+dx,y:baseY+dy,width:10,height:14,rx:4,fill:'var(--gold-lt)',opacity:.95})));
+
+  // crystal shards at the base
+  drawCrystal(g,x-78,baseY+18,.7,'var(--crystal)');
+  drawCrystal(g,x+80,baseY+16,.8,'var(--peri)');
+
+  // gate (where the FINISH stone sits)
+  g.appendChild(el('path',{d:`M ${x-16} ${baseY+32} L ${x-16} ${baseY-4} A 16 16 0 0 1 ${x+16} ${baseY-4} L ${x+16} ${baseY+32} Z`,fill:'#053d2a'}));
+  g.appendChild(el('path',{d:`M ${x-10} ${baseY+32} L ${x-10} ${baseY-3} A 10 10 0 0 1 ${x+10} ${baseY-3} L ${x+10} ${baseY+32} Z`,fill:'var(--gold-lt)',opacity:.92}));
+  svg.appendChild(g);
+
+  // twinkling sparkles around the castle
+  [[x-70,baseY-110,5],[x+72,baseY-96,4],[x,baseY-150,5],[x+40,baseY-140,3],[x-44,baseY-150,4]]
+    .forEach(([sx,sy,ss],i)=>drawSparkle(svg,sx,sy,ss,i*0.35));
+
+}
+
+/* ─── TOKENS — glowing magical pawns ─────────────────────────────────────── */
+function shade(hex,pct){ // pct>0 lighten, pct<0 darken
+  const n=parseInt(hex.slice(1),16);
+  let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  const f=t=>Math.round(pct<0 ? t*(1+pct) : t+(255-t)*pct);
+  return '#'+[f(r),f(g),f(b)].map(v=>Math.max(0,Math.min(255,v)).toString(16).padStart(2,'0')).join('');
+}
+// Small per-player offset so two tokens stay distinguishable on the same space.
+function tokenOffset(i,total){
+  if(total<=1) return {x:0,y:-2};
+  return i===0 ? {x:-15,y:-4} : {x:15,y:-4};
+}
+function tokenSvg(color){
+  const dk=shade(color,-0.4), lt=shade(color,0.5);
+  return `
+    <ellipse class="token-shadow" cx="0" cy="3" rx="12" ry="4.5" fill="#000" opacity="0.20"/>
+    <circle class="token-glow" cx="0" cy="-22" r="22" fill="${color}"/>
+    <circle class="token-ring" cx="0" cy="-2" r="16" fill="none" stroke="${color}" stroke-width="2.5"/>
+    <g class="token-art">
+      <ellipse cx="0" cy="-1" rx="11" ry="5" fill="${dk}"/>
+      <path d="M -9 -2 C -10 -14 -7 -20 0 -22 C 7 -20 10 -14 9 -2 Z" fill="${color}" stroke="#fff" stroke-width="2.5"/>
+      <ellipse cx="0" cy="-22" rx="8" ry="3.4" fill="${lt}" stroke="#fff" stroke-width="1.5"/>
+      <path d="M 0 -50 L 9 -38 L 0 -28 L -9 -38 Z" fill="${color}" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M 0 -50 L 9 -38 L 0 -38 Z" fill="#fff" opacity="0.45"/>
+      <path d="M 0 -38 L 9 -38 L 0 -28 Z" fill="${dk}" opacity="0.5"/>
+      <circle cx="-3" cy="-42" r="1.8" fill="#fff"/>
+    </g>`;
+}
+function renderTokens(){
+  const layer=$('tokenLayer');if(!layer)return;
+  layer.innerHTML='';
+  players.forEach((p,i)=>{
+    const g=el('g',{class:'token',id:'token'+i});
+    g.innerHTML=tokenSvg(p.color);
+    layer.appendChild(g);   // must be in DOM before positionToken looks it up
+    positionToken(i);
+  });
+  updateActiveToken();
+}
+function positionToken(i){
+  const g=$('token'+i);if(!g)return;
+  const pt=spacePoints[players[i].pos]||spacePoints[0];
+  const off=tokenOffset(i,players.length);
+  g.setAttribute('transform',`translate(${pt.x+off.x},${pt.y+off.y})`);
+}
+function updateActiveToken(){
+  players.forEach((p,i)=>{
+    const g=$('token'+i);if(!g)return;
+    g.classList.toggle('active-token', i===current);
+  });
+}
+function bringTokenToFront(i){
+  const g=$('token'+i);const layer=$('tokenLayer');
+  if(g&&layer) layer.appendChild(g);
+}
+function hopToken(i){
+  const g=$('token'+i);if(!g)return;
+  const art=g.querySelector('.token-art');if(!art)return;
+  art.classList.remove('hop');void art.getBBox();art.classList.add('hop');
+  setTimeout(()=>art.classList.remove('hop'),440);
+}
+
+/* ─── BOARD FX: sparkle trail, landing glow, firework burst ──────────────── */
+function spawnSpark(x,y,color){
+  const svg=$('boardSvg');if(!svg)return;
+  const cx=x+(Math.random()*10-5);
+  const cy=y+(Math.random()*8-4);
+  const r=3.2+Math.random()*2.2;
+  const soft=color||'#FFF6D8';
+  const s=el('path',{
+    d:`M ${cx} ${cy-r} C ${cx+r*.18} ${cy-r*.18} ${cx+r*.18} ${cy-r*.18} ${cx+r} ${cy} C ${cx+r*.18} ${cy+r*.18} ${cx+r*.18} ${cy+r*.18} ${cx} ${cy+r} C ${cx-r*.18} ${cy+r*.18} ${cx-r*.18} ${cy+r*.18} ${cx-r} ${cy} C ${cx-r*.18} ${cy-r*.18} ${cx-r*.18} ${cy-r*.18} ${cx} ${cy-r} Z`,
+    fill:soft,stroke:'#FFFFFF','stroke-width':.7,opacity:.9,class:'fx-spark'
+  });
+  svg.appendChild(s);
+  setTimeout(()=>s.remove(),650);
+}
+function landingGlow(pt){
+  const svg=$('boardSvg');if(!svg)return;
+  const r=el('circle',{cx:pt.x,cy:pt.y,r:14,fill:'none',stroke:'var(--gold-lt)','stroke-width':4,class:'fx-land'});
+  svg.appendChild(r);
+  burstAt(pt.x,pt.y-4,['#FFF6D8','#FFC928','#7E8CE8'],7);
+  setTimeout(()=>r.remove(),620);
+}
+function magicSpaceGlow(pt){
+  if(!pt)return;
+  landingGlow(pt);
+  burstAt(pt.x,pt.y-6,['#7E8CE8','#DCD8FF','#00A96B','#FFC928','#FFFFFF'],18);
+}
+function burstAt(x,y,colors,count){
+  const svg=$('boardSvg');if(!svg)return;
+  for(let k=0;k<(count||10);k++){
+    const ang=Math.random()*Math.PI*2, dist=18+Math.random()*40;
+    const s=el('circle',{cx:x,cy:y,r:2.5+Math.random()*2.5,fill:colors[Math.floor(Math.random()*colors.length)],class:'fx-burst'});
+    s.style.setProperty('--tx',(Math.cos(ang)*dist).toFixed(1)+'px');
+    s.style.setProperty('--ty',(Math.sin(ang)*dist).toFixed(1)+'px');
+    svg.appendChild(s);
+    setTimeout(()=>s.remove(),900);
+  }
+}
+
+/* ─── SOUND (Web Audio — lazy, gesture-gated, toggleable) ────────────────── */
+let audioCtx=null, soundEnabled=true;
+function audio(){
+  if(!soundEnabled) return null;
+  if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+  if(audioCtx.state==='suspended'){ audioCtx.resume().catch(()=>{}); }
+  return audioCtx;
+}
+function tone(freq,dur,{type='sine',vol=0.16,delay=0,glide=0,pan=0}={}){
+  const ctx=audio(); if(!ctx) return;
+  const t0=ctx.currentTime+delay;
+  const osc=ctx.createOscillator(), g=ctx.createGain();
+  const panner=ctx.createStereoPanner?ctx.createStereoPanner():null;
+  osc.type=type; osc.frequency.setValueAtTime(freq,t0);
+  if(glide) osc.frequency.exponentialRampToValueAtTime(Math.max(20,freq+glide),t0+dur);
+  g.gain.setValueAtTime(0.0001,t0);
+  g.gain.exponentialRampToValueAtTime(vol,t0+0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+  osc.connect(g);
+  if(panner){panner.pan.value=pan;g.connect(panner);panner.connect(ctx.destination);}
+  else g.connect(ctx.destination);
+  osc.start(t0); osc.stop(t0+dur+0.04);
+}
+function noiseBurst(dur,vol,freq,type='bandpass'){
+  const ctx=audio(); if(!ctx) return;
+  const len=Math.max(1,Math.floor(ctx.sampleRate*dur));
+  const buf=ctx.createBuffer(1,len,ctx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len);
+  const src=ctx.createBufferSource(); src.buffer=buf;
+  const bp=ctx.createBiquadFilter(); bp.type=type; bp.frequency.value=freq; bp.Q.value=1.25;
+  const g=ctx.createGain(); g.gain.value=vol;
+  src.connect(bp); bp.connect(g); g.connect(ctx.destination);
+  src.start();
+}
+const sfx={
+  count:(i)=>{
+    const notes=[523.25,659.25,783.99];
+    tone(notes[i]||783.99,0.18,{type:'triangle',vol:0.115,pan:-.08});
+    tone((notes[i]||783.99)*1.5,0.20,{type:'sine',vol:0.045,delay:.035,pan:.08});
+  },
+  go:()=>{tone(783.99,0.16,{type:'triangle',vol:0.15}); tone(1046.5,0.30,{type:'triangle',vol:0.13,delay:0.08}); tone(1567.98,0.38,{type:'sine',vol:0.07,delay:0.16});},
+  diceTick:()=>{noiseBurst(0.022,0.052,2300+Math.random()*1200); tone(420+Math.random()*180,0.035,{type:'triangle',vol:0.035,pan:Math.random()*.5-.25});},
+  dice:()=>{noiseBurst(0.11,0.08,1350); tone(220,0.08,{type:'triangle',vol:0.04,glide:80});},
+  diceLand:()=>{tone(523.25,0.09,{type:'triangle',vol:0.075}); tone(783.99,0.16,{type:'sine',vol:0.055,delay:.055});},
+  word:()=>{tone(739.99,0.12,{type:'sine',vol:0.105}); tone(1108.73,0.20,{type:'triangle',vol:0.075,delay:0.06}); tone(1479.98,0.22,{type:'sine',vol:0.04,delay:.12});},
+  read:()=>{tone(659.25,0.09,{type:'triangle',vol:0.12}); tone(987.77,0.16,{type:'triangle',vol:0.095,delay:0.07}); tone(1318.5,0.18,{type:'sine',vol:0.045,delay:.14});},
+  step:()=>{tone(880,0.045,{type:'sine',vol:0.045}); tone(1320,0.05,{type:'triangle',vol:0.025,delay:.025});},
+  land:()=>{tone(783.99,0.10,{type:'triangle',vol:0.105}); tone(1174.7,0.15,{type:'sine',vol:0.075,delay:0.045}); tone(1567.98,0.17,{type:'sine',vol:0.035,delay:.10});},
+  magic:()=>{tone(987.77,0.13,{type:'triangle',vol:0.105}); tone(1318.5,0.20,{type:'sine',vol:0.075,delay:.06}); tone(1975.53,0.24,{type:'sine',vol:0.04,delay:.14});},
+  win:()=>{
+    [523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>tone(f,0.42,{type:'triangle',vol:0.15,delay:i*0.12,pan:(i-2)*.08}));
+    [1046.5,1318.5,1567.98].forEach((f,i)=>tone(f,0.52,{type:'sine',vol:0.075,delay:.62+i*.08}));
+    noiseBurst(0.42,0.035,3600,'highpass');
+  }
+};
+function toggleSound(){
+  soundEnabled=!soundEnabled;
+  $('sndOn').style.display=soundEnabled?'block':'none';
+  $('sndOff').style.display=soundEnabled?'none':'block';
+  if(soundEnabled) audio();          // resume within this click gesture
+  else if(audioCtx){ audioCtx.suspend().catch(()=>{}); }
+}
+
+/* ─── DICE FACE ──────────────────────────────────────────────────────────── */
+function showDiceFace(n){
+  const map={1:['p6'],2:['p1','p4'],3:['p1','p6','p4'],4:['p1','p2','p3','p4'],
+             5:['p1','p2','p3','p4','p6'],6:['p1','p2','p3','p4','p5b','p6b']};
+  // Reset all
+  ['p1','p2','p3','p4','p5','p6'].forEach(id=>{const e=$(id);if(e)e.style.display='none';});
+  // Position helpers via predefined coords
+  const coords={
+    p1:[20,20],p2:[44,20],p3:[20,44],p4:[44,44],p5:[32,32],p6:[32,32]
+  };
+  const faces={
+    1:[[32,32]],
+    2:[[20,20],[44,44]],
+    3:[[20,20],[32,32],[44,44]],
+    4:[[20,20],[44,20],[20,44],[44,44]],
+    5:[[20,20],[44,20],[32,32],[20,44],[44,44]],
+    6:[[20,18],[44,18],[20,32],[44,32],[20,46],[44,46]]
+  };
+  const pts=faces[n]||faces[4];
+  const ids=['p1','p2','p3','p4','p5','p6'];
+  pts.forEach((c,idx)=>{
+    const e=$(ids[idx]);if(!e)return;
+    e.setAttribute('cx',c[0]);e.setAttribute('cy',c[1]);e.style.display='block';
+  });
+}
+function rollDice(){
+  if(phase!=='roll')return;
+  audio(); // ensure audio is live (this is a user gesture)
+  const btn=$('diceBtn');btn.disabled=true;btn.classList.add('rolling');
+  sfx.dice();
+  let ticks=0;
+  let t=setInterval(()=>{ showDiceFace(1+Math.floor(Math.random()*6)); if(ticks++%2===0) sfx.diceTick(); },70);
+  setTimeout(()=>{
+    clearInterval(t);btn.classList.remove('rolling');
+    roll=1+Math.floor(Math.random()*6);
+    showDiceFace(roll);
+    sfx.diceLand();
+    $('diceText').textContent=`Rolled a ${roll}`;
+    showReadWord();
+  },700);
+}
+
+/* ─── COUNTDOWN (magical intro overlay) ──────────────────────────────────── */
+function spawnCdRing(ov){
+  const r=document.createElement('div'); r.className='cd-ring';
+  ov.appendChild(r); setTimeout(()=>r.remove(),600);
+}
+function startCountdown(callback){
+  const ov=$('countdown'), wEl=$('countdownWord');
+  const steps=[{t:'Ready',go:false},{t:'Set',go:false},{t:'Read!',go:false},{t:'Begin Quest!',go:true}];
+  $('readyPrompt').classList.add('hidden');
+  ov.classList.add('show');
+  let i=0;
+  (function tick(){
+    const s=steps[i];
+    wEl.textContent=s.t;
+    wEl.className='countdown-word'+(s.go?' go':'');
+    wEl.style.animation='none'; void wEl.offsetWidth; wEl.style.animation=''; // replay pop
+    spawnCdRing(ov);
+    s.go ? sfx.go() : sfx.count(i);
+    i++;
+    if(i<steps.length){ setTimeout(tick,720); }
+    else { setTimeout(()=>{ ov.classList.remove('show'); callback&&callback(); }, 840); }
+  })();
+}
+
+/* ─── GAMEPLAY ───────────────────────────────────────────────────────────── */
+function showWordPanel(visible){
+  $('wordPanel').classList.toggle('visible',visible);
+  $('readyPrompt').classList.toggle('hidden',visible);
+}
+function renderSide(){
+  const p=players[current];
+  $('nowName').textContent=p.name;
+  $('nowName').style.color=p.color;
+  $('nowSub').textContent=phase==='roll'?'Roll the dice!':phase==='read'?'Read the word!':phase==='magic'?'Magic Space!':'Moving…';
+  $('playerList').innerHTML=players.map((pl,i)=>`
+    <div class="player-row ${i===current?'active':''}">
+      <span class="pdot" style="background:${pl.color}"></span>
+      <span>${escHtml(pl.name)}</span>
+      <span class="pscore">${pl.pos}/${FINISH}</span>
+    </div>`).join('');
+}
+function nextWord(){
+  if(!words.length){words=[...used];used=[];shuffle(words);}
+  const w=words.pop();used.push(w);return w;
+}
+function showReadWord(){
+  phase='read';
+  const p=players[current],w=nextWord();
+  $('wordLabel').textContent=`${p.name} — read this word:`;
+  $('bigWord').textContent=w;
+  $('wordPrompt').textContent=`Move ${roll} space${roll>1?'s':''}.`;
+  $('readBtn').disabled=false;
+  $('readBtn').textContent=`I Read It! Move ${roll}`;
+  showWordPanel(true);
+  sfx.word();
+  renderSide();
+}
+function moveCurrent(){
+  if(phase!=='read')return;
+  audio();
+  sfx.read();
+  phase='move';
+  $('readBtn').disabled=true;
+  showWordPanel(false);
+  bringTokenToFront(current);
+  animateMoveSteps(current, roll);
+}
+function isMagicSpace(pos){
+  return MAGIC_SPACE_INDEXES.includes(pos);
+}
+function pickMagicEffect(){
+  return MAGIC_EFFECTS[Math.floor(Math.random()*MAGIC_EFFECTS.length)];
+}
+function showMagicSpace(playerIdx){
+  const effect=pickMagicEffect();
+  pendingMagic={playerIdx,effect};
+  phase='magic';
+  $('magicEffectName').textContent=effect.name;
+  $('magicInstruction').textContent=effect.instruction;
+  $('magicContinueBtn').textContent=effect.delta?'Cast Magic':'Continue';
+  $('magicPanel').classList.add('visible');
+  magicSpaceGlow(spacePoints[players[playerIdx].pos]);
+  sfx.magic();
+  renderSide();
+}
+function closeMagicPanel(){
+  $('magicPanel').classList.remove('visible');
+}
+function resolveTurn(extraTurn){
+  if(!players.length)return;
+  if(!extraTurn){
+    let guard=0;
+    do{
+      current=(current+1)%players.length;
+      if(players[current].skipTurns>0){
+        players[current].skipTurns--;
+        guard++;
+        continue;
+      }
+      break;
+    }while(guard<players.length);
+  }
+  phase='roll';
+  $('diceBtn').disabled=false;
+  $('diceText').textContent='Click to roll';
+  showDiceFace(4);
+  $('readyPrompt').textContent=`${players[current].name}'s turn — roll the dice!`;
+  $('readyPrompt').classList.remove('hidden');
+  renderSide();
+  updateActiveToken();
+}
+function applyMagicSpace(){
+  if(!pendingMagic)return;
+  const {playerIdx,effect}=pendingMagic;
+  pendingMagic=null;
+  closeMagicPanel();
+  if(effect.delta){
+    animateMagicMove(playerIdx,effect.delta,()=>{
+      if(players[playerIdx].pos>=FINISH){ showWin(); return; }
+      resolveTurn(false);
+    });
+    return;
+  }
+  if(effect.extraTurn){
+    resolveTurn(true);
+    return;
+  }
+  if(effect.loseTurn){
+    players[playerIdx].skipTurns=(players[playerIdx].skipTurns||0)+1;
+    resolveTurn(false);
+  }
+}
+function animateMagicMove(playerIdx,delta,done){
+  phase='move';
+  const dir=delta>0?1:-1;
+  let steps=Math.abs(delta);
+  function step(){
+    if(steps<=0){
+      const pt=spacePoints[players[playerIdx].pos];
+      if(pt){ landingGlow(pt); sfx.land(); }
+      renderSide();
+      done&&done();
+      return;
+    }
+    const prev=spacePoints[players[playerIdx].pos];
+    players[playerIdx].pos=Math.max(0,Math.min(FINISH,players[playerIdx].pos+dir));
+    positionToken(playerIdx);
+    hopToken(playerIdx);
+    sfx.step();
+    if(prev){ spawnSpark(prev.x,prev.y,players[playerIdx].color); spawnSpark(prev.x,prev.y); }
+    renderSide();
+    if(players[playerIdx].pos>=FINISH){
+      const pt=spacePoints[FINISH];
+      if(pt){ landingGlow(pt); sfx.land(); }
+      setTimeout(()=>done&&done(),480);
+      return;
+    }
+    steps--;
+    setTimeout(step,470);
+  }
+  step();
+}
+function animateMoveSteps(playerIdx, stepsLeft){
+  if(stepsLeft<=0){
+    const pt=spacePoints[players[playerIdx].pos];
+    if(pt){ landingGlow(pt); sfx.land(); }
+    if(isMagicSpace(players[playerIdx].pos)){
+      showMagicSpace(playerIdx);
+      return;
+    }
+    resolveTurn(false);
+    return;
+  }
+  const prev=spacePoints[players[playerIdx].pos];
+  players[playerIdx].pos=Math.min(FINISH, players[playerIdx].pos+1);
+  positionToken(playerIdx);
+  hopToken(playerIdx);
+  sfx.step();
+  if(prev){ spawnSpark(prev.x,prev.y,players[playerIdx].color); spawnSpark(prev.x,prev.y); } // dust/sparkle trail
+  renderSide();
+  if(players[playerIdx].pos>=FINISH){
+    const pt=spacePoints[FINISH];
+    if(pt){ landingGlow(pt); sfx.land(); }
+    setTimeout(showWin,460); return;
+  }
+  setTimeout(()=>animateMoveSteps(playerIdx, stepsLeft-1), 470);
+}
+function celebrateBoard(){
+  const cols=['#FFC928','#9CF1D2','#36D69A','#F77CA8','#7E8CE8','#FFFFFF'];
+  const castle=spacePoints[FINISH];
+  let n=0;
+  const iv=setInterval(()=>{
+    if(castle) burstAt(castle.x+(Math.random()*120-60), castle.y-80+(Math.random()*70-30), cols, 12);
+    const idx=1+Math.floor(Math.random()*(FINISH-1));
+    const pt=spacePoints[idx]; if(pt){ spawnSpark(pt.x,pt.y,cols[Math.floor(Math.random()*cols.length)]); }
+    if(++n>11) clearInterval(iv);
+  },170);
+}
+function showWin(){
+  const winner=players[current];
+  const bw=document.querySelector('.board-wrap'); if(bw) bw.classList.add('celebrating');
+  const wg=$('token'+current); const art=wg&&wg.querySelector('.token-art');
+  if(art){ art.classList.remove('hop'); art.classList.add('victory'); }
+  celebrateBoard();
+  launchConfetti(true);
+  sfx.win();
+  const qm=$('questMoment'); if(qm) qm.classList.add('show');
+  setTimeout(()=>{
+    if(qm) qm.classList.remove('show');
+    $('winName').textContent=winner.name;
+    $('winSub').textContent=`reached the ${DESTINATION_NAME} — wonderful reading!`;
+    $('winOverlay').classList.add('open');
+  }, 1450);
+}
+
+/* ─── CONFETTI ───────────────────────────────────────────────────────────── */
+function launchConfetti(big){
+  const c=$('confetti'),ctx=c.getContext('2d');
+  c.style.display='block';c.width=innerWidth;c.height=innerHeight;
+  const cols=['#00A96B','#36D69A','#9CF1D2','#FFC928','#FFE7A0','#F77CA8','#7E8CE8'];
+  const shapes=['rect','circle','tri','star'];
+  const N=big?260:130;
+  const parts=Array.from({length:N},()=>({
+    x:Math.random()*c.width,y:-20-Math.random()*120,
+    vx:(Math.random()-.5)*6,vy:2.5+Math.random()*4,
+    s:5+Math.random()*8,col:cols[Math.floor(Math.random()*cols.length)],
+    a:1,rot:Math.random()*Math.PI*2,rv:(Math.random()-.5)*.2,
+    shape:shapes[Math.floor(Math.random()*shapes.length)]
+  }));
+  const start=Date.now(), life=big?6000:4500, fade=big?.0038:.005;
+  function star(s){ctx.beginPath();for(let k=0;k<5;k++){const a=k*2*Math.PI/5-Math.PI/2;ctx.lineTo(Math.cos(a)*s,Math.sin(a)*s);const a2=a+Math.PI/5;ctx.lineTo(Math.cos(a2)*s*.45,Math.sin(a2)*s*.45);}ctx.closePath();ctx.fill();}
+  function anim(){
+    ctx.clearRect(0,0,c.width,c.height);
+    parts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.vy+=.055;p.rot+=p.rv;p.a-=fade;
+      if(p.a<=0)return;
+      ctx.save();ctx.globalAlpha=Math.max(0,p.a);ctx.fillStyle=p.col;
+      ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+      if(p.shape==='rect'){ctx.fillRect(-p.s/2,-p.s*.8,p.s,p.s*1.5);}
+      else if(p.shape==='circle'){ctx.beginPath();ctx.arc(0,0,p.s/2,0,Math.PI*2);ctx.fill();}
+      else if(p.shape==='star'){star(p.s*.7);}
+      else{ctx.beginPath();ctx.moveTo(0,-p.s);ctx.lineTo(p.s*.87,p.s*.5);ctx.lineTo(-p.s*.87,p.s*.5);ctx.closePath();ctx.fill();}
+      ctx.restore();
+    });
+    if(Date.now()-start<life)requestAnimationFrame(anim);
+    else c.style.display='none';
+  }
+  anim();
+}
+
+/* ─── START / RESET ──────────────────────────────────────────────────────── */
+function beginGame(wordList){
+  playerCount=2;
+  words=[...wordList];
+  if(!words.length){alert('Please select at least one word for the quest.');return false;}
+  shuffle(words);used=[];players=[];
+  for(let i=0;i<playerCount;i++){
+    players.push({name:($('player'+i).value||`Player ${i+1}`).trim(),color:playerColors[i],pos:0,skipTurns:0});
+  }
+  current=0;phase='roll';roll=0;pendingMagic=null;
+  $('setup').style.display='none';
+  $('game').style.display='flex';
+  document.body.classList.add('in-game');
+  $('winOverlay').classList.remove('open');
+  const bw=document.querySelector('.board-wrap'); if(bw) bw.classList.remove('celebrating');
+  $('questMoment') && $('questMoment').classList.remove('show');
+  $('countdown') && $('countdown').classList.remove('show');
+  $('magicPanel') && $('magicPanel').classList.remove('visible');
+  $('diceBtn').disabled=true;$('diceBtn').classList.remove('rolling');
+  $('diceText').textContent='Get ready…';showDiceFace(4);
+  $('gameListLabel').textContent=`${words.length} word${words.length===1?'':'s'}`;
+  showWordPanel(false);
+  $('readyPrompt').classList.remove('hidden');
+  buildBoard();
+  renderTokens();
+  renderSide();
+  startCountdown(()=>{
+    $('diceBtn').disabled=false;
+    $('diceText').textContent='Click to roll';
+    $('readyPrompt').textContent=`${players[0].name}'s turn — roll the dice!`;
+    $('readyPrompt').classList.remove('hidden');
+  });
+  return true;
+}
+function startGame(){
+  audio(); // first user gesture → unlock audio for the countdown
+  lastWordSnapshot=[...selectedWordsSet];
+  beginGame(selectedWordsSet);
+}
+function resetToSetup(){
+  $('game').style.display='none';$('setup').style.display='block';
+  document.body.classList.remove('in-game');
+  $('winOverlay').classList.remove('open');
+  const bw=document.querySelector('.board-wrap'); if(bw) bw.classList.remove('celebrating');
+  $('questMoment') && $('questMoment').classList.remove('show');
+  $('countdown') && $('countdown').classList.remove('show');
+  $('magicPanel') && $('magicPanel').classList.remove('visible');
+  phase='roll';roll=0;current=0;players=[];words=[];used=[];pendingMagic=null;
+  $('boardSvg').innerHTML='';
+  $('diceBtn').disabled=false;showDiceFace(4);$('diceText').textContent='Click to roll';
+  showWordPanel(false);
+}
+function playAgain(){
+  if(!players.length||!lastWordSnapshot.length)return;
+  players.forEach(p=>p.pos=0);
+  beginGame(lastWordSnapshot);
+}
+
+/* ─── INIT ───────────────────────────────────────────────────────────────── */
+function init(){
+  playerCount=2;
+  populateLevels();
+  openWordBank();
+  refreshWordSelectionUI();
+  renderPlayerInputs();
+  document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>setListType(btn.dataset.type)));
+  $('levelSelect').addEventListener('change',refreshWordSelectionUI);
+  $('selectAllBtn').addEventListener('click',selectAllVisible);
+  $('deselectAllBtn').addEventListener('click',deselectAllVisible);
+  $('addCustomBtn').addEventListener('click',addCustomWords);
+  $('clearSelectedBtn').addEventListener('click',clearSelectedWords);
+  $('toggleWordBuilderBtn').addEventListener('click',()=>setWordSelectionCollapsed(!wordSelectionCollapsed));
+  $('startBtn').addEventListener('click',startGame);
+  $('newGameBtn').addEventListener('click',resetToSetup);
+  $('restartBtn').addEventListener('click',resetToSetup);
+  $('diceBtn').addEventListener('click',rollDice);
+  $('readBtn').addEventListener('click',moveCurrent);
+  $('magicContinueBtn').addEventListener('click',applyMagicSpace);
+  $('playAgainBtn').addEventListener('click',playAgain);
+  $('changeListBtn').addEventListener('click',resetToSetup);
+  $('soundToggle').addEventListener('click',toggleSound);
+  showDiceFace(4);
+  // Expose globals for the Firebase module
+  window.selectedWordsSet = selectedWordsSet;
+  window.currentListType  = currentListType;
+  window.setListType      = setListType;
+  window.refreshWordSelectionUI = refreshWordSelectionUI;
+  window.getPlayerCount   = ()=>playerCount;
+  window.TOOL_TYPE        = TOOL_TYPE;
+  window.TOOL_URL         = TOOL_URL;
+}
+window.addEventListener('DOMContentLoaded',init);
+</script>
+
+<!-- ═══ FIREBASE SAVE / LOAD ═══ -->
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
+  authDomain: "literacy-arcade.firebaseapp.com",
+  projectId: "literacy-arcade",
+  storageBucket: "literacy-arcade.firebasestorage.app",
+  messagingSenderId: "628621471724",
+  appId: "1:628621471724:web:7ddfd231d1261b6c781ac9"
+};
+
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let currentUser = null;
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  updateAuthBar(user);
+  const dashBtn = document.getElementById('dashboardBtn');
+  if (dashBtn) dashBtn.style.display = user ? 'flex' : 'none';
+});
+
+function escStr(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+function updateAuthBar(user) {
+  const bar = document.getElementById('authStatus');
+  if (!bar) return;
+  if (user) {
+    const name = user.displayName || user.email || 'Teacher';
+    bar.innerHTML = `
+      ${user.photoURL ? `<img class="auth-avatar" src="${user.photoURL}" alt=""/>` : ''}
+      <span class="auth-name">${escStr(name)}</span>
+      &nbsp;·&nbsp;
+      <a href="teacher-dashboard.html" style="color:var(--teal-dk);font-weight:800;font-size:12px">My Dashboard</a>`;
+  } else {
+    bar.innerHTML = `<span style="color:var(--navy-lt)">Sign in to save activities</span>`;
+  }
+}
+
+const saveActivityBtn = document.getElementById('saveActivityBtn');
+if (saveActivityBtn) {
+  saveActivityBtn.addEventListener('click', async () => {
+    if (!currentUser) { window.location.href = 'teacher-login.html'; return; }
+
+    const wordsArr = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
+    if (!wordsArr.length) { alert('Please select at least one word before saving.'); return; }
+
+    const defaultTitle = buildDefaultTitle();
+    const title = prompt('Name this saved activity:', defaultTitle);
+    if (title === null) return;
+    const cleanTitle = title.trim();
+    if (!cleanTitle) { alert('Please enter a name for this activity.'); return; }
+
+    const listType = window.currentListType || 'custom';
+    const level    = document.getElementById('levelSelect')?.value || '';
+    const playerCount = window.getPlayerCount ? window.getPlayerCount() : 2;
+
+    const activityData = {
+      title:        cleanTitle,
+      toolType:     window.TOOL_TYPE || 'magic-word-road',
+      activityType: window.TOOL_TYPE || 'magic-word-road',
+      words:        wordsArr,
+      settings:     { listType, level, playerCount },
+      url:          window.TOOL_URL || 'magic-word-road.html',
+      createdAt:    serverTimestamp(),
+      updatedAt:    serverTimestamp(),
+      userId:       currentUser.uid
+    };
+
+    try {
+      await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
+      const btn = document.getElementById('saveActivityBtn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Saved!`;
+      btn.style.background = 'var(--teal)';
+      btn.style.color = 'white';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2500);
+    } catch (err) {
+      console.error('Save error:', err);
+      alert('Save failed. Please check your connection and try again.');
+    }
+  });
+}
+
+function buildDefaultTitle() {
+  const listType = window.currentListType || 'fry';
+  const level = document.getElementById('levelSelect')?.value || '';
+  const count = window.selectedWordsSet ? window.selectedWordsSet.size : 0;
+  const parts = [];
+  if (listType === 'fry')          parts.push('Fry Words');
+  else if (listType === 'dolch')   parts.push('Dolch Words');
+  else if (listType === 'phonics') parts.push('Phonics');
+  else                             parts.push('Custom Words');
+  if (level) parts.push(level);
+  if (count) parts.push(`(${count} words)`);
+  return parts.join(' — ');
+}
+
+/* ── Load from dashboard (sessionStorage) ────────────────────────────────── */
+function tryLoadSavedActivity() {
+  const raw = sessionStorage.getItem('savedActivityData');
+  if (!raw) return;
+  let activity;
+  try { activity = JSON.parse(raw); } catch { return; }
+  const tt = window.TOOL_TYPE || 'magic-word-road';
+  if (!activity || activity.toolType !== tt) return;
+
+  sessionStorage.removeItem('savedActivityData');
+  sessionStorage.removeItem('savedActivityId');
+
+  const words    = activity.words || [];
+  const settings = activity.settings || {};
+  const title    = activity.title || 'Saved Activity';
+  if (!words.length) return;
+
+  const listType = settings.listType || 'custom';
+  if (listType === 'custom') {
+    const customBox = document.getElementById('customWords');
+    if (customBox) customBox.value = words.join('\n');
+  }
+  if (window.setListType) window.setListType(listType, { keepSelected: true });
+
+  if (settings.level && document.getElementById('levelSelect')) {
+    setTimeout(() => {
+      const sel = document.getElementById('levelSelect');
+      const opt = [...sel.options].find(o => o.value === settings.level);
+      if (opt) { sel.value = settings.level; if (window.refreshWordSelectionUI) window.refreshWordSelectionUI(); }
+    }, 50);
+  }
+
+  if (window.selectedWordsSet) {
+    window.selectedWordsSet.clear();
+    words.forEach(w => window.selectedWordsSet.add(w));
+    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
+  }
+
+  const banner = document.getElementById('loadedBanner');
+  const bannerText = document.getElementById('loadedBannerText');
+  if (banner) {
+    bannerText.textContent = `"${title}" loaded — ${words.length} word${words.length===1?'':'s'} ready`;
+    banner.style.display = 'flex';
+  }
+}
+
+document.getElementById('loadedBannerClear')?.addEventListener('click', () => {
+  document.getElementById('loadedBanner').style.display = 'none';
+  if (window.selectedWordsSet) {
+    window.selectedWordsSet.clear();
+    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
+  }
+});
+
+window.addEventListener('DOMContentLoaded', () => { setTimeout(tryLoadSavedActivity, 80); });
+</script>
+</body>
+</html>
