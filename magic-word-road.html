@@ -1080,6 +1080,7 @@ const COLOR_OPTIONS=[
   {name:'Rose',     value:'#E040A0'},
 ];
 let playerColors=['#2F6FED','#E8444C'];
+window.playerColors = playerColors;
 
 /* ─── STATE ──────────────────────────────────────────────────────────────── */
 let currentListType='fry';
@@ -2140,18 +2141,22 @@ function init(){
   window.currentListType  = currentListType;
   window.setListType      = setListType;
   window.refreshWordSelectionUI = refreshWordSelectionUI;
+  window.renderPlayerInputs = renderPlayerInputs;
   window.getPlayerCount   = ()=>playerCount;
+  window.playerColors     = playerColors;
   window.TOOL_TYPE        = TOOL_TYPE;
   window.TOOL_URL         = TOOL_URL;
 }
 window.addEventListener('DOMContentLoaded',init);
 </script>
 
+<script src="share-activity.js"></script>
+
 <!-- ═══ FIREBASE SAVE / LOAD ═══ -->
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
@@ -2170,6 +2175,7 @@ let currentUser = null;
 
 onAuthStateChanged(auth, user => {
   currentUser = user;
+  window.magicWordRoadCurrentUser = user;
   updateAuthBar(user);
   const dashBtn = document.getElementById('dashboardBtn');
   if (dashBtn) dashBtn.style.display = user ? 'flex' : 'none';
@@ -2212,13 +2218,24 @@ if (saveActivityBtn) {
     const listType = window.currentListType || 'custom';
     const level    = document.getElementById('levelSelect')?.value || '';
     const playerCount = window.getPlayerCount ? window.getPlayerCount() : 2;
+    const playerSetup = [0, 1].map(i => ({
+      name: document.getElementById(`player${i}`)?.value || `Player ${i + 1}`,
+      color: Array.isArray(window.playerColors) ? window.playerColors[i] : ''
+    }));
 
     const activityData = {
       title:        cleanTitle,
       toolType:     window.TOOL_TYPE || 'magic-word-road',
       activityType: window.TOOL_TYPE || 'magic-word-road',
       words:        wordsArr,
-      settings:     { listType, level, playerCount },
+      settings:     {
+        listType,
+        level,
+        customText: document.getElementById('customWords')?.value || '',
+        selectedWords: wordsArr,
+        playerCount,
+        playerSetup
+      },
       url:          window.TOOL_URL || 'magic-word-road.html',
       createdAt:    serverTimestamp(),
       updatedAt:    serverTimestamp(),
@@ -2272,9 +2289,21 @@ function tryLoadSavedActivity() {
   if (!words.length) return;
 
   const listType = settings.listType || 'custom';
-  if (listType === 'custom') {
-    const customBox = document.getElementById('customWords');
-    if (customBox) customBox.value = words.join('\n');
+  const customBox = document.getElementById('customWords');
+  if (customBox && (settings.customText || listType === 'custom')) {
+    customBox.value = settings.customText || words.join('\n');
+  }
+  if (Array.isArray(settings.playerSetup)) {
+    settings.playerSetup.forEach((player, i) => {
+      if (player.color && Array.isArray(window.playerColors)) window.playerColors[i] = player.color;
+    });
+    if (typeof window.renderPlayerInputs === 'function') {
+      window.renderPlayerInputs();
+      settings.playerSetup.forEach((player, i) => {
+        const input = document.getElementById(`player${i}`);
+        if (input && player.name) input.value = player.name;
+      });
+    }
   }
   if (window.setListType) window.setListType(listType, { keepSelected: true });
 
@@ -2309,6 +2338,139 @@ document.getElementById('loadedBannerClear')?.addEventListener('click', () => {
 });
 
 window.addEventListener('DOMContentLoaded', () => { setTimeout(tryLoadSavedActivity, 80); });
+
+window.saveMagicWordRoadSharedActivity = async function(activity) {
+  if (!currentUser) throw new Error('Teacher must be signed in to share.');
+  const sharedData = {
+    title:        activity.title,
+    toolType:     'magic-word-road',
+    activityType: 'magic-word-road',
+    words:        activity.words || [],
+    settings:     activity.settings || {},
+    createdAt:    serverTimestamp(),
+    updatedAt:    serverTimestamp(),
+    public:       true
+  };
+  const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
+
+  const activityData = {
+    ...sharedData,
+    url:          'magic-word-road.html',
+    shareEnabled: true,
+    sharedSetup:  true,
+    shareId:      sharedRef.id,
+    userId:       currentUser.uid
+  };
+  const privateRef = await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
+  return { shareId: sharedRef.id, savedActivityId: privateRef.id };
+};
+
+window.loadMagicWordRoadSharedActivity = async function(shareId) {
+  const snap = await getDoc(doc(db, 'sharedActivities', shareId));
+  if (!snap.exists()) {
+    alert('This shared activity link could not be found.');
+    return null;
+  }
+  const data = snap.data();
+  if (!data || data.toolType !== 'magic-word-road') {
+    alert('This shared activity is not available for Magic Word Road.');
+    return null;
+  }
+  return {
+    version: 1,
+    title: data.title || 'Magic Word Road Activity',
+    toolType: data.toolType,
+    words: data.words || [],
+    settings: data.settings || {},
+    shareId
+  };
+};
+</script>
+<script>
+LiteracyArcadeShare.register({
+  toolType: 'magic-word-road',
+  mount: document.getElementById('saveActivityBtn')?.parentElement,
+  requireAuth: true,
+  publicOrigin: 'https://literacyarcade.com',
+  isAuthenticated() {
+    return Boolean(window.magicWordRoadCurrentUser);
+  },
+  onLoginRequired() {
+    window.location.href = 'teacher-login.html';
+  },
+  getActivity() {
+    const words = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
+    if (!words.length) {
+      alert('Please select at least one word before sharing.');
+      return null;
+    }
+    const listType = window.currentListType || 'custom';
+    const playerSetup = [0, 1].map(i => ({
+      name: document.getElementById(`player${i}`)?.value || `Player ${i + 1}`,
+      color: Array.isArray(window.playerColors) ? window.playerColors[i] : ''
+    }));
+    return {
+      title: `Magic Word Road - ${words.length} word${words.length === 1 ? '' : 's'}`,
+      words,
+      settings: {
+        listType,
+        level: document.getElementById('levelSelect')?.value || '',
+        customText: document.getElementById('customWords')?.value || '',
+        selectedWords: words,
+        playerCount: 2,
+        playerSetup
+      },
+      autoStart: true
+    };
+  },
+  saveActivity(activity) {
+    if (typeof window.saveMagicWordRoadSharedActivity !== 'function') {
+      throw new Error('Share save function is not ready.');
+    }
+    return window.saveMagicWordRoadSharedActivity(activity);
+  },
+  loadSharedActivity(shareId) {
+    if (typeof window.loadMagicWordRoadSharedActivity !== 'function') {
+      throw new Error('Shared activity loader is not ready.');
+    }
+    return window.loadMagicWordRoadSharedActivity(shareId);
+  },
+  loadActivity(activity) {
+    const words = activity.words || [];
+    if (!words.length) return;
+    const settings = activity.settings || {};
+    const customBox = document.getElementById('customWords');
+    if (customBox && (settings.customText || settings.listType === 'custom')) {
+      customBox.value = settings.customText || words.join('\n');
+    }
+    if (Array.isArray(settings.playerSetup)) {
+      settings.playerSetup.forEach((player, i) => {
+        const input = document.getElementById(`player${i}`);
+        if (input && player.name) input.value = player.name;
+        if (player.color && Array.isArray(window.playerColors)) window.playerColors[i] = player.color;
+      });
+      if (typeof renderPlayerInputs === 'function') {
+        renderPlayerInputs();
+        settings.playerSetup.forEach((player, i) => {
+          const input = document.getElementById(`player${i}`);
+          if (input && player.name) input.value = player.name;
+        });
+      }
+    }
+    if (window.setListType) window.setListType(settings.listType || 'custom', { keepSelected: true });
+    if (settings.level) {
+      const sel = document.getElementById('levelSelect');
+      const opt = sel && [...sel.options].find(o => o.value === settings.level);
+      if (opt) sel.value = settings.level;
+    }
+    if (window.selectedWordsSet) {
+      window.selectedWordsSet.clear();
+      words.forEach(w => window.selectedWordsSet.add(w));
+      if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
+    }
+    if (typeof startGame === 'function') startGame();
+  }
+});
 </script>
 </body>
 </html>
