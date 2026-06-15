@@ -181,6 +181,17 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
   transition:all .13s;
 }
 .open-btn:hover{background:var(--teal);transform:translateY(-1px)}
+.share-btn{
+  width:100%;background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal);
+  border-radius:10px;height:36px;font-family:var(--font-head);
+  font-weight:900;font-size:13px;cursor:pointer;margin-top:8px;
+  transition:all .13s;
+}
+.share-btn:hover{background:var(--teal-light);transform:translateY(-1px)}
+.share-btn:disabled{
+  background:#F4F6F8;color:var(--navy-soft);border-color:var(--border);
+  cursor:not-allowed;transform:none;
+}
 .card-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
 .card-actions button{
   height:34px;border-radius:9px;font-family:var(--font-head);
@@ -190,6 +201,40 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .rename-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
 .delete-btn{background:#fff;color:#B42318;border:1.5px solid #F3B4AE}
 .delete-btn:hover{background:#FFF5F5;border-color:#E57373}
+
+/* ── SHARE MODAL ─────────────────────────────────────────────────────────── */
+.share-overlay{
+  position:fixed;inset:0;background:rgba(27,42,74,.42);display:none;
+  align-items:center;justify-content:center;padding:18px;z-index:100;
+}
+.share-overlay.open{display:flex}
+.share-modal{
+  width:min(520px,100%);background:#fff;border:1px solid rgba(27,42,74,.12);
+  border-radius:14px;box-shadow:0 18px 60px rgba(27,42,74,.25);overflow:hidden;
+}
+.share-modal-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:16px 18px;border-bottom:1px solid var(--border);
+}
+.share-modal-title{font-family:var(--font-head);font-size:20px;font-weight:900;line-height:1.1}
+.share-close{
+  width:34px;height:34px;border:1px solid var(--border);background:#fff;border-radius:8px;
+  cursor:pointer;font-size:22px;line-height:1;color:var(--navy-soft);
+}
+.share-modal-body{padding:18px;display:flex;flex-direction:column;gap:12px}
+.share-label{font-size:12px;font-weight:800;color:var(--navy-soft)}
+.share-input{
+  width:100%;border:1.5px solid #D5DAE4;border-radius:9px;padding:10px 11px;
+  font:600 12px var(--font-body);color:var(--navy);background:#FBFCFE;
+}
+.share-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.share-action{
+  border:0;border-radius:9px;min-height:40px;padding:9px 12px;
+  font:900 13px var(--font-head);cursor:pointer;background:var(--teal-dark);color:#fff;
+}
+.share-action.secondary{background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal)}
+.share-note{font-size:12px;line-height:1.45;color:var(--navy-soft)}
+.share-status{min-height:16px;font-size:12px;font-weight:800;color:var(--teal-dark)}
 
 /* ── EMPTY STATES ────────────────────────────────────────────────────────── */
 .empty-group{
@@ -289,9 +334,8 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
     <div class="filter-tabs" id="filterTabs">
       <button class="filter-tab active" data-filter="all">All</button>
       <button class="filter-tab" data-filter="read-and-race">🏎️ Read &amp; Race</button>
+      <button class="filter-tab" data-filter="magic-word-road">🛤️ Magic Word Road</button>
       <button class="filter-tab" data-filter="word-spinner">🌀 Word Spinner</button>
-      <button class="filter-tab" data-filter="repeated-reading-raceway">🏁 Raceway</button>
-      <button class="filter-tab" data-filter="balloon-pop">🎈 Balloon Pop</button>
       <button class="filter-tab" data-filter="letterbox-lesson">🔤 Letterbox</button>
       <button class="filter-tab" data-filter="digital-reading-flashcards">🃏 Flashcards</button>
       <button class="filter-tab" data-filter="vocabulary-flashcards">📚 Vocab Cards</button>
@@ -333,10 +377,29 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
   </div>
 </main>
 
+<div class="share-overlay" id="shareOverlay">
+  <div class="share-modal" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <div class="share-modal-head">
+      <div class="share-modal-title" id="shareTitle">Share Activity</div>
+      <button class="share-close" type="button" id="shareClose" aria-label="Close share dialog">&times;</button>
+    </div>
+    <div class="share-modal-body">
+      <label class="share-label" for="shareLinkInput">Student link</label>
+      <input class="share-input" id="shareLinkInput" readonly>
+      <div class="share-actions">
+        <button class="share-action" type="button" id="copyShareLink">Copy Link</button>
+        <button class="share-action secondary" type="button" id="copyEmbedCode">Copy Embed Code</button>
+      </div>
+      <div class="share-note">Anyone with this link can open the student activity setup. Students do not need to sign in.</div>
+      <div class="share-status" id="shareStatus" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
@@ -351,22 +414,54 @@ const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-/* ── Tool config ─────────────────────────────────────────────────────────── */
-const TOOLS = {
-  'read-and-race':              { label: 'Read & Race',                    emoji: '🏎️' },
-  'word-spinner':               { label: 'Reading Word Spinner',           emoji: '🌀' },
-  'repeated-reading-raceway':   { label: 'Repeated Reading Raceway',       emoji: '🏁' },
-  'balloon-pop':                { label: 'Phonemic Awareness Balloon Pop', emoji: '🎈' },
-  'letterbox-lesson':           { label: 'Letterbox Lesson',               emoji: '🔤' },
-  'digital-reading-flashcards': { label: 'Digital Reading Flashcards',     emoji: '🃏' },
-  'vocabulary-flashcards':      { label: 'Vocabulary Flashcards',          emoji: '📚' },
+/* ── Activity type registry ──────────────────────────────────────────────── */
+const ACTIVITY_TYPES = {
+  'read-and-race': {
+    label: 'Read & Race',
+    emoji: '🏎️',
+    saveable: true,
+    shareable: true,
+    url: 'read-and-race.html'
+  },
+  'magic-word-road': {
+    label: 'Magic Word Road',
+    emoji: '🛤️',
+    saveable: true,
+    shareable: false,
+    url: 'magic-word-road.html'
+  },
+  'word-spinner': {
+    label: 'Reading Word Spinner',
+    emoji: '🌀',
+    saveable: true,
+    shareable: false,
+    url: 'reading-word-spinner.html'
+  },
+  'letterbox-lesson': {
+    label: 'Letterbox Lesson',
+    emoji: '🔤',
+    saveable: true,
+    shareable: false,
+    url: 'letterbox-lesson.html'
+  },
+  'digital-reading-flashcards': {
+    label: 'Digital Reading Flashcards',
+    emoji: '🃏',
+    saveable: true,
+    shareable: false,
+    url: 'digital-reading-flashcards.html'
+  },
+  'vocabulary-flashcards': {
+    label: 'Vocabulary Flashcards',
+    emoji: '📚',
+    saveable: true,
+    shareable: false,
+    url: 'vocabulary-flashcards.html'
+  }
 };
 
-// Desired display order for groups
-const TOOL_ORDER = [
-  'read-and-race','word-spinner','repeated-reading-raceway',
-  'balloon-pop','letterbox-lesson','digital-reading-flashcards','vocabulary-flashcards'
-];
+const TOOL_ORDER = Object.keys(ACTIVITY_TYPES);
+const PUBLIC_ORIGIN = 'https://literacyarcade.com';
 
 /* ── State ───────────────────────────────────────────────────────────────── */
 let currentUser  = null;
@@ -405,6 +500,7 @@ async function loadActivities() {
     const q   = query(ref, orderBy('createdAt', 'desc'));
     const snap = await getDocs(q);
     allActivities = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderFilterTabs();
     renderAll();
   } catch (err) {
     console.error(err);
@@ -413,13 +509,34 @@ async function loadActivities() {
   }
 }
 
+function renderFilterTabs() {
+  const filterTabs = document.getElementById('filterTabs');
+  const presentTypes = [...new Set(allActivities.map(a => getActivityType(a)).filter(Boolean))];
+  const keys = [
+    ...TOOL_ORDER.filter(key => ACTIVITY_TYPES[key]?.saveable),
+    ...presentTypes.filter(key => !TOOL_ORDER.includes(key))
+  ];
+
+  filterTabs.innerHTML = `<button class="filter-tab ${activeFilter === 'all' ? 'active' : ''}" data-filter="all">All</button>`;
+  keys.forEach(key => {
+    const type = ACTIVITY_TYPES[key] || { label: formatToolKey(key), emoji: '📋' };
+    const btn = document.createElement('button');
+    btn.className = 'filter-tab' + (activeFilter === key ? ' active' : '');
+    btn.dataset.filter = key;
+    btn.textContent = `${type.emoji} ${type.label}`;
+    filterTabs.appendChild(btn);
+  });
+
+  if (activeFilter !== 'all' && !keys.includes(activeFilter)) activeFilter = 'all';
+}
+
 /* ── Render ──────────────────────────────────────────────────────────────── */
 function getFilteredSorted() {
   let list = [...allActivities];
 
   // Filter by tool type
   if (activeFilter !== 'all') {
-    list = list.filter(a => (a.toolType || a.activityType || '') === activeFilter);
+    list = list.filter(a => getActivityType(a) === activeFilter);
   }
 
   // Search
@@ -427,7 +544,7 @@ function getFilteredSorted() {
     const q = searchQuery.toLowerCase();
     list = list.filter(a =>
       (a.title || '').toLowerCase().includes(q) ||
-      (a.toolType || a.activityType || '').toLowerCase().includes(q)
+      getActivityType(a).toLowerCase().includes(q)
     );
   }
 
@@ -481,7 +598,7 @@ function renderAll() {
   // Group by tool type
   const groups = {};
   list.forEach(a => {
-    const key = a.toolType || a.activityType || 'other';
+    const key = getActivityType(a) || 'other';
     if (!groups[key]) groups[key] = [];
     groups[key].push(a);
   });
@@ -496,7 +613,7 @@ function renderAll() {
 
   orderedKeys.forEach(toolKey => {
     const items = groups[toolKey];
-    const tool  = TOOLS[toolKey] || { label: formatToolKey(toolKey), emoji: '📋' };
+    const tool  = ACTIVITY_TYPES[toolKey] || { label: formatToolKey(toolKey), emoji: '📋', shareable: false };
     const isCollapsed = collapsedGroups.has(toolKey);
 
     const groupEl = document.createElement('div');
@@ -548,6 +665,8 @@ function buildCard(activity, tool) {
   const count = Array.isArray(activity.words) ? activity.words.length : 0;
   const title = activity.title || makeDefaultTitle(activity);
   const savedDate = formatDate(activity.updatedAt || activity.createdAt);
+  const type = getActivityType(activity);
+  const shareable = Boolean(ACTIVITY_TYPES[type]?.shareable);
 
   card.innerHTML = `
     <div class="card-top">
@@ -562,12 +681,16 @@ function buildCard(activity, tool) {
       </div>
     </div>
     <button class="open-btn" type="button">Open Activity</button>
+    <button class="share-btn" type="button" ${shareable ? '' : 'disabled'}>${shareable ? 'Share' : 'Share coming soon'}</button>
     <div class="card-actions">
       <button class="rename-btn" type="button">Rename</button>
       <button class="delete-btn" type="button">Delete</button>
     </div>`;
 
   card.querySelector('.open-btn').addEventListener('click',   () => openActivity(activity.id, activity));
+  if (shareable) {
+    card.querySelector('.share-btn').addEventListener('click', () => shareActivity(activity.id, activity));
+  }
   card.querySelector('.rename-btn').addEventListener('click', () => renameActivity(activity.id, title));
   card.querySelector('.delete-btn').addEventListener('click', () => deleteActivity(activity.id, title));
 
@@ -591,6 +714,78 @@ function openActivity(id, activity) {
     return;
   }
   alert('This saved activity type is not connected yet.');
+}
+
+async function shareActivity(id, activity) {
+  const type = getActivityType(activity);
+  if (type !== 'read-and-race') {
+    alert('Sharing is coming soon for this activity type.');
+    return;
+  }
+
+  const words = Array.isArray(activity.words) ? activity.words : [];
+  if (!words.length) {
+    alert('This activity does not have saved words to share.');
+    return;
+  }
+
+  try {
+    let shareId = activity.shareId || '';
+    if (!shareId) {
+      const sharedData = buildSharedActivityData(activity);
+      const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
+      shareId = sharedRef.id;
+      await updateDoc(doc(db, `users/${currentUser.uid}/activities`, id), {
+        shareId,
+        shareEnabled: true,
+        sharedSetup: true,
+        updatedAt: serverTimestamp()
+      });
+      const idx = allActivities.findIndex(a => a.id === id);
+      if (idx !== -1) {
+        allActivities[idx].shareId = shareId;
+        allActivities[idx].shareEnabled = true;
+        allActivities[idx].sharedSetup = true;
+      }
+    }
+
+    openShareModal(buildStudentLink(type, shareId), activity.title || makeDefaultTitle(activity));
+  } catch (err) {
+    console.error(err);
+    alert('Share failed. Check Firestore rules and try again.');
+  }
+}
+
+function buildSharedActivityData(activity) {
+  return {
+    title:        activity.title || makeDefaultTitle(activity),
+    toolType:     'read-and-race',
+    activityType: 'read-and-race',
+    words:        Array.isArray(activity.words) ? activity.words : [],
+    settings:     cleanReadRaceSettings(activity.settings || {}, activity.words || []),
+    public:       true,
+    createdAt:    serverTimestamp(),
+    updatedAt:    serverTimestamp()
+  };
+}
+
+function cleanReadRaceSettings(settings, words) {
+  return {
+    listType:      settings.listType || 'custom',
+    level:         settings.level || '',
+    customText:    settings.customText || '',
+    selectedWords: Array.isArray(settings.selectedWords) ? settings.selectedWords : words,
+    playerCount:   settings.playerCount || 2,
+    playerSetup:   Array.isArray(settings.playerSetup) ? settings.playerSetup.map(player => ({
+      name:  player && player.name ? String(player.name) : '',
+      color: player && player.color ? String(player.color) : ''
+    })) : []
+  };
+}
+
+function buildStudentLink(type, shareId) {
+  const config = ACTIVITY_TYPES[type];
+  return `${PUBLIC_ORIGIN}/${config.url}?activity=${encodeURIComponent(shareId)}`;
 }
 
 async function renameActivity(id, currentTitle) {
@@ -650,7 +845,23 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
   window.location.href = 'teacher-login.html';
 });
 
+document.getElementById('shareClose').addEventListener('click', closeShareModal);
+document.getElementById('shareOverlay').addEventListener('click', e => {
+  if (e.target.id === 'shareOverlay') closeShareModal();
+});
+document.getElementById('copyShareLink').addEventListener('click', () => {
+  copyText(document.getElementById('shareLinkInput').value);
+});
+document.getElementById('copyEmbedCode').addEventListener('click', () => {
+  const link = document.getElementById('shareLinkInput').value;
+  const title = document.getElementById('shareTitle').textContent || 'Literacy Arcade Activity';
+  copyText(`<iframe src="${link.replace(/"/g, '&quot;')}" width="100%" height="720" loading="lazy" title="${escHtml(title)}"></iframe>`);
+});
+
 /* ── Helpers ─────────────────────────────────────────────────────────────── */
+function getActivityType(activity) {
+  return activity.toolType || activity.activityType || '';
+}
 function escHtml(str) {
   return String(str).replace(/[&<>"']/g, s =>
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[s]));
@@ -673,6 +884,40 @@ function makeDefaultTitle(activity) {
 }
 function formatToolKey(key) {
   return String(key).replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+function openShareModal(link, title) {
+  document.getElementById('shareTitle').textContent = `Share ${title || 'Activity'}`;
+  document.getElementById('shareLinkInput').value = link;
+  document.getElementById('shareStatus').textContent = '';
+  document.getElementById('shareOverlay').classList.add('open');
+}
+function closeShareModal() {
+  document.getElementById('shareOverlay').classList.remove('open');
+}
+function copyText(text) {
+  const status = document.getElementById('shareStatus');
+  const setStatus = msg => {
+    status.textContent = msg;
+    window.clearTimeout(status._timer);
+    status._timer = window.setTimeout(() => { status.textContent = ''; }, 2200);
+  };
+  const fallback = () => {
+    const area = document.createElement('textarea');
+    area.value = text;
+    area.setAttribute('readonly', '');
+    area.style.position = 'fixed';
+    area.style.left = '-9999px';
+    document.body.appendChild(area);
+    area.select();
+    const copied = document.execCommand('copy');
+    area.remove();
+    setStatus(copied ? 'Copied' : 'Select the field and copy manually');
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => setStatus('Copied')).catch(fallback);
+  } else {
+    fallback();
+  }
 }
 </script>
 </body>
