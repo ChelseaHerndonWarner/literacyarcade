@@ -2346,6 +2346,7 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
 LiteracyArcadeShare.register({
   toolType: 'word-spinner',
   mount: document.getElementById('saveActivityBtn')?.parentElement,
+  buttonLabel: 'Share Activity',
   requireAuth: true,
   publicOrigin: 'https://literacyarcade.com',
   isAuthenticated() {
@@ -2358,7 +2359,7 @@ LiteracyArcadeShare.register({
     const sp = window._spinner;
     const entries = sp ? sp.getWheelEntries() : [];
     if (!entries.length) {
-      alert('Please add at least one word to the wheel before sharing.');
+      alert('Add words to the wheel before sharing.');
       return null;
     }
     const words = entries.map(e => e.word);
