@@ -444,7 +444,7 @@ const ACTIVITY_TYPES = {
     label: 'Magic Word Road',
     emoji: '🛤️',
     saveable: true,
-    shareable: false,
+    shareable: true,
     url: 'magic-word-road.html'
   },
   'word-spinner': {
@@ -735,7 +735,7 @@ function openActivity(id, activity) {
 
 async function shareActivity(id, activity) {
   const type = getActivityType(activity);
-  if (type !== 'read-and-race') {
+  if (!ACTIVITY_TYPES[type]?.shareable) {
     alert('Sharing is coming soon for this activity type.');
     return;
   }
@@ -774,23 +774,31 @@ async function shareActivity(id, activity) {
 }
 
 function buildSharedActivityData(activity) {
+  const type = getActivityType(activity);
   return {
     title:        activity.title || makeDefaultTitle(activity),
-    toolType:     'read-and-race',
-    activityType: 'read-and-race',
+    toolType:     type,
+    activityType: type,
     words:        Array.isArray(activity.words) ? activity.words : [],
-    settings:     cleanReadRaceSettings(activity.settings || {}, activity.words || []),
+    settings:     cleanShareSettings(type, activity.settings || {}, activity.words || []),
     public:       true,
     createdAt:    serverTimestamp(),
     updatedAt:    serverTimestamp()
   };
 }
 
-function cleanReadRaceSettings(settings, words) {
+function cleanShareSettings(type, settings, words) {
+  if (type === 'read-and-race' || type === 'magic-word-road') {
+    return cleanWordGameSettings(settings, words);
+  }
+  return {};
+}
+
+function cleanWordGameSettings(settings, words) {
   return {
     listType:      settings.listType || 'custom',
     level:         settings.level || '',
-    customText:    settings.customText || '',
+    customText:    settings.customText || (settings.listType === 'custom' ? words.join('\n') : ''),
     selectedWords: Array.isArray(settings.selectedWords) ? settings.selectedWords : words,
     playerCount:   settings.playerCount || 2,
     playerSetup:   Array.isArray(settings.playerSetup) ? settings.playerSetup.map(player => ({
