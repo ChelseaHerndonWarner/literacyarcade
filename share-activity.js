@@ -89,7 +89,10 @@
       .la-share-action.secondary{background:#fff;color:#087A70;border:1.5px solid #2EC4B6}
       .la-share-action.classroom{grid-column:1/-1;background:#fff;color:#1B2A4A;border:1.5px solid #D5DAE4}
       .la-share-action.classroom:hover{border-color:#087A70;color:#087A70;background:#F6FEFD}
-      .la-classroom-row{grid-column:1/-1;min-height:40px;display:flex;align-items:center;justify-content:center}
+      .la-classroom-section{grid-column:1/-1;border-top:1px solid #E1E4EA;margin-top:4px;padding-top:12px;display:flex;flex-direction:column;gap:8px}
+      .la-classroom-title{font:900 14px Nunito,Lexend,Arial,sans-serif;color:#1B2A4A}
+      .la-classroom-sub{font:600 12px Lexend,Nunito,Arial,sans-serif;color:#4B5875;line-height:1.4}
+      .la-classroom-row{min-height:40px;display:flex;align-items:center;justify-content:flex-start}
       .la-classroom-official{display:flex;align-items:center;justify-content:center;min-height:32px}
       .la-share-note{font-size:12px;line-height:1.45;color:#4B5875}
       .la-share-status{min-height:16px;font-size:12px;font-weight:800;color:#087A70}
@@ -121,9 +124,15 @@
           <div class="la-share-actions">
             <button class="la-share-action" type="button" id="laCopyLink">Copy Link</button>
             <button class="la-share-action secondary" type="button" id="laCopyEmbed">Copy Embed Code</button>
-            <div class="la-classroom-row">
-              <div id="laClassroomOfficial" class="g-sharetoclassroom la-classroom-official" data-size="32"></div>
-              <button class="la-share-action classroom" type="button" id="laClassroomFallback">Share to Google Classroom</button>
+            <div class="la-classroom-section">
+              <div>
+                <div class="la-classroom-title">Share to Google Classroom</div>
+                <div class="la-classroom-sub">Post this student-ready activity link to your class.</div>
+              </div>
+              <div class="la-classroom-row">
+                <div id="laClassroomOfficial" class="g-sharetoclassroom la-classroom-official" data-size="32"></div>
+                <button class="la-share-action classroom" type="button" id="laClassroomFallback">Share to Google Classroom</button>
+              </div>
             </div>
           </div>
           <div class="la-share-note">Students can open this link directly. No student login is required.</div>
