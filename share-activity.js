@@ -87,7 +87,8 @@
       .la-share-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
       .la-share-action{border:0;border-radius:9px;min-height:40px;padding:9px 12px;font:900 13px Nunito,Lexend,Arial,sans-serif;cursor:pointer;background:#087A70;color:#fff}
       .la-share-action.secondary{background:#fff;color:#087A70;border:1.5px solid #2EC4B6}
-      .la-share-action.disabled{background:#F4F6F8;color:#6B7A99;border:1.5px solid #D5DAE4}
+      .la-share-action.classroom{grid-column:1/-1;background:#fff;color:#1B2A4A;border:1.5px solid #D5DAE4}
+      .la-share-action.classroom:hover{border-color:#087A70;color:#087A70;background:#F6FEFD}
       .la-share-note{font-size:12px;line-height:1.45;color:#4B5875}
       .la-share-status{min-height:16px;font-size:12px;font-weight:800;color:#087A70}
       .la-share-login-text{font-size:14px;line-height:1.5;color:#4B5875}
@@ -118,8 +119,8 @@
           <div class="la-share-actions">
             <button class="la-share-action" type="button" id="laCopyLink">Copy Link</button>
             <button class="la-share-action secondary" type="button" id="laCopyEmbed">Copy Embed Code</button>
+            <button class="la-share-action classroom" type="button" id="laClassroom">Share to Google Classroom</button>
           </div>
-          <button class="la-share-action disabled" type="button" id="laClassroom">Google Classroom sharing coming soon</button>
           <div class="la-share-note">Students can open this link directly. No student login is required.</div>
           <div class="la-share-status" id="laShareStatus" aria-live="polite"></div>
         </div>
@@ -184,9 +185,13 @@
     overlay.querySelector('#laCopyLink').onclick = () => copyText(link, overlay.querySelector('#laShareStatus'));
     overlay.querySelector('#laCopyEmbed').onclick = () => copyText(embed, overlay.querySelector('#laShareStatus'));
     overlay.querySelector('#laClassroom').onclick = () => {
-      overlay.querySelector('#laShareStatus').textContent = 'Google Classroom sharing is not connected yet.';
+      openClassroomShare(link);
     };
     overlay.classList.add('open');
+  }
+
+  function openClassroomShare(link) {
+    window.open(`https://classroom.google.com/share?url=${encodeURIComponent(link)}`, '_blank', 'noopener,noreferrer');
   }
 
   function makeButton(label) {
