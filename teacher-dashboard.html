@@ -233,6 +233,8 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
   font:900 13px var(--font-head);cursor:pointer;background:var(--teal-dark);color:#fff;
 }
 .share-action.secondary{background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal)}
+.share-action.classroom{grid-column:1/-1;background:#fff;color:var(--navy);border:1.5px solid #D5DAE4}
+.share-action.classroom:hover{border-color:var(--teal-dark);color:var(--teal-dark);background:#F6FEFD}
 .share-note{font-size:12px;line-height:1.45;color:var(--navy-soft)}
 .share-status{min-height:16px;font-size:12px;font-weight:800;color:var(--teal-dark)}
 
@@ -389,6 +391,7 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
       <div class="share-actions">
         <button class="share-action" type="button" id="copyShareLink">Copy Link</button>
         <button class="share-action secondary" type="button" id="copyEmbedCode">Copy Embed Code</button>
+        <button class="share-action classroom" type="button" id="shareClassroom">Share to Google Classroom</button>
       </div>
       <div class="share-note">Anyone with this link can open the student activity setup. Students do not need to sign in.</div>
       <div class="share-status" id="shareStatus" aria-live="polite"></div>
@@ -856,6 +859,10 @@ document.getElementById('copyEmbedCode').addEventListener('click', () => {
   const link = document.getElementById('shareLinkInput').value;
   const title = document.getElementById('shareTitle').textContent || 'Literacy Arcade Activity';
   copyText(`<iframe src="${link.replace(/"/g, '&quot;')}" width="100%" height="720" loading="lazy" title="${escHtml(title)}"></iframe>`);
+});
+document.getElementById('shareClassroom').addEventListener('click', () => {
+  const link = document.getElementById('shareLinkInput').value;
+  window.open(`https://classroom.google.com/share?url=${encodeURIComponent(link)}`, '_blank', 'noopener,noreferrer');
 });
 
 /* ── Helpers ─────────────────────────────────────────────────────────────── */
