@@ -89,6 +89,8 @@
       .la-share-action.secondary{background:#fff;color:#087A70;border:1.5px solid #2EC4B6}
       .la-share-action.classroom{grid-column:1/-1;background:#fff;color:#1B2A4A;border:1.5px solid #D5DAE4}
       .la-share-action.classroom:hover{border-color:#087A70;color:#087A70;background:#F6FEFD}
+      .la-classroom-row{grid-column:1/-1;min-height:40px;display:flex;align-items:center;justify-content:center}
+      .la-classroom-official{display:flex;align-items:center;justify-content:center;min-height:32px}
       .la-share-note{font-size:12px;line-height:1.45;color:#4B5875}
       .la-share-status{min-height:16px;font-size:12px;font-weight:800;color:#087A70}
       .la-share-login-text{font-size:14px;line-height:1.5;color:#4B5875}
@@ -119,7 +121,10 @@
           <div class="la-share-actions">
             <button class="la-share-action" type="button" id="laCopyLink">Copy Link</button>
             <button class="la-share-action secondary" type="button" id="laCopyEmbed">Copy Embed Code</button>
-            <button class="la-share-action classroom" type="button" id="laClassroom">Share to Google Classroom</button>
+            <div class="la-classroom-row">
+              <div id="laClassroomOfficial" class="g-sharetoclassroom la-classroom-official" data-size="32"></div>
+              <button class="la-share-action classroom" type="button" id="laClassroomFallback">Share to Google Classroom</button>
+            </div>
           </div>
           <div class="la-share-note">Students can open this link directly. No student login is required.</div>
           <div class="la-share-status" id="laShareStatus" aria-live="polite"></div>
@@ -184,14 +189,51 @@
     overlay.querySelector('#laShareLink').value = link;
     overlay.querySelector('#laCopyLink').onclick = () => copyText(link, overlay.querySelector('#laShareStatus'));
     overlay.querySelector('#laCopyEmbed').onclick = () => copyText(embed, overlay.querySelector('#laShareStatus'));
-    overlay.querySelector('#laClassroom').onclick = () => {
-      openClassroomShare(link);
-    };
+    setupClassroomShare(overlay, link);
     overlay.classList.add('open');
   }
 
   function openClassroomShare(link) {
     window.open(`https://classroom.google.com/share?url=${encodeURIComponent(link)}`, '_blank', 'noopener,noreferrer');
+  }
+
+  function ensureClassroomPlatform() {
+    window.___gcfg = window.___gcfg || {};
+    window.___gcfg.parsetags = 'explicit';
+    if (document.querySelector('script[src="https://apis.google.com/js/platform.js"]')) return;
+    const script = document.createElement('script');
+    script.src = 'https://apis.google.com/js/platform.js';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+
+  function setupClassroomShare(overlay, link) {
+    const official = overlay.querySelector('#laClassroomOfficial');
+    const fallback = overlay.querySelector('#laClassroomFallback');
+    fallback.onclick = () => openClassroomShare(link);
+    fallback.style.display = '';
+    official.style.display = 'none';
+    official.innerHTML = '';
+    official.dataset.url = link;
+    official.dataset.size = '32';
+
+    ensureClassroomPlatform();
+
+    const tryRender = () => {
+      if (!window.gapi || !window.gapi.sharetoclassroom || !window.gapi.sharetoclassroom.render) return false;
+      official.style.display = 'flex';
+      fallback.style.display = 'none';
+      window.gapi.sharetoclassroom.render(official, { url: link, size: 32 });
+      return true;
+    };
+
+    if (tryRender()) return;
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      if (tryRender() || attempts >= 20) window.clearInterval(timer);
+    }, 150);
   }
 
   function makeButton(label) {
