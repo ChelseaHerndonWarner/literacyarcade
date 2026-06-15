@@ -451,7 +451,7 @@ const ACTIVITY_TYPES = {
     label: 'Reading Word Spinner',
     emoji: '🌀',
     saveable: true,
-    shareable: false,
+    shareable: true,
     url: 'reading-word-spinner.html'
   },
   'letterbox-lesson': {
@@ -791,6 +791,9 @@ function cleanShareSettings(type, settings, words) {
   if (type === 'read-and-race' || type === 'magic-word-road') {
     return cleanWordGameSettings(settings, words);
   }
+  if (type === 'word-spinner') {
+    return cleanSpinnerSettings(settings, words);
+  }
   return {};
 }
 
@@ -805,6 +808,33 @@ function cleanWordGameSettings(settings, words) {
       name:  player && player.name ? String(player.name) : '',
       color: player && player.color ? String(player.color) : ''
     })) : []
+  };
+}
+
+function cleanSpinnerSettings(settings, words) {
+  const sourceEntries = Array.isArray(settings.wheelEntries) && settings.wheelEntries.length
+    ? settings.wheelEntries
+    : Array.isArray(settings.entries) && settings.entries.length
+      ? settings.entries
+      : words.map(word => ({ word, source: settings.tab || 'custom' }));
+
+  const wheelEntries = sourceEntries.map(entry => ({
+    word: String(entry && entry.word ? entry.word : '').trim(),
+    source: String(entry && entry.source ? entry.source : 'custom')
+  })).filter(entry => entry.word);
+
+  const customWords = Array.isArray(settings.customWords)
+    ? settings.customWords.map(word => String(word).trim()).filter(Boolean)
+    : wheelEntries.filter(entry => entry.source === 'custom').map(entry => entry.word);
+
+  return {
+    tab: settings.tab || 'custom',
+    level: settings.level || '',
+    phonicsGroup: settings.phonicsGroup || '',
+    phonicsPattern: settings.phonicsPattern || '',
+    customWords: [...new Set(customWords)],
+    selectedWords: Array.isArray(settings.selectedWords) ? settings.selectedWords : words,
+    wheelEntries
   };
 }
 
