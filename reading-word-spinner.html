@@ -2050,8 +2050,11 @@ requestAnimationFrame(() => {
     switchTab,
     populateSelect,
     loadWordBank,
+    loadPhonicsWords,
     updateWheelWords,
     drawWheel,
+    enterSpinMode,
+    enterBuildMode,
     customWords: () => customWords,
     setCustomWords: (w) => { customWords = w; },
   };
@@ -2070,11 +2073,13 @@ window.addEventListener('resize', () => {
 });
 </script>
 
+<script src="share-activity.js"></script>
+
 <!-- ═══ FIREBASE SAVE / LOAD ═══ -->
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
@@ -2093,6 +2098,7 @@ let currentUser = null;
 /* ── Auth state ──────────────────────────────────────────────────────── */
 onAuthStateChanged(auth, user => {
   currentUser = user;
+  window.wordSpinnerCurrentUser = user;
   updateAuthBar(user);
   const dashBtn = document.getElementById('dashboardBtn');
   if (dashBtn) dashBtn.style.display = user ? 'flex' : 'none';
@@ -2149,7 +2155,9 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
       level,
       phonicsGroup,
       phonicsPattern,
-      wheelEntries: entries  // full entries with source info
+      customWords: sp ? sp.customWords() : [],
+      selectedWords: entries.map(e => e.word),
+      wheelEntries: cleanSpinnerEntries(entries)  // full setup entries with source info
     },
     url:       'reading-word-spinner.html',
     createdAt: serverTimestamp(),
@@ -2186,6 +2194,91 @@ function buildDefaultTitle(entries) {
   return parts.join(' — ');
 }
 
+function cleanSpinnerEntries(entries) {
+  return Array.isArray(entries) ? entries.map(entry => ({
+    word: String(entry && entry.word ? entry.word : '').trim(),
+    source: String(entry && entry.source ? entry.source : 'custom')
+  })).filter(entry => entry.word) : [];
+}
+
+function buildSpinnerSetup(entries) {
+  const sp = window._spinner;
+  return {
+    tab: sp ? sp.getCurrentTab() : 'custom',
+    level: document.getElementById('levelSelect')?.value || '',
+    phonicsGroup: document.getElementById('phonicsGroupSelect')?.value || '',
+    phonicsPattern: document.getElementById('phonicsPatternSelect')?.value || '',
+    customWords: sp ? sp.customWords() : [],
+    selectedWords: entries.map(entry => entry.word),
+    wheelEntries: cleanSpinnerEntries(entries)
+  };
+}
+
+function restoreSpinnerActivity(activity, options = {}) {
+  const settings = activity.settings || {};
+  const sp = window._spinner;
+  if (!sp) return false;
+
+  const savedEntries = cleanSpinnerEntries(
+    settings.wheelEntries ||
+    settings.entries ||
+    (activity.words || []).map(word => ({ word, source: settings.tab || 'custom' }))
+  );
+  if (!savedEntries.length) return false;
+
+  const tab = settings.tab || 'custom';
+  sp.switchTab(tab);
+
+  if (tab === 'phonics') {
+    setTimeout(() => {
+      const groupSel = document.getElementById('phonicsGroupSelect');
+      const patternSel = document.getElementById('phonicsPatternSelect');
+      if (groupSel && settings.phonicsGroup != null && settings.phonicsGroup !== '') {
+        groupSel.value = settings.phonicsGroup;
+        if (typeof populatePhonicsPatterns === 'function') populatePhonicsPatterns();
+      }
+      if (patternSel && settings.phonicsPattern) patternSel.value = settings.phonicsPattern;
+      if (typeof loadPhonicsWords === 'function') loadPhonicsWords();
+    }, 60);
+  } else if (settings.level && document.getElementById('levelSelect')) {
+    setTimeout(() => {
+      const sel = document.getElementById('levelSelect');
+      const opt = [...sel.options].find(o => o.value === settings.level);
+      if (opt) {
+        sel.value = settings.level;
+        sp.loadWordBank();
+      }
+    }, 60);
+  }
+
+  const customWords = Array.isArray(settings.customWords) ? settings.customWords : [];
+  const customFromEntries = savedEntries.filter(entry => entry.source === 'custom').map(entry => entry.word);
+  sp.setCustomWords([...new Set([...customWords, ...customFromEntries])]);
+  if (tab === 'custom') sp.loadWordBank();
+
+  sp.setWheelEntries(savedEntries);
+  setTimeout(() => {
+    sp.updateWheelWords();
+    sp.drawWheel();
+    if (options.start && typeof sp.enterSpinMode === 'function') sp.enterSpinMode();
+    if (options.notice) showLoadedNotice(activity.title || 'Activity');
+  }, 120);
+  return true;
+}
+
+function showLoadedNotice(title) {
+  const btn = document.getElementById('saveActivityBtn');
+  if (!btn) return;
+  const orig = btn.innerHTML;
+  btn.innerHTML = `✓ "${title}" loaded`;
+  btn.style.background = 'var(--teal)';
+  btn.style.color = 'white';
+  setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 3000);
+}
+
+window.buildWordSpinnerSetup = buildSpinnerSetup;
+window.restoreWordSpinnerActivity = restoreSpinnerActivity;
+
 /* ── Load from dashboard (sessionStorage) ────────────────────────────── */
 function tryLoadSavedActivity() {
   const raw = sessionStorage.getItem('savedActivityData');
@@ -2197,60 +2290,115 @@ function tryLoadSavedActivity() {
   sessionStorage.removeItem('savedActivityData');
   sessionStorage.removeItem('savedActivityId');
 
-  const settings = activity.settings || {};
-  const sp = window._spinner;
-  if (!sp) return;
-
-  // Restore wheel entries (with source info if available)
-  const savedEntries = settings.wheelEntries || (activity.words || []).map(w => ({ word: w, source: 'custom' }));
-  if (!savedEntries.length) return;
-
-  // Switch to the right tab first
-  const tab = settings.tab || 'custom';
-  sp.switchTab(tab);
-
-  // Restore level / phonics selectors
-  if (settings.level && document.getElementById('levelSelect')) {
-    setTimeout(() => {
-      const sel = document.getElementById('levelSelect');
-      const opt = [...sel.options].find(o => o.value === settings.level);
-      if (opt) { sel.value = settings.level; sp.loadWordBank(); }
-    }, 60);
-  }
-  if (settings.phonicsGroup && document.getElementById('phonicsGroupSelect')) {
-    setTimeout(() => {
-      document.getElementById('phonicsGroupSelect').value = settings.phonicsGroup;
-      if (settings.phonicsPattern) {
-        document.getElementById('phonicsPatternSelect').value = settings.phonicsPattern;
-      }
-    }, 60);
-  }
-
-  // Restore custom words if any
-  const customEntries = savedEntries.filter(e => e.source === 'custom');
-  if (customEntries.length) {
-    const cw = sp.customWords();
-    customEntries.forEach(e => { if (!cw.includes(e.word)) cw.push(e.word); });
-  }
-
-  // Restore wheel
-  sp.setWheelEntries(savedEntries);
-  setTimeout(() => {
-    sp.updateWheelWords();
-    sp.drawWheel();
-    // Show brief loaded notice on save button
-    const btn = document.getElementById('saveActivityBtn');
-    if (btn) {
-      const orig = btn.innerHTML;
-      btn.innerHTML = `✓ "${activity.title || 'Activity'}" loaded`;
-      btn.style.background = 'var(--teal)';
-      btn.style.color = 'white';
-      setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 3000);
-    }
-  }, 100);
+  restoreSpinnerActivity(activity, { notice: true });
 }
 
 window.addEventListener('load', () => setTimeout(tryLoadSavedActivity, 150));
+
+window.saveWordSpinnerSharedActivity = async function(activity) {
+  if (!currentUser) throw new Error('Teacher must be signed in to share.');
+  const sharedData = {
+    title:        activity.title,
+    toolType:     'word-spinner',
+    activityType: 'word-spinner',
+    words:        activity.words || [],
+    settings:     activity.settings || {},
+    createdAt:    serverTimestamp(),
+    updatedAt:    serverTimestamp(),
+    public:       true
+  };
+  const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
+
+  const activityData = {
+    ...sharedData,
+    url:          'reading-word-spinner.html',
+    shareEnabled: true,
+    sharedSetup:  true,
+    shareId:      sharedRef.id,
+    userId:       currentUser.uid
+  };
+  const privateRef = await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
+  return { shareId: sharedRef.id, savedActivityId: privateRef.id };
+};
+
+window.loadWordSpinnerSharedActivity = async function(shareId) {
+  const snap = await getDoc(doc(db, 'sharedActivities', shareId));
+  if (!snap.exists()) {
+    alert('This shared activity link could not be found.');
+    return null;
+  }
+  const data = snap.data();
+  if (!data || data.toolType !== 'word-spinner') {
+    alert('This shared activity is not available for Reading Word Spinner.');
+    return null;
+  }
+  return {
+    version: 1,
+    title: data.title || 'Reading Word Spinner Activity',
+    toolType: data.toolType,
+    words: data.words || [],
+    settings: data.settings || {},
+    shareId
+  };
+};
+</script>
+<script>
+LiteracyArcadeShare.register({
+  toolType: 'word-spinner',
+  mount: document.getElementById('saveActivityBtn')?.parentElement,
+  requireAuth: true,
+  publicOrigin: 'https://literacyarcade.com',
+  isAuthenticated() {
+    return Boolean(window.wordSpinnerCurrentUser);
+  },
+  onLoginRequired() {
+    window.location.href = 'teacher-login.html';
+  },
+  getActivity() {
+    const sp = window._spinner;
+    const entries = sp ? sp.getWheelEntries() : [];
+    if (!entries.length) {
+      alert('Please add at least one word to the wheel before sharing.');
+      return null;
+    }
+    const words = entries.map(e => e.word);
+    return {
+      title: `Reading Word Spinner - ${words.length} word${words.length === 1 ? '' : 's'}`,
+      words,
+      settings: typeof window.buildWordSpinnerSetup === 'function'
+        ? window.buildWordSpinnerSetup(entries)
+        : {
+          tab: sp ? sp.getCurrentTab() : 'custom',
+          level: document.getElementById('levelSelect')?.value || '',
+          phonicsGroup: document.getElementById('phonicsGroupSelect')?.value || '',
+          phonicsPattern: document.getElementById('phonicsPatternSelect')?.value || '',
+          customWords: sp ? sp.customWords() : [],
+          selectedWords: words,
+          wheelEntries: entries
+        },
+      autoStart: true
+    };
+  },
+  saveActivity(activity) {
+    if (typeof window.saveWordSpinnerSharedActivity !== 'function') {
+      throw new Error('Share save function is not ready.');
+    }
+    return window.saveWordSpinnerSharedActivity(activity);
+  },
+  loadSharedActivity(shareId) {
+    if (typeof window.loadWordSpinnerSharedActivity !== 'function') {
+      throw new Error('Shared activity loader is not ready.');
+    }
+    return window.loadWordSpinnerSharedActivity(shareId);
+  },
+  loadActivity(activity) {
+    const words = activity.words || [];
+    if (!words.length) return;
+    if (typeof window.restoreWordSpinnerActivity === 'function') {
+      window.restoreWordSpinnerActivity(activity, { start: true });
+    }
+  }
+});
 </script>
 </body>
 </html>
