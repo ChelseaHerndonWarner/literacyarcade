@@ -235,7 +235,10 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .share-action.secondary{background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal)}
 .share-action.classroom{grid-column:1/-1;background:#fff;color:var(--navy);border:1.5px solid #D5DAE4}
 .share-action.classroom:hover{border-color:var(--teal-dark);color:var(--teal-dark);background:#F6FEFD}
-.classroom-row{grid-column:1/-1;min-height:40px;display:flex;align-items:center;justify-content:center}
+.classroom-section{grid-column:1/-1;border-top:1px solid var(--border);margin-top:4px;padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.classroom-title{font-family:var(--font-head);font-weight:900;font-size:14px;color:var(--navy)}
+.classroom-sub{font-family:var(--font-body);font-weight:600;font-size:12px;color:var(--navy-soft);line-height:1.4}
+.classroom-row{min-height:40px;display:flex;align-items:center;justify-content:flex-start}
 .classroom-official{display:flex;align-items:center;justify-content:center;min-height:32px}
 .share-note{font-size:12px;line-height:1.45;color:var(--navy-soft)}
 .share-status{min-height:16px;font-size:12px;font-weight:800;color:var(--teal-dark)}
@@ -393,9 +396,15 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
       <div class="share-actions">
         <button class="share-action" type="button" id="copyShareLink">Copy Link</button>
         <button class="share-action secondary" type="button" id="copyEmbedCode">Copy Embed Code</button>
-        <div class="classroom-row">
-          <div id="shareClassroomOfficial" class="g-sharetoclassroom classroom-official" data-size="32"></div>
-          <button class="share-action classroom" type="button" id="shareClassroomFallback">Share to Google Classroom</button>
+        <div class="classroom-section">
+          <div>
+            <div class="classroom-title">Share to Google Classroom</div>
+            <div class="classroom-sub">Post this student-ready activity link to your class.</div>
+          </div>
+          <div class="classroom-row">
+            <div id="shareClassroomOfficial" class="g-sharetoclassroom classroom-official" data-size="32"></div>
+            <button class="share-action classroom" type="button" id="shareClassroomFallback">Share to Google Classroom</button>
+          </div>
         </div>
       </div>
       <div class="share-note">Anyone with this link can open the student activity setup. Students do not need to sign in.</div>
