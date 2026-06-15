@@ -530,6 +530,15 @@
     border-radius:20px;padding:3px 10px;cursor:pointer;transition:all .14s;
   }
   .change-len-btn:hover{border-color:var(--navy-light);color:var(--navy)}
+  .magic-hint-btn{
+    display:none;
+    font-family:'Nunito',sans-serif;font-weight:800;font-size:11px;
+    color:var(--magic-purple);background:#F3EEF9;border:1.5px solid rgba(123,94,167,.24);
+    border-radius:20px;padding:3px 10px;cursor:pointer;transition:all .14s;
+  }
+  .magic-hint-btn.visible{display:inline-flex;align-items:center;gap:4px}
+  .magic-hint-btn:hover:not(:disabled){border-color:var(--magic-purple);background:#EEE8F8;transform:translateY(-1px)}
+  .magic-hint-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
 
   /* Message pill */
   .message-bar{
@@ -986,6 +995,7 @@
         <div class="word-length-badge" id="wordLenBadge">5 letters</div>
         <div style="display:flex;align-items:center;gap:6px">
           <div class="guesses-label" id="guessesLabel">6 guesses</div>
+          <button class="magic-hint-btn" id="magicHintBtn">Magic Hint</button>
           <button class="change-len-btn" id="changeLenBtn">Change</button>
         </div>
       </div>
@@ -1058,14 +1068,27 @@
 /* ══════════════════════════════════════════════════════════
    BLOCKED WORDS
 ══════════════════════════════════════════════════════════ */
-const BAD_WORDS = new Set([
-  'fuck','shit','crap','ass','bitch','cunt','dick','cock','piss','turd',
-  'slut','whore','porn','rape','nazi','fag','dyke','spaz','twat','wank',
-  'vodka','booze','beer','wine','meth','drug','drugs','vomit','puke',
-  'pubic','vulva','penis','vagina','boob','boobs','boner','horny',
-  'kill','dead','die','blood','gore','hate','slur','damn','hell',
-  'fucks','dicks','asses','shits','cunts','bitches','prick','bastard',
+const BLOCKED_WORDS = new Set([
+  'anal','anus','arse','asses','bastard','bimbo','bitch','bitches','booby',
+  'boner','boobs','booze','breast','butts','cigar','cocks','coked','crack',
+  'craps','cruel','cunts','damns','death','devil','dicks','dopey','drugs',
+  'drunk','dykes','farts','filth','fucks','gored','hates','hussy','lusty',
+  'morph','naked','nasty','nudes','penis','pimps','porny','privy','prude',
+  'pubic','puked','pukes','risky','sassy','sissy','slain','sluts','spasm',
+  'spazz','toxic','turdy','vodka','vulva','wanky','whore','woozy',
+  'adult','bitch','blood','booze','cruel','death','devil','drunk','drugs',
+  'filth','gored','hussy','knife','naked','nasty','penis','porno','prick',
+  'puked','pukes','slain','sluts','toxic','vodka','vulva','whore',
+  'bikini','biopsy','bloods','bloody','bombed','busted','devils','drinks',
+  'druggy','fierce','guilty','hazard','horrid','insane','jailed','killed',
+  'knives','murder','prison','punish','savage','stolen','threat','weapon',
+  'wither',
+  'fuck','shit','crap','ass','cunt','dick','cock','piss','turd','slut',
+  'porn','rape','nazi','fag','dyke','spaz','twat','wank','beer','wine',
+  'meth','drug','vomit','puke','vagina','kill','dead','die','gore','hate',
+  'slur','damn','hell'
 ]);
+const BAD_WORDS = BLOCKED_WORDS;
 
 /* ══════════════════════════════════════════════════════════
    EMOJI MAP — meaningful emoji for every target word
@@ -2066,10 +2089,32 @@ const _DICT6 = new Set([
   'widget','zealot',
 ]);
 
+
+/* ══════════════════════════════════════════════════════════
+   CURATED CLASSROOM-SAFE ANSWER WORDS
+   The larger lists above remain part of the accepted guess
+   dictionary, but the game only chooses secret answers from
+   these kid-friendly pools.
+══════════════════════════════════════════════════════════ */
+const BROAD_ACCEPTED_GUESS_SEED = {
+  4: [...ANSWER_WORDS[4]],
+  5: [...ANSWER_WORDS[5]],
+  6: [...ANSWER_WORDS[6]]
+};
+ANSWER_WORDS[4] = [
+  'able','also','area','army','aunt','baby','back','bake','ball','band','bank','base','bean','bear','beat','bell','belt','best','bike','bird','blue','boat','book','bowl','bunk','cake','call','calm','camp','card','care','cart','case','cave','chip','city','clap','clay','clip','club','coat','cold','come','cone','cook','cool','corn','cube','cute','dark','dawn','deer','desk','dive','door','dove','draw','drop','duck','dust','each','earn','east','easy','edge','face','fair','fall','farm','fern','find','fine','fire','fish','five','flag','flat','flee','flip','flow','food','fork','frog','from','game','gate','gave','gift','girl','give','glow','goat','gold','good','grow','hand','hare','hawk','help','here','hill','home','hope','jump','just','keep','kind','king','kite','lake','lamb','land','lane','last','leaf','left','life','like','lime','line','lion','list','live','long','look','love','made','make','many','mask','maze','meal','milk','mine','mint','moon','more','moth','move','name','near','need','nest','nice','nine','note','only','open','over','page','park','part','path','pear','pine','plan','play','plum','pond','pony','read','real','reef','ring','road','rock','roll','root','rose','safe','same','sand','seal','seed','ship','shop','show','sing','snow','soft','soil','song','star','stem','step','stop','take','tall','team','tell','time','tree','trip','turn','unit','very','vine','walk','warm','wave','west','wind','wing','wink','wise','wish','wood','wool','word','work','year','zero','zone'
+];
+ANSWER_WORDS[5] = [
+  'about','above','after','again','apple','beach','begin','below','berry','black','blend','block','bloom','board','brain','brave','bread','bring','brown','brush','build','bunny','cabin','camel','candy','carry','chair','charm','check','cheer','chest','child','chime','class','clean','clear','climb','cloud','coach','color','comet','coral','could','crown','dance','dream','drink','eager','early','earth','eight','entry','every','fairy','faith','field','first','flame','flash','float','floor','flute','found','frame','fresh','friend','funny','garden','giant','glide','globe','grace','grade','grain','grand','grant','grape','grass','great','green','group','happy','heart','hello','honey','horse','house','human','jelly','jolly','juice','kitty','kneel','laugh','learn','lemon','light','lucky','magic','mango','maple','march','melon','merry','might','money','month','music','never','night','north','ocean','often','olive','order','other','paint','paper','party','peach','pearl','piano','place','plain','plane','plant','plate','point','power','prize','quick','quiet','rainy','raise','reach','river','round','royal','seven','shape','share','shiny','short','silly','skill','sleep','slide','small','smart','smile','snail','snake','snowy','sound','space','spark','speak','spoon','spring','stand','start','stone','story','study','sunny','sweet','table','teach','thank','their','there','these','think','three','tiger','today','train','treat','under','until','visit','voice','water','wheel','where','which','while','white','world','would','write','young'
+];
+ANSWER_WORDS[6] = [
+  'almost','always','animal','answer','around','artist','autumn','banana','basket','beacon','before','behind','belong','better','breeze','bridge','bright','bubble','button','cactus','camera','candle','castle','center','chance','circle','clever','cloudy','coming','common','corner','cotton','cousin','crayon','dinner','dragon','dreams','eagles','easily','either','family','farmer','father','flower','forest','friend','frozen','garden','gentle','ginger','golden','grapes','ground','happy','health','helped','hidden','hiking','honest','jacket','jingle','joyful','jungle','kitten','ladder','latest','letter','listen','little','lively','lizard','lovely','market','meadow','mirror','monkey','mother','muffin','nature','nearby','nicely','nimble','noodle','normal','notice','orange','palace','parent','people','person','pickle','picnic','planet','player','please','pocket','pollen','pretty','prince','puzzle','rabbit','random','reason','record','relate','repeat','rescue','ribbon','ripple','rocket','saddle','sample','school','screen','second','secret','settle','shadow','silver','simple','single','sister','sketch','sleeve','smiles','smooth','soccer','soften','spider','spiral','splash','spring','stable','stream','string','strong','summer','sunset','switch','symbol','talent','temple','tender','thread','ticket','timber','turtle','useful','valley','velvet','violet','vision','voyage','wander','warmth','weekly','window','winter','wonder','yellow','zipper'
+];
+
 const ALLOWED_GUESSES = {
-  4: new Set([...ANSWER_WORDS[4], ..._DICT4]),
-  5: new Set([...ANSWER_WORDS[5], ..._DICT5]),
-  6: new Set([...ANSWER_WORDS[6], ..._DICT6]),
+  4: new Set([...ANSWER_WORDS[4], ...BROAD_ACCEPTED_GUESS_SEED[4], ..._DICT4]),
+  5: new Set([...ANSWER_WORDS[5], ...BROAD_ACCEPTED_GUESS_SEED[5], ..._DICT5]),
+  6: new Set([...ANSWER_WORDS[6], ...BROAD_ACCEPTED_GUESS_SEED[6], ..._DICT6]),
 };
 
 // Merge target words into valid guess sets
@@ -2094,7 +2139,8 @@ const VALID_GUESSES = ALLOWED_GUESSES;
       [...ALLOWED_GUESSES[len]].filter(w=>
         typeof w==='string' &&
         w.length===len &&
-        /^[a-z]+$/.test(w)
+        /^[a-z]+$/.test(w) &&
+        !BAD_WORDS.has(w)
       )
     );
     ALLOWED_GUESSES[len] = cleanedGuesses;
@@ -2113,6 +2159,7 @@ function isValidGuess(word){
 ══════════════════════════════════════════════════════════ */
 let wordLen=5,target='',tileValues=[],curRow=0,curCol=0;
 let over=false,keyStates={},soundOn=true;
+let hintUsed=false;
 const MAX=6;
 let lastRewardNew=false,lastRewardEmoji='',lastRewardWord='';
 
@@ -2255,10 +2302,12 @@ document.querySelectorAll('.length-btn').forEach(btn=>{
     btn.classList.add('selected');
     wordLen=parseInt(btn.dataset.len);
     buildPreview();
+    updateHintButton();
   });
 });
 
 document.getElementById('startBtn').addEventListener('click',startGame);
+document.getElementById('magicHintBtn').addEventListener('click',useMagicHint);
 buildPreview();
 
 /* ══════════════════════════════════════════════════════════
@@ -2484,6 +2533,7 @@ function startGame(){
   target=pool[Math.floor(Math.random()*pool.length)];
   tileValues=Array.from({length:MAX},()=>Array(wordLen).fill(''));
   curRow=0;curCol=0;
+  hintUsed=false;
   // Keep input locked during the countdown so students cannot type early.
   over=true;
   keyStates={};
@@ -2492,7 +2542,7 @@ function startGame(){
   // Build and show the game board BEFORE the countdown begins.
   // This prevents the setup/home screen from flashing between countdown and gameplay.
   buildGrid();buildKeyboard();buildDots();
-  updateStatus();clearMsg();renderCollection();
+  updateStatus();updateHintButton();clearMsg();renderCollection();
   document.getElementById('gameWrap').className=`game-wrap len-${wordLen}`;
   document.getElementById('wordLenBadge').textContent=`${wordLen} letters`;
   showScreen('gameScreen');
@@ -2500,6 +2550,7 @@ function startGame(){
   runMagicCountdown(()=>{
     // Unlock input after the countdown overlay fades.
     over=false;
+    updateHintButton();
     setActiveTiles();
     renderCurrentRow();
   });
@@ -2576,6 +2627,27 @@ function updateDots(){
 function updateStatus(){
   const left=MAX-curRow;
   document.getElementById('guessesLabel').textContent=left===1?'Last guess!':`${left} guesses`;
+  updateHintButton();
+}
+
+function updateHintButton(){
+  const btn=document.getElementById('magicHintBtn');
+  if(!btn)return;
+  const show=wordLen===5;
+  btn.classList.toggle('visible',show);
+  btn.disabled=!show||hintUsed||over;
+  btn.textContent=hintUsed?'Hint Used':'Magic Hint';
+}
+
+function useMagicHint(){
+  if(wordLen!==5||hintUsed||over||!target)return;
+  hintUsed=true;
+  tileValues[curRow][0]=target[0];
+  curCol=Math.max(curCol,1);
+  renderCurrentRow();
+  updateHintButton();
+  showMsg('Magic Hint: first letter revealed! ✨','ok');
+  sndKey();
 }
 
 const KB=[
@@ -2646,10 +2718,10 @@ function submitGuess(){
   }
   const word=tileValues[curRow].join('');
   if(BAD_WORDS.has(word)){
-    showMsg("That word isn't allowed here. Try another!",'error');shakeRow();return;
+    showMsg('Try a school-friendly word.','error');shakeRow();return;
   }
   if(!VALID_GUESSES[wordLen].has(word)){
-    showMsg("That word isn't in our list. Try another word! 📖",'warn');shakeRow();return;
+    showMsg("That word is not in the wizard's dictionary.",'warn');shakeRow();return;
   }
   sndSubmit();
   const result=scoreGuess(word,target);
