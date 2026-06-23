@@ -1231,6 +1231,880 @@ button[onclick*="addToLesson"]:hover {
   background: #F8F7F3;
 }
 
+
+
+/* ─── v45 Teacher Tool Standards + Lexend letterbox polish ────────────
+   Final override for Phoneme Counter. Keep this last in the main CSS. */
+:root {
+  --ink: #1A1A2E;
+  --text: #4A4A64;
+  --muted: #8F8AA6;
+  --teal-standard: #2EC4B6;
+  --teal-dark-standard: #1FA99C;
+  --coral-standard: #FF6B6B;
+  --coral-dark-standard: #E85555;
+  --lavender-standard: #ECE8F8;
+  --line-standard: #E4DEF2;
+  --cream-standard: #FFFDF8;
+  --shell-standard: 1160px;
+  --shell-wide: 1240px;
+}
+
+body {
+  min-height: 100vh !important;
+  color: var(--ink) !important;
+  font-family: Nunito, Arial, sans-serif !important;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(46,196,182,.13), transparent 32%),
+    radial-gradient(circle at 100% 100%, rgba(173,151,236,.22), transparent 34%),
+    linear-gradient(135deg, #F4FFFD 0%, #FFFDF9 58%, #F3EFFD 100%) !important;
+}
+
+.la-header {
+  height: 62px !important;
+  padding: 0 clamp(16px, 3vw, 24px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: rgba(255,255,255,.94) !important;
+  border-bottom: 1px solid var(--line-standard) !important;
+  box-shadow: 0 2px 14px rgba(26,26,46,.05) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+}
+
+.la-left,
+.la-logo-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.la-icon {
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 38px !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  box-shadow: 0 6px 16px rgba(46,196,182,.22) !important;
+}
+
+.la-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.la-wordmark {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 18.4px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: -.02em !important;
+  color: var(--ink) !important;
+  white-space: nowrap !important;
+}
+
+.la-pipe {
+  width: 1px !important;
+  height: 22px !important;
+  background: var(--line-standard) !important;
+  margin: 0 4px !important;
+  flex: 0 0 auto !important;
+}
+
+.la-tool-name {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 17px !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em !important;
+  color: var(--teal-dark-standard) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.hdr-btns {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  margin-left: 16px !important;
+}
+
+.home-btn,
+.icon-btn,
+.account-btn {
+  height: 40px !important;
+  border: 1.5px solid var(--line-standard) !important;
+  border-radius: 10px !important;
+  background: #F8F7F3 !important;
+  color: #5F5A7B !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.home-btn,
+.icon-btn {
+  width: 40px !important;
+  flex: 0 0 40px !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+}
+
+.account-btn {
+  min-width: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 16px !important;
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+
+.home-btn:hover,
+.icon-btn:hover,
+.account-btn:hover {
+  background: #FFFFFF !important;
+  border-color: #D7D0E8 !important;
+}
+
+.home-btn svg,
+.icon-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.75 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+main {
+  width: min(var(--shell-wide), calc(100% - 32px)) !important;
+  max-width: var(--shell-wide) !important;
+  height: calc(100vh - 62px) !important;
+  flex: 1 0 auto !important;
+  margin: 0 auto !important;
+  padding: 22px 0 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.workspace {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  grid-template-columns: 330px minmax(0, 1fr) !important;
+  gap: 18px !important;
+}
+
+.card,
+.panel,
+.result {
+  background: rgba(255,255,255,.96) !important;
+  border: 1px solid var(--line-standard) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 18px 40px rgba(26,26,46,.06) !important;
+}
+
+footer {
+  margin-top: auto !important;
+  padding: 16px 0 6px !important;
+  color: #9692AD !important;
+  text-align: center !important;
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: .84rem !important;
+  line-height: 1.2 !important;
+  font-weight: 900 !important;
+  opacity: 1 !important;
+}
+
+/* Student-facing word/letter displays use Lexend. */
+.big-word,
+.result-word,
+.map-box,
+.phoneme-box,
+.sound-box,
+.silent-e-space,
+.tile,
+.bank-word,
+.chip,
+.tray-word {
+  font-family: Lexend, Nunito, Arial, sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: .01em !important;
+}
+
+.big-word,
+.result-word {
+  font-size: clamp(44px, 4.8vw, 62px) !important;
+  line-height: 1.02 !important;
+  padding: 8px 34px !important;
+}
+
+.map-box {
+  min-width: 56px !important;
+  min-height: 48px !important;
+  padding: 6px 12px !important;
+  font-size: 27px !important;
+  line-height: 1 !important;
+}
+
+.phoneme-box {
+  font-size: 22px !important;
+}
+
+.letterbox-preview {
+  padding: 14px 16px !important;
+}
+
+.sound-box-row {
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  flex-wrap: nowrap !important;
+  gap: 0 !important;
+  margin: 8px 0 10px !important;
+}
+
+.sound-box {
+  width: clamp(78px, 8vw, 102px) !important;
+  height: 52px !important;
+  min-width: 0 !important;
+  border: 3px solid #08729A !important;
+  border-right-width: 1.5px !important;
+  border-radius: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 30px !important;
+  line-height: 1 !important;
+  color: #06638A !important;
+  background: #FFFFFF !important;
+}
+
+.sound-box:first-child {
+  border-radius: 9px 0 0 9px !important;
+}
+
+.sound-box.last-sound {
+  border-right-width: 3px !important;
+  border-radius: 0 9px 9px 0 !important;
+}
+
+.sound-box:first-child.last-sound {
+  border-radius: 9px !important;
+  border-right-width: 3px !important;
+}
+
+.silent-e-space {
+  height: 52px !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  margin-left: 14px !important;
+  font-size: 28px !important;
+}
+
+.tile-row {
+  gap: 9px !important;
+  margin-top: 8px !important;
+}
+
+.tile {
+  width: 44px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  font-size: 22px !important;
+  line-height: 1 !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #F6C54A !important;
+  outline-offset: 3px !important;
+}
+
+@media (max-width: 900px) {
+  body { overflow: auto !important; }
+  main {
+    height: auto !important;
+    width: min(100% - 20px, var(--shell-standard)) !important;
+    padding-top: 18px !important;
+  }
+  .workspace {
+    grid-template-columns: 1fr !important;
+  }
+  .workspace > aside.card.panel,
+  .result,
+  .result-body {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .la-header { padding: 0 12px !important; }
+  .la-wordmark,
+  .la-pipe { display: none !important; }
+  .la-tool-name { font-size: .98rem !important; }
+  .account-btn { padding: 0 10px !important; font-size: 12px !important; }
+}
+
+
+/* ─── v46 Phoneme Counter final fit + Lexend dropdown patch ──────────
+   Fixes bottom overlap when words are added and applies Lexend to phonics pattern text. */
+.category-select,
+.pattern-select,
+#countFilter,
+#patternFilter,
+.category-select option,
+.pattern-select option,
+#countFilter option,
+#patternFilter option,
+.count-pill,
+.big-word,
+.result-word,
+.map-box,
+.phoneme-box,
+.sound-box,
+.silent-e-space,
+.tile,
+.bank-word,
+.chip,
+.tray-word {
+  font-family: Lexend, Nunito, Arial, sans-serif !important;
+  letter-spacing: 0 !important;
+}
+
+.category-select,
+.pattern-select,
+#countFilter,
+#patternFilter,
+.count-pill {
+  font-weight: 700 !important;
+}
+
+.big-word,
+.result-word,
+.map-box,
+.sound-box,
+.tile {
+  font-weight: 800 !important;
+}
+
+/* Use normal document flow inside the result card so the tile row cannot fall
+   underneath the note/actions/footer. If vertical space is tight, the right
+   result panel scrolls internally instead of overlapping content. */
+.result-body {
+  display: flex !important;
+  flex-direction: column !important;
+  align-content: stretch !important;
+  grid-template-rows: none !important;
+  gap: 10px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 14px 18px 16px !important;
+}
+
+.word-display,
+.mapping-section,
+.word-mapping,
+.letterbox-preview,
+.note,
+.actions {
+  flex: 0 0 auto !important;
+}
+
+.letterbox-preview {
+  overflow: visible !important;
+  padding: 14px 16px 16px !important;
+}
+
+.letterbox-preview .section-title,
+.letterbox-preview h3 {
+  margin-bottom: 6px !important;
+}
+
+.tile-row {
+  position: static !important;
+  transform: none !important;
+  margin: 8px 0 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  flex-wrap: wrap !important;
+}
+
+.note {
+  margin: 0 !important;
+}
+
+.actions {
+  margin: 0 !important;
+  padding-bottom: 2px !important;
+}
+
+footer {
+  flex: 0 0 auto !important;
+  margin-top: 8px !important;
+  padding: 8px 0 4px !important;
+}
+
+@media (max-height: 760px) {
+  .result-body {
+    gap: 8px !important;
+    padding: 10px 16px 12px !important;
+  }
+  .word-display {
+    margin-top: 6px !important;
+    margin-bottom: 4px !important;
+  }
+  .letterbox-preview {
+    padding: 10px 12px 12px !important;
+  }
+  .tile-row {
+    margin-top: 6px !important;
+  }
+}
+
+
+
+/* ─── v48 Teacher Tool Standards header correction ──────────────────
+   Matches the Teacher Tool Standards document: compact 62px shell,
+   38px brand mark, Nunito wordmark, 22px divider, and lighter 17px/700
+   teal tool title. My Activities is kept but softened. */
+.la-header {
+  height: 62px !important;
+  background: rgba(255,255,255,.94) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid var(--line-standard, #E4DEF2) !important;
+  box-shadow: 0 2px 14px rgba(26,26,46,.05) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  padding: 0 clamp(16px, 3vw, 24px) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+}
+
+.la-left,
+.la-logo-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.la-icon {
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 38px !important;
+  border-radius: 10px !important;
+  display: block !important;
+  overflow: hidden !important;
+  object-fit: cover !important;
+  background: transparent !important;
+  box-shadow: 0 6px 16px rgba(46,196,182,.22) !important;
+}
+
+.la-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+.la-wordmark {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: -.02em !important;
+  color: var(--ink, #1A1A2E) !important;
+  white-space: nowrap !important;
+}
+
+.la-pipe {
+  height: 22px !important;
+  width: 1px !important;
+  flex: 0 0 1px !important;
+  background: var(--line-standard, #E4DEF2) !important;
+  margin: 0 4px !important;
+}
+
+.la-tool-name {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 17px !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em !important;
+  color: var(--teal-dark-standard, #1FA99C) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.hdr-btns {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  margin-left: auto !important;
+}
+
+.home-btn,
+.icon-btn {
+  width: 40px !important;
+  height: 40px !important;
+  flex: 0 0 40px !important;
+  border: 1.5px solid var(--line-standard, #E4DEF2) !important;
+  border-radius: 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #F8F7F3 !important;
+  color: #5F5A7B !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.account-btn {
+  height: 40px !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  padding: 0 14px !important;
+  border: 1.5px solid var(--line-standard, #E4DEF2) !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #fff !important;
+  color: var(--ink, #1A1A2E) !important;
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+
+.account-btn:hover,
+.home-btn:hover,
+.icon-btn:hover {
+  background: #F8F7F3 !important;
+}
+
+.home-btn svg,
+.icon-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 1.75 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+main {
+  height: calc(100vh - 62px) !important;
+}
+
+.workspace > aside.card.panel,
+.result {
+  max-height: calc(100vh - 96px) !important;
+}
+
+@media (max-width: 560px) {
+  .la-header { padding: 0 12px !important; }
+  .la-wordmark,
+  .la-pipe { display: none !important; }
+  .la-tool-name { font-size: .98rem !important; }
+  .account-btn { display: none !important; }
+  main { height: auto !important; }
+}
+
+.la-left,
+.la-logo-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+  min-width: 0 !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.la-icon {
+  width: 44px !important;
+  height: 44px !important;
+  flex: 0 0 44px !important;
+  border-radius: 12px !important;
+  display: block !important;
+  overflow: hidden !important;
+  object-fit: cover !important;
+  background: transparent !important;
+  box-shadow: 0 6px 16px rgba(36,184,178,.25) !important;
+}
+
+.la-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+.la-wordmark {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: -.02em !important;
+  color: var(--ink, #1A1A2E) !important;
+  white-space: nowrap !important;
+}
+
+.la-pipe {
+  height: 34px !important;
+  width: 1px !important;
+  flex: 0 0 1px !important;
+  background: var(--line-standard, #E4DEF2) !important;
+  margin: 0 !important;
+}
+
+.la-tool-name {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.1 !important;
+  font-weight: 900 !important;
+  color: var(--teal-dark-standard, #1FA99C) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.hdr-btns {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  margin-left: 18px !important;
+}
+
+.home-btn,
+.icon-btn {
+  width: 42px !important;
+  height: 42px !important;
+  flex: 0 0 42px !important;
+  border: 1px solid var(--line-standard, #E4DEF2) !important;
+  border-radius: 12px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #fff !important;
+  color: #656083 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.account-btn {
+  height: 42px !important;
+  min-width: 0 !important;
+  padding: 0 18px !important;
+  border: 1px solid var(--line-standard, #E4DEF2) !important;
+  border-radius: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #fff !important;
+  color: var(--ink, #1A1A2E) !important;
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: .95rem !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+
+.home-btn svg,
+.icon-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 1.75 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+main {
+  height: calc(100vh - 70px) !important;
+}
+
+.workspace > aside.card.panel,
+.result {
+  max-height: calc(100vh - 104px) !important;
+}
+
+@media (max-width: 560px) {
+  .la-header { padding: 0 12px !important; }
+  .la-wordmark,
+  .la-pipe { display: none !important; }
+  .la-tool-name { font-size: .98rem !important; }
+  .account-btn { display: none !important; }
+  main { height: auto !important; }
+}
+
+
+
+/* ─── v47 corrected teacher-standard header alignment ─────────────────
+   Final header override: match the Teacher Tool Standards and keep the
+   optional My Activities/Home controls grouped on the far right. */
+.la-header {
+  height: 62px !important;
+  padding: 0 clamp(16px, 3vw, 24px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  background: rgba(255,255,255,.94) !important;
+  border-bottom: 1px solid #E4DEF2 !important;
+  box-shadow: 0 2px 14px rgba(26,26,46,.05) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+}
+
+.la-left,
+.la-logo-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  flex: 0 1 auto !important;
+}
+
+.la-icon {
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 38px !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  box-shadow: 0 6px 16px rgba(46,196,182,.22) !important;
+}
+
+.la-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.la-wordmark {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: -.02em !important;
+  color: #1A1A2E !important;
+  white-space: nowrap !important;
+}
+
+.la-pipe {
+  width: 1px !important;
+  height: 22px !important;
+  background: #E4DEF2 !important;
+  margin: 0 6px !important;
+  flex: 0 0 1px !important;
+}
+
+.la-tool-name {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 17px !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em !important;
+  color: #1FA99C !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.hdr-btns {
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  flex: 0 0 auto !important;
+}
+
+.account-btn {
+  min-width: 0 !important;
+  height: 40px !important;
+  padding: 0 18px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1.5px solid #E4DEF2 !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  color: #1A1A2E !important;
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+}
+
+.home-btn {
+  width: 40px !important;
+  height: 40px !important;
+  flex: 0 0 40px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1.5px solid #E4DEF2 !important;
+  border-radius: 10px !important;
+  background: #F8F7F3 !important;
+  color: #5F5A7B !important;
+  text-decoration: none !important;
+}
+
+.home-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.75 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+@media (max-width: 560px) {
+  .la-header { padding: 0 12px !important; gap: 10px !important; }
+  .la-wordmark, .la-pipe { display: none !important; }
+  .la-tool-name { font-size: .98rem !important; }
+  .account-btn { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -1238,11 +2112,12 @@ button[onclick*="addToLesson"]:hover {
   <a class="la-left" href="https://literacyarcade.com" aria-label="Literacy Arcade home">
     <span class="la-icon"><img src="data:image/jpeg;base64,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" alt="Literacy Arcade logo"></span><span class="la-wordmark">Literacy Arcade</span><span class="la-pipe"></span><span class="la-tool-name">Phoneme Counter</span>
   </a>
-  
+  <div class="hdr-btns" aria-label="Tool navigation">
     <a class="account-btn" href="teacher-dashboard.html" title="My Activities">My Activities</a>
-  <a class="home-btn" href="https://literacyarcade.com/" title="Home" aria-label="All tools">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
-  </a>
+    <a class="home-btn" href="https://literacyarcade.com/" title="Home" aria-label="Home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+    </a>
+  </div>
 </header>
 <main>
 
@@ -3796,6 +4671,295 @@ button[onclick*="addToLesson"]:hover {
 }
 .account-btn:hover {
   background: #F8F7F3;
+}
+
+
+
+/* ─── v48 Teacher Tool Standards header correction ──────────────────
+   Matches the Teacher Tool Standards document: compact 62px shell,
+   38px brand mark, Nunito wordmark, 22px divider, and lighter 17px/700
+   teal tool title. My Activities is kept but softened. */
+.la-header {
+  height: 62px !important;
+  background: rgba(255,255,255,.94) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid var(--line-standard, #E4DEF2) !important;
+  box-shadow: 0 2px 14px rgba(26,26,46,.05) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  padding: 0 clamp(16px, 3vw, 24px) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+}
+
+.la-left,
+.la-logo-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.la-icon {
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 38px !important;
+  border-radius: 10px !important;
+  display: block !important;
+  overflow: hidden !important;
+  object-fit: cover !important;
+  background: transparent !important;
+  box-shadow: 0 6px 16px rgba(46,196,182,.22) !important;
+}
+
+.la-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+.la-wordmark {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: -.02em !important;
+  color: var(--ink, #1A1A2E) !important;
+  white-space: nowrap !important;
+}
+
+.la-pipe {
+  height: 22px !important;
+  width: 1px !important;
+  flex: 0 0 1px !important;
+  background: var(--line-standard, #E4DEF2) !important;
+  margin: 0 4px !important;
+}
+
+.la-tool-name {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 17px !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em !important;
+  color: var(--teal-dark-standard, #1FA99C) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.hdr-btns {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  margin-left: auto !important;
+}
+
+.home-btn,
+.icon-btn {
+  width: 40px !important;
+  height: 40px !important;
+  flex: 0 0 40px !important;
+  border: 1.5px solid var(--line-standard, #E4DEF2) !important;
+  border-radius: 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #F8F7F3 !important;
+  color: #5F5A7B !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.account-btn {
+  height: 40px !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  padding: 0 14px !important;
+  border: 1.5px solid var(--line-standard, #E4DEF2) !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #fff !important;
+  color: var(--ink, #1A1A2E) !important;
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+
+.account-btn:hover,
+.home-btn:hover,
+.icon-btn:hover {
+  background: #F8F7F3 !important;
+}
+
+.home-btn svg,
+.icon-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 1.75 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+main {
+  height: calc(100vh - 62px) !important;
+}
+
+.workspace > aside.card.panel,
+.result {
+  max-height: calc(100vh - 96px) !important;
+}
+
+@media (max-width: 560px) {
+  .la-header { padding: 0 12px !important; }
+  .la-wordmark,
+  .la-pipe { display: none !important; }
+  .la-tool-name { font-size: .98rem !important; }
+  .account-btn { display: none !important; }
+  main { height: auto !important; }
+}
+
+.la-left,
+.la-logo-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+  min-width: 0 !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.la-icon {
+  width: 44px !important;
+  height: 44px !important;
+  flex: 0 0 44px !important;
+  border-radius: 12px !important;
+  display: block !important;
+  overflow: hidden !important;
+  object-fit: cover !important;
+  background: transparent !important;
+  box-shadow: 0 6px 16px rgba(36,184,178,.25) !important;
+}
+
+.la-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+.la-wordmark {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: -.02em !important;
+  color: var(--ink, #1A1A2E) !important;
+  white-space: nowrap !important;
+}
+
+.la-pipe {
+  height: 34px !important;
+  width: 1px !important;
+  flex: 0 0 1px !important;
+  background: var(--line-standard, #E4DEF2) !important;
+  margin: 0 !important;
+}
+
+.la-tool-name {
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.1 !important;
+  font-weight: 900 !important;
+  color: var(--teal-dark-standard, #1FA99C) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.hdr-btns {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  margin-left: 18px !important;
+}
+
+.home-btn,
+.icon-btn {
+  width: 42px !important;
+  height: 42px !important;
+  flex: 0 0 42px !important;
+  border: 1px solid var(--line-standard, #E4DEF2) !important;
+  border-radius: 12px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #fff !important;
+  color: #656083 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.account-btn {
+  height: 42px !important;
+  min-width: 0 !important;
+  padding: 0 18px !important;
+  border: 1px solid var(--line-standard, #E4DEF2) !important;
+  border-radius: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #fff !important;
+  color: var(--ink, #1A1A2E) !important;
+  font-family: Nunito, Arial, sans-serif !important;
+  font-size: .95rem !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+
+.home-btn svg,
+.icon-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 1.75 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+main {
+  height: calc(100vh - 70px) !important;
+}
+
+.workspace > aside.card.panel,
+.result {
+  max-height: calc(100vh - 104px) !important;
+}
+
+@media (max-width: 560px) {
+  .la-header { padding: 0 12px !important; }
+  .la-wordmark,
+  .la-pipe { display: none !important; }
+  .la-tool-name { font-size: .98rem !important; }
+  .account-btn { display: none !important; }
+  main { height: auto !important; }
 }
 
 </style>
