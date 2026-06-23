@@ -1,9 +1,4 @@
 User-agent: *
 Allow: /
 
-# Block any future admin or draft directories from indexing
-Disallow: /admin/
-Disallow: /drafts/
-Disallow: /dev/
-
 Sitemap: https://literacyarcade.com/sitemap.xml
