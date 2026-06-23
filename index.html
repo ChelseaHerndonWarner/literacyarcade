@@ -933,20 +933,67 @@
     .card-violet::before { background: linear-gradient(90deg, var(--violet), #a78bfa); }
     .card-amber::before { background: linear-gradient(90deg, var(--amber), #ffd166); }
     .card-mint::before  { background: linear-gradient(90deg, #4ecdc4, var(--teal)); }
+    .card-blue::before  { background: linear-gradient(90deg, #2F6FB3, #6EA8E8); }
 
     .tool-icon {
-      width: 52px; height: 52px;
+      width: 52px;
+      height: 52px;
       border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
 
-    .icon-teal   { background: var(--mint); }
-    .icon-coral  { background: var(--blush); }
-    .icon-violet { background: var(--lavender); }
-    .icon-amber  { background: var(--sand); }
-    .icon-mint   { background: #E2FAF8; }
+    .tool-icon svg {
+      width: 30px;
+      height: 30px;
+      display: block;
+      color: currentColor;
+    }
+
+    .icon-teal {
+      background: var(--mint);
+      color: var(--teal-dk);
+    }
+
+    .icon-coral {
+      background: var(--blush);
+      color: var(--coral-dk);
+    }
+
+    .icon-violet {
+      background: var(--lavender);
+      color: var(--violet);
+    }
+
+    .icon-amber {
+      background: var(--sand);
+      color: #9A6A00;
+    }
+
+    .icon-mint {
+      background: #E2FAF8;
+      color: var(--teal-dk);
+    }
+
+    .icon-blue {
+      background: #EAF3FF;
+      color: #2F6FB3;
+    }
+
+    .mini-text-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      font-size: .58rem;
+      font-weight: 900;
+      letter-spacing: .01em;
+      line-height: 1;
+      color: var(--teal-dk);
+    }
 
     .tool-meta {
       display: flex;
@@ -1675,7 +1722,7 @@
             <!-- CARD 2 — Word Spinner (back-left) -->
             <div class="hc hc-spinner">
               <div class="hc-spinner-head">
-                <div class="hc-spinner-eyebrow">🌀 Word Spinner</div>
+                <div class="hc-spinner-eyebrow">Word Spinner</div>
                 <div class="hc-spinner-title">Phonics &amp; Word Reading Wheel</div>
               </div>
               <div class="hc-spinner-wheel">
@@ -1770,17 +1817,17 @@
               </div>
               <div class="hc-saved-list">
                 <div class="hc-saved-row">
-                  <div class="hc-saved-icon">🔤</div>
+                  <div class="hc-saved-icon mini-text-badge">LB</div>
                   <div class="hc-saved-name">Letterbox Lesson</div>
                   <div class="hc-saved-badge reopen">Saved</div>
                 </div>
                 <div class="hc-saved-row">
-                  <div class="hc-saved-icon" style="background:var(--blush);">🏎️</div>
+                  <div class="hc-saved-icon mini-text-badge" style="background:var(--blush);color:var(--coral-dk);">RR</div>
                   <div class="hc-saved-name">Read &amp; Race</div>
                   <div class="hc-saved-badge reopen">Saved</div>
                 </div>
                 <div class="hc-saved-row">
-                  <div class="hc-saved-icon" style="background:var(--lavender);">📚</div>
+                  <div class="hc-saved-icon mini-text-badge" style="background:var(--lavender);color:var(--violet);">VF</div>
                   <div class="hc-saved-name">Vocabulary Flashcards</div>
                   <div class="hc-saved-badge">Reopen</div>
                 </div>
@@ -1793,7 +1840,7 @@
             <!-- CARD 4 — Letterbox Lesson (bottom-right) -->
             <div class="hc hc-letterbox">
               <div class="hc-letterbox-inner">
-                <div class="hc-letterbox-eyebrow">📦 Elkonin Boxes</div>
+                <div class="hc-letterbox-eyebrow">Elkonin Boxes</div>
                 <div class="hc-letterbox-title">Letterbox Lesson</div>
                 <div class="hc-letterbox-word">ship</div>
                 <div class="hc-box-row">
@@ -1888,16 +1935,13 @@
 
         <div class="tools-grid">
 
-
           <article class="tool-card card-amber fade-up" role="link" tabindex="0" aria-label="Spellbound" data-href="spellbound.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-amber" style="overflow:hidden;padding:2px;">
-                <img src="data:image/png;base64,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" alt="Spellbound dragon mascot" style="width:100%;height:100%;object-fit:contain;display:block;" />
-              </div>
+              <div class="tool-icon icon-amber" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,32V192H72a24,24,0,0,0-24,24V56A24,24,0,0,1,72,32h40v96l32-24,32,24V32Z" opacity="0.2"/><path d="M208,24H72A32,32,0,0,0,40,56V224a8,8,0,0,0,8,8H192a8,8,0,0,0,0-16H56a16,16,0,0,1,16-16H208a8,8,0,0,0,8-8V32A8,8,0,0,0,208,24ZM120,40h48v72L148.79,97.6a8,8,0,0,0-9.6,0L120,112Zm80,144H72a31.82,31.82,0,0,0-16,4.29V56A16,16,0,0,1,72,40h32v88a8,8,0,0,0,12.8,6.4L144,114l27.21,20.4A8,8,0,0,0,176,136a8.1,8.1,0,0,0,3.58-.84A8,8,0,0,0,184,128V40h16Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Spellbound</h3>
-            <p class="tool-desc">Practice spelling short-vowel words by choosing the letters that match each spoken word.</p>
+            <p class="tool-desc">Practice spelling and phonics patterns in a magical word game.</p>
             <div class="tool-tags">
               <span class="tag">Spelling</span>
               <span class="tag">Phonics</span>
@@ -1908,7 +1952,7 @@
 
           <article class="tool-card card-violet fade-up" role="link" tabindex="0" aria-label="Word Wizard Quest" data-href="word-wizard.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-violet">🪄</div>
+              <div class="tool-icon icon-violet" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M176,112,74.34,213.66a8,8,0,0,1-11.31,0L42.34,193a8,8,0,0,1,0-11.31L144,80Z" opacity="0.2"/><path d="M248,152a8,8,0,0,1-8,8H224v16a8,8,0,0,1-16,0V160H192a8,8,0,0,1,0-16h16V128a8,8,0,0,1,16,0v16h16A8,8,0,0,1,248,152ZM56,72H72V88a8,8,0,0,0,16,0V72h16a8,8,0,0,0,0-16H88V40a8,8,0,0,0-16,0V56H56a8,8,0,0,0,0,16ZM184,192h-8v-8a8,8,0,0,0-16,0v8h-8a8,8,0,0,0,0,16h8v8a8,8,0,0,0,16,0v-8h8a8,8,0,0,0,0-16ZM219.31,80,80,219.31a16,16,0,0,1-22.62,0L36.68,198.63a16,16,0,0,1,0-22.63L176,36.69a16,16,0,0,1,22.63,0l20.68,20.68A16,16,0,0,1,219.31,80Zm-54.63,32L144,91.31l-96,96L68.68,208ZM208,68.69,187.31,48l-32,32L176,100.69Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Word Wizard Quest</h3>
@@ -1923,7 +1967,7 @@
 
           <article class="tool-card card-amber fade-up" role="link" tabindex="0" aria-label="Word Forge" data-href="word-forge.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-amber">⚒️</div>
+              <div class="tool-icon icon-amber" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M245.66,129,217,157.66a8,8,0,0,1-11.3,0L168.1,120l-28,28-32-32,28-28L80,31.78a87.81,87.81,0,0,1,98.31,18l67.35,67.89A8,8,0,0,1,245.66,129Z" opacity="0.2"/><path d="M251.34,112,183.88,44.08a96.1,96.1,0,0,0-135.77,0l-.09.09L34.25,58.4A8,8,0,0,0,45.74,69.53L59.47,55.35a79.92,79.92,0,0,1,18.71-13.9L124.68,88l-96,96a16,16,0,0,0,0,22.63l20.69,20.69a16,16,0,0,0,22.63,0l96-96,14.34,14.34h0L200,163.3a16,16,0,0,0,22.63,0l28.69-28.69A16,16,0,0,0,251.34,112ZM60.68,216,40,195.31l68-68L128.68,148ZM162.34,114.32,140,136.67,119.31,116l22.35-22.35a8,8,0,0,0,0-11.32L94.32,35a80,80,0,0,1,78.23,20.41l44.22,44.51L188,128.66l-14.34-14.34A8,8,0,0,0,162.34,114.32Zm49,37.66-12-12L228,111.25l12,12Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Word Forge</h3>
@@ -1938,10 +1982,10 @@
 
           <article class="tool-card card-violet fade-up" role="link" tabindex="0" aria-label="Read and Race" data-href="read-and-race.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-violet">🏎️</div>
+              <div class="tool-icon icon-violet" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,56v60c-19.89,17.23-38.23,18.39-56,13.48v-60C185.76,74.39,204.11,73.23,224,56ZM104,102.52v-60C86.24,37.61,67.89,38.77,48,56v60c19.89-17.22,38.23-18.39,56-13.48v60c21.62,6,42.38,21,64,27v-60c-21.62-6-42.38-21-64-27Z" opacity="0.2"/><path d="M227.32,48.75A8,8,0,0,0,218.76,50c-28,24.22-51.72,12.48-79.21-1.13C111.07,34.76,78.78,18.79,42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,28.49,14.09,60.77,30.06,96.79-1.13a8,8,0,0,0,2.76-6V56A8,8,0,0,0,227.32,48.75ZM216,71.6v40.65c-14,11.06-27,13.22-40,10.88V79.34A60.05,60.05,0,0,0,216,71.6Zm-56,3.76v43c-6.66-2.67-13.43-6-20.45-9.48-8.82-4.37-18-8.91-27.55-12.18v-43c6.66,2.66,13.43,6,20.45,9.48C141.27,67.55,150.46,72.09,160,75.36ZM96,48.91V92.69a60.06,60.06,0,0,0-40,7.75V59.78C70,48.72,83,46.57,96,48.91ZM86.58,152A60.06,60.06,0,0,0,56,160.43V119.78c14-11.06,27-13.22,40-10.88v43.8A65.61,65.61,0,0,0,86.58,152ZM112,156.67v-43c6.66,2.66,13.43,6,20.45,9.48,8.82,4.37,18,8.9,27.55,12.17v43c-6.66-2.67-13.43-6-20.45-9.48C130.73,164.47,121.54,159.94,112,156.67Zm64,26.45v-43.8a65.61,65.61,0,0,0,9.42.72A60.11,60.11,0,0,0,216,131.57v40.68C202,183.31,189,185.46,176,183.12Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
-            <h3 class="tool-name">Read & Race</h3>
+            <h3 class="tool-name">Read &amp; Race</h3>
             <p class="tool-desc">Race to read words from preloaded or custom lists in a multiplayer classroom game.</p>
             <div class="tool-tags">
               <span class="tag">Multiplayer</span>
@@ -1953,7 +1997,7 @@
 
           <article class="tool-card card-violet fade-up" role="link" tabindex="0" aria-label="Magic Word Road" data-href="magic-word-road.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-violet">🏰</div>
+              <div class="tool-icon icon-violet" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M160,72V216L96,184V40Z" opacity="0.2"/><path d="M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Magic Word Road</h3>
@@ -1966,9 +2010,9 @@
             <div class="tool-label label-new">New</div>
           </article>
 
-          <article class="tool-card card-teal fade-up" role="link" tabindex="0" aria-label="Reading Word Spinner" data-href="reading-word-spinner.html">
+          <article class="tool-card card-violet fade-up" role="link" tabindex="0" aria-label="Reading Word Spinner" data-href="reading-word-spinner.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-teal">🌀</div>
+              <div class="tool-icon icon-violet" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,128a88,88,0,1,1-88-88A88,88,0,0,1,216,128Z" opacity="0.2"/><path d="M224,48V96a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h28.69L182.06,73.37a79.56,79.56,0,0,0-56.13-23.43h-.45A79.52,79.52,0,0,0,69.59,72.71,8,8,0,0,1,58.41,61.27a96,96,0,0,1,135,.79L208,76.69V48a8,8,0,0,1,16,0ZM186.41,183.29a80,80,0,0,1-112.47-.66L59.31,168H88a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V179.31l14.63,14.63A95.43,95.43,0,0,0,130,222.06h.53a95.36,95.36,0,0,0,67.07-27.33,8,8,0,0,0-11.18-11.44Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Reading Word Spinner</h3>
@@ -1981,9 +2025,24 @@
             <div class="tool-label">Game</div>
           </article>
 
+          <article class="tool-card card-violet fade-up" role="link" tabindex="0" aria-label="Sentence Spinner" data-href="sentence-spinner.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-violet" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M107.14,98.8,128,128l-20.86,29.2A64,64,0,0,1,55.06,184H32V72H55.06A64,64,0,0,1,107.14,98.8ZM200.94,72a64,64,0,0,0-52.08,26.8L128,128l20.86,29.2A64,64,0,0,0,200.94,184H232V72Z" opacity="0.2"/><path d="M237.66,178.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L212.69,192H200.94a72.12,72.12,0,0,1-58.59-30.15l-41.72-58.4A56.1,56.1,0,0,0,55.06,80H32a8,8,0,0,1,0-16H55.06a72.12,72.12,0,0,1,58.59,30.15l41.72,58.4A56.1,56.1,0,0,0,200.94,176h11.75l-10.35-10.34a8,8,0,0,1,11.32-11.32ZM143,107a8,8,0,0,0,11.16-1.86l1.2-1.67A56.1,56.1,0,0,1,200.94,80h11.75L202.34,90.34a8,8,0,0,0,11.32,11.32l24-24a8,8,0,0,0,0-11.32l-24-24a8,8,0,0,0-11.32,11.32L212.69,64H200.94a72.12,72.12,0,0,0-58.59,30.15l-1.2,1.67A8,8,0,0,0,143,107Zm-30,42a8,8,0,0,0-11.16,1.86l-1.2,1.67A56.1,56.1,0,0,1,55.06,176H32a8,8,0,0,0,0,16H55.06a72.12,72.12,0,0,0,58.59-30.15l1.2-1.67A8,8,0,0,0,113,149Z"/></svg></div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Sentence Spinner</h3>
+            <p class="tool-desc">Spin and practice sentence fluency with teacher-created sentences.</p>
+            <div class="tool-tags">
+              <span class="tag">Sentence Fluency</span>
+              <span class="tag">Custom Sentences</span>
+              <span class="tag">Spinner</span>
+            </div>
+            <div class="tool-label label-new">New</div>
+          </article>
+
           <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="Repeated Reading Raceway" data-href="repeated-reading-raceway.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-coral">🏁</div>
+              <div class="tool-icon icon-coral" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M184,176h40v24a8,8,0,0,1-8,8H192a8,8,0,0,1-8-8ZM32,200a8,8,0,0,0,8,8H64a8,8,0,0,0,8-8V176H32ZM194.11,44.75A8,8,0,0,0,186.8,40H69.2a8,8,0,0,0-7.31,4.75L32,112H224Z" opacity="0.2"/><path d="M240,104H229.2L201.42,41.5A16,16,0,0,0,186.8,32H69.2a16,16,0,0,0-14.62,9.5L26.8,104H16a8,8,0,0,0,0,16h8v80a16,16,0,0,0,16,16H64a16,16,0,0,0,16-16V184h96v16a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16V120h8a8,8,0,0,0,0-16ZM69.2,48H186.8l24.89,56H44.31ZM64,200H40V184H64Zm128,0V184h24v16Zm24-32H40V120H216ZM56,144a8,8,0,0,1,8-8H80a8,8,0,0,1,0,16H64A8,8,0,0,1,56,144Zm112,0a8,8,0,0,1,8-8h16a8,8,0,0,1,0,16H176A8,8,0,0,1,168,144Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Repeated Reading Raceway</h3>
@@ -1998,7 +2057,7 @@
 
           <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="Repeated Reading Rockets" data-href="repeatedreadingrockets.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-coral">🚀</div>
+              <div class="tool-icon icon-coral" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M184,120v61.65a8,8,0,0,1-2.34,5.65l-34.35,34.35a8,8,0,0,1-13.57-4.53L128,176ZM136,72H74.35a8,8,0,0,0-5.65,2.34L34.35,108.69a8,8,0,0,0,4.53,13.57L80,128ZM40,216c37.65,0,50.69-19.69,54.56-28.18L68.18,161.44C59.69,165.31,40,178.35,40,216Z" opacity="0.2"/><path d="M223.85,47.12a16,16,0,0,0-15-15c-12.58-.75-44.73.4-71.41,27.07L132.69,64H74.36A15.91,15.91,0,0,0,63,68.68L28.7,103a16,16,0,0,0,9.07,27.16l38.47,5.37,44.21,44.21,5.37,38.49a15.94,15.94,0,0,0,10.78,12.92,16.11,16.11,0,0,0,5.1.83A15.91,15.91,0,0,0,153,227.3L187.32,193A15.91,15.91,0,0,0,192,181.64V123.31l4.77-4.77C223.45,91.86,224.6,59.71,223.85,47.12ZM74.36,80h42.33L77.16,119.52,40,114.34Zm74.41-9.45a76.65,76.65,0,0,1,59.11-22.47,76.46,76.46,0,0,1-22.42,59.16L128,164.68,91.32,128ZM176,181.64,141.67,216l-5.19-37.17L176,139.31Zm-74.16,9.5C97.34,201,82.29,224,40,224a8,8,0,0,1-8-8c0-42.29,23-57.34,32.86-61.85a8,8,0,0,1,6.64,14.56c-6.43,2.93-20.62,12.36-23.12,38.91,26.55-2.5,36-16.69,38.91-23.12a8,8,0,1,1,14.56,6.64Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Repeated Reading Rockets</h3>
@@ -2011,10 +2070,9 @@
             <div class="tool-label label-new">New</div>
           </article>
 
-        
           <article class="tool-card card-teal fade-up" role="link" tabindex="0" aria-label="Phonemic Awareness Balloon Pop" data-href="">
             <div class="tool-meta">
-              <div class="tool-icon icon-teal">🎈</div>
+              <div class="tool-icon icon-teal" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M137.89,199.13h0L152,232H104l14.09-32.87h0C78.59,192.18,48,144.83,48,104a80,80,0,0,1,160,0C208,144.83,177.41,192.18,137.89,199.13Z" opacity="0.2"/><path d="M128,16a88.1,88.1,0,0,0-88,88c0,23.43,9.4,49.42,25.13,69.5,12.08,15.41,26.5,26,41.91,31.09L96.65,228.85A8,8,0,0,0,104,240h48a8,8,0,0,0,7.35-11.15L149,204.59c15.4-5.07,29.83-15.68,41.91-31.09C206.6,153.42,216,127.43,216,104A88.1,88.1,0,0,0,128,16Zm11.87,208H116.13l6.94-16.19c1.64.12,3.28.19,4.93.19s3.29-.07,4.93-.19Zm38.4-60.37C163.94,181.93,146.09,192,128,192s-35.94-10.07-50.27-28.37C64.12,146.27,56,124,56,104a72,72,0,0,1,144,0C200,124,191.88,146.27,178.27,163.63Zm-1-59.74A8.52,8.52,0,0,1,176,104a8,8,0,0,1-7.88-6.68,41.29,41.29,0,0,0-33.43-33.43,8,8,0,1,1,2.64-15.78,57.5,57.5,0,0,1,46.57,46.57A8,8,0,0,1,177.32,103.89Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Phonemic Awareness Balloon Pop</h3>
@@ -2026,6 +2084,7 @@
             </div>
             <div class="tool-label" style="background:var(--sand);color:#8a6000;">Coming Soon</div>
           </article>
+
 
         </div>
       </div>
@@ -2044,13 +2103,13 @@
 
         <div class="tools-grid">
 
-          <article class="tool-card card-coral fade-up" role="link" tabindex="0" aria-label="Oral Reading Fluency Calculator" data-href="orf-fluency-calculator.html">
+          <article class="tool-card card-blue fade-up" role="link" tabindex="0" aria-label="Oral Reading Fluency Calculator" data-href="orf-fluency-calculator.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-coral">📊</div>
+              <div class="tool-icon icon-blue" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,152a103.93,103.93,0,0,1-5.9,34.63,8,8,0,0,1-7.57,5.37H37.46a8.05,8.05,0,0,1-7.57-5.41A104.06,104.06,0,0,1,24,151.19C24.44,94,71.73,47.49,129,48A104,104,0,0,1,232,152Z" opacity="0.2"/><path d="M114.34,154.34l96-96a8,8,0,0,1,11.32,11.32l-96,96a8,8,0,0,1-11.32-11.32ZM128,88a63.9,63.9,0,0,1,20.44,3.33,8,8,0,1,0,5.11-15.16A80,80,0,0,0,48.49,160.88,8,8,0,0,0,56.43,168c.29,0,.59,0,.89-.05a8,8,0,0,0,7.07-8.83A64.92,64.92,0,0,1,64,152,64.07,64.07,0,0,1,128,88Zm99.74,13a8,8,0,0,0-14.24,7.3,96.27,96.27,0,0,1,5,75.71l-181.1-.07A96.24,96.24,0,0,1,128,56h.88a95,95,0,0,1,42.82,10.5A8,8,0,1,0,179,52.27,110.8,110.8,0,0,0,129,40h-1A112.05,112.05,0,0,0,22.35,189.25,16.07,16.07,0,0,0,37.46,200H218.53a16,16,0,0,0,15.11-10.71,112.35,112.35,0,0,0-5.9-88.3Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Oral Reading Fluency Calculator</h3>
-            <p class="tool-desc">Calculate oral reading fluency with WCPM, accuracy, and Hasbrouck &amp; Tindal Fluency Norms. Print or save student results as a PDF.</p>
+            <p class="tool-desc">Calculate oral reading fluency with WCPM, accuracy, and Hasbrouck &amp; Tindal Fluency Norms. Print student reports with a free Literacy Arcade account.</p>
             <div class="tool-tags">
               <span class="tag">ORF Calculator</span>
               <span class="tag">WCPM</span>
@@ -2059,10 +2118,55 @@
             <div class="tool-label">Teacher Tool</div>
           </article>
 
+          <article class="tool-card card-blue fade-up" role="link" tabindex="0" aria-label="Quick Letter Knowledge Check" data-href="quick-letter-knowledge-check.html">
+            <div class="tool-meta">
+              <div class="tool-icon icon-blue" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,164c0,15.46-14.33,28-32,28s-32-12.54-32-28,14.33-28,32-28S232,148.54,232,164ZM34.82,152h90.36L80,56Z" opacity="0.2"/><path d="M87.24,52.59a8,8,0,0,0-14.48,0l-64,136a8,8,0,1,0,14.48,6.81L39.9,160h80.2l16.66,35.4a8,8,0,1,0,14.48-6.81ZM47.43,144,80,74.79,112.57,144ZM200,96c-12.76,0-22.73,3.47-29.63,10.32a8,8,0,0,0,11.26,11.36c3.8-3.77,10-5.68,18.37-5.68,13.23,0,24,9,24,20v3.22A42.76,42.76,0,0,0,200,128c-22.06,0-40,16.15-40,36s17.94,36,40,36a42.73,42.73,0,0,0,24-7.25,8,8,0,0,0,16-.75V132C240,112.15,222.06,96,200,96Zm0,88c-13.23,0-24-9-24-20s10.77-20,24-20,24,9,24,20S213.23,184,200,184Z"/></svg></div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Quick Letter Knowledge Check</h3>
+            <p class="tool-desc">Quickly check letter-name knowledge and generate a simple student-friendly report.</p>
+            <div class="tool-tags">
+              <span class="tag">Letter Names</span>
+              <span class="tag">Alphabet Knowledge</span>
+              <span class="tag">Quick Check</span>
+            </div>
+            <div class="tool-label">Assessment</div>
+          </article>
+
+          <article class="tool-card card-blue fade-up" role="link" tabindex="0" aria-label="Quick Letter Sound Knowledge Check" data-href="quick-letter-sound-check.html">
+            <!-- Confirm actual file name before launch if different. -->
+            <div class="tool-meta">
+              <div class="tool-icon icon-blue" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M80,88v80H32a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8Z" opacity="0.2"/><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.08a40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.58,24,24,0,0,0,0-31.72,8,8,0,0,1,12-10.58ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></svg></div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Quick Letter Sound Knowledge Check</h3>
+            <p class="tool-desc">Quickly check letter-sound knowledge and identify sounds for review.</p>
+            <div class="tool-tags">
+              <span class="tag">Letter Sounds</span>
+              <span class="tag">Alphabet Knowledge</span>
+              <span class="tag">Quick Check</span>
+            </div>
+            <div class="tool-label">Assessment</div>
+          </article>
+
+          <article class="tool-card card-teal fade-up" role="link" tabindex="0" aria-label="Interactive Phoneme Tool coming soon" data-href="">
+            <div class="tool-meta">
+              <div class="tool-icon icon-teal" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,96v64H48V96Z" opacity="0.2"/><path d="M56,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0ZM88,24a8,8,0,0,0-8,8V224a8,8,0,0,0,16,0V32A8,8,0,0,0,88,24Zm40,32a8,8,0,0,0-8,8V192a8,8,0,0,0,16,0V64A8,8,0,0,0,128,56Zm40,32a8,8,0,0,0-8,8v64a8,8,0,0,0,16,0V96A8,8,0,0,0,168,88Zm40-16a8,8,0,0,0-8,8v96a8,8,0,0,0,16,0V80A8,8,0,0,0,208,72Z"/></svg></div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">Interactive Phoneme Tool</h3>
+            <p class="tool-desc">Tap sounds to hear phonemes and view articulation support for instruction.</p>
+            <div class="tool-tags">
+              <span class="tag">Coming Soon</span>
+              <span class="tag">Phonemes</span>
+              <span class="tag">Articulation</span>
+            </div>
+            <div class="tool-label" style="background:var(--sand);color:#8a6000;">Coming Soon</div>
+          </article>
 
           <article class="tool-card card-teal fade-up" role="link" tabindex="0" aria-label="Phoneme Counter" data-href="phoneme-counter.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-teal">🔤</div>
+              <div class="tool-icon icon-teal" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z" opacity="0.2"/><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM140,80v96a8,8,0,0,1-16,0V95l-11.56,7.71a8,8,0,1,1-8.88-13.32l24-16A8,8,0,0,1,140,80Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Phoneme Counter + Letterbox Builder</h3>
@@ -2077,7 +2181,7 @@
 
           <article class="tool-card card-mint fade-up" role="link" tabindex="0" aria-label="Digital Reading Flashcards" data-href="digital-reading-flashcards.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-mint">🃏</div>
+              <div class="tool-icon icon-mint" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M192,88V200a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V88a8,8,0,0,1,8-8H184A8,8,0,0,1,192,88Z" opacity="0.2"/><path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Digital Reading Flashcards</h3>
@@ -2092,7 +2196,7 @@
 
           <article class="tool-card card-mint fade-up" role="link" tabindex="0" aria-label="Vocabulary Flashcards" data-href="vocabulary-flashcards.html">
             <div class="tool-meta">
-              <div class="tool-icon icon-mint">📚</div>
+              <div class="tool-icon icon-mint" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,56V200H160a32,32,0,0,0-32,32V88a32,32,0,0,1,32-32Z" opacity="0.2"/><path d="M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64ZM160,88h40a8,8,0,0,1,0,16H160a8,8,0,0,1,0-16Zm48,40a8,8,0,0,1-8,8H160a8,8,0,0,1,0-16h40A8,8,0,0,1,208,128Zm0,32a8,8,0,0,1-8,8H160a8,8,0,0,1,0-16h40A8,8,0,0,1,208,160Z"/></svg></div>
               <div class="tool-arrow">→</div>
             </div>
             <h3 class="tool-name">Vocabulary Flashcards</h3>
