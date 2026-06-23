@@ -1,130 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
     <loc>https://literacyarcade.com/</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>weekly</changefreq>
     <priority>1.00</priority>
   </url>
-
-  <url>
-    <loc>https://literacyarcade.com/spellbound.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/word-wizard.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/word-forge.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/read-and-race.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/magic-word-road.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/reading-word-spinner.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/repeated-reading-raceway.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/repeatedreadingrockets.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/orf-fluency-calculator.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.95</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/quick-letter-knowledge-check.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/quick-letter-sound-check.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/phoneme-counter.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/digital-reading-flashcards.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://literacyarcade.com/vocabulary-flashcards.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
   <url>
     <loc>https://literacyarcade.com/teacher-dashboard.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.60</priority>
+    <priority>0.80</priority>
   </url>
-
+  <url>
+    <loc>https://literacyarcade.com/spellbound.html</loc>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/word-wizard.html</loc>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/word-forge.html</loc>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/read-and-race.html</loc>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/magic-word-road.html</loc>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/reading-word-spinner.html</loc>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/repeated-reading-raceway.html</loc>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/repeatedreadingrockets.html</loc>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/orf-fluency-calculator.html</loc>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/quick-letter-knowledge-check.html</loc>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/quick-letter-sound-check.html</loc>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/phoneme-counter.html</loc>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/digital-reading-flashcards.html</loc>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://literacyarcade.com/vocabulary-flashcards.html</loc>
+    <priority>0.85</priority>
+  </url>
   <url>
     <loc>https://literacyarcade.com/founding-teacher.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.60</priority>
+    <priority>0.70</priority>
   </url>
-
   <url>
     <loc>https://literacyarcade.com/privacy.html</loc>
-    <lastmod>2026-06-23</lastmod>
-    <changefreq>yearly</changefreq>
     <priority>0.40</priority>
   </url>
-
 </urlset>
