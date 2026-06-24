@@ -2536,15 +2536,23 @@
       navLinks.classList.toggle('open');
     });
     toggle.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') navLinks.classList.toggle('open');
+      if (e.key === 'Enter' || e.key === ' ') navLinks.classList.toggle('open'); 
     });
 
     // Clickable, keyboard-accessible tool cards
     document.querySelectorAll('.tool-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const href = card.getAttribute('data-href');
-        if (href && href !== '#') window.location.href = href;
-      });
+    card.addEventListener('click', () => {
+      const href = card.getAttribute('data-href');
+
+      const toolName =
+        card.querySelector('h2, h3, .tool-title')?.textContent.trim() ||
+        href || 'unknown';
+      if (typeof gtag === 'function') {
+        gtag('event', 'tool_open', { tool_name: toolName });
+      }
+
+      if (href && href !== '#') window.location.href = href;
+    });
       card.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
