@@ -1363,6 +1363,102 @@
     .share-btn-fallback svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
 
 
+    /* ── SHARE RESULT MODAL: copy link + Google Classroom ── */
+    .share-result-overlay{
+      position:fixed;
+      inset:0;
+      z-index:500;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:rgba(26,26,46,.48);
+      backdrop-filter:blur(3px);
+      -webkit-backdrop-filter:blur(3px);
+    }
+    .share-result-overlay.open{display:flex;}
+    .share-result-modal{
+      width:min(560px,94vw);
+      background:var(--white);
+      border:1.5px solid var(--border);
+      border-radius:26px;
+      box-shadow:0 22px 70px rgba(26,26,46,.25);
+      padding:24px;
+      color:var(--navy);
+      font-family:'Nunito',sans-serif;
+    }
+    .share-result-modal h2{
+      font-family:'Nunito',sans-serif;
+      font-size:1.35rem;
+      font-weight:900;
+      line-height:1.15;
+      margin:0 0 8px;
+      color:var(--navy);
+    }
+    .share-result-modal p{
+      font-size:.98rem;
+      font-weight:700;
+      line-height:1.45;
+      color:var(--navy-mid);
+      margin:0 0 14px;
+    }
+    .share-url-box{
+      width:100%;
+      background:var(--cream);
+      border:1.5px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      font-family:'Inter',system-ui,sans-serif;
+      font-size:.88rem;
+      font-weight:600;
+      line-height:1.35;
+      color:var(--navy);
+      word-break:break-all;
+      margin:0 0 16px;
+    }
+    .share-result-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .classroom-share-btn,.copy-share-link-btn,.share-close-btn{
+      appearance:none;
+      -webkit-appearance:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border-radius:14px;
+      min-height:44px;
+      padding:10px 16px;
+      font-family:'Nunito',sans-serif;
+      font-size:.95rem;
+      font-weight:900;
+      cursor:pointer;
+      text-decoration:none;
+      transition:all .13s;
+      border:1.5px solid var(--border);
+      background:var(--white);
+      color:var(--navy-mid);
+    }
+    .classroom-share-btn{
+      background:var(--teal);
+      border-color:var(--teal);
+      color:white;
+      box-shadow:0 4px 0 #0a7a6e;
+    }
+    .classroom-share-btn:hover{background:var(--teal-dk);color:white;transform:translateY(-1px);}
+    .copy-share-link-btn:hover,.share-close-btn:hover{background:var(--teal-bg);border-color:var(--teal);color:var(--teal-dk);}
+    .classroom-share-btn svg,.copy-share-link-btn svg{width:18px;height:18px;flex-shrink:0;}
+    @media(max-width:520px){
+      .share-result-modal{padding:20px;}
+      .share-result-actions{justify-content:stretch;}
+      .classroom-share-btn,.copy-share-link-btn,.share-close-btn{width:100%;}
+    }
+
+
     /* ── PATCH V2: show every selected source and truly center spin mode ── */
     .selected-words-wrap,
     .selected-words-wrap.wheel-words-section{
@@ -3332,6 +3428,7 @@ function updateAuthBar(user) {
 /* ── Save button ─────────────────────────────────────────────────────── */
 document.getElementById('saveActivityBtn').addEventListener('click', async () => {
   if (!currentUser) {
+    captureWordSpinnerBeforeLogin('save');
     window.location.href = 'teacher-login.html';
     return;
   }
@@ -3495,10 +3592,74 @@ function showLoadedNotice(title) {
 window.buildWordSpinnerSetup = buildSpinnerSetup;
 window.restoreWordSpinnerActivity = restoreSpinnerActivity;
 
+/* ── Preserve setup through login redirects ────────────────────────────
+   If a teacher builds a wheel while signed out and then clicks Save or Share,
+   the page reloads during Google sign-in. Save the current setup in
+   sessionStorage first so their selected words come back after login. */
+const WORD_SPINNER_PENDING_AUTH_KEY = 'wordSpinnerPendingAuthSetup';
+
+function captureWordSpinnerBeforeLogin(action = 'save') {
+  try {
+    const sp = window._spinner;
+    const entries = sp ? cleanSpinnerEntries(sp.getWheelEntries()) : [];
+    const pending = {
+      toolType: 'word-spinner',
+      activityType: 'word-spinner',
+      title: 'Unsaved Reading Word Spinner',
+      words: entries.map(entry => entry.word),
+      settings: buildSpinnerSetup(entries),
+      pendingAction: action,
+      savedAt: Date.now()
+    };
+    sessionStorage.setItem(WORD_SPINNER_PENDING_AUTH_KEY, JSON.stringify(pending));
+  } catch (err) {
+    console.warn('Could not preserve spinner setup before login:', err);
+  }
+}
+
+function tryRestorePendingAuthSetup() {
+  const raw = sessionStorage.getItem(WORD_SPINNER_PENDING_AUTH_KEY);
+  if (!raw) return false;
+
+  let activity;
+  try { activity = JSON.parse(raw); } catch {
+    sessionStorage.removeItem(WORD_SPINNER_PENDING_AUTH_KEY);
+    return false;
+  }
+
+  if (!activity || activity.toolType !== 'word-spinner') {
+    sessionStorage.removeItem(WORD_SPINNER_PENDING_AUTH_KEY);
+    return false;
+  }
+
+  // Drop very old pending setups so stale data does not unexpectedly restore days later.
+  if (activity.savedAt && Date.now() - activity.savedAt > 1000 * 60 * 60 * 6) {
+    sessionStorage.removeItem(WORD_SPINNER_PENDING_AUTH_KEY);
+    return false;
+  }
+
+  sessionStorage.removeItem(WORD_SPINNER_PENDING_AUTH_KEY);
+  const restored = restoreSpinnerActivity(activity, { notice: false });
+  if (restored) {
+    const status = document.getElementById('authStatus');
+    const actionText = activity.pendingAction === 'share' ? 'Share Activity' : 'Save Activity';
+    if (status) {
+      status.innerHTML = `<span style="color:#1FA99C;font-weight:800">Your selected words were restored. Click ${actionText} again to finish.</span>`;
+      setTimeout(() => updateAuthBar(currentUser), 5500);
+    }
+  }
+  return restored;
+}
+
+window.captureWordSpinnerBeforeLogin = captureWordSpinnerBeforeLogin;
+
 /* ── Load from dashboard (sessionStorage) ────────────────────────────── */
 function tryLoadSavedActivity() {
   const raw = sessionStorage.getItem('savedActivityData');
-  if (!raw) return;
+  if (!raw) {
+    tryRestorePendingAuthSetup();
+    return;
+  }
   let activity;
   try { activity = JSON.parse(raw); } catch { return; }
   if (!activity || activity.toolType !== 'word-spinner') return;
@@ -3586,6 +3747,54 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
     return ok;
   }
 
+  function showShareResultModal(url){
+    let overlay = document.getElementById('shareResultOverlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'shareResultOverlay';
+      overlay.className = 'share-result-overlay';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-labelledby', 'shareResultTitle');
+      document.body.appendChild(overlay);
+    }
+
+    const classroomUrl = `https://classroom.google.com/share?url=${encodeURIComponent(url)}`;
+    overlay.innerHTML = `
+      <div class="share-result-modal">
+        <h2 id="shareResultTitle">Activity link is ready</h2>
+        <p>Share this activity in Google Classroom, or copy the link for Canvas, Seesaw, email, or another LMS.</p>
+        <div class="share-url-box" aria-label="Share link">${url}</div>
+        <div class="share-result-actions">
+          <a class="classroom-share-btn" href="${classroomUrl}" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v13A2.5 2.5 0 0 1 17.5 21h-11A2.5 2.5 0 0 1 4 18.5v-13Z" fill="currentColor" opacity=".18"/><path d="M7 8.5h10M7 12h10M7 15.5h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Google Classroom
+          </a>
+          <button type="button" class="copy-share-link-btn" id="copyShareLinkAgain">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+          <button type="button" class="share-close-btn" id="closeShareResult">Done</button>
+        </div>
+      </div>
+    `;
+
+    overlay.classList.add('open');
+    const close = () => overlay.classList.remove('open');
+    overlay.addEventListener('click', (event) => { if (event.target === overlay) close(); }, { once:true });
+    overlay.querySelector('#closeShareResult')?.addEventListener('click', close);
+    overlay.querySelector('#copyShareLinkAgain')?.addEventListener('click', async () => {
+      await copyText(url);
+      const btn = overlay.querySelector('#copyShareLinkAgain');
+      if (btn) {
+        const original = btn.innerHTML;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.innerHTML = original; }, 1200);
+      }
+    });
+    overlay.querySelector('.classroom-share-btn')?.focus();
+  }
+
   async function handleShareClick(){
     const sp = window._spinner;
     const entries = sp ? sp.getWheelEntries() : [];
@@ -3594,6 +3803,9 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
       return;
     }
     if (!window.wordSpinnerCurrentUser) {
+      if (typeof window.captureWordSpinnerBeforeLogin === 'function') {
+        window.captureWordSpinnerBeforeLogin('share');
+      }
       window.location.href = 'teacher-login.html';
       return;
     }
@@ -3620,7 +3832,7 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
       const url = `https://literacyarcade.com/reading-word-spinner.html?activity=${encodeURIComponent(result.shareId)}`;
       await copyText(url);
       setShareButtonState('Link Copied!', false);
-      alert('Share link copied. You can paste it into Google Classroom or another LMS.\n\n' + url);
+      showShareResultModal(url);
       setTimeout(() => setShareButtonState('Share Activity', false), 2500);
     } catch (err) {
       console.error('Share error:', err);
@@ -3648,6 +3860,9 @@ LiteracyArcadeShare.register({
     return Boolean(window.wordSpinnerCurrentUser);
   },
   onLoginRequired() {
+    if (typeof window.captureWordSpinnerBeforeLogin === 'function') {
+      window.captureWordSpinnerBeforeLogin('share');
+    }
     window.location.href = 'teacher-login.html';
   },
   getActivity() {
