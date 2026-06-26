@@ -3795,7 +3795,12 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
     overlay.querySelector('.classroom-share-btn')?.focus();
   }
 
-  async function handleShareClick(){
+  async function handleShareClick(event){
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+    }
     const sp = window._spinner;
     const entries = sp ? sp.getWheelEntries() : [];
     if (!entries.length) {
@@ -3841,10 +3846,17 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
     }
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
+  function bindPrimaryShareButton(){
     const btn = document.getElementById('shareActivityBtn');
-    if (btn) btn.addEventListener('click', handleShareClick);
-  });
+    if (btn && !btn.dataset.customShareBound) {
+      btn.dataset.customShareBound = 'true';
+      // Capture-phase listener prevents the older generic share handler from
+      // also firing a browser alert after this custom Google Classroom modal.
+      btn.addEventListener('click', handleShareClick, { capture: true });
+    }
+  }
+  bindPrimaryShareButton();
+  window.addEventListener('DOMContentLoaded', bindPrimaryShareButton);
 })();
 </script>
 
