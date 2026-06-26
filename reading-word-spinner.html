@@ -23,11 +23,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free Sight Word & Phonics Spinner | Literacy Arcade</title>
-  <meta name="description" content="Use this free Literacy Arcade reading word spinner for Science of Reading aligned phonics practice, Fry sight words, Dolch sight words, structured literacy activities, fluency practice, and reading intervention games." />
+  <meta name="description" content="Free Science of Reading aligned word spinner for phonics, Fry &amp; Dolch sight words, fluency warm-ups, and reading intervention. Projector-ready for classrooms." />
   <meta name="keywords" content="sight word spinner, phonics spinner, Fry word games, Dolch games, Science of Reading games, SoR aligned tools, structured literacy activities, literacy wheel spinner, classroom spinner tool, reading intervention games, phonics games, sight word practice, literacy games, fluency practice, teacher tools" />
   <meta name="author" content="Literacy Arcade" />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#1D9E75" />
+  <meta name="theme-color" content="#2EC4B6" />
   
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="./favicon.ico" />
@@ -61,6 +61,11 @@
     "applicationCategory": "EducationalApplication",
     "operatingSystem": "Any",
     "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
     "publisher": {
       "@type": "Organization",
       "name": "Literacy Arcade"
@@ -124,6 +129,8 @@
       --text-mid:var(--navy-mid);
       --text-lt:var(--navy-light);
       --mustard:var(--amber);
+      --navy-lt:var(--navy-light);   /* alias: 11 override rules referenced this typo'd name */
+      --coral-lt:var(--coral-light); /* alias: legacy .btn.clr:hover referenced this typo'd name */
       --shadow-sm:0 2px 8px rgba(15,23,42,.06);
       --shadow-md:0 8px 24px rgba(15,23,42,.10);
       --shadow-lg:0 16px 48px rgba(15,23,42,.14);
@@ -2163,6 +2170,96 @@
     }
 
 
+
+    /* ── SHARE MODAL V11: final compact override.
+       This is intentionally at the end of the stylesheet so it wins over all older share modal rules. ── */
+    #shareResultOverlay{
+      padding:12px!important;
+      align-items:center!important;
+      justify-content:center!important;
+    }
+    #shareResultOverlay .share-result-modal{
+      width:min(520px, calc(100vw - 32px))!important;
+      max-width:520px!important;
+      max-height:82vh!important;
+      border-radius:18px!important;
+      overflow:auto!important;
+      box-shadow:0 18px 54px rgba(26,26,46,.24)!important;
+    }
+    #shareResultOverlay .share-modal-head{
+      padding:14px 18px!important;
+      min-height:0!important;
+    }
+    #shareResultOverlay .share-modal-head h2{
+      font-size:1.18rem!important;
+      letter-spacing:-.015em!important;
+    }
+    #shareResultOverlay .share-x-btn{
+      width:34px!important;
+      height:34px!important;
+      border-radius:10px!important;
+      font-size:22px!important;
+    }
+    #shareResultOverlay .share-modal-body{
+      padding:15px 18px 18px!important;
+    }
+    #shareResultOverlay .share-field-label{
+      font-size:.84rem!important;
+      margin-bottom:6px!important;
+    }
+    #shareResultOverlay .share-url-box{
+      font-size:.76rem!important;
+      line-height:1.28!important;
+      padding:9px 11px!important;
+      border-radius:11px!important;
+      margin-bottom:10px!important;
+      max-height:58px!important;
+    }
+    #shareResultOverlay .share-primary-actions{
+      grid-template-columns:1fr 1fr!important;
+      gap:9px!important;
+      margin-bottom:12px!important;
+    }
+    #shareResultOverlay .copy-share-link-btn,
+    #shareResultOverlay .copy-embed-code-btn{
+      min-height:38px!important;
+      border-radius:11px!important;
+      padding:8px 10px!important;
+      font-size:.82rem!important;
+    }
+    #shareResultOverlay .share-divider{
+      margin:12px 0 13px!important;
+    }
+    #shareResultOverlay .share-classroom-title{
+      font-size:.96rem!important;
+      margin-bottom:2px!important;
+    }
+    #shareResultOverlay .share-classroom-text{
+      font-size:.8rem!important;
+      line-height:1.25!important;
+      margin-bottom:8px!important;
+    }
+    #shareResultOverlay .classroom-widget-wrap{
+      min-height:36px!important;
+      margin-bottom:10px!important;
+    }
+    #shareResultOverlay .classroom-fallback-link{
+      min-height:34px!important;
+      padding:7px 12px!important;
+      font-size:.8rem!important;
+    }
+    #shareResultOverlay .share-note{
+      font-size:.76rem!important;
+      line-height:1.3!important;
+      padding:9px 10px!important;
+      border-radius:11px!important;
+      margin:0!important;
+    }
+    @media(max-width:560px){
+      #shareResultOverlay .share-result-modal{width:calc(100vw - 24px)!important;max-width:none!important;}
+      #shareResultOverlay .share-primary-actions{grid-template-columns:1fr!important;}
+    }
+
   </style>
 </head>
 <body>
@@ -2319,7 +2416,7 @@
 
       <button class="spin-btn" id="spinBtn" onclick="spin()">SPIN!</button>
 
-      <div class="winner-banner" id="winnerBanner">
+      <div class="winner-banner" id="winnerBanner" role="status" aria-live="polite">
         <p>Last word standing!</p>
         <div class="big-word" id="winnerWord"></div>
         <div class="winner-actions">
@@ -2352,11 +2449,11 @@
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay">
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalWord">
   <div class="modal">
     <div class="modal-header"><p>Read this word!</p></div>
     <div class="modal-body">
-      <div class="modal-word" id="modalWord"></div>
+      <div class="modal-word" id="modalWord" aria-live="assertive"></div>
       <div class="modal-prompt">Can you read it?</div>
       <div class="modal-btns">
         <button class="modal-keep"   onclick="closeModal(false)">Keep It</button>
