@@ -1363,7 +1363,7 @@
     .share-btn-fallback svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
 
 
-    /* ── SHARE RESULT MODAL: copy link + Google Classroom ── */
+    /* ── SHARE MODAL: matches shared Literacy Arcade activity modal ── */
     .share-result-overlay{
       position:fixed;
       inset:0;
@@ -1378,84 +1378,144 @@
     }
     .share-result-overlay.open{display:flex;}
     .share-result-modal{
-      width:min(560px,94vw);
+      width:min(640px,94vw);
+      max-height:min(90vh,720px);
+      overflow:auto;
       background:var(--white);
       border:1.5px solid var(--border);
-      border-radius:26px;
+      border-radius:22px;
       box-shadow:0 22px 70px rgba(26,26,46,.25);
-      padding:24px;
       color:var(--navy);
       font-family:'Nunito',sans-serif;
     }
-    .share-result-modal h2{
-      font-family:'Nunito',sans-serif;
-      font-size:1.35rem;
-      font-weight:900;
-      line-height:1.15;
-      margin:0 0 8px;
-      color:var(--navy);
-    }
-    .share-result-modal p{
-      font-size:.98rem;
-      font-weight:700;
-      line-height:1.45;
-      color:var(--navy-mid);
-      margin:0 0 14px;
-    }
-    .share-url-box{
-      width:100%;
-      background:var(--cream);
-      border:1.5px solid var(--border);
-      border-radius:14px;
-      padding:12px;
-      font-family:'Inter',system-ui,sans-serif;
-      font-size:.88rem;
-      font-weight:600;
-      line-height:1.35;
-      color:var(--navy);
-      word-break:break-all;
-      margin:0 0 16px;
-    }
-    .share-result-actions{
+    .share-modal-head{
       display:flex;
-      flex-wrap:wrap;
-      gap:10px;
       align-items:center;
-      justify-content:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      padding:22px 24px 20px;
+      border-bottom:1px solid #DEE2EA;
     }
-    .classroom-share-btn,.copy-share-link-btn,.share-close-btn{
-      appearance:none;
-      -webkit-appearance:none;
+    .share-modal-head h2{
+      font-family:'Nunito',sans-serif;
+      font-size:1.55rem;
+      font-weight:900;
+      line-height:1.1;
+      margin:0;
+      color:#17284A;
+      letter-spacing:-.02em;
+    }
+    .share-x-btn{
+      width:42px;
+      height:42px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      border-radius:14px;
-      min-height:44px;
-      padding:10px 16px;
+      border:1.5px solid #D9DEE8;
+      border-radius:12px;
+      background:#fff;
+      color:#4F5871;
+      font-size:28px;
+      font-weight:900;
+      line-height:1;
+      cursor:pointer;
+    }
+    .share-x-btn:hover{background:var(--teal-bg);border-color:var(--teal);color:var(--teal-dk);}
+    .share-modal-body{padding:24px;}
+    .share-field-label{
+      display:block;
       font-family:'Nunito',sans-serif;
-      font-size:.95rem;
+      font-size:1rem;
+      font-weight:900;
+      color:#4F5871;
+      margin:0 0 10px;
+    }
+    .share-url-box{
+      width:100%;
+      background:#fff;
+      border:1.5px solid #D9DEE8;
+      border-radius:14px;
+      padding:14px 16px;
+      font-family:'Nunito',system-ui,sans-serif;
+      font-size:1rem;
+      font-weight:900;
+      line-height:1.35;
+      color:#17284A;
+      word-break:break-all;
+      margin:0 0 16px;
+    }
+    .share-primary-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .copy-share-link-btn,.copy-embed-code-btn{
+      appearance:none;
+      -webkit-appearance:none;
+      min-height:50px;
+      border-radius:14px;
+      padding:12px 16px;
+      font-family:'Nunito',sans-serif;
+      font-size:1rem;
       font-weight:900;
       cursor:pointer;
-      text-decoration:none;
       transition:all .13s;
-      border:1.5px solid var(--border);
-      background:var(--white);
-      color:var(--navy-mid);
-    }
-    .classroom-share-btn{
-      background:var(--teal);
-      border-color:var(--teal);
+      border:1.5px solid var(--teal);
+      background:var(--teal-dk);
       color:white;
+      text-align:center;
+    }
+    .copy-embed-code-btn{background:#fff;color:#08796F;}
+    .copy-share-link-btn:hover{background:#08796F;}
+    .copy-embed-code-btn:hover{background:var(--teal-bg);}
+    .share-divider{height:1px;background:#DEE2EA;margin:18px 0 20px;}
+    .share-classroom-title{
+      font-size:1.25rem;
+      font-weight:900;
+      color:#17284A;
+      margin:0 0 4px;
+    }
+    .share-classroom-text{
+      font-size:1rem;
+      font-weight:800;
+      color:#4F5871;
+      margin:0 0 18px;
+      line-height:1.35;
+    }
+    .classroom-widget-wrap{
+      min-height:54px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .classroom-fallback-link{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
+      border-radius:12px;
+      padding:10px 16px;
+      background:var(--teal);
+      color:#fff;
+      font-family:'Nunito',sans-serif;
+      font-weight:900;
+      text-decoration:none;
       box-shadow:0 4px 0 #0a7a6e;
     }
-    .classroom-share-btn:hover{background:var(--teal-dk);color:white;transform:translateY(-1px);}
-    .copy-share-link-btn:hover,.share-close-btn:hover{background:var(--teal-bg);border-color:var(--teal);color:var(--teal-dk);}
-    .classroom-share-btn svg,.copy-share-link-btn svg{width:18px;height:18px;flex-shrink:0;}
+    .classroom-fallback-link:hover{background:var(--teal-dk);color:#fff;}
+    .share-note{
+      font-size:1rem;
+      line-height:1.4;
+      font-weight:800;
+      color:#4F5871;
+      margin:0;
+    }
     @media(max-width:520px){
-      .share-result-modal{padding:20px;}
-      .share-result-actions{justify-content:stretch;}
-      .classroom-share-btn,.copy-share-link-btn,.share-close-btn{width:100%;}
+      .share-result-modal{width:96vw;border-radius:18px;}
+      .share-modal-head,.share-modal-body{padding:18px;}
+      .share-primary-actions{grid-template-columns:1fr;}
     }
 
 
@@ -3747,6 +3807,60 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
     return ok;
   }
 
+  function htmlEscape(value){
+    return String(value).replace(/[&<>'"]/g, (char) => ({
+      '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
+    }[char]));
+  }
+
+  function ensureGoogleClassroomScript(){
+    return new Promise((resolve) => {
+      if (window.gapi && window.gapi.sharetoclassroom) {
+        resolve(true);
+        return;
+      }
+      const existing = document.querySelector('script[src="https://apis.google.com/js/platform.js"]');
+      if (existing) {
+        existing.addEventListener('load', () => resolve(true), { once:true });
+        setTimeout(() => resolve(Boolean(window.gapi && window.gapi.sharetoclassroom)), 1800);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://apis.google.com/js/platform.js';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.head.appendChild(script);
+      setTimeout(() => resolve(Boolean(window.gapi && window.gapi.sharetoclassroom)), 2200);
+    });
+  }
+
+  function renderGoogleClassroomButton(url){
+    const wrap = document.getElementById('classroomShareWidget');
+    const fallback = document.getElementById('classroomFallbackLink');
+    if (!wrap) return;
+    wrap.innerHTML = `<div class="g-sharetoclassroom" data-size="32" data-url="${htmlEscape(url)}" data-title="Reading Word Spinner"></div>`;
+    ensureGoogleClassroomScript().then(() => {
+      try {
+        if (window.gapi && window.gapi.sharetoclassroom) {
+          if (typeof window.gapi.sharetoclassroom.go === 'function') {
+            window.gapi.sharetoclassroom.go();
+          } else if (typeof window.gapi.sharetoclassroom.render === 'function') {
+            const target = wrap.querySelector('.g-sharetoclassroom');
+            window.gapi.sharetoclassroom.render(target, { url, title:'Reading Word Spinner', size:32 });
+          }
+        }
+      } catch (err) {
+        console.warn('Google Classroom button render failed:', err);
+      }
+      setTimeout(() => {
+        const hasRenderedButton = wrap.querySelector('iframe, button, a');
+        if (!hasRenderedButton && fallback) fallback.style.display = 'inline-flex';
+      }, 900);
+    });
+  }
+
   function showShareResultModal(url){
     let overlay = document.getElementById('shareResultOverlay');
     if (!overlay) {
@@ -3759,22 +3873,28 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
       document.body.appendChild(overlay);
     }
 
+    const safeUrl = htmlEscape(url);
     const classroomUrl = `https://classroom.google.com/share?url=${encodeURIComponent(url)}`;
+    const embedCode = `<iframe src="${url}" width="100%" height="700" style="border:0;" loading="lazy" title="Literacy Arcade Reading Word Spinner"></iframe>`;
     overlay.innerHTML = `
       <div class="share-result-modal">
-        <h2 id="shareResultTitle">Activity link is ready</h2>
-        <p>Share this activity in Google Classroom, or copy the link for Canvas, Seesaw, email, or another LMS.</p>
-        <div class="share-url-box" aria-label="Share link">${url}</div>
-        <div class="share-result-actions">
-          <a class="classroom-share-btn" href="${classroomUrl}" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v13A2.5 2.5 0 0 1 17.5 21h-11A2.5 2.5 0 0 1 4 18.5v-13Z" fill="currentColor" opacity=".18"/><path d="M7 8.5h10M7 12h10M7 15.5h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            Google Classroom
-          </a>
-          <button type="button" class="copy-share-link-btn" id="copyShareLinkAgain">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            Copy Link
-          </button>
-          <button type="button" class="share-close-btn" id="closeShareResult">Done</button>
+        <div class="share-modal-head">
+          <h2 id="shareResultTitle">Share spinner</h2>
+          <button type="button" class="share-x-btn" id="closeShareResult" aria-label="Close share modal">×</button>
+        </div>
+        <div class="share-modal-body">
+          <label class="share-field-label">Student link</label>
+          <div class="share-url-box" aria-label="Student link">${safeUrl}</div>
+          <div class="share-primary-actions">
+            <button type="button" class="copy-share-link-btn" id="copyShareLinkAgain">Copy Link</button>
+            <button type="button" class="copy-embed-code-btn" id="copyEmbedCodeBtn">Copy Embed Code</button>
+          </div>
+          <div class="share-divider" aria-hidden="true"></div>
+          <h3 class="share-classroom-title">Share to Google Classroom</h3>
+          <p class="share-classroom-text">Post this student-ready activity link to your class.</p>
+          <div class="classroom-widget-wrap" id="classroomShareWidget"></div>
+          <a class="classroom-fallback-link" id="classroomFallbackLink" href="${classroomUrl}" target="_blank" rel="noopener noreferrer">Open Google Classroom</a>
+          <p class="share-note">Anyone with this link can open the student activity setup. Students do not need to sign in.</p>
         </div>
       </div>
     `;
@@ -3787,13 +3907,24 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
       await copyText(url);
       const btn = overlay.querySelector('#copyShareLinkAgain');
       if (btn) {
-        const original = btn.innerHTML;
+        const original = btn.textContent;
         btn.textContent = 'Copied!';
-        setTimeout(() => { btn.innerHTML = original; }, 1200);
+        setTimeout(() => { btn.textContent = original; }, 1200);
       }
     });
-    overlay.querySelector('.classroom-share-btn')?.focus();
+    overlay.querySelector('#copyEmbedCodeBtn')?.addEventListener('click', async () => {
+      await copyText(embedCode);
+      const btn = overlay.querySelector('#copyEmbedCodeBtn');
+      if (btn) {
+        const original = btn.textContent;
+        btn.textContent = 'Embed Copied!';
+        setTimeout(() => { btn.textContent = original; }, 1200);
+      }
+    });
+    renderGoogleClassroomButton(url);
+    overlay.querySelector('#copyShareLinkAgain')?.focus();
   }
+
 
   async function handleShareClick(event){
     if (event) {
