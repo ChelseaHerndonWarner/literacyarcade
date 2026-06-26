@@ -21,23 +21,6 @@
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"WebApplication","name":"Phonics Knowledge Check","applicationCategory":"EducationalApplication","operatingSystem":"Web","url":"https://literacyarcade.com/phonics-knowledge-check.html","educationalUse":"Assessment","learningResourceType":"Interactive tool","provider":{"@type":"Organization","name":"Literacy Arcade","url":"https://literacyarcade.com"},"audience":{"@type":"EducationalAudience","educationalRole":"Teacher"},"offers":{"@type":"Offer","price":"0","priceCategory":"free"}}
   </script>
-
-  <!-- Firebase Auth is used only to check whether a teacher is signed in before printing. Phonics assessment results are not saved. -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-  <script>
-    window.LA_FIREBASE_CONFIG = window.LA_FIREBASE_CONFIG || {
-      apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
-      authDomain: "literacy-arcade.firebaseapp.com",
-      projectId: "literacy-arcade",
-      storageBucket: "literacy-arcade.firebasestorage.app",
-      messagingSenderId: "628621471724",
-      appId: "1:628621471724:web:7ddfd231d1261b6c781ac9",
-      measurementId: "G-LNWHB69FV1"
-    };
-    window.firebaseConfig = window.firebaseConfig || window.LA_FIREBASE_CONFIG;
-  </script>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
     :root{
@@ -561,83 +544,24 @@
     .pattern-chip.chip-ok{background:#f0fbf9;border-color:#9dddd6;color:var(--ink)}
     .pattern-chip.chip-ok small{color:#3b8a7a}
     .start-hint{margin:6px 0 0;font-size:.8rem;font-weight:800;color:#b05c2a;text-align:center}
-
-    /* Print-login gate: same-page Google popup like ORF */
-    .print-login-modal[hidden]{display:none!important}
-    .print-login-modal{
-      position:fixed;
-      inset:0;
-      z-index:3000;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      background:rgba(26,26,46,.46);
-      backdrop-filter:blur(5px);
-    }
-    .print-login-card{
-      width:min(430px,100%);
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:22px;
-      box-shadow:0 24px 70px rgba(26,26,46,.24);
-      padding:22px;
-      color:var(--ink);
-    }
-    .print-login-card h2{
-      font-family:Nunito,Arial,sans-serif;
-      font-size:1.45rem;
-      line-height:1.12;
-      letter-spacing:-.03em;
-      margin:0 0 8px;
-      color:var(--ink);
-      font-weight:900;
-    }
-    .print-login-card p{
-      margin:0 0 16px;
-      color:#4A4A64;
-      font-size:14px;
-      font-weight:800;
-      line-height:1.45;
-    }
+  /* Print-login modal (auth gate for report printing) */
+    .print-login-modal[hidden]{display:none}
+    .print-login-modal{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(27,45,69,.52);backdrop-filter:blur(5px)}
+    .print-login-card{width:min(430px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 24px 70px rgba(27,45,69,.24);padding:24px}
+    .print-login-card h2{font-size:1.3rem;line-height:1.15;letter-spacing:-.02em;margin:0 0 8px;color:var(--ink);font-weight:900}
+    .print-login-card p{margin:0 0 18px;color:var(--muted);font-size:.9rem;font-weight:700;line-height:1.5}
     .print-login-actions{display:grid;gap:9px}
-    .google-login-btn,
-    .print-login-cancel{
-      min-height:44px;
-      border-radius:13px;
-      padding:11px 14px;
-      font-family:Nunito,Arial,sans-serif;
-      font-size:15px;
-      font-weight:900;
-    }
-    .google-login-btn{
-      background:var(--teal);
-      color:#fff;
-      box-shadow:0 4px 0 var(--teal-dark);
-    }
-    .google-login-btn:hover{background:var(--teal-dark)}
-    .print-login-cancel{
-      background:#E8E4F0;
-      color:#4A4A64;
-      border:1.5px solid var(--line);
-    }
+    .google-login-btn,.print-login-cancel{min-height:44px;border-radius:12px;padding:11px 14px;font-family:Nunito,Arial,sans-serif;font-size:.94rem;font-weight:900;border:none;cursor:pointer}
+    .google-login-btn{background:var(--teal);color:#fff;box-shadow:0 4px 0 #1fa99c}
+    .google-login-btn:hover{background:#1fa99c}
+    .print-login-cancel{background:#ece9f5;color:var(--muted);border:1.5px solid var(--line)}
     .print-login-cancel:hover{background:#fff;border-color:var(--teal);color:var(--teal-dark)}
-    .print-login-error{
-      display:none;
-      margin-top:12px;
-      border:1px solid #FFC4C4;
-      border-radius:12px;
-      background:#FFF1F1;
-      color:#B93030;
-      padding:10px 11px;
-      font-size:13px;
-      font-weight:900;
-      line-height:1.35;
-    }
+    .print-login-error{display:none;margin-top:12px;border:1px solid #ffc4c4;border-radius:12px;background:#fff0f0;color:#8e2525;padding:10px 11px;font-size:.83rem;font-weight:800;line-height:1.35}
     .print-login-error.show{display:block}
-    @media print{.print-login-modal{display:none!important}}
-
   </style>
+  <!-- Firebase Auth — used only to gate report printing; no data is saved -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 </head>
 <body>
   <header class="topbar" aria-label="Literacy Arcade header">
@@ -872,24 +796,105 @@
     <div class="response-actions"><button class="btn secondary" id="skipResponseBtn" type="button">Cancel</button><button class="btn primary" id="saveResponseBtn" type="button" disabled>Save</button></div>
   </div>
 
+  <section id="studentPrint" class="print-page" aria-hidden="true"></section>
+  <section id="reportPrint" class="print-page" aria-hidden="true"></section>
 
+        <!-- Print-login modal -->
   <div class="print-login-modal" id="printLoginModal" role="dialog" aria-modal="true" aria-labelledby="printLoginTitle" hidden>
     <div class="print-login-card">
-      <h2 id="printLoginTitle">Print reports with a free Literacy Arcade account</h2>
-      <p>Create a free account to print student reports. Your Phonics Knowledge Check results are generated in your browser and are not saved to your dashboard.</p>
+      <h2 id="printLoginTitle">Sign in to print reports</h2>
+      <p>Student sheets are free to print. To print or save a completed assessment report, please sign in with Google.</p>
       <div class="print-login-actions">
         <button class="google-login-btn" id="printLoginGoogle" type="button">Sign in with Google</button>
-        <button class="print-login-cancel" id="printLoginCancel" type="button">Continue without printing</button>
+        <button class="print-login-cancel" id="printLoginCancel" type="button">Cancel</button>
       </div>
       <div class="print-login-error" id="printLoginError" role="alert"></div>
     </div>
   </div>
 
-  <section id="studentPrint" class="print-page" aria-hidden="true"></section>
-  <section id="reportPrint" class="print-page" aria-hidden="true"></section>
-
-      <script>
+  <script>
   (() => {
+    /* ---- Auth gate for report printing ---- */
+    // Reuses window.LA_AUTH (shared Literacy Arcade auth) if available,
+    // then falls back to a page-level Firebase init. No data is saved.
+    const LA_FIREBASE_CONFIG = window.LA_FIREBASE_CONFIG || window.firebaseConfig || null;
+    let printGateUser = null;
+    let pendingPrintAfterSignIn = false;
+
+    function getCurrentPrintUser(){
+      try{
+        if(window.LA_AUTH && typeof window.LA_AUTH.getCurrentUser === 'function'){
+          const u = window.LA_AUTH.getCurrentUser(); if(u) return u;
+        }
+        if(window.firebase && firebase.auth && firebase.auth().currentUser) return firebase.auth().currentUser;
+      }catch(e){}
+      return printGateUser;
+    }
+    function isPrintUserSignedIn(){ return !!getCurrentPrintUser(); }
+
+    function initPrintAuthGate(){
+      try{
+        if(window.LA_AUTH && typeof window.LA_AUTH.onAuthStateChanged === 'function'){
+          window.LA_AUTH.onAuthStateChanged(u => { printGateUser = u; }); return;
+        }
+        if(window.firebase && firebase.auth){
+          if(firebase.apps && firebase.apps.length){
+            firebase.auth().onAuthStateChanged(u => { printGateUser = u; }); return;
+          }
+          if(LA_FIREBASE_CONFIG){
+            firebase.initializeApp(LA_FIREBASE_CONFIG);
+            firebase.auth().onAuthStateChanged(u => { printGateUser = u; });
+          }
+        }
+      }catch(e){ console.warn('Phonics Check: print auth gate could not initialize.', e); }
+    }
+
+    function openPrintLoginModal(){
+      pendingPrintAfterSignIn = true;
+      $('printLoginError').textContent = '';
+      $('printLoginError').classList.remove('show');
+      $('printLoginModal').hidden = false;
+      setTimeout(() => $('printLoginGoogle').focus(), 0);
+    }
+    function closePrintLoginModal(){
+      $('printLoginModal').hidden = true;
+      pendingPrintAfterSignIn = false;
+    }
+
+    async function signInToPrint(){
+      $('printLoginError').textContent = '';
+      $('printLoginError').classList.remove('show');
+      try{
+        if(window.LA_AUTH && typeof window.LA_AUTH.signInWithGoogle === 'function'){
+          const u = await window.LA_AUTH.signInWithGoogle();
+          printGateUser = u || getCurrentPrintUser();
+          closePrintLoginModal();
+          printContent('report');
+          return;
+        }
+        if(window.firebase && firebase.auth){
+          if(firebase.apps && !firebase.apps.length && LA_FIREBASE_CONFIG) firebase.initializeApp(LA_FIREBASE_CONFIG);
+          const provider = new firebase.auth.GoogleAuthProvider();
+          await firebase.auth().signInWithPopup(provider);
+          printGateUser = firebase.auth().currentUser;
+          closePrintLoginModal();
+          printContent('report');
+          return;
+        }
+        // Fallback: redirect to dashboard
+        window.location.href = 'teacher-dashboard.html?return=phonics-knowledge-check.html&print=report';
+      }catch(e){
+        $('printLoginError').textContent = 'Sign-in did not finish. Please try again, or sign in from My Activities and return to print.';
+        $('printLoginError').classList.add('show');
+      }
+    }
+
+    function handlePrintReportClick(){
+      if(isPrintUserSignedIn()){ printContent('report'); }
+      else { openPrintLoginModal(); }
+    }
+    /* ---- end auth gate ---- */
+
     const $ = id => document.getElementById(id);
 
     /* ============================ WORD DATA ============================ */
@@ -1588,117 +1593,6 @@
         function editScoring(){ showLeft('gridPanel'); showControls('activeControls'); $('rightHeading').textContent='Edit Scoring'; $('rightSubhead').textContent=''; }
     function newAssessment(){ if(state.running) stopTimer(); if($('teacherNotes')) $('teacherNotes').value=''; state.marks={}; state.notAdministered=new Set(); Object.assign(state,{elapsed:0,running:false,completed:false,started:false,startAt:null}); updateTimerUI(); showLeft('overviewPanel'); showControls(null); $('setupControls').style.display=''; $('rightHeading').textContent='Assessment Details'; $('rightSubhead').textContent='Set up the assessment, then start when the student begins.'; }
 
-
-    /* ============================ PRINT LOGIN GATE ============================ */
-    let printGateUser = null;
-    let pendingPrintReport = false;
-
-    // This page only uses authentication to unlock report printing. It does not save
-    // Phonics Knowledge Check data to Firestore.
-    const LA_FIREBASE_CONFIG = window.LA_FIREBASE_CONFIG || window.firebaseConfig || null;
-
-    function getCurrentPrintUser(){
-      try{
-        if(window.LA_AUTH && typeof window.LA_AUTH.getCurrentUser === 'function'){
-          const sharedUser = window.LA_AUTH.getCurrentUser();
-          if(sharedUser) return sharedUser;
-        }
-        if(window.firebase && firebase.auth && firebase.auth().currentUser) return firebase.auth().currentUser;
-      }catch(err){}
-      return printGateUser;
-    }
-
-    function isPrintUserSignedIn(){
-      return !!getCurrentPrintUser();
-    }
-
-    function initPrintAuthGate(){
-      try{
-        if(window.LA_AUTH && typeof window.LA_AUTH.onAuthStateChanged === 'function'){
-          window.LA_AUTH.onAuthStateChanged(user => { printGateUser = user; });
-          return;
-        }
-        if(window.firebase && firebase.auth){
-          if(firebase.apps && firebase.apps.length){
-            firebase.auth().onAuthStateChanged(user => { printGateUser = user; });
-            return;
-          }
-          if(LA_FIREBASE_CONFIG){
-            firebase.initializeApp(LA_FIREBASE_CONFIG);
-            firebase.auth().onAuthStateChanged(user => { printGateUser = user; });
-          }
-        }
-      }catch(err){
-        console.warn('Print login gate could not initialize Firebase Auth.', err);
-      }
-    }
-
-    function openPrintLoginModal(){
-      pendingPrintReport = true;
-      $('printLoginError').textContent = '';
-      $('printLoginError').classList.remove('show');
-      $('printLoginModal').hidden = false;
-      setTimeout(() => $('printLoginGoogle').focus(), 0);
-    }
-
-    function closePrintLoginModal(){
-      $('printLoginModal').hidden = true;
-      pendingPrintReport = false;
-    }
-
-    function doPrintReport(){
-      printContent('report');
-    }
-
-    function handlePrintReportClick(){
-      if(isPrintUserSignedIn()){
-        doPrintReport();
-      } else {
-        openPrintLoginModal();
-      }
-    }
-
-    async function signInToPrint(){
-      const btn = $('printLoginGoogle');
-      $('printLoginError').textContent = '';
-      $('printLoginError').classList.remove('show');
-      btn.disabled = true;
-      btn.textContent = 'Signing in…';
-
-      try{
-        if(window.LA_AUTH && typeof window.LA_AUTH.signInWithGoogle === 'function'){
-          const user = await window.LA_AUTH.signInWithGoogle();
-          printGateUser = user || getCurrentPrintUser();
-          closePrintLoginModal();
-          doPrintReport();
-          return;
-        }
-
-        if(window.firebase && firebase.auth && LA_FIREBASE_CONFIG){
-          if(firebase.apps && !firebase.apps.length){
-            firebase.initializeApp(LA_FIREBASE_CONFIG);
-          }
-          const provider = new firebase.auth.GoogleAuthProvider();
-          const result = await firebase.auth().signInWithPopup(provider);
-          printGateUser = result.user || firebase.auth().currentUser;
-          closePrintLoginModal();
-          doPrintReport();
-          return;
-        }
-
-        $('printLoginError').textContent = 'Sign-in is not available on this page. Check that Firebase Auth scripts and config are loading.';
-        $('printLoginError').classList.add('show');
-      }catch(err){
-        $('printLoginError').textContent = 'Sign-in did not finish. Please try again.';
-        $('printLoginError').classList.add('show');
-        console.warn('Print sign-in failed.', err);
-      }finally{
-        btn.disabled = false;
-        btn.textContent = 'Sign in with Google';
-      }
-    }
-
-
     /* ============================ PRINT ============================ */
     function studentPrintHTML(){
       collectSetup();
@@ -1781,13 +1675,10 @@
     $('printReportBtn').addEventListener('click', handlePrintReportClick);
     $('printLoginGoogle').addEventListener('click', signInToPrint);
     $('printLoginCancel').addEventListener('click', closePrintLoginModal);
-    $('printLoginModal').addEventListener('click', event => {
-      if(event.target === $('printLoginModal')) closePrintLoginModal();
-    });
-    document.addEventListener('keydown', event => {
-      if(event.key === 'Escape' && !$('printLoginModal').hidden) closePrintLoginModal();
-    });
-    initPrintAuthGate();
+    $('printLoginModal').addEventListener('click', e => { if(e.target === $('printLoginModal')) closePrintLoginModal(); });
+    document.addEventListener('keydown', e => { if(e.key==='Escape' && !$('printLoginModal').hidden) closePrintLoginModal(); });
+    // defer auth init until Firebase scripts have loaded
+    if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', initPrintAuthGate); } else { setTimeout(initPrintAuthGate, 0); }
     $('editScoringCompleteBtn').addEventListener('click', editScoring);
     $('newAssessmentBtn').addEventListener('click', newAssessment);
     $('responseInput').addEventListener('input', updateSaveEnabled);
@@ -1804,3 +1695,4 @@
 
 </body>
 </html>
+
