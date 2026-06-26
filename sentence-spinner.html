@@ -3,189 +3,692 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sentence Spinner | Literacy Arcade</title>
-  <meta name="description" content="Spin custom sentence prompts for fluency, phrasing, expression, and repeated reading practice." />
-  <meta name="theme-color" content="#1D9E75" />
+  <title>Free Sentence Spinner for Reading Fluency | Literacy Arcade</title>
+  <meta name="description" content="Free classroom sentence spinner for fluency, phrasing, and expression practice. Spin custom sentences for repeated reading — projector-ready for the classroom." />
+  <meta name="keywords" content="sentence spinner, fluency spinner, reading fluency practice, phrasing and expression, repeated reading, sentence reading practice, Science of Reading, structured literacy, classroom spinner tool, reading intervention" />
+  <meta name="author" content="Literacy Arcade" />
+  <meta name="application-name" content="Sentence Spinner" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="theme-color" content="#2EC4B6" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+
+  <link rel="canonical" href="https://literacyarcade.com/sentence-spinner.html" />
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="Literacy Arcade" />
+  <meta property="og:title" content="Free Sentence Spinner for Reading Fluency | Literacy Arcade" />
+  <meta property="og:description" content="A free classroom sentence spinner for fluency, phrasing, expression, and repeated reading practice. Enter custom sentences, spin the wheel, and display results on a projector — science of reading aligned." />
+  <meta property="og:url" content="https://literacyarcade.com/sentence-spinner.html" />
+  <meta property="og:image" content="https://literacyarcade.com/images/sentence-spinner-preview.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Literacy Arcade Sentence Spinner — classroom fluency wheel for phrasing and expression practice" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Sentence Spinner for Reading Fluency | Literacy Arcade" />
+  <meta name="twitter:description" content="Spin custom sentences for fluency, phrasing, and expression practice with a Science of Reading aligned classroom tool." />
+  <meta name="twitter:image" content="https://literacyarcade.com/images/sentence-spinner-preview.png" />
+  <meta name="twitter:image:alt" content="Classroom sentence spinner from Literacy Arcade" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Sentence Spinner",
+    "alternateName": ["Reading Sentence Spinner", "Fluency Sentence Spinner", "Classroom Fluency Wheel"],
+    "url": "https://literacyarcade.com/sentence-spinner.html",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web",
+    "browserRequirements": "Requires JavaScript. Compatible with all modern browsers.",
+    "inLanguage": "en-US",
+    "typicalAgeRange": "5-12",
+    "isAccessibleForFree": true,
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://literacyarcade.com/images/sentence-spinner-preview.png",
+      "width": 1200,
+      "height": 630
+    },
+    "description": "A free classroom sentence spinner for reading fluency, phrasing, expression, and repeated reading practice. Enter custom sentences, spin the wheel, and display results full-screen — projector-ready for whole-class warm-ups.",
+    "educationalUse": ["Fluency practice", "Repeated reading", "Classroom warm-up"],
+    "learningResourceType": "Interactive classroom tool",
+    "featureList": [
+      "Custom sentence list entry",
+      "Animated spinning wheel",
+      "Full-screen projector display mode",
+      "Repeated reading support",
+      "Phrasing and expression practice",
+      "Save and share sentence lists",
+      "Science of reading aligned",
+      "No login required for basic use",
+      "Works on any device"
+    ],
+    "keywords": "sentence spinner, reading fluency practice, phrasing and expression, repeated reading, structured literacy, classroom reading tools, reading intervention, fluency warm-up, projector reading tool",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Literacy Arcade",
+      "url": "https://literacyarcade.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://literacyarcade.com/logo.png",
+        "width": 512,
+        "height": 512
+      }
+    },
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": ["teacher", "tutor", "reading interventionist", "parent"]
+    },
+    "dateModified": "2025-06-26"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Literacy Arcade","item":"https://literacyarcade.com"},
+      {"@type":"ListItem","position":2,"name":"Teacher Tools","item":"https://literacyarcade.com/tools"},
+      {"@type":"ListItem","position":3,"name":"Sentence Spinner","item":"https://literacyarcade.com/sentence-spinner.html"}
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root{
-      --teal:#2EC4B6; --teal-dk:#1FA99C; --teal-bg:#E8FAF7;
-      --coral:#FF6B6B; --coral-dk:#E85555; --coral-bg:#FFF0EE;
-      --navy:#1A1A2E; --navy-mid:#4A4A64; --navy-lt:#6B7890;
-      --muted:#8F8AA6; --cream:#FFFDF8; --white:#FFFFFF; --border:#E4DEF2; --line:#E4DEF2;
-      --amber:#D8BE72; --amber-bg:#FEF5E2;
-      --shadow-sm:0 2px 8px rgba(15,23,42,.06);
-      --shadow-md:0 8px 24px rgba(15,23,42,.10);
-      --shadow-lg:0 16px 48px rgba(15,23,42,.14);
-      --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
-    }
-    body{
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(46,196,182,.13), transparent 32%),
-        radial-gradient(circle at 100% 100%, rgba(173,151,236,.22), transparent 34%),
-        linear-gradient(135deg,#F4FFFD 0%,#FFFDF9 58%,#F3EFFD 100%);
-      color:var(--navy);
-      font-family:'Nunito',system-ui,sans-serif;
-      overflow-x:hidden;
-    }
-    button, textarea, input, select { font: inherit; }
-    button { cursor: pointer; }
-    button:disabled { cursor:not-allowed; opacity:.5; transform:none!important; }
-    a{color:inherit;text-decoration:none}
-    button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #F6C54A;outline-offset:3px}
-    #app{width:100%;min-height:100vh;display:flex;flex-direction:column;}
-    .la-header{height:62px;padding:0 clamp(16px,3vw,24px);display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);box-shadow:0 2px 14px rgba(26,26,46,.05)}
-    .la-logo-group{min-width:0;display:flex;align-items:center;gap:10px;flex-shrink:0;color:inherit;text-decoration:none}.la-icon{width:38px;height:38px;border-radius:10px;overflow:hidden;flex-shrink:0;display:block}.la-icon img{width:100%;height:100%;object-fit:cover;display:block}.la-wordmark,.la-tool-name{font-family:'Nunito',sans-serif;line-height:1;white-space:nowrap;letter-spacing:-.1px}.la-wordmark{color:var(--navy);font-size:1.15rem;font-weight:900;letter-spacing:-.2px}.la-tool-name{color:var(--teal-dk);font-size:17px;font-weight:700}.la-pipe{width:1px;height:22px;background:var(--border);flex-shrink:0}.hdr-btns{display:flex;align-items:center;gap:6px}.icon-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);border-radius:var(--r-sm);background:#F8F7F3;color:var(--navy-mid);transition:background .15s,border-color .15s,color .15s;flex-shrink:0}.icon-btn:hover{background:var(--cream);border-color:var(--navy-lt);color:var(--navy)}.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
-    main{width:min(1180px,calc(100% - 32px));margin:0 auto;flex:1}.view{display:none}.view.active{display:block}.hero{text-align:center;margin:18px auto 14px}.hero h1{font-family:'Nunito',sans-serif;font-size:clamp(2rem,4vw,2.65rem);font-weight:900;line-height:1.05;color:var(--navy);letter-spacing:-.5px}.hero h1 strong{font-style:normal;color:var(--teal-dk)}.hero p{margin-top:4px;color:var(--navy-lt);font-size:14px;font-weight:700}
-    .setup-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(320px,.72fr);gap:24px;align-items:start;margin-top:8px}.setup-copy{display:grid;gap:10px}.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r-xl);padding:16px 18px;box-shadow:var(--shadow-md)}.card-title{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--navy-lt);margin-bottom:9px;display:flex;align-items:center;gap:7px}.card-title::before{content:"";display:block;width:3px;height:13px;border-radius:2px;background:var(--teal)}.field-note{color:var(--navy-lt);font-size:12px;font-weight:700;line-height:1.4;margin:-1px 0 9px}.sentence-textarea{width:100%;min-height:210px;padding:12px 13px;resize:vertical;outline:none;border:1.5px solid var(--border);border-radius:var(--r-md);background:#fff;color:var(--navy);font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;line-height:1.45;transition:border-color .15s,box-shadow .15s}.sentence-textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12)}.sentence-textarea::placeholder{color:var(--navy-lt);font-weight:700}.message{display:none;margin-top:8px;padding:8px 10px;border:1px solid rgba(232,85,85,.32);border-radius:var(--r-sm);background:var(--coral-bg);color:#8b351b;font-size:12px;font-weight:800}.message.show{display:block}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--teal:#2EC4B6;--teal-dk:#1FA99C;--teal-bg:#E8FAF7;--teal-border:#BFEDEA;--coral:#FF6B6B;--coral-dk:#E85555;--coral-bg:#FFF0EE;--navy:#1A1A2E;--navy-mid:#4A4A64;--navy-lt:#8F8AA6;--cream:#FFFDF8;--white:#fff;--border:#E4DEF2;--amber:#D8BE72;--amber-bg:#FEF5E2;--shadow-sm:0 2px 8px rgba(15,23,42,.06);--shadow-md:0 8px 24px rgba(15,23,42,.10);--shadow-lg:0 16px 48px rgba(15,23,42,.14);--r-sm:10px;--r-md:14px;--r-lg:20px;--r-xl:26px}
+    body{min-height:100vh;background:radial-gradient(circle at 0% 0%,rgba(46,196,182,.13),transparent 32%),radial-gradient(circle at 100% 100%,rgba(173,151,236,.22),transparent 34%),linear-gradient(135deg,#F4FFFD 0%,#FFFDF9 58%,#F3EFFD 100%);color:var(--navy);font-family:'Nunito',system-ui,sans-serif;overflow-x:hidden}
+    button,textarea,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5;transform:none!important}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid #F6C54A;outline-offset:3px}
+    #app{width:100%;min-height:100vh;display:flex;flex-direction:column;padding:0 24px 30px;gap:14px}.la-header{height:62px;padding:0 clamp(16px,3vw,24px);display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);box-shadow:0 2px 14px rgba(26,26,46,.05);margin:0 -24px}.la-logo-group{min-width:0;display:flex;align-items:center;gap:10px;flex-shrink:0;color:inherit;text-decoration:none}.la-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:linear-gradient(135deg,var(--teal),#6f63b6);box-shadow:0 5px 14px rgba(46,196,182,.22);color:white;font-weight:900;font-family:'Nunito',sans-serif;letter-spacing:-.5px}.la-wordmark,.la-tool-name{font-family:'Nunito',sans-serif;line-height:1;white-space:nowrap;letter-spacing:-.1px}.la-wordmark{color:var(--navy);font-size:1.15rem;font-weight:900;letter-spacing:-.2px}.la-tool-name{color:var(--teal-dk);font-size:17px;font-weight:700}.la-pipe{width:1px;height:22px;background:var(--border);flex-shrink:0}.hdr-btns{display:flex;align-items:center;gap:6px}.icon-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);border-radius:var(--r-sm);background:#F8F7F3;color:var(--navy-mid);transition:background .15s,border-color .15s,color .15s;flex-shrink:0}.icon-btn:hover{background:var(--cream);border-color:var(--navy-lt);color:var(--navy)}.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round}
+    main{width:min(1180px,100%);margin:0 auto;flex:1}.hero{text-align:center;margin:6px auto 2px}.hero h1{font-family:'Nunito',sans-serif;font-size:clamp(2rem,4vw,2.65rem);font-weight:900;line-height:1.05;color:var(--navy);letter-spacing:-.5px}.hero h1 strong{font-style:normal;color:var(--teal-dk)}.hero p{margin-top:4px;color:var(--navy-lt);font-size:14px;font-weight:700}.view{display:none}.view.active{display:block}
+    .setup-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(340px,.75fr);gap:24px;align-items:start;margin-top:8px}.setup-copy{display:grid;gap:10px}.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r-xl);padding:16px 18px;box-shadow:var(--shadow-md)}.card-title{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--navy-lt);margin-bottom:9px;display:flex;align-items:center;gap:7px}.card-title::before{content:"";display:block;width:3px;height:13px;border-radius:2px;background:var(--teal)}.field-note{color:var(--navy-lt);font-size:12px;font-weight:700;line-height:1.4;margin:-1px 0 9px}.sentence-textarea{width:100%;min-height:210px;padding:12px 13px;resize:vertical;outline:none;border:1.5px solid var(--border);border-radius:var(--r-md);background:#fff;color:var(--navy);font-family:'Lexend',sans-serif;font-size:16px;font-weight:700;line-height:1.45;transition:border-color .15s,box-shadow .15s}.sentence-textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12)}.sentence-textarea::placeholder{color:var(--navy-lt);font-weight:600}.message{display:none;margin-top:8px;padding:8px 10px;border:1px solid rgba(232,85,85,.32);border-radius:var(--r-sm);background:var(--coral-bg);color:#8b351b;font-size:12px;font-weight:800}.message.show{display:block}.restore-message{display:none;margin-top:8px;padding:8px 10px;border:1px solid var(--teal-border);border-radius:var(--r-sm);background:var(--teal-bg);color:var(--teal-dk);font-size:12px;font-weight:900}.restore-message.show{display:block}
     .btn-row,.reading-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.setup-actions{justify-content:flex-start;margin-top:10px}.btn{min-height:40px;padding:8px 16px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--white);color:var(--navy-mid);font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;transition:transform .12s,background .12s,border-color .12s,color .12s;white-space:nowrap}.btn:hover{transform:translateY(-1px);border-color:var(--teal);background:var(--teal-bg);color:var(--teal-dk)}.btn.primary,.btn.sage{border-color:var(--teal-dk);background:var(--teal-dk);color:#fff;box-shadow:0 4px 0 #0a7a6e}.btn.primary:hover,.btn.sage:hover{background:var(--teal);border-color:var(--teal-dk);color:#fff;box-shadow:0 5px 0 #0a7a6e}.btn.clr{color:var(--navy-mid);border-color:var(--border);background:var(--white)}.btn.clr:hover{border-color:var(--coral);background:var(--coral-bg);color:#8b351b}.btn.marked{border-color:var(--amber);background:var(--amber-bg);color:#6f4b06}
+    .save-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:9px 0 2px;border-top:1px solid var(--border);margin-top:10px}.save-btn,.share-btn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--teal);background:var(--teal-bg);border-radius:var(--r-sm);padding:8px 16px;font-size:13px;font-weight:800;color:var(--teal-dk);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .13s;white-space:nowrap}.save-btn:hover,.share-btn:hover{background:var(--teal);color:white}.save-btn svg,.share-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.auth-status{font-size:12px;font-weight:700;color:var(--navy-lt);font-family:'Nunito',sans-serif}.share-permissions{display:flex;align-items:flex-start;gap:8px;width:100%;padding:10px 11px;border:1px solid rgba(14,159,142,.18);border-radius:var(--r-sm);background:var(--teal-bg);cursor:pointer}.share-permissions input{width:17px;height:17px;margin-top:2px;accent-color:var(--teal-dk);flex:0 0 auto}.share-permissions strong{display:block;color:var(--navy);font-size:12px;font-weight:900}.share-permissions span span{display:block;color:var(--navy-lt);font-size:11px;font-weight:700;line-height:1.35;margin-top:1px}
     .wheel-card{display:grid;gap:11px;justify-items:center;text-align:center;position:sticky;top:78px}.wheel-area{position:relative;display:flex;flex-direction:column;align-items:center;width:100%}.pointer{position:absolute;top:-7px;left:50%;z-index:3;width:0;height:0;transform:translateX(-50%);border-top:27px solid var(--amber);border-right:14px solid transparent;border-left:14px solid transparent;filter:drop-shadow(0 2px 3px rgba(0,0,0,.16))}.wheel-canvas{width:min(360px,100%);max-width:100%;aspect-ratio:1;display:block;border-radius:50%;box-shadow:0 7px 28px rgba(78,120,90,.2),0 2px 8px rgba(0,0,0,.08)}.setup-wheel-note{color:var(--navy-lt);font-size:12px;font-weight:700;line-height:1.4}
-    .play-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px auto 10px;max-width:1080px}.status{display:flex;flex-wrap:wrap;gap:6px}.count-badge{display:inline-flex;align-items:center;padding:4px 12px;border:1px solid rgba(14,159,142,.20);border-radius:999px;background:var(--teal);color:white;font-size:11px;font-weight:900;white-space:nowrap}.play-tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.play-stage{width:min(1080px,100%);margin:0 auto;display:grid;grid-template-columns:390px minmax(0,1fr);gap:26px;align-items:center}.spinner-column{display:grid;justify-items:center;gap:12px}.play-wheel{width:min(390px,100%)}.spin-btn{min-height:56px;min-width:240px;padding:12px 42px;border:0;border-radius:var(--r-md);background:var(--teal-dk);color:#fff;font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;box-shadow:0 5px 0 #0a7a6e;transition:.12s}.spin-btn:hover{background:var(--teal);transform:translateY(-2px);box-shadow:0 7px 0 #0a7a6e}.reading-card{min-height:260px;display:grid;align-content:center;gap:16px;padding:26px 30px;border:1px solid var(--border);border-radius:var(--r-xl);background:var(--white);box-shadow:var(--shadow-md);text-align:center}.reading-card.empty{box-shadow:var(--shadow-sm);background:rgba(255,255,255,.72)}.reading-label{color:var(--teal-dk);font-size:11px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}.student-sentence{font-family:'Nunito',sans-serif;color:var(--navy);font-size:clamp(34px,4.1vw,60px);font-weight:900;line-height:1.14;overflow-wrap:anywhere}.empty-reading{color:var(--navy-lt);font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;line-height:1.3}.review-link{margin-top:10px;text-align:center}.review-link .btn{min-height:34px}
-    .screen-card{width:min(850px,100%);margin:20px auto 0;display:grid;gap:14px;padding:22px;border:1px solid var(--border);border-radius:var(--r-xl);background:var(--white);box-shadow:var(--shadow-md)}.screen-card h2{margin:0;color:var(--navy);font-family:'Nunito',sans-serif;font-size:36px;line-height:1;text-align:center}.screen-copy{margin:0;color:var(--navy-lt);font-size:13px;text-align:center;line-height:1.45;font-weight:700}.review-list{display:grid;gap:8px}.review-card{padding:11px 13px;border:1px solid rgba(14,159,142,.24);border-radius:var(--r-sm);background:var(--teal-bg);color:var(--navy);font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;line-height:1.25}.empty-note{color:var(--navy-lt);font-size:13px;font-style:italic;text-align:center}.stat-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.stat{min-width:150px;padding:11px;border:1px solid rgba(14,159,142,.24);border-radius:var(--r-sm);background:var(--teal-bg);text-align:center}.stat strong{display:block;color:var(--teal-dk);font-family:'Nunito',sans-serif;font-size:28px;line-height:1}.stat span{color:var(--navy-lt);font-size:10px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}
-    #confettiCanvas{position:fixed;inset:0;z-index:80;display:none;pointer-events:none}body.is-spinning{overflow:hidden}body.is-spinning .play-head,body.is-spinning .reading-card,body.is-spinning .review-link{opacity:0;pointer-events:none}body.is-spinning .play-stage{position:fixed;inset:0;z-index:70;display:grid;place-items:center;grid-template-columns:1fr;background:rgba(26,26,46,.42);backdrop-filter:blur(3px)}body.is-spinning .spinner-column{width:min(620px,92vw);padding:36px;border-radius:22px;background:var(--white);box-shadow:0 22px 70px rgba(0,0,0,.28)}body.is-spinning .play-wheel{width:min(560px,78vh,88vw)}body.is-spinning .spin-btn{visibility:hidden}.footer-note{width:min(1240px,calc(100% - 32px));margin:auto auto 0;padding:16px 0 6px;color:#9692AD;font-family:'Nunito',Arial,sans-serif;font-size:.84rem;font-weight:900;line-height:1.35;text-align:center}body.fullscreen-active #app{width:100%;max-width:none}.fullscreen-active .la-header,.fullscreen-active .footer-note,.fullscreen-active .hero{display:none}.fullscreen-active main{width:100%}.fullscreen-active .play-stage{min-height:calc(100vh - 40px)}.fullscreen-active .play-wheel{width:min(500px,74vh,88vw)}
-    @media(max-width:900px){.setup-grid,.play-stage{grid-template-columns:1fr}.wheel-card{position:static}.setup-grid{gap:16px}.setup-wheel{order:-1}.play-stage{gap:14px}.reading-card{min-height:190px}.play-head{align-items:flex-start}.play-tools{justify-content:flex-start}.play-wheel{width:min(360px,88vw)}}
-    @media(max-width:560px){main{width:min(100% - 28px,1180px)}.la-header{height:62px;padding:0 12px}.la-logo-group{gap:10px;min-width:0}.la-icon{width:36px;height:36px;border-radius:10px}.la-wordmark,.la-pipe{display:none}.la-tool-name{font-size:.98rem;font-weight:700;letter-spacing:-.1px;white-space:nowrap}.icon-btn{width:40px;height:40px}.hero h1{font-size:32px}.hero p{font-size:12px}.card{padding:16px 18px}.sentence-textarea{min-height:160px;font-size:16px}.setup-actions .btn{flex:1 1 100%}.play-head{display:grid}.play-tools{justify-content:stretch}.play-tools .btn{flex:1}.reading-card{padding:20px 16px}.student-sentence{font-size:clamp(31px,10vw,48px)}.reading-actions .btn{width:100%}.spinner-column{width:100%}.spin-btn{width:100%}.review-card{font-size:22px}}
+    .play-shell{display:none}.play-shell.active{display:grid}.play-shell{position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 20% 10%,rgba(46,196,182,.16),transparent 34%),linear-gradient(135deg,#F4FFFD 0%,#FFFDF9 60%,#F3EFFD 100%);place-items:center;padding:24px;overflow:auto}.play-controls{position:fixed;top:16px;right:16px;display:flex;gap:8px;z-index:85}.play-icon-btn{min-width:42px;height:42px;border:1.5px solid var(--border);border-radius:14px;background:rgba(255,255,255,.94);box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;color:var(--navy-mid);font-weight:900;padding:0 12px}.play-icon-btn:hover{border-color:var(--teal);background:var(--teal-bg);color:var(--teal-dk)}.play-icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.edit-words-btn{gap:6px}.play-stage{width:min(760px,92vw);display:grid;justify-items:center;gap:16px}.play-wheel{width:min(600px,72vh,90vw)}.spin-btn{min-height:58px;min-width:250px;padding:13px 46px;border:0;border-radius:var(--r-md);background:var(--teal-dk);color:#fff;font-family:'Lexend',sans-serif;font-size:22px;font-weight:800;box-shadow:0 5px 0 #0a7a6e;transition:.12s}.spin-btn:hover{background:var(--teal);transform:translateY(-2px);box-shadow:0 7px 0 #0a7a6e}.spin-btn:disabled{box-shadow:none}.spin-prompt{font-family:'Lexend',sans-serif;font-size:clamp(20px,3vw,30px);font-weight:700;color:var(--navy-mid);text-align:center;max-width:800px}.spin-prompt strong{color:var(--teal-dk)}
+    .result-overlay{display:none;position:fixed;inset:0;z-index:100;align-items:center;justify-content:center;background:rgba(26,26,46,.48);backdrop-filter:blur(3px);padding:22px}.result-overlay.open{display:flex}.result-card{width:min(780px,94vw);background:#fff;border-radius:28px;box-shadow:0 22px 70px rgba(0,0,0,.28);overflow:hidden;animation:popBounce .34s cubic-bezier(.22,1.35,.36,1)}@keyframes popBounce{0%{transform:translateY(18px) scale(.78);opacity:0}62%{transform:translateY(0) scale(1.055);opacity:1}82%{transform:scale(.982)}100%{transform:scale(1)}}.result-head{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;text-align:center;padding:14px 24px}.result-head p{font-family:'Lexend',sans-serif;font-size:18px;font-weight:800}.result-body{padding:22px 26px 24px;text-align:center}.result-sentence{font-family:'Lexend',sans-serif;color:var(--navy);font-size:clamp(34px,5.2vw,66px);font-weight:800;line-height:1.15;margin:0 auto 20px;overflow-wrap:anywhere}.result-prompt{font-size:16px;color:var(--navy-lt);font-weight:800;margin-bottom:17px}.result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.last-card .result-head{background:linear-gradient(135deg,var(--coral),var(--teal))}.last-card .result-sentence{font-size:clamp(30px,4.7vw,58px)}.last-card .celebrate-sub{font-family:'Nunito',sans-serif;color:var(--navy-lt);font-size:15px;font-weight:900;margin:-8px 0 18px}.teacher-only{}#app[data-shared-mode="true"] .save-bar{display:none!important}#app[data-shared-locked="true"] .teacher-only{display:none!important}.play-shell[data-shared-locked="true"] .teacher-only{display:none!important}
+    .review-section{width:min(850px,100%);margin:20px auto 0;display:grid;gap:14px;padding:22px;border:1px solid var(--border);border-radius:var(--r-xl);background:var(--white);box-shadow:var(--shadow-md)}.review-section h2{margin:0;color:var(--navy);font-family:'Nunito',sans-serif;font-size:36px;line-height:1;text-align:center}.screen-copy{margin:0;color:var(--navy-lt);font-size:13px;text-align:center;line-height:1.45;font-weight:700}.review-list{display:grid;gap:8px}.review-card{padding:11px 13px;border:1px solid rgba(14,159,142,.24);border-radius:var(--r-sm);background:var(--teal-bg);color:var(--navy);font-family:'Lexend',sans-serif;font-size:24px;font-weight:700;line-height:1.25}.empty-note{color:var(--navy-lt);font-size:13px;font-style:italic;text-align:center}.hidden{display:none!important}.footer-note{width:min(1240px,calc(100% - 32px));margin:auto auto 0;padding:16px 0 6px;color:#9692AD;font-family:'Nunito',Arial,sans-serif;font-size:.84rem;font-weight:900;line-height:1.35;text-align:center}#confettiCanvas{position:fixed;inset:0;z-index:130;display:none;pointer-events:none}
+    .seo-copy{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .share-result-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,.46);backdrop-filter:blur(3px);z-index:150;align-items:center;justify-content:center;padding:16px}.share-result-overlay.open{display:flex}.share-result-modal{width:min(620px,96vw);background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(26,26,46,.26);overflow:hidden}.share-modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#fff,#F8FFFE)}.share-modal-head h2{font-family:'Nunito',sans-serif;font-size:1.35rem;font-weight:900;color:var(--navy);margin:0}.share-x-btn{width:34px;height:34px;border:1.5px solid var(--border);border-radius:999px;background:#fff;color:var(--navy-mid);font-size:22px;font-weight:900;line-height:1}.share-x-btn:hover{background:var(--teal-bg);border-color:var(--teal);color:var(--teal-dk)}.share-modal-body{padding:18px 20px 20px}.share-field-label{display:block;font-size:.74rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:var(--navy-lt);margin-bottom:6px}.share-url-box{min-height:42px;padding:10px 12px;border:1.5px solid var(--border);border-radius:12px;background:var(--cream);font-size:.86rem;font-weight:800;color:var(--navy-mid);overflow-wrap:anywhere;margin-bottom:12px}.share-primary-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.copy-share-link-btn,.copy-embed-code-btn{border:0;border-radius:12px;background:var(--teal-dk);color:#fff;font-weight:900;padding:10px 12px;min-height:40px}.copy-embed-code-btn{background:var(--navy-mid)}.share-divider{height:1px;background:#DEE2EA;margin:14px 0 16px}.share-classroom-title{font-size:.94rem;font-weight:900;color:var(--navy);margin-bottom:3px}.share-classroom-text{font-size:.84rem;font-weight:700;color:var(--navy-lt);margin-bottom:10px}.classroom-widget-wrap{min-height:42px;display:flex;align-items:center;margin-bottom:12px}.classroom-fallback-link{display:none;align-items:center;justify-content:center;width:max-content;min-height:38px;border:1.5px solid var(--teal);border-radius:12px;background:var(--teal-bg);padding:8px 13px;font-weight:900;font-size:.9rem;color:var(--teal-dk);margin-bottom:12px}.share-note{font-size:.86rem;line-height:1.35;background:var(--teal-bg);border:1px solid var(--teal-border);border-radius:12px;padding:10px 12px;color:var(--navy-mid);font-weight:800}
+    @media(max-width:900px){.setup-grid{grid-template-columns:1fr}.wheel-card{position:static}.setup-grid{gap:16px}.setup-wheel{order:-1}.play-wheel{width:min(520px,82vw)}}
+    @media(max-width:560px){#app{padding:0 14px 24px}.la-header{height:62px;padding:0 12px;margin:0 -14px}.la-icon{width:36px;height:36px}.la-wordmark,.la-pipe{display:none}.la-tool-name{font-size:.98rem;font-weight:700}.icon-btn{width:40px;height:40px}.hero h1{font-size:32px}.hero p{font-size:12px}.card{padding:16px}.sentence-textarea{min-height:160px}.setup-actions .btn{flex:1 1 100%}.spin-btn{width:100%}.result-body{padding:18px}.share-primary-actions{grid-template-columns:1fr}.play-controls{top:10px;right:10px}.edit-words-btn span{display:none}}
+  
+
+    /* ── Sentence Spinner v2: align whiteboard play mode with Reading Word Spinner ── */
+    .play-stage{width:min(760px,92vw)!important;gap:14px!important;}
+    .play-wheel{width:min(600px,72vh,90vw)!important;}
+    .spin-prompt{display:none!important;}
+    .edit-words-btn{gap:8px!important;min-width:auto!important;padding:0 16px!important;}
+    .edit-words-btn span{white-space:nowrap;}
+    .result-card{width:min(760px,92vw)!important;border-radius:28px!important;}
+    .result-head{background:var(--teal)!important;padding:16px 24px!important;}
+    .result-head p{font-family:'Lexend',sans-serif!important;font-size:clamp(22px,2.5vw,30px)!important;font-weight:800!important;line-height:1.15!important;color:#fff!important;}
+    .result-body{padding:28px 30px 30px!important;}
+    .result-sentence{font-family:'Lexend',sans-serif!important;font-size:clamp(34px,5.2vw,72px)!important;font-weight:800!important;line-height:1.13!important;letter-spacing:-.02em!important;margin:0 auto 20px!important;max-width:100%;overflow-wrap:break-word!important;}
+    .result-prompt{font-family:'Lexend',sans-serif!important;font-size:clamp(16px,1.8vw,22px)!important;font-weight:700!important;color:var(--navy-lt)!important;margin-bottom:20px!important;}
+    .result-actions .btn{font-family:'Lexend',sans-serif!important;font-size:16px!important;font-weight:800!important;min-height:48px!important;padding:12px 28px!important;border-radius:14px!important;}
+    .result-actions .btn.clr{background:#B95A5E!important;border-color:#B95A5E!important;color:#fff!important;}
+    .result-actions .btn.clr:hover{background:#9d484c!important;border-color:#9d484c!important;color:#fff!important;}
+    .last-card{position:relative!important;overflow:hidden!important;background:linear-gradient(135deg,#129B8E 0%,var(--teal) 58%,#6FA58E 100%)!important;border:2px solid rgba(255,255,255,.42)!important;box-shadow:0 28px 80px rgba(26,26,46,.32)!important;}
+    .last-card::before,.last-card::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.65;background-image:radial-gradient(circle,rgba(255,255,255,.72) 0 4px,transparent 5px),radial-gradient(circle,rgba(246,197,74,.45) 0 5px,transparent 6px);background-size:72px 68px,96px 92px;background-position:12px 18px,42px 35px;}
+    .last-card::after{transform:rotate(180deg);opacity:.35;}
+    .last-card .result-head{position:relative;z-index:1;background:transparent!important;padding:28px 24px 0!important;}
+    .last-card .result-head p{text-transform:uppercase!important;letter-spacing:.09em!important;font-size:clamp(26px,3.2vw,42px)!important;color:#fff!important;}
+    .last-card .result-body{position:relative;z-index:1;padding:22px 34px 34px!important;}
+    .last-card .result-sentence{color:#fff!important;text-shadow:none!important;font-size:clamp(34px,5vw,70px)!important;line-height:1.12!important;margin:0 auto 20px!important;max-width:100%;}
+    .last-card .celebrate-sub{display:none!important;}
+    .last-card .result-actions .btn.sage{background:#fff!important;color:var(--teal-dk)!important;border-color:#fff!important;box-shadow:0 6px 0 rgba(10,122,110,.55)!important;}
+    .last-card .result-actions .btn.teacher-only{background:rgba(255,255,255,.18)!important;color:#fff!important;border-color:rgba(255,255,255,.55)!important;}
+    @media(max-width:700px){.play-stage{width:min(92vw,640px)!important}.result-card{width:min(94vw,720px)!important}.result-sentence{font-size:clamp(30px,8vw,54px)!important}.last-card .result-sentence{font-size:clamp(28px,7vw,52px)!important}.edit-words-btn span{display:none}}
+
+  
+    /* ── HEADER / TITLE FINAL STANDARDIZATION ── */
+    .la-icon{width:38px!important;height:38px!important;border-radius:10px!important;overflow:hidden!important;flex-shrink:0!important;display:block!important;background:none!important;box-shadow:none!important;color:inherit!important;}
+    .la-icon img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important;}
+    .hero{max-width:1180px!important;width:100%!important;text-align:center!important;margin:10px auto 8px!important;}
+    .hero h1{font-family:'Nunito',sans-serif!important;font-weight:900!important;color:var(--navy)!important;font-size:clamp(2rem,4vw,2.65rem)!important;line-height:1.05!important;letter-spacing:-.5px!important;margin:0!important;}
+    .hero h1 strong{color:var(--teal-dk)!important;font-style:normal!important;}
+    .hero p{max-width:1180px!important;width:100%!important;margin:6px auto 0!important;color:var(--navy-lt)!important;font-size:14px!important;font-weight:700!important;text-align:center!important;letter-spacing:.01em!important;}
+    @media(max-width:560px){.la-icon{width:36px!important;height:36px!important}.hero h1{font-size:32px!important}.hero p{font-size:12px!important}}
+
+
+    /* ── V4: match Reading Word Spinner whiteboard proportions ── */
+    .play-shell.active{
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+    }
+    .play-shell{
+      padding:28px 16px 22px!important;
+      overflow:hidden!important;
+    }
+    .play-stage{
+      width:100%!important;
+      max-width:none!important;
+      min-height:calc(100svh - 50px)!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:12px!important;
+      padding:18px 0 0!important;
+      margin:0!important;
+    }
+    .play-stage .wheel-area{
+      width:100%!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+    }
+    .play-wheel{
+      width:min(820px,90vw,calc(100svh - 150px))!important;
+      height:min(820px,90vw,calc(100svh - 150px))!important;
+      max-width:90vw!important;
+      max-height:calc(100svh - 150px)!important;
+    }
+    .play-stage .pointer{
+      top:-12px!important;
+      border-top-width:31px!important;
+      border-left-width:16px!important;
+      border-right-width:16px!important;
+    }
+    .spin-btn{
+      flex:0 0 auto!important;
+      width:min(420px,calc(100vw - 48px))!important;
+      max-width:420px!important;
+      min-height:58px!important;
+      padding:14px 24px!important;
+      border-radius:18px!important;
+      font-family:'Lexend',sans-serif!important;
+      font-size:clamp(22px,3.2vw,30px)!important;
+      font-weight:800!important;
+      margin:0!important;
+    }
+    .spin-prompt{display:none!important;}
+
+    /* Sentence result card should feel like the word-spinner result card, just wider for wrapping. */
+    .result-card{
+      width:min(760px,92vw)!important;
+      border-radius:28px!important;
+    }
+    .result-head{
+      padding:15px 24px!important;
+    }
+    .result-head p{
+      font-family:'Lexend',sans-serif!important;
+      font-size:clamp(18px,2.4vw,24px)!important;
+      font-weight:800!important;
+    }
+    .result-body{
+      padding:30px 30px 32px!important;
+      min-height:250px!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+    }
+    .result-sentence{
+      max-width:100%!important;
+      font-size:clamp(42px,5vw,72px)!important;
+      line-height:1.12!important;
+      margin:0 auto 18px!important;
+    }
+    .result-prompt{
+      font-size:clamp(16px,2vw,20px)!important;
+      margin-bottom:18px!important;
+    }
+    .result-actions .btn{
+      min-height:46px!important;
+      padding:10px 24px!important;
+      border-radius:14px!important;
+      font-family:'Lexend',sans-serif!important;
+      font-size:16px!important;
+      font-weight:700!important;
+    }
+    .last-card.result-card{
+      width:min(760px,92vw)!important;
+      border-radius:28px!important;
+    }
+    .last-card .result-head{
+      padding:24px 24px 0!important;
+    }
+    .last-card .result-head p{
+      font-size:clamp(22px,3vw,34px)!important;
+    }
+    .last-card .result-body{
+      min-height:300px!important;
+      padding:22px 32px 32px!important;
+    }
+    .last-card .result-sentence{
+      font-size:clamp(30px,4.4vw,58px)!important;
+      line-height:1.12!important;
+      max-width:100%!important;
+    }
+    @media(max-height:760px){
+      .play-shell{padding:22px 12px 14px!important;}
+      .play-stage{gap:9px!important;padding-top:28px!important;}
+      .play-wheel{
+        width:min(700px,88vw,calc(100svh - 135px))!important;
+        height:min(700px,88vw,calc(100svh - 135px))!important;
+        max-height:calc(100svh - 135px)!important;
+      }
+      .spin-btn{min-height:52px!important;font-size:24px!important;padding:11px 22px!important;}
+    }
+    @media(max-width:700px){
+      .play-controls{top:10px!important;right:10px!important;}
+      .play-wheel{width:min(92vw,calc(100svh - 145px))!important;height:min(92vw,calc(100svh - 145px))!important;}
+      .result-card,.last-card.result-card{width:min(94vw,720px)!important;}
+      .result-body{padding:22px 18px 24px!important;}
+      .result-sentence{font-size:clamp(32px,8vw,54px)!important;}
+      .last-card .result-sentence{font-size:clamp(28px,7vw,46px)!important;}
+    }
+
+
+
+    /* ── V5: Match Reading Word Spinner play-screen proportions ── */
+    .play-shell.active{
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+    }
+    .play-shell{
+      padding:16px 16px 14px!important;
+      overflow:hidden!important;
+    }
+    .play-stage{
+      width:100%!important;
+      max-width:none!important;
+      min-height:100svh!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:12px!important;
+      padding:0!important;
+      margin:0!important;
+      transform:translateY(-4px)!important;
+    }
+    .play-stage .wheel-area{
+      width:100%!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+      flex:0 0 auto!important;
+    }
+    .play-wheel{
+      width:min(880px,92vw,calc(100svh - 118px))!important;
+      height:min(880px,92vw,calc(100svh - 118px))!important;
+      max-width:92vw!important;
+      max-height:calc(100svh - 118px)!important;
+    }
+    .play-stage .pointer{
+      top:-13px!important;
+      border-top-width:32px!important;
+      border-left-width:17px!important;
+      border-right-width:17px!important;
+    }
+    .spin-btn{
+      width:min(430px,calc(100vw - 48px))!important;
+      max-width:430px!important;
+      min-height:58px!important;
+      padding:13px 24px!important;
+      border-radius:18px!important;
+      font-family:'Lexend',sans-serif!important;
+      font-size:clamp(24px,3vw,31px)!important;
+      font-weight:800!important;
+      margin:0!important;
+      flex:0 0 auto!important;
+    }
+    .spin-prompt{display:none!important;}
+    @media(max-height:760px){
+      .play-shell{padding:10px 12px!important;}
+      .play-stage{gap:8px!important;transform:translateY(-2px)!important;}
+      .play-wheel{
+        width:min(820px,92vw,calc(100svh - 104px))!important;
+        height:min(820px,92vw,calc(100svh - 104px))!important;
+        max-height:calc(100svh - 104px)!important;
+      }
+      .spin-btn{min-height:54px!important;font-size:25px!important;padding:11px 22px!important;}
+    }
+    @media(max-width:700px){
+      .play-wheel{width:min(93vw,calc(100svh - 120px))!important;height:min(93vw,calc(100svh - 120px))!important;}
+    }
+
+
+    /* ── V6: exact Reading Word Spinner play-screen proportion standard ── */
+    .play-shell.active{
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+    }
+    .play-shell{
+      padding:28px 16px 22px!important;
+      overflow:hidden!important;
+      place-items:center!important;
+    }
+    .play-controls{
+      top:14px!important;
+      right:14px!important;
+      gap:8px!important;
+      z-index:85!important;
+      font-family:'Lexend',sans-serif!important;
+    }
+    .play-icon-btn{
+      min-width:34px!important;
+      height:34px!important;
+      min-height:34px!important;
+      padding:7px 12px!important;
+      border-radius:999px!important;
+      border:1.5px solid rgba(26,35,64,.12)!important;
+      background:rgba(255,255,255,.92)!important;
+      box-shadow:0 8px 24px rgba(26,26,46,.1)!important;
+      font-family:'Lexend',sans-serif!important;
+      font-size:12px!important;
+      font-weight:800!important;
+      line-height:1!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+    }
+    .play-icon-btn svg{width:15px!important;height:15px!important;}
+    .edit-words-btn{gap:6px!important;}
+    .play-stage{
+      width:100%!important;
+      max-width:none!important;
+      min-height:calc(100svh - 50px)!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:10px!important;
+      padding:0!important;
+      margin:0!important;
+      transform:none!important;
+    }
+    .play-stage .wheel-area{
+      width:100%!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+      flex:0 0 auto!important;
+    }
+    .play-wheel{
+      width:min(820px,90vw,calc(100svh - 135px))!important;
+      height:min(820px,90vw,calc(100svh - 135px))!important;
+      max-width:90vw!important;
+      max-height:calc(100svh - 135px)!important;
+    }
+    .play-stage .pointer{
+      top:-12px!important;
+      border-top-width:31px!important;
+      border-left-width:16px!important;
+      border-right-width:16px!important;
+    }
+    .spin-btn{
+      flex:0 0 auto!important;
+      width:min(420px,calc(100vw - 48px))!important;
+      max-width:420px!important;
+      min-height:58px!important;
+      padding:15px 24px!important;
+      border-radius:18px!important;
+      font-family:'Lexend',sans-serif!important;
+      font-size:clamp(22px,3.2vw,30px)!important;
+      font-weight:800!important;
+      margin:0!important;
+    }
+    .spin-prompt{display:none!important;}
+    .result-card{
+      width:min(920px,92vw)!important;
+      border-radius:28px!important;
+    }
+    .result-head{padding:18px 24px!important;}
+    .result-head p{
+      font-family:'Lexend',sans-serif!important;
+      font-size:clamp(20px,2.3vw,28px)!important;
+      font-weight:800!important;
+    }
+    .result-body{
+      padding:30px 34px 32px!important;
+      min-height:300px!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+    }
+    .result-sentence{
+      max-width:100%!important;
+      font-size:clamp(36px,5.3vw,76px)!important;
+      line-height:1.12!important;
+      margin:0 auto 18px!important;
+      overflow-wrap:normal!important;
+      word-break:normal!important;
+    }
+    .result-prompt{
+      font-size:clamp(16px,2vw,20px)!important;
+      margin-bottom:18px!important;
+    }
+    .result-actions .btn{
+      min-height:46px!important;
+      padding:10px 24px!important;
+      border-radius:14px!important;
+      font-family:'Lexend',sans-serif!important;
+      font-size:16px!important;
+      font-weight:700!important;
+    }
+    .last-card.result-card{
+      width:min(760px,92vw)!important;
+      border-radius:28px!important;
+    }
+    .last-card .result-body{min-height:300px!important;padding:22px 32px 32px!important;}
+    .last-card .result-sentence{font-size:clamp(30px,4.4vw,58px)!important;line-height:1.12!important;}
+    @media(max-height:700px){
+      .play-shell{padding-top:48px!important;padding-bottom:12px!important;}
+      .play-stage{gap:8px!important;}
+      .play-wheel{width:min(680px,84vw,calc(100svh - 145px))!important;height:min(680px,84vw,calc(100svh - 145px))!important;max-height:calc(100svh - 145px)!important;}
+      .spin-btn{padding:12px 22px!important;font-size:24px!important;min-height:54px!important;}
+      .result-card{width:min(92vw,860px)!important;}
+      .result-body{min-height:250px!important;padding:24px 28px 26px!important;}
+      .result-sentence{font-size:clamp(34px,5vw,66px)!important;}
+    }
+    @media(max-width:700px){
+      .play-controls{top:10px!important;right:10px!important;}
+      .edit-words-btn span{display:none!important;}
+      .play-wheel{width:min(94vw,calc(100svh - 130px))!important;height:min(94vw,calc(100svh - 130px))!important;}
+      .result-card,.last-card.result-card{width:min(94vw,720px)!important;}
+      .result-body{padding:22px 18px 24px!important;}
+      .result-sentence{font-size:clamp(32px,8vw,54px)!important;}
+      .last-card .result-sentence{font-size:clamp(28px,7vw,46px)!important;}
+    }
+
+
+    /* ── V7: Last Sentence Standing readability fix ── */
+    .last-card.result-card{
+      width:min(820px,92vw)!important;
+      border-radius:28px!important;
+    }
+    .last-card::before,.last-card::after{
+      opacity:.34!important;
+    }
+    .last-card .result-head{
+      padding:24px 24px 0!important;
+    }
+    .last-card .result-head p{
+      font-size:clamp(22px,3vw,36px)!important;
+      line-height:1.1!important;
+    }
+    .last-card .result-body{
+      padding:22px 32px 32px!important;
+      min-height:auto!important;
+    }
+    .last-card .result-sentence{
+      display:block!important;
+      width:min(690px,100%)!important;
+      max-width:100%!important;
+      margin:8px auto 22px!important;
+      padding:18px 24px!important;
+      border-radius:22px!important;
+      background:rgba(255,255,255,.95)!important;
+      border:2px solid rgba(255,255,255,.62)!important;
+      color:var(--navy)!important;
+      text-shadow:none!important;
+      box-shadow:0 12px 28px rgba(26,26,46,.14)!important;
+      font-size:clamp(32px,4.2vw,60px)!important;
+      line-height:1.12!important;
+      overflow-wrap:break-word!important;
+      word-break:normal!important;
+    }
+    .last-card .result-actions{
+      position:relative!important;
+      z-index:2!important;
+    }
+    @media(max-width:700px){
+      .last-card.result-card{width:min(94vw,720px)!important;}
+      .last-card .result-body{padding:18px 18px 24px!important;}
+      .last-card .result-sentence{font-size:clamp(28px,7vw,46px)!important;padding:16px 18px!important;}
+    }
+
   </style>
 </head>
 <body>
   <canvas id="confettiCanvas"></canvas>
-  <div id="app">
+  <div id="app" data-shared-mode="false" data-shared-locked="false">
     <header class="la-header" aria-label="Literacy Arcade navigation">
-      <a class="la-logo-group" href="https://literacyarcade.com" aria-label="Literacy Arcade home">
-        <div class="la-icon">
-      <img src="data:image/png;base64,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" alt="" aria-hidden="true" aria-hidden="true"/>
-    </div>
-        <span class="la-wordmark">Literacy Arcade</span>
-        <span class="la-pipe" aria-hidden="true"></span>
-        <span class="la-tool-name">Sentence Spinner</span>
-      </a>
+      <a class="la-logo-group" href="https://literacyarcade.com" aria-label="Literacy Arcade home"><div class="la-icon">
+        <img src="data:image/jpeg;base64,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" alt="Literacy Arcade logo"/>
+      </div><span class="la-wordmark">Literacy Arcade</span><span class="la-pipe" aria-hidden="true"></span><span class="la-tool-name">Sentence Spinner</span></a>
       <div class="hdr-btns">
-        <button class="icon-btn" id="soundIconBtn" type="button" aria-label="Toggle sound" title="Toggle sound"><svg id="soundOnIcon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><svg id="soundOffIcon" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></button>
-        <button class="icon-btn" id="fullscreenBtn" type="button" aria-label="Toggle fullscreen" title="Toggle fullscreen"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+        <button class="icon-btn" id="headerSoundBtn" type="button" aria-label="Toggle sound" title="Toggle sound"><svg id="headerSoundOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><svg id="headerSoundOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></button>
+        <button class="icon-btn" id="dashboardBtn" type="button" aria-label="My saved activities" title="Teacher Dashboard" style="display:none" onclick="window.location.href='teacher-dashboard.html'"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
         <button class="icon-btn" type="button" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></button>
       </div>
     </header>
     <main>
-      <div class="hero"><h1>Sentence <strong>Spinner</strong></h1><p>Enter sentences · spin the wheel · read with phrasing and expression</p></div>
+      <div class="hero"><h1>Sentence <strong>Spinner</strong></h1><p>Custom sentences · Fluency practice · Phrasing and expression · SmartBoard ready</p></div>
       <section class="view active" id="setupView" aria-label="Sentence Spinner setup">
         <div class="setup-grid">
           <div class="setup-copy">
             <div class="card">
               <div class="card-title">Enter Sentences</div>
-              <p class="field-note">Enter one sentence per line. Longer sentences are okay — the wheel will show a shortened preview, and the full sentence appears after the spin.</p>
+              <p class="field-note">Enter one sentence per line. Longer sentences are okay — the wheel shows a shortened preview, and the full sentence appears after the spin.</p>
               <textarea id="sentenceInput" class="sentence-textarea" spellcheck="true" placeholder="The cat sat on the mat.&#10;Can you see the red fish?&#10;She made a cake for Sam.&#10;I like to run and jump."></textarea>
               <div class="message" id="setupMessage" role="alert"></div>
-              <div class="btn-row setup-actions">
-                <button class="btn primary" type="button" id="startBtn">Start Spinner</button>
-                <button class="btn" type="button" id="exampleBtn">Example Sentences</button>
-                <button class="btn clr" type="button" id="clearBtn">Clear Sentences</button>
+              <div class="restore-message" id="restoreMessage"></div>
+              <div class="btn-row setup-actions"><button class="btn primary" type="button" id="startBtn">Start Spinner</button><button class="btn" type="button" id="exampleBtn">Example Sentences</button><button class="btn clr" type="button" id="clearBtn">Clear Sentences</button></div>
+              <div class="save-bar">
+                <button id="saveActivityBtn" class="save-btn" type="button"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save Activity</button>
+                <button id="shareActivityBtn" class="share-btn" type="button"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6 15.4 6.4"/><path d="M8.6 13.4l6.8 4.2"/></svg>Share Activity</button>
+                <div id="authStatus" class="auth-status">Loading…</div>
+                <label class="share-permissions" for="studentCanEditToggle"><input type="checkbox" id="studentCanEditToggle" /><span><strong>Allow students to edit sentences in shared links</strong><span>Leave unchecked to lock the sentence list for Google Classroom/LMS assignments.</span></span></label>
               </div>
             </div>
           </div>
-          <div class="card wheel-card setup-wheel">
-            <div class="card-title">Spinner Preview</div>
-            <div class="wheel-area"><div class="pointer"></div><canvas id="setupWheelCanvas" class="wheel-canvas" aria-label="Sentence spinner preview"></canvas></div>
-            <p class="setup-wheel-note">The wheel can hold sentence prompts. The full sentence stays visible after it lands.</p>
-          </div>
+          <div class="card wheel-card setup-wheel"><div class="card-title">Spinner Preview</div><div class="wheel-area"><div class="pointer"></div><canvas id="setupWheelCanvas" class="wheel-canvas" aria-label="Sentence spinner preview"></canvas></div><p class="setup-wheel-note">The wheel can hold sentence prompts. The full sentence stays visible after it lands.</p></div>
         </div>
       </section>
-      <section class="view" id="gameView" aria-label="Sentence Spinner game">
-        <div class="play-head"><div class="status"><span class="count-badge" id="activeCount">0 sentences on spinner</span><span class="count-badge" id="reviewCount">0 marked for review</span></div><div class="play-tools"><button class="btn" id="editBtn" type="button">Edit Sentences</button><button class="btn" id="reviewBtn" type="button">Review</button><button class="btn clr" id="startOverBtn" type="button">Start Over</button></div></div>
-        <div class="play-stage"><div class="spinner-column" id="spinnerStage"><div class="wheel-area"><div class="pointer"></div><canvas id="gameWheelCanvas" class="wheel-canvas play-wheel" aria-label="Active sentence spinner"></canvas></div><button class="spin-btn" type="button" id="spinBtn">SPIN!</button></div><article class="reading-card empty" id="readingCard" aria-live="polite"><div class="reading-label">Read this sentence</div><div class="empty-reading" id="emptyReading">Spin the wheel to choose a sentence.</div><div class="student-sentence" id="selectedSentence" hidden></div><div class="reading-actions" id="readingActions" hidden><button class="btn" type="button" id="markReviewBtn">Mark for Review</button><button class="btn clr" type="button" id="removeSentenceBtn">Remove from Spinner</button></div></article></div>
-        <div class="review-link"><button class="btn" id="reviewLinkBtn" type="button">Review Sentences</button></div>
-      </section>
-      <section class="view" id="reviewView" aria-label="Review sentences"><div class="screen-card"><h2>Review Sentences</h2><p class="screen-copy" id="reviewIntro"></p><div class="review-list" id="reviewList"></div><div class="btn-row"><button class="btn sage" type="button" id="practiceReviewBtn">Practice Review Sentences</button><button class="btn" type="button" id="backToSpinnerBtn">Back to Spinner</button><button class="btn clr" type="button" id="reviewStartOverBtn">Start Over</button></div></div></section>
-      <section class="view" id="completeView" aria-label="Sentence Spinner complete"><div class="screen-card"><h2>Great reading!</h2><p class="screen-copy" id="completeMessage">You finished this spinner round.</p><div class="stat-row"><div class="stat"><strong id="totalPracticed">0</strong><span>Sentences practiced</span></div><div class="stat"><strong id="totalReview">0</strong><span>Marked for review</span></div></div><div class="btn-row"><button class="btn sage" type="button" id="completeReviewBtn">Review Marked Sentences</button><button class="btn clr" type="button" id="completeStartOverBtn">Start Over</button></div></div></section>
+      <section class="view" id="reviewView" aria-label="Review sentences"><div class="review-section"><h2>Review Sentences</h2><p class="screen-copy" id="reviewIntro"></p><div class="review-list" id="reviewList"></div><div class="btn-row"><button class="btn sage" type="button" id="practiceReviewBtn">Practice Review Sentences</button><button class="btn" type="button" id="backToSpinnerBtn">Back to Spinner</button><button class="btn clr" type="button" id="reviewStartOverBtn">Start Over</button></div></div></section>
     </main>
+    <section class="seo-copy" aria-label="About this Literacy Arcade sentence spinner">
+      <h2>Free Sentence Spinner for Reading Fluency Practice</h2>
+      <p>
+        The Literacy Arcade Sentence Spinner is a classroom tool for reading fluency,
+        phrasing, and expression. Teachers, tutors, and reading interventionists can enter custom
+        sentences and spin them for repeated reading practice, fluency warm-ups, and small-group
+        intervention.
+      </p>
+      <p>
+        This free sentence spinner supports educator searches for sentence spinner, fluency practice,
+        phrasing and expression, repeated reading, and classroom reading tools while keeping the
+        student-facing interface clean, simple, and projector-friendly.
+      </p>
+    </section>
     <p class="footer-note">Literacy Arcade • Sentence Spinner</p>
   </div>
+  <section class="play-shell" id="playShell" aria-label="Sentence Spinner game">
+    <div class="play-controls"><button class="play-icon-btn" id="playSoundBtn" type="button" aria-label="Toggle sound"><svg id="playSoundOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg><svg id="playSoundOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></button><button class="play-icon-btn edit-words-btn teacher-only" id="editBtn" type="button"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Edit Sentences</span></button><button class="play-icon-btn" type="button" aria-label="Home" onclick="window.location.href='https://literacyarcade.com'"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></button></div>
+    <div class="play-stage"><div class="wheel-area"><div class="pointer"></div><canvas id="gameWheelCanvas" class="wheel-canvas play-wheel" aria-label="Active sentence spinner"></canvas></div><button class="spin-btn" type="button" id="spinBtn">SPIN!</button><div class="spin-prompt" id="spinPrompt" aria-hidden="true"></div></div>
+  </section>
+  <div class="result-overlay" id="resultOverlay" role="dialog" aria-modal="true" aria-labelledby="resultTitle"><div class="result-card" id="resultCard"><div class="result-head"><p id="resultTitle">Read this sentence!</p></div><div class="result-body"><div class="result-sentence" id="selectedSentence" aria-live="polite"></div><div class="celebrate-sub hidden" id="celebrateSub">You read every sentence!</div><div class="result-prompt" id="resultPrompt">Read with phrasing and expression.</div><div class="result-actions" id="resultActions"><button class="btn" type="button" id="markReviewBtn">Keep It</button><button class="btn clr" type="button" id="removeSentenceBtn">Remove</button></div><div class="result-actions hidden" id="lastActions"><button class="btn sage" type="button" id="playAgainBtn">Play Again</button><button class="btn teacher-only" type="button" id="lastEditBtn">Edit Sentences</button></div></div></div></div>
   <script>
     const EXAMPLES=['I can see the dog.','The cat ran to the bed.','She has a red bag.','Can you jump?','We like to read books.','The sun is hot.','He made a big mess.','Do you see the fish?','The kids ran fast.','I will help you.'];
-    const WHEEL_COLORS=['#1D9E75','#D85A30','#6E9EDB','#D8BE72','#6F63B6','#5DCAA5','#E3845C','#62A39F'];
-    const state={active:[],selected:'',angle:0,spinning:false,sound:true,audio:null,review:[],practiced:new Set()};
-    const el={setupView:document.getElementById('setupView'),gameView:document.getElementById('gameView'),reviewView:document.getElementById('reviewView'),completeView:document.getElementById('completeView'),input:document.getElementById('sentenceInput'),message:document.getElementById('setupMessage'),setupCanvas:document.getElementById('setupWheelCanvas'),gameCanvas:document.getElementById('gameWheelCanvas'),spin:document.getElementById('spinBtn'),activeCount:document.getElementById('activeCount'),reviewCount:document.getElementById('reviewCount'),card:document.getElementById('readingCard'),selected:document.getElementById('selectedSentence'),empty:document.getElementById('emptyReading'),actions:document.getElementById('readingActions'),mark:document.getElementById('markReviewBtn'),soundOn:document.getElementById('soundOnIcon'),soundOff:document.getElementById('soundOffIcon')};
-    function parse(raw){return raw.split(/\r?\n/).map(s=>s.trim().replace(/\s+/g,' ')).filter(Boolean);}
-    function showView(name){['setup','game','review','complete'].forEach(v=>el[v+'View'].classList.toggle('active',v===name));requestAnimationFrame(initAndDraw);}
-    function initCanvas(canvas){const size=Math.round(canvas.getBoundingClientRect().width||340),dpr=Math.min(devicePixelRatio||1,3);canvas.width=size*dpr;canvas.height=size*dpr;canvas.dataset.size=size;const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=true;}
-    function initAndDraw(){initCanvas(el.setupCanvas);initCanvas(el.gameCanvas);const preview=parse(el.input.value);drawWheel(el.setupCanvas,preview,preview.length===0);drawWheel(el.gameCanvas,state.active,false);}
-    function cleanWheelText(text){return String(text||'').trim().replace(/\s+/g,' ');}
-    function shortenForWheel(text,count){
-      const clean=cleanWheelText(text);
-      const max=count<=4?54:count<=6?44:count<=8?34:count<=12?26:20;
-      if(clean.length<=max)return clean;
-      const cut=clean.slice(0,max).replace(/\s+\S*$/,'').trim();
-      return (cut||clean.slice(0,max-1)).trim()+'…';
-    }
-    function wrapWheelLabel(ctx,text,maxWidth,maxLines){
-      const words=String(text).split(/\s+/).filter(Boolean);
-      const lines=[];let line='';
-      words.forEach(word=>{
-        const test=line?line+' '+word:word;
-        if(ctx.measureText(test).width<=maxWidth||!line){line=test;}
-        else{lines.push(line);line=word;}
-      });
-      if(line)lines.push(line);
-      if(lines.length>maxLines){
-        const kept=lines.slice(0,maxLines);
-        let last=kept[kept.length-1];
-        while(last.length>1&&ctx.measureText(last+'…').width>maxWidth)last=last.slice(0,-1).trim();
-        kept[kept.length-1]=(last||'…')+'…';
-        return kept;
-      }
-      return lines;
-    }
-    function drawWheel(canvas,sentences,demo,highlight=-1){
-      const size=Number(canvas.dataset.size)||340,ctx=canvas.getContext('2d'),cx=size/2,cy=size/2,r=size/2-9;
-      const demoSentences=EXAMPLES.slice(0,6);
-      const items=demo?demoSentences:sentences;
-      const count=items.length||1,slice=Math.PI*2/count;
-      ctx.clearRect(0,0,size,size);
-      if(!items.length){return;}
-      items.forEach((sentence,i)=>{
-        const start=state.angle+i*slice,end=start+slice;
-        ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
-        ctx.globalAlpha=demo?.52:1;
-        ctx.fillStyle=highlight===i?'#B89D33':WHEEL_COLORS[i%WHEEL_COLORS.length];ctx.fill();ctx.globalAlpha=1;
-        ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=3;ctx.stroke();
-        const mid=start+slice/2,tx=cx+Math.cos(mid)*r*.62,ty=cy+Math.sin(mid)*r*.62,norm=((mid%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
-        ctx.save();ctx.translate(tx,ty);ctx.rotate(mid+(norm>Math.PI/2&&norm<Math.PI*1.5?Math.PI:0));
-        const isLarge=size>430;
-        const base=demo?Math.max(10,Math.min(15,size*.04)):(count<=4?Math.min(isLarge?30:20,size*.058):count<=6?Math.min(isLarge?24:18,size*.05):count<=8?Math.min(isLarge?20:15,size*.043):Math.min(isLarge?16:12,size*.035));
-        ctx.font=`800 ${base}px Lexend,sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
-        const label=shortenForWheel(sentence,count);
-        const maxWidth=r*(count<=4?.58:count<=8?.50:.42);
-        const maxLines=count<=4?3:2;
-        const lines=wrapWheelLabel(ctx,label,maxWidth,maxLines);
-        const lineHeight=base*1.08;
-        ctx.lineWidth=Math.max(2.5,base*.18);ctx.strokeStyle='rgba(26,26,46,.58)';ctx.fillStyle='#fff';
-        lines.forEach((line,idx)=>{const y=(idx-(lines.length-1)/2)*lineHeight;ctx.strokeText(line,0,y);ctx.fillText(line,0,y);});
-        ctx.restore();
-      });
-      ctx.beginPath();ctx.arc(cx,cy,Math.max(14,size*.04),0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='rgba(160,200,190,.9)';ctx.lineWidth=2;ctx.stroke();
-    }
-    function update(){const active=state.active.length,review=state.review.length;el.activeCount.textContent=`${active} ${active===1?'sentence':'sentences'} on spinner`;el.reviewCount.textContent=`${review} marked for review`;el.spin.disabled=state.spinning||active<2;document.getElementById('reviewLinkBtn').disabled=review===0;drawWheel(el.gameCanvas,state.active,false);}
-    function showMessage(text){el.message.textContent=text;el.message.classList.add('show');}function clearMessage(){el.message.textContent='';el.message.classList.remove('show');}
-    function start(){clearMessage();const sentences=parse(el.input.value);if(sentences.length<2){showMessage('Please enter at least two sentences to use the spinner.');return;}state.active=[...sentences];state.review=[];state.practiced=new Set();state.selected='';state.angle=0;showEmptyCard();update();showView('game');}
-    function showEmptyCard(){el.card.classList.add('empty');el.empty.hidden=false;el.selected.hidden=true;el.actions.hidden=true;}
-    function showSentence(){el.card.classList.remove('empty');el.empty.hidden=true;el.selected.hidden=false;el.actions.hidden=false;el.selected.textContent=state.selected;state.practiced.add(state.selected);el.mark.classList.toggle('marked',state.review.includes(state.selected));el.mark.textContent=state.review.includes(state.selected)?'Marked for Review':'Mark for Review';}
-    function getAudio(){if(!state.audio)state.audio=new (AudioContext||webkitAudioContext)();return state.audio;}
-    function tone(freq,duration=.03,volume=.035,delay=0){if(!state.sound)return;try{const ctx=getAudio(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type='triangle';osc.frequency.setValueAtTime(freq,ctx.currentTime+delay);gain.gain.setValueAtTime(0,ctx.currentTime+delay);gain.gain.linearRampToValueAtTime(volume,ctx.currentTime+delay+.01);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+delay+duration);osc.start(ctx.currentTime+delay);osc.stop(ctx.currentTime+delay+duration+.05);}catch(e){}}
-    function spin(){if(state.spinning||state.active.length<2)return;getAudio();state.spinning=true;document.body.classList.add('is-spinning');showEmptyCard();update();requestAnimationFrame(()=>{initCanvas(el.gameCanvas);runSpin();});}
-    function runSpin(){const total=(6+Math.random()*5)*Math.PI*2,duration=3000+Math.random()*900,start=state.angle,t0=performance.now();let last=-1;function frame(now){const raw=Math.min((now-t0)/duration,1),p=1-Math.pow(1-raw,3);state.angle=start+total*p;const slice=Math.PI*2/state.active.length,norm=((-state.angle%(Math.PI*2))+Math.PI*2)%(Math.PI*2),adjusted=(norm+Math.PI*1.5)%(Math.PI*2),seg=Math.floor(adjusted/slice)%state.active.length;if(seg!==last){tone(520);last=seg;}drawWheel(el.gameCanvas,state.active,false);if(raw<1){requestAnimationFrame(frame);return;}state.spinning=false;state.selected=state.active[seg];document.body.classList.remove('is-spinning');requestAnimationFrame(()=>{initCanvas(el.gameCanvas);drawWheel(el.gameCanvas,state.active,false,seg);showSentence();update();tone(523,.18,.13,0);tone(659,.18,.13,.16);tone(784,.18,.13,.32);launchConfetti();});}requestAnimationFrame(frame);}
-    function markReview(){if(!state.selected)return;const idx=state.review.indexOf(state.selected);if(idx===-1)state.review.push(state.selected);else state.review.splice(idx,1);showSentence();update();}
-    function removeSentence(){if(!state.selected)return;state.active=state.active.filter(s=>s!==state.selected);state.selected='';showEmptyCard();update();if(state.active.length<2)showComplete();}
-    function showReview(){renderReview();showView('review');}function renderReview(){const list=document.getElementById('reviewList'),intro=document.getElementById('reviewIntro');list.innerHTML='';if(!state.review.length){intro.textContent='No sentences were marked for review.';list.innerHTML='<div class="empty-note">No sentences were marked for review.</div>';}else{intro.textContent='Practice the sentences marked “Needs Practice.”';state.review.forEach(sentence=>{const card=document.createElement('div');card.className='review-card';card.textContent=sentence;list.appendChild(card);});}document.getElementById('practiceReviewBtn').disabled=!state.review.length;document.getElementById('completeReviewBtn').disabled=!state.review.length;}
-    function practiceReview(){if(!state.review.length)return;state.active=[...state.review];state.selected='';state.angle=0;showEmptyCard();update();showView('game');if(state.active.length===1){state.selected=state.active[0];showSentence();}}
-    function showComplete(){document.getElementById('totalPracticed').textContent=state.practiced.size;document.getElementById('totalReview').textContent=state.review.length;document.getElementById('completeMessage').textContent=state.active.length?'One sentence is left on the spinner.':'You finished this spinner round.';renderReview();showView('complete');}
-    function reset(){state.active=[];state.review=[];state.practiced=new Set();state.selected='';state.angle=0;state.spinning=false;showEmptyCard();clearMessage();showView('setup');}
-    async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch(e){document.body.classList.toggle('fullscreen-active');}requestAnimationFrame(initAndDraw);}
-    document.addEventListener('fullscreenchange',()=>{document.body.classList.toggle('fullscreen-active',!!document.fullscreenElement);requestAnimationFrame(initAndDraw);});
-    let confetti=[];function launchConfetti(){const canvas=document.getElementById('confettiCanvas'),ctx=canvas.getContext('2d');canvas.style.display='block';canvas.width=innerWidth;canvas.height=innerHeight;confetti=Array.from({length:56},()=>({x:Math.random()*canvas.width,y:-Math.random()*100,w:6+Math.random()*5,h:8+Math.random()*6,vx:(Math.random()-.5)*2.5,vy:2+Math.random()*2.5,r:Math.random()*6,dr:(Math.random()-.5)*.14,a:1,c:WHEEL_COLORS[Math.floor(Math.random()*WHEEL_COLORS.length)]}));function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);let alive=false;confetti.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.04;p.r+=p.dr;if(p.y>canvas.height*.7)p.a=Math.max(0,p.a-.03);alive||=p.a>0;ctx.save();ctx.globalAlpha=p.a;ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();});if(alive)requestAnimationFrame(draw);else canvas.style.display='none';}draw();}
-    document.getElementById('startBtn').addEventListener('click',start);document.getElementById('exampleBtn').addEventListener('click',()=>{el.input.value=EXAMPLES.join('\n');clearMessage();initAndDraw();});document.getElementById('clearBtn').addEventListener('click',()=>{el.input.value='';clearMessage();initAndDraw();});el.input.addEventListener('input',()=>requestAnimationFrame(initAndDraw));document.getElementById('spinBtn').addEventListener('click',spin);document.getElementById('markReviewBtn').addEventListener('click',markReview);document.getElementById('removeSentenceBtn').addEventListener('click',removeSentence);document.getElementById('reviewBtn').addEventListener('click',showReview);document.getElementById('reviewLinkBtn').addEventListener('click',showReview);document.getElementById('editBtn').addEventListener('click',()=>{if(state.active.length)el.input.value=state.active.join('\n');showView('setup');});document.getElementById('startOverBtn').addEventListener('click',reset);document.getElementById('practiceReviewBtn').addEventListener('click',practiceReview);document.getElementById('backToSpinnerBtn').addEventListener('click',()=>showView('game'));document.getElementById('reviewStartOverBtn').addEventListener('click',reset);document.getElementById('completeReviewBtn').addEventListener('click',showReview);document.getElementById('completeStartOverBtn').addEventListener('click',reset);document.getElementById('fullscreenBtn').addEventListener('click',fullscreen);document.getElementById('soundIconBtn').addEventListener('click',()=>{state.sound=!state.sound;el.soundOn.style.display=state.sound?'':'none';el.soundOff.style.display=state.sound?'none':'';});window.addEventListener('resize',initAndDraw);document.addEventListener('keydown',event=>{if(event.key==='Enter'&&event.ctrlKey&&el.gameView.classList.contains('active'))spin();});requestAnimationFrame(()=>{initAndDraw();update();});
+    const WHEEL_COLORS=['#1FA99C','#E85555','#6E9EDB','#D8BE72','#6F63B6','#5DCAA5','#E3845C','#62A39F'];
+    const params=new URLSearchParams(location.search);const isSharedStudentMode=params.has('activity');let sharedStudentCanEdit=false;
+    const state={setupSentences:[],originalRound:[],active:[],selected:'',angle:0,spinning:false,sound:true,audio:null,review:[],practiced:new Set(),mode:'setup'};
+    const el={app:document.getElementById('app'),setupView:document.getElementById('setupView'),reviewView:document.getElementById('reviewView'),playShell:document.getElementById('playShell'),input:document.getElementById('sentenceInput'),message:document.getElementById('setupMessage'),restore:document.getElementById('restoreMessage'),setupCanvas:document.getElementById('setupWheelCanvas'),gameCanvas:document.getElementById('gameWheelCanvas'),spin:document.getElementById('spinBtn'),prompt:document.getElementById('spinPrompt'),resultOverlay:document.getElementById('resultOverlay'),resultCard:document.getElementById('resultCard'),resultTitle:document.getElementById('resultTitle'),selected:document.getElementById('selectedSentence'),celebrateSub:document.getElementById('celebrateSub'),resultPrompt:document.getElementById('resultPrompt'),resultActions:document.getElementById('resultActions'),lastActions:document.getElementById('lastActions'),mark:document.getElementById('markReviewBtn')};
+    function parse(raw){return raw.split(/\r?\n/).map(s=>s.trim().replace(/\s+/g,' ')).filter(Boolean)}
+    function currentSetupSentences(){return parse(el.input.value)}
+    function setSharedModeFlags(){const locked=isSharedStudentMode&&!sharedStudentCanEdit;el.app.dataset.sharedMode=isSharedStudentMode?'true':'false';el.app.dataset.sharedLocked=locked?'true':'false';el.playShell.dataset.sharedLocked=locked?'true':'false'}
+    function showView(name){el.setupView.classList.toggle('active',name==='setup');el.reviewView.classList.toggle('active',name==='review');el.playShell.classList.toggle('active',name==='play');state.mode=name;setSharedModeFlags();requestAnimationFrame(initAndDraw)}
+    function initCanvas(canvas){const size=Math.round(canvas.getBoundingClientRect().width||340),dpr=Math.min(devicePixelRatio||1,3);canvas.width=size*dpr;canvas.height=size*dpr;canvas.dataset.size=size;const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=true}
+    function initAndDraw(){initCanvas(el.setupCanvas);initCanvas(el.gameCanvas);const preview=currentSetupSentences();drawWheel(el.setupCanvas,preview,preview.length===0);drawWheel(el.gameCanvas,state.active,false)}
+    function cleanText(text){return String(text||'').trim().replace(/\s+/g,' ')}
+    function shortenForWheel(text,count){const clean=cleanText(text);const max=count<=4?54:count<=6?44:count<=8?34:count<=12?26:20;if(clean.length<=max)return clean;const cut=clean.slice(0,max).replace(/\s+\S*$/,'').trim();return (cut||clean.slice(0,max-1)).trim()+'…'}
+    function wrapLabel(ctx,text,maxWidth,maxLines){const words=String(text).split(/\s+/).filter(Boolean),lines=[];let line='';words.forEach(word=>{const test=line?line+' '+word:word;if(ctx.measureText(test).width<=maxWidth||!line)line=test;else{lines.push(line);line=word}});if(line)lines.push(line);if(lines.length>maxLines){const kept=lines.slice(0,maxLines);let last=kept[kept.length-1];while(last.length>1&&ctx.measureText(last+'…').width>maxWidth)last=last.slice(0,-1).trim();kept[kept.length-1]=(last||'…')+'…';return kept}return lines}
+    function drawWheel(canvas,sentences,demo,highlight=-1){const size=Number(canvas.dataset.size)||340,ctx=canvas.getContext('2d'),cx=size/2,cy=size/2,r=size/2-9;const items=demo?EXAMPLES.slice(0,6):sentences;const count=items.length||1,slice=Math.PI*2/count;ctx.clearRect(0,0,size,size);if(!items.length)return;items.forEach((sentence,i)=>{const start=state.angle+i*slice,end=start+slice;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();ctx.globalAlpha=demo?.52:1;ctx.fillStyle=highlight===i?'#B89D33':WHEEL_COLORS[i%WHEEL_COLORS.length];ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=3;ctx.stroke();const mid=start+slice/2,tx=cx+Math.cos(mid)*r*.62,ty=cy+Math.sin(mid)*r*.62,norm=((mid%(Math.PI*2))+Math.PI*2)%(Math.PI*2);ctx.save();ctx.translate(tx,ty);ctx.rotate(mid+(norm>Math.PI/2&&norm<Math.PI*1.5?Math.PI:0));const isLarge=size>430;const base=demo?Math.max(10,Math.min(15,size*.04)):(count<=4?Math.min(isLarge?30:20,size*.058):count<=6?Math.min(isLarge?24:18,size*.05):count<=8?Math.min(isLarge?20:15,size*.043):Math.min(isLarge?16:12,size*.035));ctx.font=`800 ${base}px Lexend,sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';const label=shortenForWheel(sentence,count);const maxWidth=r*(count<=4?.58:count<=8?.50:.42);const maxLines=count<=4?3:2;const lines=wrapLabel(ctx,label,maxWidth,maxLines);const lineHeight=base*1.08;ctx.lineWidth=Math.max(2.5,base*.18);ctx.strokeStyle='rgba(26,26,46,.58)';ctx.fillStyle='#fff';lines.forEach((line,idx)=>{const y=(idx-(lines.length-1)/2)*lineHeight;ctx.strokeText(line,0,y);ctx.fillText(line,0,y)});ctx.restore()});ctx.beginPath();ctx.arc(cx,cy,Math.max(14,size*.04),0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='rgba(160,200,190,.9)';ctx.lineWidth=2;ctx.stroke()}
+    function clearMessage(){el.message.classList.remove('show');el.message.textContent=''}function showMessage(text){el.message.textContent=text;el.message.classList.add('show')}
+    function enterPlay(sentences,{preserveOriginal=false}={}){if(!sentences||sentences.length<2){showMessage('Please enter at least two sentences to use the spinner.');return}state.setupSentences=[...sentences];if(!preserveOriginal)state.originalRound=[...sentences];state.active=[...sentences];state.selected='';state.review=[];state.practiced=new Set();state.angle=0;state.spinning=false;hideResult();updatePlay();showView('play')}
+    function startFromSetup(){clearMessage();enterPlay(currentSetupSentences())}
+    function updatePlay(){el.spin.disabled=state.spinning||state.active.length<2;if(el.prompt){el.prompt.textContent='';}drawWheel(el.gameCanvas,state.active,false);setSharedModeFlags()}
+    function getAudio(){if(!state.audio)state.audio=new (window.AudioContext||window.webkitAudioContext)();return state.audio}function tone(freq,duration=.03,volume=.035,delay=0){if(!state.sound)return;try{const ctx=getAudio(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type='triangle';osc.frequency.setValueAtTime(freq,ctx.currentTime+delay);gain.gain.setValueAtTime(0,ctx.currentTime+delay);gain.gain.linearRampToValueAtTime(volume,ctx.currentTime+delay+.01);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+delay+duration);osc.start(ctx.currentTime+delay);osc.stop(ctx.currentTime+delay+duration+.05)}catch(e){}}
+    function spin(){if(state.spinning||state.active.length<2)return;getAudio();state.spinning=true;hideResult();updatePlay();runSpin()}
+    function runSpin(){const total=(6+Math.random()*5)*Math.PI*2,duration=3000+Math.random()*900,start=state.angle,t0=performance.now();let last=-1;function frame(now){const raw=Math.min((now-t0)/duration,1),p=1-Math.pow(1-raw,3);state.angle=start+total*p;const slice=Math.PI*2/state.active.length,norm=((-state.angle%(Math.PI*2))+Math.PI*2)%(Math.PI*2),adjusted=(norm+Math.PI*1.5)%(Math.PI*2),seg=Math.floor(adjusted/slice)%state.active.length;if(seg!==last){tone(520);last=seg}drawWheel(el.gameCanvas,state.active,false);if(raw<1){requestAnimationFrame(frame);return}state.spinning=false;state.selected=state.active[seg];state.practiced.add(state.selected);requestAnimationFrame(()=>{drawWheel(el.gameCanvas,state.active,false,seg);showSentenceResult();updatePlay();tone(523,.18,.13,0);tone(659,.18,.13,.16);tone(784,.18,.13,.32);launchConfetti()})}requestAnimationFrame(frame)}
+    function showSentenceResult(){el.resultCard.classList.remove('last-card');el.resultTitle.textContent='Read this sentence!';el.selected.textContent=state.selected;el.celebrateSub.classList.add('hidden');el.resultPrompt.textContent='Read with phrasing and expression.';el.resultActions.classList.remove('hidden');el.lastActions.classList.add('hidden');el.mark.classList.remove('marked');el.mark.textContent='Keep It';el.resultOverlay.classList.add('open')}
+    function showLastStanding(){el.resultCard.classList.add('last-card');el.resultTitle.textContent='LAST SENTENCE STANDING!';el.selected.textContent=state.active[0]||state.selected||'';el.celebrateSub.classList.remove('hidden');el.resultPrompt.textContent='';el.resultActions.classList.add('hidden');el.lastActions.classList.remove('hidden');el.resultOverlay.classList.add('open');launchConfetti();tone(523,.18,.13,0);tone(659,.18,.13,.16);tone(784,.22,.13,.32)}
+    function hideResult(){el.resultOverlay.classList.remove('open')}
+    function markReview(){if(!state.selected)return;hideResult()}
+    function removeSentence(){if(!state.selected)return;state.active=state.active.filter(s=>s!==state.selected);state.selected='';hideResult();updatePlay();if(state.active.length===1)showLastStanding()}
+    function playAgain(){hideResult();state.active=[...state.originalRound];state.selected='';state.review=[];state.practiced=new Set();state.angle=0;updatePlay();showView('play')}
+    function editSentences(){hideResult();const restore=state.originalRound.length?state.originalRound:state.setupSentences.length?state.setupSentences:state.active;el.input.value=restore.join('\n');showView('setup')}
+    function reset(){hideResult();state.active=[];state.originalRound=[];state.review=[];state.practiced=new Set();state.selected='';state.angle=0;state.spinning=false;clearMessage();showView('setup')}
+    function renderReview(){const list=document.getElementById('reviewList'),intro=document.getElementById('reviewIntro');list.innerHTML='';if(!state.review.length){intro.textContent='No sentences were marked for review.';list.innerHTML='<div class="empty-note">No sentences were marked for review.</div>'}else{intro.textContent='Practice the sentences marked for review.';state.review.forEach(sentence=>{const card=document.createElement('div');card.className='review-card';card.textContent=sentence;list.appendChild(card)})}document.getElementById('practiceReviewBtn').disabled=!state.review.length}
+    function showReview(){hideResult();renderReview();showView('review')}function practiceReview(){if(!state.review.length)return;state.originalRound=[...state.review];state.active=[...state.review];state.selected='';state.angle=0;updatePlay();showView('play')}
+    function setSoundButtons(){['header','play'].forEach(prefix=>{document.getElementById(prefix+'SoundOn').style.display=state.sound?'':'none';document.getElementById(prefix+'SoundOff').style.display=state.sound?'none':''})}function toggleSound(){state.sound=!state.sound;setSoundButtons()}
+    let confetti=[];function launchConfetti(){const canvas=document.getElementById('confettiCanvas'),ctx=canvas.getContext('2d');canvas.style.display='block';canvas.width=innerWidth;canvas.height=innerHeight;confetti=Array.from({length:70},()=>({x:Math.random()*canvas.width,y:-Math.random()*100,w:6+Math.random()*5,h:8+Math.random()*6,vx:(Math.random()-.5)*2.5,vy:2+Math.random()*2.5,r:Math.random()*6,dr:(Math.random()-.5)*.14,a:1,c:WHEEL_COLORS[Math.floor(Math.random()*WHEEL_COLORS.length)]}));function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);let alive=false;confetti.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.04;p.r+=p.dr;if(p.y>canvas.height*.7)p.a=Math.max(0,p.a-.03);alive||=p.a>0;ctx.save();ctx.globalAlpha=p.a;ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore()});if(alive)requestAnimationFrame(draw);else canvas.style.display='none'}draw()}
+    window.sentenceSpinner={getSentences:currentSetupSentences,setSentences:(s)=>{el.input.value=(Array.isArray(s)?s:[]).join('\n');initAndDraw()},startWith:(s)=>enterPlay(s||currentSetupSentences())};
+    window.setSentenceSpinnerSharedEdit=(canEdit)=>{sharedStudentCanEdit=!!canEdit;setSharedModeFlags();};
+    document.getElementById('startBtn').addEventListener('click',startFromSetup);document.getElementById('exampleBtn').addEventListener('click',()=>{el.input.value=EXAMPLES.join('\n');clearMessage();initAndDraw()});document.getElementById('clearBtn').addEventListener('click',()=>{el.input.value='';clearMessage();initAndDraw()});el.input.addEventListener('input',()=>requestAnimationFrame(initAndDraw));document.getElementById('spinBtn').addEventListener('click',spin);document.getElementById('markReviewBtn').addEventListener('click',markReview);document.getElementById('removeSentenceBtn').addEventListener('click',removeSentence);document.getElementById('playAgainBtn').addEventListener('click',playAgain);document.getElementById('lastEditBtn').addEventListener('click',editSentences);document.getElementById('editBtn').addEventListener('click',editSentences);document.getElementById('reviewStartOverBtn').addEventListener('click',reset);document.getElementById('practiceReviewBtn').addEventListener('click',practiceReview);document.getElementById('backToSpinnerBtn').addEventListener('click',()=>showView('play'));document.getElementById('headerSoundBtn').addEventListener('click',toggleSound);document.getElementById('playSoundBtn').addEventListener('click',toggleSound);window.addEventListener('resize',initAndDraw);document.addEventListener('keydown',event=>{if(event.key==='Enter'&&event.ctrlKey&&el.playShell.classList.contains('active'))spin();if(event.key==='Escape')hideResult()});el.resultOverlay.addEventListener('click',event=>{if(event.target===el.resultOverlay&&!el.lastActions.classList.contains('hidden'))return;if(event.target===el.resultOverlay)hideResult()});setSharedModeFlags();requestAnimationFrame(()=>{initAndDraw();setSoundButtons()});
+  </script>
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    const firebaseConfig={apiKey:"AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",authDomain:"literacy-arcade.firebaseapp.com",projectId:"literacy-arcade",storageBucket:"literacy-arcade.firebasestorage.app",messagingSenderId:"628621471724",appId:"1:628621471724:web:7ddfd231d1261b6c781ac9"};
+    const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);const auth=getAuth(app);const db=getFirestore(app);let currentUser=null;window.sentenceSpinnerCurrentUser=null;const PENDING_KEY='sentenceSpinnerPendingAuthSetup';
+    function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+    function updateAuthBar(user){const bar=document.getElementById('authStatus');if(!bar)return;if(user){const name=user.displayName||user.email||'Teacher';bar.innerHTML=`<strong style="color:#1a2340">${esc(name)}</strong>&nbsp;·&nbsp;<a href="teacher-dashboard.html" style="color:#0F6E56;font-weight:800;font-size:12px">My Dashboard</a>`}else{bar.innerHTML='<span style="color:#6b7a99">Sign in to save activities</span>'}}
+    onAuthStateChanged(auth,user=>{currentUser=user;window.sentenceSpinnerCurrentUser=user;updateAuthBar(user);const dashBtn=document.getElementById('dashboardBtn');if(dashBtn)dashBtn.style.display=user?'flex':'none';setTimeout(tryRestorePendingAuthSetup,80)});
+    function buildSetup(sentences){return{studentCanEdit:!!document.getElementById('studentCanEditToggle')?.checked,sentences:[...sentences]}}
+    function defaultTitle(sentences){return `Sentence Spinner - ${sentences.length} sentence${sentences.length===1?'':'s'}`}
+    function captureBeforeLogin(action='save'){try{const sentences=window.sentenceSpinner.getSentences();const pending={toolType:'sentence-spinner',activityType:'sentence-spinner',title:'Unsaved Sentence Spinner',sentences,settings:buildSetup(sentences),pendingAction:action,savedAt:Date.now()};sessionStorage.setItem(PENDING_KEY,JSON.stringify(pending))}catch(err){console.warn('Could not preserve sentence spinner setup before login:',err)}}
+    function restoreActivity(activity,{notice=false,start=false}={}){const sentences=(activity.sentences||activity.words||activity.settings?.sentences||[]).map(s=>String(s).trim()).filter(Boolean);if(!sentences.length)return false;const toggle=document.getElementById('studentCanEditToggle');if(toggle)toggle.checked=activity.settings?.studentCanEdit===true;if(window.setSentenceSpinnerSharedEdit)window.setSentenceSpinnerSharedEdit(activity.settings?.studentCanEdit===true);if(window.sentenceSpinner){window.sentenceSpinner.setSentences(sentences);if(start)window.sentenceSpinner.startWith(sentences)}if(notice){const msg=document.getElementById('restoreMessage');if(msg){msg.textContent=`${activity.title||'Activity'} loaded.`;msg.classList.add('show');setTimeout(()=>msg.classList.remove('show'),3500)}}return true}
+    function tryRestorePendingAuthSetup(){const raw=sessionStorage.getItem(PENDING_KEY);if(!raw)return false;let activity;try{activity=JSON.parse(raw)}catch{sessionStorage.removeItem(PENDING_KEY);return false}if(!activity||activity.toolType!=='sentence-spinner'){sessionStorage.removeItem(PENDING_KEY);return false}if(activity.savedAt&&Date.now()-activity.savedAt>1000*60*60*6){sessionStorage.removeItem(PENDING_KEY);return false}sessionStorage.removeItem(PENDING_KEY);const restored=restoreActivity(activity);if(restored){const msg=document.getElementById('restoreMessage');const action=activity.pendingAction==='share'?'Share Activity':'Save Activity';if(msg){msg.textContent=`Your selected sentences were restored. Click ${action} again to finish.`;msg.classList.add('show')}}return restored}
+    async function saveActivity(){if(!currentUser){captureBeforeLogin('save');location.href='teacher-login.html';return}const sentences=window.sentenceSpinner.getSentences();if(sentences.length<2){alert('Please enter at least two sentences before saving.');return}const title=prompt('Name this saved activity:',defaultTitle(sentences));if(title===null)return;const clean=title.trim();if(!clean){alert('Please enter a name for this activity.');return}const data={title:clean,toolType:'sentence-spinner',activityType:'sentence-spinner',sentences,words:sentences,settings:buildSetup(sentences),url:'sentence-spinner.html',createdAt:serverTimestamp(),updatedAt:serverTimestamp(),userId:currentUser.uid};try{await addDoc(collection(db,`users/${currentUser.uid}/activities`),data);const btn=document.getElementById('saveActivityBtn'),orig=btn.innerHTML;btn.innerHTML='✓ Saved!';btn.style.background='var(--teal)';btn.style.color='white';setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';btn.style.color=''},2400)}catch(err){console.error('Save error:',err);alert('Save failed. Please check your connection and try again.')}}
+    async function saveSharedActivity(activity){if(!currentUser)throw new Error('Teacher must be signed in to share.');const sharedData={title:activity.title,toolType:'sentence-spinner',activityType:'sentence-spinner',sentences:activity.sentences||[],words:activity.sentences||[],settings:activity.settings||{},createdAt:serverTimestamp(),updatedAt:serverTimestamp(),public:true};const sharedRef=await addDoc(collection(db,'sharedActivities'),sharedData);const privateData={...sharedData,url:'sentence-spinner.html',shareEnabled:true,sharedSetup:true,shareId:sharedRef.id,userId:currentUser.uid};const privateRef=await addDoc(collection(db,`users/${currentUser.uid}/activities`),privateData);return{shareId:sharedRef.id,savedActivityId:privateRef.id}}
+    async function loadShared(shareId){const snap=await getDoc(doc(db,'sharedActivities',shareId));if(!snap.exists()){alert('This shared activity link could not be found.');return null}const data=snap.data();if(!data||data.toolType!=='sentence-spinner'){alert('This shared activity is not available for Sentence Spinner.');return null}return{version:1,title:data.title||'Sentence Spinner Activity',toolType:data.toolType,sentences:data.sentences||data.words||[],settings:data.settings||{},shareId}}
+    function copyText(text){if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(text);const temp=document.createElement('textarea');temp.value=text;temp.setAttribute('readonly','');temp.style.position='fixed';temp.style.left='-9999px';document.body.appendChild(temp);temp.select();document.execCommand('copy');document.body.removeChild(temp);return Promise.resolve()}
+    function htmlEscape(value){return String(value).replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]))}
+    function ensureGoogleClassroomScript(){return new Promise(resolve=>{if(window.gapi&&window.gapi.sharetoclassroom){resolve(true);return}const existing=document.querySelector('script[src="https://apis.google.com/js/platform.js"]');if(existing){existing.addEventListener('load',()=>resolve(true),{once:true});setTimeout(()=>resolve(Boolean(window.gapi&&window.gapi.sharetoclassroom)),1800);return}const script=document.createElement('script');script.src='https://apis.google.com/js/platform.js';script.async=true;script.defer=true;script.onload=()=>resolve(true);script.onerror=()=>resolve(false);document.head.appendChild(script);setTimeout(()=>resolve(Boolean(window.gapi&&window.gapi.sharetoclassroom)),2200)})}
+    function renderGoogleClassroomButton(url){const wrap=document.getElementById('classroomShareWidget'),fallback=document.getElementById('classroomFallbackLink');if(!wrap)return;wrap.innerHTML=`<div class="g-sharetoclassroom" data-size="32" data-url="${htmlEscape(url)}" data-title="Sentence Spinner"></div>`;ensureGoogleClassroomScript().then(()=>{try{if(window.gapi&&window.gapi.sharetoclassroom){if(typeof window.gapi.sharetoclassroom.go==='function')window.gapi.sharetoclassroom.go();else if(typeof window.gapi.sharetoclassroom.render==='function'){const target=wrap.querySelector('.g-sharetoclassroom');window.gapi.sharetoclassroom.render(target,{url,title:'Sentence Spinner',size:32})}}}catch(err){console.warn('Google Classroom button render failed:',err)}setTimeout(()=>{const has=wrap.querySelector('iframe,button,a');if(!has&&fallback)fallback.style.display='inline-flex'},900)})}
+    function showShareModal(url){let overlay=document.getElementById('shareResultOverlay');if(!overlay){overlay=document.createElement('div');overlay.id='shareResultOverlay';overlay.className='share-result-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-labelledby','shareResultTitle');document.body.appendChild(overlay)}const safeUrl=htmlEscape(url);const classroomUrl=`https://classroom.google.com/share?url=${encodeURIComponent(url)}`;const embedCode=`<iframe src="${url}" width="100%" height="700" style="border:0;" loading="lazy" title="Literacy Arcade Sentence Spinner"></iframe>`;overlay.innerHTML=`<div class="share-result-modal"><div class="share-modal-head"><h2 id="shareResultTitle">Share spinner</h2><button type="button" class="share-x-btn" id="closeShareResult" aria-label="Close share modal">×</button></div><div class="share-modal-body"><label class="share-field-label">Student link</label><div class="share-url-box" aria-label="Student link">${safeUrl}</div><div class="share-primary-actions"><button type="button" class="copy-share-link-btn" id="copyShareLinkAgain">Copy Link</button><button type="button" class="copy-embed-code-btn" id="copyEmbedCodeBtn">Copy Embed Code</button></div><div class="share-divider" aria-hidden="true"></div><h3 class="share-classroom-title">Share to Google Classroom</h3><p class="share-classroom-text">Post this student-ready activity link to your class.</p><div class="classroom-widget-wrap" id="classroomShareWidget"></div><a class="classroom-fallback-link" id="classroomFallbackLink" href="${classroomUrl}" target="_blank" rel="noopener noreferrer">Open Google Classroom</a><p class="share-note" id="sharePermissionNote">Students can open this activity and play the assigned sentences. Students do not need to sign in.</p></div></div>`;overlay.classList.add('open');const note=overlay.querySelector('#sharePermissionNote');const canEdit=!!document.getElementById('studentCanEditToggle')?.checked;if(note)note.textContent=canEdit?'Students can open this activity and edit the sentence list. Students do not need to sign in.':'Students can open this activity and play the assigned sentences. Students do not need to sign in.';const close=()=>overlay.classList.remove('open');overlay.addEventListener('click',event=>{if(event.target===overlay)close()},{once:true});overlay.querySelector('#closeShareResult')?.addEventListener('click',close);overlay.querySelector('#copyShareLinkAgain')?.addEventListener('click',async()=>{await copyText(url);const btn=overlay.querySelector('#copyShareLinkAgain'),orig=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=orig,1200)});overlay.querySelector('#copyEmbedCodeBtn')?.addEventListener('click',async()=>{await copyText(embedCode);const btn=overlay.querySelector('#copyEmbedCodeBtn'),orig=btn.textContent;btn.textContent='Embed Copied!';setTimeout(()=>btn.textContent=orig,1200)});renderGoogleClassroomButton(url);overlay.querySelector('#copyShareLinkAgain')?.focus()}
+    async function shareActivity(){const sentences=window.sentenceSpinner.getSentences();if(sentences.length<2){alert('Please enter at least two sentences before sharing.');return}if(!currentUser){captureBeforeLogin('share');location.href='teacher-login.html';return}const btn=document.getElementById('shareActivityBtn'),orig=btn.innerHTML;try{btn.disabled=true;btn.innerHTML='Sharing…';const activity={title:defaultTitle(sentences),toolType:'sentence-spinner',activityType:'sentence-spinner',sentences,settings:buildSetup(sentences),autoStart:true};const result=await saveSharedActivity(activity);const url=`https://literacyarcade.com/sentence-spinner.html?activity=${encodeURIComponent(result.shareId)}`;await copyText(url);btn.innerHTML='Link Copied!';showShareModal(url);setTimeout(()=>{btn.innerHTML=orig;btn.disabled=false},2200)}catch(err){console.error('Share error:',err);btn.innerHTML=orig;btn.disabled=false;alert('Share failed. Please make sure you are signed in and try again.')}}
+    document.getElementById('saveActivityBtn').addEventListener('click',saveActivity);document.getElementById('shareActivityBtn').addEventListener('click',shareActivity);
+    window.addEventListener('load',async()=>{const shareId=new URLSearchParams(location.search).get('activity');if(shareId){document.getElementById('app').dataset.sharedMode='true';try{const activity=await loadShared(shareId);if(activity){if(window.setSentenceSpinnerSharedEdit)window.setSentenceSpinnerSharedEdit(activity.settings?.studentCanEdit===true);restoreActivity(activity,{start:true})}}catch(err){console.error('Shared activity load failed:',err);alert('This shared activity could not be loaded.')}}else{const raw=sessionStorage.getItem('savedActivityData');if(raw){try{const activity=JSON.parse(raw);if(activity&&activity.toolType==='sentence-spinner'){sessionStorage.removeItem('savedActivityData');sessionStorage.removeItem('savedActivityId');restoreActivity(activity,{notice:true})}}catch(e){}}}});
   </script>
 </body>
 </html>
