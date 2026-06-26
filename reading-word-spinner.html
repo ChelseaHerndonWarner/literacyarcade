@@ -1275,6 +1275,657 @@
     .save-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
     @media(max-width:900px){.spinner-word-card .tab-bar{flex-wrap:wrap}.spinner-word-card .tab-btn{flex:1 1 45%;}.phonics-tools{grid-template-columns:1fr;}}
 
+
+    /* ── PATCH: selected-word visibility + centered spin mode ────────────── */
+    .selected-words-wrap .wheel-words-body,
+    #wheelWordsBody{
+      max-height:none!important;
+      overflow:visible!important;
+      display:flex!important;
+      flex-direction:column!important;
+      gap:8px!important;
+    }
+    #wheelWordsBody .source-group{
+      display:flex!important;
+      align-items:flex-start!important;
+      flex-wrap:wrap!important;
+      width:100%!important;
+      gap:6px!important;
+    }
+    #wheelWordsBody .source-chips{
+      display:flex!important;
+      flex-wrap:wrap!important;
+      gap:5px!important;
+      min-width:0!important;
+      flex:1 1 240px!important;
+    }
+    #app[data-mode="spin"] .layout-columns{
+      display:flex!important;
+      grid-template-columns:none!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:flex-start!important;
+      width:100%!important;
+      max-width:none!important;
+      margin:0 auto!important;
+      gap:10px!important;
+    }
+    #app[data-mode="spin"] .col-left{display:none!important;}
+    #app[data-mode="spin"] .col-right{
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:flex-start!important;
+      width:100%!important;
+      max-width:680px!important;
+      margin:0 auto!important;
+      position:static!important;
+      padding-top:0!important;
+      left:auto!important;
+      right:auto!important;
+    }
+    #app[data-mode="spin"] .wheel-area{
+      width:100%!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+    }
+    #app[data-mode="spin"] #canvas{
+      width:min(525px,82vw,calc(100vh - 230px))!important;
+      height:min(525px,82vw,calc(100vh - 230px))!important;
+      margin:0 auto!important;
+    }
+    #app[data-mode="spin"] .spin-summary{
+      display:flex!important;
+      width:min(680px,calc(100vw - 48px))!important;
+      margin:0 auto!important;
+      justify-content:center!important;
+    }
+    .share-btn-fallback{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border:1.5px solid var(--teal);
+      background:var(--teal-bg);
+      border-radius:var(--r-sm);
+      padding:8px 16px;
+      font-size:13px;
+      font-weight:800;
+      color:var(--teal-dk);
+      cursor:pointer;
+      font-family:'Nunito',sans-serif;
+      transition:all .13s;
+      white-space:nowrap;
+    }
+    .save-bar .la-share-btn{display:none!important;}
+    .share-btn-fallback:hover{background:var(--teal);color:white;}
+    .share-btn-fallback svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+
+
+    /* ── PATCH V2: show every selected source and truly center spin mode ── */
+    .selected-words-wrap,
+    .selected-words-wrap.wheel-words-section{
+      height:auto!important;
+      max-height:none!important;
+      overflow:visible!important;
+    }
+    .selected-words-wrap .wheel-words-body,
+    #wheelWordsBody{
+      height:auto!important;
+      max-height:none!important;
+      overflow:visible!important;
+      display:flex!important;
+      flex-direction:column!important;
+      flex-wrap:nowrap!important;
+      gap:8px!important;
+      align-items:stretch!important;
+    }
+    #wheelWordsBody .source-group{
+      display:flex!important;
+      align-items:flex-start!important;
+      flex-wrap:nowrap!important;
+      width:100%!important;
+      gap:8px!important;
+      min-height:0!important;
+    }
+    #wheelWordsBody .source-tag{
+      flex:0 0 auto!important;
+    }
+    #wheelWordsBody .source-chips{
+      display:flex!important;
+      flex-wrap:wrap!important;
+      gap:5px!important;
+      min-width:0!important;
+      flex:1 1 auto!important;
+      overflow:visible!important;
+    }
+
+    #app[data-mode="spin"]{
+      padding-left:0!important;
+      padding-right:0!important;
+      align-items:center!important;
+    }
+    #app[data-mode="spin"] .layout-columns{
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:flex-start!important;
+      width:100vw!important;
+      max-width:100vw!important;
+      margin-left:calc(50% - 50vw)!important;
+      margin-right:calc(50% - 50vw)!important;
+      transform:none!important;
+      grid-template-columns:none!important;
+      gap:10px!important;
+    }
+    #app[data-mode="spin"] .col-left{
+      display:none!important;
+    }
+    #app[data-mode="spin"] .col-right{
+      width:100vw!important;
+      max-width:100vw!important;
+      margin:0!important;
+      padding:0!important;
+      position:static!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:flex-start!important;
+      left:auto!important;
+      right:auto!important;
+      top:auto!important;
+    }
+    #app[data-mode="spin"] .wheel-area{
+      width:100vw!important;
+      max-width:100vw!important;
+      margin:0 auto!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+    }
+    #app[data-mode="spin"] #canvas{
+      display:block!important;
+      margin-left:auto!important;
+      margin-right:auto!important;
+      width:min(560px,82vw,calc(100vh - 230px))!important;
+      height:min(560px,82vw,calc(100vh - 230px))!important;
+    }
+    #app[data-mode="spin"] .pointer{
+      left:50%!important;
+      transform:translateX(-50%)!important;
+    }
+    #app[data-mode="spin"] .spin-summary{
+      width:min(680px,calc(100vw - 48px))!important;
+      margin:0 auto!important;
+      justify-content:center!important;
+    }
+
+
+    /* ── PATCH V3: spin-page header/footer, Lexend student font, compact last-word state ── */
+    #app[data-mode="spin"] .la-header{
+      display:flex!important;
+      width:100vw!important;
+      max-width:100vw!important;
+      margin:0 0 14px 0!important;
+      padding:0 clamp(16px,3vw,24px)!important;
+      align-self:stretch!important;
+      justify-content:space-between!important;
+      border-bottom:1px solid var(--border)!important;
+      box-shadow:0 2px 14px rgba(26,26,46,.05)!important;
+    }
+    #app[data-mode="spin"] .la-logo-group{
+      min-width:0!important;
+    }
+    #app[data-mode="spin"] .la-tool-name{
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+    }
+    #app[data-mode="spin"] footer{
+      display:block!important;
+      width:100vw!important;
+      max-width:100vw!important;
+      margin:12px 0 0 0!important;
+      padding:10px 0 14px!important;
+      flex:0 0 auto!important;
+      text-align:center!important;
+    }
+    #app[data-mode="spin"] .spin-btn,
+    #app[data-mode="spin"] .spin-word-count,
+    #app[data-mode="spin"] .winner-banner,
+    #app[data-mode="spin"] .winner-banner p,
+    #app[data-mode="spin"] .winner-banner .big-word,
+    .modal-header p,
+    .modal-word,
+    .modal-prompt,
+    .modal-keep,
+    .modal-remove{
+      font-family:'Lexend',sans-serif!important;
+    }
+    .modal-word{
+      font-weight:800!important;
+    }
+    #app[data-mode="spin"] .winner-banner{
+      width:min(520px,calc(100vw - 48px))!important;
+      max-width:520px!important;
+      margin:8px auto 0!important;
+      border-radius:24px!important;
+      padding:16px 20px 18px!important;
+      background:var(--teal)!important;
+      box-shadow:0 12px 30px rgba(26,26,46,.12)!important;
+      text-align:center!important;
+    }
+    #app[data-mode="spin"] .winner-banner p{
+      font-size:15px!important;
+      font-weight:700!important;
+      line-height:1.2!important;
+      margin:0 0 4px!important;
+    }
+    #app[data-mode="spin"] .winner-banner .big-word{
+      font-size:clamp(46px,8vw,72px)!important;
+      line-height:1!important;
+      font-weight:800!important;
+      margin:0 0 10px!important;
+    }
+    #app[data-mode="spin"] .winner-banner .btn{
+      margin-top:4px!important;
+      min-height:36px!important;
+      padding:7px 16px!important;
+      border-radius:12px!important;
+      font-family:'Lexend',sans-serif!important;
+      font-size:13px!important;
+      font-weight:700!important;
+    }
+    @media(max-height:760px){
+      #app[data-mode="spin"] #canvas{
+        width:min(500px,76vw,calc(100vh - 250px))!important;
+        height:min(500px,76vw,calc(100vh - 250px))!important;
+      }
+      #app[data-mode="spin"] .winner-banner{
+        padding:12px 18px!important;
+      }
+      #app[data-mode="spin"] .winner-banner .big-word{
+        font-size:clamp(40px,7vw,58px)!important;
+      }
+    }
+
+
+
+    /* ── PATCH V4: whiteboard-style full-screen spin mode ─────────────
+       When the teacher clicks Start Spinning, the wheel becomes the page.
+       Header/footer/setup chrome is hidden so the spinner has room on a
+       SmartBoard or projector. */
+    #app[data-mode="spin"]{
+      min-height:100svh!important;
+      height:100svh!important;
+      width:100vw!important;
+      max-width:100vw!important;
+      overflow:hidden!important;
+      padding:0!important;
+      gap:0!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+    }
+    #app[data-mode="spin"] .la-header,
+    #app[data-mode="spin"] .page-title,
+    #app[data-mode="spin"] .subtitle,
+    #app[data-mode="spin"] footer{
+      display:none!important;
+    }
+    #app[data-mode="spin"] .spin-summary{
+      position:fixed!important;
+      top:14px!important;
+      left:50%!important;
+      transform:translateX(-50%)!important;
+      z-index:40!important;
+      width:auto!important;
+      min-width:min(420px,calc(100vw - 32px))!important;
+      max-width:calc(100vw - 32px)!important;
+      margin:0!important;
+      padding:8px 12px!important;
+      border-radius:999px!important;
+      background:rgba(255,255,255,.94)!important;
+      box-shadow:0 8px 24px rgba(26,26,46,.08)!important;
+      border:1.5px solid var(--border)!important;
+      justify-content:center!important;
+      backdrop-filter:blur(8px)!important;
+      -webkit-backdrop-filter:blur(8px)!important;
+    }
+    #app[data-mode="spin"] .spin-summary-left{
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:10px!important;
+      flex-wrap:wrap!important;
+    }
+    #app[data-mode="spin"] .spin-setup-btn{
+      appearance:none!important;
+      -webkit-appearance:none!important;
+      border:1.5px solid var(--border)!important;
+      background:var(--white)!important;
+      color:var(--navy-mid)!important;
+      border-radius:999px!important;
+      min-height:30px!important;
+      padding:5px 12px!important;
+      font-family:'Lexend',sans-serif!important;
+      font-size:12px!important;
+      font-weight:700!important;
+      cursor:pointer!important;
+      box-shadow:none!important;
+    }
+    #app[data-mode="spin"] .spin-setup-btn:hover{
+      border-color:var(--teal)!important;
+      background:var(--teal-bg)!important;
+      color:var(--teal-dk)!important;
+    }
+    #app[data-mode="spin"] .layout-columns{
+      flex:1 1 auto!important;
+      min-height:100svh!important;
+      width:100vw!important;
+      max-width:100vw!important;
+      margin:0!important;
+      padding:56px 16px 18px!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:12px!important;
+    }
+    #app[data-mode="spin"] .col-right{
+      width:100%!important;
+      max-width:100%!important;
+      min-height:0!important;
+      flex:1 1 auto!important;
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:12px!important;
+      padding:0!important;
+    }
+    #app[data-mode="spin"] .wheel-area{
+      width:100%!important;
+      max-width:100%!important;
+      flex:0 1 auto!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+    }
+    #app[data-mode="spin"] #canvas{
+      width:min(760px,88vw,calc(100svh - 170px))!important;
+      height:min(760px,88vw,calc(100svh - 170px))!important;
+      max-width:88vw!important;
+      max-height:calc(100svh - 170px)!important;
+    }
+    #app[data-mode="spin"] .spin-btn{
+      flex:0 0 auto!important;
+      width:min(420px,calc(100vw - 48px))!important;
+      max-width:420px!important;
+      padding:15px 24px!important;
+      font-family:'Lexend',sans-serif!important;
+      font-size:clamp(22px,3.2vw,30px)!important;
+      border-radius:18px!important;
+    }
+
+    /* Last word standing should behave like a result modal, not a bottom bar. */
+    #app[data-mode="spin"] .winner-banner{
+      position:fixed!important;
+      left:50%!important;
+      top:50%!important;
+      transform:translate(-50%,-50%)!important;
+      z-index:60!important;
+      width:min(560px,calc(100vw - 48px))!important;
+      max-width:560px!important;
+      margin:0!important;
+      padding:24px 28px 26px!important;
+      border-radius:26px!important;
+      background:var(--teal)!important;
+      box-shadow:0 22px 70px rgba(26,26,46,.25)!important;
+      text-align:center!important;
+    }
+    #app[data-mode="spin"] .winner-banner p{
+      font-family:'Lexend',sans-serif!important;
+      font-size:clamp(17px,2.6vw,24px)!important;
+      font-weight:700!important;
+      line-height:1.2!important;
+      margin:0 0 8px!important;
+      color:white!important;
+    }
+    #app[data-mode="spin"] .winner-banner .big-word{
+      font-family:'Lexend',sans-serif!important;
+      font-size:clamp(64px,10vw,116px)!important;
+      line-height:1!important;
+      font-weight:800!important;
+      margin:0 0 18px!important;
+      color:white!important;
+    }
+    #app[data-mode="spin"] .winner-banner .btn{
+      font-family:'Lexend',sans-serif!important;
+      font-size:15px!important;
+      font-weight:700!important;
+      min-height:42px!important;
+      padding:9px 20px!important;
+      border-radius:14px!important;
+    }
+    @media(max-height:700px){
+      #app[data-mode="spin"] .layout-columns{padding-top:48px!important;padding-bottom:12px!important;gap:8px!important;}
+      #app[data-mode="spin"] #canvas{width:min(680px,84vw,calc(100svh - 145px))!important;height:min(680px,84vw,calc(100svh - 145px))!important;max-height:calc(100svh - 145px)!important;}
+      #app[data-mode="spin"] .spin-btn{padding:12px 22px!important;font-size:24px!important;}
+      #app[data-mode="spin"] .winner-banner{padding:18px 22px!important;}
+      #app[data-mode="spin"] .winner-banner .big-word{font-size:clamp(54px,9vw,86px)!important;}
+    }
+
+    /* ── PATCH V5: full-screen student spin mode controls/results ── */
+    #app[data-mode="spin"] .spin-summary{
+      display:none!important;
+    }
+    .spin-floating-controls{
+      display:none;
+      position:fixed;
+      top:14px;
+      right:14px;
+      z-index:70;
+      align-items:center;
+      gap:8px;
+      font-family:'Lexend',sans-serif;
+    }
+    #app[data-mode="spin"] .spin-floating-controls{
+      display:flex;
+    }
+    .spin-float-btn{
+      appearance:none;
+      -webkit-appearance:none;
+      border:1.5px solid rgba(26,35,64,.12);
+      background:rgba(255,255,255,.92);
+      color:var(--navy-mid);
+      border-radius:999px;
+      min-height:34px;
+      padding:7px 12px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      font-family:'Lexend',sans-serif;
+      font-size:12px;
+      font-weight:800;
+      line-height:1;
+      cursor:pointer;
+      box-shadow:0 8px 24px rgba(26,26,46,.1);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+    .spin-float-btn:hover{
+      border-color:var(--teal);
+      background:var(--teal-bg);
+      color:var(--teal-dk);
+    }
+    .spin-float-btn svg{
+      width:15px;
+      height:15px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      flex:0 0 auto;
+    }
+    #app[data-student-mode="true"] .teacher-only{
+      display:none!important;
+    }
+    #app[data-mode="spin"] .layout-columns{
+      padding:28px 16px 22px!important;
+    }
+    #app[data-mode="spin"] #canvas{
+      width:min(820px,90vw,calc(100svh - 135px))!important;
+      height:min(820px,90vw,calc(100svh - 135px))!important;
+      max-width:90vw!important;
+      max-height:calc(100svh - 135px)!important;
+    }
+    #app.spin-result-open::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:50;
+      background:rgba(12,22,36,.36);
+      backdrop-filter:blur(5px);
+      -webkit-backdrop-filter:blur(5px);
+      pointer-events:none;
+    }
+    #app.spin-result-open .wheel-area,
+    #app.spin-result-open .spin-btn{
+      filter:blur(4px);
+      opacity:.42;
+      transition:filter .18s ease, opacity .18s ease;
+    }
+    #app[data-mode="spin"] .winner-banner{
+      display:none;
+      overflow:hidden;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:0;
+      background:
+        radial-gradient(circle at 16% 18%, rgba(255,255,255,.42) 0 3px, transparent 4px),
+        radial-gradient(circle at 82% 22%, rgba(255,255,255,.34) 0 4px, transparent 5px),
+        radial-gradient(circle at 72% 78%, rgba(255,255,255,.28) 0 3px, transparent 4px),
+        linear-gradient(135deg,#0F8F80 0%,#2EC4B6 58%,#6F9B7A 100%)!important;
+      border:1.5px solid rgba(255,255,255,.58)!important;
+    }
+    #app[data-mode="spin"] .winner-banner::before,
+    #app[data-mode="spin"] .winner-banner::after{
+      content:"";
+      position:absolute;
+      width:160px;
+      height:160px;
+      border-radius:50%;
+      background:
+        radial-gradient(circle, rgba(255,255,255,.95) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(255,238,173,.8) 0 3px, transparent 4px);
+      background-size:28px 28px, 42px 42px;
+      opacity:.5;
+      animation:winnerSparkle 4s linear infinite;
+      pointer-events:none;
+    }
+    #app[data-mode="spin"] .winner-banner::before{left:-46px;top:-44px;}
+    #app[data-mode="spin"] .winner-banner::after{right:-52px;bottom:-50px;animation-direction:reverse;}
+    #app[data-mode="spin"] .winner-banner p,
+    #app[data-mode="spin"] .winner-banner .big-word,
+    #app[data-mode="spin"] .winner-actions{
+      position:relative;
+      z-index:1;
+    }
+    #app[data-mode="spin"] .winner-banner p{
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    #app[data-mode="spin"] .winner-actions{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    #app[data-mode="spin"] .winner-banner .btn{
+      border:none!important;
+      background:white!important;
+      color:var(--teal-dk)!important;
+      box-shadow:0 5px 0 rgba(10,122,110,.45)!important;
+      cursor:pointer!important;
+    }
+    #app[data-mode="spin"] .winner-banner .btn.secondary{
+      background:rgba(255,255,255,.16)!important;
+      color:white!important;
+      border:1.5px solid rgba(255,255,255,.62)!important;
+      box-shadow:none!important;
+    }
+    @keyframes winnerSparkle{
+      from{transform:rotate(0deg) scale(1);}
+      50%{transform:rotate(12deg) scale(1.06);}
+      to{transform:rotate(0deg) scale(1);}
+    }
+
+    /* ── PATCH V6: shared-link permissions and spin sound control ── */
+    #app[data-shared-locked="true"] .teacher-only,
+    #app[data-shared-locked="true"] .save-bar{
+      display:none!important;
+    }
+    #app[data-shared-mode="true"] .save-bar{
+      display:none!important;
+    }
+    .share-permissions{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      width:100%;
+      margin-top:8px;
+      padding:10px 12px;
+      border:1.5px solid rgba(14,159,142,.22);
+      border-radius:var(--r-md);
+      background:linear-gradient(180deg,#F7FFFE 0%,#FFFFFF 100%);
+      font-family:'Nunito',sans-serif;
+      color:var(--navy-mid);
+    }
+    .share-permissions input{
+      width:18px;
+      height:18px;
+      margin-top:2px;
+      accent-color:var(--teal-dk);
+      flex:0 0 auto;
+    }
+    .share-permissions strong{
+      display:block;
+      font-size:13px;
+      line-height:1.2;
+      color:var(--navy);
+      font-weight:900;
+    }
+    .share-permissions span{
+      display:block;
+      margin-top:2px;
+      font-size:11px;
+      line-height:1.35;
+      font-weight:700;
+      color:var(--navy-light);
+    }
+    #spinSoundBtn[aria-pressed="false"]{
+      color:var(--coral-dk);
+    }
+
+    @media(max-width:520px){
+      .spin-floating-controls{top:10px;right:10px;}
+      .spin-float-btn{min-height:32px;padding:7px 10px;font-size:11px;}
+      #app[data-mode="spin"] #canvas{
+        width:min(94vw,calc(100svh - 130px))!important;
+        height:min(94vw,calc(100svh - 130px))!important;
+      }
+    }
+
+
   </style>
 </head>
 <body>
@@ -1311,11 +1962,18 @@
   
   <div class="subtitle">Fry sight words · Dolch sight words · Phonics patterns · Custom lists · SmartBoard ready</div>
 
-  <!-- ── SPIN MODE SUMMARY BAR (hidden in Build Mode) ── -->
-  <div class="spin-summary" id="spinSummary">
-    <div class="spin-summary-left">
-      <span class="spin-word-count" id="spinWordCount">0 words on wheel</span>
-    </div>
+  <div class="spin-floating-controls" id="spinFloatingControls" aria-label="Spinner controls">
+    <button type="button" class="spin-float-btn" id="spinSoundBtn" onclick="toggleMute()" title="Toggle sound" aria-label="Toggle sound" aria-pressed="true">
+      <svg id="spinSndOn" viewBox="0 0 24 24" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      <svg id="spinSndOff" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+    <button type="button" class="spin-float-btn teacher-only" id="spinEditWordsBtn" onclick="enterBuildMode()" title="Edit Words">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+      Edit Words
+    </button>
+    <button type="button" class="spin-float-btn" id="spinHomeBtn" onclick="window.location.href='https://literacyarcade.com'" title="Home" aria-label="Home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V9.5z"/></svg>
+    </button>
   </div>
 
   <div class="layout-columns">
@@ -1395,7 +2053,18 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
           Save Activity
         </button>
+        <button id="shareActivityBtn" class="share-btn-fallback" type="button">
+          <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6 15.4 6.4"/><path d="M8.6 13.4l6.8 4.2"/></svg>
+          Share Activity
+        </button>
         <div id="authStatus" style="font-size:12px;font-weight:700;color:var(--navy-light);font-family:'Nunito',sans-serif;">Loading…</div>
+        <label class="share-permissions" for="studentCanEditToggle">
+          <input type="checkbox" id="studentCanEditToggle" />
+          <span>
+            <strong>Allow students to edit words in shared links</strong>
+            <span>Leave unchecked to lock the word list for Google Classroom/LMS assignments.</span>
+          </span>
+        </label>
       </div>
 
     </div><!-- /col-left -->
@@ -1416,7 +2085,10 @@
       <div class="winner-banner" id="winnerBanner">
         <p>Last word standing!</p>
         <div class="big-word" id="winnerWord"></div>
-        <button class="btn" style="margin-top:10px;background:white;" onclick="clearWheel()">Start Over</button>
+        <div class="winner-actions">
+          <button class="btn" onclick="playAgain()">Play Again</button>
+          <button class="btn secondary teacher-only" onclick="enterBuildMode()">Edit Words</button>
+        </div>
       </div>
 
     </div><!-- /col-right -->
@@ -1771,8 +2443,17 @@ let DPR = Math.min(window.devicePixelRatio || 1, 3);
 
 function getVisualSize() {
   const canvas = document.getElementById('canvas');
-  // Use the CSS-rendered size (set by min() in CSS), fallback to 420
-  return canvas.getBoundingClientRect().width || VISUAL_SIZE;
+  if (appMode === 'spin') {
+    return Math.max(360, Math.round(Math.min(820, window.innerWidth * 0.9, window.innerHeight - 135)));
+  }
+  // Use the CSS-rendered size. If a mode switch has just happened and the
+  // browser has not painted the new size yet, fall back to the wheel area's
+  // available width so spin mode does not inherit the left-column preview size.
+  const rectW = canvas.getBoundingClientRect().width;
+  if (rectW && rectW > 40) return rectW;
+  const areaW = canvas.parentElement ? canvas.parentElement.getBoundingClientRect().width : 0;
+  const maxByMode = Math.min(390, areaW || 390);
+  return Math.max(260, Math.round(maxByMode || VISUAL_SIZE));
 }
 
 function initCanvas() {
@@ -1796,9 +2477,13 @@ function getCtx() {
 }
 
 // ── STATE ─────────────────────────────────────────────────────────────
+const isSharedStudentMode = new URLSearchParams(window.location.search).has('activity');
+let sharedStudentCanEdit = false; // loaded from shared activity settings; default locked
 let currentTab   = 'fry';
 // wheelEntries: [{word, source}] — preserves source for grouping
 let wheelEntries = [];
+let originalSpinWords = [];
+let activeSpinWords = [];
 let currentAngle = 0;
 let spinning     = false;
 let pendingEntry = null; // {word, source}
@@ -1810,6 +2495,9 @@ let customWords  = []; // typed/pasted words, persists across tab switches
 
 // Convenience getter
 function wheelWords() { return wheelEntries.map(e => e.word); }
+function cloneEntries(entries) {
+  return (entries || []).map(entry => ({ word: entry.word, source: entry.source || 'custom' }));
+}
 
 // ── AUDIO ─────────────────────────────────────────────────────────────
 function startTicking(ms) {
@@ -1831,18 +2519,18 @@ function toggleMute() {
   const setupMuteTextBtn = document.getElementById('muteBtn');
   if (setupMuteTextBtn) setupMuteTextBtn.textContent = label;
   
-  // Update Read & Race style header button with SVG icons
+  // Update Read & Race style header and floating spin buttons with SVG icons
   const setupSndOn = document.getElementById('setupSndOn');
   const setupSndOff = document.getElementById('setupSndOff');
-  if (setupSndOn && setupSndOff) {
-    if (soundEnabled) {
-      setupSndOn.style.display = '';
-      setupSndOff.style.display = 'none';
-    } else {
-      setupSndOn.style.display = 'none';
-      setupSndOff.style.display = '';
-    }
-  }
+  const spinSndOn = document.getElementById('spinSndOn');
+  const spinSndOff = document.getElementById('spinSndOff');
+  const spinSoundBtn = document.getElementById('spinSoundBtn');
+  [[setupSndOn, setupSndOff], [spinSndOn, spinSndOff]].forEach(([onIcon, offIcon]) => {
+    if (!onIcon || !offIcon) return;
+    onIcon.style.display = soundEnabled ? '' : 'none';
+    offIcon.style.display = soundEnabled ? 'none' : '';
+  });
+  if (spinSoundBtn) spinSoundBtn.setAttribute('aria-pressed', soundEnabled ? 'true' : 'false');
   if (soundEnabled && spinning) startTicking(tickIntervalMs);
 }
 
@@ -1912,22 +2600,70 @@ function animateConfetti() {
 // ── BUILD / SPIN MODE ─────────────────────────────────────────────────
 let appMode = 'build'; // 'build' | 'spin'
 
-function enterSpinMode() {
+function hideWinner() {
+  const banner = document.getElementById('winnerBanner');
+  const app = document.getElementById('app');
+  if (banner) banner.style.display = 'none';
+  if (app) app.classList.remove('spin-result-open');
+}
+
+function showWinner(word) {
+  const banner = document.getElementById('winnerBanner');
+  const winnerWord = document.getElementById('winnerWord');
+  const app = document.getElementById('app');
+  if (!banner || !winnerWord) return;
+  winnerWord.textContent = word;
+  banner.style.display = 'flex';
+  if (app) app.classList.add('spin-result-open');
+  launchConfetti();
+  playCelebration();
+}
+
+function playAgain() {
+  const entries = cloneEntries(originalSpinWords);
+  if (!entries.length) {
+    alert('Add some words to the wheel first!');
+    return;
+  }
+  activeSpinWords = entries;
+  wheelEntries = activeSpinWords;
+  appMode = 'spin';
+  const app = document.getElementById('app');
+  app.dataset.mode = 'spin';
+  hideWinner();
+  updateWheelWords();
+  updateModeUI();
+  requestAnimationFrame(() => requestAnimationFrame(() => { initCanvas(); drawWheel(); }));
+}
+
+function enterSpinMode(options = {}) {
   if (!wheelEntries.length) {
     alert('Add some words to the wheel first!');
     return;
   }
+  const captureOriginal = options.captureOriginal !== false;
+  if (captureOriginal || !originalSpinWords.length) {
+    originalSpinWords = cloneEntries(wheelEntries);
+  }
+  activeSpinWords = cloneEntries(originalSpinWords);
+  wheelEntries = activeSpinWords;
   appMode = 'spin';
   document.getElementById('app').dataset.mode = 'spin';
-  // Re-init canvas for larger spin-mode size
-  requestAnimationFrame(() => { initCanvas(); drawWheel(); });
+  hideWinner();
   updateModeUI();
+  // Let the browser apply the spin-mode CSS before measuring the canvas.
+  requestAnimationFrame(() => requestAnimationFrame(() => { initCanvas(); drawWheel(); }));
 }
 
 function enterBuildMode() {
+  if (isSharedStudentMode && !sharedStudentCanEdit) return;
+  if (appMode === 'spin' && originalSpinWords.length) {
+    wheelEntries = cloneEntries(originalSpinWords);
+    activeSpinWords = [];
+  }
   appMode = 'build';
   document.getElementById('app').dataset.mode = 'build';
-  document.getElementById('winnerBanner').style.display = 'none';
+  hideWinner();
   // Re-init canvas for smaller build-mode preview size
   requestAnimationFrame(() => { initCanvas(); drawWheel(); });
   updateModeUI();
@@ -1937,8 +2673,9 @@ function updateModeUI() {
   const count = wheelEntries.length;
   const plural = count === 1 ? 'word' : 'words';
 
-  // Summary bar word count
-  document.getElementById('spinWordCount').textContent = `${count} ${plural} on wheel`;
+  // Legacy summary bar word count, if present in older copies.
+  const spinWordCount = document.getElementById('spinWordCount');
+  if (spinWordCount) spinWordCount.textContent = `${count} ${plural} on wheel`;
 
   // Sync both mute buttons
   const muteLabel = soundEnabled ? '🔊' : '🔇';
@@ -1950,6 +2687,29 @@ function updateModeUI() {
   // Start Spinning button: show only in build mode when words exist
   const ssBtn = document.getElementById('startSpinBtn');
   if (ssBtn) ssBtn.style.display = (appMode === 'build' && count > 0) ? 'block' : 'none';
+
+  const app = document.getElementById('app');
+  const sharedLocked = isSharedStudentMode && !sharedStudentCanEdit;
+  if (app) {
+    app.dataset.studentMode = sharedLocked ? 'true' : 'false';
+    app.dataset.sharedMode = isSharedStudentMode ? 'true' : 'false';
+    app.dataset.sharedLocked = sharedLocked ? 'true' : 'false';
+  }
+
+  const editBtn = document.getElementById('spinEditWordsBtn');
+  if (editBtn) editBtn.style.display = sharedLocked ? 'none' : '';
+
+  const winnerEditBtn = document.querySelector('#winnerBanner .teacher-only');
+  if (winnerEditBtn) winnerEditBtn.style.display = sharedLocked ? 'none' : '';
+
+  const spinSndOn = document.getElementById('spinSndOn');
+  const spinSndOff = document.getElementById('spinSndOff');
+  const spinSoundBtn = document.getElementById('spinSoundBtn');
+  if (spinSndOn && spinSndOff) {
+    spinSndOn.style.display = soundEnabled ? '' : 'none';
+    spinSndOff.style.display = soundEnabled ? 'none' : '';
+  }
+  if (spinSoundBtn) spinSoundBtn.setAttribute('aria-pressed', soundEnabled ? 'true' : 'false');
 }
 
 // ── TABS ──────────────────────────────────────────────────────────────
@@ -2104,7 +2864,7 @@ function toggleWord(w, chip) {
     if (chip) chip.classList.add('on-wheel');
   }
   updateWheelWords();
-  document.getElementById('winnerBanner').style.display = 'none';
+  hideWinner();
 }
 
 function removeEntry(word) {
@@ -2114,11 +2874,10 @@ function removeEntry(word) {
     if (c.dataset.word === word) c.classList.remove('on-wheel');
   });
   updateWheelWords();
-  if (wheelEntries.length === 1) {
-    document.getElementById('winnerWord').textContent = wheelEntries[0].word;
-    document.getElementById('winnerBanner').style.display = 'block';
-  } else if (wheelEntries.length === 0) {
-    document.getElementById('winnerBanner').style.display = 'none';
+  if (appMode === 'spin' && wheelEntries.length === 1) {
+    showWinner(wheelEntries[0].word);
+  } else if (wheelEntries.length === 0 || appMode !== 'spin') {
+    hideWinner();
   }
 }
 
@@ -2136,7 +2895,7 @@ function selectAll() {
     if (!wheelEntries.find(e => e.word === w)) wheelEntries.push({ word: w, source: src });
   });
   updateWheelWords();
-  document.getElementById('winnerBanner').style.display = 'none';
+  hideWinner();
   const ww = wheelWords();
   document.querySelectorAll('#wordChips .chip').forEach(c => {
     if (ww.includes(c.dataset.word)) c.classList.add('on-wheel');
@@ -2154,67 +2913,79 @@ function selectNone() {
   }
   wheelEntries = wheelEntries.filter(e => !words.includes(e.word));
   updateWheelWords();
+  hideWinner();
   document.querySelectorAll('#wordChips .chip').forEach(c => c.classList.remove('on-wheel'));
 }
 
 function clearWheel() {
   wheelEntries = [];
-  updateWheelWords(); // will call enterBuildMode() since wheel is empty + mode check
-  document.getElementById('winnerBanner').style.display = 'none';
+  updateWheelWords();
+  hideWinner();
   document.querySelectorAll('#wordChips .chip').forEach(c => c.classList.remove('on-wheel'));
 }
 
 // ── RENDER WORDS ON WHEEL (grouped by source) ─────────────────────────
 function updateWheelWords() {
   drawWheel();
+
   const body = document.getElementById('wheelWordsBody');
   const count = document.getElementById('wheelCount');
-  count.textContent = wheelEntries.length + (wheelEntries.length === 1 ? ' word' : ' words');
+  if (!body || !count) return;
 
-  // If wheel becomes empty while in spin mode, drop back to build mode
-  if (!wheelEntries.length && appMode === 'spin') {
-    enterBuildMode();
-  }
+  const total = wheelEntries.length;
+  count.textContent = total + (total === 1 ? ' word' : ' words');
 
-  // Keep summary bar and start-spin button in sync
   updateModeUI();
 
-  if (!wheelEntries.length) {
+  if (!total) {
     body.innerHTML = '<span class="wheel-empty-msg">No words yet. Tap any word above to add it to the wheel.</span>';
     return;
   }
 
-  // Group by source, preserving insertion order of first appearance
-  const groups = {};
-  const order  = [];
-  wheelEntries.forEach(e => {
-    if (!groups[e.source]) { groups[e.source] = []; order.push(e.source); }
-    groups[e.source].push(e.word);
+  // Group by source, but make the renderer independent of the visible tab.
+  // This keeps Fry + Dolch + Phonics + Custom selections visible together.
+  const groups = new Map();
+  wheelEntries.forEach(entry => {
+    const src = entry.source || 'custom';
+    if (!groups.has(src)) groups.set(src, []);
+    groups.get(src).push(entry.word);
   });
 
-  body.innerHTML = '';
-  order.forEach(src => {
-    const meta   = getSourceMeta(src);
-    const row    = document.createElement('div');
+  body.replaceChildren();
+
+  groups.forEach((words, src) => {
+    const meta = getSourceMeta(src);
+    const row = document.createElement('div');
     row.className = 'source-group';
 
-    const tag    = document.createElement('span');
+    const tag = document.createElement('span');
     tag.className = 'source-tag ' + meta.cls;
     tag.textContent = meta.label;
     row.appendChild(tag);
 
     const chips = document.createElement('div');
     chips.className = 'source-chips';
-    groups[src].forEach(w => {
+
+    words.forEach(word => {
       const chip = document.createElement('span');
       chip.className = 'wheel-chip';
-      const txt = document.createElement('span'); txt.textContent = w;
+
+      const txt = document.createElement('span');
+      txt.textContent = word;
+
       const btn = document.createElement('button');
-      btn.className = 'remove-x'; btn.innerHTML = '&times;'; btn.title = 'Remove "' + w + '"';
-      btn.onclick = () => removeEntry(w);
-      chip.appendChild(txt); chip.appendChild(btn);
+      btn.type = 'button';
+      btn.className = 'remove-x';
+      btn.innerHTML = '&times;';
+      btn.title = 'Remove "' + word + '"';
+      btn.setAttribute('aria-label', 'Remove ' + word + ' from wheel');
+      btn.onclick = () => removeEntry(word);
+
+      chip.appendChild(txt);
+      chip.appendChild(btn);
       chips.appendChild(chip);
     });
+
     row.appendChild(chips);
     body.appendChild(row);
   });
@@ -2234,7 +3005,7 @@ function addCustomWords() {
     }
   });
   document.getElementById('customTextarea').value = '';
-  document.getElementById('winnerBanner').style.display = 'none';
+  hideWinner();
   loadWordBank();       // refresh chip display (all chips shown as on-wheel)
   updateWheelWords();   // refresh grouped wheel section
 }
@@ -2243,7 +3014,7 @@ function clearCustomWords() {
   wheelEntries = wheelEntries.filter(e => e.source !== 'custom');
   customWords = [];
   updateWheelWords();
-  document.getElementById('winnerBanner').style.display = 'none';
+  hideWinner();
   loadWordBank();
 }
 
@@ -2398,11 +3169,7 @@ function closeModal(remove) {
   document.getElementById('app').classList.remove('modal-active');
   if (remove && pendingEntry) {
     removeEntry(pendingEntry.word);
-    if (wheelEntries.length === 1) {
-      drawWheel();
-      document.getElementById('winnerWord').textContent = wheelEntries[0].word;
-      document.getElementById('winnerBanner').style.display = 'block';
-    } else { drawWheel(); }
+    drawWheel();
   } else { drawWheel(); }
   pendingEntry = null;
 }
@@ -2413,9 +3180,7 @@ function spin() {
   if (!wheelEntries.length) { alert('Tap some words to add them to the wheel first!'); return; }
   // Auto-enter spin mode if still in build mode
   if (appMode === 'build') {
-    appMode = 'spin';
-    document.getElementById('app').dataset.mode = 'spin';
-    updateModeUI();
+    enterSpinMode();
     // Give the CSS transition time to resize canvas before animating
     requestAnimationFrame(() => {
       initCanvas();
@@ -2429,11 +3194,11 @@ function spin() {
 
 function _doSpin() {
   if (spinning) return;
-  if (wheelEntries.length === 1) { showModal(wheelEntries[0]); return; }
+  if (wheelEntries.length === 1) { showWinner(wheelEntries[0].word); return; }
   getAudio();
   spinning = true;
   document.getElementById('spinBtn').disabled = true;
-  document.getElementById('winnerBanner').style.display = 'none';
+  hideWinner();
 
   const total = (6+Math.random()*5)*Math.PI*2;
   const dur   = 4000+Math.random()*2200;
@@ -2489,7 +3254,7 @@ requestAnimationFrame(() => {
   // Expose globals for Firebase module
   window._spinner = {
     getWheelEntries: () => wheelEntries,
-    setWheelEntries: (entries) => { wheelEntries = entries; },
+    setWheelEntries: (entries) => { wheelEntries = entries; updateModeUI(); },
     getCurrentTab: () => currentTab,
     switchTab,
     populateSelect,
@@ -2653,6 +3418,7 @@ function buildSpinnerSetup(entries) {
     phonicsGroup: document.getElementById('phonicsGroupSelect')?.value || '',
     phonicsPattern: document.getElementById('phonicsPatternSelect')?.value || '',
     customWords: sp ? sp.customWords() : [],
+    studentCanEdit: !!document.getElementById('studentCanEditToggle')?.checked,
     selectedWords: entries.map(entry => entry.word),
     wheelEntries: cleanSpinnerEntries(entries)
   };
@@ -2660,6 +3426,11 @@ function buildSpinnerSetup(entries) {
 
 function restoreSpinnerActivity(activity, options = {}) {
   const settings = activity.settings || {};
+  if (isSharedStudentMode) {
+    sharedStudentCanEdit = settings.studentCanEdit === true;
+  }
+  const toggle = document.getElementById('studentCanEditToggle');
+  if (toggle) toggle.checked = settings.studentCanEdit === true;
   const sp = window._spinner;
   if (!sp) return false;
 
@@ -2703,6 +3474,7 @@ function restoreSpinnerActivity(activity, options = {}) {
   sp.setWheelEntries(savedEntries);
   setTimeout(() => {
     sp.updateWheelWords();
+    if (typeof updateModeUI === 'function') updateModeUI();
     sp.drawWheel();
     if (options.start && typeof sp.enterSpinMode === 'function') sp.enterSpinMode();
     if (options.notice) showLoadedNotice(activity.title || 'Activity');
@@ -2786,7 +3558,86 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
   };
 };
 </script>
+
 <script>
+(function(){
+  function setShareButtonState(label, busy){
+    const btn = document.getElementById('shareActivityBtn');
+    if (!btn) return;
+    btn.disabled = !!busy;
+    btn.style.opacity = busy ? '0.65' : '';
+    if (label) btn.lastChild.textContent = ' ' + label;
+  }
+
+  async function copyText(text){
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+    const temp = document.createElement('textarea');
+    temp.value = text;
+    temp.setAttribute('readonly', '');
+    temp.style.position = 'fixed';
+    temp.style.left = '-9999px';
+    document.body.appendChild(temp);
+    temp.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(temp);
+    return ok;
+  }
+
+  async function handleShareClick(){
+    const sp = window._spinner;
+    const entries = sp ? sp.getWheelEntries() : [];
+    if (!entries.length) {
+      alert('Add words to the wheel before sharing.');
+      return;
+    }
+    if (!window.wordSpinnerCurrentUser) {
+      window.location.href = 'teacher-login.html';
+      return;
+    }
+    if (typeof window.saveWordSpinnerSharedActivity !== 'function') {
+      alert('Share is still loading. Please try again in a moment.');
+      return;
+    }
+    const words = entries.map(e => e.word);
+    const defaultTitle = `Reading Word Spinner - ${words.length} word${words.length === 1 ? '' : 's'}`;
+    const activity = {
+      title: defaultTitle,
+      toolType: 'word-spinner',
+      activityType: 'word-spinner',
+      words,
+      settings: typeof window.buildWordSpinnerSetup === 'function'
+        ? window.buildWordSpinnerSetup(entries)
+        : { selectedWords: words, wheelEntries: entries, studentCanEdit: !!document.getElementById('studentCanEditToggle')?.checked },
+      autoStart: true
+    };
+
+    try {
+      setShareButtonState('Sharing…', true);
+      const result = await window.saveWordSpinnerSharedActivity(activity);
+      const url = `https://literacyarcade.com/reading-word-spinner.html?activity=${encodeURIComponent(result.shareId)}`;
+      await copyText(url);
+      setShareButtonState('Link Copied!', false);
+      alert('Share link copied. You can paste it into Google Classroom or another LMS.\n\n' + url);
+      setTimeout(() => setShareButtonState('Share Activity', false), 2500);
+    } catch (err) {
+      console.error('Share error:', err);
+      setShareButtonState('Share Activity', false);
+      alert('Share failed. Please make sure you are signed in and try again.');
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('shareActivityBtn');
+    if (btn) btn.addEventListener('click', handleShareClick);
+  });
+})();
+</script>
+
+<script>
+if (window.LiteracyArcadeShare) {
 LiteracyArcadeShare.register({
   toolType: 'word-spinner',
   mount: document.getElementById('saveActivityBtn')?.parentElement,
@@ -2818,6 +3669,7 @@ LiteracyArcadeShare.register({
           phonicsGroup: document.getElementById('phonicsGroupSelect')?.value || '',
           phonicsPattern: document.getElementById('phonicsPatternSelect')?.value || '',
           customWords: sp ? sp.customWords() : [],
+          studentCanEdit: !!document.getElementById('studentCanEditToggle')?.checked,
           selectedWords: words,
           wheelEntries: entries
         },
@@ -2844,6 +3696,7 @@ LiteracyArcadeShare.register({
     }
   }
 });
+}
 </script>
 </body>
 </html>
