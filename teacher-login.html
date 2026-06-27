@@ -75,6 +75,19 @@ const errorMsg = document.getElementById('errorMsg');
 const provider = new GoogleAuthProvider();
 
 function getPostLoginDestination() {
+  // Preserve in-progress teacher work through Google sign-in.
+  // These keys are set by the individual tools before redirecting here.
+  if (sessionStorage.getItem('wordSpinnerPendingAuthSetup')) {
+    return 'reading-word-spinner.html';
+  }
+  if (sessionStorage.getItem('sentenceSpinnerPendingAuthSetup')) {
+    return 'sentence-spinner.html';
+  }
+  if (sessionStorage.getItem('readRacePendingAuthSetup')) {
+    return 'read-and-race.html';
+  }
+
+  // Existing assessment/tool pending-save flow.
   const pending = sessionStorage.getItem('pendingActivityData');
   if (pending) {
     return 'phoneme-counter.html?autoSavePendingActivity=1';
