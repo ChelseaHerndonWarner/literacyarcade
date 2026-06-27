@@ -95,6 +95,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 .icon-btn:hover{background:var(--cream);border-color:var(--navy-lt)}
 .icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.hdr-game-btn{
+  border:1.5px solid var(--border);background:var(--white);
+  border-radius:var(--r-sm);padding:7px 13px;font-size:12px;
+  font-weight:800;color:var(--navy-mid);cursor:pointer;transition:all .13s;
+  align-items:center;justify-content:center;white-space:nowrap;
+}
+.hdr-game-btn:hover{border-color:var(--teal-dk);color:var(--teal-dk);background:var(--teal-bg)}
 
 body.setup-mode .game-only{display:none!important}
 body.game-mode .game-only{display:flex!important}
@@ -726,6 +733,8 @@ body.shared-mode.shared-locked #newGameBtn{display:none!important;}
     <span class="la-tool-name">Read &amp; Race</span>
   </a>
   <div class="hdr-btns">
+    <button class="hdr-game-btn game-only" id="restartBtn" type="button">Restart Race</button>
+    <button class="hdr-game-btn game-only" id="newGameBtn" type="button">← Edit Words</button>
     <button class="icon-btn" id="setupSoundBtn" aria-label="Toggle sound" title="Toggle sound" type="button">
       <svg id="setupSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
       <svg id="setupSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
@@ -854,8 +863,8 @@ body.shared-mode.shared-locked #newGameBtn{display:none!important;}
     </div>
     <div class="topbar-right">
       <span class="topbar-label" id="gameListLabel"></span>
-      <button class="topbar-btn" id="restartBtn">Restart</button>
-      <button class="topbar-btn" id="newGameBtn">← Edit Words</button>
+      <button class="topbar-btn" id="topbarRestartBtn">Restart Race</button>
+      <button class="topbar-btn" id="topbarNewGameBtn">← Edit Words</button>
       <button class="topbar-snd" id="gameSoundBtn" aria-label="Toggle sound" title="Toggle sound">
         <svg id="gameSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         <svg id="gameSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
@@ -1763,7 +1772,7 @@ function init(){
   $('clearSelectedBtn').addEventListener('click',clearSelectedWords);
   $('startBtn').addEventListener('click',startGame);
   $('newGameBtn').addEventListener('click',resetToSetup);
-  $('restartBtn').addEventListener('click',resetToSetup);
+  $('restartBtn').addEventListener('click',playAgain);
   $('diceBtn').addEventListener('click',rollDice);
   $('readBtn').addEventListener('click',moveCurrent);
   $('playAgainBtn').addEventListener('click',playAgain);
