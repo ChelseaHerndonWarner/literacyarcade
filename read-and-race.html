@@ -744,7 +744,7 @@ body.shared-mode #setup .save-bar{display:none!important;}
   <div class="loaded-banner" id="loadedBanner" style="display:none">
     <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
     <span class="loaded-banner-text" id="loadedBannerText">Activity loaded from your dashboard</span>
-    <button class="loaded-banner-clear" id="loadedBannerClear" title="Clear and start fresh">✕ Clear</button>
+    <button class="loaded-banner-clear" id="loadedBannerClear" title="Dismiss message">✕</button>
   </div>
 
   <div class="hero">
@@ -2019,8 +2019,10 @@ function tryRestorePendingAuthSetup() {
     const bannerText = document.getElementById('loadedBannerText');
     const action = activity.pendingAction === 'share' ? 'Share Activity' : 'Save Activity';
     if (banner && bannerText) {
-      bannerText.textContent = `Your Read & Race setup was restored. Click ${action} again to finish.`;
+      bannerText.textContent = `Your Read & Race setup was restored after sign-in. Click ${action} when you are ready.`;
       banner.style.display = 'flex';
+      window.clearTimeout(banner._hideTimer);
+      banner._hideTimer = window.setTimeout(() => { banner.style.display = 'none'; }, 6500);
     }
   }
   return restored;
@@ -2048,11 +2050,8 @@ function tryLoadSavedActivity() {
 }
 
 document.getElementById('loadedBannerClear')?.addEventListener('click', () => {
-  document.getElementById('loadedBanner').style.display = 'none';
-  if (window.selectedWordsSet) {
-    window.selectedWordsSet.clear();
-    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
-  }
+  const banner = document.getElementById('loadedBanner');
+  if (banner) banner.style.display = 'none';
 });
 
 // Run after main init so globals are ready
