@@ -44,7 +44,7 @@ body{
 .la-logo-fallback{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--teal),var(--coral));color:white;font-family:var(--font-head);font-weight:900;font-size:13px;letter-spacing:.3px}
 .la-wordmark{font-family:var(--font-head);font-weight:900;font-size:18px}
 .la-divider{width:1px;height:22px;background:var(--border);flex-shrink:0}
-.la-page-title{font-family:var(--font-head);font-weight:800;color:var(--teal-dark);font-size:15px}
+.la-page-title{font-family:var(--font-head);font-weight:800;color:var(--teal);font-size:15px}
 .header-spacer{flex:1}
 .header-btn{
   height:36px;border:1.5px solid var(--border);background:#fff;
@@ -583,6 +583,43 @@ main{max-width:1160px;padding:28px 18px 56px;}
 .collection-card-sub{font-size:13px!important;font-weight:500!important;}
 .collection-grid{gap:13px!important;}
 
+
+/* View cleanup refinements: reduce extra green, keep color controls neutral, and support section reordering */
+.activity-card > .open-btn{
+  background:#fff!important;
+  color:var(--teal-dark)!important;
+  border:1.5px solid var(--teal)!important;
+  box-shadow:none!important;
+}
+.activity-card > .open-btn:hover{
+  background:var(--teal-light)!important;
+  color:var(--teal-dark)!important;
+  transform:translateY(-1px);
+}
+.collection-actions .color-btn,
+.collection-detail-actions #changeCollectionColorBtn,
+.section-mini-btn.section-color-btn{
+  border-color:var(--border)!important;
+  color:var(--navy-soft)!important;
+  background:#fff!important;
+}
+.collection-actions .color-btn:hover,
+.collection-detail-actions #changeCollectionColorBtn:hover,
+.section-mini-btn.section-color-btn:hover{
+  border-color:var(--teal)!important;
+  color:var(--teal-dark)!important;
+  background:#F8FFFE!important;
+}
+.section-drag-grip{
+  width:18px;height:28px;display:inline-flex;align-items:center;justify-content:center;
+  color:#9AA4B8;font-size:18px;line-height:1;cursor:grab;flex:0 0 auto;
+}
+.section-drag-grip:active{cursor:grabbing}
+.collection-section.section-dragging{opacity:.45}
+.collection-section.section-drag-over{border-color:var(--teal);background:#F8FFFE}
+.collection-section.section-drop-before{box-shadow:0 -5px 0 rgba(46,196,182,.30), var(--shadow-sm)}
+.collection-section.section-drop-after{box-shadow:0 5px 0 rgba(46,196,182,.30), var(--shadow-sm)}
+
 </style>
 </head>
 <body>
@@ -863,6 +900,7 @@ let currentView = 'all';
 let activeCollectionId = null;
 let activityPickerContext = null;
 let draggedActivity = null;
+let draggedSection = null;
 const COLLECTION_COLOR_OPTIONS = [
   { name: 'Teal', value: '#2EC4B6' },
   { name: 'Purple', value: '#7B5EA7' },
@@ -1517,6 +1555,7 @@ function buildSection(col, section) {
   if (isCollapsed) el.classList.add('is-collapsed');
   el.innerHTML = `
     <div class="section-head">
+      <span class="section-drag-grip" title="Drag section to reorder" aria-hidden="true">⋮⋮</span>
       <span class="section-color-dot" aria-hidden="true"></span>
       <span class="section-title">${escHtml(section.name)}</span>
       <span class="section-count">${ids.length}</span>
@@ -1529,6 +1568,42 @@ function buildSection(col, section) {
       </span>
     </div>
     <div class="section-list" data-section-id="${section.id}"></div>`;
+  el.draggable = true;
+  el.addEventListener('dragstart', e => {
+    if (e.target.closest('.collection-activity-card') || e.target.closest('button')) return;
+    draggedSection = { collectionId: col.id, sectionId: section.id };
+    el.classList.add('section-dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('application/x-la-section', section.id);
+  });
+  el.addEventListener('dragend', () => {
+    draggedSection = null;
+    el.classList.remove('section-dragging');
+    document.querySelectorAll('.collection-section').forEach(sec => {
+      sec.classList.remove('section-drag-over','section-drop-before','section-drop-after');
+    });
+  });
+  el.addEventListener('dragover', e => {
+    if (!draggedSection || draggedSection.collectionId !== col.id || draggedSection.sectionId === section.id) return;
+    e.preventDefault();
+    const rect = el.getBoundingClientRect();
+    const after = e.clientY > rect.top + rect.height / 2;
+    el.classList.add('section-drag-over');
+    el.classList.toggle('section-drop-before', !after);
+    el.classList.toggle('section-drop-after', after);
+  });
+  el.addEventListener('dragleave', e => {
+    if (!el.contains(e.relatedTarget)) {
+      el.classList.remove('section-drag-over','section-drop-before','section-drop-after');
+    }
+  });
+  el.addEventListener('drop', async e => {
+    if (!draggedSection || draggedSection.collectionId !== col.id || draggedSection.sectionId === section.id) return;
+    e.preventDefault();
+    const rect = el.getBoundingClientRect();
+    const after = e.clientY > rect.top + rect.height / 2;
+    await moveSectionInCollection(col.id, draggedSection.sectionId, section.id, after);
+  });
   el.querySelector('.toggle-section').addEventListener('click', () => toggleSectionCollapsed(col.id, section.id));
   el.querySelector('.add-to-section').addEventListener('click', () => openActivityPicker({ collectionId: col.id, sectionId: section.id }));
   el.querySelector('.color-section').addEventListener('click', () => changeSectionColor(col.id, section.id));
@@ -1595,6 +1670,7 @@ function buildCollectionActivityCard(col, section, activity) {
 
 function setupSectionDropZone(el, col, section) {
   el.addEventListener('dragover', e => {
+    if (draggedSection) return;
     if (!draggedActivity || draggedActivity.collectionId !== col.id) return;
     e.preventDefault();
     el.classList.add('drag-over');
@@ -1603,6 +1679,7 @@ function setupSectionDropZone(el, col, section) {
     if (!el.contains(e.relatedTarget)) el.classList.remove('drag-over');
   });
   el.addEventListener('drop', async e => {
+    if (draggedSection) return;
     e.preventDefault();
     el.classList.remove('drag-over');
     if (!draggedActivity || draggedActivity.collectionId !== col.id) return;
@@ -1838,6 +1915,23 @@ async function moveActivityInCollection(collectionId, activityId, fromSectionId,
   });
   const target = col.sections.find(s => s.id === toSectionId) || col.sections[0];
   target.activityIds = [...(target.activityIds || []), activityId];
+  await saveCollection(col);
+  renderAll();
+}
+
+async function moveSectionInCollection(collectionId, fromSectionId, toSectionId, placeAfter = false) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  if (!col || fromSectionId === toSectionId) return;
+  const sections = [...(col.sections || [])];
+  const fromIndex = sections.findIndex(s => s.id === fromSectionId);
+  const toIndexOriginal = sections.findIndex(s => s.id === toSectionId);
+  if (fromIndex < 0 || toIndexOriginal < 0) return;
+  const [moving] = sections.splice(fromIndex, 1);
+  let toIndex = sections.findIndex(s => s.id === toSectionId);
+  if (toIndex < 0) toIndex = sections.length;
+  if (placeAfter) toIndex += 1;
+  sections.splice(toIndex, 0, moving);
+  col.sections = sections;
   await saveCollection(col);
   renderAll();
 }
