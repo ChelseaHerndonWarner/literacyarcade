@@ -112,11 +112,13 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
   font-weight:700;color:var(--navy-mid);cursor:pointer;transition:all .13s;display:none;
 }
 .hdr-game-btn:hover{border-color:var(--teal-dk);color:var(--teal-dk);background:var(--teal-bg)}
+body.in-game .hdr-game-btn{display:inline-flex;align-items:center;justify-content:center;}
 .hdr-label{font-size:11px;font-weight:600;color:var(--navy-lt);display:none}
 body.shared-activity .hdr-game-btn,
 body.shared-activity #dashboardBtn,
 body.shared-activity .hdr-btns .icon-btn:not(#headerSoundBtn){display:none!important}
 body.shared-activity .la-logo-group{pointer-events:none;cursor:default}
+body.shared-locked #newGameBtn{display:none!important;}
 
 /* ─── SETUP ──────────────────────────────────────────────────────────────── */
 #setup{max-width:740px;margin:0 auto;padding:18px 20px 36px}
@@ -694,6 +696,13 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
 .loaded-banner-clear:hover{color:var(--navy)}
 .footer-note{width:min(1240px,calc(100% - 32px));margin:auto auto 0;padding:16px 0 6px;color:#9692AD;font-family:'Nunito',Arial,sans-serif;font-size:.84rem;font-weight:900;line-height:1.35;text-align:center;}
 
+.share-permissions{display:flex;align-items:flex-start;gap:8px;width:100%;padding:10px 11px;border:1px solid rgba(14,159,142,.18);border-radius:var(--r-sm);background:var(--teal-bg);cursor:pointer;margin:10px 0 0}
+.share-permissions input{width:17px;height:17px;margin-top:2px;accent-color:var(--teal-dk);flex:0 0 auto;min-height:17px;padding:0}
+.share-permissions strong{display:block;color:var(--navy);font-size:12px;font-weight:900}
+.share-permissions span span{display:block;color:var(--navy-lt);font-size:11px;font-weight:700;line-height:1.35;margin-top:1px}
+body.shared-locked .teacher-only{display:none!important}
+
+
 /* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
 @media(max-width:820px){
   .game-layout{flex-direction:column}
@@ -746,7 +755,7 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
   <div class="hdr-btns">
     <span class="hdr-label" id="gameListLabel"></span>
     <button class="hdr-game-btn" id="restartBtn">Restart</button>
-    <button class="hdr-game-btn" id="newGameBtn">Change List</button>
+    <button class="hdr-game-btn" id="newGameBtn">← Edit Words</button>
     <button class="icon-btn" id="headerSoundBtn" aria-label="Toggle sound" title="Toggle sound" type="button">
       <svg id="headerSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
       <svg id="headerSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
@@ -835,6 +844,14 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
   </div>
 
   <button class="start-btn" id="startBtn">Begin the Quest</button>
+
+  <label class="share-permissions teacher-only" for="studentCanEditToggle">
+    <input type="checkbox" id="studentCanEditToggle" />
+    <span>
+      <strong>Allow students to choose or edit words in shared links</strong>
+      <span>Leave unchecked to lock this exact word list for Google Classroom/LMS assignments.</span>
+    </span>
+  </label>
 
   <!-- Save / Auth bar -->
   <div class="save-bar">
@@ -2139,6 +2156,7 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 
 let currentUser = null;
+const PENDING_KEY = 'magicWordRoadPendingAuthSetup';
 
 onAuthStateChanged(auth, user => {
   currentUser = user;
@@ -2146,6 +2164,7 @@ onAuthStateChanged(auth, user => {
   updateAuthBar(user);
   const dashBtn = document.getElementById('dashboardBtn');
   if (dashBtn) dashBtn.style.display = user ? 'flex' : 'none';
+  setTimeout(tryRestorePendingAuthSetup, 80);
 });
 
 function escStr(s) {
@@ -2171,38 +2190,35 @@ function updateAuthBar(user) {
 const saveActivityBtn = document.getElementById('saveActivityBtn');
 if (saveActivityBtn) {
   saveActivityBtn.addEventListener('click', async () => {
-    if (!currentUser) { window.location.href = 'teacher-login.html'; return; }
-
     const wordsArr = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
     if (!wordsArr.length) { alert('Please select at least one word before saving.'); return; }
 
-    const defaultTitle = buildDefaultTitle();
-    const title = prompt('Name this saved activity:', defaultTitle);
+    if (!currentUser) {
+      const titleBeforeLogin = prompt('Name this saved activity:', buildDefaultTitle());
+      if (titleBeforeLogin === null) return;
+      const cleanTitleBeforeLogin = titleBeforeLogin.trim();
+      if (!cleanTitleBeforeLogin) { alert('Please enter a name for this activity.'); return; }
+      sessionStorage.setItem('magicWordRoadPendingSaveTitle', cleanTitleBeforeLogin);
+      localStorage.setItem('magicWordRoadPendingSaveTitle', cleanTitleBeforeLogin);
+      captureBeforeLogin('save', cleanTitleBeforeLogin);
+      window.location.href = 'teacher-login.html?returnTo=magic-word-road.html';
+      return;
+    }
+
+    const restoredTitle = sessionStorage.getItem('magicWordRoadPendingSaveTitle') || localStorage.getItem('magicWordRoadPendingSaveTitle') || '';
+    const title = prompt('Name this saved activity:', restoredTitle || buildDefaultTitle());
     if (title === null) return;
     const cleanTitle = title.trim();
     if (!cleanTitle) { alert('Please enter a name for this activity.'); return; }
-
-    const listType = window.currentListType || 'custom';
-    const level    = document.getElementById('levelSelect')?.value || '';
-    const playerCount = window.getPlayerCount ? window.getPlayerCount() : 2;
-    const playerSetup = [0, 1].map(i => ({
-      name: document.getElementById(`player${i}`)?.value || `Player ${i + 1}`,
-      color: Array.isArray(window.playerColors) ? window.playerColors[i] : ''
-    }));
+    sessionStorage.removeItem('magicWordRoadPendingSaveTitle');
+    localStorage.removeItem('magicWordRoadPendingSaveTitle');
 
     const activityData = {
       title:        cleanTitle,
       toolType:     window.TOOL_TYPE || 'magic-word-road',
       activityType: window.TOOL_TYPE || 'magic-word-road',
       words:        wordsArr,
-      settings:     {
-        listType,
-        level,
-        customText: document.getElementById('customWords')?.value || '',
-        selectedWords: wordsArr,
-        playerCount,
-        playerSetup
-      },
+      settings:     buildMagicWordRoadSettings(wordsArr),
       url:          window.TOOL_URL || 'magic-word-road.html',
       createdAt:    serverTimestamp(),
       updatedAt:    serverTimestamp(),
@@ -2238,6 +2254,134 @@ function buildDefaultTitle() {
   return parts.join(' — ');
 }
 
+function buildMagicWordRoadSettings(wordsArr) {
+  const listType = window.currentListType || 'custom';
+  return {
+    studentCanEdit: !!document.getElementById('studentCanEditToggle')?.checked,
+    listType,
+    level: document.getElementById('levelSelect')?.value || '',
+    customText: document.getElementById('customWords')?.value || '',
+    selectedWords: wordsArr,
+    playerCount: 2,
+    playerSetup: [0, 1].map(i => ({
+      name: document.getElementById(`player${i}`)?.value || `Player ${i + 1}`,
+      color: Array.isArray(window.playerColors) ? window.playerColors[i] : ''
+    }))
+  };
+}
+
+function restoreMagicWordRoadPlayerSetup(settings) {
+  if (!settings || !Array.isArray(settings.playerSetup)) return;
+  settings.playerSetup.forEach((player, i) => {
+    if (player.color && Array.isArray(window.playerColors)) window.playerColors[i] = player.color;
+  });
+  if (typeof window.renderPlayerInputs === 'function') window.renderPlayerInputs();
+  settings.playerSetup.forEach((player, i) => {
+    const input = document.getElementById(`player${i}`);
+    if (input && player.name) input.value = player.name;
+  });
+}
+
+function captureBeforeLogin(action = 'save', pendingTitle = '') {
+  try {
+    const wordsArr = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
+    const pending = {
+      title: pendingTitle || 'Unsaved Magic Word Road',
+      toolType: 'magic-word-road',
+      activityType: 'magic-word-road',
+      words: wordsArr,
+      settings: buildMagicWordRoadSettings(wordsArr),
+      pendingAction: action,
+      savedAt: Date.now()
+    };
+    sessionStorage.setItem(PENDING_KEY, JSON.stringify(pending));
+  } catch (err) {
+    console.warn('Could not preserve Magic Word Road setup before login:', err);
+  }
+}
+
+function restoreMagicWordRoadActivity(activity, { notice = false, start = false } = {}) {
+  const words = (activity.words || activity.settings?.selectedWords || [])
+    .map(w => String(w).trim())
+    .filter(Boolean);
+  if (!words.length) return false;
+
+  const settings = activity.settings || {};
+  const listType = settings.listType || 'custom';
+  const customBox = document.getElementById('customWords');
+  if (customBox) customBox.value = settings.customText || (listType === 'custom' ? words.join('\n') : '');
+
+  const toggle = document.getElementById('studentCanEditToggle');
+  if (toggle) toggle.checked = settings.studentCanEdit === true;
+
+  restoreMagicWordRoadPlayerSetup(settings);
+  if (window.setListType) window.setListType(listType, { keepSelected: true });
+
+  if (settings.level && document.getElementById('levelSelect')) {
+    const sel = document.getElementById('levelSelect');
+    const opt = [...sel.options].find(o => o.value === settings.level);
+    if (opt) sel.value = settings.level;
+  }
+
+  if (window.selectedWordsSet) {
+    window.selectedWordsSet.clear();
+    words.forEach(w => window.selectedWordsSet.add(w));
+    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
+  }
+
+  if (notice) {
+    const banner = document.getElementById('loadedBanner');
+    const bannerText = document.getElementById('loadedBannerText');
+    if (banner && bannerText) {
+      bannerText.textContent = `${activity.title || 'Activity'} loaded — ${words.length} word${words.length === 1 ? '' : 's'} ready`;
+      banner.style.display = 'flex';
+    }
+  }
+
+  if (start && typeof window.startGame === 'function') window.startGame();
+  return true;
+}
+
+function tryRestorePendingAuthSetup() {
+  const raw = sessionStorage.getItem(PENDING_KEY);
+  if (!raw) return false;
+  let activity;
+  try { activity = JSON.parse(raw); } catch { sessionStorage.removeItem(PENDING_KEY); return false; }
+  if (!activity || activity.toolType !== 'magic-word-road') {
+    sessionStorage.removeItem(PENDING_KEY);
+    return false;
+  }
+  if (activity.savedAt && Date.now() - activity.savedAt > 1000 * 60 * 60 * 6) {
+    sessionStorage.removeItem(PENDING_KEY);
+    return false;
+  }
+  sessionStorage.removeItem(PENDING_KEY);
+  const restored = restoreMagicWordRoadActivity(activity);
+  if (restored) {
+    if (activity.pendingAction === 'save' && activity.title && activity.title !== 'Unsaved Magic Word Road') {
+      sessionStorage.setItem('magicWordRoadPendingSaveTitle', activity.title);
+      localStorage.setItem('magicWordRoadPendingSaveTitle', activity.title);
+    }
+    const banner = document.getElementById('loadedBanner');
+    const bannerText = document.getElementById('loadedBannerText');
+    const action = activity.pendingAction === 'share' ? 'Share Activity' : 'Save Activity';
+    if (banner && bannerText) {
+      bannerText.textContent = activity.pendingAction === 'save'
+        ? 'Your Magic Word Road setup and activity name were restored after sign-in. Click Save Activity when you are ready.'
+        : `Your Magic Word Road setup was restored after sign-in. Click ${action} when you are ready.`;
+      banner.style.display = 'flex';
+      window.clearTimeout(banner._hideTimer);
+      banner._hideTimer = window.setTimeout(() => { banner.style.display = 'none'; }, 6500);
+    }
+  }
+  return restored;
+}
+
+window.captureMagicWordRoadBeforeLogin = captureBeforeLogin;
+window.restoreMagicWordRoadActivity = restoreMagicWordRoadActivity;
+window.buildMagicWordRoadSettings = buildMagicWordRoadSettings;
+window.restoreMagicWordRoadPlayerSetup = restoreMagicWordRoadPlayerSetup;
+
 /* ── Load from dashboard (sessionStorage) ────────────────────────────────── */
 function tryLoadSavedActivity() {
   const raw = sessionStorage.getItem('savedActivityData');
@@ -2249,59 +2393,12 @@ function tryLoadSavedActivity() {
 
   sessionStorage.removeItem('savedActivityData');
   sessionStorage.removeItem('savedActivityId');
-
-  const words    = activity.words || [];
-  const settings = activity.settings || {};
-  const title    = activity.title || 'Saved Activity';
-  if (!words.length) return;
-
-  const listType = settings.listType || 'custom';
-  const customBox = document.getElementById('customWords');
-  if (customBox && (settings.customText || listType === 'custom')) {
-    customBox.value = settings.customText || words.join('\n');
-  }
-  if (Array.isArray(settings.playerSetup)) {
-    settings.playerSetup.forEach((player, i) => {
-      if (player.color && Array.isArray(window.playerColors)) window.playerColors[i] = player.color;
-    });
-    if (typeof window.renderPlayerInputs === 'function') {
-      window.renderPlayerInputs();
-      settings.playerSetup.forEach((player, i) => {
-        const input = document.getElementById(`player${i}`);
-        if (input && player.name) input.value = player.name;
-      });
-    }
-  }
-  if (window.setListType) window.setListType(listType, { keepSelected: true });
-
-  if (settings.level && document.getElementById('levelSelect')) {
-    setTimeout(() => {
-      const sel = document.getElementById('levelSelect');
-      const opt = [...sel.options].find(o => o.value === settings.level);
-      if (opt) { sel.value = settings.level; if (window.refreshWordSelectionUI) window.refreshWordSelectionUI(); }
-    }, 50);
-  }
-
-  if (window.selectedWordsSet) {
-    window.selectedWordsSet.clear();
-    words.forEach(w => window.selectedWordsSet.add(w));
-    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
-  }
-
-  const banner = document.getElementById('loadedBanner');
-  const bannerText = document.getElementById('loadedBannerText');
-  if (banner) {
-    bannerText.textContent = `"${title}" loaded — ${words.length} word${words.length===1?'':'s'} ready`;
-    banner.style.display = 'flex';
-  }
+  restoreMagicWordRoadActivity(activity, { notice: true });
 }
 
 document.getElementById('loadedBannerClear')?.addEventListener('click', () => {
-  document.getElementById('loadedBanner').style.display = 'none';
-  if (window.selectedWordsSet) {
-    window.selectedWordsSet.clear();
-    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
-  }
+  const banner = document.getElementById('loadedBanner');
+  if (banner) banner.style.display = 'none';
 });
 
 window.addEventListener('DOMContentLoaded', () => { setTimeout(tryLoadSavedActivity, 80); });
@@ -2365,7 +2462,8 @@ if (window.LiteracyArcadeShare) {
       return Boolean(window.magicWordRoadCurrentUser);
     },
     onLoginRequired() {
-      window.location.href = 'teacher-login.html';
+      if (typeof window.captureMagicWordRoadBeforeLogin === 'function') window.captureMagicWordRoadBeforeLogin('share');
+      window.location.href = 'teacher-login.html?returnTo=magic-word-road.html';
     },
     getActivity() {
       const words = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
@@ -2381,11 +2479,12 @@ if (window.LiteracyArcadeShare) {
       return {
         title: `Magic Word Road - ${words.length} word${words.length === 1 ? '' : 's'}`,
         words,
-        settings: {
+        settings: (typeof window.buildMagicWordRoadSettings === 'function') ? window.buildMagicWordRoadSettings(words) : {
           listType,
           level: document.getElementById('levelSelect')?.value || '',
           customText: document.getElementById('customWords')?.value || '',
           selectedWords: words,
+          studentCanEdit: !!document.getElementById('studentCanEditToggle')?.checked,
           playerCount: 2,
           playerSetup
         },
@@ -2408,36 +2507,12 @@ if (window.LiteracyArcadeShare) {
       const words = activity.words || [];
       if (!words.length) return;
       const settings = activity.settings || {};
-      const customBox = document.getElementById('customWords');
-      if (customBox && (settings.customText || settings.listType === 'custom')) {
-        customBox.value = settings.customText || words.join('\n');
+      document.body.classList.add('shared-activity');
+      if (settings.studentCanEdit !== true) document.body.classList.add('shared-locked');
+      const shouldStart = activity.autoStart !== false && settings.studentCanEdit !== true;
+      if (typeof window.restoreMagicWordRoadActivity === 'function') {
+        window.restoreMagicWordRoadActivity(activity, { notice: settings.studentCanEdit === true, start: shouldStart });
       }
-      if (Array.isArray(settings.playerSetup)) {
-        settings.playerSetup.forEach((player, i) => {
-          const input = document.getElementById(`player${i}`);
-          if (input && player.name) input.value = player.name;
-          if (player.color && Array.isArray(window.playerColors)) window.playerColors[i] = player.color;
-        });
-        if (typeof renderPlayerInputs === 'function') {
-          renderPlayerInputs();
-          settings.playerSetup.forEach((player, i) => {
-            const input = document.getElementById(`player${i}`);
-            if (input && player.name) input.value = player.name;
-          });
-        }
-      }
-      if (window.setListType) window.setListType(settings.listType || 'custom', { keepSelected: true });
-      if (settings.level) {
-        const sel = document.getElementById('levelSelect');
-        const opt = sel && [...sel.options].find(o => o.value === settings.level);
-        if (opt) sel.value = settings.level;
-      }
-      if (window.selectedWordsSet) {
-        window.selectedWordsSet.clear();
-        words.forEach(w => window.selectedWordsSet.add(w));
-        if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
-      }
-      if (typeof startGame === 'function') startGame();
     }
   });
 }
