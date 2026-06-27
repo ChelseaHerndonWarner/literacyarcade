@@ -1862,19 +1862,22 @@ if (saveActivityBtn) {
     if (titleBeforeLogin === null) return;
     const cleanTitleBeforeLogin = titleBeforeLogin.trim();
     if (!cleanTitleBeforeLogin) { alert('Please enter a name for this activity.'); return; }
+    sessionStorage.setItem('readRacePendingSaveTitle', cleanTitleBeforeLogin);
+    localStorage.setItem('readRacePendingSaveTitle', cleanTitleBeforeLogin);
     captureBeforeLogin('save', cleanTitleBeforeLogin);
     window.location.href = 'teacher-login.html?returnTo=read-and-race.html';
     return;
   }
 
   // Prompt for activity name — use the pre-login title as the default if one was restored.
-  const restoredTitle = sessionStorage.getItem('readRacePendingSaveTitle') || '';
+  const restoredTitle = sessionStorage.getItem('readRacePendingSaveTitle') || localStorage.getItem('readRacePendingSaveTitle') || '';
   const defaultTitle = restoredTitle || buildDefaultTitle();
   const title = prompt('Name this saved activity:', defaultTitle);
   if (title === null) return; // user cancelled
   const cleanTitle = title.trim();
   if (!cleanTitle) { alert('Please enter a name for this activity.'); return; }
   sessionStorage.removeItem('readRacePendingSaveTitle');
+  localStorage.removeItem('readRacePendingSaveTitle');
 
   // Build the activity document
   const activityData = {
@@ -2025,6 +2028,7 @@ function tryRestorePendingAuthSetup() {
   if (restored) {
     if (activity.pendingAction === 'save' && activity.title && activity.title !== 'Unsaved Read & Race') {
       sessionStorage.setItem('readRacePendingSaveTitle', activity.title);
+      localStorage.setItem('readRacePendingSaveTitle', activity.title);
     }
     const banner = document.getElementById('loadedBanner');
     const bannerText = document.getElementById('loadedBannerText');
