@@ -411,6 +411,33 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 
 @media(max-width:700px){.picker-row{grid-template-columns:1fr}.collection-detail-actions{width:100%}.collection-primary-btn,.collection-secondary-btn{flex:1}}
 
+
+
+/* Final dashboard refinements */
+.back-strip{display:none!important}
+.collection-detail-actions .subtle-action{height:34px;padding:0 12px;font-size:12px;background:#fff;color:var(--navy-soft);border-color:var(--border)}
+.collection-detail-actions .subtle-action:hover{border-color:var(--teal);color:var(--teal-dark);background:#F8FFFE}
+.collection-section{padding:12px 14px}
+.section-stack{gap:12px}
+.section-head{margin-bottom:9px}
+.section-list{gap:10px;min-height:24px}
+.collection-empty{padding:11px 14px}
+.collection-activity-card{padding:10px 12px}
+.color-picker-overlay{position:fixed;inset:0;background:rgba(27,42,74,.42);display:none;align-items:center;justify-content:center;padding:18px;z-index:120}
+.color-picker-overlay.open{display:flex}
+.color-picker-modal{width:min(460px,100%);background:#fff;border:1px solid rgba(27,42,74,.12);border-radius:16px;box-shadow:0 18px 60px rgba(27,42,74,.25);overflow:hidden}
+.color-picker-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border)}
+.color-picker-title{font-family:var(--font-head);font-weight:800;font-size:20px;color:var(--navy);line-height:1.1}
+.color-picker-body{padding:16px 18px}
+.color-picker-sub{font-size:13px;line-height:1.45;color:var(--navy-soft);margin-bottom:12px}
+.color-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.color-choice{border:1.5px solid var(--border);background:#fff;border-radius:12px;padding:10px 6px;min-height:72px;cursor:pointer;font-family:var(--font-head);font-weight:700;font-size:12px;color:var(--navy-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;transition:all .13s}
+.color-choice:hover{border-color:var(--teal);background:#F8FFFE;transform:translateY(-1px)}
+.color-choice.selected{border-color:var(--teal-dark);box-shadow:0 0 0 3px rgba(46,196,182,.14);color:var(--navy)}
+.color-sample{width:28px;height:28px;border-radius:50%;background:var(--choice-color);box-shadow:0 0 0 4px color-mix(in srgb, var(--choice-color) 16%, white)}
+.color-picker-actions{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid var(--border);padding:14px 18px}
+@media(max-width:520px){.color-grid{grid-template-columns:repeat(2,1fr)}.section-actions{width:100%;margin-left:0}.section-mini-btn{flex:1}.collection-detail-actions{width:100%}}
+
 </style>
 </head>
 <body>
@@ -507,13 +534,6 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
     </div>
   </div>
 
-  <!-- Back to arcade strip -->
-  <div class="back-strip">
-    <a class="back-link" href="https://literacyarcade.com/">
-      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Literacy Arcade
-    </a>
-  </div>
 </main>
 
 <div class="share-overlay" id="shareOverlay">
@@ -565,6 +585,23 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
     <div class="picker-actions">
       <button class="collection-secondary-btn" type="button" id="activityPickerCancel">Cancel</button>
       <button class="collection-primary-btn" type="button" id="activityPickerAdd">Add Selected</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="color-picker-overlay" id="colorPickerOverlay">
+  <div class="color-picker-modal" role="dialog" aria-modal="true" aria-labelledby="colorPickerTitle">
+    <div class="color-picker-head">
+      <div class="color-picker-title" id="colorPickerTitle">Choose collection color</div>
+      <button class="picker-close" type="button" id="colorPickerClose" aria-label="Close color picker">&times;</button>
+    </div>
+    <div class="color-picker-body">
+      <p class="color-picker-sub">Choose a color to help you quickly spot groups, classes, skills, or weekly plans.</p>
+      <div class="color-grid" id="colorPickerGrid"></div>
+    </div>
+    <div class="color-picker-actions">
+      <button class="collection-secondary-btn" type="button" id="colorPickerCancel">Cancel</button>
     </div>
   </div>
 </div>
@@ -1259,9 +1296,9 @@ function renderCollectionDetail(col) {
         <p class="collection-drag-hint">Tip: drag activity cards to move them between sections.</p>
       </div>
       <div class="collection-detail-actions">
-        <button class="collection-secondary-btn" type="button" id="changeCollectionColorBtn">Change Color</button>
         <button class="collection-secondary-btn" type="button" id="addSectionBtn">+ Add Section</button>
         <button class="collection-primary-btn" type="button" id="addActivitiesBtn">+ Add Activities</button>
+        <button class="collection-secondary-btn subtle-action" type="button" id="changeCollectionColorBtn">Change Color</button>
       </div>
     </section>
     <div class="stats-strip" style="display:flex;margin-bottom:14px">
@@ -1379,28 +1416,37 @@ function setupSectionDropZone(el, col, section) {
 }
 
 
-function chooseCollectionColor(currentColor = '') {
-  const currentIndex = Math.max(0, COLLECTION_COLOR_OPTIONS.findIndex(option => option.value.toLowerCase() === String(currentColor).toLowerCase()));
-  const colorList = COLLECTION_COLOR_OPTIONS.map((option, index) => `${index + 1}. ${option.name}`).join('\n');
-  const answer = prompt(`Choose a collection color:\n${colorList}\n\nType a number or color name.`, String(currentIndex + 1));
-  if (answer === null) return null;
-  const clean = answer.trim().toLowerCase();
-  if (!clean) return COLLECTION_COLOR_OPTIONS[currentIndex]?.value || COLLECTION_COLOR_OPTIONS[0].value;
-  const numberChoice = Number(clean);
-  if (Number.isInteger(numberChoice) && numberChoice >= 1 && numberChoice <= COLLECTION_COLOR_OPTIONS.length) {
-    return COLLECTION_COLOR_OPTIONS[numberChoice - 1].value;
+function closeColorPicker(result = null) {
+  const overlay = document.getElementById('colorPickerOverlay');
+  overlay.classList.remove('open');
+  if (overlay._resolve) {
+    overlay._resolve(result);
+    overlay._resolve = null;
   }
-  const namedChoice = COLLECTION_COLOR_OPTIONS.find(option => option.name.toLowerCase() === clean);
-  if (namedChoice) return namedChoice.value;
-  if (/^#[0-9a-f]{6}$/i.test(clean)) return clean;
-  alert('That color was not recognized. Please choose a number or color name from the list.');
-  return chooseCollectionColor(currentColor);
+}
+
+function chooseCollectionColor(currentColor = '') {
+  const overlay = document.getElementById('colorPickerOverlay');
+  const grid = document.getElementById('colorPickerGrid');
+  const current = String(currentColor || '').toLowerCase();
+  grid.innerHTML = COLLECTION_COLOR_OPTIONS.map(option => {
+    const selected = option.value.toLowerCase() === current ? ' selected' : '';
+    return `<button class="color-choice${selected}" type="button" data-color="${option.value}" style="--choice-color:${option.value}">
+      <span class="color-sample" aria-hidden="true"></span>
+      <span>${escHtml(option.name)}</span>
+    </button>`;
+  }).join('');
+  grid.querySelectorAll('.color-choice').forEach(button => {
+    button.addEventListener('click', () => closeColorPicker(button.dataset.color));
+  });
+  overlay.classList.add('open');
+  return new Promise(resolve => { overlay._resolve = resolve; });
 }
 
 async function changeCollectionColor(collectionId) {
   const col = teachingCollections.find(c => c.id === collectionId);
   if (!col) return;
-  const chosen = chooseCollectionColor(col.color || fallbackCollectionColor(col.id));
+  const chosen = await chooseCollectionColor(col.color || fallbackCollectionColor(col.id));
   if (!chosen) return;
   col.color = chosen;
   await saveCollection(col);
@@ -1413,7 +1459,7 @@ async function createCollection() {
   const clean = name.trim();
   if (!clean) { alert('Please enter a collection name.'); return; }
   const defaultColor = COLLECTION_COLORS[teachingCollections.length % COLLECTION_COLORS.length];
-  const chosenColor = chooseCollectionColor(defaultColor);
+  const chosenColor = await chooseCollectionColor(defaultColor);
   if (!chosenColor) return;
   try {
     const data = {
@@ -1622,6 +1668,13 @@ document.getElementById('viewSwitch').addEventListener('click', e => {
 });
 
 document.getElementById('newCollectionBtn').addEventListener('click', createCollection);
+
+document.getElementById('colorPickerClose').addEventListener('click', () => closeColorPicker(null));
+document.getElementById('colorPickerCancel').addEventListener('click', () => closeColorPicker(null));
+document.getElementById('colorPickerOverlay').addEventListener('click', e => {
+  if (e.target.id === 'colorPickerOverlay') closeColorPicker(null);
+});
+
 document.getElementById('activityPickerClose').addEventListener('click', closeActivityPicker);
 document.getElementById('activityPickerCancel').addEventListener('click', closeActivityPicker);
 document.getElementById('activityPickerAdd').addEventListener('click', addPickedActivities);
