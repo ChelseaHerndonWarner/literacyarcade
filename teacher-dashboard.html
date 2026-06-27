@@ -360,11 +360,11 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .collection-drag-hint{font-size:12px;color:var(--navy-soft);font-weight:800;margin-top:6px}
 .collection-detail-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .section-stack{display:flex;flex-direction:column;gap:16px}
-.collection-section{background:rgba(255,255,255,.78);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:14px;box-shadow:var(--shadow-sm)}
+.collection-section{background:rgba(255,255,255,.78);border:1.5px solid var(--border);border-left:6px solid var(--section-color,var(--teal));border-radius:var(--r-lg);padding:14px;box-shadow:var(--shadow-sm)}
 .collection-section.drag-over{border-color:var(--teal);background:#F2FFFD}
 .collection-section.is-collapsed .section-list{display:none}
 .collection-section.is-collapsed{background:rgba(255,255,255,.55)}
-.section-head{display:flex;align-items:center;gap:11px;margin-bottom:12px;flex-wrap:wrap}.section-title{font-family:var(--font-head);font-weight:900;font-size:21px;color:var(--navy)}
+.section-head{display:flex;align-items:center;gap:11px;margin-bottom:12px;flex-wrap:wrap}.section-title{font-family:var(--font-head);font-weight:900;font-size:21px;color:var(--navy)}.section-color-dot{width:14px;height:14px;border-radius:50%;background:var(--section-color,var(--teal));box-shadow:0 0 0 3px color-mix(in srgb, var(--section-color,var(--teal)) 18%, white);flex:0 0 auto}
 .section-count{background:var(--teal-light);color:var(--teal-dark);border-radius:999px;padding:3px 10px;font-size:12px;font-family:var(--font-head);font-weight:900}.section-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
 .section-mini-btn{border:1.5px solid var(--border);background:#fff;color:var(--navy-soft);border-radius:8px;height:32px;padding:0 11px;font-family:var(--font-head);font-weight:900;font-size:12px;cursor:pointer}.section-mini-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
 .section-toggle-btn{border-color:rgba(8,122,112,.22);color:var(--teal-dark);background:#F7FFFE}
@@ -597,7 +597,7 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
       <button class="picker-close" type="button" id="colorPickerClose" aria-label="Close color picker">&times;</button>
     </div>
     <div class="color-picker-body">
-      <p class="color-picker-sub">Choose a color to help you quickly spot groups, classes, skills, or weekly plans.</p>
+      <p class="color-picker-sub" id="colorPickerSub">Choose a color to help you quickly spot groups, classes, skills, or weekly plans.</p>
       <div class="color-grid" id="colorPickerGrid"></div>
     </div>
     <div class="color-picker-actions">
@@ -795,6 +795,7 @@ function normalizeCollection(col) {
     ? col.sections.map(section => ({
         id: section.id || makeId('section'),
         name: section.name || 'Unsorted',
+        color: section.color || col.color || fallbackCollectionColor(col.id || col.name || ''),
         activityIds: Array.isArray(section.activityIds) ? section.activityIds : []
       }))
     : [{ id: makeId('section'), name: 'Unsorted', activityIds: [] }];
@@ -1273,12 +1274,14 @@ function buildCollectionCard(col) {
     </div>
     <button class="open-btn" type="button">Open Collection</button>
     <div class="collection-actions">
+      <button class="duplicate-btn" type="button">Duplicate</button>
       <button class="color-btn" type="button">Change Color</button>
       <button class="rename-btn" type="button">Rename</button>
       <button class="delete-btn" type="button">Delete</button>
     </div>`;
   card.querySelector('.open-btn').addEventListener('click', () => { activeCollectionId = col.id; renderAll(); });
   card.querySelector('.color-btn').addEventListener('click', () => changeCollectionColor(col.id));
+  card.querySelector('.duplicate-btn').addEventListener('click', () => duplicateCollection(col.id));
   card.querySelector('.rename-btn').addEventListener('click', () => renameCollection(col.id));
   card.querySelector('.delete-btn').addEventListener('click', () => deleteCollection(col.id));
   return card;
@@ -1299,6 +1302,7 @@ function renderCollectionDetail(col) {
         <button class="collection-secondary-btn" type="button" id="addSectionBtn">+ Add Section</button>
         <button class="collection-primary-btn" type="button" id="addActivitiesBtn">+ Add Activities</button>
         <button class="collection-secondary-btn subtle-action" type="button" id="changeCollectionColorBtn">Change Color</button>
+        <button class="collection-secondary-btn subtle-action" type="button" id="duplicateCollectionBtn">Duplicate</button>
       </div>
     </section>
     <div class="stats-strip" style="display:flex;margin-bottom:14px">
@@ -1308,6 +1312,7 @@ function renderCollectionDetail(col) {
     <div class="section-stack" id="sectionStack"></div>`;
   document.getElementById('backToCollections').addEventListener('click', () => { activeCollectionId = null; renderAll(); });
   document.getElementById('changeCollectionColorBtn').addEventListener('click', () => changeCollectionColor(col.id));
+  document.getElementById('duplicateCollectionBtn').addEventListener('click', () => duplicateCollection(col.id));
   document.getElementById('addSectionBtn').addEventListener('click', () => createSection(col.id));
   document.getElementById('addActivitiesBtn').addEventListener('click', () => openActivityPicker({ collectionId: col.id }));
 
@@ -1319,17 +1324,20 @@ function buildSection(col, section) {
   const el = document.createElement('section');
   el.className = 'collection-section';
   el.dataset.sectionId = section.id;
+  el.style.setProperty('--section-color', section.color || col.color || fallbackCollectionColor(col.id));
   const ids = section.activityIds || [];
   const collapseKey = getSectionCollapseKey(col.id, section.id);
   const isCollapsed = collapsedCollectionSections.has(collapseKey);
   if (isCollapsed) el.classList.add('is-collapsed');
   el.innerHTML = `
     <div class="section-head">
+      <span class="section-color-dot" aria-hidden="true"></span>
       <span class="section-title">${escHtml(section.name)}</span>
       <span class="section-count">${ids.length}</span>
       <span class="section-actions">
         <button class="section-mini-btn section-toggle-btn toggle-section" type="button">${isCollapsed ? 'Show' : 'Hide'}</button>
         <button class="section-mini-btn add-to-section" type="button">+ Add here</button>
+        <button class="section-mini-btn color-section" type="button">Color</button>
         <button class="section-mini-btn rename-section" type="button">Rename</button>
         <button class="section-mini-btn delete-section" type="button">Delete</button>
       </span>
@@ -1337,6 +1345,7 @@ function buildSection(col, section) {
     <div class="section-list" data-section-id="${section.id}"></div>`;
   el.querySelector('.toggle-section').addEventListener('click', () => toggleSectionCollapsed(col.id, section.id));
   el.querySelector('.add-to-section').addEventListener('click', () => openActivityPicker({ collectionId: col.id, sectionId: section.id }));
+  el.querySelector('.color-section').addEventListener('click', () => changeSectionColor(col.id, section.id));
   el.querySelector('.rename-section').addEventListener('click', () => renameSection(col.id, section.id));
   el.querySelector('.delete-section').addEventListener('click', () => deleteSection(col.id, section.id));
   const list = el.querySelector('.section-list');
@@ -1425,9 +1434,13 @@ function closeColorPicker(result = null) {
   }
 }
 
-function chooseCollectionColor(currentColor = '') {
+function chooseCollectionColor(currentColor = '', options = {}) {
   const overlay = document.getElementById('colorPickerOverlay');
   const grid = document.getElementById('colorPickerGrid');
+  const title = document.getElementById('colorPickerTitle');
+  const sub = document.getElementById('colorPickerSub');
+  if (title) title.textContent = options.title || 'Choose color';
+  if (sub) sub.textContent = options.subtitle || 'Choose a color to help you quickly spot groups, classes, skills, or weekly plans.';
   const current = String(currentColor || '').toLowerCase();
   grid.innerHTML = COLLECTION_COLOR_OPTIONS.map(option => {
     const selected = option.value.toLowerCase() === current ? ' selected' : '';
@@ -1443,10 +1456,76 @@ function chooseCollectionColor(currentColor = '') {
   return new Promise(resolve => { overlay._resolve = resolve; });
 }
 
+
+function collectionNameExists(name, ignoreId = '') {
+  const clean = String(name || '').trim().toLowerCase();
+  if (!clean) return false;
+  return teachingCollections.some(collectionItem =>
+    collectionItem.id !== ignoreId && String(collectionItem.name || '').trim().toLowerCase() === clean
+  );
+}
+
+async function changeSectionColor(collectionId, sectionId) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  const section = col?.sections.find(s => s.id === sectionId);
+  if (!col || !section) return;
+  const chosen = await chooseCollectionColor(section.color || col.color || fallbackCollectionColor(col.id), {
+    title: 'Choose section color',
+    subtitle: 'Choose a color to help this section stand out inside the collection.'
+  });
+  if (!chosen) return;
+  section.color = chosen;
+  await saveCollection(col);
+  renderAll();
+}
+
+async function duplicateCollection(collectionId) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  if (!col) return;
+  let suggested = `${col.name} Copy`;
+  let counter = 2;
+  while (collectionNameExists(suggested)) {
+    suggested = `${col.name} Copy ${counter}`;
+    counter += 1;
+  }
+  const name = prompt('Name the duplicated collection:', suggested);
+  if (name === null) return;
+  const clean = name.trim();
+  if (!clean) { alert('Please enter a collection name.'); return; }
+  if (collectionNameExists(clean)) {
+    const keepGoing = confirm(`You already have a collection named "${clean}". Duplicate with this name anyway?`);
+    if (!keepGoing) return;
+  }
+  const newSections = (col.sections || []).map(section => ({
+    id: makeId('section'),
+    name: section.name,
+    color: section.color || col.color || fallbackCollectionColor(col.id),
+    activityIds: Array.isArray(section.activityIds) ? [...section.activityIds] : []
+  }));
+  try {
+    const data = {
+      name: clean,
+      color: col.color || fallbackCollectionColor(col.id),
+      sections: newSections.length ? newSections : [{ id: makeId('section'), name: 'Unsorted', color: col.color || fallbackCollectionColor(col.id), activityIds: [] }],
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      userId: currentUser.uid
+    };
+    const ref = await addDoc(collection(db, `users/${currentUser.uid}/collections`), data);
+    teachingCollections.unshift(normalizeCollection({ id: ref.id, ...data, createdAt: new Date(), updatedAt: new Date() }));
+    currentView = 'collections';
+    activeCollectionId = ref.id;
+    renderAll();
+  } catch (err) {
+    console.error(err);
+    alert('Could not duplicate the collection. Check Firestore rules and try again.');
+  }
+}
+
 async function changeCollectionColor(collectionId) {
   const col = teachingCollections.find(c => c.id === collectionId);
   if (!col) return;
-  const chosen = await chooseCollectionColor(col.color || fallbackCollectionColor(col.id));
+  const chosen = await chooseCollectionColor(col.color || fallbackCollectionColor(col.id), { title: 'Choose collection color', subtitle: 'Choose a color to help you quickly spot this collection.' });
   if (!chosen) return;
   col.color = chosen;
   await saveCollection(col);
@@ -1458,14 +1537,18 @@ async function createCollection() {
   if (name === null) return;
   const clean = name.trim();
   if (!clean) { alert('Please enter a collection name.'); return; }
+  if (collectionNameExists(clean)) {
+    const keepGoing = confirm(`You already have a collection named "${clean}". Create another one with the same name anyway?`);
+    if (!keepGoing) return;
+  }
   const defaultColor = COLLECTION_COLORS[teachingCollections.length % COLLECTION_COLORS.length];
-  const chosenColor = await chooseCollectionColor(defaultColor);
+  const chosenColor = await chooseCollectionColor(defaultColor, { title: 'Choose collection color', subtitle: 'Choose a color for this collection.' });
   if (!chosenColor) return;
   try {
     const data = {
       name: clean,
       color: chosenColor,
-      sections: [{ id: makeId('section'), name: 'Unsorted', activityIds: [] }],
+      sections: [{ id: makeId('section'), name: 'Unsorted', color: chosenColor, activityIds: [] }],
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       userId: currentUser.uid
@@ -1488,6 +1571,10 @@ async function renameCollection(collectionId) {
   if (name === null) return;
   const clean = name.trim();
   if (!clean) { alert('Please enter a collection name.'); return; }
+  if (collectionNameExists(clean, collectionId)) {
+    const keepGoing = confirm(`You already have a collection named "${clean}". Use this name anyway?`);
+    if (!keepGoing) return;
+  }
   col.name = clean;
   await saveCollection(col);
   renderAll();
@@ -1515,7 +1602,9 @@ async function createSection(collectionId) {
   if (name === null) return;
   const clean = name.trim();
   if (!clean) { alert('Please enter a section name.'); return; }
-  col.sections.push({ id: makeId('section'), name: clean, activityIds: [] });
+  const chosenColor = await chooseCollectionColor(col.color || fallbackCollectionColor(col.id), { title: 'Choose section color', subtitle: 'Choose a color for this section.' });
+  if (!chosenColor) return;
+  col.sections.push({ id: makeId('section'), name: clean, color: chosenColor, activityIds: [] });
   await saveCollection(col);
   renderAll();
 }
@@ -1572,6 +1661,7 @@ async function saveCollection(col) {
   const cleanSections = (col.sections || []).map(section => ({
     id: section.id,
     name: section.name,
+    color: section.color || col.color || fallbackCollectionColor(col.id),
     activityIds: Array.isArray(section.activityIds) ? section.activityIds : []
   }));
   await updateDoc(doc(db, `users/${currentUser.uid}/collections`, col.id), {
