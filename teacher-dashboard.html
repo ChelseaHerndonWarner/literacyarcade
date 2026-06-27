@@ -361,6 +361,7 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
       <button class="filter-tab" data-filter="read-and-race">Read &amp; Race</button>
       <button class="filter-tab" data-filter="magic-word-road">Magic Word Road</button>
       <button class="filter-tab" data-filter="word-spinner">Word Spinner</button>
+      <button class="filter-tab" data-filter="sentence-spinner">Sentence Spinner</button>
       <button class="filter-tab" data-filter="letterbox-lesson">Letterbox</button>
       <button class="filter-tab" data-filter="digital-reading-flashcards">Flashcards</button>
       <button class="filter-tab" data-filter="vocabulary-flashcards">Vocab Cards</button>
@@ -475,6 +476,14 @@ const ACTIVITY_TYPES = {
     shareable: true,
     url: 'reading-word-spinner.html'
   },
+  'sentence-spinner': {
+    label: 'Sentence Spinner',
+    icon: 'textAlignLeft',
+    colorClass: 'icon-violet',
+    saveable: true,
+    shareable: true,
+    url: 'sentence-spinner.html'
+  },
   'letterbox-lesson': {
     label: 'Letterbox Lesson',
     icon: 'numberCircleOne',
@@ -508,6 +517,7 @@ const ACTIVITY_ICON_SVGS = {
   flagCheckered: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,56v60c-19.89,17.23-38.23,18.39-56,13.48v-60C185.76,74.39,204.11,73.23,224,56ZM104,102.52v-60C86.24,37.61,67.89,38.77,48,56v60c19.89-17.22,38.23-18.39,56-13.48v60c21.62,6,42.38,21,64,27v-60c-21.62-6-42.38-21-64-27Z" opacity="0.2"/><path d="M227.32,48.75A8,8,0,0,0,218.76,50c-28,24.22-51.72,12.48-79.21-1.13C111.07,34.76,78.78,18.79,42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,28.49,14.09,60.77,30.06,96.79-1.13a8,8,0,0,0,2.76-6V56A8,8,0,0,0,227.32,48.75ZM216,71.6v40.65c-14,11.06-27,13.22-40,10.88V79.34A60.05,60.05,0,0,0,216,71.6Zm-56,3.76v43c-6.66-2.67-13.43-6-20.45-9.48-8.82-4.37-18-8.91-27.55-12.18v-43c6.66,2.66,13.43,6,20.45,9.48C141.27,67.55,150.46,72.09,160,75.36ZM96,48.91V92.69a60.06,60.06,0,0,0-40,7.75V59.78C70,48.72,83,46.57,96,48.91ZM86.58,152A60.06,60.06,0,0,0,56,160.43V119.78c14-11.06,27-13.22,40-10.88v43.8A65.61,65.61,0,0,0,86.58,152ZM112,156.67v-43c6.66,2.66,13.43,6,20.45,9.48,8.82,4.37,18,8.9,27.55,12.17v43c-6.66-2.67-13.43-6-20.45-9.48C130.73,164.47,121.54,159.94,112,156.67Zm64,26.45v-43.8a65.61,65.61,0,0,0,9.42.72A60.11,60.11,0,0,0,216,131.57v40.68C202,183.31,189,185.46,176,183.12Z"/></svg>`,
   mapTrifold: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M160,72V216L96,184V40Z" opacity="0.2"/><path d="M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z"/></svg>`,
   arrowsClockwise: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,128a88,88,0,1,1-88-88A88,88,0,0,1,216,128Z" opacity="0.2"/><path d="M224,48V96a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h28.69L182.06,73.37a79.56,79.56,0,0,0-56.13-23.43h-.45A79.52,79.52,0,0,0,69.59,72.71,8,8,0,0,1,58.41,61.27a96,96,0,0,1,135,.79L208,76.69V48a8,8,0,0,1,16,0ZM186.41,183.29a80,80,0,0,1-112.47-.66L59.31,168H88a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V179.31l14.63,14.63A95.43,95.43,0,0,0,130,222.06h.53a95.36,95.36,0,0,0,67.07-27.33,8,8,0,0,0-11.18-11.44Z"/></svg>`,
+  textAlignLeft: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,56V184a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H208A8,8,0,0,1,216,56Z" opacity="0.2"/><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM64,88a8,8,0,0,1,8-8H184a8,8,0,0,1,0,16H72A8,8,0,0,1,64,88Zm0,40a8,8,0,0,1,8-8H184a8,8,0,0,1,0,16H72A8,8,0,0,1,64,128Zm0,40a8,8,0,0,1,8-8h72a8,8,0,0,1,0,16H72A8,8,0,0,1,64,168Z"/></svg>`,
   numberCircleOne: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z" opacity="0.2"/><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM140,80v96a8,8,0,0,1-16,0V95l-11.56,7.71a8,8,0,1,1-8.88-13.32l24-16A8,8,0,0,1,140,80Z"/></svg>`,
   cards: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M192,88V200a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V88a8,8,0,0,1,8-8H184A8,8,0,0,1,192,88Z" opacity="0.2"/><path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"/></svg>`,
   bookOpenText: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,56V200H160a32,32,0,0,0-32,32V88a32,32,0,0,1,32-32Z" opacity="0.2"/><path d="M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64ZM160,88h40a8,8,0,0,1,0,16H160a8,8,0,0,1,0-16Zm48,40a8,8,0,0,1-8,8H160a8,8,0,0,1,0-16h40A8,8,0,0,1,208,128Zm0,32a8,8,0,0,1-8,8H160a8,8,0,0,1,0-16h40A8,8,0,0,1,208,160Z"/></svg>`
@@ -725,10 +735,13 @@ function buildCard(activity, tool) {
   const card = document.createElement('div');
   card.className = 'activity-card';
 
-  const count = Array.isArray(activity.words) ? activity.words.length : 0;
+  const type = getActivityType(activity);
+  const count = type === 'sentence-spinner'
+    ? (Array.isArray(activity.sentences) ? activity.sentences.length : Array.isArray(activity.words) ? activity.words.length : 0)
+    : (Array.isArray(activity.words) ? activity.words.length : 0);
+  const countLabel = type === 'sentence-spinner' ? 'sentence' : 'word';
   const title = activity.title || makeDefaultTitle(activity);
   const savedDate = formatDate(activity.updatedAt || activity.createdAt);
-  const type = getActivityType(activity);
   const shareable = Boolean(ACTIVITY_TYPES[type]?.shareable);
 
   card.innerHTML = `
@@ -738,7 +751,7 @@ function buildCard(activity, tool) {
         <div class="card-title" title="${escHtml(title)}">${escHtml(title)}</div>
         <div class="card-meta">
           <span>${escHtml(tool.label)}</span>
-          ${count ? `<span class="dot">·</span><span>${count} word${count===1?'':'s'}</span>` : ''}
+          ${count ? `<span class="dot">·</span><span>${count} ${countLabel}${count===1?'':'s'}</span>` : ''}
           ${savedDate ? `<span class="dot">·</span><span>${savedDate}</span>` : ''}
         </div>
       </div>
@@ -787,7 +800,14 @@ async function shareActivity(id, activity) {
   }
 
   const words = Array.isArray(activity.words) ? activity.words : [];
-  if (!words.length) {
+  const sentences = Array.isArray(activity.sentences) ? activity.sentences : [];
+  if (type === 'sentence-spinner') {
+    const sentenceList = sentences.length ? sentences : words;
+    if (!sentenceList.length) {
+      alert('This activity does not have saved sentences to share.');
+      return;
+    }
+  } else if (!words.length) {
     alert('This activity does not have saved words to share.');
     return;
   }
@@ -821,12 +841,15 @@ async function shareActivity(id, activity) {
 
 function buildSharedActivityData(activity) {
   const type = getActivityType(activity);
+  const words = Array.isArray(activity.words) ? activity.words : [];
+  const sentences = Array.isArray(activity.sentences) ? activity.sentences : (type === 'sentence-spinner' ? words : []);
   return {
     title:        activity.title || makeDefaultTitle(activity),
     toolType:     type,
     activityType: type,
-    words:        Array.isArray(activity.words) ? activity.words : [],
-    settings:     cleanShareSettings(type, activity.settings || {}, activity.words || []),
+    words:        type === 'sentence-spinner' ? sentences : words,
+    sentences:    type === 'sentence-spinner' ? sentences : [],
+    settings:     cleanShareSettings(type, activity.settings || {}, type === 'sentence-spinner' ? sentences : words),
     public:       true,
     createdAt:    serverTimestamp(),
     updatedAt:    serverTimestamp()
@@ -839,6 +862,9 @@ function cleanShareSettings(type, settings, words) {
   }
   if (type === 'word-spinner') {
     return cleanSpinnerSettings(settings, words);
+  }
+  if (type === 'sentence-spinner') {
+    return cleanSentenceSpinnerSettings(settings, words);
   }
   return {};
 }
@@ -881,6 +907,16 @@ function cleanSpinnerSettings(settings, words) {
     customWords: [...new Set(customWords)],
     selectedWords: Array.isArray(settings.selectedWords) ? settings.selectedWords : words,
     wheelEntries
+  };
+}
+
+function cleanSentenceSpinnerSettings(settings, sentences) {
+  const sentenceList = Array.isArray(settings.sentences) && settings.sentences.length
+    ? settings.sentences
+    : sentences;
+  return {
+    studentCanEdit: settings.studentCanEdit === true,
+    sentences: Array.isArray(sentenceList) ? sentenceList.map(sentence => String(sentence).trim()).filter(Boolean) : []
   };
 }
 
