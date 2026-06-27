@@ -1847,26 +1847,34 @@ const saveActivityBtn = document.getElementById('saveActivityBtn');
 
 if (saveActivityBtn) {
   saveActivityBtn.addEventListener('click', async () => {
-  // Not signed in → preserve the setup, then return here after Google sign-in.
-  if (!currentUser) {
-    captureBeforeLogin('save');
-    window.location.href = 'teacher-login.html?returnTo=read-and-race.html';
-    return;
-  }
-
-  // Check words are selected
+  // Check words are selected before either saving or sending the teacher to sign in.
   const wordsArr = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
   if (!wordsArr.length) {
     alert('Please select at least one word before saving.');
     return;
   }
 
-  // Prompt for activity name — matches Phoneme Counter UX exactly
-  const defaultTitle = buildDefaultTitle();
+  // If the teacher is not signed in yet, ask for the activity name now so the
+  // name is not lost during Google sign-in. The setup and title are restored
+  // when they come back to this page.
+  if (!currentUser) {
+    const titleBeforeLogin = prompt('Name this saved activity:', buildDefaultTitle());
+    if (titleBeforeLogin === null) return;
+    const cleanTitleBeforeLogin = titleBeforeLogin.trim();
+    if (!cleanTitleBeforeLogin) { alert('Please enter a name for this activity.'); return; }
+    captureBeforeLogin('save', cleanTitleBeforeLogin);
+    window.location.href = 'teacher-login.html?returnTo=read-and-race.html';
+    return;
+  }
+
+  // Prompt for activity name — use the pre-login title as the default if one was restored.
+  const restoredTitle = sessionStorage.getItem('readRacePendingSaveTitle') || '';
+  const defaultTitle = restoredTitle || buildDefaultTitle();
   const title = prompt('Name this saved activity:', defaultTitle);
   if (title === null) return; // user cancelled
   const cleanTitle = title.trim();
   if (!cleanTitle) { alert('Please enter a name for this activity.'); return; }
+  sessionStorage.removeItem('readRacePendingSaveTitle');
 
   // Build the activity document
   const activityData = {
@@ -1939,11 +1947,11 @@ function restoreReadRacePlayerSetup(settings) {
   });
 }
 
-function captureBeforeLogin(action = 'save') {
+function captureBeforeLogin(action = 'save', pendingTitle = '') {
   try {
     const wordsArr = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
     const pending = {
-      title: 'Unsaved Read & Race',
+      title: pendingTitle || 'Unsaved Read & Race',
       toolType: 'read-and-race',
       activityType: 'read-and-race',
       words: wordsArr,
@@ -2015,11 +2023,16 @@ function tryRestorePendingAuthSetup() {
   sessionStorage.removeItem(PENDING_KEY);
   const restored = restoreReadRaceActivity(activity);
   if (restored) {
+    if (activity.pendingAction === 'save' && activity.title && activity.title !== 'Unsaved Read & Race') {
+      sessionStorage.setItem('readRacePendingSaveTitle', activity.title);
+    }
     const banner = document.getElementById('loadedBanner');
     const bannerText = document.getElementById('loadedBannerText');
     const action = activity.pendingAction === 'share' ? 'Share Activity' : 'Save Activity';
     if (banner && bannerText) {
-      bannerText.textContent = `Your Read & Race setup was restored after sign-in. Click ${action} when you are ready.`;
+      bannerText.textContent = activity.pendingAction === 'save'
+        ? 'Your Read & Race setup and activity name were restored after sign-in. Click Save Activity when you are ready.'
+        : `Your Read & Race setup was restored after sign-in. Click ${action} when you are ready.`;
       banner.style.display = 'flex';
       window.clearTimeout(banner._hideTimer);
       banner._hideTimer = window.setTimeout(() => { banner.style.display = 'none'; }, 6500);
