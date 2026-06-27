@@ -312,6 +312,63 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
   .controls-right{margin-left:0}
   .stats-strip{gap:7px}
 }
+
+/* ── TEACHING COLLECTIONS / PLAYLISTS ───────────────────────────────────── */
+.view-switch{
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 14px;
+}
+.view-tab{
+  border:1.5px solid var(--border);background:#fff;border-radius:999px;
+  padding:8px 14px;font-family:var(--font-head);font-weight:900;font-size:13px;
+  color:var(--navy-soft);cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  transition:all .13s;
+}
+.view-tab:hover{border-color:var(--teal);color:var(--teal-dark);background:#F8FFFE}
+.view-tab.active{background:var(--teal-dark);border-color:var(--teal-dark);color:#fff}
+.view-tab svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.collections-intro{
+  background:linear-gradient(135deg,#FFFFFF 0%,#F1FFFD 100%);
+  border:1.5px solid rgba(46,196,182,.28);border-radius:var(--r-lg);
+  padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;
+  box-shadow:var(--shadow-sm);
+}
+.collections-intro-title{font-family:var(--font-head);font-weight:900;font-size:16px;color:var(--navy);margin-bottom:2px}
+.collections-intro-text{font-size:12px;color:var(--navy-soft);line-height:1.45;max-width:680px}
+.collection-primary-btn,.collection-secondary-btn{
+  border:0;border-radius:10px;height:38px;padding:0 14px;font-family:var(--font-head);font-weight:900;font-size:13px;cursor:pointer;transition:all .13s;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+}
+.collection-primary-btn{background:var(--teal-dark);color:#fff}.collection-primary-btn:hover{background:var(--teal);transform:translateY(-1px)}
+.collection-secondary-btn{background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal)}.collection-secondary-btn:hover{background:var(--teal-light);transform:translateY(-1px)}
+.collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:14px;margin-top:14px}
+.collection-card{
+  background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow-sm);
+  transition:box-shadow .15s,border-color .15s;display:flex;flex-direction:column;gap:10px;
+}
+.collection-card:hover{box-shadow:var(--shadow);border-color:rgba(8,122,112,.25)}
+.collection-card-top{display:flex;align-items:flex-start;gap:10px}.collection-folder-icon{width:38px;height:38px;border-radius:12px;background:var(--teal-light);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.collection-folder-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.collection-card-title{font-family:var(--font-head);font-weight:900;font-size:16px;color:var(--navy);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.collection-card-sub{font-size:11px;color:var(--navy-soft);line-height:1.5;margin-top:3px}
+.collection-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.collection-actions button{height:34px;border-radius:9px;font-family:var(--font-head);font-weight:900;font-size:12px;cursor:pointer}
+.collection-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.collection-breadcrumb{border:0;background:transparent;color:var(--teal-dark);font-family:var(--font-head);font-weight:900;font-size:13px;cursor:pointer;margin-bottom:6px;padding:2px 0}
+.collection-detail-title{font-family:var(--font-head);font-weight:900;font-size:28px;line-height:1.1;color:var(--navy)}
+.collection-detail-sub{font-size:13px;color:var(--navy-soft);line-height:1.45;margin-top:4px}
+.collection-detail-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.section-stack{display:flex;flex-direction:column;gap:16px}
+.collection-section{background:rgba(255,255,255,.7);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:12px;box-shadow:var(--shadow-sm)}
+.collection-section.drag-over{border-color:var(--teal);background:#F2FFFD}
+.section-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}.section-title{font-family:var(--font-head);font-weight:900;font-size:17px;color:var(--navy)}
+.section-count{background:var(--teal-light);color:var(--teal-dark);border-radius:999px;padding:2px 9px;font-size:11px;font-family:var(--font-head);font-weight:900}.section-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.section-mini-btn{border:1.5px solid var(--border);background:#fff;color:var(--navy-soft);border-radius:8px;height:30px;padding:0 10px;font-family:var(--font-head);font-weight:900;font-size:11px;cursor:pointer}.section-mini-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
+.section-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;min-height:34px}
+.collection-activity-card{background:#fff;border:1.5px solid var(--border);border-radius:13px;padding:12px;cursor:grab;box-shadow:var(--shadow-sm)}
+.collection-activity-card:active{cursor:grabbing}.collection-activity-card.dragging{opacity:.45}.collection-activity-title{font-family:var(--font-head);font-weight:900;font-size:14px;line-height:1.2;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.collection-activity-meta{font-size:11px;color:var(--navy-soft);margin-top:3px}.collection-card-buttons{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.collection-card-buttons button{height:32px;border-radius:8px;font-family:var(--font-head);font-weight:900;font-size:11px;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--navy)}.collection-card-buttons button:hover{border-color:var(--teal);color:var(--teal-dark)}
+.collection-btn{width:100%;background:#fff;color:var(--violet);border:1.5px solid var(--lavender);border-radius:10px;height:34px;font-family:var(--font-head);font-weight:900;font-size:12px;cursor:pointer;margin-top:8px;transition:all .13s}.collection-btn:hover{background:var(--lavender);transform:translateY(-1px)}
+.collection-empty{color:var(--navy-soft);background:#FBFCFE;border:1.5px dashed var(--border);border-radius:13px;padding:14px;text-align:center;font-size:12px;line-height:1.5;grid-column:1/-1}
+.activity-picker-overlay{position:fixed;inset:0;background:rgba(27,42,74,.42);display:none;align-items:center;justify-content:center;padding:18px;z-index:110}.activity-picker-overlay.open{display:flex}.activity-picker-modal{width:min(720px,100%);max-height:86vh;background:#fff;border-radius:16px;box-shadow:0 18px 60px rgba(27,42,74,.25);overflow:hidden;border:1px solid rgba(27,42,74,.12);display:flex;flex-direction:column}.activity-picker-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border)}.activity-picker-title{font-family:var(--font-head);font-weight:900;font-size:20px}.activity-picker-body{padding:16px 18px;overflow:auto;display:flex;flex-direction:column;gap:12px}.picker-row{display:grid;grid-template-columns:1fr 220px;gap:10px}.picker-list{display:flex;flex-direction:column;gap:7px;max-height:380px;overflow:auto;border:1.5px solid var(--border);border-radius:12px;padding:8px;background:#FBFCFE}.picker-item{display:flex;align-items:flex-start;gap:9px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px;cursor:pointer}.picker-item input{margin-top:2px}.picker-item-title{font-family:var(--font-head);font-weight:900;font-size:13px}.picker-item-meta{font-size:11px;color:var(--navy-soft);margin-top:2px}.picker-actions{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid var(--border);padding:14px 18px}.picker-close{width:34px;height:34px;border:1px solid var(--border);background:#fff;border-radius:8px;cursor:pointer;font-size:22px;line-height:1;color:var(--navy-soft)}
+@media(max-width:700px){.picker-row{grid-template-columns:1fr}.collection-detail-actions{width:100%}.collection-primary-btn,.collection-secondary-btn{flex:1}}
+
 </style>
 </head>
 <body>
@@ -380,6 +437,20 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
     </div>
   </div>
 
+
+
+  <!-- View switch -->
+  <div class="view-switch" id="viewSwitch">
+    <button class="view-tab active" type="button" data-view="all">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="7" rx="1"/><rect x="3" y="15" width="7" height="5" rx="1"/><rect x="14" y="15" width="7" height="5" rx="1"/></svg>
+      All Activities
+    </button>
+    <button class="view-tab" type="button" data-view="collections">
+      <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Teaching Collections
+    </button>
+    <button class="collection-primary-btn" type="button" id="newCollectionBtn" style="margin-left:auto">+ New Collection</button>
+  </div>
   <!-- Stats strip -->
   <div class="stats-strip" id="statsStrip" style="display:none">
     <div class="stat-pill"><strong id="statTotal">0</strong> saved activities</div>
@@ -428,6 +499,30 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
       </div>
       <div class="share-note">Anyone with this link can open the student activity setup. Students do not need to sign in.</div>
       <div class="share-status" id="shareStatus" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="activity-picker-overlay" id="activityPickerOverlay">
+  <div class="activity-picker-modal" role="dialog" aria-modal="true" aria-labelledby="activityPickerTitle">
+    <div class="activity-picker-head">
+      <div class="activity-picker-title" id="activityPickerTitle">Add Activities to Collection</div>
+      <button class="picker-close" type="button" id="activityPickerClose" aria-label="Close activity picker">&times;</button>
+    </div>
+    <div class="activity-picker-body">
+      <div class="picker-row">
+        <div class="search-wrap" style="max-width:none">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" id="activityPickerSearch" type="search" placeholder="Search activities to add…" autocomplete="off"/>
+        </div>
+        <select class="sort-select" id="activityPickerSection"></select>
+      </div>
+      <div class="picker-list" id="activityPickerList"></div>
+    </div>
+    <div class="picker-actions">
+      <button class="collection-secondary-btn" type="button" id="activityPickerCancel">Cancel</button>
+      <button class="collection-primary-btn" type="button" id="activityPickerAdd">Add Selected</button>
     </div>
   </div>
 </div>
@@ -539,6 +634,11 @@ function renderActivityIcon(type, size = 'card') {
 /* ── State ───────────────────────────────────────────────────────────────── */
 let currentUser  = null;
 let allActivities = []; // [{id, ...data}]
+let teachingCollections = []; // [{id, name, sections:[{id,name,activityIds:[]}]}]
+let currentView = 'all';
+let activeCollectionId = null;
+let activityPickerContext = null;
+let draggedActivity = null;
 let activeFilter  = 'all';
 let searchQuery   = '';
 let sortOrder     = 'newest';
@@ -573,6 +673,7 @@ async function loadActivities() {
     const q   = query(ref, orderBy('createdAt', 'desc'));
     const snap = await getDocs(q);
     allActivities = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    await loadCollections();
     renderFilterTabs();
     renderAll();
   } catch (err) {
@@ -580,6 +681,37 @@ async function loadActivities() {
     document.getElementById('activitiesContainer').innerHTML =
       `<div class="error-msg">Could not load activities. Check Firestore rules and try refreshing.</div>`;
   }
+}
+
+async function loadCollections() {
+  try {
+    const ref = collection(db, `users/${currentUser.uid}/collections`);
+    const snap = await getDocs(ref);
+    teachingCollections = snap.docs.map(d => normalizeCollection({ id: d.id, ...d.data() }));
+    teachingCollections.sort((a, b) => {
+      const da = toDate(a.updatedAt || a.createdAt);
+      const dbb = toDate(b.updatedAt || b.createdAt);
+      return dbb - da;
+    });
+  } catch (err) {
+    console.warn('Could not load teaching collections:', err);
+    teachingCollections = [];
+  }
+}
+
+function normalizeCollection(col) {
+  const sections = Array.isArray(col.sections) && col.sections.length
+    ? col.sections.map(section => ({
+        id: section.id || makeId('section'),
+        name: section.name || 'Unsorted',
+        activityIds: Array.isArray(section.activityIds) ? section.activityIds : []
+      }))
+    : [{ id: makeId('section'), name: 'Unsorted', activityIds: [] }];
+  return { ...col, name: col.name || 'Untitled Collection', sections };
+}
+
+function makeId(prefix = 'id') {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function renderFilterTabs() {
@@ -638,6 +770,11 @@ function getFilteredSorted() {
 }
 
 function renderAll() {
+  updateViewTabs();
+  if (currentView === 'collections') {
+    renderCollectionsView();
+    return;
+  }
   const list = getFilteredSorted();
   const container = document.getElementById('activitiesContainer');
 
@@ -758,6 +895,7 @@ function buildCard(activity, tool) {
     </div>
     <button class="open-btn" type="button">Open Activity</button>
     <button class="share-btn" type="button" ${shareable ? '' : 'disabled'}>${shareable ? 'Share' : 'Share coming soon'}</button>
+    <button class="collection-btn" type="button">Add to Collection</button>
     <div class="card-actions">
       <button class="rename-btn" type="button">Rename</button>
       <button class="delete-btn" type="button">Delete</button>
@@ -767,6 +905,7 @@ function buildCard(activity, tool) {
   if (shareable) {
     card.querySelector('.share-btn').addEventListener('click', () => shareActivity(activity.id, activity));
   }
+  card.querySelector('.collection-btn').addEventListener('click', () => openActivityPicker({ activityId: activity.id }));
   card.querySelector('.rename-btn').addEventListener('click', () => renameActivity(activity.id, title));
   card.querySelector('.delete-btn').addEventListener('click', () => deleteActivity(activity.id, title));
 
@@ -876,6 +1015,7 @@ function cleanWordGameSettings(settings, words) {
     customText:    settings.customText || (settings.listType === 'custom' ? words.join('\n') : ''),
     selectedWords: Array.isArray(settings.selectedWords) ? settings.selectedWords : words,
     playerCount:   settings.playerCount || 2,
+    studentCanEdit: settings.studentCanEdit === true,
     playerSetup:   Array.isArray(settings.playerSetup) ? settings.playerSetup.map(player => ({
       name:  player && player.name ? String(player.name) : '',
       color: player && player.color ? String(player.color) : ''
@@ -956,7 +1096,416 @@ async function deleteActivity(id, title) {
   }
 }
 
+
+/* ── Teaching Collections / Practice Playlists ───────────────────────────── */
+function updateViewTabs() {
+  document.querySelectorAll('.view-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.view === currentView);
+  });
+  const newBtn = document.getElementById('newCollectionBtn');
+  if (newBtn) newBtn.style.display = currentView === 'collections' ? 'inline-flex' : 'none';
+}
+
+function renderCollectionsView() {
+  document.getElementById('statsStrip').style.display = 'none';
+  if (activeCollectionId) {
+    const col = teachingCollections.find(c => c.id === activeCollectionId);
+    if (col) return renderCollectionDetail(col);
+    activeCollectionId = null;
+  }
+  renderCollectionsHome();
+}
+
+function getCollectionActivityCount(col) {
+  const ids = new Set();
+  (col.sections || []).forEach(section => (section.activityIds || []).forEach(id => ids.add(id)));
+  return ids.size;
+}
+
+function renderCollectionsHome() {
+  const container = document.getElementById('activitiesContainer');
+  const totalInCollections = teachingCollections.reduce((sum, col) => sum + getCollectionActivityCount(col), 0);
+  container.innerHTML = `
+    <section class="collections-intro">
+      <div>
+        <div class="collections-intro-title">Teaching Collections</div>
+        <div class="collections-intro-text">Create collections for small groups, classes, skills, or weekly plans. Add sections to organize activities by lesson, week, or game type, then drag activities into a practice playlist.</div>
+      </div>
+      <button class="collection-primary-btn" type="button" id="collectionsIntroNew">+ New Collection</button>
+    </section>
+    <div class="stats-strip" style="display:flex;margin-bottom:10px">
+      <div class="stat-pill"><strong>${teachingCollections.length}</strong> collection${teachingCollections.length===1?'':'s'}</div>
+      <div class="stat-pill"><strong>${totalInCollections}</strong> activity placement${totalInCollections===1?'':'s'}</div>
+    </div>
+    <div id="collectionGridMount"></div>`;
+  document.getElementById('collectionsIntroNew').addEventListener('click', createCollection);
+  const mount = document.getElementById('collectionGridMount');
+  if (!teachingCollections.length) {
+    mount.innerHTML = `<div class="empty-all"><span class="empty-all-icon">📁</span><h3>No collections yet</h3><p>Create a collection for a small group, class, skill, student, or weekly plan.</p></div>`;
+    return;
+  }
+  const grid = document.createElement('div');
+  grid.className = 'collection-grid';
+  teachingCollections.forEach(col => grid.appendChild(buildCollectionCard(col)));
+  mount.appendChild(grid);
+}
+
+function buildCollectionCard(col) {
+  const card = document.createElement('div');
+  card.className = 'collection-card';
+  const sectionCount = (col.sections || []).length;
+  const activityCount = getCollectionActivityCount(col);
+  card.innerHTML = `
+    <div class="collection-card-top">
+      <span class="collection-folder-icon"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+      <div style="min-width:0;flex:1">
+        <div class="collection-card-title" title="${escHtml(col.name)}">${escHtml(col.name)}</div>
+        <div class="collection-card-sub">${sectionCount} section${sectionCount===1?'':'s'} · ${activityCount} activity placement${activityCount===1?'':'s'}</div>
+      </div>
+    </div>
+    <button class="open-btn" type="button">Open Collection</button>
+    <div class="collection-actions">
+      <button class="rename-btn" type="button">Rename</button>
+      <button class="delete-btn" type="button">Delete</button>
+    </div>`;
+  card.querySelector('.open-btn').addEventListener('click', () => { activeCollectionId = col.id; renderAll(); });
+  card.querySelector('.rename-btn').addEventListener('click', () => renameCollection(col.id));
+  card.querySelector('.delete-btn').addEventListener('click', () => deleteCollection(col.id));
+  return card;
+}
+
+function renderCollectionDetail(col) {
+  const container = document.getElementById('activitiesContainer');
+  const activityCount = getCollectionActivityCount(col);
+  container.innerHTML = `
+    <section class="collection-detail-head">
+      <div>
+        <button class="collection-breadcrumb" type="button" id="backToCollections">← Teaching Collections</button>
+        <h2 class="collection-detail-title">${escHtml(col.name)}</h2>
+        <p class="collection-detail-sub">Build a practice playlist for this group. Use sections for weeks, lessons, game types, skills, or anything that matches your teaching plan.</p>
+      </div>
+      <div class="collection-detail-actions">
+        <button class="collection-secondary-btn" type="button" id="addSectionBtn">+ Add Section</button>
+        <button class="collection-primary-btn" type="button" id="addActivitiesBtn">+ Add Activities</button>
+      </div>
+    </section>
+    <div class="stats-strip" style="display:flex;margin-bottom:14px">
+      <div class="stat-pill"><strong>${(col.sections || []).length}</strong> section${(col.sections || []).length===1?'':'s'}</div>
+      <div class="stat-pill"><strong>${activityCount}</strong> activity placement${activityCount===1?'':'s'}</div>
+    </div>
+    <div class="section-stack" id="sectionStack"></div>`;
+  document.getElementById('backToCollections').addEventListener('click', () => { activeCollectionId = null; renderAll(); });
+  document.getElementById('addSectionBtn').addEventListener('click', () => createSection(col.id));
+  document.getElementById('addActivitiesBtn').addEventListener('click', () => openActivityPicker({ collectionId: col.id }));
+
+  const stack = document.getElementById('sectionStack');
+  (col.sections || []).forEach(section => stack.appendChild(buildSection(col, section)));
+}
+
+function buildSection(col, section) {
+  const el = document.createElement('section');
+  el.className = 'collection-section';
+  el.dataset.sectionId = section.id;
+  const ids = section.activityIds || [];
+  el.innerHTML = `
+    <div class="section-head">
+      <span class="section-title">${escHtml(section.name)}</span>
+      <span class="section-count">${ids.length}</span>
+      <span class="section-actions">
+        <button class="section-mini-btn add-to-section" type="button">+ Add here</button>
+        <button class="section-mini-btn rename-section" type="button">Rename</button>
+        <button class="section-mini-btn delete-section" type="button">Delete</button>
+      </span>
+    </div>
+    <div class="section-list" data-section-id="${section.id}"></div>`;
+  el.querySelector('.add-to-section').addEventListener('click', () => openActivityPicker({ collectionId: col.id, sectionId: section.id }));
+  el.querySelector('.rename-section').addEventListener('click', () => renameSection(col.id, section.id));
+  el.querySelector('.delete-section').addEventListener('click', () => deleteSection(col.id, section.id));
+  const list = el.querySelector('.section-list');
+  if (!ids.length) {
+    list.innerHTML = `<div class="collection-empty">No activities in this section yet. Add activities or drag them here.</div>`;
+  } else {
+    ids.forEach(activityId => {
+      const activity = allActivities.find(a => a.id === activityId);
+      if (activity) list.appendChild(buildCollectionActivityCard(col, section, activity));
+    });
+  }
+  setupSectionDropZone(el, col, section);
+  return el;
+}
+
+function buildCollectionActivityCard(col, section, activity) {
+  const type = getActivityType(activity);
+  const tool = ACTIVITY_TYPES[type] || { label: formatToolKey(type), icon: '', colorClass: 'icon-teal', shareable: false };
+  const title = activity.title || makeDefaultTitle(activity);
+  const card = document.createElement('div');
+  card.className = 'collection-activity-card';
+  card.draggable = true;
+  card.dataset.activityId = activity.id;
+  card.dataset.fromSectionId = section.id;
+  card.innerHTML = `
+    <div class="card-top" style="margin-bottom:0">
+      ${renderActivityIcon(tool, 'sm')}
+      <div style="min-width:0;flex:1">
+        <div class="collection-activity-title" title="${escHtml(title)}">${escHtml(title)}</div>
+        <div class="collection-activity-meta">${escHtml(tool.label)}</div>
+      </div>
+    </div>
+    <div class="collection-card-buttons">
+      <button type="button" class="open-collection-activity">Open</button>
+      <button type="button" class="remove-collection-activity">Remove</button>
+    </div>`;
+  card.addEventListener('dragstart', e => {
+    draggedActivity = { collectionId: col.id, fromSectionId: section.id, activityId: activity.id };
+    card.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', activity.id);
+  });
+  card.addEventListener('dragend', () => {
+    draggedActivity = null;
+    card.classList.remove('dragging');
+    document.querySelectorAll('.collection-section').forEach(sec => sec.classList.remove('drag-over'));
+  });
+  card.querySelector('.open-collection-activity').addEventListener('click', () => openActivity(activity.id, activity));
+  card.querySelector('.remove-collection-activity').addEventListener('click', () => removeActivityFromSection(col.id, section.id, activity.id));
+  return card;
+}
+
+function setupSectionDropZone(el, col, section) {
+  el.addEventListener('dragover', e => {
+    if (!draggedActivity || draggedActivity.collectionId !== col.id) return;
+    e.preventDefault();
+    el.classList.add('drag-over');
+  });
+  el.addEventListener('dragleave', e => {
+    if (!el.contains(e.relatedTarget)) el.classList.remove('drag-over');
+  });
+  el.addEventListener('drop', async e => {
+    e.preventDefault();
+    el.classList.remove('drag-over');
+    if (!draggedActivity || draggedActivity.collectionId !== col.id) return;
+    await moveActivityInCollection(col.id, draggedActivity.activityId, draggedActivity.fromSectionId, section.id);
+  });
+}
+
+async function createCollection() {
+  const name = prompt('Name this teaching collection:', 'Group A');
+  if (name === null) return;
+  const clean = name.trim();
+  if (!clean) { alert('Please enter a collection name.'); return; }
+  try {
+    const data = {
+      name: clean,
+      sections: [{ id: makeId('section'), name: 'Unsorted', activityIds: [] }],
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      userId: currentUser.uid
+    };
+    const ref = await addDoc(collection(db, `users/${currentUser.uid}/collections`), data);
+    teachingCollections.unshift(normalizeCollection({ id: ref.id, ...data, createdAt: new Date(), updatedAt: new Date() }));
+    currentView = 'collections';
+    activeCollectionId = ref.id;
+    renderAll();
+  } catch (err) {
+    console.error(err);
+    alert('Could not create the collection. Check Firestore rules and try again.');
+  }
+}
+
+async function renameCollection(collectionId) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  if (!col) return;
+  const name = prompt('Rename this collection:', col.name);
+  if (name === null) return;
+  const clean = name.trim();
+  if (!clean) { alert('Please enter a collection name.'); return; }
+  col.name = clean;
+  await saveCollection(col);
+  renderAll();
+}
+
+async function deleteCollection(collectionId) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  if (!col) return;
+  if (!confirm(`Delete "${col.name}"? The activities will stay in My Activities.`)) return;
+  try {
+    await deleteDoc(doc(db, `users/${currentUser.uid}/collections`, collectionId));
+    teachingCollections = teachingCollections.filter(c => c.id !== collectionId);
+    if (activeCollectionId === collectionId) activeCollectionId = null;
+    renderAll();
+  } catch (err) {
+    console.error(err);
+    alert('Could not delete the collection.');
+  }
+}
+
+async function createSection(collectionId) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  if (!col) return;
+  const name = prompt('Name this section:', 'Week 1');
+  if (name === null) return;
+  const clean = name.trim();
+  if (!clean) { alert('Please enter a section name.'); return; }
+  col.sections.push({ id: makeId('section'), name: clean, activityIds: [] });
+  await saveCollection(col);
+  renderAll();
+}
+
+async function renameSection(collectionId, sectionId) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  const section = col?.sections.find(s => s.id === sectionId);
+  if (!section) return;
+  const name = prompt('Rename this section:', section.name);
+  if (name === null) return;
+  const clean = name.trim();
+  if (!clean) { alert('Please enter a section name.'); return; }
+  section.name = clean;
+  await saveCollection(col);
+  renderAll();
+}
+
+async function deleteSection(collectionId, sectionId) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  const section = col?.sections.find(s => s.id === sectionId);
+  if (!col || !section) return;
+  if ((col.sections || []).length <= 1) { alert('A collection needs at least one section.'); return; }
+  if (!confirm(`Delete the "${section.name}" section? Activities will stay in My Activities.`)) return;
+  const target = col.sections.find(s => s.id !== sectionId);
+  if (target) target.activityIds = [...new Set([...(target.activityIds || []), ...(section.activityIds || [])])];
+  col.sections = col.sections.filter(s => s.id !== sectionId);
+  await saveCollection(col);
+  renderAll();
+}
+
+async function removeActivityFromSection(collectionId, sectionId, activityId) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  const section = col?.sections.find(s => s.id === sectionId);
+  if (!section) return;
+  section.activityIds = (section.activityIds || []).filter(id => id !== activityId);
+  await saveCollection(col);
+  renderAll();
+}
+
+async function moveActivityInCollection(collectionId, activityId, fromSectionId, toSectionId) {
+  const col = teachingCollections.find(c => c.id === collectionId);
+  if (!col) return;
+  col.sections.forEach(section => {
+    section.activityIds = (section.activityIds || []).filter(id => id !== activityId);
+  });
+  const target = col.sections.find(s => s.id === toSectionId) || col.sections[0];
+  target.activityIds = [...(target.activityIds || []), activityId];
+  await saveCollection(col);
+  renderAll();
+}
+
+async function saveCollection(col) {
+  col.updatedAt = new Date();
+  const cleanSections = (col.sections || []).map(section => ({
+    id: section.id,
+    name: section.name,
+    activityIds: Array.isArray(section.activityIds) ? section.activityIds : []
+  }));
+  await updateDoc(doc(db, `users/${currentUser.uid}/collections`, col.id), {
+    name: col.name,
+    sections: cleanSections,
+    updatedAt: serverTimestamp()
+  });
+}
+
+function openActivityPicker(context = {}) {
+  if (!teachingCollections.length) {
+    const makeOne = confirm('Create a collection first?');
+    if (makeOne) createCollection();
+    return;
+  }
+  activityPickerContext = {
+    collectionId: context.collectionId || activeCollectionId || teachingCollections[0].id,
+    sectionId: context.sectionId || '',
+    preselectedActivityId: context.activityId || ''
+  };
+  renderActivityPicker();
+  document.getElementById('activityPickerOverlay').classList.add('open');
+}
+
+function renderActivityPicker() {
+  const selectedCollectionId = activityPickerContext?.collectionId || teachingCollections[0]?.id || '';
+  const selectedSectionId = activityPickerContext?.sectionId || '';
+  const sectionSelect = document.getElementById('activityPickerSection');
+  const options = [];
+  teachingCollections.forEach(collectionItem => {
+    (collectionItem.sections || []).forEach(section => {
+      options.push({
+        value: `${collectionItem.id}::${section.id}`,
+        label: `${collectionItem.name} / ${section.name}`,
+        selected: collectionItem.id === selectedCollectionId && (!selectedSectionId || section.id === selectedSectionId)
+      });
+    });
+  });
+  sectionSelect.innerHTML = options.map(opt => `<option value="${escHtml(opt.value)}" ${opt.selected ? 'selected' : ''}>${escHtml(opt.label)}</option>`).join('');
+  if (!sectionSelect.value && options[0]) sectionSelect.value = options[0].value;
+  const search = document.getElementById('activityPickerSearch').value.trim().toLowerCase();
+  let list = [...allActivities];
+  if (search) {
+    list = list.filter(a => (a.title || makeDefaultTitle(a)).toLowerCase().includes(search) || formatToolKey(getActivityType(a)).toLowerCase().includes(search));
+  }
+  const pickerList = document.getElementById('activityPickerList');
+  if (!list.length) {
+    pickerList.innerHTML = `<div class="collection-empty">No saved activities match that search.</div>`;
+    return;
+  }
+  pickerList.innerHTML = list.map(activity => {
+    const type = getActivityType(activity);
+    const tool = ACTIVITY_TYPES[type] || { label: formatToolKey(type) };
+    const title = activity.title || makeDefaultTitle(activity);
+    const checked = activityPickerContext.preselectedActivityId === activity.id ? 'checked' : '';
+    return `<label class="picker-item">
+      <input type="checkbox" value="${activity.id}" ${checked}/>
+      <span><span class="picker-item-title">${escHtml(title)}</span><span class="picker-item-meta">${escHtml(tool.label)}</span></span>
+    </label>`;
+  }).join('');
+}
+
+async function addPickedActivities() {
+  const selected = document.getElementById('activityPickerSection').value || '';
+  const [collectionId, sectionId] = selected.split('::');
+  const col = teachingCollections.find(c => c.id === collectionId) || teachingCollections[0];
+  if (!col) return;
+  const section = col.sections.find(s => s.id === sectionId) || col.sections[0];
+  const picked = [...document.querySelectorAll('#activityPickerList input[type="checkbox"]:checked')].map(input => input.value);
+  if (!picked.length) { alert('Choose at least one activity to add.'); return; }
+  section.activityIds = [...new Set([...(section.activityIds || []), ...picked])];
+  await saveCollection(col);
+  closeActivityPicker();
+  currentView = 'collections';
+  activeCollectionId = col.id;
+  renderAll();
+}
+
+function closeActivityPicker() {
+  document.getElementById('activityPickerOverlay').classList.remove('open');
+  document.getElementById('activityPickerSearch').value = '';
+  activityPickerContext = null;
+}
+
 /* ── Controls ────────────────────────────────────────────────────────────── */
+
+document.getElementById('viewSwitch').addEventListener('click', e => {
+  const tab = e.target.closest('.view-tab');
+  if (!tab) return;
+  currentView = tab.dataset.view;
+  if (currentView === 'all') activeCollectionId = null;
+  renderAll();
+});
+
+document.getElementById('newCollectionBtn').addEventListener('click', createCollection);
+document.getElementById('activityPickerClose').addEventListener('click', closeActivityPicker);
+document.getElementById('activityPickerCancel').addEventListener('click', closeActivityPicker);
+document.getElementById('activityPickerAdd').addEventListener('click', addPickedActivities);
+document.getElementById('activityPickerSearch').addEventListener('input', renderActivityPicker);
+document.getElementById('activityPickerOverlay').addEventListener('click', e => {
+  if (e.target.id === 'activityPickerOverlay') closeActivityPicker();
+});
+
 document.getElementById('searchInput').addEventListener('input', e => {
   searchQuery = e.target.value.trim();
   renderAll();
