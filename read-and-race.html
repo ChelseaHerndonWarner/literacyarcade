@@ -391,29 +391,44 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
 /* ─── RACE STAGE ─────────────────────────────────────────────────────────── */
 .race-stage{
   width:100%;height:100%;position:relative;overflow:hidden;
-  background:linear-gradient(180deg,#D6EEFF 0%,#E8F5FF 28%,#F0FAF0 58%,#D8F0C8 100%);
+  background:linear-gradient(180deg,
+    #7ECBFF 0%,
+    #AAD9FF 18%,
+    #CCE9FF 35%,
+    #E4F4FF 50%,
+    #EDF8EE 62%,
+    #D4EFC4 80%,
+    #C4E8AC 100%);
 }
 .race-stage::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 55% at 50% 0%,rgba(255,255,255,.28) 0%,transparent 68%);
+  background:
+    radial-gradient(ellipse 36% 26% at 86% 5%, rgba(255,246,160,.42) 0%, transparent 70%),
+    radial-gradient(ellipse 68% 42% at 50% 0%, rgba(255,255,255,.20) 0%, transparent 68%);
   pointer-events:none;z-index:1;
 }
 
 /* Clouds */
 .cloud{position:absolute;z-index:2;pointer-events:none}
 .cloud-shape{
-  position:relative;background:rgba(255,255,255,.88);
-  border-radius:50px;box-shadow:0 3px 12px rgba(100,160,200,.12);
+  position:relative;background:rgba(255,255,255,.95);
+  border-radius:60px;
+  box-shadow:0 5px 20px rgba(100,160,210,.16),inset 0 -3px 6px rgba(150,195,230,.14);
 }
 
 /* Ground */
 .ground-strip{
-  position:absolute;left:0;right:0;bottom:0;height:60px;
-  background:linear-gradient(180deg,#9DBFA0 0%,#7FA882 60%,#6A9470 100%);z-index:2;
+  position:absolute;left:0;right:0;bottom:0;height:66px;
+  background:linear-gradient(180deg,#AADA98 0%,#86C070 50%,#6CAE58 100%);z-index:2;
 }
 .ground-strip::before{
-  content:"";position:absolute;top:-12px;left:0;right:0;height:16px;
-  background:radial-gradient(ellipse at 50% 100%,#9DBFA0 0 56%,transparent 57%);
+  content:"";position:absolute;top:-16px;left:0;right:0;height:20px;
+  background:radial-gradient(ellipse at 50% 100%,#AADA98 0 52%,transparent 53%);
+}
+/* Subtle lighter stripe along ground top for depth */
+.ground-strip::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:10px;
+  background:rgba(255,255,255,.12);border-radius:0;
 }
 
 /* Track */
@@ -579,7 +594,11 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
   background:linear-gradient(135deg,var(--teal) 0%,#22d8c8 100%);
   padding:28px 24px 22px;text-align:center;
 }
-.win-icon{font-size:48px;display:block;margin-bottom:8px}
+.win-icon{
+  width:58px;height:58px;margin:0 auto 10px;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.win-icon svg{width:58px;height:58px;display:block;filter:drop-shadow(0 4px 0 rgba(10,10,30,.16))}
 .win-title-sm{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.8)}
 .win-name{font-size:30px;font-weight:800;color:white;line-height:1.1;margin:4px 0}
 .win-sub{font-size:13px;color:rgba(255,255,255,.85);font-weight:600}
@@ -640,6 +659,24 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
   margin-top:8px;padding-top:8px;
   border-top:1px solid var(--border);
 }
+.share-permissions{
+  display:flex;align-items:flex-start;gap:10px;width:100%;
+  margin-top:10px;padding:10px 12px;
+  border:1.5px solid rgba(14,159,142,.22);
+  border-radius:var(--r-md);
+  background:linear-gradient(180deg,#F7FFFE 0%,#FFFFFF 100%);
+  color:var(--navy-mid);cursor:pointer;
+}
+.share-permissions input{
+  width:18px;height:18px;margin-top:2px;accent-color:var(--teal-dk);flex:0 0 auto;
+}
+.share-permissions strong{
+  display:block;font-size:13px;line-height:1.2;color:var(--navy);font-weight:900;
+}
+.share-permissions span span{
+  display:block;margin-top:2px;font-size:11px;line-height:1.35;font-weight:700;color:var(--navy-lt);
+}
+body.shared-mode #setup .save-bar{display:none!important;}
 .save-btn{
   display:inline-flex;align-items:center;gap:6px;
   border:1.5px solid var(--teal);background:var(--teal-bg);
@@ -780,6 +817,14 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
 
   <button class="start-btn" id="startBtn">Start the Race</button>
 
+  <label class="share-permissions" for="studentCanEditToggle">
+    <input type="checkbox" id="studentCanEditToggle" />
+    <span>
+      <strong>Allow students to choose or edit words in shared links</strong>
+      <span>Leave unchecked to lock this exact word list for Google Classroom/LMS assignments.</span>
+    </span>
+  </label>
+
   <!-- Save / Auth bar -->
   <div class="save-bar">
     <button class="save-btn" id="saveActivityBtn">
@@ -873,7 +918,28 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
 <div class="overlay" id="winOverlay">
   <div class="win-modal">
     <div class="win-header">
-      <span class="win-icon">🏆</span>
+      <span class="win-icon" aria-hidden="true">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Trophy">
+          <defs>
+            <linearGradient id="trophyGold" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FFF2A8"/>
+              <stop offset="45%" stop-color="#F6C54A"/>
+              <stop offset="100%" stop-color="#D9961F"/>
+            </linearGradient>
+            <linearGradient id="trophyBase" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#8A5A18"/>
+              <stop offset="100%" stop-color="#5F3A0B"/>
+            </linearGradient>
+          </defs>
+          <path d="M24 18H14c-2.8 0-5 2.2-5 5v4c0 8.5 6.5 15.5 15 16" fill="none" stroke="#FFE18A" stroke-width="5" stroke-linecap="round"/>
+          <path d="M56 18h10c2.8 0 5 2.2 5 5v4c0 8.5-6.5 15.5-15 16" fill="none" stroke="#FFE18A" stroke-width="5" stroke-linecap="round"/>
+          <path d="M23 12h34v22c0 10.5-7.5 19-17 19S23 44.5 23 34V12Z" fill="url(#trophyGold)" stroke="rgba(255,255,255,.85)" stroke-width="2.5"/>
+          <path d="M32 15h16v4H32z" fill="rgba(255,255,255,.35)"/>
+          <path d="M34 52h12v9H34z" fill="url(#trophyGold)"/>
+          <path d="M25 61h30c2 0 3.5 1.5 3.5 3.5V68h-37v-3.5C21.5 62.5 23 61 25 61Z" fill="url(#trophyBase)"/>
+          <path d="M28 66h24" stroke="rgba(255,255,255,.28)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
       <div class="win-title-sm">Winner!</div>
       <div class="win-name" id="winName">Player 1</div>
       <div class="win-sub">crossed the finish line — amazing reading!</div>
@@ -1232,32 +1298,51 @@ function selectPlayerColor(playerIdx, colorVal){
 function buildScenery(){
   const s=$('scenery');if(!s)return;
   s.innerHTML='';
-  const stage=$('raceStage');
-  const sw=stage.clientWidth||900;
 
-  // Clouds — soft, minimal
-  [[5,44,.85],[30,36,1.0],[60,48,.75],[82,34,.65]].forEach(([lp,t,sc])=>{
-    const w=76*sc,h=26*sc;
+  // Layered clouds — 5 clouds, each with 3 puffs for a rounder cartoon look
+  [[4,54,1.12],[26,42,.86],[52,60,.70],[71,40,.98],[89,66,.62]].forEach(([lp,t,sc])=>{
+    const w=84*sc,h=30*sc;
     const el=document.createElement('div');
     el.className='cloud';
     el.style.cssText=`left:${lp}%;top:${t}px;`;
     el.innerHTML=`<div class="cloud-shape" style="width:${w}px;height:${h}px">
-      <div style="position:absolute;width:${w*.42}px;height:${w*.42}px;border-radius:50%;background:rgba(255,255,255,.82);left:${w*.08}px;top:${-w*.20}px"></div>
-      <div style="position:absolute;width:${w*.28}px;height:${w*.28}px;border-radius:50%;background:rgba(255,255,255,.82);right:${w*.10}px;top:${-w*.12}px"></div>
+      <div style="position:absolute;width:${w*.52}px;height:${w*.52}px;border-radius:50%;background:rgba(255,255,255,.92);left:${w*.05}px;top:${-(w*.26)}px"></div>
+      <div style="position:absolute;width:${w*.36}px;height:${w*.36}px;border-radius:50%;background:rgba(255,255,255,.88);left:${w*.30}px;top:${-(w*.18)}px"></div>
+      <div style="position:absolute;width:${w*.26}px;height:${w*.26}px;border-radius:50%;background:rgba(255,255,255,.82);right:${w*.09}px;top:${-(w*.10)}px"></div>
     </div>`;
     s.appendChild(el);
   });
 
-  // Minimal rolling hills — soft gradient bands, no clip-art trees
-  // Left hill accent
-  const lHill=document.createElement('div');
-  lHill.style.cssText=`position:absolute;left:-5%;bottom:42px;width:18%;height:64px;border-radius:50% 50% 0 0/56px 56px 0 0;background:linear-gradient(180deg,#A4DC98 0%,#80C878 100%);opacity:.48;`;
-  s.appendChild(lHill);
+  // Far background hills (pale, rise from top of ground strip)
+  [{l:'-3%',w:'20%',h:52,c:'#C8EDBA'},{l:'14%',w:'14%',h:42,c:'#CCEFC4'},
+   {l:'34%',w:'12%',h:36,c:'#C8ECC0'},{r:'16%',w:'16%',h:46,c:'#C4ECBA'},
+   {r:'-3%',w:'21%',h:58,c:'#BEE8B0'}
+  ].forEach(({l,r,w,h,c})=>{
+    const el=document.createElement('div');
+    const rr=Math.round(h*.9);
+    el.style.cssText=`position:absolute;${l?'left:'+l:'right:'+r};bottom:60px;width:${w};height:${h}px;border-radius:50% 50% 0 0/${rr}px ${rr}px 0 0;background:${c};opacity:.52;`;
+    s.appendChild(el);
+  });
 
-  // Right hill accent
-  const rHill=document.createElement('div');
-  rHill.style.cssText=`position:absolute;right:-4%;bottom:42px;width:18%;height:70px;border-radius:50% 50% 0 0/60px 60px 0 0;background:linear-gradient(180deg,#A4DC98 0%,#80C878 100%);opacity:.65;`;
-  s.appendChild(rHill);
+  // Near hills (richer green, taller, flanking the scene edges)
+  [{l:'-6%',w:'25%',h:80,c:'linear-gradient(180deg,#AADC94 0%,#84C06C 100%)',op:.60},
+   {r:'-5%',w:'25%',h:88,c:'linear-gradient(180deg,#A6D890 0%,#80BC68 100%)',op:.72}
+  ].forEach(({l,r,w,h,c,op})=>{
+    const el=document.createElement('div');
+    const rr=Math.round(h*.88);
+    el.style.cssText=`position:absolute;${l?'left:'+l:'right:'+r};bottom:60px;width:${w};height:${h}px;border-radius:50% 50% 0 0/${rr}px ${rr}px 0 0;background:${c};opacity:${op};`;
+    s.appendChild(el);
+  });
+
+  // Tiny sparkle stars scattered across the upper sky (top ~45px, away from tracks)
+  [{l:'7%',t:44},{l:'22%',t:34},{l:'42%',t:50},{l:'60%',t:32},{l:'76%',t:48},{l:'92%',t:40}].forEach(({l,t},i)=>{
+    const sz=i%2===0?9:7;
+    const op=i%3===0?.50:.38;
+    const el=document.createElement('div');
+    el.style.cssText=`position:absolute;left:${l};top:${t}px;width:${sz}px;height:${sz}px;opacity:${op};pointer-events:none;`;
+    el.innerHTML=`<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" width="${sz}" height="${sz}"><path d="M5 .5L5.65 3.85 9.5 5 5.65 6.15 5 9.5 4.35 6.15.5 5 4.35 3.85Z" fill="rgba(255,216,48,1)"/></svg>`;
+    s.appendChild(el);
+  });
 
   // Ground strip
   const g=document.createElement('div');g.className='ground-strip';s.appendChild(g);
@@ -1344,33 +1429,80 @@ function moveRunner(i){
 /* ─── CAR SVG (no numbers, polished) ────────────────────────────────────── */
 function carSvg(p,i){
   const col=p.color;
+  /* Car faces RIGHT. Front wheel = right (cx 88), rear wheel = left (cx 34). */
   return `<svg viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" aria-label="${escHtml(p.name)} race car">
-    <!-- Ground shadow -->
-    <ellipse cx="60" cy="63" rx="42" ry="5" fill="rgba(0,0,0,.15)"/>
-    <!-- Main body -->
-    <path d="M12 44 C16 31 28 24 48 23 H72 C92 23 106 33 112 45 L104 52 H18 Z"
-          fill="${col}" stroke="white" stroke-width="3.5" stroke-linejoin="round"/>
-    <!-- Cockpit -->
-    <path d="M46 24 C52 11 70 9 82 22 L88 34 H44 Z"
-          fill="${col}" stroke="white" stroke-width="3.5" stroke-linejoin="round"/>
-    <!-- Windshield glass -->
-    <path d="M60 16 C67 12 77 15 82 24 L83 32 H56 Z" fill="rgba(190,235,255,.72)"/>
-    <!-- Windshield highlight -->
-    <path d="M60 16 C67 13 76 15 80 22 L79 20 C75 14 67 12 60 16 Z" fill="rgba(255,255,255,.32)"/>
-    <!-- Undercarriage line -->
-    <path d="M16 44 H108" stroke="rgba(0,0,0,.10)" stroke-width="3" stroke-linecap="round"/>
-    <!-- Front wheel -->
-    <circle cx="34" cy="51" r="10.5" fill="#1A2530" stroke="#5A6670" stroke-width="3"/>
-    <circle cx="34" cy="51" r="3.5" fill="#D0DCE4"/>
-    <circle cx="34" cy="51" r="7.5" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1.5"/>
-    <!-- Rear wheel -->
-    <circle cx="88" cy="51" r="10.5" fill="#1A2530" stroke="#5A6670" stroke-width="3"/>
-    <circle cx="88" cy="51" r="3.5" fill="#D0DCE4"/>
-    <circle cx="88" cy="51" r="7.5" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1.5"/>
-    <!-- Front wing/spoiler -->
-    <path d="M18 34 L4 30 L4 22 L22 26 Z" fill="${col}" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M20 30 L7 27 L7 24 L20 28 Z" fill="rgba(255,255,255,.18)"/>
-  </svg>`;
+
+  <!-- Ground shadow -->
+  <ellipse cx="62" cy="64" rx="46" ry="4" fill="rgba(0,0,0,.18)"/>
+
+  <!-- Rear spoiler blade + strut (left / rear, properly sized GT wing) -->
+  <path d="M26 17 L6 11 L6 17 L26 22 Z"
+        fill="${col}" stroke="rgba(255,255,255,.86)" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M19 20 L16 20 L16 29 L19 29 Z"
+        fill="${col}" stroke="rgba(255,255,255,.48)" stroke-width="1"/>
+
+  <!-- Main body: lower sportier coupe, faces right -->
+  <path d="M108 49
+           C112 45 114 40 113 35
+           C112 29 104 24 92 21
+           L74 19
+           C68 16 62 15 54 15
+           L38 17
+           C28 18 16 25 12 35
+           C10 41 12 46 14 49
+           H106 Z"
+        fill="${col}" stroke="rgba(255,255,255,.92)" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Windshield (steep angle, front glass) -->
+  <path d="M90 27 L88 22 C84 16 76 15 63 15 L61 27 Z"
+        fill="rgba(155,212,242,.90)"/>
+  <!-- Side window (door glass, slightly darker tint) -->
+  <path d="M63 15 L38 17 C30 19 26 24 28 27 L61 27 Z"
+        fill="rgba(112,178,215,.72)"/>
+  <!-- A-pillar divider line -->
+  <line x1="63" y1="15" x2="61" y2="27"
+        stroke="rgba(255,255,255,.58)" stroke-width="1.3" stroke-linecap="round"/>
+  <!-- Windshield glare -->
+  <path d="M88 21 C84 16 76 15 70 15 L68 15 L82 16 L88 21 Z"
+        fill="rgba(255,255,255,.44)"/>
+
+  <!-- Front splitter (adds sporty stance, not an F1 nose) -->
+  <path d="M114 44 L106 42 L106 48 L112 49 Z"
+        fill="${col}" stroke="rgba(255,255,255,.58)" stroke-width="1" stroke-linejoin="round"/>
+
+  <!-- Hood highlight -->
+  <path d="M104 27 C96 23 84 21 70 20 L68 22 C82 22 96 25 104 29 Z"
+        fill="rgba(255,255,255,.20)"/>
+
+  <!-- Side body crease (polished racing detail) -->
+  <path d="M106 38 C86 34 52 32 20 34 L18 36 C50 35 86 36 106 40 Z"
+        fill="rgba(255,255,255,.15)"/>
+
+  <!-- Headlight (right / front, warm oval) -->
+  <ellipse cx="113" cy="36" rx="2" ry="5" fill="rgba(255,248,176,.94)"/>
+
+  <!-- Tail light (left / rear, red oval) -->
+  <ellipse cx="11" cy="37" rx="1.8" ry="4.5" fill="rgba(255,50,50,.78)"/>
+
+  <!-- ── Rear wheel (cx 34 cy 51 — left / rear) ── -->
+  <circle cx="34" cy="51" r="11" fill="#1B2A36" stroke="#46606C" stroke-width="2.5"/>
+  <circle cx="34" cy="51" r="7.5" fill="#7E929E"/>
+  <line x1="34" y1="44.5" x2="34" y2="57.5" stroke="#546070" stroke-width="1.8"/>
+  <line x1="27.5" y1="47.5" x2="40.5" y2="54.5" stroke="#546070" stroke-width="1.8"/>
+  <line x1="27.5" y1="54.5" x2="40.5" y2="47.5" stroke="#546070" stroke-width="1.8"/>
+  <circle cx="34" cy="51" r="3.5" fill="#C6D6E0"/>
+  <circle cx="34" cy="51" r="1.5" fill="#8EA4B0"/>
+
+  <!-- ── Front wheel (cx 88 cy 51 — right / front) ── -->
+  <circle cx="88" cy="51" r="11" fill="#1B2A36" stroke="#46606C" stroke-width="2.5"/>
+  <circle cx="88" cy="51" r="7.5" fill="#7E929E"/>
+  <line x1="88" y1="44.5" x2="88" y2="57.5" stroke="#546070" stroke-width="1.8"/>
+  <line x1="81.5" y1="47.5" x2="94.5" y2="54.5" stroke="#546070" stroke-width="1.8"/>
+  <line x1="81.5" y1="54.5" x2="94.5" y2="47.5" stroke="#546070" stroke-width="1.8"/>
+  <circle cx="88" cy="51" r="3.5" fill="#C6D6E0"/>
+  <circle cx="88" cy="51" r="1.5" fill="#8EA4B0"/>
+
+</svg>`;
 }
 
 /* ─── DICE ───────────────────────────────────────────────────────────────── */
@@ -1678,6 +1810,7 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 
 let currentUser = null;
+const PENDING_KEY = 'readRacePendingAuthSetup';
 
 /* ── Auth state ──────────────────────────────────────────────────────────── */
 onAuthStateChanged(auth, user => {
@@ -1686,6 +1819,7 @@ onAuthStateChanged(auth, user => {
   updateAuthBar(user);
   const dashBtn = document.getElementById('dashboardBtn');
   if (dashBtn) dashBtn.style.display = user ? 'flex' : 'none';
+  setTimeout(tryRestorePendingAuthSetup, 80);
 });
 
 function escStr(s) {
@@ -1713,9 +1847,10 @@ const saveActivityBtn = document.getElementById('saveActivityBtn');
 
 if (saveActivityBtn) {
   saveActivityBtn.addEventListener('click', async () => {
-  // Not signed in → redirect to login page (same as Phoneme Counter)
+  // Not signed in → preserve the setup, then return here after Google sign-in.
   if (!currentUser) {
-    window.location.href = 'teacher-login.html';
+    captureBeforeLogin('save');
+    window.location.href = 'teacher-login.html?returnTo=read-and-race.html';
     return;
   }
 
@@ -1734,19 +1869,12 @@ if (saveActivityBtn) {
   if (!cleanTitle) { alert('Please enter a name for this activity.'); return; }
 
   // Build the activity document
-  const listType = window.currentListType || 'custom';
-  const level    = document.getElementById('levelSelect')?.value || '';
-
   const activityData = {
     title:        cleanTitle,
     toolType:     'read-and-race',
     activityType: 'read-and-race',
     words:        wordsArr,
-    settings: {
-      listType,
-      level,
-      playerCount: 2
-    },
+    settings: buildReadRaceSettings(wordsArr),
     url:       'read-and-race.html',
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -1783,6 +1911,126 @@ function buildDefaultTitle() {
   return parts.join(' — ');
 }
 
+function buildReadRaceSettings(wordsArr) {
+  const listType = window.currentListType || 'custom';
+  return {
+    studentCanEdit: !!document.getElementById('studentCanEditToggle')?.checked,
+    listType,
+    level: document.getElementById('levelSelect')?.value || '',
+    customText: document.getElementById('customWords')?.value || '',
+    selectedWords: wordsArr,
+    playerCount: 2,
+    playerSetup: [0, 1].map(i => ({
+      name: document.getElementById(`player${i}`)?.value || `Player ${i + 1}`,
+      color: Array.isArray(window.playerColors) ? window.playerColors[i] : ''
+    }))
+  };
+}
+
+function restoreReadRacePlayerSetup(settings) {
+  if (!settings || !Array.isArray(settings.playerSetup)) return;
+  settings.playerSetup.forEach((player, i) => {
+    if (player.color && Array.isArray(window.playerColors)) window.playerColors[i] = player.color;
+  });
+  if (typeof renderPlayerInputs === 'function') renderPlayerInputs();
+  settings.playerSetup.forEach((player, i) => {
+    const input = document.getElementById(`player${i}`);
+    if (input && player.name) input.value = player.name;
+  });
+}
+
+function captureBeforeLogin(action = 'save') {
+  try {
+    const wordsArr = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
+    const pending = {
+      title: 'Unsaved Read & Race',
+      toolType: 'read-and-race',
+      activityType: 'read-and-race',
+      words: wordsArr,
+      settings: buildReadRaceSettings(wordsArr),
+      pendingAction: action,
+      savedAt: Date.now()
+    };
+    sessionStorage.setItem(PENDING_KEY, JSON.stringify(pending));
+  } catch (err) {
+    console.warn('Could not preserve Read & Race setup before login:', err);
+  }
+}
+
+function restoreReadRaceActivity(activity, { notice = false, start = false } = {}) {
+  const words = (activity.words || activity.settings?.selectedWords || [])
+    .map(w => String(w).trim())
+    .filter(Boolean);
+  if (!words.length) return false;
+
+  const settings = activity.settings || {};
+  const listType = settings.listType || 'custom';
+  const customBox = document.getElementById('customWords');
+  if (customBox) customBox.value = settings.customText || (listType === 'custom' ? words.join('\n') : '');
+
+  const toggle = document.getElementById('studentCanEditToggle');
+  if (toggle) toggle.checked = settings.studentCanEdit === true;
+
+  if (typeof window.restoreReadRacePlayerSetup === 'function') window.restoreReadRacePlayerSetup(settings);
+  if (window.setListType) window.setListType(listType, { keepSelected: true });
+
+  if (settings.level && document.getElementById('levelSelect')) {
+    const sel = document.getElementById('levelSelect');
+    const opt = [...sel.options].find(o => o.value === settings.level);
+    if (opt) sel.value = settings.level;
+  }
+
+  if (window.selectedWordsSet) {
+    window.selectedWordsSet.clear();
+    words.forEach(w => window.selectedWordsSet.add(w));
+    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
+  }
+
+  if (notice) {
+    const banner = document.getElementById('loadedBanner');
+    const bannerText = document.getElementById('loadedBannerText');
+    if (banner && bannerText) {
+      bannerText.textContent = `${activity.title || 'Activity'} loaded — ${words.length} word${words.length === 1 ? '' : 's'} ready`;
+      banner.style.display = 'flex';
+    }
+  }
+
+  if (start && typeof window.startGame === 'function') window.startGame();
+  return true;
+}
+
+function tryRestorePendingAuthSetup() {
+  const raw = sessionStorage.getItem(PENDING_KEY);
+  if (!raw) return false;
+  let activity;
+  try { activity = JSON.parse(raw); } catch { sessionStorage.removeItem(PENDING_KEY); return false; }
+  if (!activity || activity.toolType !== 'read-and-race') {
+    sessionStorage.removeItem(PENDING_KEY);
+    return false;
+  }
+  if (activity.savedAt && Date.now() - activity.savedAt > 1000 * 60 * 60 * 6) {
+    sessionStorage.removeItem(PENDING_KEY);
+    return false;
+  }
+  sessionStorage.removeItem(PENDING_KEY);
+  const restored = restoreReadRaceActivity(activity);
+  if (restored) {
+    const banner = document.getElementById('loadedBanner');
+    const bannerText = document.getElementById('loadedBannerText');
+    const action = activity.pendingAction === 'share' ? 'Share Activity' : 'Save Activity';
+    if (banner && bannerText) {
+      bannerText.textContent = `Your Read & Race setup was restored. Click ${action} again to finish.`;
+      banner.style.display = 'flex';
+    }
+  }
+  return restored;
+}
+
+window.captureReadRaceBeforeLogin = captureBeforeLogin;
+window.restoreReadRaceActivity = restoreReadRaceActivity;
+window.buildReadRaceSettings = buildReadRaceSettings;
+window.restoreReadRacePlayerSetup = restoreReadRacePlayerSetup;
+
 /* ── Load from dashboard (sessionStorage) ────────────────────────────────── */
 function tryLoadSavedActivity() {
   const raw = sessionStorage.getItem('savedActivityData');
@@ -1796,44 +2044,7 @@ function tryLoadSavedActivity() {
   sessionStorage.removeItem('savedActivityData');
   sessionStorage.removeItem('savedActivityId');
 
-  const words    = activity.words || [];
-  const settings = activity.settings || {};
-  const title    = activity.title || 'Saved Activity';
-
-  if (!words.length) return;
-
-  // Restore list type + level
-  const listType = settings.listType || 'custom';
-
-  if (listType === 'custom') {
-    const customBox = document.getElementById('customWords');
-    if (customBox) customBox.value = words.join('\n');
-  }
-
-  if (window.setListType) window.setListType(listType, { keepSelected: true });
-
-  if (settings.level && document.getElementById('levelSelect')) {
-    setTimeout(() => {
-      const sel = document.getElementById('levelSelect');
-      const opt = [...sel.options].find(o => o.value === settings.level);
-      if (opt) { sel.value = settings.level; if (window.refreshWordSelectionUI) window.refreshWordSelectionUI(); }
-    }, 50);
-  }
-
-  // Restore selected words
-  if (window.selectedWordsSet) {
-    window.selectedWordsSet.clear();
-    words.forEach(w => window.selectedWordsSet.add(w));
-    if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
-  }
-
-  // Show loaded banner
-  const banner = document.getElementById('loadedBanner');
-  const bannerText = document.getElementById('loadedBannerText');
-  if (banner) {
-    bannerText.textContent = `"${title}" loaded — ${words.length} word${words.length===1?'':'s'} ready`;
-    banner.style.display = 'flex';
-  }
+  restoreReadRaceActivity(activity, { notice: true });
 }
 
 document.getElementById('loadedBannerClear')?.addEventListener('click', () => {
@@ -1907,7 +2118,8 @@ LiteracyArcadeShare.register({
     return Boolean(window.readRaceCurrentUser);
   },
   onLoginRequired() {
-    window.location.href = 'teacher-login.html';
+    if (typeof window.captureReadRaceBeforeLogin === 'function') window.captureReadRaceBeforeLogin('share');
+    window.location.href = 'teacher-login.html?returnTo=read-and-race.html';
   },
   getActivity() {
     const words = window.selectedWordsSet ? [...window.selectedWordsSet] : [];
@@ -1923,11 +2135,12 @@ LiteracyArcadeShare.register({
     return {
       title: `Read & Race - ${words.length} word${words.length === 1 ? '' : 's'}`,
       words,
-      settings: {
+      settings: (typeof window.buildReadRaceSettings === 'function') ? window.buildReadRaceSettings(words) : {
         listType,
         level: document.getElementById('levelSelect')?.value || '',
         customText: document.getElementById('customWords')?.value || '',
         selectedWords: words,
+        studentCanEdit: !!document.getElementById('studentCanEditToggle')?.checked,
         playerCount: 2,
         playerSetup
       },
@@ -1950,22 +2163,16 @@ LiteracyArcadeShare.register({
     const words = activity.words || [];
     if (!words.length) return;
     const settings = activity.settings || {};
+    document.body.classList.add('shared-mode');
+    if (settings.studentCanEdit !== true) document.body.classList.add('shared-locked');
+    const shouldStart = activity.autoStart !== false && settings.studentCanEdit !== true;
+    if (typeof window.restoreReadRaceActivity === 'function') {
+      window.restoreReadRaceActivity(activity, { notice: settings.studentCanEdit === true, start: shouldStart });
+      return;
+    }
     const customBox = document.getElementById('customWords');
     if (customBox && settings.customText) customBox.value = settings.customText;
-    if (Array.isArray(settings.playerSetup)) {
-      settings.playerSetup.forEach((player, i) => {
-        const input = document.getElementById(`player${i}`);
-        if (input && player.name) input.value = player.name;
-        if (player.color && Array.isArray(window.playerColors)) window.playerColors[i] = player.color;
-      });
-      if (typeof renderPlayerInputs === 'function') {
-        renderPlayerInputs();
-        settings.playerSetup.forEach((player, i) => {
-          const input = document.getElementById(`player${i}`);
-          if (input && player.name) input.value = player.name;
-        });
-      }
-    }
+    if (typeof window.restoreReadRacePlayerSetup === 'function') window.restoreReadRacePlayerSetup(settings);
     if (window.setListType) window.setListType(settings.listType || 'custom', { keepSelected: true });
     if (settings.level) {
       const sel = document.getElementById('levelSelect');
@@ -1977,7 +2184,7 @@ LiteracyArcadeShare.register({
       words.forEach(w => window.selectedWordsSet.add(w));
       if (window.refreshWordSelectionUI) window.refreshWordSelectionUI();
     }
-    if (typeof startGame === 'function') startGame();
+    if (shouldStart && typeof window.startGame === 'function') window.startGame();
   }
 });
 </script>
