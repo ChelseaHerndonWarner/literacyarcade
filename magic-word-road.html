@@ -754,8 +754,8 @@ body.shared-locked .teacher-only{display:none!important}
   </a>
   <div class="hdr-btns">
     <span class="hdr-label" id="gameListLabel"></span>
-    <button class="hdr-game-btn" id="restartBtn">Restart</button>
-    <button class="hdr-game-btn" id="newGameBtn">← Edit Words</button>
+    <button class="hdr-game-btn" id="restartBtn" type="button">Restart Quest</button>
+    <button class="hdr-game-btn" id="newGameBtn" type="button">← Edit Words</button>
     <button class="icon-btn" id="headerSoundBtn" aria-label="Toggle sound" title="Toggle sound" type="button">
       <svg id="headerSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
       <svg id="headerSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
@@ -2090,9 +2090,16 @@ function resetToSetup(){
   showWordPanel(false);
 }
 function playAgain(){
-  if(!players.length||!lastWordSnapshot.length)return;
+  // Restart the current quest immediately without returning to word selection.
+  // This also lets students restart a locked shared game.
+  const restartWords = lastWordSnapshot.length ? lastWordSnapshot : [...selectedWordsSet];
+  if(!restartWords.length) return;
+  if(!players.length){
+    beginGame(restartWords);
+    return;
+  }
   players.forEach(p=>p.pos=0);
-  beginGame(lastWordSnapshot);
+  beginGame(restartWords);
 }
 
 /* ─── INIT ───────────────────────────────────────────────────────────────── */
@@ -2111,7 +2118,7 @@ function init(){
   $('clearSelectedBtn').addEventListener('click',clearSelectedWords);
   $('startBtn').addEventListener('click',startGame);
   $('newGameBtn').addEventListener('click',resetToSetup);
-  $('restartBtn').addEventListener('click',resetToSetup);
+  $('restartBtn').addEventListener('click',playAgain);
   $('diceBtn').addEventListener('click',rollDice);
   $('readBtn').addEventListener('click',moveCurrent);
   $('magicContinueBtn').addEventListener('click',applyMagicSpace);
