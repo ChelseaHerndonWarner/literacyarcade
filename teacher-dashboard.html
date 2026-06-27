@@ -1355,7 +1355,32 @@ function updateViewTabs() {
     tab.classList.toggle('active', tab.dataset.view === currentView);
   });
   const newBtn = document.getElementById('newCollectionBtn');
-  if (newBtn) newBtn.style.display = currentView === 'collections' ? 'inline-flex' : 'none';
+  if (newBtn) newBtn.style.display = currentView === 'collections' && !activeCollectionId ? 'inline-flex' : 'none';
+  updateDashboardControls();
+}
+
+function updateDashboardControls() {
+  const controlsBar = document.querySelector('.controls-bar');
+  const searchWrap = document.querySelector('.controls-bar > .search-wrap');
+  const filterTabs = document.getElementById('filterTabs');
+  const controlsRight = document.querySelector('.controls-bar > .controls-right');
+  const sortSelect = document.getElementById('sortSelect');
+  const refreshBtn = document.getElementById('refreshBtn');
+
+  if (!controlsBar) return;
+
+  const isCollectionsHome = currentView === 'collections' && !activeCollectionId;
+  const isCollectionDetail = currentView === 'collections' && Boolean(activeCollectionId);
+
+  controlsBar.style.display = isCollectionDetail ? 'none' : 'flex';
+  if (searchWrap) searchWrap.style.display = currentView === 'all' ? '' : 'none';
+  if (filterTabs) filterTabs.style.display = currentView === 'all' ? 'flex' : 'none';
+  if (controlsRight) controlsRight.style.display = isCollectionDetail ? 'none' : 'flex';
+  if (sortSelect) {
+    sortSelect.style.display = isCollectionDetail ? 'none' : '';
+    sortSelect.setAttribute('aria-label', isCollectionsHome ? 'Sort collections' : 'Sort saved activities');
+  }
+  if (refreshBtn) refreshBtn.style.display = isCollectionDetail ? 'none' : 'inline-flex';
 }
 
 function renderCollectionsView() {
@@ -1372,6 +1397,22 @@ function getCollectionActivityCount(col) {
   const ids = new Set();
   (col.sections || []).forEach(section => (section.activityIds || []).forEach(id => ids.add(id)));
   return ids.size;
+}
+
+function getSortedCollections() {
+  const list = [...teachingCollections];
+  list.sort((a, b) => {
+    const dateA = toDate(a.updatedAt || a.createdAt);
+    const dateB = toDate(b.updatedAt || b.createdAt);
+    if (sortOrder === 'newest') return dateB - dateA;
+    if (sortOrder === 'oldest') return dateA - dateB;
+    const ta = (a.name || '').toLowerCase();
+    const tb = (b.name || '').toLowerCase();
+    if (sortOrder === 'az') return ta < tb ? -1 : ta > tb ? 1 : 0;
+    if (sortOrder === 'za') return ta > tb ? -1 : ta < tb ? 1 : 0;
+    return 0;
+  });
+  return list;
 }
 
 function renderCollectionsHome() {
@@ -1399,7 +1440,7 @@ function renderCollectionsHome() {
   }
   const grid = document.createElement('div');
   grid.className = 'collection-grid';
-  teachingCollections.forEach(col => grid.appendChild(buildCollectionCard(col)));
+  getSortedCollections().forEach(col => grid.appendChild(buildCollectionCard(col)));
   mount.appendChild(grid);
 }
 
@@ -1898,7 +1939,7 @@ document.getElementById('viewSwitch').addEventListener('click', e => {
   const tab = e.target.closest('.view-tab');
   if (!tab) return;
   currentView = tab.dataset.view;
-  if (currentView === 'all') activeCollectionId = null;
+  activeCollectionId = null;
   renderAll();
 });
 
