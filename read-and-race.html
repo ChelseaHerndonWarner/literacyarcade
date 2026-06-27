@@ -677,6 +677,7 @@ textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12
   display:block;margin-top:2px;font-size:11px;line-height:1.35;font-weight:700;color:var(--navy-lt);
 }
 body.shared-mode #setup .save-bar{display:none!important;}
+body.shared-mode.shared-locked #newGameBtn{display:none!important;}
 .save-btn{
   display:inline-flex;align-items:center;gap:6px;
   border:1.5px solid var(--teal);background:var(--teal-bg);
@@ -854,7 +855,7 @@ body.shared-mode #setup .save-bar{display:none!important;}
     <div class="topbar-right">
       <span class="topbar-label" id="gameListLabel"></span>
       <button class="topbar-btn" id="restartBtn">Restart</button>
-      <button class="topbar-btn" id="newGameBtn">Change List</button>
+      <button class="topbar-btn" id="newGameBtn">← Edit Words</button>
       <button class="topbar-snd" id="gameSoundBtn" aria-label="Toggle sound" title="Toggle sound">
         <svg id="gameSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         <svg id="gameSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
