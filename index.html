@@ -2204,6 +2204,21 @@
             <div class="tool-label">Teacher Tool</div>
           </article>
 
+          <article class="tool-card card-blue fade-up" role="link" tabindex="0" aria-label="ORF Calculator Chrome Extension" data-href="https://chromewebstore.google.com/detail/miaemldmllaajndjebafphgkonhlikmd" target="_blank" rel="noopener">
+            <div class="tool-meta">
+              <div class="tool-icon icon-blue" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M208,68H180.2a44,44,0,0,0-72.4-37.66A8,8,0,0,0,96,32.16,60,60,0,0,1,164.36,68H48a16,16,0,0,0-16,16v40a8,8,0,0,0,8,8,20,20,0,0,1,0,40,8,8,0,0,0-8,8v40a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V196a8,8,0,0,0-8-8,20,20,0,0,1,0-40,8,8,0,0,0,8-8V84A16,16,0,0,0,208,68Z" opacity="0.2"/><path d="M225.84,136.4A8,8,0,0,0,232,128.5V84a24,24,0,0,0-24-24H187.27a52,52,0,0,0-92.54-32A8,8,0,1,0,107,38.07,36,36,0,0,1,135.45,60H48A24,24,0,0,0,24,84v44.5a8,8,0,0,0,6.16,7.9,12,12,0,0,1,0,23.2A8,8,0,0,0,24,167.5V212a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V167.5a8,8,0,0,0-6.16-7.9,12,12,0,0,1,0-23.2ZM216,153.07a28,28,0,0,0,0,53.86V212a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8v-5.07a28,28,0,0,0,0-53.86V84a8,8,0,0,1,8-8H208a8,8,0,0,1,8,8Z"/></svg></div>
+              <div class="tool-arrow">→</div>
+            </div>
+            <h3 class="tool-name">ORF Calculator — Chrome Extension</h3>
+            <p class="tool-desc">Float the fluency calculator right on your screen while you listen to a student read — no tab switching required.</p>
+            <div class="tool-tags">
+              <span class="tag">Chrome Extension</span>
+              <span class="tag">ORF Calculator</span>
+              <span class="tag">Floating Panel</span>
+            </div>
+            <div class="tool-label label-new">New</div>
+          </article>
+
           <article class="tool-card card-blue fade-up" role="link" tabindex="0" aria-label="Quick Letter Knowledge Check" data-href="quick-letter-knowledge-check.html">
             <div class="tool-meta">
               <div class="tool-icon icon-blue" aria-hidden="true"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,164c0,15.46-14.33,28-32,28s-32-12.54-32-28,14.33-28,32-28S232,148.54,232,164ZM34.82,152h90.36L80,56Z" opacity="0.2"/><path d="M87.24,52.59a8,8,0,0,0-14.48,0l-64,136a8,8,0,1,0,14.48,6.81L39.9,160h80.2l16.66,35.4a8,8,0,1,0,14.48-6.81ZM47.43,144,80,74.79,112.57,144ZM200,96c-12.76,0-22.73,3.47-29.63,10.32a8,8,0,0,0,11.26,11.36c3.8-3.77,10-5.68,18.37-5.68,13.23,0,24,9,24,20v3.22A42.76,42.76,0,0,0,200,128c-22.06,0-40,16.15-40,36s17.94,36,40,36a42.73,42.73,0,0,0,24-7.25,8,8,0,0,0,16-.75V132C240,112.15,222.06,96,200,96Zm0,88c-13.23,0-24-9-24-20s10.77-20,24-20,24,9,24,20S213.23,184,200,184Z"/></svg></div>
@@ -2580,7 +2595,13 @@
         gtag('event', 'tool_open', { tool_name: toolName });
       }
 
-      if (href && href !== '#') window.location.href = href;
+      if (href && href !== '#') {
+        if (/^https?:\/\//i.test(href)) {
+          window.open(href, '_blank', 'noopener');
+        } else {
+          window.location.href = href;
+        }
+      }
     });
       card.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
