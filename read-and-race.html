@@ -2101,7 +2101,8 @@ window.saveReadRaceSharedActivity = async function(activity) {
     settings:     activity.settings || {},
     createdAt:    serverTimestamp(),
     updatedAt:    serverTimestamp(),
-    public:       true
+    public:       true,
+    ownerUid:     currentUser.uid
   };
   const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
 
