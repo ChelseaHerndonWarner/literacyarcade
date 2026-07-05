@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2"></script>
+  <!-- Google tag (gtag.js) — skipped in shared student mode (?activity=...) -->
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  if (!new URLSearchParams(window.location.search).has('activity')) {
+    var gaScript = document.createElement('script');
+    gaScript.async = true;
+    gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2';
+    document.head.appendChild(gaScript);
 
-  gtag('config', 'G-CL8QW5CGB2');
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CL8QW5CGB2');
+  }
 </script>
   <script type="text/javascript">
     // Only load Clarity for teacher setup, not shared student games
