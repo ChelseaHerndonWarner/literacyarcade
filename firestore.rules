@@ -1,0 +1,29 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{userId}/activities/{activityId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == userId;
+    }
+
+    match /users/{userId}/collections/{collectionId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == userId;
+    }
+
+    match /users/{userId}/lessons/{lessonId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == userId;
+    }
+
+    match /sharedActivities/{shareId} {
+      allow get: if resource.data.public == true;
+      allow list: if false;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null
+        && request.auth.uid == resource.data.ownerUid;
+    }
+  }
+}
