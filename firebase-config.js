@@ -26,7 +26,10 @@ const app = initializeApp(firebaseConfig);
 // Services
 const auth = getAuth(app);
 const db = getFirestore(app);
-const analytics = getAnalytics(app);
+
+// Skip Firebase Analytics in shared student activity mode (?activity=...)
+const isSharedActivityMode = new URLSearchParams(window.location.search).has('activity');
+const analytics = isSharedActivityMode ? null : getAnalytics(app);
 
 // Export services
 export { auth, db };
