@@ -229,6 +229,11 @@
       line-height:1;
     }
 
+    body.shared-activity .hdr-game-btn,
+    body.shared-activity #dashboardBtn,
+    body.shared-activity .hdr-btns .icon-btn:not(#setupSoundBtn){display:none!important}
+    body.shared-activity .la-logo-group{pointer-events:none;cursor:default}
+
     button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #F6C54A;outline-offset:3px}
 
     .la-logo-group span,
@@ -2818,6 +2823,9 @@ function getCtx() {
 // ── STATE ─────────────────────────────────────────────────────────────
 const isSharedStudentMode = new URLSearchParams(window.location.search).has('activity');
 let sharedStudentCanEdit = false; // loaded from shared activity settings; default locked
+
+// Shared student mode — hides site navigation so students stay on the assigned activity
+document.body.classList.toggle('shared-activity', isSharedStudentMode);
 let currentTab   = 'fry';
 // wheelEntries: [{word, source}] — preserves source for grouping
 let wheelEntries = [];
