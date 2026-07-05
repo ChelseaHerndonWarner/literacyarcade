@@ -1280,6 +1280,7 @@ function buildSharedActivityData(activity) {
     sentences:    type === 'sentence-spinner' ? sentences : [],
     settings:     cleanShareSettings(type, activity.settings || {}, type === 'sentence-spinner' ? sentences : words),
     public:       true,
+    ownerUid:     currentUser.uid,
     createdAt:    serverTimestamp(),
     updatedAt:    serverTimestamp()
   };
