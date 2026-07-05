@@ -2274,6 +2274,11 @@
   </style>
 </head>
 <body>
+<script>
+  // Shared student mode — set as early as possible so header/nav CSS applies
+  // immediately, independent of the rest of the page's scripts.
+  document.body.classList.toggle('shared-activity', new URLSearchParams(window.location.search).has('activity'));
+</script>
 
 <canvas id="confettiCanvas"></canvas>
 
