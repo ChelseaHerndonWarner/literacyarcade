@@ -853,7 +853,7 @@ const ACTIVITY_TYPES = {
     icon: 'cards',
     colorClass: 'icon-mint',
     saveable: true,
-    shareable: false,
+    shareable: true,
     url: 'digital-reading-flashcards.html'
   },
   'vocabulary-flashcards': {
@@ -861,7 +861,7 @@ const ACTIVITY_TYPES = {
     icon: 'bookOpenText',
     colorClass: 'icon-mint',
     saveable: true,
-    shareable: false,
+    shareable: true,
     url: 'vocabulary-flashcards.html'
   }
 };
@@ -922,6 +922,16 @@ let collapsedGroups = new Set();
 onAuthStateChanged(auth, async user => {
   if (!user) { window.location.href = 'teacher-login.html'; return; }
   currentUser = user;
+
+  // Return teachers to any flashcard setup preserved before sign-in.
+  if (sessionStorage.getItem('vocabularyFlashcardsPendingAuthSetup')) {
+    window.location.href = 'vocabulary-flashcards.html';
+    return;
+  }
+  if (sessionStorage.getItem('digitalReadingFlashcardsPendingAuthSetup')) {
+    window.location.href = 'digital-reading-flashcards.html';
+    return;
+  }
 
   // User card
   document.getElementById('userName').textContent = user.displayName || 'Teacher';
@@ -1166,7 +1176,7 @@ function buildCard(activity, tool) {
   const count = type === 'sentence-spinner'
     ? (Array.isArray(activity.sentences) ? activity.sentences.length : Array.isArray(activity.words) ? activity.words.length : 0)
     : (Array.isArray(activity.words) ? activity.words.length : 0);
-  const countLabel = type === 'sentence-spinner' ? 'sentence' : 'word';
+  const countLabel = type === 'sentence-spinner' ? 'sentence' : type === 'vocabulary-flashcards' ? 'card' : 'word';
   const title = activity.title || makeDefaultTitle(activity);
   const savedDate = formatDate(activity.updatedAt || activity.createdAt);
   const shareable = Boolean(ACTIVITY_TYPES[type]?.shareable);
@@ -1236,6 +1246,12 @@ async function shareActivity(id, activity) {
       alert('This activity does not have saved sentences to share.');
       return;
     }
+  } else if (type === 'vocabulary-flashcards') {
+    const vocabularyCards = cleanVocabularyFlashcardSettings(activity.settings || {}, words).cards;
+    if (!vocabularyCards.length) {
+      alert('This activity does not have saved vocabulary cards to share.');
+      return;
+    }
   } else if (!words.length) {
     alert('This activity does not have saved words to share.');
     return;
@@ -1272,13 +1288,19 @@ function buildSharedActivityData(activity) {
   const type = getActivityType(activity);
   const words = Array.isArray(activity.words) ? activity.words : [];
   const sentences = Array.isArray(activity.sentences) ? activity.sentences : (type === 'sentence-spinner' ? words : []);
+  const cleanedSettings = cleanShareSettings(type, activity.settings || {}, type === 'sentence-spinner' ? sentences : words);
+  const publicWords = type === 'vocabulary-flashcards'
+    ? cleanedSettings.cards.map(card => card.word)
+    : type === 'digital-reading-flashcards'
+      ? cleanedSettings.selectedWords
+    : type === 'sentence-spinner' ? sentences : words;
   return {
     title:        activity.title || makeDefaultTitle(activity),
     toolType:     type,
     activityType: type,
-    words:        type === 'sentence-spinner' ? sentences : words,
+    words:        publicWords,
     sentences:    type === 'sentence-spinner' ? sentences : [],
-    settings:     cleanShareSettings(type, activity.settings || {}, type === 'sentence-spinner' ? sentences : words),
+    settings:     cleanedSettings,
     public:       true,
     ownerUid:     currentUser.uid,
     createdAt:    serverTimestamp(),
@@ -1296,7 +1318,78 @@ function cleanShareSettings(type, settings, words) {
   if (type === 'sentence-spinner') {
     return cleanSentenceSpinnerSettings(settings, words);
   }
+  if (type === 'vocabulary-flashcards') {
+    return cleanVocabularyFlashcardSettings(settings, words);
+  }
+  if (type === 'digital-reading-flashcards') {
+    return cleanDigitalReadingFlashcardSettings(settings, words);
+  }
   return {};
+}
+
+function cleanDigitalReadingFlashcardSettings(settings, words) {
+  const cleanText = (value, maxLength) => {
+    if (value === undefined || value === null || typeof value === 'object') return '';
+    const text = String(value).replace(/\s+/g, ' ').trim().slice(0, maxLength);
+    return /^(undefined|null|\[object Object\])$/i.test(text) ? '' : text;
+  };
+  const cleanWords = value => Array.isArray(value)
+    ? value.slice(0, 300).map(word => cleanText(word, 160)).filter(Boolean)
+    : [];
+  const allowedTabs = new Set(['fry', 'dolch', 'phonics', 'custom']);
+  const tab = allowedTabs.has(settings.tab) ? settings.tab : 'custom';
+  const selectedWords = cleanWords(
+    Array.isArray(settings.selectedWords) && settings.selectedWords.length
+      ? settings.selectedWords
+      : words
+  );
+  const customWords = tab === 'custom' ? cleanWords(
+    Array.isArray(settings.customWords) && settings.customWords.length
+      ? settings.customWords
+      : selectedWords
+  ) : [];
+  return {
+    tab,
+    level: cleanText(settings.level, 100),
+    phonicsGroup: cleanText(settings.phonicsGroup, 100),
+    phonicsPattern: cleanText(settings.phonicsPattern, 100),
+    customText: tab === 'custom' ? customWords.join('\n') : '',
+    selectedWords,
+    customWords,
+    countdownEnabled: settings.countdownEnabled !== false,
+    soundEnabled: settings.soundEnabled !== false,
+    studentCanEdit: false
+  };
+}
+
+function cleanVocabularyFlashcardSettings(settings, words) {
+  const cleanText = (value, maxLength) => {
+    if (value === undefined || value === null || typeof value === 'object') return '';
+    const text = String(value).replace(/\s+/g, ' ').trim().slice(0, maxLength);
+    return /^(undefined|null|\[object Object\])$/i.test(text) ? '' : text;
+  };
+
+  const sourceCards = Array.isArray(settings.cards) && settings.cards.length
+    ? settings.cards
+    : (Array.isArray(words) ? words : []).map(word => ({ word, definition: '' }));
+
+  const cards = sourceCards.slice(0, 300).map(card => {
+    const word = cleanText(typeof card === 'string' ? card : card?.word, 160);
+    if (!word) return null;
+    const definition = cleanText(typeof card === 'object' ? card?.definition : '', 1200)
+      || 'Definition coming soon.';
+    return { word, definition };
+  }).filter(Boolean);
+
+  const deckTitle = cleanText(settings.deckTitle, 100);
+  return {
+    tab: 'custom',
+    deckTitle,
+    customText: cards.map(card => `${card.word} | ${card.definition}`).join('\n'),
+    cards,
+    countdownEnabled: settings.countdownEnabled !== false,
+    soundEnabled: settings.soundEnabled !== false
+  };
 }
 
 function cleanWordGameSettings(settings, words) {

@@ -12,7 +12,10 @@
 </script>
   <script type="text/javascript">
   // Only load Clarity for teacher setup, not shared student games
-  if (!new URLSearchParams(window.location.search).has('activity')) {
+  const isSharedReadingFlashcardDeck = new URLSearchParams(window.location.search).has('activity');
+  if (isSharedReadingFlashcardDeck) {
+    document.documentElement.classList.add('shared-student-mode');
+  } else {
     (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
       t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -504,6 +507,19 @@
       100% { transform:scale(1); opacity:1; }
     }
     .count-pop { animation:countPop .35s cubic-bezier(.34,1.56,.64,1) forwards; }
+    .teacher-save-bar .la-share-btn { border-color:var(--teal); background:var(--teal-bg); border-radius:8px; padding:7px 14px; font-family:'Lexend',sans-serif; font-size:12px; font-weight:700; color:var(--teal-dk); }
+    .teacher-save-bar .la-share-btn:hover { background:var(--teal); color:white; }
+    .teacher-save-bar .la-share-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+    .shared-deck-status { display:none; min-height:calc(100vh - 58px); padding:32px 20px; align-items:center; justify-content:center; text-align:center; background:linear-gradient(145deg,#E8F9F8 0%,#FDFBF7 58%,#F2ECFA 100%); }
+    .shared-deck-status-card { width:min(520px,100%); padding:34px 28px; border:1.5px solid #D8D0EB; border-radius:24px; background:var(--white); box-shadow:0 18px 45px rgba(50,42,78,.12); }
+    .shared-deck-status-card h1 { margin:0 0 9px; color:var(--navy); font-family:'Nunito',sans-serif; font-size:clamp(25px,5vw,34px); font-weight:900; }
+    .shared-deck-status-card p { margin:0; color:var(--navy-mid); font-family:'Lexend',sans-serif; font-size:15px; line-height:1.6; }
+    .shared-deck-home { display:none; width:max-content; margin:20px auto 0; padding:11px 18px; border-radius:10px; background:var(--teal-dk); color:white; font-family:'Nunito',sans-serif; font-size:14px; font-weight:900; text-decoration:none; }
+    html.shared-student-mode #setup { display:none !important; }
+    html.shared-student-mode .shared-deck-status { display:flex; }
+    html.shared-deck-loaded .shared-deck-status { display:none; }
+    html.shared-student-mode #dashboardBtn,
+    html.shared-student-mode .teacher-only-shared { display:none !important; }
     footer {
       margin-top: 16px;
       font-size: 11px;
@@ -553,7 +569,7 @@
       <svg id="setupSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
       <svg id="setupSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
     </button>
-    <button class="icon-btn" id="dashboardBtn" aria-label="My saved activities" title="Teacher Dashboard" style="display:none" onclick="window.location.href='teacher-dashboard.html'">
+    <button class="icon-btn" id="dashboardBtn" aria-label="My saved activities" title="Teacher Dashboard" style="display:none" onclick="if (!document.documentElement.classList.contains('shared-student-mode')) window.location.href='teacher-dashboard.html'">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     </button>
     <button class="icon-btn" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'">
@@ -561,6 +577,14 @@
     </button>
   </div>
 </header>
+
+<section class="shared-deck-status" id="sharedDeckStatus" aria-live="polite">
+  <div class="shared-deck-status-card">
+    <h1 id="sharedDeckStatusTitle">Loading reading flashcard deck…</h1>
+    <p id="sharedDeckStatusText">Getting this reading practice ready.</p>
+    <a class="shared-deck-home" id="sharedDeckHome" href="https://literacyarcade.com/">Back to Literacy Arcade</a>
+  </div>
+</section>
 
 <!-- ══════════════════════
      SETUP SCREEN
@@ -652,7 +676,7 @@
       <kbd>F</kbd> Fullscreen
     </p>
     <!-- Save bar -->
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-top:12px;margin-top:10px;border-top:1px solid var(--border);">
+    <div class="teacher-save-bar teacher-only-shared" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-top:12px;margin-top:10px;border-top:1px solid var(--border);">
       <button id="saveActivityBtn" style="display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--teal);background:var(--teal-bg);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--teal-dk);cursor:pointer;font-family:'Lexend',sans-serif;transition:all .13s;white-space:nowrap;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         Save Activity
@@ -680,7 +704,7 @@
     <div class="topbar-btns">
       <button class="tbar-btn" onclick="shuffleDeck()">Shuffle</button>
       <button class="tbar-btn" onclick="restartDeck()">Restart</button>
-      <button class="tbar-btn" onclick="backToSetup()">Change List</button>
+      <button class="tbar-btn teacher-only-shared" onclick="backToSetup()">Change List</button>
       <button class="tbar-btn fs" onclick="openFS()">Fullscreen</button>
     </div>
   </div>
@@ -723,7 +747,7 @@
         <button class="sb-btn" onclick="shuffleDeck()">Shuffle Deck</button>
         <button class="sb-btn" onclick="restartDeck()">Restart Deck</button>
         <button class="sb-btn" onclick="openFS()">Fullscreen / SmartBoard</button>
-        <button class="sb-btn pri" onclick="backToSetup()">Change List</button>
+        <button class="sb-btn pri teacher-only-shared" onclick="backToSetup()">Change List</button>
       </div>
     </aside>
   </div>
@@ -761,7 +785,7 @@
     <div class="finish-btns">
       <button class="start-btn" onclick="practiceAgain()">Practice Again</button>
       <button class="btn" onclick="doMissedFromFinish()">Practice Missed Words</button>
-      <button class="btn" onclick="backToSetupFromFinish()">Choose New List</button>
+      <button class="btn teacher-only-shared" onclick="backToSetupFromFinish()">Choose New List</button>
     </div>
   </div>
 </div>
@@ -1115,6 +1139,7 @@ function updateCount() {
   const verb = currentTab === 'custom' ? 'ready' : 'selected for deck';
   $('countLine').textContent = n ? `${n} ${noun} ${verb}` : 'No words selected — tap words or use Select All';
   $('countLine').style.color = n ? 'var(--teal-dk)' : 'var(--coral)';
+  if (typeof window.syncReadingFlashcardShareButton === 'function') window.syncReadingFlashcardShareButton();
 }
 
 function getCustomWords() {
@@ -1339,7 +1364,14 @@ function renderCard() {
   $('knownNum').textContent  = knownCount;
   $('missedNum').textContent = missed.length;
   $('missedBadge').textContent = missed.length ? `${missed.length} need practice` : '';
-  $('missedList').innerHTML = missed.map(w => `<span class="mc">${w}</span>`).join('');
+  const missedList = $('missedList');
+  missedList.innerHTML = '';
+  missed.forEach(word => {
+    const chip = document.createElement('span');
+    chip.className = 'mc';
+    chip.textContent = word;
+    missedList.appendChild(chip);
+  });
 }
 
 function nextCard()  { sndAdvance(); currentIndex++; renderCard(); }
@@ -1368,6 +1400,7 @@ function practiceMissed() {
 }
 
 function backToSetup() {
+  if (document.documentElement.classList.contains('shared-student-mode')) return;
   $('flashScreen').style.display = 'none';
   $('setup').style.display = 'block';
   closeFS();
@@ -1410,6 +1443,7 @@ function doMissedFromFinish() {
 }
 
 function backToSetupFromFinish() {
+  if (document.documentElement.classList.contains('shared-student-mode')) return;
   $('finishOverlay').classList.remove('open');
   backToSetup();
 }
@@ -1454,11 +1488,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<script src="share-activity.js"></script>
+
 <!-- ═══ FIREBASE SAVE / LOAD ═══ -->
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
@@ -1473,10 +1509,16 @@ const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 let currentUser = null;
+window.digitalReadingFlashcardsCurrentUser = null;
+const PENDING_SETUP_KEY = 'digitalReadingFlashcardsPendingAuthSetup';
+const sharedActivityId = new URLSearchParams(window.location.search).get('activity');
+const isSharedStudentMode = sharedActivityId !== null;
 
 /* ── Auth state ──────────────────────────────────────────────────────── */
 onAuthStateChanged(auth, user => {
   currentUser = user;
+  window.digitalReadingFlashcardsCurrentUser = user;
+  if (isSharedStudentMode) return;
   updateAuthBar(user);
   const dashBtn = document.getElementById('dashboardBtn');
   if (dashBtn) dashBtn.style.display = user ? 'flex' : 'none';
@@ -1500,7 +1542,9 @@ function updateAuthBar(user) {
 
 /* ── Save button ─────────────────────────────────────────────────────── */
 document.getElementById('saveActivityBtn').addEventListener('click', async () => {
+  if (isSharedStudentMode) return;
   if (!currentUser) {
+    savePendingSetup('save');
     window.location.href = 'teacher-login.html';
     return;
   }
@@ -1526,23 +1570,12 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
   const cleanTitle = title.trim();
   if (!cleanTitle) { alert('Please enter a name for this activity.'); return; }
 
-  const level          = document.getElementById('levelSelect')?.value || '';
-  const phonicsGroup   = document.getElementById('phonicsGroup')?.value || '';
-  const phonicsPattern = document.getElementById('phonicsPattern')?.value || '';
-  const customText     = document.getElementById('customArea')?.value || '';
-
   const activityData = {
     title:        cleanTitle,
     toolType:     'digital-reading-flashcards',
     activityType: 'digital-reading-flashcards',
     words,
-    settings: {
-      tab,
-      level,
-      phonicsGroup,
-      phonicsPattern,
-      customText: tab === 'custom' ? customText : ''
-    },
+    settings: buildCurrentSettings(words),
     url:       'digital-reading-flashcards.html',
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -1574,59 +1607,264 @@ function buildDefaultTitle(tab, count) {
   parts.push(`(${count} words)`);
   return parts.filter(Boolean).join(' — ');
 }
+window.buildDigitalReadingFlashcardTitle = buildDefaultTitle;
+
+function safeText(value, maxLength = 50000) {
+  if (value === undefined || value === null || typeof value === 'object') return '';
+  const text = String(value).trim().slice(0, maxLength);
+  return /^(undefined|null|\[object Object\])$/i.test(text) ? '' : text;
+}
+
+function normalizeWords(value, limit = 10000, maxLength = 10000) {
+  if (!Array.isArray(value)) return [];
+  return value.slice(0, limit).map(word => safeText(word, maxLength)).filter(Boolean);
+}
+
+function parseCustomText(value) {
+  return safeText(value, 100000).split(/[\s,\n]+/).map(word => word.trim()).filter(Boolean);
+}
+
+function getCurrentWords() {
+  const fc = window._flashcards;
+  if (!fc) return [];
+  return fc.getCurrentTab() === 'custom' ? fc.getCustomWords() : fc.getSelectedWords();
+}
+
+function buildCurrentSettings(words = getCurrentWords()) {
+  const fc = window._flashcards;
+  const tab = fc?.getCurrentTab?.() || 'fry';
+  const selectedWords = normalizeWords(words);
+  return {
+    tab,
+    level: document.getElementById('levelSelect')?.value || '',
+    phonicsGroup: document.getElementById('phonicsGroup')?.value || '',
+    phonicsPattern: document.getElementById('phonicsPattern')?.value || '',
+    customText: tab === 'custom' ? (document.getElementById('customArea')?.value || '') : '',
+    selectedWords,
+    customWords: tab === 'custom' ? selectedWords : [],
+    countdownEnabled: document.getElementById('countdownToggle')?.checked !== false,
+    soundEnabled: document.getElementById('soundToggle')?.checked !== false,
+    studentCanEdit: false
+  };
+}
+
+function restoreSelectedWords(words) {
+  const fc = window._flashcards;
+  if (!fc) return;
+  const cleanWords = normalizeWords(words);
+  fc.setSelectedWords(cleanWords);
+  const selectedSet = new Set(cleanWords);
+  document.querySelectorAll('#wordBank .chip').forEach(chip => {
+    chip.classList.toggle('sel', selectedSet.has(chip.textContent));
+  });
+  fc.updateCount();
+}
+
+function restoreOptions(settings) {
+  const countdown = document.getElementById('countdownToggle');
+  const sound = document.getElementById('soundToggle');
+  if (countdown) countdown.checked = settings.countdownEnabled !== false;
+  if (sound) sound.checked = settings.soundEnabled !== false;
+  if (typeof syncHeaderSoundIcon === 'function') syncHeaderSoundIcon();
+}
+
+function restoreReadingFlashcardActivity(activity, { start = false } = {}) {
+  if (!activity || typeof activity !== 'object') return false;
+  const type = activity.toolType || activity.activityType || 'digital-reading-flashcards';
+  if (type !== 'digital-reading-flashcards') return false;
+  const settings = activity.settings && typeof activity.settings === 'object' ? activity.settings : {};
+  const allowedTabs = new Set(['fry', 'dolch', 'phonics', 'custom']);
+  const tab = allowedTabs.has(settings.tab) ? settings.tab : 'fry';
+  let words = normalizeWords(settings.selectedWords);
+  if (!words.length) words = normalizeWords(activity.words);
+
+  if (tab === 'custom') {
+    const customWords = normalizeWords(settings.customWords).length
+      ? normalizeWords(settings.customWords)
+      : parseCustomText(settings.customText).length
+        ? parseCustomText(settings.customText)
+        : words;
+    if (!customWords.length) return false;
+    words = customWords;
+  }
+  if (!words.length) return false;
+
+  const fc = window._flashcards;
+  if (!fc) return false;
+  restoreOptions(settings);
+  fc.switchTab(tab);
+
+  const finishRestore = () => {
+    if (tab === 'custom') {
+      const area = document.getElementById('customArea');
+      if (area) area.value = words.join('\n');
+      if ((!isSharedStudentMode || !start) && typeof updateCustomPreview === 'function') updateCustomPreview();
+    } else {
+      restoreSelectedWords(words);
+    }
+    if (start && typeof startFlashcards === 'function') {
+      if (isSharedStudentMode) document.documentElement.classList.add('shared-deck-loaded');
+      startFlashcards();
+    }
+  };
+
+  if (tab === 'fry' || tab === 'dolch') {
+    setTimeout(() => {
+      const level = safeText(settings.level, 100);
+      const select = document.getElementById('levelSelect');
+      if (select && level && [...select.options].some(option => option.value === level)) {
+        select.value = level;
+        fc.loadWordBank();
+      }
+      setTimeout(finishRestore, 80);
+    }, 60);
+  } else if (tab === 'phonics') {
+    setTimeout(() => {
+      const group = safeText(settings.phonicsGroup, 100);
+      const groupSelect = document.getElementById('phonicsGroup');
+      if (groupSelect && group && [...groupSelect.options].some(option => option.value === group)) {
+        groupSelect.value = group;
+        if (typeof onGroupChange === 'function') onGroupChange();
+      }
+      setTimeout(() => {
+        const pattern = safeText(settings.phonicsPattern, 100);
+        const patternSelect = document.getElementById('phonicsPattern');
+        if (patternSelect && pattern && [...patternSelect.options].some(option => option.value === pattern)) {
+          patternSelect.value = pattern;
+          if (typeof onPatternChange === 'function') onPatternChange();
+        }
+        setTimeout(finishRestore, 80);
+      }, 60);
+    }, 60);
+  } else {
+    finishRestore();
+  }
+  return true;
+}
+
+function captureCurrentSetup(action = 'save') {
+  const words = getCurrentWords();
+  const tab = window._flashcards?.getCurrentTab?.() || 'fry';
+  return {
+    title: buildDefaultTitle(tab, words.length),
+    toolType: 'digital-reading-flashcards',
+    activityType: 'digital-reading-flashcards',
+    words,
+    settings: buildCurrentSettings(words),
+    pendingAction: action,
+    pendingSavedAt: Date.now()
+  };
+}
+
+function savePendingSetup(action = 'save') {
+  try { sessionStorage.setItem(PENDING_SETUP_KEY, JSON.stringify(captureCurrentSetup(action))); }
+  catch (err) { console.warn('Could not preserve the reading flashcard setup before sign-in.', err); }
+}
+
+function tryLoadPendingSetup() {
+  const raw = sessionStorage.getItem(PENDING_SETUP_KEY);
+  if (!raw) return false;
+  sessionStorage.removeItem(PENDING_SETUP_KEY);
+  try {
+    const pending = JSON.parse(raw);
+    if (!pending.pendingSavedAt || Date.now() - pending.pendingSavedAt > 6 * 60 * 60 * 1000) return false;
+    const restored = restoreReadingFlashcardActivity(pending);
+    if (restored) {
+      const actionLabel = pending.pendingAction === 'share' ? 'Share Activity' : 'Save Activity';
+      const status = document.getElementById('authStatus');
+      if (status) {
+        status.innerHTML = `<span style="color:#1FA99C;font-weight:800">Your reading flashcard deck was restored. Click ${actionLabel} again to finish.</span>`;
+        setTimeout(() => updateAuthBar(currentUser), 5500);
+      }
+    }
+    return restored;
+  } catch {
+    return false;
+  }
+}
+
+function cleanPublicText(value, maxLength) {
+  if (value === undefined || value === null || typeof value === 'object') return '';
+  const text = String(value).replace(/\s+/g, ' ').trim().slice(0, maxLength);
+  return /^(undefined|null|\[object Object\])$/i.test(text) ? '' : text;
+}
+
+function cleanPublicWords(value) {
+  if (!Array.isArray(value)) return [];
+  return value.slice(0, 300).map(word => cleanPublicText(word, 160)).filter(Boolean);
+}
+
+function cleanSharedSettings(settings, fallbackWords = []) {
+  const allowedTabs = new Set(['fry', 'dolch', 'phonics', 'custom']);
+  const tab = allowedTabs.has(settings.tab) ? settings.tab : 'custom';
+  const selectedWords = cleanPublicWords(
+    Array.isArray(settings.selectedWords) && settings.selectedWords.length
+      ? settings.selectedWords
+      : fallbackWords
+  );
+  const customWords = tab === 'custom' ? cleanPublicWords(
+    Array.isArray(settings.customWords) && settings.customWords.length
+      ? settings.customWords
+      : selectedWords
+  ) : [];
+  return {
+    tab,
+    level: cleanPublicText(settings.level, 100),
+    phonicsGroup: cleanPublicText(settings.phonicsGroup, 100),
+    phonicsPattern: cleanPublicText(settings.phonicsPattern, 100),
+    customText: tab === 'custom' ? customWords.join('\n') : '',
+    selectedWords,
+    customWords,
+    countdownEnabled: settings.countdownEnabled !== false,
+    soundEnabled: settings.soundEnabled !== false,
+    studentCanEdit: false
+  };
+}
+
+window.saveDigitalReadingFlashcardsSharedActivity = async function(activity) {
+  if (!currentUser || isSharedStudentMode) throw new Error('Teacher must be signed in to share.');
+  const settings = cleanSharedSettings(activity?.settings || {}, activity?.words || []);
+  if (!settings.selectedWords.length) throw new Error('At least one reading word is required.');
+  const title = cleanPublicText(activity?.title, 140) || buildDefaultTitle(settings.tab, settings.selectedWords.length);
+  const sharedData = {
+    title,
+    toolType: 'digital-reading-flashcards',
+    activityType: 'digital-reading-flashcards',
+    words: settings.selectedWords,
+    sentences: [],
+    settings,
+    public: true,
+    ownerUid: currentUser.uid,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  };
+  const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
+  const privateRef = await addDoc(collection(db, `users/${currentUser.uid}/activities`), {
+    ...sharedData,
+    url: 'digital-reading-flashcards.html',
+    shareEnabled: true,
+    sharedSetup: true,
+    shareId: sharedRef.id,
+    userId: currentUser.uid
+  });
+  return { shareId: sharedRef.id, savedActivityId: privateRef.id };
+};
+
+window.captureDigitalReadingFlashcardsBeforeLogin = function(action = 'save') {
+  savePendingSetup(action);
+};
 
 /* ── Load from dashboard ─────────────────────────────────────────────── */
 function tryLoadSavedActivity() {
   const raw = sessionStorage.getItem('savedActivityData');
-  if (!raw) return;
+  if (!raw) return false;
   let activity;
-  try { activity = JSON.parse(raw); } catch { return; }
-  if (!activity || activity.toolType !== 'digital-reading-flashcards') return;
+  try { activity = JSON.parse(raw); } catch { return false; }
+  if (!activity || (activity.toolType || activity.activityType) !== 'digital-reading-flashcards') return false;
 
   sessionStorage.removeItem('savedActivityData');
   sessionStorage.removeItem('savedActivityId');
-
-  const settings = activity.settings || {};
-  const words    = activity.words || [];
-  const fc       = window._flashcards;
-  if (!fc || !words.length) return;
-
-  const tab = settings.tab || 'fry';
-  fc.switchTab(tab);
-
-  if (tab === 'custom') {
-    // Restore custom textarea
-    const area = document.getElementById('customArea');
-    if (area) {
-      area.value = settings.customText || words.join('\n');
-      // Trigger preview update
-      if (typeof updateCustomPreview === 'function') updateCustomPreview();
-    }
-  } else if (tab === 'fry' || tab === 'dolch') {
-    setTimeout(() => {
-      if (settings.level) {
-        const sel = document.getElementById('levelSelect');
-        const opt = [...sel.options].find(o => o.value === settings.level);
-        if (opt) { sel.value = settings.level; fc.loadWordBank(); }
-      }
-      // Select the saved words
-      setTimeout(() => restoreSelectedWords(words), 80);
-    }, 60);
-  } else if (tab === 'phonics') {
-    setTimeout(() => {
-      if (settings.phonicsGroup) {
-        const gs = document.getElementById('phonicsGroup');
-        if (gs) { gs.value = settings.phonicsGroup; if (typeof onGroupChange === 'function') onGroupChange(); }
-      }
-      setTimeout(() => {
-        if (settings.phonicsPattern) {
-          const ps = document.getElementById('phonicsPattern');
-          if (ps) { ps.value = settings.phonicsPattern; if (typeof onPatternChange === 'function') onPatternChange(); }
-        }
-        setTimeout(() => restoreSelectedWords(words), 80);
-      }, 60);
-    }, 60);
-  }
+  if (!restoreReadingFlashcardActivity(activity)) return false;
 
   // Show loaded notice
   const btn = document.getElementById('saveActivityBtn');
@@ -1637,18 +1875,125 @@ function tryLoadSavedActivity() {
     btn.style.color = 'white';
     setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 3000);
   }
+  return true;
 }
 
-function restoreSelectedWords(words) {
-  const fc = window._flashcards;
-  if (!fc) return;
-  // Click chips matching the saved word list
-  document.querySelectorAll('#wordBank .chip').forEach(chip => {
-    if (words.includes(chip.textContent)) chip.click();
+function showSharedUnavailable() {
+  document.getElementById('sharedDeckStatusTitle').textContent = 'This shared reading flashcard deck is unavailable.';
+  document.getElementById('sharedDeckStatusText').textContent = 'The link may be incomplete, expired, or no longer available.';
+  document.getElementById('sharedDeckHome').style.display = 'block';
+}
+
+async function loadSharedReadingFlashcardDeck() {
+  const shareId = cleanPublicText(sharedActivityId, 160);
+  if (!shareId || shareId.includes('/') || !/^[A-Za-z0-9_-]+$/.test(shareId)) {
+    showSharedUnavailable();
+    return;
+  }
+  try {
+    const snapshot = await getDoc(doc(db, 'sharedActivities', shareId));
+    if (!snapshot.exists()) { showSharedUnavailable(); return; }
+    const activity = snapshot.data();
+    const type = activity.toolType || activity.activityType || activity.type;
+    const settings = activity.settings && typeof activity.settings === 'object' ? activity.settings : {};
+    const selectedWords = cleanPublicWords(settings.selectedWords);
+    if (activity.public !== true || type !== 'digital-reading-flashcards' || !selectedWords.length) {
+      showSharedUnavailable();
+      return;
+    }
+    const sharedActivity = {
+      title: cleanPublicText(activity.title, 140),
+      toolType: 'digital-reading-flashcards',
+      words: selectedWords,
+      settings: {
+        ...cleanSharedSettings(settings, selectedWords),
+        selectedWords,
+        studentCanEdit: false
+      }
+    };
+    if (!restoreReadingFlashcardActivity(sharedActivity, { start: true })) {
+      showSharedUnavailable();
+      return;
+    }
+  } catch (err) {
+    console.error('Shared reading flashcard deck load failed:', err);
+    showSharedUnavailable();
+  }
+}
+
+window.addEventListener('load', () => setTimeout(() => {
+  if (isSharedStudentMode) {
+    loadSharedReadingFlashcardDeck();
+    return;
+  }
+  if (!tryLoadPendingSetup()) tryLoadSavedActivity();
+}, 200));
+</script>
+
+<script>
+if (window.LiteracyArcadeShare) {
+  LiteracyArcadeShare.register({
+    toolType: 'digital-reading-flashcards',
+    mount: document.getElementById('saveActivityBtn')?.parentElement,
+    buttonLabel: 'Share Activity',
+    requireAuth: true,
+    publicOrigin: 'https://literacyarcade.com',
+    isAuthenticated() {
+      const words = window._flashcards?.getCurrentTab?.() === 'custom'
+        ? window._flashcards?.getCustomWords?.() || []
+        : window._flashcards?.getSelectedWords?.() || [];
+      return !words.length || Boolean(window.digitalReadingFlashcardsCurrentUser);
+    },
+    onLoginRequired() {
+      window.captureDigitalReadingFlashcardsBeforeLogin?.('share');
+      window.location.href = 'teacher-login.html';
+    },
+    getActivity() {
+      const fc = window._flashcards;
+      const tab = fc?.getCurrentTab?.() || 'fry';
+      const words = tab === 'custom' ? fc?.getCustomWords?.() || [] : fc?.getSelectedWords?.() || [];
+      if (!words.length) {
+        alert('Select at least one reading word before sharing.');
+        return null;
+      }
+      return {
+        title: typeof window.buildDigitalReadingFlashcardTitle === 'function'
+          ? window.buildDigitalReadingFlashcardTitle(tab, words.length)
+          : `Digital Reading Flashcards — ${words.length} words`,
+        words,
+        settings: {
+          tab,
+          level: document.getElementById('levelSelect')?.value || '',
+          phonicsGroup: document.getElementById('phonicsGroup')?.value || '',
+          phonicsPattern: document.getElementById('phonicsPattern')?.value || '',
+          customText: tab === 'custom' ? words.join('\n') : '',
+          selectedWords: words,
+          customWords: tab === 'custom' ? words : [],
+          countdownEnabled: document.getElementById('countdownToggle')?.checked !== false,
+          soundEnabled: document.getElementById('soundToggle')?.checked !== false,
+          studentCanEdit: false
+        },
+        autoStart: true
+      };
+    },
+    saveActivity(activity) {
+      if (typeof window.saveDigitalReadingFlashcardsSharedActivity !== 'function') {
+        throw new Error('Share save function is not ready.');
+      }
+      return window.saveDigitalReadingFlashcardsSharedActivity(activity);
+    }
   });
-}
 
-window.addEventListener('load', () => setTimeout(tryLoadSavedActivity, 200));
+  window.syncReadingFlashcardShareButton = function() {
+    const button = document.getElementById('shareActivityBtn');
+    if (!button) return;
+    const fc = window._flashcards;
+    const words = fc?.getCurrentTab?.() === 'custom' ? fc?.getCustomWords?.() || [] : fc?.getSelectedWords?.() || [];
+    button.disabled = !words.length || document.documentElement.classList.contains('shared-student-mode');
+    button.title = words.length ? 'Create a student-ready share link' : 'Select at least one reading word to share';
+  };
+  document.addEventListener('DOMContentLoaded', () => window.syncReadingFlashcardShareButton(), { once: true });
+}
 </script>
 </body>
 </html>
