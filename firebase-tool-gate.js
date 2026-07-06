@@ -1,0 +1,163 @@
+import { auth, db } from './firebase-config.js';
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const body = document.body;
+const toolId = body.dataset.toolId || location.pathname.split('/').pop().replace(/\.html$/i, '') || 'literacy-tool';
+const toolName = body.dataset.toolName || 'Literacy Arcade Tool';
+const provider = new GoogleAuthProvider();
+
+let currentUser = null;
+let authorizedUid = null;
+let currentSessionId = null;
+let gateElement = null;
+
+function googleMark() {
+  return `<svg class="la-auth-google-mark" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.57-.14-3.08-.41-4.55H24v9.1h12.62c-.54 2.9-2.18 5.36-4.65 7.01l7.18 5.57C43.35 37.76 46.5 31.57 46.5 24.5z"/><path fill="#FBBC05" d="M10.54 28.59A14.43 14.43 0 0 1 9.75 24c0-1.59.28-3.14.79-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.92 7.53 2.56 10.78l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.47 0 11.9-2.13 15.87-5.78l-7.18-5.57c-2 1.34-4.55 2.13-8.69 2.13-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
+}
+
+function renderGate({ checking = false, error = '' } = {}) {
+  body.dataset.authState = checking ? 'checking' : 'signed-out';
+  if (!gateElement) {
+    gateElement = document.createElement('main');
+    gateElement.className = 'la-auth-gate';
+    gateElement.setAttribute('aria-live', 'polite');
+    body.appendChild(gateElement);
+  }
+
+  if (checking) {
+    gateElement.innerHTML = `
+      <section class="la-auth-gate-card" aria-label="Checking teacher account">
+        <img class="la-auth-gate-mark" src="./apple-touch-icon.png" alt="Literacy Arcade">
+        <div class="la-auth-gate-loading" aria-hidden="true"></div>
+        <h1>Checking your teacher account…</h1>
+      </section>`;
+    return;
+  }
+
+  gateElement.innerHTML = `
+    <section class="la-auth-gate-card" aria-labelledby="laAuthGateTitle">
+      <img class="la-auth-gate-mark" src="./apple-touch-icon.png" alt="Literacy Arcade">
+      <div class="la-auth-gate-kicker">Free teacher tool</div>
+      <h1 id="laAuthGateTitle">Create a free teacher account to use this fluency tool.</h1>
+      <p class="la-auth-gate-copy">Sign in with Google to open ${toolName}. Your account helps keep teacher tools and usage organized in one place.</p>
+      <button class="la-auth-google-btn" id="laAuthGoogleButton" type="button">
+        ${googleMark()}
+        <span>Sign in with Google</span>
+      </button>
+      <div class="la-auth-gate-error${error ? ' is-visible' : ''}" id="laAuthGateError">${error}</div>
+      <p class="la-auth-gate-note">Free to use. Student accounts are not required.</p>
+    </section>`;
+
+  gateElement.querySelector('#laAuthGoogleButton').addEventListener('click', signIn);
+}
+
+async function recordUserDates(user) {
+  try {
+    const userRef = doc(db, 'users', user.uid);
+    const snapshot = await getDoc(userRef);
+    const creationDate = user.metadata.creationTime ? new Date(user.metadata.creationTime) : new Date();
+    const lastLoginDate = user.metadata.lastSignInTime ? new Date(user.metadata.lastSignInTime) : new Date();
+    const userData = {
+      displayName: user.displayName || '',
+      email: user.email || '',
+      lastLoginAt: lastLoginDate,
+      lastSeenAt: serverTimestamp(),
+    };
+    if (!snapshot.exists()) userData.createdAt = creationDate;
+    await setDoc(userRef, userData, { merge: true });
+  } catch (error) {
+    console.warn('Literacy Arcade user tracking was unavailable.', error);
+  }
+}
+
+function cleanDetails(details) {
+  return Object.fromEntries(Object.entries(details).filter(([, value]) => value !== undefined));
+}
+
+async function track(eventName, details = {}) {
+  if (!currentUser) return;
+  try {
+    await addDoc(collection(db, 'users', currentUser.uid, 'usageEvents'), {
+      eventName,
+      toolId,
+      toolName,
+      pagePath: location.pathname,
+      occurredAt: serverTimestamp(),
+      ...cleanDetails(details),
+    });
+  } catch (error) {
+    console.warn(`Literacy Arcade event tracking failed for ${eventName}.`, error);
+  }
+}
+
+function createSessionId() {
+  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+window.LiteracyArcadeToolTracking = {
+  track,
+  trackSessionStarted(details = {}) {
+    currentSessionId = createSessionId();
+    return track('repeated_reading_session_started', { sessionId: currentSessionId, ...details });
+  },
+  trackSessionCompleted(details = {}) {
+    const sessionId = currentSessionId;
+    currentSessionId = null;
+    return track('reading_session_completed', { sessionId, ...details });
+  },
+};
+
+async function authorize(user) {
+  currentUser = user;
+  body.dataset.authState = 'signed-in';
+  if (gateElement) {
+    gateElement.remove();
+    gateElement = null;
+  }
+  if (authorizedUid === user.uid) return;
+  authorizedUid = user.uid;
+  document.dispatchEvent(new CustomEvent('literacyarcade:tool-authorized', { detail: { user } }));
+  await Promise.allSettled([
+    recordUserDates(user),
+    track('tool_opened'),
+  ]);
+}
+
+async function signIn() {
+  const button = gateElement?.querySelector('#laAuthGoogleButton');
+  const label = button?.querySelector('span');
+  if (button) button.disabled = true;
+  if (label) label.textContent = 'Signing in…';
+  try {
+    const result = await signInWithPopup(auth, provider);
+    await authorize(result.user);
+  } catch (error) {
+    console.error(error);
+    renderGate({ error: 'Google sign-in did not work. Check Firebase authorized domains and try again.' });
+  }
+}
+
+renderGate({ checking: true });
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    authorize(user);
+  } else {
+    currentUser = null;
+    authorizedUid = null;
+    currentSessionId = null;
+    renderGate();
+  }
+});

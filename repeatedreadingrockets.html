@@ -28,13 +28,13 @@
 <meta name="description" content="Track repeated reading growth with a rocket-themed WCPM fluency tool. Students complete three reads, calculate WCPM and accuracy, and watch the rocket move toward the moon.">
 <meta name="keywords" content="repeated reading rockets, repeated reading, reading fluency, WCPM, oral reading fluency, fluency tool, fluency tracker, reading intervention, Literacy Arcade">
 <meta name="author" content="Literacy Arcade">
-<link rel="canonical" href="https://literacyarcade.com/repeated-reading-rockets.html">
+<link rel="canonical" href="https://literacyarcade.com/repeatedreadingrockets.html">
 
 <!-- Open Graph -->
 <meta property="og:title" content="Repeated Reading Rockets | Literacy Arcade">
 <meta property="og:description" content="Track repeated reading growth with a rocket-themed WCPM fluency tool. Students complete three reads, calculate WCPM and accuracy, and watch the rocket move toward the moon.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://literacyarcade.com/repeated-reading-rockets.html">
+<meta property="og:url" content="https://literacyarcade.com/repeatedreadingrockets.html">
 <meta property="og:site_name" content="Literacy Arcade">
 <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png">
 
@@ -50,7 +50,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Repeated Reading Rockets",
-  "url": "https://literacyarcade.com/repeated-reading-rockets.html",
+  "url": "https://literacyarcade.com/repeatedreadingrockets.html",
   "description": "Track repeated reading growth with a rocket-themed WCPM fluency tool. Students complete three reads, calculate WCPM and accuracy, and watch the rocket move toward the moon.",
   "applicationCategory": "EducationalApplication",
   "operatingSystem": "Any",
@@ -2098,8 +2098,10 @@ body {
   line-height: 1.4;
 }
 </style>
+<link rel="stylesheet" href="./firebase-tool-gate.css">
+<script type="module" src="./firebase-tool-gate.js"></script>
 </head>
-<body>
+<body data-auth-required="true" data-tool-id="repeated-reading-rockets" data-tool-name="Repeated Reading Rockets">
 
 <!-- CONFETTI CANVAS -->
 <canvas id="confetti-canvas"></canvas>
@@ -3039,6 +3041,7 @@ function startMission() {
   if (customVal && customVal >= 10) state.wcpmGoal = customVal;
   const goal = state.wcpmGoal;
   if (!goal || goal < 10) { alert('Please set a WCPM goal.'); return; }
+  window.LiteracyArcadeToolTracking?.trackSessionStarted({ goalWcpm: goal });
 
   state.student = name || 'Student';
   state.missionActive = true;
@@ -4056,6 +4059,12 @@ function showFinalSummary() {
   const growth = r3 - r1;
   const goalForSummary = Number(state.wcpmGoal) || 120;
   const reachedGoal = best >= goalForSummary;
+  window.LiteracyArcadeToolTracking?.trackSessionCompleted({
+    goalWcpm: goalForSummary,
+    readCount: [1, 2, 3].filter(read => Number.isFinite(state.reads[read]?.wcpm)).length,
+    bestWcpm: best,
+    reachedGoal,
+  });
 
   setCelebrationIcon(reachedGoal ? 'moon' : 'rocket');
   banner.textContent = 'Mission Accomplished!';

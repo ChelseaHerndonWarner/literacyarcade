@@ -1,0 +1,159 @@
+:root {
+  --la-gate-teal: #2ec4b6;
+  --la-gate-teal-dark: #168f87;
+  --la-gate-coral: #ff6b6b;
+  --la-gate-navy: #1b2a4a;
+  --la-gate-cream: #fffaf0;
+}
+
+body[data-auth-required="true"]:not([data-auth-state="signed-in"]) {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(46, 196, 182, 0.18), transparent 32%),
+    radial-gradient(circle at 90% 90%, rgba(255, 107, 107, 0.16), transparent 30%),
+    var(--la-gate-cream);
+}
+
+body[data-auth-required="true"]:not([data-auth-state="signed-in"]) > :not(.la-auth-gate):not(script) {
+  display: none !important;
+}
+
+.la-auth-gate {
+  min-height: 100vh;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--la-gate-navy);
+  font-family: Nunito, Arial, sans-serif;
+}
+
+.la-auth-gate-card {
+  width: min(540px, 100%);
+  padding: clamp(30px, 6vw, 48px);
+  border: 1px solid rgba(27, 42, 74, 0.1);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 24px 70px rgba(27, 42, 74, 0.14);
+  text-align: center;
+}
+
+.la-auth-gate-mark {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  border-radius: 18px;
+  display: block;
+  object-fit: cover;
+  box-shadow: 0 10px 24px rgba(46, 196, 182, 0.28);
+}
+
+.la-auth-gate-kicker {
+  display: inline-flex;
+  margin-bottom: 14px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: var(--la-gate-teal-dark);
+  background: rgba(46, 196, 182, 0.12);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.la-auth-gate h1 {
+  margin: 0 0 12px;
+  color: var(--la-gate-navy);
+  font-size: clamp(27px, 5vw, 38px);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+.la-auth-gate-copy {
+  margin: 0 auto 24px;
+  max-width: 430px;
+  color: #536078;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.la-auth-google-btn {
+  width: 100%;
+  min-height: 54px;
+  border: 2px solid var(--la-gate-navy);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: white;
+  background: var(--la-gate-navy);
+  box-shadow: 0 5px 0 #0f1a30;
+  cursor: pointer;
+  font: 900 16px/1 Nunito, Arial, sans-serif;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.la-auth-google-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 #0f1a30;
+}
+
+.la-auth-google-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 #0f1a30;
+}
+
+.la-auth-google-btn:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.la-auth-google-mark {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+
+.la-auth-gate-note {
+  margin: 18px 0 0;
+  color: #68748a;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.la-auth-gate-error {
+  display: none;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 107, 107, 0.35);
+  border-radius: 12px;
+  color: #9c3030;
+  background: rgba(255, 107, 107, 0.1);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.la-auth-gate-error.is-visible {
+  display: block;
+}
+
+.la-auth-gate-loading {
+  width: 34px;
+  height: 34px;
+  margin: 4px auto 16px;
+  border: 4px solid rgba(46, 196, 182, 0.2);
+  border-top-color: var(--la-gate-coral);
+  border-radius: 50%;
+  animation: la-auth-spin 0.8s linear infinite;
+}
+
+@keyframes la-auth-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 520px) {
+  .la-auth-gate { padding: 18px; }
+  .la-auth-gate-card { border-radius: 22px; }
+}
