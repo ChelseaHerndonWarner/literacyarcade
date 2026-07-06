@@ -12,7 +12,10 @@
 </script>
   <script type="text/javascript">
     // Only load Clarity for teacher setup, not shared student games
-    if (!new URLSearchParams(window.location.search).has('activity')) {
+    const isSharedVocabularyDeck = new URLSearchParams(window.location.search).has('activity');
+    if (isSharedVocabularyDeck) {
+      document.documentElement.classList.add('shared-student-mode');
+    } else {
       (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -22,22 +25,22 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vocabulary Flashcards – Lexile Word Lists | Literacy Arcade</title>
-  <meta name="description" content="Free digital vocabulary flashcards for Grades 1–5 teachers. Practice Lexile general, math, science, and social studies vocabulary words with card-flip reveal, missed-word review, progress tracking, full-screen SmartBoard mode, and shuffle. No login required." />
-  <meta name="keywords" content="digital vocabulary flashcards, Lexile vocabulary, science vocabulary flashcards, math vocabulary flashcards, social studies vocabulary, general vocabulary flashcards, free teacher flashcards, grade level vocabulary, academic vocabulary practice, SmartBoard vocabulary, vocabulary intervention, Grades 1-5 vocabulary" />
+  <title>Custom Vocabulary Flashcards for Teachers | Literacy Arcade</title>
+  <meta name="description" content="Create custom digital vocabulary flashcards with your own words and definitions. Includes card-flip reveal, vocabulary review, progress tracking, full-screen SmartBoard mode, and shuffle. No student accounts required." />
+  <meta name="keywords" content="custom vocabulary flashcards, digital vocabulary flashcards, teacher vocabulary tool, academic vocabulary practice, SmartBoard vocabulary, vocabulary intervention, custom word definitions" />
   <meta name="author" content="Literacy Arcade" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#1D9E75" />
   <link rel="canonical" href="https://literacyarcade.com/vocabulary-flashcards.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Literacy Arcade" />
-  <meta property="og:title" content="Vocabulary Flashcards – Lexile Word Lists | Literacy Arcade" />
-  <meta property="og:description" content="Free digital vocabulary flashcards for Lexile general, math, science, and social studies word lists by grade level. Card-flip reveal, missed-word review, SmartBoard mode. No login required." />
+  <meta property="og:title" content="Custom Vocabulary Flashcards for Teachers | Literacy Arcade" />
+  <meta property="og:description" content="Create vocabulary flashcards with your own words and definitions. Practice with card-flip reveal, vocabulary review, progress tracking, and SmartBoard mode. No student accounts required." />
   <meta property="og:url" content="https://literacyarcade.com/vocabulary-flashcards.html" />
   <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Vocabulary Flashcards – Lexile Word Lists | Literacy Arcade" />
-  <meta name="twitter:description" content="Practice Lexile vocabulary words by grade — general, math, science, social studies. Card-flip flashcards with SmartBoard mode. Grades 1–5." />
+  <meta name="twitter:title" content="Custom Vocabulary Flashcards for Teachers | Literacy Arcade" />
+  <meta name="twitter:description" content="Create vocabulary flashcards with your own words and definitions, then practice with vocabulary review and SmartBoard mode. No student accounts required." />
   <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
   <script type="application/ld+json">
   {
@@ -50,7 +53,7 @@
     "isAccessibleForFree": true,
     "publisher": { "@type": "Organization", "name": "Literacy Arcade", "url": "https://literacyarcade.com/" },
     "audience": { "@type": "EducationalAudience", "educationalRole": ["teacher","tutor","reading interventionist","parent"] },
-    "description": "Free digital vocabulary flashcards for Lexile general, math, science, and social studies word lists across Grades 1–5. Card-flip reveal, missed-word review, SmartBoard mode. No login required."
+    "description": "Create custom digital vocabulary flashcards with your own words and definitions. Includes card-flip reveal, vocabulary review, progress tracking, SmartBoard mode, and shuffle. No student accounts required."
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -84,45 +87,53 @@
       --green-dk:    #357a4c;
     }
 
-    body { font-family:'Lexend',system-ui,sans-serif; background:var(--bg); color:var(--navy); min-height:100vh; }
+    body {
+      font-family:'Lexend',system-ui,sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(46,196,182,.13), transparent 32%),
+        radial-gradient(circle at 100% 100%, rgba(173,151,236,.22), transparent 34%),
+        linear-gradient(135deg,#F4FFFD 0%,#FFFDF9 58%,#F3EFFD 100%);
+      color:var(--navy); min-height:100vh;
+    }
     button,input,select,textarea { font-family:inherit; }
 
-    /* ── HEADER (exact match to Reading Flashcards) ── */
+    /* ── HEADER (standard Literacy Arcade tool treatment) ── */
     .la-header {
-      background:var(--white); border-bottom:1px solid var(--border);
-      padding:0 24px; height:58px; display:flex; align-items:center;
+      background:rgba(255,255,255,.94); border-bottom:1px solid #E4DEF2;
+      padding:0 clamp(16px,3vw,24px); height:62px; display:flex; align-items:center;
       justify-content:space-between; position:sticky; top:0; z-index:100;
-      box-shadow:0 2px 8px rgba(15,23,42,.06);
+      box-shadow:0 2px 14px rgba(26,26,46,.05);
     }
     .la-logo-group { display:flex; align-items:center; gap:10px; flex-shrink:0; text-decoration:none; color:inherit; }
     .la-logo-group:hover,.la-logo-group:focus,.la-logo-group:visited { text-decoration:none; color:inherit; }
-    .la-icon { width:36px; height:36px; border-radius:9px; overflow:hidden; flex-shrink:0; display:block; }
+    .la-icon { width:38px; height:38px; border-radius:10px; overflow:hidden; flex-shrink:0; display:block; }
     .la-icon svg { width:100%; height:100%; object-fit:cover; display:block; }
-    .la-wordmark { font-family:'Nunito',sans-serif; font-size:18px; font-weight:900; color:var(--navy); letter-spacing:-.2px; line-height:1; }
-    .la-pipe { width:1px; height:18px; background:var(--border); margin:0 4px; flex-shrink:0; }
-    .la-tool-name { font-family:'Nunito',sans-serif; font-size:16px; font-weight:700; color:#0F6E56; letter-spacing:-.1px; line-height:1; }
+    .la-wordmark { font-family:'Nunito',sans-serif; font-size:1.15rem; font-weight:900; color:var(--navy); letter-spacing:-.2px; line-height:1; }
+    .la-pipe { width:1px; height:22px; background:#E4DEF2; margin:0; flex-shrink:0; }
+    .la-tool-name { font-family:'Nunito',sans-serif; font-size:17px; font-weight:700; color:var(--teal-dk); letter-spacing:-.1px; line-height:1; }
     .hdr-btns { display:flex; align-items:center; gap:6px; }
     .icon-btn {
-      width:36px; height:36px; border-radius:10px; border:1.5px solid var(--border);
+      width:40px; height:40px; border-radius:10px; border:1.5px solid #E4DEF2;
       background:#F8F7F3; display:flex; align-items:center; justify-content:center;
       color:var(--navy-mid); transition:background .15s, border-color .15s; flex-shrink:0; cursor:pointer;
     }
     .icon-btn:hover { background:var(--bg); border-color:var(--navy-lt); }
     .icon-btn svg { width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round; }
+    .la-header button:focus-visible,.la-header a:focus-visible,#setup button:focus-visible,#setup input:focus-visible,#setup textarea:focus-visible { outline:3px solid #F6C54A; outline-offset:3px; }
 
     /* ── SETUP ── */
-    #setup { max-width:920px; margin:0 auto; padding:24px 20px 48px; }
+    #setup { max-width:920px; margin:0 auto; padding:26px 20px 48px; font-family:'Nunito',system-ui,sans-serif; }
 
     .setup-hero { text-align:center; margin-bottom:22px; }
-    .setup-hero h1 { font-size:clamp(28px,5vw,42px); font-weight:800; letter-spacing:-1.5px; line-height:1.05; margin-bottom:8px; }
+    .setup-hero h1 { font-family:'Nunito',sans-serif; font-size:clamp(32px,5vw,42px); font-weight:900; letter-spacing:-.5px; line-height:1.05; margin-bottom:8px; }
     .setup-hero h1 em { font-style:normal; color:var(--teal-dk); }
     .setup-hero p {
-      font-size:12.5px; color:var(--navy-mid); font-weight:500;
+      font-size:14px; color:var(--navy-lt); font-weight:700;
       max-width:640px; margin:0 auto; line-height:1.55; letter-spacing:.01em;
     }
 
-    .card { background:var(--white); border:1px solid var(--border); border-radius:20px; padding:20px; box-shadow:var(--shadow-card); margin-bottom:12px; }
-    .card-title { font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--navy-lt); margin-bottom:12px; }
+    .card { background:var(--white); border:1px solid #E4DEF2; border-radius:26px; padding:18px; box-shadow:0 8px 24px rgba(15,23,42,.10); margin-bottom:14px; }
+    .card-title { font-family:'Nunito',sans-serif; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--navy-lt); margin-bottom:12px; }
 
     /* Tabs */
     .tab-row { display:flex; border-radius:10px; overflow:hidden; border:1px solid var(--border); margin-bottom:14px; }
@@ -131,27 +142,42 @@
     .tab.active { background:var(--teal); color:white; }
     .tab:hover:not(.active) { background:var(--teal-bg); }
 
-    label { display:block; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--navy-mid); margin-bottom:7px; }
+    #setup label { display:block; font-family:'Nunito',sans-serif; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--navy-lt); margin-bottom:7px; }
     select {
       width:100%; border:1px solid var(--border); background:var(--bg);
       border-radius:10px; padding:10px 13px; font-size:14px; font-weight:600;
       color:var(--navy); outline:none; cursor:pointer; transition:border-color .15s;
     }
     select:focus { border-color:var(--teal); }
-    textarea {
-      width:100%; border:1px solid var(--border); background:var(--bg);
-      border-radius:10px; padding:10px 13px; font-size:14px; font-weight:600;
+    #setup textarea {
+      width:100%; border:1.5px solid #E4DEF2; background:var(--white);
+      border-radius:10px; padding:10px 13px; font-family:'Nunito',sans-serif; font-size:14px; font-weight:700;
       color:var(--navy); outline:none; min-height:100px; resize:vertical;
-      line-height:1.5; transition:border-color .15s;
+      line-height:1.5; transition:border-color .15s,box-shadow .15s;
     }
-    textarea:focus { border-color:var(--teal); }
+    #setup textarea:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(46,196,182,.12); }
 
-    .lexile-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:10px; }
+    .text-input {
+      width:100%; border:1.5px solid #E4DEF2; background:var(--white);
+      border-radius:10px; padding:10px 13px; font-family:'Nunito',sans-serif; font-size:14px; font-weight:700;
+      color:var(--navy); outline:none; transition:border-color .15s,box-shadow .15s;
+    }
+    .text-input:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(46,196,182,.12); }
+    .setup-field + .setup-field { margin-top:16px; }
+    .compact-format-help {
+      display:flex; flex-wrap:wrap; gap:3px 12px; margin-top:7px; padding:8px 10px;
+      border:1px solid #E4DEF2; border-radius:12px; background:#FFFDF8; color:var(--navy-mid);
+      font-size:11px; font-weight:700; line-height:1.45;
+    }
+    .compact-format-help strong { color:var(--navy); }
+    .validation-feedback { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+    .validation-note { display:inline-flex; align-items:center; border-radius:999px; padding:4px 9px; background:var(--coral-lt); color:#9F3328; font-size:10.5px; font-weight:700; }
+
 
     /* Word bank */
     .bank-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-    .bank-header-label { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--navy-mid); }
-    .bank-header-hint { font-size:10px; color:var(--navy-lt); font-weight:500; }
+    .bank-header-label { font-family:'Nunito',sans-serif; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--navy-lt); }
+    .bank-header-hint { font-size:10px; color:var(--navy-lt); font-weight:700; }
     .word-bank { display:flex; flex-wrap:wrap; gap:6px; max-height:120px; overflow-y:auto; padding:10px; background:var(--bg); border:1px solid var(--border); border-radius:12px; }
     .chip { border:1.5px solid var(--border); background:var(--white); border-radius:100px; padding:5px 12px; font-size:12px; font-weight:700; color:var(--navy-mid); cursor:pointer; transition:all .15s; user-select:none; }
     .chip.sel { background:var(--teal); border-color:var(--teal-dk); color:white; box-shadow:0 2px 6px rgba(46,196,182,.25); }
@@ -161,31 +187,57 @@
     .btn { background:var(--white); border:1px solid var(--border); border-radius:8px; padding:7px 14px; font-family:'Lexend',sans-serif; font-size:12px; font-weight:700; color:var(--navy); cursor:pointer; transition:background .15s; }
     .btn:hover { background:var(--teal-bg); }
 
-    .count-line { font-size:12px; font-weight:700; color:var(--teal-dk); margin-top:8px; }
+    .count-line { font-size:12px; font-weight:800; color:var(--teal-dk); margin-top:8px; }
     .hint-line  { font-size:11px; color:var(--navy-lt); font-weight:500; margin-top:5px; }
 
     /* Custom card preview */
-    .custom-card-preview { display:flex; flex-direction:column; gap:6px; max-height:180px; overflow-y:auto; margin-top:8px; }
-    .custom-card-row { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:8px 12px; font-size:13px; }
-    .custom-card-word { font-weight:700; color:var(--navy); }
-    .custom-card-def  { color:var(--navy-mid); font-weight:500; margin-top:2px; font-size:12px; line-height:1.4; }
+    .custom-card-preview { display:flex; flex-direction:column; gap:6px; max-height:320px; overflow-y:auto; margin-top:8px; }
+    .custom-card-preview.is-expanded { max-height:none; overflow:visible; }
+    .custom-card-preview:not(.is-expanded) .custom-card-row:nth-child(n+4) { display:none; }
+    .custom-card-row { background:linear-gradient(180deg,#F7FFFE 0%,#FFFFFF 100%); border:1px solid #E4DEF2; border-radius:14px; padding:9px 12px; font-size:13px; box-shadow:0 2px 8px rgba(15,23,42,.04); }
+    .custom-card-word { font-family:'Nunito',sans-serif; font-weight:900; color:var(--navy); }
+    .custom-card-def  { color:var(--navy-mid); font-weight:600; margin-top:2px; font-size:12px; line-height:1.4; }
     .custom-card-def.coming-soon { font-style:italic; color:var(--navy-lt); }
+    .preview-toggle {
+      display:none; margin-top:8px; padding:6px 11px; border:1.5px solid var(--teal-border);
+      border-radius:999px; background:var(--white); color:var(--teal-dk);
+      font-family:'Nunito',sans-serif; font-size:11px; font-weight:900; cursor:pointer;
+    }
+    .preview-toggle:hover { background:#DDF3F1; }
 
-    .start-btn { width:100%; border:none; background:var(--navy); color:white; border-radius:14px; padding:18px 24px; font-family:'Lexend',sans-serif; font-size:20px; font-weight:800; cursor:pointer; box-shadow:0 6px 0 #0d0d1a; transition:transform .1s, box-shadow .1s; }
-    .start-btn:hover { transform:translateY(-2px); box-shadow:0 8px 0 #0d0d1a; }
-    .start-btn:active { transform:translateY(2px); box-shadow:0 3px 0 #0d0d1a; }
+    #setup .start-btn { width:100%; border:none; background:var(--teal-dk); color:white; border-radius:14px; padding:17px 24px; font-family:'Nunito',sans-serif; font-size:19px; font-weight:900; cursor:pointer; box-shadow:0 4px 0 #0a7a6e; transition:transform .1s, box-shadow .1s, background .15s; }
+    #setup .start-btn:hover { transform:translateY(-2px); background:var(--teal-dk); box-shadow:0 6px 0 #0a7a6e; }
+    #setup .start-btn:active { transform:translateY(1px); box-shadow:0 3px 0 #0a7a6e; }
 
-    .options-row { display:flex; gap:24px; flex-wrap:wrap; margin-bottom:16px; }
-    .toggle-label { display:flex; align-items:center; gap:10px; cursor:pointer; font-size:13px; font-weight:700; color:var(--navy-mid); user-select:none; }
+    .options-panel { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:14px; padding:10px 12px; border:1px solid #E4DEF2; border-radius:14px; background:#FFFDF8; }
+    .options-title { color:var(--navy-lt); font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .options-row { display:flex; gap:20px; flex-wrap:wrap; }
+    #setup .toggle-label { display:flex; align-items:center; gap:10px; margin-bottom:0; cursor:pointer; font-family:'Nunito',sans-serif; font-size:13px; font-weight:800; letter-spacing:0; text-transform:none; color:var(--navy-mid); user-select:none; }
     .toggle-label input { display:none; }
     .toggle-track { width:38px; height:22px; border-radius:100px; background:var(--border); position:relative; flex-shrink:0; transition:background .2s; }
     .toggle-thumb { position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:white; box-shadow:0 1px 4px rgba(0,0,0,.2); transition:transform .2s; }
     .toggle-label input:checked + .toggle-track { background:var(--teal); }
     .toggle-label input:checked + .toggle-track .toggle-thumb { transform:translateX(16px); }
 
-    .kbd-hint { text-align:center; font-size:11px; color:var(--navy-lt); margin-top:10px; }
+    .kbd-hint { margin-top:11px; text-align:center; font-family:'Nunito',sans-serif; font-size:11px; font-weight:700; color:var(--navy-lt); line-height:1.8; }
     kbd { background:var(--white); border:1px solid var(--border); border-radius:4px; padding:1px 5px; font-family:inherit; font-size:10px; }
-    footer { margin-top:16px; font-size:11px; color:var(--navy-lt); text-align:center; padding:12px 0 20px; opacity:.7; }
+    #setup .save-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px; padding:10px 0 2px; border-top:1px solid #E4DEF2; }
+    #setup .save-activity-btn { display:inline-flex; align-items:center; gap:6px; border:1.5px solid var(--teal); background:var(--teal-bg); border-radius:10px; padding:8px 16px; font-family:'Nunito',sans-serif; font-size:13px; font-weight:800; color:var(--teal-dk); cursor:pointer; transition:all .13s; white-space:nowrap; }
+    #setup .save-activity-btn:hover { background:var(--teal); color:white; }
+    #setup .save-bar .la-share-btn { border-color:var(--teal); background:var(--teal-bg); border-radius:10px; padding:8px 16px; font-family:'Nunito',sans-serif; font-size:13px; color:var(--teal-dk); }
+    #setup .save-bar .la-share-btn:hover { background:var(--teal); color:white; }
+    #setup .save-bar .la-share-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+    .shared-deck-status { display:none; min-height:calc(100vh - 58px); padding:32px 20px; align-items:center; justify-content:center; text-align:center; background:linear-gradient(145deg,#E8F9F8 0%,#FDFBF7 58%,#F2ECFA 100%); }
+    .shared-deck-status-card { width:min(520px,100%); padding:34px 28px; border:1.5px solid #D8D0EB; border-radius:24px; background:var(--white); box-shadow:0 18px 45px rgba(50,42,78,.12); }
+    .shared-deck-status-card h1 { margin:0 0 9px; color:var(--navy); font-family:'Nunito',sans-serif; font-size:clamp(25px,5vw,34px); font-weight:900; }
+    .shared-deck-status-card p { margin:0; color:var(--navy-mid); font-family:'Lexend',sans-serif; font-size:15px; line-height:1.6; }
+    .shared-deck-home { display:none; width:max-content; margin:20px auto 0; padding:11px 18px; border-radius:10px; background:var(--teal-dk); color:white; font-family:'Nunito',sans-serif; font-size:14px; font-weight:900; text-decoration:none; }
+    html.shared-student-mode #setup { display:none !important; }
+    html.shared-student-mode .shared-deck-status { display:flex; }
+    html.shared-deck-loaded .shared-deck-status { display:none; }
+    html.shared-student-mode #dashboardBtn,
+    html.shared-student-mode .teacher-only-shared { display:none !important; }
+    footer { margin-top:16px; padding:16px 0 6px; color:#9692AD; font-family:'Nunito',Arial,sans-serif; font-size:.84rem; font-weight:900; line-height:1.35; text-align:center; opacity:1; }
 
     /* ── FLASH SCREEN ── */
     #flashScreen { display:none; flex-direction:column; min-height:calc(100vh - 58px); }
@@ -422,8 +474,21 @@
 
     /* ── FINISH ── */
     .finish-overlay { display:none; position:fixed; inset:0; background:rgba(26,26,46,.55); z-index:300; align-items:center; justify-content:center; }
-    .finish-modal { background:var(--white); border-radius:24px; padding:34px 30px; max-width:410px; width:90%; text-align:center; box-shadow:0 24px 80px rgba(26,26,46,.25); }
-    .fi { font-size:52px; margin-bottom:6px; }
+    .finish-modal { position:relative; overflow:hidden; background:linear-gradient(180deg,#F4FCFB 0,var(--white) 34%); border:1px solid var(--teal-border); border-radius:24px; padding:34px 30px; max-width:410px; width:90%; text-align:center; box-shadow:0 24px 80px rgba(26,26,46,.25); }
+    .finish-modal::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg,var(--teal),var(--violet),var(--coral)); }
+    .finish-mark {
+      position:relative; display:grid; place-items:center; width:62px; height:62px;
+      margin:0 auto 12px; border-radius:18px;
+      background:linear-gradient(135deg,var(--teal),var(--violet));
+      box-shadow:0 10px 24px rgba(46,196,182,.22);
+    }
+    .finish-mark svg { width:34px; height:34px; color:white; }
+    .finish-mark::before,.finish-mark::after {
+      content:''; position:absolute; width:8px; height:8px; border-radius:2px;
+      background:var(--amber); transform:rotate(45deg);
+    }
+    .finish-mark::before { top:-5px; right:2px; }
+    .finish-mark::after { bottom:3px; left:-5px; width:6px; height:6px; background:var(--coral); }
     .finish-modal h2 { font-size:26px; font-weight:800; color:var(--navy); margin-bottom:8px; }
     .finish-modal p  { font-size:14px; color:var(--navy-mid); font-weight:500; line-height:1.5; margin-bottom:18px; }
     .finish-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
@@ -451,7 +516,12 @@
     @media (max-width:540px) {
       .tab { font-size:10px; padding:8px 4px; }
       .topbar-btns .tbar-btn:not(.fs) { display:none; }
-      .lexile-row { grid-template-columns:1fr; }
+      .la-header { padding:0 12px; }
+      .la-icon { width:36px; height:36px; }
+      .la-wordmark,.la-pipe { display:none; }
+      .la-tool-name { font-size:.98rem; white-space:nowrap; }
+      #setup { padding:22px 14px 38px; }
+      #setup .card { padding:16px; border-radius:20px; }
     }
     @media (max-width:720px) {
       .card-btns { gap:8px; }
@@ -489,7 +559,7 @@
       <svg id="setupSndOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
       <svg id="setupSndOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
     </button>
-    <button class="icon-btn" id="dashboardBtn" aria-label="My saved activities" title="Teacher Dashboard" style="display:none" onclick="window.location.href='teacher-dashboard.html'">
+    <button class="icon-btn" id="dashboardBtn" aria-label="My saved activities" title="Teacher Dashboard" style="display:none" onclick="if (!document.documentElement.classList.contains('shared-student-mode')) window.location.href='teacher-dashboard.html'">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     </button>
     <button class="icon-btn" aria-label="All tools" onclick="window.location.href='https://literacyarcade.com'">
@@ -498,76 +568,67 @@
   </div>
 </header>
 
+<section class="shared-deck-status" id="sharedDeckStatus" aria-live="polite">
+  <div class="shared-deck-status-card">
+    <h1 id="sharedDeckStatusTitle">Loading vocabulary deck…</h1>
+    <p id="sharedDeckStatusText">Getting this vocabulary practice ready.</p>
+    <a class="shared-deck-home" id="sharedDeckHome" href="https://literacyarcade.com/">Back to Literacy Arcade</a>
+  </div>
+</section>
+
 <!-- SETUP -->
 <div id="setup">
   <div class="setup-hero">
     <h1>Vocabulary <em>Flashcards</em></h1>
-    <p>Lexile General &nbsp;·&nbsp; Lexile Math &nbsp;·&nbsp; Lexile Science &nbsp;·&nbsp; Lexile Social Studies &nbsp;·&nbsp; Custom Lists &nbsp;·&nbsp; SmartBoard</p>
+    <p>Your Words &nbsp;·&nbsp; Your Definitions &nbsp;·&nbsp; Vocabulary Review &nbsp;·&nbsp; SmartBoard</p>
   </div>
 
   <div class="card">
-    <div class="card-title">Choose Your Word List</div>
-    <div class="tab-row">
-      <button class="tab active" id="tabLexile" onclick="switchTab('lexile')">Lexile Words</button>
-      <button class="tab"        id="tabCustom" onclick="switchTab('custom')">Custom</button>
-    </div>
-
-    <div id="lexileSection">
-      <div class="lexile-row">
-        <div>
-          <label>Category</label>
-          <select id="lexileCategory" onchange="onLexileCategoryChange()"></select>
-        </div>
-        <div>
-          <label>Grade Level</label>
-          <select id="lexileGrade" onchange="onLexileGradeChange()"></select>
+    <div class="card-title">Create Your Vocabulary Deck</div>
+    <div id="customSection" style="margin-top:4px;">
+      <div class="setup-field">
+        <label for="deckTitle">Deck name</label>
+        <input class="text-input" id="deckTitle" type="text" maxlength="100" placeholder="Week 3 science vocabulary" />
+      </div>
+      <div class="setup-field">
+        <label for="customArea">Type or paste one vocabulary card per line.</label>
+        <textarea id="customArea"
+          placeholder="ecosystem | a community of living things&#10;compare | to tell how things are alike&#10;predict | to say what might happen next"
+          oninput="updateCustomPreview()"></textarea>
+        <div class="compact-format-help">
+          <span><strong>Format:</strong> word | definition</span>
+          <span><strong>Also accepts:</strong> word: definition or word - definition</span>
+          <span><strong>Example:</strong> ecosystem | a community of living things</span>
         </div>
       </div>
-      <p class="hint-line">Words load automatically — tap to select, then click Start.</p>
-    </div>
-
-    <div id="customSection" style="display:none; margin-top:4px;">
-      <label>Type or paste your cards — word first, then the definition</label>
-      <textarea id="customArea"
-        placeholder="ecosystem-a community of living and nonliving things interacting in an environment&#10;contrast-to tell how two things are different&#10;estimate-to make a careful guess about an amount"
-        oninput="updateCustomPreview()"></textarea>
-      <p class="hint-line">Each line = one card. Use a dash to separate word from definition: <strong>ecosystem-a community of living things</strong></p>
       <div id="customPreview" style="display:none; margin-top:10px;">
         <div class="bank-header">
           <span class="bank-header-label">Cards in Deck</span>
           <span class="bank-header-hint" id="customCountHint"></span>
         </div>
         <div class="custom-card-preview" id="customWordBank"></div>
+        <button class="preview-toggle" id="previewToggle" type="button" aria-expanded="false" onclick="toggleCardPreview()">Show all cards</button>
       </div>
-    </div>
-
-    <div id="bankSection" style="margin-top:14px;">
-      <div class="bank-header">
-        <span class="bank-header-label">Word Bank</span>
-        <span class="bank-header-hint">Tap words to include · all words start unselected</span>
-      </div>
-      <div class="word-bank" id="wordBank"></div>
-      <div class="btn-row">
-        <button class="btn" onclick="selectAll()">Select All</button>
-        <button class="btn" onclick="selectNone()">Clear All</button>
-        <button class="btn" onclick="shuffleSetup()">Shuffle</button>
-      </div>
-      <p class="count-line" id="countLine">0 cards selected</p>
+      <p class="count-line" id="countLine">Add at least one word to begin.</p>
+      <div class="validation-feedback" id="validationFeedback" aria-live="polite"></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="options-row">
-      <label class="toggle-label">
-        <input type="checkbox" id="countdownToggle" checked />
-        <span class="toggle-track"><span class="toggle-thumb"></span></span>
-        Start with countdown
-      </label>
-      <label class="toggle-label">
-        <input type="checkbox" id="soundToggle" checked />
-        <span class="toggle-track"><span class="toggle-thumb"></span></span>
-        Sound effects
-      </label>
+    <div class="options-panel">
+      <span class="options-title">Options</span>
+      <div class="options-row">
+        <label class="toggle-label">
+          <input type="checkbox" id="countdownToggle" checked />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          Start with countdown
+        </label>
+        <label class="toggle-label">
+          <input type="checkbox" id="soundToggle" checked />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          Sound effects
+        </label>
+      </div>
     </div>
     <button class="start-btn" onclick="startFlashcards()">Start Vocabulary Flashcards</button>
     <p class="kbd-hint">
@@ -578,8 +639,8 @@
       <kbd>F</kbd> Fullscreen
     </p>
     <!-- Save bar -->
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-top:12px;margin-top:10px;border-top:1px solid var(--border);">
-      <button id="saveActivityBtn" style="display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--teal);background:var(--teal-bg);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--teal-dk);cursor:pointer;font-family:'Lexend',sans-serif;transition:all .13s;white-space:nowrap;">
+    <div class="save-bar teacher-only-shared">
+      <button id="saveActivityBtn" class="save-activity-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         Save Activity
       </button>
@@ -602,7 +663,7 @@
     <div class="topbar-btns">
       <button class="tbar-btn" onclick="shuffleDeck()">Shuffle</button>
       <button class="tbar-btn" onclick="restartDeck()">Restart</button>
-      <button class="tbar-btn" onclick="backToSetup()">Change List</button>
+      <button class="tbar-btn teacher-only-shared" onclick="backToSetup()">Edit Deck</button>
       <button class="tbar-btn fs" onclick="openFS()">Fullscreen</button>
     </div>
   </div>
@@ -641,20 +702,20 @@
       <div class="sc">
         <div class="sc-lbl">Got It</div>
         <div class="sc-num" id="knownNum" style="color:var(--green-val);">0</div>
-        <div class="sc-sub">words mastered</div>
+        <div class="sc-sub">this round</div>
       </div>
       <div class="sc">
         <div class="sc-lbl">Need Practice</div>
         <div class="sc-num" id="missedNum" style="color:var(--coral);">0</div>
         <div class="missed-chips" id="missedList"></div>
-        <button class="sb-btn" onclick="practiceMissed()">Practice Missed Words</button>
+        <button class="sb-btn" onclick="practiceMissed()">Review Needed</button>
       </div>
       <div class="sc">
         <div class="sc-lbl">Controls</div>
         <button class="sb-btn" onclick="shuffleDeck()">Shuffle Deck</button>
         <button class="sb-btn" onclick="restartDeck()">Restart Deck</button>
         <button class="sb-btn" onclick="openFS()">Fullscreen / SmartBoard</button>
-        <button class="sb-btn pri" onclick="backToSetup()">Change List</button>
+        <button class="sb-btn pri teacher-only-shared" onclick="backToSetup()">Edit Deck</button>
       </div>
     </aside>
   </div>
@@ -680,7 +741,12 @@
 <!-- FINISH OVERLAY -->
 <div class="finish-overlay" id="finishOverlay" style="display:none;">
   <div class="finish-modal">
-    <div class="fi">🎉</div>
+    <div class="finish-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12.5l4.2 4.2L19 7"/>
+        <path d="M12 2.8l1.2 2.7 2.8 1.2-2.8 1.2L12 10.6l-1.2-2.7L8 6.7l2.8-1.2L12 2.8z" fill="currentColor" stroke="none" opacity=".75"/>
+      </svg>
+    </div>
     <h2>Deck Complete!</h2>
     <p id="finishMsg">Great vocabulary practice!</p>
     <div class="finish-stats">
@@ -689,8 +755,8 @@
     </div>
     <div class="finish-btns">
       <button class="start-btn" onclick="practiceAgain()">Practice Again</button>
-      <button class="btn" onclick="doMissedFromFinish()">Practice Missed Words</button>
-      <button class="btn" onclick="backToSetupFromFinish()">Choose New List</button>
+      <button class="btn" onclick="doMissedFromFinish()">Review Needed</button>
+      <button class="btn teacher-only-shared" onclick="backToSetupFromFinish()">Create New Deck</button>
     </div>
   </div>
 </div>
@@ -706,36 +772,6 @@
 <canvas id="confettiCanvas" style="display:none; position:fixed; inset:0; pointer-events:none; z-index:310;"></canvas>
 
 <script>
-const LEXILE_DB = {
-  'General Vocabulary': {
-    'Grade 1': [{word:'lesson',definition:'a time for learning something new'},{word:'each',definition:'every one'},{word:'solve',definition:'to figure out an answer'},{word:'shape',definition:'the form of something'},{word:'sentence',definition:'a group of words that tells an idea'},{word:'grow',definition:'to get bigger or taller'},{word:'vocabulary',definition:'words we know and use'},{word:'compare',definition:'to tell how things are alike or different'},{word:'chart',definition:'a way to organize information'},{word:'science',definition:'the study of how things work in nature'},{word:'inquiry',definition:'asking questions to learn more'},{word:'addition',definition:'putting numbers together'},{word:'essential',definition:'very important'},{word:'pattern',definition:'something that repeats'},{word:'explain',definition:'to tell how or why something happens'},{word:'below',definition:'under something else'},{word:'observe',definition:'to watch carefully'},{word:'activity',definition:'something you do'},{word:'strategy',definition:'a plan to help solve a problem'},{word:'alike',definition:'the same in some way'},{word:'resource',definition:'something helpful you can use'},{word:'describe',definition:'to tell about something'},{word:'detail',definition:'a small piece of information'},{word:'envision',definition:'to picture something in your mind'},{word:'large',definition:'big in size'},{word:'complete',definition:'finished or done'},{word:'model',definition:'an example that shows something'},{word:'topic',definition:'the subject of something'},{word:'natural',definition:'found in nature'},{word:'independent',definition:'able to do things on your own'},{word:'predict',definition:'to say what may happen next'},{word:'symbol',definition:'a picture or mark that stands for something'},{word:'technology',definition:'tools or machines that help people'},{word:'estimate',definition:'a close guess'}],
-    'Grade 2': [{word:'form',definition:'the shape or type of something'},{word:'event',definition:'something that happens'},{word:'clue',definition:'something that helps you figure something out'},{word:'effect',definition:'what happens because of something else'},{word:'amount',definition:'how much of something there is'},{word:'connect',definition:'to join or link together'},{word:'example',definition:'something that shows what another thing is like'},{word:'reason',definition:'a cause or explanation for something'},{word:'volume',definition:'the amount of space something takes up'},{word:'comprehension',definition:'understanding what you read or hear'},{word:'direction',definition:'instructions for what to do'},{word:'purpose',definition:'the reason something is done'},{word:'illustrate',definition:'to explain using pictures or examples'},{word:'expository',definition:'giving facts and information'},{word:'opinion',definition:'what someone thinks or believes'},{word:'value',definition:'how much something is worth or matters'},{word:'contrast',definition:'to tell how things are different'},{word:'during',definition:'at the same time as something else'},{word:'retell',definition:'to tell again in your own words'},{word:'solution',definition:'the answer to a problem'},{word:'contain',definition:'to hold something inside'},{word:'context',definition:'the words or ideas around something'},{word:'difference',definition:'a way things are not alike'},{word:'design',definition:'to plan or create something'},{word:'summarize',definition:'to tell the main points briefly'},{word:'paragraph',definition:'a group of sentences about one idea'},{word:'selection',definition:'a chosen piece of reading'},{word:'sequence',definition:'the order things happen'},{word:'fiction',definition:'a story that is made up'},{word:'web',definition:'a network of connected parts'},{word:'mental',definition:'related to the mind or thinking'},{word:'method',definition:'a way of doing something'},{word:'result',definition:'what happens in the end'},{word:'analyze',definition:'to study something carefully'},{word:'communicate',definition:'to share ideas or information'},{word:'location',definition:'the place where something is'},{word:'apply',definition:'to use something'},{word:'classify',definition:'to group by shared features'},{word:'expand',definition:'to make larger'},{word:'recycle',definition:'to use something again in a new way'},{word:'carefully',definition:'with attention and caution'},{word:'interest',definition:'a feeling of wanting to learn more'},{word:'concept',definition:'an idea or understanding'},{word:'infer',definition:'to figure something out using clues'},{word:'source',definition:'a place where information comes from'},{word:'informational',definition:'giving facts and real information'},{word:'process',definition:'a series of steps'},{word:'revise',definition:'to improve or change something'},{word:'experience',definition:'something that happens to you'},{word:'correctly',definition:'in the right way'},{word:'preview',definition:'to look at before reading or learning'},{word:'relate',definition:'to connect to something'},{word:'system',definition:'a group of parts working together'},{word:'investigate',definition:'to study or explore carefully'},{word:'toward',definition:'in the direction of'},{word:'theme',definition:'the main message or lesson'}],
-    'Grade 3': [{word:'affect',definition:'to change or influence something'},{word:'organize',definition:'to arrange in order'},{word:'represent',definition:'to stand for or show something'},{word:'critical',definition:'very important'},{word:'factor',definition:'something that helps cause a result'},{word:'separate',definition:'to divide or keep apart'},{word:'locate',definition:'to find the place of something'},{word:'prediction',definition:'a thoughtful guess about what may happen'},{word:'operation',definition:'a process or action'},{word:'active',definition:'busy or doing something'},{word:'depend',definition:'to rely on something or someone'},{word:'section',definition:'a part of something larger'},{word:'term',definition:'a word or expression with a meaning'},{word:'hypothesis',definition:'a possible explanation that can be tested'},{word:'link',definition:'to connect together'},{word:'focus',definition:'to pay close attention'},{word:'similar',definition:'almost the same'},{word:'standard',definition:'a usual level or rule'},{word:'express',definition:'to share thoughts or feelings'},{word:'allow',definition:'to let something happen'},{word:'statement',definition:'a sentence that shares information'},{word:'observation',definition:'something noticed carefully'},{word:'suppose',definition:'to think something may be true'},{word:'improve',definition:'to make better'},{word:'adaptation',definition:'a change that helps something survive'},{word:'invent',definition:'to create something new'},{word:'balance',definition:'an even amount on each side'},{word:'develop',definition:'to grow or improve over time'},{word:'illustration',definition:'a picture that explains something'},{word:'definition',definition:'the meaning of a word'},{word:'display',definition:'to show something'},{word:'opposite',definition:'completely different'},{word:'phrase',definition:'a small group of words'},{word:'visual',definition:'related to seeing'},{word:'passage',definition:'a section of written text'},{word:'description',definition:'words that tell about something'},{word:'interpret',definition:'to explain the meaning of something'},{word:'nutrient',definition:'a substance living things need to grow'},{word:'characteristic',definition:'a feature or quality of something'},{word:'challenge',definition:'a difficult task or problem'},{word:'determine',definition:'to figure out or decide'},{word:'multiple',definition:'more than one'},{word:'online',definition:'connected to the internet'},{word:'prefix',definition:'a word part added to the beginning of a word'},{word:'professor',definition:'a teacher at a college or university'},{word:'revolve',definition:'to move around something'},{word:'situation',definition:'a set of conditions or events'},{word:'surround',definition:'to be all around something'},{word:'visualize',definition:'to picture something in your mind'},{word:'combination',definition:'a mix of things together'},{word:'conserve',definition:'to save or protect'},{word:'generalize',definition:'to make a broad statement from details'},{word:'interact',definition:'to act or communicate with others'},{word:'knowledge',definition:'information and understanding'},{word:'potential',definition:'possible ability or future success'},{word:'relevant',definition:'connected to the topic'},{word:'behavior',definition:'the way a person or animal acts'},{word:'evaluate',definition:'to judge or study carefully'},{word:'excite',definition:'to cause strong feelings or interest'},{word:'explanation',definition:'a statement that makes something clear'},{word:'interactive',definition:'involving actions between people or things'},{word:'declaration',definition:'a formal statement'},{word:'phase',definition:'a stage in a process'},{word:'procedure',definition:'a series of steps to follow'},{word:'response',definition:'an answer or reaction'},{word:'unique',definition:'one of a kind'},{word:'average',definition:'the middle or typical amount'},{word:'occur',definition:'to happen'},{word:'caption',definition:'words explaining a picture'},{word:'representative',definition:'someone chosen to speak for others'},{word:'suffix',definition:'a word part added to the end of a word'},{word:'construct',definition:'to build or put together'},{word:'content',definition:'the information inside something'},{word:'farther',definition:'at a greater distance'},{word:'fluency',definition:'the ability to read or speak smoothly'},{word:'inherit',definition:'to receive from family members'},{word:'relationship',definition:'the connection between things or people'},{word:'clearly',definition:'in a way that is easy to understand'},{word:'pronunciation',definition:'the way a word is spoken'},{word:'reasonableness',definition:'being fair or making sense'}],
-    'Grade 4': [{word:'range',definition:'the difference between the highest and lowest amount'},{word:'essay',definition:'a piece of writing about a topic'},{word:'condition',definition:'the state something is in'},{word:'scientific',definition:'related to science'},{word:'reference',definition:'information used for support or study'},{word:'increase',definition:'to become greater'},{word:'growth',definition:'the process of becoming larger'},{word:'convert',definition:'to change into something else'},{word:'customary',definition:'usual or traditional'},{word:'generalization',definition:'a broad statement based on details'},{word:'acute',definition:'sharp or severe'},{word:'inference',definition:'a conclusion based on evidence and clues'},{word:'conclude',definition:'to decide after thinking carefully'},{word:'role',definition:'the job or purpose of something'},{word:'comparison',definition:'the act of showing similarities'},{word:'partial',definition:'not complete'},{word:'select',definition:'to choose'},{word:'specific',definition:'exact or clearly stated'},{word:'basic',definition:'simple or most important'},{word:'progress',definition:'movement toward improvement'},{word:'actual',definition:'real or true'},{word:'appropriate',definition:'right or suitable for the situation'},{word:'task',definition:'a job or duty'},{word:'ability',definition:'a skill or talent'},{word:'conduct',definition:'to carry out or behave'},{word:'conflict',definition:'a disagreement or struggle'},{word:'influence',definition:'to affect or change something'},{word:'persuasive',definition:'able to convince others'},{word:'primary',definition:'main or most important'},{word:'audience',definition:'the people watching or listening'},{word:'historical',definition:'related to history'},{word:'organization',definition:'a group or arranged system'},{word:'positive',definition:'good or helpful'},{word:'precise',definition:'exact and accurate'},{word:'transform',definition:'to change greatly'},{word:'unfamiliar',definition:'not known well'},{word:'variety',definition:'a range of different kinds'},{word:'vary',definition:'to change or differ'},{word:'boundary',definition:'a border or limit'},{word:'career',definition:'a long-term job or profession'},{word:'exist',definition:'to be real or present'},{word:'narrow',definition:'not wide'},{word:'preserve',definition:'to protect or keep safe'},{word:'publish',definition:'to prepare and share publicly'},{word:'reduce',definition:'to make smaller or less'},{word:'simplify',definition:'to make easier to understand'},{word:'suggest',definition:'to offer an idea'},{word:'advertisement',definition:'a message made to persuade people to buy or act'},{word:'descriptive',definition:'using details to explain'},{word:'eventually',definition:'after some time'},{word:'involve',definition:'to include or require'},{word:'prevent',definition:'to stop something from happening'},{word:'endanger',definition:'to put at risk'},{word:'error',definition:'a mistake'},{word:'examine',definition:'to study carefully'},{word:'generate',definition:'to create or produce'},{word:'require',definition:'to need something'},{word:'decrease',definition:'to become smaller or less'},{word:'differ',definition:'to be unlike'},{word:'draft',definition:'a first version of writing'},{word:'evenly',definition:'in equal amounts'},{word:'inspire',definition:'to encourage or excite'},{word:'limit',definition:'the greatest amount allowed'},{word:'rate',definition:'the speed or amount of change'},{word:'beyond',definition:'on the farther side of'},{word:'discussion',definition:'a conversation about a topic'},{word:'forecast',definition:'a prediction about the future'},{word:'gain',definition:'to get or increase'},{word:'individual',definition:'a single person or thing'},{word:'original',definition:'the first or earliest'},{word:'prove',definition:'to show something is true'},{word:'accurate',definition:'correct and exact'},{word:'composite',definition:'made from different parts'},{word:'convince',definition:'to cause someone to believe'},{word:'establish',definition:'to set up or create'},{word:'inform',definition:'to give knowledge or facts'},{word:'instruction',definition:'directions for what to do'},{word:'particular',definition:'specific or exact'},{word:'relative',definition:'connected by comparison or family'},{word:'safely',definition:'in a secure way'},{word:'argument',definition:'a reasoned disagreement or claim'},{word:'complex',definition:'complicated or detailed'},{word:'definite',definition:'clear and certain'},{word:'department',definition:'a division within an organization'},{word:'outline',definition:'a plan showing main ideas'},{word:'prompt',definition:'to encourage quick action or thinking'},{word:'diverse',definition:'including many different kinds'},{word:'extreme',definition:'very great or severe'},{word:'persuade',definition:'to convince someone'},{word:'quantity',definition:'the amount of something'},{word:'realistic',definition:'reasonable and practical'},{word:'benefit',definition:'something helpful or useful'},{word:'clarify',definition:'to make easier to understand'},{word:'comprehend',definition:'to understand fully'},{word:'historic',definition:'important in history'},{word:'production',definition:'the process of making something'},{word:'similarity',definition:'a way things are alike'}],
-    'Grade 5': [{word:'compromise',definition:'an agreement where each side gives up something'},{word:'percent',definition:'a part out of one hundred'},{word:'advantage',definition:'something that helps or gives benefit'},{word:'coordinate',definition:'to organize or work together'},{word:'approve',definition:'to accept or agree with'},{word:'additional',definition:'extra or added'},{word:'assembly',definition:'a gathering of people'},{word:'exploration',definition:'the act of searching or discovering'},{word:'oppose',definition:'to disagree with or fight against'},{word:'arctic',definition:'related to the cold northern region'},{word:'indicate',definition:'to point out or show'},{word:'resistance',definition:'the act of opposing or slowing something'},{word:'approach',definition:'a way of dealing with something'},{word:'origin',definition:'the place or cause something began'},{word:'reveal',definition:'to make known or show'},{word:'quiz',definition:'a short test'},{word:'quotation',definition:'words copied exactly from another source'},{word:'quality',definition:'the condition or level of excellence'},{word:'adjust',definition:'to change slightly'},{word:'classification',definition:'the grouping of things by shared traits'},{word:'introduction',definition:'the beginning part of something'},{word:'representation',definition:'something standing for another thing'},{word:'previous',definition:'happening before'},{word:'constant',definition:'staying the same'},{word:'contribute',definition:'to give or help provide'},{word:'development',definition:'growth or progress'},{word:'everyday',definition:'common or ordinary'},{word:'feedback',definition:'helpful comments or advice'},{word:'impact',definition:'a strong effect or influence'},{word:'logical',definition:'reasonable and sensible'},{word:'secondary',definition:'less important than primary'},{word:'succession',definition:'a series following in order'},{word:'achieve',definition:'to reach a goal'},{word:'define',definition:'to explain the meaning'},{word:'maintain',definition:'to keep in good condition'},{word:'severe',definition:'very serious or harsh'},{word:'consist',definition:'to be made of'},{word:'lack',definition:'the absence of something needed'},{word:'viewpoint',definition:'a way of thinking about something'},{word:'category',definition:'a group sharing common features'},{word:'compact',definition:'small but complete'},{word:'composition',definition:'a piece of writing or arrangement'},{word:'concern',definition:'a worry or important matter'},{word:'dependent',definition:'relying on something else'},{word:'depression',definition:'a deep low area or strong sadness'},{word:'despite',definition:'without being stopped by'},{word:'detect',definition:'to discover or notice'},{word:'efficient',definition:'working well without waste'},{word:'medium',definition:'the middle size or amount'},{word:'obtain',definition:'to get or gain'},{word:'relation',definition:'a connection between things'},{word:'slightly',definition:'a little'},{word:'transition',definition:'a change from one state to another'},{word:'version',definition:'a form or variation of something'},{word:'attribute',definition:'a quality or feature'},{word:'engage',definition:'to involve or attract interest'},{word:'importance',definition:'the quality of being significant'},{word:'mainly',definition:'mostly'},{word:'preparation',definition:'the act of getting ready'},{word:'recall',definition:'to remember'},{word:'therefore',definition:'for that reason'},{word:'various',definition:'different kinds'},{word:'vast',definition:'very large'},{word:'accuracy',definition:'the quality of being correct'},{word:'alternative',definition:'another choice or option'},{word:'circulation',definition:'movement around an area or system'},{word:'concentrate',definition:'to focus attention'},{word:'critique',definition:'a careful review or evaluation'},{word:'disadvantage',definition:'something making success harder'},{word:'further',definition:'more distant or additional'},{word:'generally',definition:'in most cases'},{word:'highlight',definition:'to emphasize or make noticeable'},{word:'navigation',definition:'the act of finding directions or routes'},{word:'neutral',definition:'not taking sides'},{word:'presentation',definition:'a way of showing information'},{word:'propose',definition:'to suggest a plan or idea'},{word:'reliable',definition:'able to be trusted'},{word:'spiral',definition:'a curve winding around a center'},{word:'artificial',definition:'made by people rather than nature'},{word:'assessment',definition:'the process of evaluating'},{word:'behave',definition:'to act in a certain way'},{word:'confuse',definition:'to make unclear or difficult to understand'},{word:'constantly',definition:'continuously or repeatedly'},{word:'demonstrate',definition:'to show clearly'},{word:'desire',definition:'a strong wish'},{word:'dominant',definition:'most powerful or important'},{word:'exert',definition:'to apply force or effort'},{word:'gradually',definition:'slowly over time'},{word:'informal',definition:'casual or not official'},{word:'irregular',definition:'not following a pattern'},{word:'newly',definition:'recently'},{word:'promote',definition:'to encourage or support'},{word:'proportion',definition:'a relationship between amounts'},{word:'resolve',definition:'to solve or settle'},{word:'specialize',definition:'to focus on one area'},{word:'typical',definition:'usual or expected'},{word:'conjunction',definition:'a word connecting ideas or sentences'},{word:'contribution',definition:'something given to help'},{word:'convey',definition:'to communicate or express'},{word:'driven',definition:'motivated or powered'},{word:'encounter',definition:'to meet unexpectedly'},{word:'expectation',definition:'a belief about what will happen'},{word:'farthest',definition:'most distant'},{word:'homonym',definition:'a word sounding like another but with different meaning'},{word:'incorrect',definition:'not correct'},{word:'interaction',definition:'communication or action between things'},{word:'perspective',definition:'a particular way of viewing something'},{word:'scarce',definition:'hard to find or limited'},{word:'separation',definition:'the act of dividing apart'},{word:'suggestion',definition:'an idea offered for consideration'},{word:'technique',definition:'a special method or skill'}]
-  },
-  'Math Vocabulary': {
-    'Grade 1': [{word:'solve',definition:'to figure out an answer'},{word:'unit',definition:'a single part or amount'},{word:'subtract',definition:'to take away'},{word:'measure',definition:'to find the size or amount of something'},{word:'cube',definition:'a solid shape with 6 equal square sides'},{word:'equal',definition:'the same amount'},{word:'graph',definition:'a picture that shows information'},{word:'math',definition:'the study of numbers and shapes'},{word:'subtraction',definition:'taking one number away from another'},{word:'data',definition:'information collected to study'},{word:'mathematical',definition:'related to math'},{word:'estimate',definition:'a close guess'}],
-    'Grade 2': [{word:'length',definition:'how long something is'},{word:'centimeter',definition:'a small unit used to measure length'},{word:'total',definition:'the whole amount'},{word:'regroup',definition:'to rearrange numbers when adding or subtracting'},{word:'sum',definition:'the answer to an addition problem'},{word:'area',definition:'the amount of space inside a shape'},{word:'volume',definition:'the amount of space something fills'},{word:'addend',definition:'a number being added'},{word:'product',definition:'the answer to a multiplication problem'},{word:'least',definition:'the smallest amount'},{word:'digit',definition:'a number symbol from 0 to 9'},{word:'angle',definition:'the space where two lines meet'},{word:'equation',definition:'a math sentence with an equal sign'},{word:'rectangle',definition:'a shape with 4 sides and 4 right angles'},{word:'triangle',definition:'a shape with 3 sides'},{word:'round',definition:'to change a number to the nearest value'}],
-    'Grade 3': [{word:'fraction',definition:'a part of a whole'},{word:'multiplication',definition:'the process of repeated addition'},{word:'divide',definition:'to split into equal parts'},{word:'division',definition:'the process of separating into equal groups'},{word:'perimeter',definition:'the distance around a shape'},{word:'multiply',definition:'to add a number repeatedly'},{word:'distance',definition:'the space between two places'},{word:'x',definition:'the multiplication symbol or a variable'},{word:'graphic',definition:'a visual display of information'},{word:'compute',definition:'to solve using math'},{word:'scale',definition:'a system of measurement or size comparison'},{word:'measurement',definition:'the process of finding size or amount'},{word:'exercise',definition:'a practice activity or problem'},{word:'polygon',definition:'a closed shape with straight sides'},{word:'quadrilateral',definition:'a shape with 4 sides'},{word:'weigh',definition:'to measure how heavy something is'},{word:'algebra',definition:'a type of math using symbols and equations'},{word:'expression',definition:'a math phrase with numbers or symbols'},{word:'axis',definition:'a line used to measure or graph'},{word:'variable',definition:'a symbol that can stand for different values'},{word:'metric',definition:'a system used for measurement'},{word:'zero',definition:'the number showing no amount'},{word:'cone',definition:'a solid shape with a circular base and point'},{word:'commutative',definition:'showing numbers can change order and stay equal'},{word:'parallelogram',definition:'a shape with opposite sides parallel'},{word:'millimeter',definition:'a very small unit of length'}],
-    'Grade 4': [{word:'decimal',definition:'a number containing a decimal point'},{word:'ounce',definition:'a unit used to measure weight'},{word:'height',definition:'how tall something is'},{word:'equivalent',definition:'equal in value or amount'},{word:'per',definition:'for each'},{word:'quotient',definition:'the answer to a division problem'},{word:'cm',definition:'a shortened form of centimeter'},{word:'range',definition:'the difference between highest and lowest values'},{word:'hundredth',definition:'one part out of one hundred equal parts'},{word:'parallel',definition:'lines that never cross'},{word:'tenth',definition:'one part out of ten equal parts'},{word:'gallon',definition:'a unit used to measure liquid'},{word:'degree',definition:'a unit used to measure angles or temperature'},{word:'symmetry',definition:'balanced parts that match on both sides'},{word:'segment',definition:'a part of a line'},{word:'width',definition:'the distance from side to side'},{word:'output',definition:'the result produced'},{word:'obtuse',definition:'an angle greater than 90 degrees'},{word:'ton',definition:'a unit used to measure heavy weight'},{word:'numerator',definition:'the top number in a fraction'},{word:'dot',definition:'a small round mark'},{word:'input',definition:'information or values put into a system'},{word:'negative',definition:'less than zero'},{word:'remainder',definition:'the amount left over after division'},{word:'perpendicular',definition:'lines meeting at right angles'},{word:'function',definition:'a rule connecting inputs and outputs'},{word:'rotation',definition:'a turning movement'},{word:'cylinder',definition:'a solid shape with circular ends'},{word:'distributive',definition:'a property used to break apart multiplication'},{word:'simplify',definition:'to make easier or shorter'},{word:'milligram',definition:'a very small unit of weight'}],
-    'Grade 5': [{word:'prism',definition:'a solid shape with matching parallel ends'},{word:'ratio',definition:'a comparison between two amounts'},{word:'rectangular',definition:'shaped like a rectangle'},{word:'congruent',definition:'exactly the same size and shape'},{word:'exponent',definition:'a number showing repeated multiplication'},{word:'cubic',definition:'related to cubes or volume'},{word:'divisor',definition:'the number dividing another number'},{word:'calculate',definition:'to find an answer using math'},{word:'compatible',definition:'able to work together'},{word:'coordinate',definition:'a number pair locating a point'},{word:'dividend',definition:'the number being divided'},{word:'estimation',definition:'a close guess of an amount'},{word:'formula',definition:'a rule written using symbols and numbers'},{word:'rotate',definition:'to turn around a center point'},{word:'numerical',definition:'related to numbers'},{word:'calculator',definition:'a tool used for math problems'},{word:'thousandth',definition:'one part out of one thousand'},{word:'ft',definition:'a shortened form of foot or feet'},{word:'diameter',definition:'a line across a circle through the center'},{word:'acre',definition:'a unit used to measure land'},{word:'associative',definition:'a property allowing regrouping of numbers'},{word:'factorization',definition:'the process of breaking into factors'},{word:'slope',definition:'the steepness of a line'},{word:'triangular',definition:'shaped like a triangle'},{word:'vertical',definition:'straight up and down'},{word:'benchmark',definition:'a standard used for comparison'},{word:'rhombus',definition:'a shape with four equal sides'},{word:'horizontal',definition:'side to side'},{word:'homograph',definition:'a word spelled the same with different meanings'},{word:'index',definition:'a list or indicator'},{word:'median',definition:'the middle number in a set'},{word:'vertices',definition:'the corner points of shapes'},{word:'gcf',definition:'greatest common factor'},{word:'lcm',definition:'least common multiple'}]
-  },
-  'Science Vocabulary': {
-    'Grade 1': [{word:'plant',definition:'a living thing that grows in soil'},{word:'earth',definition:'the planet we live on'},{word:'soil',definition:'dirt where plants grow'},{word:'seed',definition:'the part of a plant that can grow into a new plant'},{word:'ocean',definition:'a very large body of salt water'},{word:'matter',definition:'anything that takes up space'},{word:'energy',definition:'power that makes things happen'},{word:'solid',definition:'matter that keeps its shape'},{word:'material',definition:'what something is made of'},{word:'scientist',definition:'a person who studies science'},{word:'heat',definition:'warmth or hotness'},{word:'liquid',definition:'matter that can flow'},{word:'habitat',definition:'the place where a plant or animal lives'},{word:'magnet',definition:'something that pulls certain metals'},{word:'temperature',definition:'how hot or cold something is'},{word:'nonliving',definition:'something that is not alive'},{word:'gas',definition:'matter that spreads out and fills space'},{word:'cycle',definition:'a series of events that repeats'},{word:'insect',definition:'a small animal with 6 legs'},{word:'lab',definition:'a place where science work is done'},{word:'stem',definition:'the part of a plant that holds it up'},{word:'shelter',definition:'a safe place for living things'},{word:'electricity',definition:'energy that powers lights and machines'},{word:'plastic',definition:'a material used to make many objects'},{word:'gram',definition:'a unit used to measure weight'},{word:'diagram',definition:'a drawing that explains something'},{word:'environment',definition:'the world around living things'},{word:'shell',definition:'a hard outer covering'},{word:'thermometer',definition:'a tool that measures temperature'},{word:'pole',definition:'either end of Earth or a magnet'},{word:'attract',definition:'to pull something closer'},{word:'engineer',definition:'a person who designs and builds things'},{word:'giraffe',definition:'a tall animal with a long neck'},{word:'mass',definition:'the amount of matter in something'},{word:'reuse',definition:'to use something again'},{word:'ant',definition:'a small insect that lives in groups'},{word:'planet',definition:'a large object that moves around a star'},{word:'elephant',definition:'a very large animal with a trunk'},{word:'caterpillar',definition:'a young insect that becomes a butterfly or moth'},{word:'gravity',definition:'the force that pulls things down'},{word:'liter',definition:'a unit used to measure liquid'},{word:'melt',definition:'to change from solid to liquid'},{word:'metal',definition:'a hard material found in nature'},{word:'mixture',definition:'two or more things combined together'},{word:'tadpole',definition:'a young frog with a tail'},{word:'astronaut',definition:'a person who travels into space'},{word:'cub',definition:'a baby bear, lion, or other wild animal'},{word:'mammal',definition:'an animal with hair or fur that drinks milk as a baby'},{word:'motion',definition:'movement'},{word:'vapor',definition:'a gas made from a liquid'},{word:'evaporate',definition:'to change from liquid to gas'},{word:'hive',definition:'a home for bees'},{word:'lens',definition:'a curved piece of glass used to help see things'},{word:'lizard',definition:'a reptile with scales'},{word:'seedling',definition:'a young plant'},{word:'dissolve',definition:'to mix completely into a liquid'},{word:'erosion',definition:'the wearing away of land'},{word:'flow',definition:'to move smoothly in one direction'},{word:'pulley',definition:'a wheel used to help lift things'},{word:'reflect',definition:'to bounce back light or sound'},{word:'wave',definition:'moving water or energy'},{word:'analog',definition:'a device with moving hands or parts'},{word:'beetle',definition:'a type of insect with hard wings'},{word:'foldable',definition:'something that can be folded'},{word:'fossil',definition:'the remains or mark of a living thing from long ago'},{word:'iron',definition:'a strong metal'},{word:'lever',definition:'a bar used to help lift or move things'},{word:'reptile',definition:'a cold-blooded animal with scales'},{word:'rocket',definition:'a machine that travels into space'},{word:'snail',definition:'a small animal with a shell'},{word:'survive',definition:'to stay alive'},{word:'tiger',definition:'a large wild cat with stripes'},{word:'wetland',definition:'land that stays wet much of the time'},{word:'dam',definition:'a wall built to hold back water'}],
-    'Grade 2': [{word:'penguin',definition:'a bird that cannot fly and lives in cold places'},{word:'landform',definition:'a natural feature of Earth\'s surface'},{word:'mineral',definition:'a natural substance found in rocks and soil'},{word:'dinosaur',definition:'a large reptile that lived long ago'},{word:'tornado',definition:'a spinning storm with strong winds'},{word:'hurricane',definition:'a large storm with strong wind and rain'},{word:'solar',definition:'related to the sun'},{word:'adapt',definition:'to change in order to fit a new situation'},{word:'orbit',definition:'the path something takes around a planet or star'},{word:'trait',definition:'a quality or feature of something'},{word:'beak',definition:'the hard mouth of a bird'},{word:'oil',definition:'a thick liquid found underground'},{word:'shark',definition:'a large fish with sharp teeth'},{word:'zone',definition:'an area with a certain purpose or feature'},{word:'backbone',definition:'the row of bones along the back'},{word:'climate',definition:'the usual weather of a place'},{word:'vibrate',definition:'to move back and forth quickly'},{word:'whale',definition:'a very large ocean mammal'},{word:'amphibian',definition:'an animal that lives on land and in water'},{word:'palm',definition:'a tree with large leaves or the inside of your hand'},{word:'rhythm',definition:'a repeated pattern of sound or movement'},{word:'volcano',definition:'a mountain that can erupt with melted rock'},{word:'cactus',definition:'a plant that grows well in dry places'},{word:'healthy',definition:'strong and well'},{word:'human',definition:'a person'},{word:'constellation',definition:'a group of stars forming a pattern'},{word:'pollen',definition:'fine powder made by flowers'},{word:'compound',definition:'something made of two or more parts'},{word:'oxygen',definition:'a gas living things need to breathe'},{word:'physical',definition:'related to the body or objects'},{word:'compass',definition:'a tool used to find direction'},{word:'footprint',definition:'a mark left by a foot'},{word:'muscle',definition:'a body part that helps movement'},{word:'oral',definition:'spoken instead of written'},{word:'precipitation',definition:'rain, snow, sleet, or hail'},{word:'texture',definition:'how something feels'},{word:'condense',definition:'to change from gas to liquid'},{word:'fuel',definition:'something burned to make energy'},{word:'grasshopper',definition:'an insect with strong jumping legs'},{word:'jellyfish',definition:'a soft sea animal with tentacles'},{word:'kilogram',definition:'a unit used to measure weight'},{word:'larva',definition:'a young form of an insect'},{word:'monitor',definition:'to watch or check carefully'},{word:'parrot',definition:'a colorful bird that can copy sounds'},{word:'prey',definition:'an animal hunted by another animal'},{word:'telescope',definition:'a tool used to see faraway objects'},{word:'beaver',definition:'an animal that builds dams in water'},{word:'burrow',definition:'a hole or tunnel dug by an animal'},{word:'decompose',definition:'to break down naturally'},{word:'extinct',definition:'no longer living anywhere on Earth'},{word:'loop',definition:'a curved shape that circles around'},{word:'lung',definition:'a body part used for breathing'},{word:'particle',definition:'a very tiny piece of something'},{word:'pollution',definition:'harmful waste added to the environment'},{word:'predator',definition:'an animal that hunts other animals'},{word:'tissue',definition:'a group of cells working together'},{word:'wire',definition:'a thin piece of metal used to carry electricity'},{word:'acorn',definition:'the nut of an oak tree'},{word:'chipmunk',definition:'a small striped animal like a squirrel'},{word:'equator',definition:'an imaginary line around the middle of Earth'},{word:'friction',definition:'a force that slows movement when things rub'},{word:'level',definition:'flat or even'},{word:'robin',definition:'a bird with a red chest'},{word:'satellite',definition:'an object that moves around a planet'},{word:'bulb',definition:'the glass part of a light'},{word:'coal',definition:'a black rock burned for energy'},{word:'coyote',definition:'a wild animal related to dogs'},{word:'crust',definition:'the outer layer of Earth'},{word:'current',definition:'a flow of water or electricity'},{word:'electric',definition:'using electricity'},{word:'gill',definition:'a body part fish use to breathe underwater'},{word:'hedgehog',definition:'a small animal with sharp spines'},{word:'herd',definition:'a group of animals living together'},{word:'mentally',definition:'using the mind'},{word:'pupa',definition:'a stage in insect growth before adulthood'},{word:'shuttle',definition:'a vehicle that travels back and forth'},{word:'silver',definition:'a shiny gray metal'},{word:'underground',definition:'below Earth\'s surface'},{word:'boil',definition:'to heat until bubbling'},{word:'camouflage',definition:'coloring that helps something blend in'},{word:'conservation',definition:'the protection of nature and resources'},{word:'coral',definition:'a hard ocean material made by sea animals'},{word:'crater',definition:'a large hole formed by an explosion or impact'},{word:'earthquake',definition:'a shaking of Earth\'s surface'},{word:'evaporation',definition:'the change from liquid to gas'},{word:'fern',definition:'a green plant with feathery leaves'},{word:'filter',definition:'to remove unwanted parts'},{word:'glacier',definition:'a large moving sheet of ice'},{word:'grassland',definition:'land covered mostly with grass'},{word:'hemisphere',definition:'half of Earth'},{word:'hibernate',definition:'to sleep deeply during winter'},{word:'nymph',definition:'a young insect form'},{word:'otter',definition:'an animal that swims and lives near water'},{word:'ramp',definition:'a sloped surface'},{word:'tilt',definition:'to lean to one side'},{word:'vibration',definition:'a quick back-and-forth movement'},{word:'woodland',definition:'land covered with trees'},{word:'zebra',definition:'an animal with black and white stripes'},{word:'astronomer',definition:'a scientist who studies space'},{word:'boulder',definition:'a very large rock'},{word:'chemical',definition:'a substance used or made in science'},{word:'contraction',definition:'a shortened word made from two words'},{word:'drought',definition:'a long time without rain'},{word:'humus',definition:'dark material in soil from dead plants and animals'},{word:'loam',definition:'soil made from sand, clay, and organic material'},{word:'loudness',definition:'how strong or soft a sound is'},{word:'manatee',definition:'a large sea mammal'},{word:'paleontologist',definition:'a scientist who studies fossils'},{word:'pollute',definition:'to make land, air, or water dirty'},{word:'powder',definition:'tiny dry particles'},{word:'raccoon',definition:'a small animal with a striped tail'},{word:'reflection',definition:'light or an image bouncing back'},{word:'skeleton',definition:'the set of bones in a body'},{word:'sprout',definition:'to begin growing'},{word:'strand',definition:'a thin piece or strip'},{word:'substance',definition:'a type of material'},{word:'dye',definition:'color used to change the color of something'},{word:'environmental',definition:'related to nature and the environment'},{word:'polar',definition:'related to Earth\'s poles'}],
-    'Grade 3': [{word:'ecosystem',definition:'a community of living things and their environment'},{word:'organism',definition:'a living thing'},{word:'adaptation',definition:'a change that helps a living thing survive'},{word:'signal',definition:'something used to send information'},{word:'milliliter',definition:'a small unit used to measure liquid'},{word:'electrical',definition:'related to electricity'},{word:'cell',definition:'the basic unit of living things'},{word:'reproduce',definition:'to make more of the same kind'},{word:'potential',definition:'possible ability or power'},{word:'atmosphere',definition:'the layer of gases around Earth'},{word:'renewable',definition:'able to be replaced naturally'},{word:'disease',definition:'an illness that harms the body'},{word:'vertebrate',definition:'an animal with a backbone'},{word:'wedge',definition:'a tool or shape used for splitting'},{word:'absorb',definition:'to soak up or take in'},{word:'circuit',definition:'a path electricity follows'},{word:'nonrenewable',definition:'unable to be replaced quickly'},{word:'crane',definition:'a machine used to lift heavy objects'},{word:'iguana',definition:'a large lizard'},{word:'kinetic',definition:'related to motion or movement'},{word:'tortoise',definition:'a land turtle with a hard shell'},{word:'kilometer',definition:'a unit used to measure distance'},{word:'lava',definition:'melted rock flowing from a volcano'},{word:'male',definition:'the sex that can father young'},{word:'axle',definition:'a rod that connects wheels'},{word:'pressure',definition:'force pushing on something'},{word:'rattlesnake',definition:'a snake with a rattling tail'},{word:'refract',definition:'to bend light or sound'},{word:'alligator',definition:'a large reptile with strong jaws'},{word:'carbon',definition:'an element found in all living things'},{word:'germinate',definition:'to begin growing from a seed'},{word:'microscope',definition:'a tool used to see tiny objects'},{word:'dioxide',definition:'a compound with two oxygen atoms'},{word:'invertebrate',definition:'an animal without a backbone'},{word:'roadrunner',definition:'a fast-running bird'},{word:'wildfire',definition:'a large uncontrolled fire'},{word:'freshwater',definition:'water without salt'},{word:'mercury',definition:'a liquid metal or a planet'},{word:'panda',definition:'a black-and-white bear from China'},{word:'screw',definition:'a tool or fastener with spiral grooves'},{word:'germ',definition:'a tiny living thing that can cause disease'},{word:'igneous',definition:'formed from cooled melted rock'},{word:'sedimentary',definition:'formed from layers of sediment'},{word:'aluminum',definition:'a lightweight metal'},{word:'condensation',definition:'the change from gas to liquid'},{word:'copper',definition:'a reddish-brown metal'},{word:'magma',definition:'melted rock under Earth\'s surface'},{word:'offspring',definition:'the young of a living thing'},{word:'beam',definition:'a long piece of wood or metal'},{word:'conductor',definition:'a material that carries heat or electricity'},{word:'frequency',definition:'how often something happens'},{word:'metamorphic',definition:'rock changed by heat and pressure'},{word:'plateau',definition:'a high area of flat land'},{word:'spore',definition:'a tiny part that can grow into a new organism'},{word:'steam',definition:'water in gas form'},{word:'thermal',definition:'related to heat'},{word:'tube',definition:'a hollow cylinder-shaped object'},{word:'battery',definition:'a device that stores energy'},{word:'compost',definition:'decayed material used to enrich soil'},{word:'crystal',definition:'a solid with a repeating pattern'},{word:'density',definition:'how much matter is packed into space'},{word:'gasoline',definition:'fuel used in many vehicles'},{word:'sensory',definition:'related to the senses'},{word:'chameleon',definition:'a lizard that can change color'},{word:'cord',definition:'a thick string or wire'},{word:'metamorphosis',definition:'a major change in form during growth'},{word:'silt',definition:'fine soil carried by water'},{word:'topsoil',definition:'the upper layer of soil'},{word:'comet',definition:'a space object with ice and dust'},{word:'decay',definition:'to break down over time'},{word:'insulator',definition:'a material that slows heat or electricity'},{word:'magnetism',definition:'the force caused by magnets'},{word:'mold',definition:'a fungus that grows in damp places'},{word:'tide',definition:'the rise and fall of ocean water'},{word:'wetlands',definition:'land covered with shallow water'},{word:'algae',definition:'simple plant-like organisms living in water'},{word:'blast',definition:'a sudden strong explosion'},{word:'blob',definition:'a soft rounded shape'},{word:'droplet',definition:'a very small drop of liquid'},{word:'granite',definition:'a hard rock'},{word:'groundwater',definition:'water found underground'},{word:'landslide',definition:'a mass of earth sliding downhill'},{word:'locust',definition:'a jumping insect that travels in groups'},{word:'magnify',definition:'to make something appear larger'},{word:'marsh',definition:'a wet area with grasses'},{word:'photosynthesis',definition:'the process plants use to make food'},{word:'prototype',definition:'a first model used for testing'},{word:'species',definition:'a group of similar living things'},{word:'tundra',definition:'a cold treeless region'},{word:'turbine',definition:'a machine moved by water, wind, or steam'},{word:'vaccine',definition:'a substance that helps prevent disease'},{word:'bolt',definition:'a metal fastener or a flash of lightning'},{word:'coniferous',definition:'related to trees with cones'},{word:'eruption',definition:'the sudden release from a volcano'},{word:'imprint',definition:'a mark or impression left behind'},{word:'laboratory',definition:'a place for scientific work'},{word:'magnetic',definition:'related to magnets'},{word:'mantle',definition:'the layer inside Earth below the crust'},{word:'microwave',definition:'a type of energy wave or cooking appliance'},{word:'moist',definition:'slightly wet'},{word:'moss',definition:'a small green plant without flowers'},{word:'moth',definition:'an insect similar to a butterfly'},{word:'nerve',definition:'a body part carrying messages'},{word:'salty',definition:'containing salt'},{word:'sediment',definition:'small pieces of material that settle'},{word:'transfer',definition:'to move from one place to another'},{word:'woodpecker',definition:'a bird that pecks trees'},{word:'asteroid',definition:'a rocky object in space'},{word:'bedrock',definition:'solid rock under soil'},{word:'billion',definition:'one thousand million'},{word:'binocular',definition:'a tool used to see faraway things'},{word:'carnivore',definition:'an animal that eats meat'},{word:'deposit',definition:'to leave behind'},{word:'erode',definition:'to wear away slowly'},{word:'fir',definition:'a type of evergreen tree'},{word:'healthful',definition:'good for health'},{word:'herbivore',definition:'an animal that eats plants'},{word:'landfill',definition:'a place where trash is buried'},{word:'mechanical',definition:'related to machines'},{word:'meteorologist',definition:'a scientist who studies weather'},{word:'mimicry',definition:'copying another organism\'s appearance'},{word:'mound',definition:'a small hill or pile'},{word:'nectar',definition:'sweet liquid made by flowers'},{word:'petal',definition:'a colorful part of a flower'},{word:'pollinate',definition:'to move pollen between flowers'},{word:'reef',definition:'a ridge of rock or coral underwater'},{word:'reservoir',definition:'a place where water is stored'},{word:'robotic',definition:'related to robots'},{word:'rod',definition:'a straight thin bar'},{word:'spacecraft',definition:'a vehicle used in space'},{word:'stalk',definition:'the main stem of a plant'},{word:'vinegar',definition:'a sour liquid used in cooking'},{word:'windmill',definition:'a machine powered by wind'},{word:'bacteria',definition:'tiny living things found almost everywhere'},{word:'bamboo',definition:'a tall fast-growing plant'},{word:'bobcat',definition:'a wild cat with a short tail'},{word:'cheetah',definition:'a very fast wild cat'},{word:'chimpanzee',definition:'a large ape'},{word:'coil',definition:'a wound or spiral shape'},{word:'conifer',definition:'a tree that produces cones'},{word:'deciduous',definition:'trees that lose leaves yearly'},{word:'diversity',definition:'a variety of different things'},{word:'dolphin',definition:'a smart ocean mammal'},{word:'faucet',definition:'a device that controls water flow'},{word:'fertilize',definition:'to help plants grow by adding nutrients'},{word:'fluid',definition:'a substance that flows'},{word:'fulcrum',definition:'the support point of a lever'},{word:'gear',definition:'a toothed wheel in a machine'},{word:'geologist',definition:'a scientist who studies rocks and Earth'},{word:'honeybee',definition:'a bee that makes honey'},{word:'horizon',definition:'the line where Earth and sky seem to meet'},{word:'intestine',definition:'a body organ used in digestion'},{word:'kangaroo',definition:'an Australian animal that hops'},{word:'limestone',definition:'a rock formed from shells and minerals'},{word:'magnolia',definition:'a flowering tree'},{word:'millimeter',definition:'a very small unit of length'},{word:'newton',definition:'a unit used to measure force'},{word:'observatory',definition:'a place for studying space'},{word:'omnivore',definition:'an animal that eats plants and animals'},{word:'ore',definition:'rock containing useful minerals'},{word:'ostrich',definition:'a large bird that cannot fly'},{word:'perch',definition:'to rest on something high'},{word:'polio',definition:'a serious disease caused by a virus'},{word:'pollination',definition:'the movement of pollen between flowers'},{word:'rainwater',definition:'water from rain'},{word:'redesign',definition:'to design again in a new way'},{word:'spoonful',definition:'the amount a spoon holds'},{word:'stratus',definition:'a flat layer of clouds'},{word:'subsoil',definition:'the layer of soil below topsoil'},{word:'survival',definition:'staying alive'},{word:'termite',definition:'a small insect that eats wood'},{word:'transparency',definition:'the ability to see through something'},{word:'transport',definition:'to carry from one place to another'},{word:'virus',definition:'a tiny germ that causes disease'},{word:'yeast',definition:'a tiny organism used in baking'}],
-    'Grade 4': [{word:'electromagnet',definition:'a magnet powered by electricity'},{word:'organ',definition:'a body part with a special job'},{word:'eclipse',definition:'when one object blocks another in space'},{word:'moisture',definition:'small amounts of water'},{word:'humidity',definition:'the amount of water vapor in the air'},{word:'radiation',definition:'energy moving through waves or particles'},{word:'snowflake',definition:'a crystal of frozen water'},{word:'generator',definition:'a machine that produces electricity'},{word:'visible',definition:'able to be seen'},{word:'wavelength',definition:'the distance between wave peaks'},{word:'pistil',definition:'the female part of a flower'},{word:'reaction',definition:'a change caused by something else'},{word:'redwood',definition:'a very tall evergreen tree'},{word:'sponge',definition:'a soft sea animal with tiny holes'},{word:'basin',definition:'a low area where water collects'},{word:'convection',definition:'the movement of heat through liquids or gases'},{word:'attraction',definition:'a force pulling things together'},{word:'conduction',definition:'the transfer of heat through contact'},{word:'deposition',definition:'the dropping or settling of material'},{word:'static',definition:'not moving or related to static electricity'},{word:'acid',definition:'a substance with sour or strong chemical properties'},{word:'antarctic',definition:'related to the South Pole region'},{word:'downhill',definition:'moving downward'},{word:'fungi',definition:'living things like mushrooms and mold'},{word:'jungle',definition:'a thick tropical forest'},{word:'lunar',definition:'related to the moon'},{word:'marine',definition:'related to the ocean'},{word:'quartz',definition:'a hard mineral crystal'},{word:'velocity',definition:'speed in a certain direction'},{word:'elk',definition:'a large deer'},{word:'rust',definition:'a reddish coating formed on metal'},{word:'electronic',definition:'using electricity or computer technology'},{word:'salamander',definition:'an amphibian with a long body'},{word:'stamen',definition:'the male part of a flower'},{word:'universe',definition:'all space and everything in it'},{word:'accelerate',definition:'to increase speed'},{word:'acceleration',definition:'the rate of increasing speed'},{word:'atom',definition:'the smallest unit of matter'},{word:'biologist',definition:'a scientist who studies living things'},{word:'biome',definition:'a large region with certain plants and animals'},{word:'gene',definition:'a unit that carries traits from parents'},{word:'luster',definition:'the way something reflects light'},{word:'barge',definition:'a large flat boat used to carry goods'},{word:'citrus',definition:'a type of fruit like oranges or lemons'},{word:'geyser',definition:'a hot spring that sprays water'},{word:'ridge',definition:'a long narrow hilltop'},{word:'skeletal',definition:'related to bones'},{word:'appliance',definition:'a machine used in the home'},{word:'arthropod',definition:'an animal with an outer skeleton and jointed legs'},{word:'digestive',definition:'related to breaking down food'},{word:'dwarf',definition:'something much smaller than usual'},{word:'genus',definition:'a group of related species'},{word:'gravel',definition:'small loose stones'},{word:'shaft',definition:'a long rod or pole'},{word:'soybean',definition:'a plant grown for food and oil'},{word:'spectrum',definition:'a range of colors or waves'},{word:'amplitude',definition:'the height of a wave'},{word:'aquifer',definition:'a layer of rock holding groundwater'},{word:'beaker',definition:'a container used in science labs'},{word:'biomes',definition:'large regions with certain climates and living things'},{word:'chloroplast',definition:'the part of a plant cell making food'},{word:'circulatory',definition:'related to blood movement in the body'},{word:'electrician',definition:'a person who works with electrical systems'},{word:'fertilization',definition:'the joining of cells to begin life'},{word:'formation',definition:'the process of forming something'},{word:'humid',definition:'containing much moisture'},{word:'hybrid',definition:'a mix of two different things'},{word:'mosquito',definition:'a flying insect that bites'},{word:'nucleus',definition:'the center part of a cell or atom'},{word:'petroleum',definition:'oil found underground'},{word:'raindrop',definition:'a small drop of rain'},{word:'vessel',definition:'a tube carrying liquid or a large boat'},{word:'anemometer',definition:'a tool measuring wind speed'},{word:'barometer',definition:'a tool measuring air pressure'},{word:'bond',definition:'a force holding things together'},{word:'capsule',definition:'a small container or covering'},{word:'chlorophyll',definition:'the green substance helping plants make food'},{word:'continental',definition:'related to continents'},{word:'dandelion',definition:'a common yellow flower'},{word:'debris',definition:'scattered broken pieces'},{word:'ecology',definition:'the study of living things and environments'},{word:'electromagnetic',definition:'related to electricity and magnetism'},{word:'ellipse',definition:'a stretched circular shape'},{word:'explode',definition:'to burst apart suddenly'},{word:'ferry',definition:'a boat carrying people or vehicles'},{word:'fiber',definition:'a thin threadlike material'},{word:'funnel',definition:'a tool with a wide top and narrow bottom'},{word:'galaxy',definition:'a huge group of stars in space'},{word:'greenhouse',definition:'a structure used to grow plants'},{word:'hummingbird',definition:'a small bird that hovers while flying'},{word:'insulate',definition:'to protect from heat, cold, or electricity'},{word:'lagoon',definition:'a shallow body of water near land'},{word:'lichen',definition:'a living thing made from fungi and algae'},{word:'mammoth',definition:'a huge ancient elephant-like animal'},{word:'mangrove',definition:'a tropical tree growing in wet coastal areas'},{word:'meadow',definition:'a grassy open field'},{word:'microorganism',definition:'a tiny living thing seen only with a microscope'},{word:'muscular',definition:'related to muscles'},{word:'opal',definition:'a colorful gemstone'},{word:'ovary',definition:'the female part producing eggs'},{word:'polyp',definition:'a small sea animal attached to surfaces'},{word:'protist',definition:'a simple living organism'},{word:'refraction',definition:'the bending of light'},{word:'respiratory',definition:'related to breathing'},{word:'runoff',definition:'water flowing over land'},{word:'seep',definition:'to slowly pass through'},{word:'shellfish',definition:'water animals with shells'},{word:'solvent',definition:'a liquid that dissolves substances'},{word:'transparent',definition:'clear enough to see through'},{word:'tsunami',definition:'a giant ocean wave caused by earthquakes'},{word:'vacuum',definition:'a space with little or no matter'},{word:'vane',definition:'a flat piece showing wind direction'},{word:'volcanic',definition:'related to volcanoes'},{word:'abiotic',definition:'nonliving parts of an environment'},{word:'anther',definition:'the part of a flower producing pollen'},{word:'clam',definition:'a shellfish with two shells'},{word:'convex',definition:'curving outward'},{word:'ecologist',definition:'a scientist studying ecosystems'},{word:'filament',definition:'a thin threadlike part'},{word:'geothermal',definition:'related to Earth\'s internal heat'},{word:'hydrogen',definition:'a light gas element'},{word:'iceberg',definition:'a large floating piece of ice'},{word:'immune',definition:'protected from disease'},{word:'inertia',definition:'the tendency to resist movement changes'},{word:'interdependent',definition:'depending on each other'},{word:'laser',definition:'a strong focused beam of light'},{word:'lightweight',definition:'not heavy'},{word:'meteor',definition:'a streak of light from space rock burning'},{word:'molecule',definition:'a group of atoms joined together'},{word:'molten',definition:'melted by heat'},{word:'nuclear',definition:'related to the center of an atom'},{word:'opaque',definition:'not allowing light through'},{word:'pathogenic',definition:'able to cause disease'},{word:'pellet',definition:'a small round piece'},{word:'permeability',definition:'the ability of liquid to pass through'},{word:'pore',definition:'a tiny opening'},{word:'python',definition:'a large snake'},{word:'reproduction',definition:'the process of producing offspring'},{word:'salmon',definition:'a fish that swims upstream to lay eggs'},{word:'shrub',definition:'a small bush'},{word:'spinal',definition:'related to the spine'},{word:'stimulus',definition:'something causing a reaction'},{word:'taiga',definition:'a cold forest biome with evergreen trees'},{word:'technician',definition:'a skilled worker using special equipment'},{word:'alloy',definition:'a mixture of metals'},{word:'anthill',definition:'a mound built by ants'},{word:'biotic',definition:'living parts of an environment'},{word:'bog',definition:'a wet muddy area'},{word:'chlorine',definition:'a chemical element used to clean water'},{word:'cirrus',definition:'thin wispy clouds high in the sky'},{word:'concave',definition:'curving inward'},{word:'cork',definition:'a lightweight material from tree bark'},{word:'crest',definition:'the top of a hill or wave'},{word:'cypress',definition:'a type of tree'},{word:'digest',definition:'to break down food'},{word:'dormant',definition:'inactive or resting'},{word:'exoskeleton',definition:'a hard outer covering on some animals'},{word:'filtration',definition:'the process of removing particles from liquids'},{word:'heredity',definition:'the passing of traits from parents'},{word:'insulation',definition:'material reducing heat or electricity transfer'},{word:'jackrabbit',definition:'a fast hare with long ears'},{word:'lightbulb',definition:'a glass bulb producing light'},{word:'litmus',definition:'a substance used to test acids and bases'},{word:'magnitude',definition:'the size or strength of something'},{word:'metallic',definition:'related to metal'},{word:'milky',definition:'looking like milk'},{word:'movable',definition:'able to be moved'},{word:'mussel',definition:'a shellfish living in water'},{word:'neuron',definition:'a nerve cell'},{word:'nitrogen',definition:'a gas making up much of Earth\'s atmosphere'},{word:'octopus',definition:'a sea animal with eight arms'},{word:'outlet',definition:'a place where electricity is available'},{word:'oyster',definition:'a shellfish producing pearls'},{word:'parasite',definition:'an organism living off another organism'},{word:'pendulum',definition:'a swinging weight'},{word:'pesticide',definition:'a chemical used to kill pests'},{word:'phosphate',definition:'a chemical compound containing phosphorus'},{word:'rover',definition:'a vehicle used to explore surfaces'},{word:'scavenge',definition:'to search for usable materials or food'},{word:'seismic',definition:'related to earthquakes'},{word:'seismograph',definition:'a tool measuring earthquakes'},{word:'sepal',definition:'the outer part protecting a flower bud'},{word:'shoreline',definition:'the edge where land meets water'},{word:'slab',definition:'a thick flat piece'},{word:'solubility',definition:'the ability to dissolve'},{word:'solute',definition:'a substance dissolved in a liquid'},{word:'swarm',definition:'a large moving group of insects or animals'},{word:'temperate',definition:'with moderate temperatures'},{word:'tentacle',definition:'a long flexible arm-like body part'},{word:'terrace',definition:'a flat area cut into a slope'},{word:'translucent',definition:'allowing some light through'},{word:'tropism',definition:'a plant\'s response to stimuli'},{word:'collide',definition:'to crash together'},{word:'cumulus',definition:'puffy white clouds'},{word:'fibrous',definition:'made of fibers'},{word:'hailstone',definition:'a ball of frozen rain'},{word:'incandescent',definition:'glowing because of heat'},{word:'involuntary',definition:'happening without control'},{word:'mealworm',definition:'the larva of a beetle'},{word:'milligram',definition:'a very small unit of weight'},{word:'organic',definition:'related to living things'},{word:'strait',definition:'a narrow water passage'},{word:'taproot',definition:'a large main root'},{word:'theory',definition:'a tested explanation based on evidence'}],
-    'Grade 5': [{word:'electron',definition:'a tiny negatively charged particle in an atom'},{word:'resistance',definition:'the slowing or opposing of electric flow'},{word:'proton',definition:'a positively charged particle in an atom'},{word:'nonmetal',definition:'an element without metallic properties'},{word:'sodium',definition:'a soft chemical element found in salt'},{word:'vascular',definition:'related to tubes carrying water or nutrients'},{word:'animation',definition:'the appearance of movement in images'},{word:'phylum',definition:'a major group of related organisms'},{word:'artery',definition:'a blood vessel carrying blood from the heart'},{word:'niche',definition:'the role an organism has in its environment'},{word:'respiration',definition:'the process of releasing energy from food'},{word:'vein',definition:'a blood vessel carrying blood to the heart'},{word:'infrared',definition:'a type of invisible heat energy'},{word:'malaria',definition:'a disease spread by mosquitoes'},{word:'asexual',definition:'reproducing without two parents'},{word:'capillary',definition:'a tiny blood vessel'},{word:'circulation',definition:'the movement of blood through the body'},{word:'kidney',definition:'an organ that filters waste from blood'},{word:'atomic',definition:'related to atoms'},{word:'behavioral',definition:'related to actions or behavior'},{word:'exert',definition:'to apply force or effort'},{word:'ion',definition:'a charged atom or molecule'},{word:'resistor',definition:'a device limiting electric current'},{word:'biomass',definition:'the total amount of living material'},{word:'compression',definition:'the act of pressing together'},{word:'embryo',definition:'an early stage of development'},{word:'helium',definition:'a light gas element'},{word:'interaction',definition:'action or influence between things'},{word:'multicellular',definition:'made of many cells'},{word:'neutron',definition:'a particle in an atom with no charge'},{word:'phloem',definition:'plant tissue carrying food'},{word:'prosthetic',definition:'an artificial body part'},{word:'xylem',definition:'plant tissue carrying water'},{word:'chemistry',definition:'the study of matter and changes'},{word:'chloride',definition:'a chemical compound containing chlorine'},{word:'contour',definition:'the outline or shape of land'},{word:'gland',definition:'an organ producing substances for the body'},{word:'gravitational',definition:'related to gravity'},{word:'membrane',definition:'a thin layer covering or separating'},{word:'metalloid',definition:'an element with metal and nonmetal traits'},{word:'pollutant',definition:'a harmful substance in the environment'},{word:'rainforest',definition:'a dense forest with heavy rainfall'},{word:'recessive',definition:'a trait hidden by a dominant trait'},{word:'sac',definition:'a pouch-like structure'},{word:'transmit',definition:'to send from one place to another'},{word:'anaconda',definition:'a very large snake'},{word:'caribou',definition:'a large deer living in cold regions'},{word:'disk',definition:'a flat round object'},{word:'esophagus',definition:'the tube carrying food to the stomach'},{word:'extinction',definition:'the complete disappearance of a species'},{word:'koala',definition:'an Australian tree-dwelling animal'},{word:'sexual',definition:'reproducing with two parents'},{word:'structural',definition:'related to structure or support'},{word:'vent',definition:'an opening for air or gas'},{word:'cellular',definition:'related to cells'},{word:'chemist',definition:'a scientist studying chemistry'},{word:'conductivity',definition:'the ability to carry heat or electricity'},{word:'discharge',definition:'to release energy or liquid'},{word:'estuary',definition:'a place where river and ocean water meet'},{word:'hydroelectric',definition:'producing electricity from moving water'},{word:'hydrosphere',definition:'all water on Earth'},{word:'limb',definition:'an arm or leg'},{word:'meteorite',definition:'a space rock reaching Earth'},{word:'microchip',definition:'a tiny electronic circuit'},{word:'nebula',definition:'a cloud of gas and dust in space'},{word:'stable',definition:'steady and not changing easily'},{word:'tectonic',definition:'related to Earth\'s crust movement'},{word:'vacuole',definition:'a storage space inside a cell'},{word:'ventricle',definition:'a lower chamber of the heart'},{word:'zoologist',definition:'a scientist studying animals'},{word:'alcohol',definition:'a liquid chemical substance'},{word:'angiosperm',definition:'a flowering plant producing seeds'},{word:'antibiotic',definition:'a medicine fighting bacteria'},{word:'bladder',definition:'an organ storing urine'},{word:'brine',definition:'very salty water'},{word:'calcium',definition:'a mineral important for bones'},{word:'combustion',definition:'the process of burning'},{word:'compress',definition:'to press together'},{word:'concentration',definition:'the amount of a substance in a mixture'},{word:'digestion',definition:'the process of breaking down food'},{word:'dimple',definition:'a small hollow area'},{word:'excretory',definition:'related to removing waste from the body'},{word:'finch',definition:'a small bird'},{word:'fungus',definition:'a living thing like mold or mushrooms'},{word:'glassy',definition:'smooth and shiny like glass'},{word:'gradual',definition:'happening slowly over time'},{word:'hormone',definition:'a chemical messenger in the body'},{word:'lithosphere',definition:'the solid outer layer of Earth'},{word:'photon',definition:'a tiny unit of light energy'},{word:'plasma',definition:'a state of matter made of charged particles'},{word:'pollinator',definition:'an organism moving pollen between flowers'},{word:'regulate',definition:'to control or adjust'},{word:'salinity',definition:'the amount of salt in water'},{word:'sublimation',definition:'the change from solid directly to gas'},{word:'sulfur',definition:'a yellow chemical element'},{word:'symbiosis',definition:'a close relationship between organisms'},{word:'tablet',definition:'a small flat object or medicine'},{word:'thickness',definition:'the distance between opposite sides'},{word:'trachea',definition:'the windpipe carrying air to lungs'},{word:'unicellular',definition:'made of one cell'},{word:'urchin',definition:'a small spiny sea animal'},{word:'valve',definition:'a structure controlling flow'},{word:'anemone',definition:'a sea animal with tentacles'},{word:'antelope',definition:'a fast-running hoofed animal'},{word:'atrium',definition:'an upper chamber of the heart'},{word:'basalt',definition:'a dark volcanic rock'},{word:'bioengineer',definition:'a scientist combining biology and engineering'},{word:'bleach',definition:'a chemical used for cleaning or whitening'},{word:'brightness',definition:'the amount of light something gives'},{word:'buildup',definition:'the gradual increase of something'},{word:'buoyancy',definition:'the ability to float'},{word:'crescent',definition:'a curved moon-like shape'},{word:'cyclone',definition:'a large spinning storm'},{word:'decibel',definition:'a unit measuring sound'},{word:'donor',definition:'a person giving blood, organs, or tissue'},{word:'echolocation',definition:'finding objects using reflected sound'},{word:'epicenter',definition:'the point above an earthquake\'s center'},{word:'fragment',definition:'a broken piece'},{word:'fuse',definition:'a safety device stopping electric flow'},{word:'gel',definition:'a jellylike substance'},{word:'genetic',definition:'related to genes or heredity'},{word:'impulse',definition:'a signal traveling through nerves'},{word:'indicator',definition:'something showing a condition or result'},{word:'infect',definition:'to spread disease'},{word:'inflate',definition:'to fill with air or gas'},{word:'invasive',definition:'spreading harmfully into new areas'},{word:'joule',definition:'a unit measuring energy'},{word:'larvae',definition:'young forms of insects or animals'},{word:'liver',definition:'a body organ processing nutrients and waste'},{word:'magnesium',definition:'a chemical element important to living things'},{word:'meteoroid',definition:'a small rocky object in space'},{word:'microscopic',definition:'too small to see without magnification'},{word:'momentum',definition:'the force of moving objects'},{word:'mucus',definition:'a slippery substance in the body'},{word:'mutation',definition:'a change in genetic material'},{word:'nonvascular',definition:'lacking tubes for carrying fluids'},{word:'peat',definition:'partly decayed plant material'},{word:'pouch',definition:'a small baglike structure'},{word:'projection',definition:'an estimate or planned display'},{word:'sandpaper',definition:'rough paper used for smoothing'},{word:'setup',definition:'the arrangement of equipment'},{word:'sieve',definition:'a tool used for separating materials'},{word:'silicon',definition:'a chemical element used in electronics'},{word:'specimen',definition:'a sample used for study'},{word:'stomata',definition:'tiny openings on leaves'},{word:'supernova',definition:'a giant exploding star'},{word:'testable',definition:'able to be checked by experiment'},{word:'transpiration',definition:'the release of water vapor by plants'},{word:'trench',definition:'a deep narrow valley or ocean floor cut'},{word:'troposphere',definition:'the lowest layer of Earth\'s atmosphere'},{word:'ultraviolet',definition:'a type of invisible light energy'},{word:'ammonia',definition:'a strong-smelling chemical gas'},{word:'antacid',definition:'a medicine reducing stomach acid'},{word:'aquatic',definition:'related to water'},{word:'archaea',definition:'a group of tiny single-celled organisms'},{word:'biceps',definition:'a muscle in the upper arm'},{word:'biology',definition:'the study of living things'},{word:'bronchiole',definition:'a small airway in the lungs'},{word:'bulge',definition:'a rounded swelling'},{word:'cobalt',definition:'a metallic chemical element'},{word:'collision',definition:'a crash between objects'},{word:'cytoplasm',definition:'the jellylike material inside cells'},{word:'dicot',definition:'a flowering plant with two seed leaves'},{word:'echinoderm',definition:'a spiny-skinned sea animal'},{word:'exhale',definition:'to breathe out'},{word:'furnace',definition:'a device producing heat'},{word:'gelatin',definition:'a soft jellylike substance'},{word:'graphite',definition:'a soft form of carbon'},{word:'gymnosperm',definition:'a plant producing uncovered seeds'},{word:'hazard',definition:'a danger or risk'},{word:'infection',definition:'the spread of disease in the body'},{word:'inorganic',definition:'not coming from living things'},{word:'iodine',definition:'a chemical element needed by the body'},{word:'kelp',definition:'a large ocean plant'},{word:'marrow',definition:'soft tissue inside bones'},{word:'mitochondria',definition:'cell structures producing energy'},{word:'mutualism',definition:'a relationship helping both organisms'},{word:'nekton',definition:'actively swimming water animals'},{word:'nylon',definition:'a strong artificial material'},{word:'orchid',definition:'a flowering plant with unusual blooms'},{word:'organelle',definition:'a specialized structure inside a cell'},{word:'oxide',definition:'a compound containing oxygen'},{word:'ozone',definition:'a gas layer protecting Earth'},{word:'pedigree',definition:'a chart showing family relationships'},{word:'pest',definition:'an organism causing problems'},{word:'plankton',definition:'tiny drifting water organisms'},{word:'polymer',definition:'a large molecule made of repeating parts'},{word:'protein',definition:'a nutrient important for growth'},{word:'quake',definition:'a shaking of Earth'},{word:'reactive',definition:'easily taking part in reactions'},{word:'saltwater',definition:'water containing salt'},{word:'sandstone',definition:'a rock formed from sand'},{word:'saturate',definition:'to completely soak or fill'},{word:'sensor',definition:'a device detecting changes'},{word:'spruce',definition:'a type of evergreen tree'},{word:'squid',definition:'a sea animal with tentacles'},{word:'stationary',definition:'not moving'},{word:'sunspot',definition:'a dark cooler area on the sun'},{word:'tendon',definition:'strong tissue connecting muscle to bone'},{word:'toxic',definition:'poisonous'},{word:'uranium',definition:'a radioactive metal element'},{word:'veterinarian',definition:'a doctor for animals'},{word:'volt',definition:'a unit measuring electrical force'},{word:'zinc',definition:'a metallic chemical element'},{word:'lymph',definition:'a fluid in the immune system'},{word:'saliva',definition:'liquid in the mouth'},{word:'suspension',definition:'a mixture with particles floating in liquid'},{word:'rift',definition:'a crack or split'}]
-  },
-  'Social Studies Vocabulary': {
-    'Grade 1': [{word:'country',definition:'a land with its own government'},{word:'explore',definition:'to travel and learn about new places'},{word:'state',definition:'a part of a country'},{word:'community',definition:'a group of people living together'},{word:'strategy',definition:'a plan for reaching a goal'},{word:'farm',definition:'land where crops or animals are raised'},{word:'goods',definition:'things people make or sell'},{word:'journal',definition:'a book for writing thoughts or events'},{word:'unite',definition:'to join together'},{word:'vote',definition:'to choose by giving an opinion'},{word:'culture',definition:'the traditions and way of life of a group'},{word:'citizen',definition:'a person who belongs to a country'},{word:'history',definition:'the study of the past'},{word:'genre',definition:'a type of story, book, or art'},{word:'transportation',definition:'ways people or things travel'},{word:'government',definition:'the group that leads a country or community'},{word:'native',definition:'someone or something from a certain place'},{word:'king',definition:'a male ruler of a kingdom'},{word:'continent',definition:'one of Earth\'s large land areas'},{word:'property',definition:'something a person owns'},{word:'trade',definition:'to buy, sell, or exchange'},{word:'colony',definition:'a place controlled by another country'},{word:'freedom',definition:'the ability to act or speak freely'},{word:'market',definition:'a place where things are bought and sold'},{word:'custom',definition:'a tradition or usual way of doing something'},{word:'independence',definition:'being free to make your own choices'},{word:'party',definition:'a group gathered together'},{word:'pilgrim',definition:'a traveler on a journey'},{word:'plain',definition:'a large area of flat land'},{word:'celebration',definition:'a special event for happiness or honor'},{word:'citizenship',definition:'being a member of a country or community'},{word:'factory',definition:'a building where things are made'},{word:'crop',definition:'plants grown on a farm'},{word:'volunteer',definition:'a person who helps without being paid'},{word:'constitution',definition:'the rules and laws of a government'},{word:'folktale',definition:'a story passed down over time'},{word:'governor',definition:'the leader of a state'},{word:'mayor',definition:'the leader of a city or town'},{word:'museum',definition:'a place where important objects are displayed'},{word:'nation',definition:'a country and its people'},{word:'pledge',definition:'a serious promise'},{word:'invention',definition:'something new that is created'},{word:'language',definition:'words and speech people use to communicate'},{word:'route',definition:'a path or way to travel'},{word:'capital',definition:'the main city of a state or country'},{word:'statue',definition:'a figure made from stone, metal, or other material'},{word:'grace',definition:'kindness and polite behavior'},{word:'immigrant',definition:'a person who moves to a new country'},{word:'war',definition:'fighting between countries or groups'},{word:'atlas',definition:'a book of maps'},{word:'capitol',definition:'the building where lawmakers meet'},{word:'discover',definition:'to find something new'},{word:'geography',definition:'the study of Earth\'s land and places'},{word:'border',definition:'the edge between places'},{word:'cattle',definition:'cows raised on farms'},{word:'dam',definition:'a wall built to hold back water'},{word:'landmark',definition:'a well-known place or object'},{word:'literary',definition:'related to books or writing'},{word:'narrator',definition:'the person telling a story'},{word:'principal',definition:'the leader of a school'},{word:'suburb',definition:'a town or area near a city'},{word:'wheat',definition:'a grain used to make flour and bread'}],
-    'Grade 2': [{word:'court',definition:'a place where legal decisions are made'},{word:'region',definition:'an area with shared features'},{word:'trail',definition:'a path or track'},{word:'consume',definition:'to use something'},{word:'judge',definition:'a person who makes decisions in court'},{word:'chief',definition:'the leader of a group'},{word:'pronoun',definition:'a word used in place of a noun'},{word:'festival',definition:'a special celebration'},{word:'monument',definition:'a structure built to honor something'},{word:'council',definition:'a group chosen to make decisions'},{word:'election',definition:'a process for choosing leaders'},{word:'urban',definition:'related to a city'},{word:'adverb',definition:'a word that describes a verb'},{word:'rural',definition:'related to the countryside'},{word:'tax',definition:'money paid to the government'},{word:'barter',definition:'to trade goods without money'},{word:'colonist',definition:'a person living in a colony'},{word:'fable',definition:'a short story with a lesson'},{word:'harvest',definition:'the gathering of crops'},{word:'income',definition:'money earned from work'},{word:'slavery',definition:'the forced ownership and labor of people'},{word:'railroad',definition:'a system of trains and tracks'},{word:'soldier',definition:'a person in the army'},{word:'cardinal',definition:'main or most important'},{word:'equator',definition:'an imaginary line around the middle of Earth'},{word:'petition',definition:'a written request signed by people'},{word:'artifact',definition:'an object from the past'},{word:'civil',definition:'related to citizens or community life'},{word:'fought',definition:'took part in a battle'},{word:'sue',definition:'to bring a legal case against someone'},{word:'century',definition:'a period of 100 years'},{word:'demand',definition:'a strong request or need'},{word:'electoral',definition:'related to voting or elections'},{word:'fort',definition:'a strong building used for protection'},{word:'heritage',definition:'traditions passed down over time'},{word:'peninsula',definition:'land almost surrounded by water'},{word:'predicate',definition:'the part of a sentence telling about the subject'},{word:'rainfall',definition:'the amount of rain that falls'},{word:'spirit',definition:'the attitude or feeling of a person or group'},{word:'suburban',definition:'related to areas near a city'},{word:'army',definition:'a large group of soldiers'},{word:'battle',definition:'a fight between groups or armies'},{word:'cliff',definition:'a steep wall of rock'},{word:'democracy',definition:'a government where people vote'},{word:'elect',definition:'to choose by voting'},{word:'humorous',definition:'funny'},{word:'league',definition:'a group joined for a purpose'},{word:'migrate',definition:'to move from one place to another'},{word:'motto',definition:'a short saying that expresses beliefs'},{word:'revolution',definition:'a major change in government or society'},{word:'savanna',definition:'a grassy plain with few trees'},{word:'simile',definition:'a comparison using like or as'},{word:'slave',definition:'a person forced to work without freedom'},{word:'turkey',definition:'a large bird raised on farms or found wild'},{word:'veteran',definition:'a person who served in the military'},{word:'ancestor',definition:'a family member from long ago'},{word:'ballot',definition:'a paper or form used for voting'},{word:'budget',definition:'a plan for spending money'},{word:'campaign',definition:'organized work to reach a goal'},{word:'candidate',definition:'a person running for office'},{word:'county',definition:'a part of a state'},{word:'enterprise',definition:'a business or project'},{word:'harbor',definition:'a safe place for boats'},{word:'irrigate',definition:'to supply water to land or crops'},{word:'marketplace',definition:'a place where goods are bought and sold'},{word:'palace',definition:'a large home for a ruler'},{word:'plow',definition:'a farm tool used to turn soil'},{word:'roam',definition:'to move around freely'},{word:'townspeople',definition:'the people living in a town'},{word:'tropical',definition:'related to hot and rainy regions'},{word:'agriculture',definition:'the growing of crops and raising of animals'},{word:'alphabet',definition:'a set of letters used in a language'},{word:'batter',definition:'a mixture used in cooking'},{word:'buffalo',definition:'a large animal with thick fur'},{word:'cartoon',definition:'a drawing or animation meant to entertain'},{word:'colonial',definition:'related to a colony'},{word:'courthouse',definition:'a building where court takes place'},{word:'crown',definition:'a royal head covering'},{word:'declare',definition:'to announce something officially'},{word:'eastern',definition:'related to the east'},{word:'economics',definition:'the study of money and resources'},{word:'emperor',definition:'a ruler of an empire'},{word:'enemy',definition:'a person or group against another'},{word:'executive',definition:'a leader who manages or directs'},{word:'figurative',definition:'using words in a creative or nonliteral way'},{word:'grant',definition:'to give or allow something'},{word:'irrigation',definition:'the process of supplying water to land'},{word:'legislature',definition:'a group that makes laws'},{word:'longhorn',definition:'a cow with very long horns'},{word:'manufacture',definition:'to make goods in large amounts'},{word:'meridian',definition:'an imaginary line running north and south'},{word:'occupation',definition:'a person\'s job or work'},{word:'political',definition:'related to government or leadership'},{word:'reef',definition:'a ridge of rock or coral under water'},{word:'royal',definition:'related to a king or queen'},{word:'scarcity',definition:'a shortage of something needed'},{word:'simmer',definition:'to cook just below boiling'},{word:'slogan',definition:'a short phrase used to be remembered'},{word:'southwest',definition:'the direction between south and west'},{word:'stepsister',definition:'the daughter of a stepparent'}],
-    'Grade 3': [{word:'latitude',definition:'lines measuring distance north or south of the equator'},{word:'longitude',definition:'lines measuring distance east or west'},{word:'western',definition:'related to the west'},{word:'education',definition:'the process of learning'},{word:'settlement',definition:'a place where people establish homes'},{word:'migration',definition:'movement from one place to another'},{word:'northeast',definition:'the direction between north and east'},{word:'ethnic',definition:'related to a cultural group'},{word:'legislative',definition:'related to making laws'},{word:'trial',definition:'a legal process in court'},{word:'republic',definition:'a government where people elect leaders'},{word:'crew',definition:'a group working together'},{word:'cultural',definition:'related to traditions and beliefs'},{word:'export',definition:'to send goods to another country'},{word:'import',definition:'to bring goods into a country'},{word:'international',definition:'between different countries'},{word:'northwest',definition:'the direction between north and west'},{word:'economy',definition:'the system of money and trade'},{word:'judicial',definition:'related to courts and judges'},{word:'jury',definition:'a group deciding facts in court'},{word:'religion',definition:'a system of beliefs and worship'},{word:'official',definition:'a person holding a position or authority'},{word:'seaport',definition:'a city or town with a harbor'},{word:'telegraph',definition:'a system for sending messages over wires'},{word:'union',definition:'a group joined together'},{word:'church',definition:'a place of Christian worship'},{word:'domain',definition:'an area controlled or owned'},{word:'global',definition:'related to the whole world'},{word:'industry',definition:'businesses making goods or services'},{word:'port',definition:'a place where ships load and unload'},{word:'territory',definition:'land controlled by a government'},{word:'transcontinental',definition:'stretching across a continent'},{word:'amendment',definition:'a change added to a law or document'},{word:'architecture',definition:'the design of buildings'},{word:'canal',definition:'a waterway built by people'},{word:'disaster',definition:'a sudden harmful event'},{word:'kingdom',definition:'land ruled by a king or queen'},{word:'caribbean',definition:'a region of islands near North America'},{word:'civilization',definition:'a developed society with culture and government'},{word:'duty',definition:'a responsibility or job'},{word:'economic',definition:'related to money or trade'},{word:'generation',definition:'a group born around the same time'},{word:'imagery',definition:'language creating pictures in the mind'},{word:'monarch',definition:'a king or queen'},{word:'countryside',definition:'rural land outside cities'},{word:'district',definition:'an area set apart for a purpose'},{word:'immigration',definition:'moving into a new country'},{word:'lumber',definition:'wood prepared for building'},{word:'mill',definition:'a building where materials are processed'},{word:'religious',definition:'related to religion'},{word:'tribe',definition:'a group of related families or people'},{word:'vegetation',definition:'plants growing in an area'},{word:'veto',definition:'the power to reject a decision or law'},{word:'worship',definition:'to show respect to a god or religion'},{word:'anthem',definition:'a special song representing a group or country'},{word:'enforce',definition:'to make sure rules are followed'},{word:'enslave',definition:'to force someone into slavery'},{word:'govern',definition:'to lead or control'},{word:'landscape',definition:'the visible features of an area'},{word:'spice',definition:'a plant substance used for flavor'},{word:'suffrage',definition:'the right to vote'},{word:'adobe',definition:'a building material made from clay and straw'},{word:'appoint',definition:'to choose someone for a job'},{word:'baron',definition:'a powerful nobleman'},{word:'boom',definition:'a time of fast growth or success'},{word:'consent',definition:'to give permission'},{word:'guilty',definition:'responsible for wrongdoing'},{word:'homestead',definition:'a home with surrounding land'},{word:'hopi',definition:'a Native American people of the Southwest'},{word:'immigrate',definition:'to move into a new country'},{word:'lawyer',definition:'a person trained in law'},{word:'locomotive',definition:'the engine that pulls a train'},{word:'merchant',definition:'a person who buys and sells goods'},{word:'military',definition:'the armed forces of a country'},{word:'minister',definition:'a government or religious leader'},{word:'patriot',definition:'a person who strongly supports their country'},{word:'patriotism',definition:'love and support for one\'s country'},{word:'reap',definition:'to gather crops'},{word:'reservation',definition:'land set aside for a special purpose'},{word:'tourist',definition:'a person traveling for enjoyment'},{word:'tribal',definition:'related to a tribe'},{word:'waterway',definition:'a route traveled by water'},{word:'aesop',definition:'a famous writer of fables'},{word:'beret',definition:'a soft round hat'},{word:'boycott',definition:'to refuse to buy or support something'},{word:'cabinet',definition:'a group of government advisors'},{word:'civic',definition:'related to a community or citizenship'},{word:'crossroad',definition:'a place where roads meet'},{word:'delegate',definition:'a person chosen to represent others'},{word:'empire',definition:'a group of lands ruled by one government'},{word:'entrepreneur',definition:'a person who starts a business'},{word:'farmland',definition:'land used for farming'},{word:'federal',definition:'related to the national government'},{word:'geographer',definition:'a person who studies Earth\'s features'},{word:'geographic',definition:'related to Earth\'s surface'},{word:'historian',definition:'a person who studies history'},{word:'horseback',definition:'riding on a horse'},{word:'irish',definition:'related to Ireland'},{word:'jazz',definition:'a style of music with strong rhythm'},{word:'labor',definition:'physical work'},{word:'longhouse',definition:'a large traditional Native American home'},{word:'monk',definition:'a man devoted to religious life'},{word:'olmsted',definition:'a famous landscape designer'},{word:'patriotic',definition:'showing love for one\'s country'},{word:'peacefully',definition:'in a calm and nonviolent way'},{word:'revolutionary',definition:'related to major political change'},{word:'scold',definition:'to speak angrily to correct behavior'},{word:'smallpox',definition:'a serious disease once common'},{word:'temple',definition:'a building used for worship'},{word:'tepee',definition:'a cone-shaped Native American tent'},{word:'troop',definition:'a group of soldiers'},{word:'wealth',definition:'a large amount of money or property'},{word:'advisor',definition:'a person who gives guidance'},{word:'arrest',definition:'to take someone into legal custody'},{word:'boss',definition:'a person in charge'},{word:'colonize',definition:'to settle and control new land'},{word:'confederacy',definition:'a group joined together for a purpose'},{word:'constitutional',definition:'related to a constitution'},{word:'cooperation',definition:'working together'},{word:'corps',definition:'a group organized for a special purpose'},{word:'debt',definition:'money owed to someone'},{word:'foreign',definition:'from another country'},{word:'guinea',definition:'a region or type of small animal'},{word:'highland',definition:'raised land or hills'},{word:'homeland',definition:'the country where someone was born'},{word:'inland',definition:'away from the coast'},{word:'invest',definition:'to use money hoping for future gain'},{word:'livestock',definition:'farm animals'},{word:'majority',definition:'the greater number'},{word:'monarchy',definition:'a government ruled by a king or queen'},{word:'multicultural',definition:'involving many cultures'},{word:'navigator',definition:'a person who directs travel'},{word:'nonprofit',definition:'organized to help rather than earn money'},{word:'patrol',definition:'to guard or watch an area'},{word:'payment',definition:'money given for goods or services'},{word:'phonetic',definition:'related to speech sounds'},{word:'pirate',definition:'a person who attacks ships at sea'},{word:'possession',definition:'something owned'},{word:'segregation',definition:'the separation of groups by race or identity'},{word:'seize',definition:'to take control of something'},{word:'staff',definition:'a group of workers'},{word:'terror',definition:'extreme fear'},{word:'tropic',definition:'an area near the equator'},{word:'westward',definition:'toward the west'},{word:'witness',definition:'a person who sees an event'}],
-    'Grade 4': [{word:'coastal',definition:'related to the coast'},{word:'expedition',definition:'a journey made for a purpose'},{word:'confederate',definition:'a person or group joined with others'},{word:'plantation',definition:'a large farm growing crops'},{word:'tourism',definition:'traveling for enjoyment'},{word:'viceroy',definition:'a ruler governing for a king or queen'},{word:'treaty',definition:'a formal agreement between groups or countries'},{word:'badlands',definition:'dry rocky land with little plant life'},{word:'servant',definition:'a person working for another'},{word:'diverse',definition:'including many different kinds'},{word:'steamboat',definition:'a boat powered by steam'},{word:'coastline',definition:'the edge where land meets the ocean'},{word:'fertile',definition:'good for growing plants'},{word:'barrier',definition:'something blocking movement'},{word:'stock',definition:'shares of ownership in a company'},{word:'colonel',definition:'a high-ranking military officer'},{word:'resident',definition:'a person living in a place'},{word:'timber',definition:'wood prepared for building'},{word:'mummy',definition:'a preserved dead body'},{word:'reconstruction',definition:'the rebuilding of something'},{word:'abolitionist',definition:'a person working to end slavery'},{word:'interstate',definition:'a highway connecting states'},{word:'invasion',definition:'an attack entering another place'},{word:'landowner',definition:'a person owning land'},{word:'panhandle',definition:'a narrow strip of land'},{word:'rebuild',definition:'to build again'},{word:'wealthy',definition:'having much money or property'},{word:'agricultural',definition:'related to farming'},{word:'cowhand',definition:'a person working with cattle'},{word:'descendant',definition:'a person related to earlier family members'},{word:'inset',definition:'a smaller map or picture inside another'},{word:'mainland',definition:'the main part of a continent or country'},{word:'metropolitan',definition:'related to a large city area'},{word:'migrant',definition:'a person moving from place to place'},{word:'potlatch',definition:'a ceremonial gift-giving gathering'},{word:'pottery',definition:'objects made from baked clay'},{word:'prospector',definition:'a person searching for valuable minerals'},{word:'savannah',definition:'a grassy plain with scattered trees'},{word:'sod',definition:'grass-covered soil'},{word:'victory',definition:'success in a contest or battle'},{word:'violence',definition:'physical force causing harm'},{word:'admit',definition:'to allow entrance or confess'},{word:'discrimination',definition:'unfair treatment of people'},{word:'gorge',definition:'a deep narrow valley'},{word:'industrial',definition:'related to manufacturing'},{word:'refinery',definition:'a place where raw materials are purified'},{word:'register',definition:'to officially record'},{word:'sacrifice',definition:'to give up something important'},{word:'segregate',definition:'to separate groups of people'},{word:'statehood',definition:'the condition of being a state'},{word:'textile',definition:'cloth or woven fabric'},{word:'timberline',definition:'the highest point where trees grow'},{word:'upland',definition:'high elevated land'},{word:'abolish',definition:'to officially end something'},{word:'admission',definition:'the act of entering or allowing entry'},{word:'agency',definition:'a business or organization providing services'},{word:'ally',definition:'a supporter or partner'},{word:'archaeologist',definition:'a scientist studying ancient remains'},{word:'arid',definition:'very dry'},{word:'ban',definition:'to officially forbid'},{word:'dugout',definition:'a shelter dug into the ground'},{word:'hardship',definition:'difficult conditions'},{word:'hieroglyph',definition:'a picture symbol used in ancient writing'},{word:'levy',definition:'a tax or raised bank along water'},{word:'megalopolis',definition:'a very large connected city region'},{word:'missionary',definition:'a person spreading religious beliefs'},{word:'politics',definition:'the activities of government'},{word:'powwow',definition:'a gathering or meeting'},{word:'priest',definition:'a religious leader'},{word:'resort',definition:'a place where people vacation'},{word:'scholar',definition:'a person who studies deeply'},{word:'secede',definition:'to withdraw from a group or union'},{word:'soviet',definition:'a council or former Russian political system'},{word:'surrender',definition:'to give up to another group'},{word:'totem',definition:'a symbol representing a group'},{word:'tributary',definition:'a smaller river flowing into a larger one'},{word:'wage',definition:'money earned for work'},{word:'warrior',definition:'a skilled fighter'},{word:'administration',definition:'the group managing an organization or government'},{word:'allusion',definition:'a reference to something else'},{word:'aqueduct',definition:'a structure carrying water'},{word:'authority',definition:'the power to enforce rules'},{word:'bargain',definition:'an agreement or good deal'},{word:'blockade',definition:'the blocking of movement or supplies'},{word:'bomb',definition:'a weapon causing explosions'},{word:'commerce',definition:'business and trade'},{word:'compensation',definition:'payment for loss or work'},{word:'conquer',definition:'to defeat and take control'},{word:'defeat',definition:'to win against another group'},{word:'disability',definition:'a condition limiting certain abilities'},{word:'dispute',definition:'a disagreement or argument'},{word:'emancipation',definition:'the act of setting free'},{word:'fleet',definition:'a group of ships or vehicles'},{word:'fund',definition:'money saved for a purpose'},{word:'headquarter',definition:'the main office or center'},{word:'hilly',definition:'covered with hills'},{word:'inlet',definition:'a narrow water passage into land'},{word:'invade',definition:'to enter by force'},{word:'lasso',definition:'a rope used for catching animals'},{word:'lowland',definition:'low flat land'},{word:'missile',definition:'a weapon sent through the air'},{word:'mountainous',definition:'covered with mountains'},{word:'newcomer',definition:'a person new to a place'},{word:'nomad',definition:'a person moving from place to place'},{word:'obedience',definition:'the act of following rules or orders'},{word:'politician',definition:'a person working in government'},{word:'pope',definition:'the leader of the Catholic Church'},{word:'presidential',definition:'related to a president'},{word:'prison',definition:'a place where lawbreakers are kept'},{word:'proclamation',definition:'a formal public announcement'},{word:'recruit',definition:'to add new members or workers'},{word:'reform',definition:'to improve through change'},{word:'regional',definition:'related to a certain area'},{word:'relocate',definition:'to move to a new place'},{word:'removal',definition:'the act of taking away'},{word:'sacred',definition:'holy or greatly respected'},{word:'saint',definition:'a person honored for holiness'},{word:'spy',definition:'a person secretly gathering information'},{word:'sugarcane',definition:'a tall plant used to make sugar'},{word:'unfairly',definition:'in a way that is not just'},{word:'amend',definition:'to change or improve officially'},{word:'anger',definition:'a strong feeling of displeasure'},{word:'antecedent',definition:'a word replaced later by a pronoun'},{word:'archipelago',definition:'a group of islands'},{word:'boomtown',definition:'a town growing quickly'},{word:'boost',definition:'to increase or improve'},{word:'catholic',definition:'related to the Catholic Church'},{word:'ceremonial',definition:'related to a ceremony'},{word:'chairman',definition:'a leader of a group or meeting'},{word:'cheaply',definition:'at low cost'},{word:'civilize',definition:'to bring organized society or culture'},{word:'clan',definition:'a group of related families'},{word:'committee',definition:'a group chosen for a task'},{word:'crisscross',definition:'to cross back and forth'},{word:'dictator',definition:'a ruler with complete power'},{word:'economically',definition:'in a way related to money or trade'},{word:'flashback',definition:'a scene showing past events'},{word:'floodwater',definition:'water overflowing onto land'},{word:'foothill',definition:'a small hill at a mountain\'s base'},{word:'globalization',definition:'the growing connection between countries'},{word:'hatred',definition:'strong dislike'},{word:'institute',definition:'to establish or create'},{word:'institution',definition:'an organization serving a purpose'},{word:'investor',definition:'a person putting money into something'},{word:'machinery',definition:'machines working together'},{word:'mapmaker',definition:'a person creating maps'},{word:'membership',definition:'the state of belonging to a group'},{word:'mistreat',definition:'to treat badly'},{word:'naval',definition:'related to ships or navies'},{word:'ordinance',definition:'a local law or rule'},{word:'oversee',definition:'to supervise or manage'},{word:'ownership',definition:'the state of owning something'},{word:'passport',definition:'a document allowing travel between countries'},{word:'pharaoh',definition:'a ruler of ancient Egypt'},{word:'pike',definition:'a type of road or fish'},{word:'pipeline',definition:'a long tube carrying liquids or gases'},{word:'poll',definition:'a vote or survey'},{word:'progressive',definition:'supporting improvement or change'},{word:'province',definition:'a region within a country'},{word:'punish',definition:'to give a penalty for wrongdoing'},{word:'railway',definition:'a system of train tracks'},{word:'ratify',definition:'to officially approve'},{word:'reluctantly',definition:'unwillingly'},{word:'renaissance',definition:'a period of renewed learning and culture'},{word:'rubble',definition:'broken pieces of stone or buildings'},{word:'salutation',definition:'a greeting'},{word:'sawmill',definition:'a place where logs are cut into boards'},{word:'seasonal',definition:'happening during certain times of year'},{word:'serpent',definition:'a snake'},{word:'session',definition:'a meeting period'},{word:'sharecrop',definition:'to farm land owned by another person'},{word:'tenement',definition:'a crowded apartment building'},{word:'unemployed',definition:'without a job'},{word:'urbanization',definition:'the growth of cities'}],
-    'Grade 5': [{word:'aztec',definition:'a civilization from ancient Mexico'},{word:'rebellion',definition:'an organized fight against authority'},{word:'confederation',definition:'a group joined together for a purpose'},{word:'parliament',definition:'a lawmaking group in some governments'},{word:'militia',definition:'a military force made of ordinary citizens'},{word:'birthplace',definition:'the place where someone was born'},{word:'apprentice',definition:'a person learning a trade from an expert'},{word:'battlefield',definition:'a place where battles are fought'},{word:'federalist',definition:'someone supporting a strong national government'},{word:'annex',definition:'to add territory or land'},{word:'tariff',definition:'a tax on imported goods'},{word:'revolt',definition:'an uprising against authority'},{word:'conquistador',definition:'a Spanish explorer and conqueror'},{word:'massacre',definition:'the killing of many people'},{word:'repeal',definition:'to officially remove a law'},{word:'indenture',definition:'a work agreement for a period of time'},{word:'preamble',definition:'the introduction to a document'},{word:'rebel',definition:'a person opposing authority'},{word:'tsar',definition:'a Russian emperor'},{word:'viking',definition:'a Scandinavian explorer or warrior'},{word:'accuse',definition:'to claim someone did something wrong'},{word:'regiment',definition:'a military unit'},{word:'secretary',definition:'a government official or office worker'},{word:'alliance',definition:'an agreement to work together'},{word:'charter',definition:'an official document granting rights'},{word:'expansion',definition:'the act of growing larger'},{word:'indigo',definition:'a blue dye-producing plant'},{word:'loyalist',definition:'a colonist loyal to Britain'},{word:'reserve',definition:'something saved for future use'},{word:'artisan',definition:'a skilled craft worker'},{word:'communist',definition:'a supporter of communism'},{word:'elector',definition:'a person voting in an election system'},{word:'musket',definition:'an early type of gun'},{word:'punishment',definition:'a penalty for wrongdoing'},{word:'raid',definition:'a sudden attack'},{word:'warship',definition:'a military ship'},{word:'communism',definition:'a system where property is shared'},{word:'leadership',definition:'the act of guiding others'},{word:'minutemen',definition:'colonial soldiers ready to fight quickly'},{word:'republican',definition:'supporting a republic government'},{word:'treason',definition:'the crime of betraying one\'s country'},{word:'census',definition:'an official population count'},{word:'civilian',definition:'a person not in the military'},{word:'debtor',definition:'a person owing money'},{word:'decline',definition:'to decrease or worsen'},{word:'policy',definition:'a plan or rule for action'},{word:'terrorist',definition:'a person using violence to create fear'},{word:'backcountry',definition:'remote land away from cities'},{word:'colonization',definition:'the act of settling and controlling land'},{word:'enlist',definition:'to join the military'},{word:'gunpowder',definition:'a substance used in weapons'},{word:'impeachment',definition:'the formal charging of an official'},{word:'inflation',definition:'the rise in prices over time'},{word:'mercenary',definition:'a soldier hired to fight for money'},{word:'outlaw',definition:'a person outside the law'},{word:'proprietor',definition:'a business or property owner'},{word:'ragtime',definition:'a style of music with strong rhythm'},{word:'ratification',definition:'official approval of something'},{word:'shipbuilder',definition:'a person who builds ships'},{word:'treasury',definition:'a place where money is stored'},{word:'ammunition',definition:'materials used in weapons'},{word:'arsenal',definition:'a place storing weapons'},{word:'corporation',definition:'a business recognized by law'},{word:'crisis',definition:'a difficult or dangerous situation'},{word:'currency',definition:'money used for trade'},{word:'doctrine',definition:'a set of beliefs or policies'},{word:'impeach',definition:'to formally charge an official'},{word:'jail',definition:'a place where prisoners are kept'},{word:'manifest',definition:'to clearly show'},{word:'oath',definition:'a serious promise'},{word:'preach',definition:'to give a religious speech'},{word:'prejudice',definition:'an unfair opinion about others'},{word:'privilege',definition:'a special right or advantage'},{word:'rival',definition:'a competitor'},{word:'starvation',definition:'severe lack of food'},{word:'vacancy',definition:'an empty position or place'},{word:'abolition',definition:'the ending of slavery'},{word:'assassinate',definition:'to murder an important person'},{word:'clash',definition:'a violent conflict'},{word:'conquest',definition:'the act of taking control by force'},{word:'convict',definition:'a person found guilty of a crime'},{word:'dissent',definition:'disagreement with authority'},{word:'domestic',definition:'related to home or one\'s own country'},{word:'fugitive',definition:'a person fleeing from the law'},{word:'legislation',definition:'laws made by government'},{word:'loyalty',definition:'strong support or faithfulness'},{word:'maize',definition:'corn'},{word:'monopoly',definition:'complete control of a product or business'},{word:'muckraker',definition:'a writer exposing problems in society'},{word:'nominate',definition:'to officially suggest someone for office'},{word:'outnumber',definition:'to be greater in number'},{word:'poverty',definition:'the condition of being poor'},{word:'prohibit',definition:'to forbid by law'},{word:'prosper',definition:'to succeed or grow well'},{word:'provision',definition:'a supply or preparation'},{word:'repay',definition:'to pay back'},{word:'surplus',definition:'an extra amount beyond what is needed'},{word:'terrorism',definition:'the use of violence to create fear'},{word:'traitor',definition:'a person betraying their country or group'},{word:'widespread',definition:'found over a large area'},{word:'brutal',definition:'very harsh or cruel'},{word:'caravan',definition:'a group traveling together'},{word:'cemetery',definition:'a place where people are buried'},{word:'collective',definition:'shared by a group'},{word:'conqueror',definition:'a person taking control by force'},{word:'criticize',definition:'to point out faults or problems'},{word:'crusade',definition:'a campaign for a cause'},{word:'eligible',definition:'qualified to participate'},{word:'enforcement',definition:'the act of making rules obeyed'},{word:'entitle',definition:'to give a right or title'},{word:'execute',definition:'to carry out or put to death'},{word:'garrison',definition:'a group of soldiers stationed somewhere'},{word:'gospel',definition:'Christian teachings or writings'},{word:'governance',definition:'the act of ruling or managing'},{word:'harmony',definition:'peaceful agreement'},{word:'impose',definition:'to force something on others'},{word:'inauguration',definition:'the formal beginning of a leader\'s term'},{word:'jurisdiction',definition:'the area where authority applies'},{word:'kidnap',definition:'to take someone by force'},{word:'kiva',definition:'a ceremonial room used by Pueblo peoples'},{word:'mankind',definition:'human beings collectively'},{word:'nationalism',definition:'strong pride in one\'s nation'},{word:'nationalist',definition:'a person strongly supporting their nation'},{word:'overcrowd',definition:'to fill beyond capacity'},{word:'overturn',definition:'to reverse or defeat'},{word:'panic',definition:'sudden strong fear'},{word:'persecution',definition:'unfair treatment for beliefs or identity'},{word:'pilgrimage',definition:'a journey for religious reasons'},{word:'prayer',definition:'words spoken to a deity'},{word:'prosperity',definition:'the condition of being successful or wealthy'},{word:'quarrel',definition:'an angry argument'},{word:'refusal',definition:'the act of saying no'},{word:'resign',definition:'to officially leave a position'},{word:'secretly',definition:'in a hidden way'},{word:'siege',definition:'a military blockade around a place'},{word:'spiritual',definition:'related to the spirit or religion'},{word:'stampede',definition:'a sudden rushing movement by a crowd or animals'},{word:'supervise',definition:'to oversee or direct'},{word:'tribute',definition:'something given to show respect or payment'},{word:'warfare',definition:'activities involved in war'},{word:'welfare',definition:'health and well-being'},{word:'artillery',definition:'large military weapons'},{word:'casualty',definition:'a person injured or killed in war'},{word:'criminal',definition:'a person guilty of a crime'},{word:'elaborate',definition:'detailed and carefully developed'},{word:'establishment',definition:'an organization or institution'},{word:'famine',definition:'a severe shortage of food'},{word:'federation',definition:'a group joined under one government'},{word:'grievance',definition:'a complaint about unfair treatment'},{word:'igloo',definition:'a dome-shaped snow shelter'},{word:'imprison',definition:'to put in prison'},{word:'ironclad',definition:'a metal-covered warship'},{word:'lieutenant',definition:'a military officer rank'},{word:'naturalization',definition:'the process of becoming a citizen'},{word:'outcast',definition:'a person rejected by society'},{word:'philosopher',definition:'a person studying ideas and knowledge'},{word:'qualification',definition:'a skill or requirement'},{word:'ration',definition:'a fixed amount of supplies'},{word:'riot',definition:'a violent public disturbance'},{word:'salute',definition:'a respectful gesture or greeting'},{word:'scandal',definition:'a public disgrace'},{word:'sovereignty',definition:'the power of self-government'},{word:'sympathy',definition:'feelings of care or understanding'},{word:'taxation',definition:'the system of collecting taxes'},{word:'temperance',definition:'the practice of avoiding alcohol'},{word:'torment',definition:'severe pain or suffering'},{word:'tyranny',definition:'cruel and unfair rule'},{word:'tyrant',definition:'a cruel ruler'},{word:'unconstitutional',definition:'against the constitution'}]
-  }
-};
 
 // ═══════════════════════════════════════════════════
 // AUDIO
@@ -776,7 +812,7 @@ function launchConfetti() {
   canvas.width = window.innerWidth; canvas.height = window.innerHeight;
   const ctx = canvas.getContext('2d');
   const COLORS = ['#2EC4B6','#E8483A','#7B5EA7','#FFB830','#4baa68','#ffffff'];
-  const pieces = Array.from({length:120}, () => ({
+  const pieces = Array.from({length:72}, () => ({
     x: Math.random() * canvas.width, y: Math.random() * -canvas.height * .3 - 20,
     w: Math.random()*10+5, h: Math.random()*6+3,
     color: COLORS[Math.floor(Math.random()*COLORS.length)],
@@ -789,13 +825,13 @@ function launchConfetti() {
     let alive = false;
     pieces.forEach(p => {
       p.x+=p.vx; p.y+=p.vy; p.vy+=.05; p.rot+=p.vr;
-      if (frame>80) p.opacity = Math.max(0,p.opacity-.015);
+      if (frame>65) p.opacity = Math.max(0,p.opacity-.02);
       if (p.y < canvas.height+20) alive = true;
       ctx.save(); ctx.globalAlpha=p.opacity; ctx.translate(p.x,p.y); ctx.rotate(p.rot);
       ctx.fillStyle=p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
     });
     frame++;
-    if (alive && frame<200) requestAnimationFrame(draw);
+    if (alive && frame<150) requestAnimationFrame(draw);
     else canvas.style.display='none';
   }
   draw();
@@ -825,11 +861,9 @@ function runCountdown(label, onDone) {
 // ═══════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════
-let currentTab = 'lexile';
-let selectedCards = [];          // { word, definition }
 let deck = [], missed = [], knownCount = 0;
 let currentIndex = 0;
-let deckLabel = '';
+let deckLabel = '', baseDeckLabel = '';
 let cardFlipped = false;
 
 // ═══════════════════════════════════════════════════
@@ -851,6 +885,20 @@ function shuffle(a) {
   for (let i=a.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
 }
 
+function cleanText(value) {
+  if (value === undefined || value === null || typeof value === 'object') return '';
+  const text = String(value).trim();
+  return /^(undefined|null|\[object Object\])$/i.test(text) ? '' : text;
+}
+
+function getEnteredDeckTitle() {
+  return cleanText($('deckTitle')?.value);
+}
+
+function getDeckTitle() {
+  return getEnteredDeckTitle() || 'My Vocabulary Deck';
+}
+
 function applyWordClass(word, normalEl, fsEl) {
   const len = word.length;
   const isLong  = len>=7 && len<=11;
@@ -867,49 +915,115 @@ function applyWordClass(word, normalEl, fsEl) {
   }
 }
 
-function updateCount() {
-  const n = currentTab==='custom' ? getCustomCards().length : selectedCards.length;
+function updateCount(analysis = analyzeCustomDeck()) {
+  const n = analysis.cards.length;
   $('countLine').textContent = n
-    ? `${n} card${n===1?'':'s'} selected for deck`
-    : 'No cards selected — tap words above or click Select All';
+    ? `${n} card${n===1?'':'s'} ready for this deck`
+    : 'Add at least one word to begin.';
   $('countLine').style.color = n ? 'var(--teal-dk)' : 'var(--coral)';
+
+  const feedback = $('validationFeedback');
+  feedback.innerHTML = '';
+  const messages = [];
+  if (analysis.missingDefinitionCount) {
+    messages.push(`${analysis.missingDefinitionCount} card${analysis.missingDefinitionCount===1?' is':'s are'} missing definitions.`);
+  }
+  if (analysis.duplicateTerms.length) {
+    messages.push(`Duplicate term${analysis.duplicateTerms.length===1?'':'s'}: ${analysis.duplicateTerms.join(', ')}.`);
+  }
+  messages.forEach(message => {
+    const note = document.createElement('span');
+    note.className = 'validation-note';
+    note.textContent = message;
+    feedback.appendChild(note);
+  });
 }
 
 // ═══════════════════════════════════════════════════
 // CUSTOM CARD PARSER
-// Each line: "word - definition"
+// Separator priority: pipe, colon, then dash for legacy decks.
 // ═══════════════════════════════════════════════════
-function getCustomCards() {
+function analyzeCustomDeck() {
   const raw = ($('customArea').value||'');
   const cards = [];
-  raw.split('\n').forEach(line => {
-    line = line.trim(); if (!line) return;
-    // Accept "word - definition" OR "word-definition" — split on first dash
-    const idx = line.indexOf('-');
-    if (idx > 0) {
-      const word = line.slice(0, idx).trim();
-      const def  = line.slice(idx+1).trim();
-      if (word) cards.push({ word, definition: def || 'Definition coming soon.' });
-    } else if (line) {
-      cards.push({ word: line, definition: 'Definition coming soon.' });
+  const termCounts = new Map();
+  let missingDefinitionCount = 0;
+
+  raw.split('\n').forEach(rawLine => {
+    const line = cleanText(rawLine);
+    if (!line) return;
+
+    let separatorIndex = -1;
+    for (const separator of ['|', ':', '-']) {
+      const index = line.indexOf(separator);
+      if (index !== -1) {
+        separatorIndex = index;
+        break;
+      }
     }
+
+    const word = cleanText(separatorIndex >= 0 ? line.slice(0, separatorIndex) : line);
+    const suppliedDefinition = cleanText(separatorIndex >= 0 ? line.slice(separatorIndex + 1) : '');
+    if (!word) return;
+
+    if (!suppliedDefinition) missingDefinitionCount++;
+    const definition = suppliedDefinition || 'Definition coming soon.';
+    cards.push({ word, definition });
+
+    const duplicateKey = word.toLocaleLowerCase();
+    termCounts.set(duplicateKey, { word, count:(termCounts.get(duplicateKey)?.count || 0) + 1 });
   });
-  return cards;
+
+  const duplicateTerms = [...termCounts.values()]
+    .filter(entry => entry.count > 1)
+    .map(entry => entry.word);
+
+  return { cards, missingDefinitionCount, duplicateTerms };
+}
+
+function getCustomCards() {
+  return analyzeCustomDeck().cards;
 }
 
 function updateCustomPreview() {
-  const cards = getCustomCards();
-  const preview=$('customPreview'), bank=$('customWordBank');
-  if (!cards.length) { preview.style.display='none'; updateCount(); return; }
+  const analysis = analyzeCustomDeck();
+  const cards = analysis.cards;
+  const preview=$('customPreview'), bank=$('customWordBank'), toggle=$('previewToggle');
+  bank.innerHTML = '';
+  bank.classList.remove('is-expanded');
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.textContent = 'Show all cards';
+  if (!cards.length) {
+    preview.style.display='none';
+    toggle.style.display='none';
+    updateCount(analysis);
+    if (typeof window.syncVocabularyShareButton === 'function') window.syncVocabularyShareButton();
+    return;
+  }
   preview.style.display='block';
+  toggle.style.display = cards.length > 3 ? 'inline-flex' : 'none';
   $('customCountHint').textContent=`${cards.length} card${cards.length===1?'':'s'}`;
-  bank.innerHTML = cards.map(c =>
-    `<div class="custom-card-row">
-      <div class="custom-card-word">${c.word}</div>
-      <div class="custom-card-def${c.definition==='Definition coming soon.'?' coming-soon':''}">${c.definition}</div>
-    </div>`
-  ).join('');
-  updateCount();
+  cards.forEach(card => {
+    const row = document.createElement('div');
+    row.className = 'custom-card-row';
+    const word = document.createElement('div');
+    word.className = 'custom-card-word';
+    word.textContent = cleanText(card.word);
+    const definition = document.createElement('div');
+    definition.className = `custom-card-def${card.definition==='Definition coming soon.'?' coming-soon':''}`;
+    definition.textContent = cleanText(card.definition) || 'Definition coming soon.';
+    row.append(word, definition);
+    bank.appendChild(row);
+  });
+  updateCount(analysis);
+  if (typeof window.syncVocabularyShareButton === 'function') window.syncVocabularyShareButton();
+}
+
+function toggleCardPreview() {
+  const bank = $('customWordBank'), toggle = $('previewToggle');
+  const expanded = bank.classList.toggle('is-expanded');
+  toggle.setAttribute('aria-expanded', String(expanded));
+  toggle.textContent = expanded ? 'Show fewer cards' : 'Show all cards';
 }
 
 // ═══════════════════════════════════════════════════
@@ -942,95 +1056,16 @@ function flipCard() {
 }
 
 // ═══════════════════════════════════════════════════
-// TAB SWITCHING
-// ═══════════════════════════════════════════════════
-function switchTab(tab) {
-  currentTab = tab;
-  $('tabLexile').classList.toggle('active', tab==='lexile');
-  $('tabCustom').classList.toggle('active', tab==='custom');
-  $('lexileSection').style.display = tab==='lexile' ? 'block' : 'none';
-  $('customSection').style.display = tab==='custom' ? 'block' : 'none';
-  $('bankSection').style.display   = tab==='custom' ? 'none'  : 'block';
-  if (tab==='lexile') autoLoadLexile();
-  else { $('wordBank').innerHTML=''; selectedCards=[]; $('customPreview').style.display='none'; updateCount(); }
-}
-
-// ═══════════════════════════════════════════════════
-// LEXILE — two-dropdown auto-load
-// LEXILE_DB stores plain strings; wrapped to { word, definition } here.
-// When real definitions are added, just change the DB values to objects.
-// ═══════════════════════════════════════════════════
-function toCard(w) {
-  return typeof w==='object' ? w : { word: w, definition: 'Definition coming soon.' };
-}
-
-function populateLexileCategories() {
-  $('lexileCategory').innerHTML = Object.keys(LEXILE_DB)
-    .map(k => `<option value="${k}">${k}</option>`).join('');
-  populateLexileGrades();
-}
-function populateLexileGrades() {
-  const cat = $('lexileCategory').value;
-  $('lexileGrade').innerHTML = Object.keys(LEXILE_DB[cat]||{})
-    .map(g => `<option value="${g}">${g}</option>`).join('');
-  autoLoadLexile();
-}
-function autoLoadLexile() {
-  const cat=$('lexileCategory').value, grade=$('lexileGrade').value;
-  const words = (LEXILE_DB[cat]&&LEXILE_DB[cat][grade]) || [];
-  renderChips(words.map(toCard));
-}
-function onLexileCategoryChange() { populateLexileGrades(); }
-function onLexileGradeChange()    { autoLoadLexile(); }
-
-// ═══════════════════════════════════════════════════
-// WORD BANK CHIPS
-// ═══════════════════════════════════════════════════
-function renderChips(cards) {
-  const bank=$('wordBank'); bank.innerHTML=''; selectedCards=[];
-  cards.forEach(card => {
-    const btn=document.createElement('button');
-    btn.className='chip'; btn.textContent=card.word;
-    btn.onclick=()=>{
-      const idx=selectedCards.findIndex(c=>c.word===card.word);
-      if (idx>-1) { selectedCards.splice(idx,1); btn.classList.remove('sel'); }
-      else { selectedCards.push(card); btn.classList.add('sel'); }
-      updateCount();
-    };
-    bank.appendChild(btn);
-  });
-  updateCount();
-}
-
-function selectAll() {
-  $('wordBank').querySelectorAll('.chip').forEach(c=>c.classList.add('sel'));
-  const cat=$('lexileCategory').value, grade=$('lexileGrade').value;
-  selectedCards = ((LEXILE_DB[cat]&&LEXILE_DB[cat][grade])||[]).map(toCard);
-  updateCount();
-}
-function selectNone() {
-  selectedCards=[];
-  $('wordBank').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
-  updateCount();
-}
-function shuffleSetup() {
-  const bank=$('wordBank'), chips=[...bank.querySelectorAll('.chip')];
-  shuffle(chips); chips.forEach(c=>bank.appendChild(c)); updateCount();
-}
-
-// ═══════════════════════════════════════════════════
 // START
 // ═══════════════════════════════════════════════════
 function startFlashcards() {
-  let cards;
-  if (currentTab==='custom') {
-    cards=getCustomCards(); deckLabel='Custom Cards';
-  } else {
-    cards=[...selectedCards];
-    const cat=$('lexileCategory').value, grade=$('lexileGrade').value;
-    deckLabel=`${cat} · ${grade}`;
+  const cards = getCustomCards();
+  baseDeckLabel = getDeckTitle();
+  deckLabel = baseDeckLabel;
+  if (!cards.length) {
+    alert('Add at least one word or word-and-definition pair before starting.');
+    return;
   }
-  if (!cards.length) { alert('Please select at least one word. Tap words in the Word Bank, or click Select All.'); return; }
   deck=[...cards]; shuffle(deck);
   missed=[]; knownCount=0; currentIndex=0;
   $('setup').style.display='none';
@@ -1097,12 +1132,13 @@ function shuffleDeck()  { shuffle(deck); currentIndex=0; missed=[]; knownCount=0
 function restartDeck()  { currentIndex=0; missed=[]; knownCount=0; renderCard(); }
 
 function practiceMissed() {
-  if (!missed.length) { alert('No missed words yet — great job!'); return; }
+  if (!missed.length) { alert('No vocabulary marked for more practice yet.'); return; }
   deck=[...missed]; shuffle(deck); missed=[]; knownCount=0; currentIndex=0;
-  deckLabel='Missed Words Practice'; renderCard();
+  deckLabel=`${baseDeckLabel || 'My Vocabulary Deck'} · Vocabulary Review`; renderCard();
 }
 
 function backToSetup() {
+  if (document.documentElement.classList.contains('shared-student-mode')) return;
   $('flashScreen').style.display='none'; $('setup').style.display='block'; closeFS();
 }
 
@@ -1119,7 +1155,7 @@ function showFinish() {
   $('progFill').style.width='100%';
   $('finKnown').textContent  = knownCount;
   $('finMissed').textContent = missed.length;
-  $('finishMsg').textContent = `You practiced ${deck.length} card${deck.length===1?'':'s'}. ${missed.length?`${missed.length} word${missed.length===1?' needs':' need'} more practice.`:'Great job — every word got it!'}`;
+  $('finishMsg').textContent = `You practiced ${deck.length} vocabulary card${deck.length===1?'':'s'}. ${missed.length?`${missed.length} card${missed.length===1?' was':'s were'} marked Need Practice.`:'Nice work — every card was marked Got It.'}`;
   $('finishOverlay').style.display='flex';
   closeFS(); sndComplete(); setTimeout(launchConfetti, 150);
 }
@@ -1128,10 +1164,11 @@ function practiceAgain() {
   currentIndex=0; missed=[]; knownCount=0; shuffle(deck); renderCard();
 }
 function doMissedFromFinish() {
-  if (!missed.length) { alert('No missed words — well done!'); return; }
+  if (!missed.length) { alert('No vocabulary marked for more practice yet.'); return; }
   $('finishOverlay').style.display='none'; practiceMissed();
 }
 function backToSetupFromFinish() {
+  if (document.documentElement.classList.contains('shared-student-mode')) return;
   $('finishOverlay').style.display='none'; backToSetup();
 }
 
@@ -1153,32 +1190,28 @@ document.addEventListener('keydown', e => {
 // INIT
 // ═══════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  populateLexileCategories();
   syncHeaderSoundIcon();
+  updateCount();
   const st=$('soundToggle');
   if (st) st.addEventListener('change', syncHeaderSoundIcon);
   // Expose globals for Firebase module
   window._vocabFlashcards = {
-    getCurrentTab:     () => currentTab,
-    getSelectedCards:  () => selectedCards,
-    setSelectedCards:  (c) => { selectedCards = c; },
     getCustomCards,
-    switchTab,
-    populateLexileCategories,
-    populateLexileGrades,
-    autoLoadLexile,
-    renderChips,
+    getDeckTitle,
+    getEnteredDeckTitle,
     updateCount,
   };
 });
 
 </script>
 
+<script src="share-activity.js"></script>
+
 <!-- ═══ FIREBASE SAVE / LOAD ═══ -->
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
@@ -1193,10 +1226,16 @@ const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 let currentUser = null;
+window.vocabularyFlashcardsCurrentUser = null;
+const PENDING_SETUP_KEY = 'vocabularyFlashcardsPendingAuthSetup';
+const sharedActivityId = new URLSearchParams(window.location.search).get('activity');
+const isSharedStudentMode = sharedActivityId !== null;
 
 /* ── Auth state ──────────────────────────────────────────────────────── */
 onAuthStateChanged(auth, user => {
   currentUser = user;
+  window.vocabularyFlashcardsCurrentUser = user;
+  if (isSharedStudentMode) return;
   updateAuthBar(user);
   const dashBtn = document.getElementById('dashboardBtn');
   if (dashBtn) dashBtn.style.display = user ? 'flex' : 'none';
@@ -1220,31 +1259,25 @@ function updateAuthBar(user) {
 
 /* ── Save button ─────────────────────────────────────────────────────── */
 document.getElementById('saveActivityBtn').addEventListener('click', async () => {
+  if (isSharedStudentMode) return;
   if (!currentUser) {
+    savePendingSetup('save');
     window.location.href = 'teacher-login.html';
     return;
   }
 
   const vf  = window._vocabFlashcards;
-  const tab = vf ? vf.getCurrentTab() : 'lexile';
-  let cards = [];
-
-  if (tab === 'custom') {
-    cards = vf ? vf.getCustomCards() : [];
-  } else {
-    cards = vf ? vf.getSelectedCards() : [];
-  }
+  const cards = vf ? vf.getCustomCards() : [];
 
   if (!cards.length) {
-    alert('Please select at least one card before saving.');
+    alert('Add at least one card before saving.');
     return;
   }
 
-  const category = document.getElementById('lexileCategory')?.value || '';
-  const grade    = document.getElementById('lexileGrade')?.value || '';
   const customText = document.getElementById('customArea')?.value || '';
+  const enteredDeckTitle = vf ? vf.getEnteredDeckTitle() : '';
 
-  const defaultTitle = buildDefaultTitle(tab, category, grade, cards.length);
+  const defaultTitle = enteredDeckTitle || buildDefaultTitle(cards.length);
   const title = prompt('Name this saved activity:', defaultTitle);
   if (title === null) return;
   const cleanTitle = title.trim();
@@ -1258,11 +1291,12 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
     words:        cards.map(c => c.word || c),
     // Save full cards (word + definition) in settings
     settings: {
-      tab,
-      category,
-      grade,
-      customText: tab === 'custom' ? customText : '',
-      cards  // full {word, definition} objects
+      tab: 'custom',
+      deckTitle: enteredDeckTitle || cleanTitle,
+      customText,
+      cards,  // full {word, definition} objects
+      countdownEnabled: document.getElementById('countdownToggle')?.checked !== false,
+      soundEnabled: document.getElementById('soundToggle')?.checked !== false
     },
     url:       'vocabulary-flashcards.html',
     createdAt: serverTimestamp(),
@@ -1284,75 +1318,194 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
   }
 });
 
-function buildDefaultTitle(tab, category, grade, count) {
-  const parts = [];
-  if (tab === 'custom') {
-    parts.push('Custom Vocabulary');
-  } else {
-    if (category) parts.push(category);
-    if (grade)    parts.push(grade);
-  }
-  parts.push(`(${count} card${count === 1 ? '' : 's'})`);
-  return parts.filter(Boolean).join(' — ');
+function buildDefaultTitle(count) {
+  return `Custom Vocabulary — ${count} card${count === 1 ? '' : 's'}`;
 }
+
+function safeSavedText(value, maxLength = 4000) {
+  if (value === undefined || value === null || typeof value === 'object') return '';
+  const text = String(value).trim().slice(0, maxLength);
+  return /^(undefined|null|\[object Object\])$/i.test(text) ? '' : text;
+}
+
+function normalizeCards(value) {
+  if (!Array.isArray(value)) return [];
+  return value.map(card => {
+    if (typeof card === 'string') {
+      const word = safeSavedText(card, 10000);
+      return word ? { word, definition: 'Definition coming soon.' } : null;
+    }
+    if (!card || typeof card !== 'object') return null;
+    const word = safeSavedText(card.word, 10000);
+    if (!word) return null;
+    return {
+      word,
+      definition: safeSavedText(card.definition, 100000) || 'Definition coming soon.'
+    };
+  }).filter(Boolean);
+}
+
+function cardsToText(cards) {
+  return cards.map(card => `${card.word} | ${card.definition}`).join('\n');
+}
+
+function applyVocabularyActivity(activity, { start = false } = {}) {
+  if (!activity || typeof activity !== 'object') return false;
+  const type = activity.toolType || activity.activityType || 'vocabulary-flashcards';
+  if (type !== 'vocabulary-flashcards') return false;
+
+  const settings = activity.settings && typeof activity.settings === 'object' ? activity.settings : {};
+  let cards = normalizeCards(settings.cards);
+
+  if (!cards.length && safeSavedText(settings.customText)) {
+    const area = document.getElementById('customArea');
+    if (area) area.value = safeSavedText(settings.customText, 50000);
+    cards = window._vocabFlashcards?.getCustomCards?.() || [];
+  }
+
+  if (!cards.length) cards = normalizeCards(activity.words);
+  if (!cards.length) return false;
+
+  const titleField = document.getElementById('deckTitle');
+  if (titleField) titleField.value = safeSavedText(settings.deckTitle, 100) || safeSavedText(activity.title, 100);
+
+  const area = document.getElementById('customArea');
+  if (area) area.value = cardsToText(cards);
+
+  const countdown = document.getElementById('countdownToggle');
+  const sound = document.getElementById('soundToggle');
+  if (countdown) countdown.checked = settings.countdownEnabled !== false;
+  if (sound) sound.checked = settings.soundEnabled !== false;
+  if (typeof syncHeaderSoundIcon === 'function') syncHeaderSoundIcon();
+  if (typeof updateCustomPreview === 'function') updateCustomPreview();
+  if (start && typeof startFlashcards === 'function') startFlashcards();
+  return true;
+}
+
+function captureCurrentSetup(action = 'save') {
+  const vf = window._vocabFlashcards;
+  const cards = vf?.getCustomCards?.() || [];
+  const deckTitle = vf?.getEnteredDeckTitle?.() || '';
+  return {
+    title: deckTitle || buildDefaultTitle(cards.length),
+    toolType: 'vocabulary-flashcards',
+    activityType: 'vocabulary-flashcards',
+    words: cards.map(card => card.word),
+    settings: {
+      tab: 'custom',
+      deckTitle,
+      customText: document.getElementById('customArea')?.value || '',
+      cards,
+      countdownEnabled: document.getElementById('countdownToggle')?.checked !== false,
+      soundEnabled: document.getElementById('soundToggle')?.checked !== false
+    },
+    pendingAction: action,
+    pendingSavedAt: Date.now()
+  };
+}
+
+function savePendingSetup(action = 'save') {
+  try { sessionStorage.setItem(PENDING_SETUP_KEY, JSON.stringify(captureCurrentSetup(action))); }
+  catch (err) { console.warn('Could not preserve the vocabulary setup before sign-in.', err); }
+}
+
+function tryLoadPendingSetup() {
+  const raw = sessionStorage.getItem(PENDING_SETUP_KEY);
+  if (!raw) return false;
+  sessionStorage.removeItem(PENDING_SETUP_KEY);
+  try {
+    const pending = JSON.parse(raw);
+    if (!pending.pendingSavedAt || Date.now() - pending.pendingSavedAt > 6 * 60 * 60 * 1000) return false;
+    const restored = applyVocabularyActivity(pending);
+    if (restored) {
+      const status = document.getElementById('authStatus');
+      if (status) {
+        const actionLabel = pending.pendingAction === 'share' ? 'Share Activity' : 'Save Activity';
+        status.innerHTML = `<span style="color:#1FA99C;font-weight:800">Your vocabulary deck was restored. Click ${actionLabel} again to finish.</span>`;
+        setTimeout(() => updateAuthBar(currentUser), 5500);
+      }
+    }
+    return restored;
+  } catch {
+    return false;
+  }
+}
+
+function cleanVocabularyPublicText(input, maxLength) {
+  if (input === undefined || input === null || typeof input === 'object') return '';
+  const text = String(input).replace(/\s+/g, ' ').trim().slice(0, maxLength);
+  return /^(undefined|null|\[object Object\])$/i.test(text) ? '' : text;
+}
+
+function sanitizeVocabularyCardsForShare(value) {
+  if (!Array.isArray(value)) return [];
+  return value.slice(0, 300).map(card => {
+    if (!card || typeof card !== 'object' || Array.isArray(card)) return null;
+    const word = cleanVocabularyPublicText(card.word, 160);
+    if (!word) return null;
+    return {
+      word,
+      definition: cleanVocabularyPublicText(card.definition, 1200) || 'Definition coming soon.'
+    };
+  }).filter(Boolean);
+}
+
+window.saveVocabularyFlashcardsSharedActivity = async function(activity) {
+  if (!currentUser || isSharedStudentMode) throw new Error('Teacher must be signed in to share.');
+  const incomingSettings = activity?.settings && typeof activity.settings === 'object' ? activity.settings : {};
+  const cards = sanitizeVocabularyCardsForShare(incomingSettings.cards);
+  if (!cards.length) throw new Error('At least one vocabulary card is required.');
+
+  const deckTitle = cleanVocabularyPublicText(incomingSettings.deckTitle, 100)
+    || cleanVocabularyPublicText(activity?.title, 100)
+    || buildDefaultTitle(cards.length);
+  const settings = {
+    tab: 'custom',
+    deckTitle,
+    customText: cardsToText(cards),
+    cards,
+    countdownEnabled: incomingSettings.countdownEnabled !== false,
+    soundEnabled: incomingSettings.soundEnabled !== false
+  };
+  const sharedData = {
+    title: deckTitle,
+    toolType: 'vocabulary-flashcards',
+    activityType: 'vocabulary-flashcards',
+    words: cards.map(card => card.word),
+    sentences: [],
+    settings,
+    public: true,
+    ownerUid: currentUser.uid,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  };
+  const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
+  const privateRef = await addDoc(collection(db, `users/${currentUser.uid}/activities`), {
+    ...sharedData,
+    url: 'vocabulary-flashcards.html',
+    shareEnabled: true,
+    sharedSetup: true,
+    shareId: sharedRef.id,
+    userId: currentUser.uid
+  });
+  return { shareId: sharedRef.id, savedActivityId: privateRef.id };
+};
+
+window.captureVocabularyFlashcardsBeforeLogin = function(action = 'save') {
+  savePendingSetup(action);
+};
 
 /* ── Load from dashboard ─────────────────────────────────────────────── */
 function tryLoadSavedActivity() {
   const raw = sessionStorage.getItem('savedActivityData');
-  if (!raw) return;
+  if (!raw) return false;
   let activity;
-  try { activity = JSON.parse(raw); } catch { return; }
-  if (!activity || activity.toolType !== 'vocabulary-flashcards') return;
+  try { activity = JSON.parse(raw); } catch { return false; }
+  if (!activity || (activity.toolType || activity.activityType) !== 'vocabulary-flashcards') return false;
 
   sessionStorage.removeItem('savedActivityData');
   sessionStorage.removeItem('savedActivityId');
-
-  const settings = activity.settings || {};
-  const vf = window._vocabFlashcards;
-  if (!vf) return;
-
-  const tab   = settings.tab || 'lexile';
-  const cards = settings.cards || [];
-  if (!cards.length) return;
-
-  vf.switchTab(tab);
-
-  if (tab === 'custom') {
-    const area = document.getElementById('customArea');
-    if (area) {
-      // Restore custom text or rebuild from cards
-      area.value = settings.customText ||
-        cards.map(c => `${c.word} - ${c.definition}`).join('\n');
-      if (typeof updateCustomPreview === 'function') updateCustomPreview();
-    }
-  } else {
-    // Restore lexile dropdowns
-    setTimeout(() => {
-      if (settings.category) {
-        const cat = document.getElementById('lexileCategory');
-        if (cat) {
-          cat.value = settings.category;
-          if (typeof populateLexileGrades === 'function') populateLexileGrades();
-        }
-      }
-      setTimeout(() => {
-        if (settings.grade) {
-          const gr = document.getElementById('lexileGrade');
-          if (gr) {
-            gr.value = settings.grade;
-            if (typeof autoLoadLexile === 'function') autoLoadLexile();
-          }
-        }
-        // Restore selected cards by clicking matching chips
-        setTimeout(() => {
-          const wordSet = new Set(cards.map(c => c.word || c));
-          document.querySelectorAll('#wordBank .chip').forEach(chip => {
-            if (wordSet.has(chip.dataset.word || chip.textContent)) chip.click();
-          });
-        }, 80);
-      }, 60);
-    }, 60);
-  }
+  if (!applyVocabularyActivity(activity)) return false;
 
   // Show loaded notice on the button
   const btn = document.getElementById('saveActivityBtn');
@@ -1363,9 +1516,127 @@ function tryLoadSavedActivity() {
     btn.style.color = 'white';
     setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 3000);
   }
+  return true;
 }
 
-window.addEventListener('load', () => setTimeout(tryLoadSavedActivity, 200));
+function showSharedUnavailable() {
+  document.getElementById('sharedDeckStatusTitle').textContent = 'This shared vocabulary deck is unavailable.';
+  document.getElementById('sharedDeckStatusText').textContent = 'The link may be incomplete, expired, or no longer available.';
+  document.getElementById('sharedDeckHome').style.display = 'block';
+}
+
+async function loadSharedVocabularyDeck() {
+  const shareId = safeSavedText(sharedActivityId, 160);
+  if (!shareId || shareId.includes('/') || !/^[A-Za-z0-9_-]+$/.test(shareId)) {
+    showSharedUnavailable();
+    return;
+  }
+
+  try {
+    const snapshot = await getDoc(doc(db, 'sharedActivities', shareId));
+    if (!snapshot.exists()) { showSharedUnavailable(); return; }
+    const activity = snapshot.data();
+    const type = activity.toolType || activity.activityType || activity.type;
+    const settings = activity.settings && typeof activity.settings === 'object' ? activity.settings : {};
+    const cards = Array.isArray(settings.cards) ? settings.cards.slice(0, 300).map(card => {
+      if (!card || typeof card !== 'object' || Array.isArray(card)) return null;
+      const word = safeSavedText(card.word, 160);
+      const definition = safeSavedText(card.definition, 1200);
+      return word && definition ? { word, definition } : null;
+    }).filter(Boolean) : [];
+    if (activity.public !== true || type !== 'vocabulary-flashcards' || !cards.length) {
+      showSharedUnavailable();
+      return;
+    }
+
+    const sharedActivity = {
+      title: safeSavedText(activity.title, 100),
+      toolType: 'vocabulary-flashcards',
+      settings: {
+        deckTitle: safeSavedText(settings.deckTitle, 100) || safeSavedText(activity.title, 100),
+        cards,
+        countdownEnabled: settings.countdownEnabled !== false,
+        soundEnabled: settings.soundEnabled !== false
+      }
+    };
+    if (!applyVocabularyActivity(sharedActivity)) { showSharedUnavailable(); return; }
+    document.documentElement.classList.add('shared-deck-loaded');
+    startFlashcards();
+  } catch (err) {
+    console.error('Shared vocabulary deck load failed:', err);
+    showSharedUnavailable();
+  }
+}
+
+window.addEventListener('load', () => setTimeout(() => {
+  if (isSharedStudentMode) {
+    loadSharedVocabularyDeck();
+    return;
+  }
+  if (!tryLoadPendingSetup()) tryLoadSavedActivity();
+}, 200));
+</script>
+
+<script>
+if (window.LiteracyArcadeShare) {
+  LiteracyArcadeShare.register({
+    toolType: 'vocabulary-flashcards',
+    mount: document.getElementById('saveActivityBtn')?.parentElement,
+    buttonLabel: 'Share Activity',
+    requireAuth: true,
+    publicOrigin: 'https://literacyarcade.com',
+    isAuthenticated() {
+      const cards = window._vocabFlashcards?.getCustomCards?.() || [];
+      // Let the activity validator handle an empty deck without opening sign-in.
+      return !cards.length || Boolean(window.vocabularyFlashcardsCurrentUser);
+    },
+    onLoginRequired() {
+      window.captureVocabularyFlashcardsBeforeLogin?.('share');
+      window.location.href = 'teacher-login.html';
+    },
+    getActivity() {
+      const vf = window._vocabFlashcards;
+      const cards = vf?.getCustomCards?.() || [];
+      if (!cards.length) {
+        alert('Add at least one vocabulary card before sharing.');
+        return null;
+      }
+      const enteredTitle = vf?.getEnteredDeckTitle?.() || '';
+      const title = enteredTitle || `Custom Vocabulary — ${cards.length} card${cards.length === 1 ? '' : 's'}`;
+      return {
+        title,
+        words: cards.map(card => card.word),
+        settings: {
+          tab: 'custom',
+          deckTitle: title,
+          customText: cards.map(card => `${card.word} | ${card.definition}`).join('\n'),
+          cards,
+          countdownEnabled: document.getElementById('countdownToggle')?.checked !== false,
+          soundEnabled: document.getElementById('soundToggle')?.checked !== false
+        },
+        autoStart: true
+      };
+    },
+    saveActivity(activity) {
+      if (typeof window.saveVocabularyFlashcardsSharedActivity !== 'function') {
+        throw new Error('Share save function is not ready.');
+      }
+      return window.saveVocabularyFlashcardsSharedActivity(activity);
+    }
+  });
+
+  window.syncVocabularyShareButton = function() {
+    const button = document.getElementById('shareActivityBtn');
+    if (!button) return;
+    const hasCards = (window._vocabFlashcards?.getCustomCards?.() || []).length > 0;
+    button.disabled = !hasCards || document.documentElement.classList.contains('shared-student-mode');
+    button.title = hasCards ? 'Create a student-ready share link' : 'Add at least one vocabulary card to share';
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    window.syncVocabularyShareButton();
+  }, { once: true });
+}
 </script>
 </body>
 </html>
