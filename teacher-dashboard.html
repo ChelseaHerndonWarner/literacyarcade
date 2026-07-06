@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Teacher/Parent Dashboard | Literacy Arcade</title>
+<title>My Dashboard | Literacy Arcade</title>
 <meta name="description" content="A private Literacy Arcade dashboard for teacher and parent accounts to reopen saved literacy activities."/>
 <meta name="robots" content="noindex, nofollow"/>
 <link rel="canonical" href="https://literacyarcade.com/teacher-dashboard.html"/>
@@ -71,18 +71,18 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .hero h1{font-family:var(--font-head);font-size:clamp(28px,5vw,38px);line-height:1.05;margin-bottom:6px}
 .hero-sub{color:var(--navy-soft);line-height:1.5;font-size:14px}
 .user-card{
-  background:#fff;border:1px solid var(--border);border-radius:18px;
-  box-shadow:var(--shadow);padding:14px 18px;min-width:240px;flex-shrink:0;
+  background:#fff;border:1px solid var(--border);border-radius:999px;
+  box-shadow:var(--shadow-sm);padding:6px 14px 6px 6px;flex-shrink:0;
 }
-.user-card-inner{display:flex;align-items:center;gap:10px}
-.user-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--teal);flex-shrink:0}
+.user-card-inner{display:flex;align-items:center;gap:8px}
+.user-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--teal);flex-shrink:0}
 .user-avatar-placeholder{
-  width:38px;height:38px;border-radius:50%;background:var(--teal-light);
+  width:30px;height:30px;border-radius:50%;background:var(--teal-light);
   border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-head);font-weight:900;color:var(--teal-dark);font-size:16px;flex-shrink:0;
+  font-family:var(--font-head);font-weight:900;color:var(--teal-dark);font-size:13px;flex-shrink:0;
 }
-.user-name{font-family:var(--font-head);font-weight:900;font-size:15px}
-.user-email{color:var(--navy-soft);font-size:12px;margin-top:2px;word-break:break-word}
+.user-name{font-family:var(--font-head);font-weight:900;font-size:13px}
+.user-email{color:var(--navy-soft);font-size:11px;margin-top:0;word-break:break-word}
 
 /* ── CONTROLS BAR ────────────────────────────────────────────────────────── */
 .controls-bar{
@@ -105,12 +105,12 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .search-input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.10)}
 .search-input::placeholder{color:var(--navy-soft)}
 
-.filter-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.filter-tabs{display:flex;gap:5px;flex-wrap:wrap}
 .filter-tab{
   border:1.5px solid var(--border);background:#fff;border-radius:999px;
-  padding:5px 12px 5px 7px;font-size:12px;font-weight:700;font-family:var(--font-head);
+  padding:4px 10px;font-size:12px;font-weight:700;font-family:var(--font-head);
   color:var(--navy-soft);cursor:pointer;transition:all .13s;white-space:nowrap;
-  display:inline-flex;align-items:center;gap:7px;
+  display:inline-flex;align-items:center;
 }
 .filter-tab:hover{border-color:var(--teal);color:var(--teal-dark)}
 .filter-tab.active{background:var(--teal-dark);border-color:var(--teal-dark);color:#fff}
@@ -166,11 +166,11 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 /* ── ACTIVITY CARD ───────────────────────────────────────────────────────── */
 .activity-card{
   background:#fff;border:1.5px solid var(--border);border-radius:var(--r);
-  padding:16px;transition:box-shadow .15s,border-color .15s;
-  display:flex;flex-direction:column;gap:0;
+  padding:14px;transition:box-shadow .15s,border-color .15s;
+  display:flex;flex-direction:column;gap:0;position:relative;
 }
 .activity-card:hover{box-shadow:var(--shadow);border-color:rgba(8,122,112,.25)}
-.card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
 .activity-icon{
   width:36px;height:36px;border-radius:11px;display:inline-flex;
   align-items:center;justify-content:center;flex-shrink:0;color:currentColor;
@@ -185,25 +185,40 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .icon-mint{background:var(--flash-bg);color:var(--flash-green)}
 .icon-blue{background:var(--assessment-bg);color:var(--assessment-blue)}
 .card-info{flex:1;min-width:0}
+.card-title-row{display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap}
 .card-title{
   font-family:var(--font-head);font-weight:900;font-size:15px;
-  color:var(--navy);line-height:1.2;margin-bottom:4px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  color:var(--navy);line-height:1.25;margin-bottom:4px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;text-overflow:ellipsis;white-space:normal;
 }
+.shared-badge{
+  flex-shrink:0;display:inline-flex;align-items:center;gap:4px;
+  background:var(--teal-light);color:var(--teal-dark);border-radius:999px;
+  padding:2px 9px;font-size:10px;font-weight:900;font-family:var(--font-head);
+  letter-spacing:.3px;text-transform:uppercase;margin-top:1px;
+}
+.shared-badge svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .card-meta{color:var(--navy-soft);font-size:11px;line-height:1.5}
 .card-meta span{display:inline-block}
 .card-meta .dot{margin:0 4px;opacity:.4}
+.card-preview{
+  color:var(--navy-soft);font-size:12px;line-height:1.45;margin-top:6px;
+  overflow:hidden;text-overflow:ellipsis;display:-webkit-box;
+  -webkit-line-clamp:1;-webkit-box-orient:vertical;
+}
+.card-controls{display:flex;align-items:center;gap:7px;margin-top:10px}
 .open-btn{
-  width:100%;background:var(--teal-dark);color:#fff;border:0;
+  flex:1;min-width:0;background:var(--teal-dark);color:#fff;border:0;
   border-radius:10px;height:38px;font-family:var(--font-head);
-  font-weight:900;font-size:13px;cursor:pointer;margin-top:12px;
+  font-weight:900;font-size:13px;cursor:pointer;
   transition:all .13s;
 }
 .open-btn:hover{background:var(--teal);transform:translateY(-1px)}
 .share-btn{
-  width:100%;background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal);
-  border-radius:10px;height:36px;font-family:var(--font-head);
-  font-weight:900;font-size:13px;cursor:pointer;margin-top:8px;
+  flex:1;min-width:0;background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal);
+  border-radius:10px;height:38px;font-family:var(--font-head);
+  font-weight:900;font-size:13px;cursor:pointer;
   transition:all .13s;
 }
 .share-btn:hover{background:var(--teal-light);transform:translateY(-1px)}
@@ -211,15 +226,30 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
   background:#F4F6F8;color:var(--navy-soft);border-color:var(--border);
   cursor:not-allowed;transform:none;
 }
-.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
-.card-actions button{
-  height:34px;border-radius:9px;font-family:var(--font-head);
-  font-weight:900;font-size:12px;cursor:pointer;transition:all .13s;
+.card-menu-wrap{position:relative;flex:0 0 auto}
+.card-menu-btn{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:#fff;border:1.5px solid var(--border);color:var(--navy-soft);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all .13s;
 }
-.rename-btn{background:#fff;color:var(--navy);border:1.5px solid var(--border)}
-.rename-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
-.delete-btn{background:#fff;color:#B42318;border:1.5px solid #F3B4AE}
-.delete-btn:hover{background:#FFF5F5;border-color:#E57373}
+.card-menu-btn svg{width:17px;height:17px;display:block}
+.card-menu-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
+.card-menu-btn.open{border-color:var(--violet);color:var(--violet);background:var(--lavender)}
+.card-menu{
+  position:absolute;top:calc(100% + 6px);right:0;z-index:20;min-width:196px;
+  background:#fff;border:1.5px solid var(--lavender);border-radius:14px;
+  box-shadow:var(--shadow);padding:6px;display:none;
+}
+.card-menu.open{display:block}
+.card-menu button{
+  width:100%;text-align:left;background:none;border:0;border-radius:9px;
+  padding:9px 11px;font-family:var(--font-head);font-weight:700;font-size:13px;
+  color:var(--navy);cursor:pointer;transition:background .12s,color .12s;
+}
+.card-menu button:hover{background:var(--teal-light);color:var(--teal-dark)}
+.card-menu button.menu-delete{color:#B42318}
+.card-menu button.menu-delete:hover{background:#FFF5F5;color:#B42318}
 
 /* ── SHARE MODAL ─────────────────────────────────────────────────────────── */
 .share-overlay{
@@ -272,7 +302,12 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
   text-align:center;padding:48px 24px;
   color:var(--navy-soft);
 }
-.empty-all-icon{font-size:48px;display:block;margin-bottom:12px}
+.empty-all-icon{
+  width:64px;height:64px;border-radius:18px;margin:0 auto 14px;
+  background:var(--teal-light);color:var(--teal-dark);
+  display:flex;align-items:center;justify-content:center;
+}
+.empty-all-icon svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .empty-all h3{font-family:var(--font-head);font-weight:900;font-size:20px;color:var(--navy);margin-bottom:6px}
 .empty-all p{font-size:14px;line-height:1.6;max-width:340px;margin:0 auto}
 
@@ -312,6 +347,7 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
   .search-wrap{max-width:100%}
   .controls-right{margin-left:0}
   .stats-strip{gap:7px}
+  .card-grid{grid-template-columns:1fr}
 }
 
 /* ── TEACHING COLLECTIONS / PLAYLISTS ───────────────────────────────────── */
@@ -453,7 +489,7 @@ body{font-family:var(--font-body);}
   height:62px;
   padding:0 clamp(16px,3vw,24px);
   gap:10px;
-  background:rgba(255,255,255,.94);
+  background:#fff;
   box-shadow:0 2px 14px rgba(26,26,46,.05);
   z-index:50;
 }
@@ -488,7 +524,7 @@ body{font-family:var(--font-body);}
 }
 .header-btn:hover{background:var(--cream);border-color:#6B7890;color:var(--navy);}
 .header-btn svg{width:16px;height:16px;stroke-width:1.75;}
-main{max-width:1160px;padding:28px 18px 56px;}
+main{max-width:1280px;padding:28px 18px 56px;}
 .hero{margin-bottom:22px;}
 .badge{font-weight:800;letter-spacing:1.3px;}
 .hero h1{font-weight:900;letter-spacing:-.5px;}
@@ -499,9 +535,9 @@ main{max-width:1160px;padding:28px 18px 56px;}
   font-family:'Nunito',system-ui,sans-serif;
 }
 .search-input{min-height:40px;border-radius:10px;font-weight:700;font-size:14px;}
-.filter-tab{font-size:13px;font-weight:800;padding:6px 12px 6px 7px;}
+.filter-tab{font-size:11.5px;font-weight:800;padding:4px 10px;}
 .sort-select{min-height:40px;font-size:13px;font-weight:800;}
-.controls-bar{gap:10px 10px;margin-bottom:16px;}
+.controls-bar{gap:6px 10px;margin-bottom:12px;}
 .stats-strip{margin-bottom:18px;}
 .collections-intro{padding:18px 20px;border-radius:20px;}
 .collections-intro.compact{padding:14px 18px;}
@@ -585,17 +621,6 @@ main{max-width:1160px;padding:28px 18px 56px;}
 
 
 /* View cleanup refinements: reduce extra green, keep color controls neutral, and support section reordering */
-.activity-card > .open-btn{
-  background:#fff!important;
-  color:var(--teal-dark)!important;
-  border:1.5px solid var(--teal)!important;
-  box-shadow:none!important;
-}
-.activity-card > .open-btn:hover{
-  background:var(--teal-light)!important;
-  color:var(--teal-dark)!important;
-  transform:translateY(-1px);
-}
 .collection-actions .color-btn,
 .collection-detail-actions #changeCollectionColorBtn,
 .section-mini-btn.section-color-btn{
@@ -630,7 +655,7 @@ main{max-width:1160px;padding:28px 18px 56px;}
     <span class="la-wordmark">Literacy Arcade</span>
   </a>
   <span class="la-divider"></span>
-  <span class="la-page-title">Teacher/Parent Dashboard</span>
+  <span class="la-page-title">My Dashboard</span>
   <span class="header-spacer"></span>
   <a class="header-btn" href="https://literacyarcade.com/">
     <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
@@ -643,9 +668,8 @@ main{max-width:1160px;padding:28px 18px 56px;}
   <!-- Hero -->
   <section class="hero">
     <div>
-      <span class="badge">Teacher/Parent Account</span>
-      <h1>My Activities</h1>
-      <p class="hero-sub">Save, organize, and reopen your Literacy Arcade games and lessons.</p>
+      <h1>My Dashboard</h1>
+      <p class="hero-sub">Save, organize, reopen, and share your Literacy Arcade activities.</p>
     </div>
     <div class="user-card" id="userCard">
       <div class="user-card-inner">
@@ -963,7 +987,7 @@ async function loadActivities() {
   } catch (err) {
     console.error(err);
     document.getElementById('activitiesContainer').innerHTML =
-      `<div class="error-msg">Could not load activities. Check Firestore rules and try refreshing.</div>`;
+      `<div class="error-msg">Something went wrong loading your saved activities. Please try refreshing the page.</div>`;
   }
 }
 
@@ -1028,7 +1052,7 @@ function renderFilterTabs() {
     const btn = document.createElement('button');
     btn.className = 'filter-tab' + (activeFilter === key ? ' active' : '');
     btn.dataset.filter = key;
-    btn.innerHTML = `${renderActivityIcon(type, 'sm')}<span>${escHtml(type.label)}</span>`;
+    btn.textContent = type.label;
     filterTabs.appendChild(btn);
   });
 
@@ -1093,7 +1117,7 @@ function renderAll() {
   if (allActivities.length === 0) {
     container.innerHTML = `
       <div class="empty-all">
-        <span class="empty-all-icon">📂</span>
+        <span class="empty-all-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="7" rx="1"/><rect x="3" y="15" width="7" height="5" rx="1"/><rect x="14" y="15" width="7" height="5" rx="1"/></svg></span>
         <h3>No saved activities yet</h3>
         <p>Open any Literacy Arcade game, build your word list, then click <strong>Save Activity</strong> to find it here.</p>
       </div>`;
@@ -1168,6 +1192,30 @@ function renderAll() {
   });
 }
 
+function buildPreviewLine(activity, type) {
+  let items = [];
+  if (type === 'sentence-spinner') {
+    items = Array.isArray(activity.sentences) && activity.sentences.length
+      ? activity.sentences
+      : (Array.isArray(activity.words) ? activity.words : []);
+  } else if (Array.isArray(activity.words)) {
+    items = activity.words;
+  }
+  const clean = items.map(item => (item == null ? '' : String(item).trim())).filter(Boolean);
+  if (!clean.length) return '';
+  return clean.slice(0, 3).join(', ');
+}
+
+function closeAllCardMenus(exceptEl = null) {
+  document.querySelectorAll('.card-menu.open').forEach(menu => {
+    if (menu !== exceptEl) {
+      menu.classList.remove('open');
+      const btn = menu.previousElementSibling;
+      if (btn && btn.classList.contains('card-menu-btn')) btn.classList.remove('open');
+    }
+  });
+}
+
 function buildCard(activity, tool) {
   const card = document.createElement('div');
   card.className = 'activity-card';
@@ -1180,12 +1228,18 @@ function buildCard(activity, tool) {
   const title = activity.title || makeDefaultTitle(activity);
   const savedDate = formatDate(activity.updatedAt || activity.createdAt);
   const shareable = Boolean(ACTIVITY_TYPES[type]?.shareable);
+  const isShared = Boolean(activity.shareEnabled && activity.shareId);
+  const preview = buildPreviewLine(activity, type);
+  const canDuplicate = Boolean(ACTIVITY_TYPES[type]);
 
   card.innerHTML = `
     <div class="card-top">
       ${renderActivityIcon(tool)}
       <div class="card-info">
-        <div class="card-title" title="${escHtml(title)}">${escHtml(title)}</div>
+        <div class="card-title-row">
+          <div class="card-title" title="${escHtml(title)}">${escHtml(title)}</div>
+          ${isShared ? `<span class="shared-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>Shared</span>` : ''}
+        </div>
         <div class="card-meta">
           <span>${escHtml(tool.label)}</span>
           ${count ? `<span class="dot">·</span><span>${count} ${countLabel}${count===1?'':'s'}</span>` : ''}
@@ -1193,21 +1247,42 @@ function buildCard(activity, tool) {
         </div>
       </div>
     </div>
-    <button class="open-btn" type="button">Open Activity</button>
-    <button class="share-btn" type="button" ${shareable ? '' : 'disabled'}>${shareable ? 'Share' : 'Share coming soon'}</button>
-    <button class="collection-btn" type="button">Add to Collection</button>
-    <div class="card-actions">
-      <button class="rename-btn" type="button">Rename</button>
-      <button class="delete-btn" type="button">Delete</button>
+    ${preview ? `<div class="card-preview" title="${escHtml(preview)}">${escHtml(preview)}</div>` : ''}
+    <div class="card-controls">
+      <button class="open-btn" type="button">Open Activity</button>
+      ${shareable ? `<button class="share-btn" type="button">Share</button>` : ''}
+      <div class="card-menu-wrap">
+        <button class="card-menu-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="More actions">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>
+        </button>
+        <div class="card-menu" role="menu">
+          <button type="button" class="menu-collection" role="menuitem">Add to Collection</button>
+          <button type="button" class="menu-rename" role="menuitem">Rename</button>
+          ${canDuplicate ? `<button type="button" class="menu-duplicate" role="menuitem">Duplicate</button>` : ''}
+          <button type="button" class="menu-delete" role="menuitem">Delete</button>
+        </div>
+      </div>
     </div>`;
 
-  card.querySelector('.open-btn').addEventListener('click',   () => openActivity(activity.id, activity));
+  card.querySelector('.open-btn').addEventListener('click', () => openActivity(activity.id, activity));
   if (shareable) {
     card.querySelector('.share-btn').addEventListener('click', () => shareActivity(activity.id, activity));
   }
-  card.querySelector('.collection-btn').addEventListener('click', () => openActivityPicker({ activityId: activity.id }));
-  card.querySelector('.rename-btn').addEventListener('click', () => renameActivity(activity.id, title));
-  card.querySelector('.delete-btn').addEventListener('click', () => deleteActivity(activity.id, title));
+
+  const menuBtn = card.querySelector('.card-menu-btn');
+  const menu = card.querySelector('.card-menu');
+  menuBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const willOpen = !menu.classList.contains('open');
+    closeAllCardMenus();
+    menu.classList.toggle('open', willOpen);
+    menuBtn.classList.toggle('open', willOpen);
+    menuBtn.setAttribute('aria-expanded', String(willOpen));
+  });
+  card.querySelector('.menu-collection').addEventListener('click', () => { closeAllCardMenus(); openActivityPicker({ activityId: activity.id }); });
+  card.querySelector('.menu-rename').addEventListener('click', () => { closeAllCardMenus(); renameActivity(activity.id, title); });
+  card.querySelector('.menu-duplicate')?.addEventListener('click', () => { closeAllCardMenus(); duplicateActivity(activity.id); });
+  card.querySelector('.menu-delete').addEventListener('click', () => { closeAllCardMenus(); deleteActivity(activity.id, title); });
 
   return card;
 }
@@ -1234,7 +1309,7 @@ function openActivity(id, activity) {
 async function shareActivity(id, activity) {
   const type = getActivityType(activity);
   if (!ACTIVITY_TYPES[type]?.shareable) {
-    alert('Sharing is coming soon for this activity type.');
+    alert('Sharing is not available for this activity type.');
     return;
   }
 
@@ -1280,7 +1355,7 @@ async function shareActivity(id, activity) {
     openShareModal(buildStudentLink(type, shareId), activity.title || makeDefaultTitle(activity));
   } catch (err) {
     console.error(err);
-    alert('Share failed. Check Firestore rules and try again.');
+    alert('Something went wrong sharing this activity. Please try again.');
   }
 }
 
@@ -1450,7 +1525,10 @@ function buildStudentLink(type, shareId) {
 }
 
 async function renameActivity(id, currentTitle) {
-  const newTitle = prompt('Rename this saved activity:', currentTitle || 'Untitled Activity');
+  const newTitle = prompt(
+    'Rename this saved activity:\n\nUse a skill, group, or lesson name — not a student name.',
+    currentTitle || 'Untitled Activity'
+  );
   if (newTitle === null) return;
   const clean = newTitle.trim();
   if (!clean) { alert('Please enter a name.'); return; }
@@ -1464,19 +1542,41 @@ async function renameActivity(id, currentTitle) {
     renderAll();
   } catch (err) {
     console.error(err);
-    alert('Rename failed. Check Firestore rules and try again.');
+    alert('Something went wrong renaming this activity. Please try again.');
+  }
+}
+
+async function duplicateActivity(id) {
+  const source = allActivities.find(a => a.id === id);
+  if (!source) return;
+  const {
+    id: _id, shareId: _shareId, shareEnabled: _shareEnabled, sharedSetup: _sharedSetup,
+    createdAt: _createdAt, updatedAt: _updatedAt, ...rest
+  } = source;
+  const baseTitle = source.title || makeDefaultTitle(source);
+  try {
+    const data = { ...rest, title: `${baseTitle} (Copy)`, createdAt: serverTimestamp(), updatedAt: serverTimestamp() };
+    const ref = await addDoc(collection(db, `users/${currentUser.uid}/activities`), data);
+    allActivities.unshift({ id: ref.id, ...data, createdAt: new Date(), updatedAt: new Date() });
+    renderAll();
+  } catch (err) {
+    console.error(err);
+    alert('Something went wrong duplicating this activity. Please try again.');
   }
 }
 
 async function deleteActivity(id, title) {
-  if (!confirm(`Delete "${title || 'this activity'}"? This can't be undone.`)) return;
+  const activity = allActivities.find(a => a.id === id);
+  const isShared = Boolean(activity && activity.shareEnabled && activity.shareId);
+  const shareWarning = isShared ? ' Students with the shared link will still be able to open this activity.' : '';
+  if (!confirm(`Delete "${title || 'this activity'}"? This can't be undone.${shareWarning}`)) return;
   try {
     await deleteDoc(doc(db, `users/${currentUser.uid}/activities`, id));
     allActivities = allActivities.filter(a => a.id !== id);
     renderAll();
   } catch (err) {
     console.error(err);
-    alert('Delete failed. Check Firestore rules and try again.');
+    alert('Something went wrong deleting this activity. Please try again.');
   }
 }
 
@@ -1567,7 +1667,7 @@ function renderCollectionsHome() {
   document.getElementById('collectionsIntroNew')?.addEventListener('click', createCollection);
   const mount = document.getElementById('collectionGridMount');
   if (!teachingCollections.length) {
-    mount.innerHTML = `<div class="empty-all"><span class="empty-all-icon">📁</span><h3>No collections yet</h3><p>Create a collection for a small group, class, skill, student, or weekly plan.</p></div>`;
+    mount.innerHTML = `<div class="empty-all"><span class="empty-all-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><h3>No collections yet</h3><p>Create a collection for a small group, class, skill, intervention group, or weekly plan.</p></div>`;
     return;
   }
   const grid = document.createElement('div');
@@ -1875,7 +1975,7 @@ async function duplicateCollection(collectionId) {
     renderAll();
   } catch (err) {
     console.error(err);
-    alert('Could not duplicate the collection. Check Firestore rules and try again.');
+    alert('Something went wrong duplicating this collection. Please try again.');
   }
 }
 
@@ -1917,7 +2017,7 @@ async function createCollection() {
     renderAll();
   } catch (err) {
     console.error(err);
-    alert('Could not create the collection. Check Firestore rules and try again.');
+    alert('Something went wrong creating this collection. Please try again.');
   }
 }
 
@@ -2122,6 +2222,10 @@ function closeActivityPicker() {
 }
 
 /* ── Controls ────────────────────────────────────────────────────────────── */
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.card-menu-wrap')) closeAllCardMenus();
+});
 
 document.getElementById('viewSwitch').addEventListener('click', e => {
   const tab = e.target.closest('.view-tab');
