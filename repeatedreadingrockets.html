@@ -3035,12 +3035,14 @@ function setCustomWCPM() {
   refreshGoalDisplay();
 }
 
-function startMission() {
+async function startMission() {
   const name = document.getElementById('studentName').value.trim();
   const customVal = parseInt(document.getElementById('customWCPMInput').value);
   if (customVal && customVal >= 10) state.wcpmGoal = customVal;
   const goal = state.wcpmGoal;
   if (!goal || goal < 10) { alert('Please set a WCPM goal.'); return; }
+  const user = await window.LiteracyArcadeToolAccess?.requireSignIn();
+  if (!user) return;
   window.LiteracyArcadeToolTracking?.trackSessionStarted({ goalWcpm: goal });
 
   state.student = name || 'Student';

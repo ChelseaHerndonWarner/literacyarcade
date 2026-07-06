@@ -22,34 +22,30 @@ let currentUser = null;
 let authorizedUid = null;
 let currentSessionId = null;
 let gateElement = null;
+let authReadyResolve;
+let pendingAccessPromise = null;
+let pendingAccessResolve = null;
+const authReady = new Promise((resolve) => { authReadyResolve = resolve; });
 
 function googleMark() {
   return `<svg class="la-auth-google-mark" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.57-.14-3.08-.41-4.55H24v9.1h12.62c-.54 2.9-2.18 5.36-4.65 7.01l7.18 5.57C43.35 37.76 46.5 31.57 46.5 24.5z"/><path fill="#FBBC05" d="M10.54 28.59A14.43 14.43 0 0 1 9.75 24c0-1.59.28-3.14.79-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.92 7.53 2.56 10.78l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.47 0 11.9-2.13 15.87-5.78l-7.18-5.57c-2 1.34-4.55 2.13-8.69 2.13-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
 }
 
-function renderGate({ checking = false, error = '' } = {}) {
-  body.dataset.authState = checking ? 'checking' : 'signed-out';
+function renderGate({ error = '' } = {}) {
+  body.classList.add('la-auth-gate-open');
   if (!gateElement) {
     gateElement = document.createElement('main');
     gateElement.className = 'la-auth-gate';
+    gateElement.setAttribute('role', 'dialog');
+    gateElement.setAttribute('aria-modal', 'true');
     gateElement.setAttribute('aria-live', 'polite');
     body.appendChild(gateElement);
   }
 
-  if (checking) {
-    gateElement.innerHTML = `
-      <section class="la-auth-gate-card" aria-label="Checking teacher account">
-        <img class="la-auth-gate-mark" src="./apple-touch-icon.png" alt="Literacy Arcade">
-        <div class="la-auth-gate-loading" aria-hidden="true"></div>
-        <h1>Checking your teacher account…</h1>
-      </section>`;
-    return;
-  }
-
   gateElement.innerHTML = `
     <section class="la-auth-gate-card" aria-labelledby="laAuthGateTitle">
+      <button class="la-auth-gate-close" id="laAuthGateClose" type="button" aria-label="Return to game setup">×</button>
       <img class="la-auth-gate-mark" src="./apple-touch-icon.png" alt="Literacy Arcade">
-      <div class="la-auth-gate-kicker">Free teacher tool</div>
       <h1 id="laAuthGateTitle">Create a free teacher account to use this fluency tool.</h1>
       <p class="la-auth-gate-copy">Sign in with Google to open ${toolName}. Your account helps keep teacher tools and usage organized in one place.</p>
       <button class="la-auth-google-btn" id="laAuthGoogleButton" type="button">
@@ -61,6 +57,19 @@ function renderGate({ checking = false, error = '' } = {}) {
     </section>`;
 
   gateElement.querySelector('#laAuthGoogleButton').addEventListener('click', signIn);
+  gateElement.querySelector('#laAuthGateClose').addEventListener('click', () => closeGate(null));
+  gateElement.querySelector('#laAuthGoogleButton').focus();
+}
+
+function closeGate(result) {
+  body.classList.remove('la-auth-gate-open');
+  if (gateElement) {
+    gateElement.remove();
+    gateElement = null;
+  }
+  if (pendingAccessResolve) pendingAccessResolve(result);
+  pendingAccessPromise = null;
+  pendingAccessResolve = null;
 }
 
 async function recordUserDates(user) {
@@ -123,10 +132,7 @@ window.LiteracyArcadeToolTracking = {
 async function authorize(user) {
   currentUser = user;
   body.dataset.authState = 'signed-in';
-  if (gateElement) {
-    gateElement.remove();
-    gateElement = null;
-  }
+  closeGate(user);
   if (authorizedUid === user.uid) return;
   authorizedUid = user.uid;
   document.dispatchEvent(new CustomEvent('literacyarcade:tool-authorized', { detail: { user } }));
@@ -135,6 +141,18 @@ async function authorize(user) {
     track('tool_opened'),
   ]);
 }
+
+async function requireSignIn() {
+  await authReady;
+  if (currentUser) return currentUser;
+  if (!pendingAccessPromise) {
+    pendingAccessPromise = new Promise((resolve) => { pendingAccessResolve = resolve; });
+    renderGate();
+  }
+  return pendingAccessPromise;
+}
+
+window.LiteracyArcadeToolAccess = { requireSignIn };
 
 async function signIn() {
   const button = gateElement?.querySelector('#laAuthGoogleButton');
@@ -150,14 +168,14 @@ async function signIn() {
   }
 }
 
-renderGate({ checking: true });
 onAuthStateChanged(auth, (user) => {
+  authReadyResolve();
   if (user) {
     authorize(user);
   } else {
     currentUser = null;
     authorizedUid = null;
     currentSessionId = null;
-    renderGate();
+    body.dataset.authState = 'signed-out';
   }
 });
