@@ -162,7 +162,7 @@
   .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:auto;}
   .primary,.secondary{border-radius:10px;padding:10px 13px;font-size:13px;}
   .primary{background:var(--teal);color:white;}.primary:hover{background:#0F6E56;}
-  .secondary{background:#EEF0F6;color:var(--navy);}.secondary:hover{background:#E1E5EF;}
+  .secondary{background:#fff;color:var(--navy);border:1.5px solid var(--line);}.secondary:hover{background:#F8F9FC;}
   .copy-msg{font-size:12px;color:#0F6E56;font-weight:900;display:none;}
 
   .ready-badge{display:inline-flex;align-items:center;gap:6px;margin:0 auto 4px;padding:7px 12px;border-radius:999px;background:var(--teal-light);border:1px solid var(--teal-border);color:#0F6E56;font-family:var(--font-head);font-size:12px;font-weight:900;letter-spacing:.3px;}
@@ -175,8 +175,8 @@
   .tray-word{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:var(--teal-light);border:1.5px solid var(--teal-border);color:#0F6E56;padding:5px 8px 5px 10px;font-family:var(--font-body);font-size:12px;font-weight:800;}
   .tray-remove{background:transparent;color:#9a4d4d;font-size:14px;line-height:1;padding:0 1px;}
   .tray-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
-  .small-secondary{border-radius:9px;padding:7px 10px;background:#EEF0F6;color:var(--navy);font-size:12px;}
-  .small-secondary:hover{background:#E1E5EF;}
+  .small-secondary{border-radius:9px;padding:7px 10px;background:#fff;color:var(--navy);border:1.5px solid var(--line);font-size:12px;}
+  .small-secondary:hover{background:#F8F9FC;}
   .lesson-msg{font-size:12px;color:var(--navy-mid);font-weight:700;line-height:1.45;margin-top:7px;display:none;}
   footer{text-align:center;color:var(--navy-light);font-family:var(--font-head);font-size:11px;font-weight:700;padding:14px 0 4px;opacity:.7;}
   @media (max-width:900px){.workspace{grid-template-columns:1fr}.result{min-height:500px}.mapping-grid{grid-template-columns:1fr}.row-label{text-align:left}.word-groups{max-height:260px}.big-word{width:100%;min-width:0}.sound-box{width:88px;height:62px;font-size:31px}.map-box{min-width:58px;min-height:54px;font-size:29px}.la-wordmark{font-size:16px}.la-tool-name{font-size:14px}}
@@ -184,15 +184,15 @@
 /* ─── Printable Letterbox Lesson PDF button ───────────────────────────── */
 #downloadLessonPdfBtn,
 .pdf-download-btn {
-  background: var(--teal, #1D9E75);
-  color: white;
-  border: none;
+  background: #fff;
+  color: var(--teal, #1D9E75);
+  border: 1.5px solid var(--teal, #1D9E75);
   border-radius: 12px;
   padding: 10px 14px;
   font-family: inherit;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 3px 0 var(--teal-dk, #0F6E56);
+  box-shadow: none;
 }
 #downloadLessonPdfBtn:hover,
 .pdf-download-btn:hover {
@@ -1074,18 +1074,18 @@ button.add-lesson-cta,
 .result button.add-lesson-cta,
 .actions button.add-lesson-cta,
 button[onclick*="addToLesson"] {
-  background: #D85A30 !important;
-  background-color: #D85A30 !important;
+  background: #1D9E75 !important;
+  background-color: #1D9E75 !important;
   color: #fff !important;
-  border-color: #D85A30 !important;
-  box-shadow: 0 5px 0 #A94224 !important;
+  border-color: #1D9E75 !important;
+  box-shadow: 0 5px 0 #0F6E56 !important;
 }
 button.add-lesson-cta:hover,
 .result button.add-lesson-cta:hover,
 .actions button.add-lesson-cta:hover,
 button[onclick*="addToLesson"]:hover {
-  background: #C94E28 !important;
-  background-color: #C94E28 !important;
+  background: #0F6E56 !important;
+  background-color: #0F6E56 !important;
 }
 
 
@@ -1211,12 +1211,13 @@ button[onclick*="addToLesson"]:hover {
 
 /* Saved Activity account button */
 .save-activity-btn {
-  background: #1A2340 !important;
-  color: #fff !important;
-  box-shadow: 0 3px 0 rgba(26,35,64,.35) !important;
+  background: #fff !important;
+  color: var(--teal, #1D9E75) !important;
+  border: 1.5px solid var(--teal, #1D9E75) !important;
+  box-shadow: none !important;
 }
 .save-activity-btn:hover {
-  background: #11182E !important;
+  background: var(--teal-light, #E1F5EE) !important;
   transform: translateY(-1px);
 }
 
@@ -2115,6 +2116,27 @@ main {
   .la-tool-name { font-size: .98rem !important; }
   .account-btn { display: none !important; }
 }
+
+/* Launch hierarchy: one filled teal action, then outline and ghost choices. */
+.lesson-tray-guide {
+  margin: -3px 0 8px;
+  color: var(--navy-mid);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.tray-actions .pdf-helper-text {
+  flex-basis: 100%;
+}
+.lesson-msg a {
+  color: var(--teal);
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lesson-msg a:hover {
+  text-decoration: underline;
+}
 </style>
 </head>
 <body>
@@ -2200,13 +2222,14 @@ main {
       </details>
 
       <div class="lesson-tray" aria-label="Words selected for Letterbox Lesson Builder">
-        <div class="tray-top"><span class="tray-title">Words for Letterbox Lesson</span><span class="tray-count" id="trayCount">0 words</span></div>
+        <div class="tray-top"><span class="tray-title">Your lesson list</span><span class="tray-count" id="trayCount">0 words</span></div>
+        <p class="lesson-tray-guide">Add mapped words, then teach or download.</p>
         <div class="tray-words" id="lessonTray"><span class="tray-empty">Add mapped words here. Words are auto-sequenced by phoneme count, spelling complexity, and rhyme spacing when possible.</span></div>
         <div class="tray-actions">
-          <button class="small-secondary" id="clearLessonBtn" type="button">Clear lesson list</button>
           <button class="small-secondary launch-lesson-btn" id="buildLessonBtn" type="button">Start Letterbox Lesson</button>
-          <button class="small-secondary save-activity-btn" id="saveActivityBtn" type="button">Save Activity</button>
           <button class="tray-action primary" id="downloadLessonPdfBtn" onclick="downloadLessonPdf()">Download Lesson PDF</button>
+          <button class="small-secondary save-activity-btn" id="saveActivityBtn" type="button">Save Activity</button>
+          <button class="small-secondary" id="clearLessonBtn" type="button">Clear lesson list</button>
           <div class="pdf-helper-text">Includes word maps, phoneme counts, sound boxes, and letter tiles.</div>
         </div>
         <div class="lesson-msg" id="lessonMsg">This list is ready to connect to Letterbox Lesson Builder in the next phase.</div>
@@ -2855,6 +2878,12 @@ function buildLetterboxActivityData(customTitle) {
   };
 }
 
+function showSavedActivityMessage(msg) {
+  if (!msg) return;
+  msg.innerHTML = 'Activity saved to your dashboard! <a href="teacher-dashboard.html">View in My Activities →</a>';
+  msg.style.display = 'block';
+}
+
 async function saveCurrentActivity() {
   const msg = document.getElementById('lessonMsg');
 
@@ -2900,8 +2929,7 @@ async function saveCurrentActivity() {
     );
 
     if (msg) {
-      msg.textContent = 'Activity saved to your dashboard!';
-      msg.style.display = 'block';
+      showSavedActivityMessage(msg);
       setTimeout(() => msg.style.display = 'none', 3000);
     } else {
       alert('Activity saved!');
@@ -2909,11 +2937,11 @@ async function saveCurrentActivity() {
   } catch (error) {
     console.error(error);
     if (msg) {
-      msg.textContent = 'Activity could not be saved. Check your Firebase setup and try again.';
+      msg.textContent = 'Something went wrong saving. Please try again.';
       msg.style.display = 'block';
       setTimeout(() => msg.style.display = 'none', 4500);
     } else {
-      alert('Activity could not be saved.');
+      alert('Something went wrong saving. Please try again.');
     }
   }
 }
@@ -3001,16 +3029,13 @@ async function savePendingActivityAfterLogin() {
 
         sessionStorage.removeItem('pendingActivityData');
 
-        if (msg) {
-          msg.textContent = 'Activity saved to your dashboard!';
-          msg.style.display = 'block';
-        }
+        if (msg) showSavedActivityMessage(msg);
 
         window.location.href = 'teacher-dashboard.html';
       } catch (saveError) {
         console.error(saveError);
         if (msg) {
-          msg.textContent = 'Activity could not be saved after sign-in. Try Save Activity again.';
+          msg.textContent = 'Something went wrong saving. Please try again.';
           msg.style.display = 'block';
           setTimeout(() => msg.style.display = 'none', 4500);
         }
@@ -3020,7 +3045,7 @@ async function savePendingActivityAfterLogin() {
   } catch (error) {
     console.error(error);
     if (msg) {
-      msg.textContent = 'Sign-in save setup could not load. Try Save Activity again.';
+      msg.textContent = 'Something went wrong saving. Please try again.';
       msg.style.display = 'block';
       setTimeout(() => msg.style.display = 'none', 4500);
     }
@@ -3319,6 +3344,7 @@ function downloadLessonPdf(){
   // Sort for lesson usefulness: phoneme-count order, simpler patterns first,
   // and avoid consecutive rhymes when possible.
   lessonMaps = sequenceLessonMaps(lessonMaps);
+  const logoSrc = document.querySelector('.la-icon img')?.src || '';
 
   const focusList = [...new Set(lessonMaps.map(m => m.vowelFocus).filter(Boolean))];
   const focusText = focusList.length ? focusList.join(', ') : 'Short vowel word mapping';
@@ -3390,12 +3416,22 @@ function downloadLessonPdf(){
           margin-bottom: 10px;
         }
         .brand {
+          display: flex;
+          align-items: center;
+          gap: 8px;
           font-size: 13px;
           font-weight: 700;
           color: #0F6E56;
           letter-spacing: .04em;
           text-transform: uppercase;
           margin-bottom: 6px;
+        }
+        .brand-logo {
+          width: 30px;
+          height: 30px;
+          border-radius: 8px;
+          object-fit: cover;
+          display: block;
         }
         h1 {
           font-size: 24px;
@@ -4976,7 +5012,7 @@ main {
     </head>
     <body>
       <div class="header">
-        <div class="brand">Literacy Arcade</div>
+        <div class="brand">${logoSrc ? `<img class="brand-logo" id="pdfLogo" src="${escapePdfHtml(logoSrc)}" alt="Literacy Arcade logo">` : ''}<span>Literacy Arcade</span></div>
         <h1>Letterbox Lesson Plan</h1>
         
         <div class="meta">
@@ -5008,8 +5044,14 @@ main {
   printWindow.document.close();
   printWindow.focus();
 
-  // A small delay helps images/fonts/styles settle before print opens.
-  setTimeout(() => printWindow.print(), 250);
+  // Decode the embedded logo before printing; Safari can otherwise print a blank image.
+  const printLogo = printWindow.document.getElementById('pdfLogo');
+  const openPrintDialog = () => setTimeout(() => printWindow.print(), 250);
+  if (printLogo && typeof printLogo.decode === 'function') {
+    printLogo.decode().then(openPrintDialog).catch(openPrintDialog);
+  } else {
+    openPrintDialog();
+  }
 }
 
 
