@@ -206,6 +206,26 @@ body {
   min-height:0;
 }
 
+.sample-banner {
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  margin:0 0 12px;
+  padding:10px 14px;
+  border:1.5px solid rgba(46,196,182,.38);
+  border-radius:14px;
+  background:var(--teal-light);
+  color:var(--navy);
+  font-family:var(--font-head);
+  font-size:13px;
+  font-weight:700;
+  text-align:center;
+}
+.sample-banner.show { display:flex; }
+.sample-banner strong { font-weight:900; }
+.sample-banner a { color:var(--teal-dark); font-weight:900; }
+
 .lesson-shell {
   display:grid;
   grid-template-columns: minmax(220px, 280px) minmax(0,1fr);
@@ -345,6 +365,8 @@ body {
 }
 .btn-primary { background:var(--teal-dark); color:white; }
 .btn-primary:hover { background:#066b62; }
+.btn-outline { background:#fff; color:var(--teal-dark); border:2px solid var(--teal); }
+.btn-outline:hover { background:var(--teal-light); }
 .btn-coral { background:var(--coral); color:white; }
 .btn-coral:hover { background:var(--coral-dark); }
 .btn-ghost { background:#EBEEF4; color:var(--navy); }
@@ -423,6 +445,12 @@ body {
   gap:18px;
   min-height:140px;
 }
+.sound-box-area {
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
 
 /* Sound boxes — the dominant elements */
 .sound-box {
@@ -443,7 +471,8 @@ body {
 .sound-box.drag-over {
   border-color:var(--teal);
   background:var(--teal-light);
-  transform:translateY(-2px);
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 0 0 5px rgba(46,196,182,.22), 0 10px 24px rgba(27,42,74,.14);
 }
 .sound-box.filled {
   border-style:solid;
@@ -495,6 +524,8 @@ body {
 .outside-spot.drag-over {
   border-color:var(--teal);
   background:var(--teal-light);
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 0 0 5px rgba(46,196,182,.22);
 }
 .outside-spot.filled {
   border-style:solid;
@@ -513,7 +544,23 @@ body {
   color:rgba(27,42,74,.55);
   font-size:11px;
   letter-spacing:1.4px;
-  margin-bottom:10px;
+  margin-bottom:4px;
+  text-align:center;
+}
+.tile-bank-hint {
+  margin:0 0 10px;
+  color:var(--teal-dark);
+  font-family:var(--font-head);
+  font-size:13px;
+  font-weight:900;
+  text-align:center;
+}
+.tile-bank-return-hint {
+  margin:-6px 0 10px;
+  color:var(--navy-soft);
+  font-family:var(--font-head);
+  font-size:11px;
+  font-weight:800;
   text-align:center;
 }
 .tile-bank {
@@ -550,9 +597,14 @@ body {
   box-shadow:0 2px 0 rgba(27,42,74,.12);
 }
 .tile.selected {
-  outline:4px solid rgba(46,196,182,.36);
+  outline:5px solid var(--teal);
+  outline-offset:3px;
   border-color:var(--teal);
   background:var(--teal-light);
+  box-shadow:0 9px 0 rgba(8,122,112,.18), 0 14px 28px rgba(27,42,74,.18);
+  transform:translateY(-5px) scale(1.12);
+  position:relative;
+  z-index:3;
 }
 .tile.in-box {
   cursor:pointer;
@@ -564,6 +616,8 @@ body {
   font-size:26px;
   border-radius:11px;
 }
+.sound-box.tile-count-3 { width:182px; flex:0 0 182px; }
+.sound-box.tile-count-4 { width:236px; flex:0 0 236px; }
 
 /* ── Teacher controls under the board ── */
 .lesson-controls {
@@ -581,16 +635,31 @@ body {
   font-size:13px;
 }
 .lesson-controls .btn-add-outside {
-  background:var(--gold);
-  color:var(--navy);
-  border:1.5px solid rgba(27,42,74,.12);
+  width:100%;
+  background:#fff;
+  color:var(--teal-dark);
+  border:2px solid var(--teal);
 }
-.lesson-controls .btn-add-outside:hover { background:#FFC548; }
+.lesson-controls .btn-add-outside:hover { background:var(--teal-light); }
 .lesson-controls .btn-add-outside.active {
   background:#fff;
   color:var(--navy-soft);
   border-color:rgba(27,42,74,.12);
   font-weight:700;
+}
+.outside-control {
+  flex:1 1 170px;
+  max-width:230px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+.outside-control-hint {
+  color:var(--navy-soft);
+  font-size:10px;
+  line-height:1.25;
+  text-align:center;
 }
 
 .feedback {
@@ -657,9 +726,17 @@ body {
   .board { padding:18px 14px; gap:18px; }
   .sound-box { width:118px; min-height:104px; border-width:3px; }
   .tile { min-width:54px; height:54px; font-size:26px; }
-  .tile.in-box { min-width:38px; height:42px; font-size:22px; }
+  .tile.in-box { min-width:48px; height:48px; font-size:22px; }
+  .outside-spot { min-width:96px; min-height:92px; }
   .play-word-btn { min-width:140px; padding:9px 16px; }
   .lesson-controls .btn { min-width:100px; font-size:12px; }
+}
+
+@media (pointer:coarse) {
+  .tile { min-width:60px; min-height:60px; }
+  .tile.in-box { min-width:48px; min-height:48px; }
+  .sound-box { min-width:118px; min-height:108px; }
+  .outside-spot { min-width:96px; min-height:92px; }
 }
 
 /* ── Site footer ── */
@@ -995,6 +1072,138 @@ body {
   display: none !important;
 }
 
+/* Keep every wrapped tile row inside the teaching board. */
+.board {
+  overflow-y:auto;
+}
+.tile-bank-wrap {
+  flex:0 0 auto;
+  padding-bottom:10px;
+}
+.tile-bank {
+  flex:0 0 auto;
+  height:auto;
+  min-height:64px;
+  align-content:flex-start;
+}
+
+@media (max-width: 1200px) {
+  .tile-bank { gap:6px; }
+  .tile {
+    min-width:48px;
+    height:48px;
+    padding:0 6px;
+    font-size:25px;
+  }
+}
+
+@media (max-width: 980px) {
+  .lesson-panel { order:1; }
+  .side-panel { order:2; }
+}
+
+@media (max-width: 700px) {
+  .la-header { padding:0 8px; gap:8px; }
+  .la-wordmark,
+  .la-divider { display:none; }
+  .la-page-title { font-size:14px; white-space:nowrap; }
+  .fullscreen-btn { padding:0 10px; }
+  .app {
+    margin-top:8px;
+    padding:0 8px 12px;
+  }
+  .sample-banner {
+    align-items:flex-start;
+    flex-direction:column;
+    font-size:12px;
+    text-align:left;
+  }
+  .lesson-shell { gap:10px; }
+  .lesson-panel {
+    padding:12px 8px;
+    border-radius:16px;
+  }
+  .play-row { margin-bottom:8px; }
+  .board {
+    min-height:440px;
+    padding:16px 8px;
+    gap:16px;
+    border-radius:16px;
+    overflow:visible;
+  }
+  .boxes-row { min-height:100px; gap:8px; }
+  .sound-box-area { width:100%; gap:8px; }
+  .sound-box {
+    width:96px;
+    min-width:96px;
+    min-height:92px;
+    padding:6px;
+    border-radius:16px;
+  }
+  .sound-box.tile-count-2 {
+    width:128px;
+    min-width:128px;
+    flex:0 0 128px;
+  }
+  .sound-box.tile-count-3 {
+    width:182px;
+    min-width:182px;
+    flex:0 0 182px;
+  }
+  .sound-box.tile-count-4 {
+    width:236px;
+    min-width:236px;
+    flex:0 0 236px;
+  }
+  .tile-bank-wrap { padding-top:14px; padding-bottom:8px; }
+  .tile-bank { gap:8px; min-height:54px; }
+  .tile {
+    min-width:54px;
+    min-height:54px;
+    height:54px;
+    padding:0 9px;
+    font-size:27px;
+  }
+  .tile.selected { transform:translateY(-3px) scale(1.08); }
+  .lesson-controls {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:start;
+  }
+  .lesson-controls .btn,
+  .outside-control {
+    width:100%;
+    min-width:0;
+    max-width:none;
+  }
+  #nextBtn { grid-column:1 / -1; }
+  .outside-control-hint { font-size:11px; }
+  .side-actions { grid-template-columns:1fr 1fr; }
+  .word-list {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    max-height:none;
+  }
+  .presentation-overlay { padding:8px; }
+  .presentation-content { padding:8px; }
+}
+
+@media (max-width: 700px) and (pointer:coarse) {
+  .sound-box {
+    width:96px;
+    min-width:96px;
+    min-height:92px;
+  }
+  .tile {
+    min-width:54px;
+    min-height:54px;
+  }
+  .tile.in-box {
+    min-width:48px;
+    min-height:48px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1020,6 +1229,10 @@ body {
 </header>
 
 <main class="app">
+  <div class="sample-banner" id="sampleBanner" role="status">
+    <strong>This is a sample lesson.</strong>
+    <a href="phoneme-counter.html">Build your own word list in the Phoneme Counter →</a>
+  </div>
   <div class="lesson-shell">
 
     <!-- ── Side panel: title, word list, teacher actions ── -->
@@ -1036,7 +1249,7 @@ body {
 
       <div class="side-actions">
         <button class="btn btn-soft" id="resetWordBtn" type="button">Reset Word</button>
-        <button class="btn btn-primary" id="showAnswerBtn" type="button">Show Answer</button>
+        <button class="btn btn-soft" id="showAnswerBtn" type="button">Show Answer</button>
         <button class="btn btn-coral" id="restartLessonBtn" type="button">Restart Lesson</button>
         <a class="btn btn-ghost" href="phoneme-counter.html" style="text-decoration:none;text-align:center;">Back to Phoneme Counter</a>
       </div>
@@ -1056,7 +1269,7 @@ body {
 
         <!-- Sound boxes row. Outside-letter area is hidden by default. -->
         <div class="boxes-row" id="boxesRow">
-          <div class="sound-box-area" id="soundBoxArea" style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center;"></div>
+          <div class="sound-box-area" id="soundBoxArea"></div>
           <div class="outside-area" id="outsideArea">
             <div class="outside-spot" id="outsideSpot"></div>
             <div class="outside-label">Letters outside the boxes</div>
@@ -1066,6 +1279,8 @@ body {
         <!-- Tile bank -->
         <div class="tile-bank-wrap">
           <div class="tile-bank-title">Letter Tiles</div>
+          <div class="tile-bank-hint">Tap a letter, then tap a sound box.</div>
+          <div class="tile-bank-return-hint">Tap a placed tile to return it.</div>
           <div class="tile-bank" id="tileBank"></div>
         </div>
       </div>
@@ -1074,8 +1289,11 @@ body {
       <div class="lesson-controls">
         <button class="btn btn-ghost" id="prevBtn" type="button">← Previous</button>
         <button class="btn btn-ghost" id="clearBoxesBtn" type="button">Clear Boxes</button>
-        <button class="btn btn-add-outside" id="addOutsideBtn" type="button">+ Reveal Outside Letter Area</button>
-        <button class="btn btn-ghost" id="checkBtn" type="button">Check</button>
+        <div class="outside-control">
+          <button class="btn btn-add-outside" id="addOutsideBtn" type="button" aria-describedby="outsideControlHint">+ Extra letter spot</button>
+          <span class="outside-control-hint" id="outsideControlHint">For letters that don't go in a sound box, like silent e.</span>
+        </div>
+        <button class="btn btn-outline" id="checkBtn" type="button">Check</button>
         <button class="btn btn-primary" id="nextBtn" type="button">Next →</button>
       </div>
       <div class="feedback" id="feedback"></div>
@@ -1149,6 +1367,7 @@ const SAMPLE_LESSON = {
 /* ============================================================
    State
    ============================================================ */
+let isSampleLesson = false;
 let lesson = loadLessonData();
 let currentIndex = 0;
 let selectedTileId = null;
@@ -1170,12 +1389,14 @@ function loadLessonData() {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && Array.isArray(parsed.words) && parsed.words.length) {
+        isSampleLesson = false;
         return normalizeLesson(parsed);
       }
     }
   } catch (e) {
     console.warn("Could not load session lesson data.", e);
   }
+  isSampleLesson = true;
   return normalizeLesson(SAMPLE_LESSON);
 }
 
@@ -1263,6 +1484,32 @@ function escapeHtml(str) {
   }[s]));
 }
 
+function updateBoxTileState(box) {
+  if (!box || (!box.classList.contains("sound-box") && !box.classList.contains("outside-spot"))) return;
+  const tileCount = Array.from(box.children).filter(child => child.classList?.contains("tile")).length;
+  box.classList.toggle("filled", tileCount > 0);
+  box.classList.toggle("multi-tile", tileCount > 1);
+  [2, 3, 4].forEach(count => box.classList.toggle(`tile-count-${count}`, tileCount === count));
+  if (tileCount === 0) box.classList.remove("correct", "wrong");
+}
+
+function returnTileToBank(tile) {
+  if (!tile) return;
+  const previousBox = tile.parentElement;
+  const bank = $("tileBank");
+  tile.classList.remove("in-box", "selected");
+  tile.setAttribute("aria-pressed", "false");
+
+  const insertionPoint = Array.from(bank.children).find(bankTile =>
+    String(bankTile.dataset.value || "").localeCompare(String(tile.dataset.value || "")) > 0
+  );
+  if (insertionPoint) bank.insertBefore(tile, insertionPoint);
+  else bank.appendChild(tile);
+
+  updateBoxTileState(previousBox);
+  if (selectedTileId === tile.id) selectedTileId = null;
+}
+
 
 function toggleOutsideArea() {
   const outsideSpot = $("outsideSpot");
@@ -1270,8 +1517,7 @@ function toggleOutsideArea() {
   if (outsideRevealed.has(currentIndex)) {
     while (outsideSpot.firstChild) {
       const tile = outsideSpot.firstChild;
-      tile.classList.remove("in-box", "selected");
-      $("tileBank").appendChild(tile);
+      returnTileToBank(tile);
     }
     outsideRevealed.delete(currentIndex);
   } else {
@@ -1286,6 +1532,7 @@ function toggleOutsideArea() {
    ============================================================ */
 function renderLesson() {
   $("lessonTitle").textContent = "Teacher-Led Letterbox Lesson";
+  $("sampleBanner")?.classList.toggle("show", isSampleLesson);
   renderWordList();
   renderCurrentWord();
 }
@@ -1364,7 +1611,7 @@ function renderOutsideArea(word) {
 
   // Clear the outside spot
   outsideSpot.innerHTML = "";
-  outsideSpot.classList.remove("filled", "drag-over", "correct", "wrong");
+  outsideSpot.classList.remove("filled", "multi-tile", "tile-count-2", "tile-count-3", "tile-count-4", "drag-over", "correct", "wrong");
 
   // Re-wire the spot's listeners (innerHTML reset doesn't drop them, but be safe)
   outsideSpot.onclick = () => placeSelectedTileInBox(outsideSpot);
@@ -1375,11 +1622,11 @@ function renderOutsideArea(word) {
 
   if (outsideRevealed.has(currentIndex)) {
     outsideArea.classList.add("show");
-    addBtn.textContent = "− Remove Outside Letter Area";
+    addBtn.textContent = "− Remove extra letter spot";
     addBtn.classList.add("active");
   } else {
     outsideArea.classList.remove("show");
-    addBtn.textContent = "+ Reveal Outside Letter Area";
+    addBtn.textContent = "+ Extra letter spot";
     addBtn.classList.remove("active");
   }
 }
@@ -1405,14 +1652,31 @@ function createTile(text) {
   tile.className = "tile";
   tile.textContent = text;
   tile.draggable = true;
+  tile.tabIndex = 0;
+  tile.setAttribute("role", "button");
+  tile.setAttribute("aria-label", `Letter ${text}`);
+  tile.setAttribute("aria-pressed", "false");
   tile.dataset.value = text;
   tile.id = "tile-" + (++tileIdCounter);
   tile.addEventListener("dragstart", e => {
     selectedTileId = tile.id;
+    tile.classList.add("selected");
+    tile.setAttribute("aria-pressed", "true");
     e.dataTransfer.setData("text/plain", tile.id);
     e.dataTransfer.effectAllowed = "move";
   });
-  tile.addEventListener("click", () => selectTile(tile));
+  tile.addEventListener("click", e => {
+    // Do not let a placed-tile click bubble to its sound box and re-place itself.
+    e.stopPropagation();
+    selectTile(tile);
+  });
+  tile.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      selectTile(tile);
+    }
+  });
   return tile;
 }
 
@@ -1424,19 +1688,17 @@ function createTile(text) {
 function selectTile(tile) {
   // Click a tile already in a box → return it to the tile bank.
   if (tile.classList.contains("in-box")) {
-    const parent = tile.parentElement;
-    tile.classList.remove("in-box", "selected");
-    $("tileBank").appendChild(tile);
-    if (parent && !parent.querySelector(".tile")) {
-      parent.classList.remove("filled", "correct", "wrong");
-    }
-    selectedTileId = null;
+    returnTileToBank(tile);
     return;
   }
 
-  document.querySelectorAll(".tile").forEach(t => t.classList.remove("selected"));
+  document.querySelectorAll(".tile").forEach(t => {
+    t.classList.remove("selected");
+    t.setAttribute("aria-pressed", "false");
+  });
   selectedTileId = tile.id;
   tile.classList.add("selected");
+  tile.setAttribute("aria-pressed", "true");
 }
 
 function placeSelectedTileInBox(box) {
@@ -1447,11 +1709,14 @@ function placeSelectedTileInBox(box) {
 }
 
 function placeTile(tile, box) {
+  const previousBox = tile.parentElement;
   tile.classList.remove("selected");
+  tile.setAttribute("aria-pressed", "false");
   tile.classList.add("in-box");
   tile.draggable = true;
   box.appendChild(tile);
-  box.classList.add("filled");
+  updateBoxTileState(previousBox);
+  updateBoxTileState(box);
   box.classList.remove("correct", "wrong");
   selectedTileId = null;
   playTone(520, .08);
@@ -1479,11 +1744,9 @@ function onDrop(e) {
 function clearBoxes() {
   document.querySelectorAll(".sound-box, .outside-spot").forEach(box => {
     while (box.firstElementChild) {
-      const tile = box.firstElementChild;
-      tile.classList.remove("in-box", "selected");
-      $("tileBank").appendChild(tile);
+      returnTileToBank(box.firstElementChild);
     }
-    box.classList.remove("filled", "drag-over", "correct", "wrong");
+    box.classList.remove("filled", "multi-tile", "tile-count-2", "tile-count-3", "tile-count-4", "drag-over", "correct", "wrong");
   });
   selectedTileId = null;
   $("feedback").textContent = "";
@@ -1504,9 +1767,7 @@ function addOutsideSpot() {
     // Return any placed outside-letter tiles to the tile bank before hiding.
     if (outsideSpot) {
       while (outsideSpot.firstChild) {
-        const tile = outsideSpot.firstChild;
-        if (tile.classList) tile.classList.remove("in-box", "selected");
-        $("tileBank").appendChild(tile);
+        returnTileToBank(outsideSpot.firstChild);
       }
       outsideSpot.classList.remove("filled", "drag-over", "correct", "wrong");
     }
@@ -1535,6 +1796,7 @@ function showAnswer() {
       tile.classList.add("in-box");
       boxes[index].appendChild(tile);
     });
+    updateBoxTileState(boxes[index]);
     boxes[index].classList.add("filled", "correct");
   });
 
@@ -1547,6 +1809,7 @@ function showAnswer() {
         spot.appendChild(tile);
       });
     });
+    updateBoxTileState(spot);
     spot.classList.add("filled", "correct");
   }
   $("feedback").textContent = "Answer shown. Talk through each sound and its spelling.";
