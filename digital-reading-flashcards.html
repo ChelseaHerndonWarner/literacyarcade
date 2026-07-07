@@ -93,7 +93,15 @@
       --green-dk:    #357a4c;
     }
 
-    body { font-family:'Lexend',system-ui,sans-serif; background:var(--bg); color:var(--navy); min-height:100vh; }
+    body {
+      font-family:'Lexend',system-ui,sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(46,196,182,.13), transparent 32%),
+        radial-gradient(circle at 100% 100%, rgba(173,151,236,.22), transparent 34%),
+        linear-gradient(135deg,#F4FFFD 0%,#FFFDF9 58%,#F3EFFD 100%);
+      color:var(--navy);
+      min-height:100vh;
+    }
     button,input,select,textarea { font-family:inherit; }
 
     /* ── SHARED LITERACY ARCADE HEADER ── */
@@ -149,7 +157,7 @@
       font-family: 'Nunito', sans-serif;
       font-size: 16px;
       font-weight: 700;
-      color: #0F6E56;
+      color: var(--teal-dk);
       letter-spacing: -.1px;
       line-height: 1;
     }
@@ -174,13 +182,26 @@
     /* ── SETUP ── */
     #setup { max-width:920px; margin:0 auto; padding:24px 20px 48px; }
 
-    .setup-hero { text-align:center; margin-bottom:22px; }
+    .setup-hero { text-align:center; margin-bottom:14px; }
     .setup-hero h1 {
-      font-size:clamp(28px,5vw,42px); font-weight:800;
-      letter-spacing:-1.5px; line-height:1.05; margin-bottom:6px;
+      font-family:'Nunito',sans-serif;
+      font-size:clamp(1.85rem,3.5vw,2.35rem);
+      font-weight:900;
+      letter-spacing:-.45px;
+      line-height:1.08;
+      color:var(--navy);
     }
-    .setup-hero h1 em { font-style:normal; color:var(--teal-dk); }
-    .setup-hero p { font-size:14px; color:var(--navy-mid); font-weight:500; }
+    .setup-hero h1 strong {
+      color:#2EC4B6;
+      font-style:normal;
+    }
+    .setup-hero p {
+      font-family:'Nunito',sans-serif;
+      font-size:14px;
+      color:var(--navy-lt);
+      font-weight:700;
+      margin-top:4px;
+    }
 
     .card {
       background:var(--white); border:1px solid var(--border);
@@ -262,6 +283,84 @@
     .btn:hover { background:var(--teal-bg); }
     .btn.red { color:#a03030; border-color:var(--coral-border); }
     .btn.red:hover { background:var(--coral-lt); }
+
+    .selected-deck-wrap {
+      border:1.5px solid rgba(46,196,182,.28);
+      background:linear-gradient(180deg,#F7FFFE 0%,#FFFFFF 100%);
+      border-radius:14px;
+      padding:11px 12px;
+      margin-top:12px;
+    }
+    .selected-deck-head {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+    .selected-deck-head h3 {
+      margin:0;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.07em;
+      text-transform:uppercase;
+      color:var(--teal-dk);
+    }
+    .selected-count-badge {
+      border:1px solid var(--teal-border);
+      background:var(--teal-bg);
+      color:var(--teal-dk);
+      border-radius:999px;
+      padding:3px 8px;
+      font-size:10px;
+      font-weight:800;
+    }
+    .selected-deck-head .btn {
+      margin-left:auto;
+      padding:5px 10px;
+      font-size:11px;
+    }
+    .selected-word-bank {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      max-height:130px;
+      overflow-y:auto;
+      padding:2px;
+    }
+    .selected-word-chip {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border:1.5px solid var(--teal);
+      background:var(--teal-bg);
+      border-radius:999px;
+      padding:4px 8px 4px 11px;
+      font-family:'Lexend',sans-serif;
+      font-size:12px;
+      font-weight:800;
+      color:var(--navy);
+    }
+    .selected-word-chip button {
+      appearance:none;
+      -webkit-appearance:none;
+      display:grid;
+      place-items:center;
+      width:18px;
+      height:18px;
+      border:none;
+      border-radius:50%;
+      background:rgba(46,196,182,.18);
+      color:var(--teal-dk);
+      cursor:pointer;
+      font-size:14px;
+      font-weight:900;
+      line-height:1;
+      padding:0;
+    }
+    .selected-word-chip button:hover { background:var(--teal); color:white; }
+    .selected-word-chip button:focus-visible { outline:2px solid rgba(46,196,182,.42); outline-offset:2px; }
+    .selected-empty { color:var(--navy-lt); font-size:12px; font-weight:600; padding:2px; }
 
     .count-line { font-size:12px; font-weight:700; color:var(--teal-dk); margin-top:8px; }
     .hint-line  { font-size:11px; color:var(--navy-lt); font-weight:500; margin-top:5px; }
@@ -464,17 +563,66 @@
     /* ── FINISH ── */
     .finish-overlay { display:none; position:fixed; inset:0; background:rgba(26,26,46,.55); z-index:300; align-items:center; justify-content:center; }
     .finish-overlay.open { display:flex; }
-    .finish-modal { background:var(--white); border-radius:24px; padding:34px 30px; max-width:410px; width:90%; text-align:center; box-shadow:0 24px 80px rgba(26,26,46,.25); }
-    .fi { font-size:52px; margin-bottom:6px; }
-    .finish-modal h2 { font-size:26px; font-weight:800; color:var(--navy); margin-bottom:8px; }
+    .finish-modal { position:relative; overflow:hidden; background:linear-gradient(180deg,#F4FCFB 0,var(--white) 34%); border:1px solid var(--teal-border); border-radius:24px; padding:34px 30px; max-width:410px; width:90%; text-align:center; box-shadow:0 24px 80px rgba(26,26,46,.25); }
+    .finish-modal::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg,var(--teal),var(--violet),var(--coral)); }
+    .finish-mark {
+      position:relative; display:grid; place-items:center; width:62px; height:62px;
+      margin:0 auto 12px; border-radius:18px;
+      background:linear-gradient(135deg,var(--teal),var(--violet));
+      box-shadow:0 10px 24px rgba(46,196,182,.22);
+    }
+    .finish-mark svg { width:34px; height:34px; color:white; }
+    .finish-mark::before,.finish-mark::after {
+      content:''; position:absolute; width:8px; height:8px; border-radius:2px;
+      background:var(--amber); transform:rotate(45deg);
+    }
+    .finish-mark::before { top:-5px; right:2px; }
+    .finish-mark::after { bottom:3px; left:-5px; width:6px; height:6px; background:var(--coral); }
+    .finish-modal h2 { font-family:'Nunito',sans-serif; font-size:26px; font-weight:800; color:var(--navy); margin-bottom:8px; }
     .finish-modal p { font-size:14px; color:var(--navy-mid); font-weight:500; line-height:1.5; margin-bottom:18px; }
     .finish-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
     .fstat { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:12px; }
     .fstat-n { font-size:26px; font-weight:800; line-height:1; }
     .fstat-l { font-size:11px; font-weight:700; color:var(--navy-lt); margin-top:3px; }
     .finish-btns { display:flex; flex-direction:column; gap:10px; }
-    .finish-btns .start-btn { font-size:16px; padding:14px; }
-    .finish-btns .btn { width:100%; padding:12px; font-size:14px; justify-content:center; }
+    .finish-btns .start-btn,
+    .finish-btns .btn {
+      appearance:none;
+      -webkit-appearance:none;
+      width:100%;
+      border-radius:14px;
+      font-family:'Nunito',sans-serif;
+      font-weight:900;
+      cursor:pointer;
+      transition:transform .1s, box-shadow .1s, background .15s, border-color .15s, color .15s;
+    }
+    .finish-btns .start-btn {
+      border:none;
+      background:var(--teal-dk);
+      color:white;
+      padding:14px 18px;
+      font-size:16px;
+      box-shadow:0 4px 0 #0a7a6e;
+    }
+    .finish-btns .start-btn:hover { transform:translateY(-2px); background:#0f8f83; box-shadow:0 6px 0 #0a7a6e; }
+    .finish-btns .start-btn:active { transform:translateY(1px); box-shadow:0 2px 0 #0a7a6e; }
+    .finish-btns .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1.5px solid var(--teal);
+      background:var(--teal-bg);
+      color:var(--teal-dk);
+      padding:12px 16px;
+      font-size:14px;
+      box-shadow:none;
+    }
+    .finish-btns .btn:hover { background:#DDF3F1; border-color:var(--teal-dk); }
+    .finish-btns .btn:active { transform:translateY(1px); background:#D3EFEC; }
+    .finish-btns .start-btn:focus,
+    .finish-btns .btn:focus { outline:none; }
+    .finish-btns .start-btn:focus-visible,
+    .finish-btns .btn:focus-visible { outline:3px solid rgba(46,196,182,.38); outline-offset:3px; }
 
     .options-row {
       display:flex; gap:24px; flex-wrap:wrap; margin-bottom:16px;
@@ -520,16 +668,25 @@
     html.shared-deck-loaded .shared-deck-status { display:none; }
     html.shared-student-mode #dashboardBtn,
     html.shared-student-mode .teacher-only-shared { display:none !important; }
-    footer {
-      margin-top: 16px;
-      font-size: 11px;
-      color: var(--navy-lt);
-      text-align: center;
-      padding: 12px 0 20px;
-      opacity: .7;
+    .footer-note {
+      width:min(1240px,calc(100% - 32px));
+      margin:auto auto 0;
+      padding:16px 0 6px;
+      color:#9692AD;
+      font-family:'Nunito',Arial,sans-serif;
+      font-size:.84rem;
+      font-weight:900;
+      line-height:1.35;
+      text-align:center;
     }
 
     /* ── RESPONSIVE ── */
+    /* Deck controls (Shuffle/Restart/Change List/Fullscreen) live in the sidebar
+       Controls panel on wider screens; the top-bar copies are only shown once
+       the sidebar itself is hidden below, so students/teachers never see both. */
+    @media (min-width:801px) {
+      .topbar-btns { display:none; }
+    }
     @media (max-width:800px) {
       .flash-body { grid-template-columns:1fr; }
       .flash-sidebar { display:none; }
@@ -546,19 +703,9 @@
 
 <!-- SHARED HEADER -->
 <header class="la-header" aria-label="Literacy Arcade navigation">
-  <a href="https://literacyarcade.com" class="la-logo-group" aria-label="Literacy Arcade home">
+  <a href="https://literacyarcade.com" class="la-logo-group" aria-label="Literacy Arcade home" onclick="if (document.documentElement.classList.contains('shared-student-mode')) return false;">
     <div class="la-icon">
-      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-label="Literacy Arcade">
-        <defs>
-          <linearGradient id="ng" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#2EC4B6"/>
-            <stop offset="100%" stop-color="#7B5EA7"/>
-          </linearGradient>
-        </defs>
-        <rect width="32" height="32" rx="8" fill="url(#ng)"/>
-        <text x="3" y="24" font-family="Georgia,serif" font-size="18" font-weight="700" font-style="italic" fill="white">LA</text>
-        <path d="M 4 27 Q 16 30 28 27" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
+      <img src="data:image/png;base64,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" alt="Literacy Arcade logo">
     </div>
     <span class="la-wordmark">Literacy Arcade</span>
     <div class="la-pipe"></div>
@@ -572,7 +719,7 @@
     <button class="icon-btn" id="dashboardBtn" aria-label="My saved activities" title="Teacher Dashboard" style="display:none" onclick="if (!document.documentElement.classList.contains('shared-student-mode')) window.location.href='teacher-dashboard.html'">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     </button>
-    <button class="icon-btn" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'">
+    <button class="icon-btn teacher-only-shared" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'">
       <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
     </button>
   </div>
@@ -591,8 +738,8 @@
 ══════════════════════ -->
 <div id="setup">
   <div class="setup-hero">
-    <h1>Digital Reading <em>Flashcards</em></h1>
-    <p>Fry sight words &nbsp;·&nbsp; Dolch sight words &nbsp;·&nbsp; Phonics patterns &nbsp;·&nbsp; Custom lists &nbsp;·&nbsp; SmartBoard ready</p>
+    <h1>Digital Reading <strong>Flashcards</strong></h1>
+    <p>High-frequency words &nbsp;·&nbsp; Phonics patterns &nbsp;·&nbsp; Custom lists &nbsp;·&nbsp; SmartBoard ready</p>
   </div>
 
   <div class="card">
@@ -648,8 +795,18 @@
       <div class="word-bank" id="wordBank"></div>
       <div class="btn-row">
         <button class="btn" onclick="selectAll()">Select All</button>
-        <button class="btn" onclick="selectNone()">Clear All</button>
         <button class="btn" onclick="shuffleSetup()">Shuffle</button>
+      </div>
+    </div>
+
+    <div class="selected-deck-wrap" id="selectedDeckSection">
+      <div class="selected-deck-head">
+        <h3>Selected Words for This Deck</h3>
+        <span class="selected-count-badge" id="selectedDeckCount">0 selected</span>
+        <button class="btn" type="button" onclick="selectNone()">Clear All</button>
+      </div>
+      <div class="selected-word-bank" id="selectedWordBank">
+        <span class="selected-empty">Choose words from any list or type custom words.</span>
       </div>
       <p class="count-line" id="countLine">0 words selected</p>
     </div>
@@ -685,7 +842,7 @@
     </div>
   </div>
 
-  <footer>Literacy Arcade &bull; Digital Reading Flashcards</footer>
+  <p class="footer-note">Literacy Arcade • Digital Reading Flashcards</p>
 </div>
 
 <!-- ══════════════════════
@@ -769,7 +926,12 @@
 <!-- FINISH OVERLAY -->
 <div class="finish-overlay" id="finishOverlay">
   <div class="finish-modal">
-    <div class="fi">🎉</div>
+    <div class="finish-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+        <path d="M12 2.8l1.2 2.7 2.8 1.2-2.8 1.2L12 10.6l-1.2-2.7L8 6.7l2.8-1.2L12 2.8z" fill="currentColor" stroke="none" opacity=".75"/>
+      </svg>
+    </div>
     <h2>Deck Complete!</h2>
     <p id="finishMsg">Great reading practice!</p>
     <div class="finish-stats">
@@ -1096,9 +1258,12 @@ function runCountdown(label, onDone) {
 // ═══════════════════════════════════════════════════
 let currentTab = 'fry';
 let selectedWords = [];
-let deck = [], missed = [], knownCount = 0;
+let originalDeck = [], deck = [], missed = [], knownCount = 0;
+let visibleWordBank = [];
 let currentIndex = 0;
 let deckLabel = '';
+let baseDeckLabel = '';
+let cardActionLocked = false;
 
 // ═══════════════════════════════════════════════════
 // HELPERS
@@ -1133,12 +1298,107 @@ function shuffle(a) {
   }
 }
 
+function cleanRoundWord(value) {
+  if (value === undefined || value === null || typeof value === 'object') return '';
+  const word = String(value).trim();
+  return /^(undefined|null|\[object Object\])$/i.test(word) ? '' : word;
+}
+
+function copyWords(words) {
+  return (Array.isArray(words) ? words : [])
+    .map(cleanRoundWord)
+    .filter(Boolean);
+}
+
+function startRound(words, label, { shuffleWords = true } = {}) {
+  deck = copyWords(words);
+  if (shuffleWords) shuffle(deck);
+  missed = [];
+  knownCount = 0;
+  currentIndex = 0;
+  cardActionLocked = false;
+  deckLabel = label || baseDeckLabel || 'Reading Flashcards';
+}
+
+function selectedWordFor(word) {
+  const key = cleanRoundWord(word).toLocaleLowerCase();
+  if (!key) return '';
+  return selectedWords.find(selected => cleanRoundWord(selected).toLocaleLowerCase() === key) || '';
+}
+
+function addSelectedWord(word) {
+  const clean = cleanRoundWord(word);
+  if (clean && !selectedWordFor(clean)) selectedWords.push(clean);
+}
+
+function removeSelectedWord(word) {
+  const existing = selectedWordFor(word);
+  if (!existing) return;
+  selectedWords = selectedWords.filter(selected => selected !== existing);
+}
+
+function getCurrentDeckWords() {
+  const allWords = [...selectedWords, ...getCustomWords()];
+  const seen = new Set();
+  return allWords.filter(word => {
+    const clean = cleanRoundWord(word);
+    const key = clean.toLocaleLowerCase();
+    if (!clean || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function removeCustomWord(word) {
+  const area = $('customArea');
+  if (!area) return;
+  const target = cleanRoundWord(word).toLocaleLowerCase();
+  if (!target) return;
+  const remaining = getCustomWords().filter(customWord => cleanRoundWord(customWord).toLocaleLowerCase() !== target);
+  area.value = remaining.join('\n');
+}
+
+function renderSelectedDeck() {
+  const bank = $('selectedWordBank');
+  const countBadge = $('selectedDeckCount');
+  if (!bank) return;
+  const words = getCurrentDeckWords();
+  if (countBadge) countBadge.textContent = `${words.length} selected`;
+  bank.innerHTML = '';
+  if (!words.length) {
+    const empty = document.createElement('span');
+    empty.className = 'selected-empty';
+    empty.textContent = 'Choose words from any list or type custom words.';
+    bank.appendChild(empty);
+    return;
+  }
+  words.forEach(word => {
+    const chip = document.createElement('span');
+    chip.className = 'selected-word-chip';
+    const label = document.createElement('span');
+    label.textContent = word;
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.textContent = '×';
+    removeBtn.setAttribute('aria-label', `Remove ${word}`);
+    removeBtn.addEventListener('click', () => {
+      removeSelectedWord(word);
+      removeCustomWord(word);
+      renderChips(visibleWordBank);
+      updateCustomPreview();
+      updateCount();
+    });
+    chip.append(label, removeBtn);
+    bank.appendChild(chip);
+  });
+}
+
 function updateCount() {
-  const n = currentTab === 'custom' ? getCustomWords().length : selectedWords.length;
+  const n = getCurrentDeckWords().length;
   const noun = n === 1 ? 'word' : 'words';
-  const verb = currentTab === 'custom' ? 'ready' : 'selected for deck';
-  $('countLine').textContent = n ? `${n} ${noun} ${verb}` : 'No words selected — tap words or use Select All';
+  $('countLine').textContent = n ? `${n} ${noun} selected for deck` : 'No words selected — tap words or use Select All';
   $('countLine').style.color = n ? 'var(--teal-dk)' : 'var(--coral)';
+  renderSelectedDeck();
   if (typeof window.syncReadingFlashcardShareButton === 'function') window.syncReadingFlashcardShareButton();
 }
 
@@ -1197,9 +1457,7 @@ function switchTab(tab) {
     populatePhonicsGroups();
   } else {
     $('wordBank').innerHTML = '';
-    selectedWords = [];
-    $('customPreview').style.display = 'none';
-    updateCount();
+    updateCustomPreview();
   }
 }
 
@@ -1256,18 +1514,17 @@ function onPatternChange() { autoLoadPhonics(); }
 function renderChips(words) {
   const bank = $('wordBank');
   bank.innerHTML = '';
-  selectedWords = []; // reset — teachers tap to select
-  words.forEach(word => {
+  visibleWordBank = copyWords(words);
+  visibleWordBank.forEach(word => {
     const btn = document.createElement('button');
-    btn.className = 'chip'; // unselected by default
+    btn.className = `chip${selectedWordFor(word) ? ' sel' : ''}`;
     btn.textContent = word;
     btn.onclick = () => {
-      const idx = selectedWords.indexOf(word);
-      if (idx > -1) {
-        selectedWords.splice(idx, 1);
+      if (selectedWordFor(word)) {
+        removeSelectedWord(word);
         btn.classList.remove('sel');
       } else {
-        selectedWords.push(word);
+        addSelectedWord(word);
         btn.classList.add('sel');
       }
       updateCount();
@@ -1278,18 +1535,19 @@ function renderChips(words) {
 }
 
 function selectAll() {
-  const allWords = [];
   $('wordBank').querySelectorAll('.chip').forEach(c => {
     c.classList.add('sel');
-    allWords.push(c.textContent);
+    addSelectedWord(c.textContent);
   });
-  selectedWords = allWords;
   updateCount();
 }
 
 function selectNone() {
   selectedWords = [];
+  const customArea = $('customArea');
+  if (customArea) customArea.value = '';
   $('wordBank').querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  updateCustomPreview();
   updateCount();
 }
 
@@ -1305,12 +1563,10 @@ function shuffleSetup() {
 // START
 // ═══════════════════════════════════════════════════
 function startFlashcards() {
-  let words;
+  let words = getCurrentDeckWords();
   if (currentTab === 'custom') {
-    words = getCustomWords();
-    deckLabel = 'Custom Words';
+    deckLabel = selectedWords.length ? 'Selected + Custom Words' : 'Custom Words';
   } else {
-    words = [...selectedWords];
     if (currentTab === 'fry') {
       deckLabel = `Fry · ${$('levelSelect').value}`;
     } else if (currentTab === 'dolch') {
@@ -1326,11 +1582,9 @@ function startFlashcards() {
     alert('Please select at least one word. Tap words in the Word Bank, or click Select All.');
     return;
   }
-  deck = [...words];
-  shuffle(deck);
-  missed = [];
-  knownCount = 0;
-  currentIndex = 0;
+  baseDeckLabel = deckLabel;
+  originalDeck = copyWords(words);
+  startRound(originalDeck, baseDeckLabel);
 
   $('setup').style.display = 'none';
 
@@ -1374,28 +1628,37 @@ function renderCard() {
   });
 }
 
-function nextCard()  { sndAdvance(); currentIndex++; renderCard(); }
-function markKnown() { sndKnown();   knownCount++;   currentIndex++; renderCard(); }
-
-function markMissed() {
-  const w = deck[currentIndex];
-  if (w && !missed.includes(w)) missed.push(w);
-  sndMissed();
+function completeCurrentCard(action) {
+  if (cardActionLocked || currentIndex >= deck.length) return;
+  cardActionLocked = true;
+  const word = deck[currentIndex];
+  if (action === 'known') {
+    sndKnown();
+    knownCount++;
+  } else if (action === 'missed') {
+    if (word) missed.push(word);
+    sndMissed();
+  } else {
+    sndAdvance();
+  }
   currentIndex++;
   renderCard();
+  setTimeout(() => { cardActionLocked = false; }, 150);
 }
 
-function shuffleDeck()  { shuffle(deck); currentIndex = 0; missed = []; knownCount = 0; renderCard(); }
-function restartDeck()  { currentIndex = 0; missed = []; knownCount = 0; renderCard(); }
+function nextCard()  { completeCurrentCard('skip'); }
+function markKnown() { completeCurrentCard('known'); }
+
+function markMissed() {
+  completeCurrentCard('missed');
+}
+
+function shuffleDeck()  { startRound(deck, deckLabel); renderCard(); }
+function restartDeck()  { startRound(deck, deckLabel, { shuffleWords:false }); renderCard(); }
 
 function practiceMissed() {
   if (!missed.length) { alert('No missed words yet — great job!'); return; }
-  deck = [...missed];
-  shuffle(deck);
-  missed = [];
-  knownCount = 0;
-  currentIndex = 0;
-  deckLabel = 'Missed Words Practice';
+  startRound(missed, 'Missed Words Practice');
   renderCard();
 }
 
@@ -1432,8 +1695,8 @@ function showFinish() {
 
 function practiceAgain() {
   $('finishOverlay').classList.remove('open');
-  currentIndex = 0; missed = []; knownCount = 0;
-  shuffle(deck); renderCard();
+  startRound(originalDeck.length ? originalDeck : deck, baseDeckLabel || deckLabel || 'Reading Flashcards');
+  renderCard();
 }
 
 function doMissedFromFinish() {
@@ -1475,8 +1738,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Expose globals for Firebase module
   window._flashcards = {
     getCurrentTab:    () => currentTab,
-    getSelectedWords: () => selectedWords,
-    setSelectedWords: (w) => { selectedWords = w; },
+    getSelectedWords: () => [...selectedWords],
+    getCurrentDeckWords,
+    setSelectedWords: (w) => { selectedWords = copyWords(w); renderChips([...document.querySelectorAll('#wordBank .chip')].map(chip => chip.textContent)); updateCount(); },
     switchTab,
     populateLevels,
     loadWordBank,
@@ -1627,7 +1891,7 @@ function parseCustomText(value) {
 function getCurrentWords() {
   const fc = window._flashcards;
   if (!fc) return [];
-  return fc.getCurrentTab() === 'custom' ? fc.getCustomWords() : fc.getSelectedWords();
+  return fc.getCurrentDeckWords ? fc.getCurrentDeckWords() : (fc.getCurrentTab() === 'custom' ? fc.getCustomWords() : fc.getSelectedWords());
 }
 
 function buildCurrentSettings(words = getCurrentWords()) {
@@ -1653,9 +1917,9 @@ function restoreSelectedWords(words) {
   if (!fc) return;
   const cleanWords = normalizeWords(words);
   fc.setSelectedWords(cleanWords);
-  const selectedSet = new Set(cleanWords);
+  const selectedSet = new Set(cleanWords.map(word => word.toLocaleLowerCase()));
   document.querySelectorAll('#wordBank .chip').forEach(chip => {
-    chip.classList.toggle('sel', selectedSet.has(chip.textContent));
+    chip.classList.toggle('sel', selectedSet.has(chip.textContent.toLocaleLowerCase()));
   });
   fc.updateCount();
 }
@@ -1939,9 +2203,7 @@ if (window.LiteracyArcadeShare) {
     requireAuth: true,
     publicOrigin: 'https://literacyarcade.com',
     isAuthenticated() {
-      const words = window._flashcards?.getCurrentTab?.() === 'custom'
-        ? window._flashcards?.getCustomWords?.() || []
-        : window._flashcards?.getSelectedWords?.() || [];
+      const words = window._flashcards?.getCurrentDeckWords?.() || [];
       return !words.length || Boolean(window.digitalReadingFlashcardsCurrentUser);
     },
     onLoginRequired() {
@@ -1951,7 +2213,7 @@ if (window.LiteracyArcadeShare) {
     getActivity() {
       const fc = window._flashcards;
       const tab = fc?.getCurrentTab?.() || 'fry';
-      const words = tab === 'custom' ? fc?.getCustomWords?.() || [] : fc?.getSelectedWords?.() || [];
+      const words = fc?.getCurrentDeckWords?.() || [];
       if (!words.length) {
         alert('Select at least one reading word before sharing.');
         return null;
@@ -1988,7 +2250,7 @@ if (window.LiteracyArcadeShare) {
     const button = document.getElementById('shareActivityBtn');
     if (!button) return;
     const fc = window._flashcards;
-    const words = fc?.getCurrentTab?.() === 'custom' ? fc?.getCustomWords?.() || [] : fc?.getSelectedWords?.() || [];
+    const words = fc?.getCurrentDeckWords?.() || [];
     button.disabled = !words.length || document.documentElement.classList.contains('shared-student-mode');
     button.title = words.length ? 'Create a student-ready share link' : 'Select at least one reading word to share';
   };
