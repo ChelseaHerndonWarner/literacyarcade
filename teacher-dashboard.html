@@ -195,8 +195,9 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .shared-badge{
   flex-shrink:0;display:inline-flex;align-items:center;gap:4px;
   background:var(--teal-light);color:var(--teal-dark);border-radius:999px;
-  padding:2px 9px;font-size:10px;font-weight:900;font-family:var(--font-head);
-  letter-spacing:.3px;text-transform:uppercase;margin-top:1px;
+  border:1px solid rgba(8,122,112,.16);padding:2px 9px;font-size:10px;
+  font-weight:900;font-family:var(--font-head);letter-spacing:.3px;
+  text-transform:uppercase;margin-top:1px;line-height:1.2;
 }
 .shared-badge svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .card-meta{color:var(--navy-soft);font-size:11px;line-height:1.5}
@@ -235,7 +236,7 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 }
 .card-menu-btn svg{width:17px;height:17px;display:block}
 .card-menu-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
-.card-menu-btn.open{border-color:var(--violet);color:var(--violet);background:var(--lavender)}
+.card-menu-btn.open{border-color:rgba(8,122,112,.34);color:var(--teal-dark);background:#F2FFFD}
 .card-menu{
   position:absolute;top:calc(100% + 6px);right:0;z-index:20;min-width:196px;
   background:#fff;border:1.5px solid var(--lavender);border-radius:14px;
@@ -389,29 +390,48 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .collection-folder-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .collection-card-title{font-family:var(--font-head);font-weight:900;font-size:19px;color:var(--navy);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .collection-card-sub{font-size:12px;color:var(--navy-soft);line-height:1.45;margin-top:4px;font-weight:600}
-.collection-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.collection-actions button{height:34px;border-radius:9px;font-family:var(--font-head);font-weight:900;font-size:12px;cursor:pointer}
-.collection-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap}
-.collection-breadcrumb{border:0;background:transparent;color:var(--teal-dark);font-family:var(--font-head);font-weight:900;font-size:14px;cursor:pointer;margin-bottom:6px;padding:2px 0}
-.collection-detail-title{font-family:var(--font-head);font-weight:900;font-size:34px;line-height:1.05;color:var(--navy);display:flex;align-items:center;gap:10px}
-.collection-title-dot{width:18px;height:18px;border-radius:50%;background:var(--collection-color,var(--teal));display:inline-block;box-shadow:0 0 0 4px color-mix(in srgb, var(--collection-color,var(--teal)) 18%, white)}
-.collection-detail-sub{font-size:14px;color:var(--navy-soft);line-height:1.45;margin-top:6px;font-weight:600}
-.collection-drag-hint{font-size:12px;color:var(--navy-soft);font-weight:800;margin-top:6px}
-.collection-detail-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.collection-actions{display:flex;gap:7px;align-items:center}.collection-actions button{height:34px;border-radius:9px;font-family:var(--font-head);font-weight:900;font-size:12px;cursor:pointer}
+.collection-more-wrap{position:relative;flex:0 0 auto}.collection-more-btn{width:38px;height:38px;border-radius:10px;background:#fff;border:1.5px solid var(--border);color:var(--navy-soft);font-family:var(--font-head);font-weight:900;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}.collection-more-btn:hover,.collection-more-btn.open{border-color:var(--teal);color:var(--teal-dark);background:#F8FFFE}
+.collection-detail-head{background:#fff;border:1.5px solid var(--border);border-left:6px solid var(--collection-color,var(--teal));border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:11px 15px;margin-bottom:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:13px;flex-wrap:wrap}
+.collection-detail-main{min-width:260px;flex:1}
+.collection-breadcrumb{border:0;background:transparent;color:var(--teal-dark);font-family:var(--font-head);font-weight:900;font-size:13px;cursor:pointer;margin-bottom:6px;padding:1px 0}
+.collection-detail-title{font-family:var(--font-head);font-weight:900;font-size:28px;line-height:1.05;color:var(--navy);display:flex;align-items:center;gap:10px}
+.collection-title-dot{width:18px;height:18px;border-radius:50%;background:var(--collection-color,var(--teal));display:inline-block;box-shadow:0 0 0 4px color-mix(in srgb, var(--collection-color,var(--teal)) 18%, white);flex:0 0 auto}
+.collection-detail-sub{font-size:13px;color:var(--navy-soft);line-height:1.38;margin-top:5px;font-weight:600}
+.collection-detail-meta{font-size:12px;color:var(--navy-soft);font-family:var(--font-head);font-weight:800;margin-top:5px}
+.collection-drag-hint{font-size:11.5px;color:#6B7890;font-weight:700;margin:0 0 8px;padding-left:3px}
+.collection-detail-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;padding-top:16px}
+.collection-detail-more-wrap{position:relative;flex:0 0 auto}
+.collection-detail-more-menu{right:0}
 .section-stack{display:flex;flex-direction:column;gap:16px}
-.collection-section{background:rgba(255,255,255,.78);border:1.5px solid var(--border);border-left:6px solid var(--section-color,var(--teal));border-radius:var(--r-lg);padding:14px;box-shadow:var(--shadow-sm)}
+.collection-section{background:rgba(255,255,255,.86);border:1.5px solid rgba(225,228,234,.72);border-left:3px solid color-mix(in srgb, var(--section-color,var(--teal)) 54%, white);border-radius:17px;padding:10px 12px;box-shadow:0 1px 4px rgba(27,42,74,.035)}
 .collection-section.drag-over{border-color:var(--teal);background:#F2FFFD}
 .collection-section.is-collapsed .section-list{display:none}
 .collection-section.is-collapsed{background:rgba(255,255,255,.55)}
-.section-head{display:flex;align-items:center;gap:11px;margin-bottom:12px;flex-wrap:wrap}.section-title{font-family:var(--font-head);font-weight:900;font-size:21px;color:var(--navy)}.section-color-dot{width:14px;height:14px;border-radius:50%;background:var(--section-color,var(--teal));box-shadow:0 0 0 3px color-mix(in srgb, var(--section-color,var(--teal)) 18%, white);flex:0 0 auto}
-.section-count{background:var(--teal-light);color:var(--teal-dark);border-radius:999px;padding:3px 10px;font-size:12px;font-family:var(--font-head);font-weight:900}.section-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.section-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}.section-title-wrap{min-width:0;flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.section-title{font-family:var(--font-head);font-weight:900;font-size:20px;color:var(--navy);display:block;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.section-color-dot{width:13px;height:13px;border-radius:50%;background:var(--section-color,var(--teal));box-shadow:0 0 0 3px color-mix(in srgb, var(--section-color,var(--teal)) 16%, white);flex:0 0 auto}
+.section-count{display:inline-flex;background:var(--teal-light);color:var(--teal-dark);border-radius:999px;padding:2px 9px;font-size:11.5px;font-family:var(--font-head);font-weight:900}.section-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center}.section-more-wrap{position:relative}
 .section-mini-btn{border:1.5px solid var(--border);background:#fff;color:var(--navy-soft);border-radius:8px;height:32px;padding:0 11px;font-family:var(--font-head);font-weight:900;font-size:12px;cursor:pointer}.section-mini-btn:hover{border-color:var(--teal);color:var(--teal-dark)}
 .section-toggle-btn{border-color:rgba(8,122,112,.22);color:var(--teal-dark);background:#F7FFFE}
-.section-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;min-height:34px}
+.section-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(305px,1fr));gap:12px;min-height:34px}
 .collection-activity-card{background:#fff;border:1.5px solid var(--border);border-radius:13px;padding:12px;cursor:grab;box-shadow:var(--shadow-sm);position:relative}
-.collection-activity-card:active{cursor:grabbing}.collection-activity-card.dragging{opacity:.45}.drag-grip{width:18px;height:36px;display:flex;align-items:center;justify-content:center;color:#9AA4B8;font-size:18px;line-height:1;flex-shrink:0;cursor:grab}.collection-activity-title{font-family:var(--font-head);font-weight:900;font-size:16px;line-height:1.2;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.collection-activity-meta{font-size:12px;color:var(--navy-soft);margin-top:3px;font-weight:600}.collection-card-buttons{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.collection-card-buttons button{height:34px;border-radius:8px;font-family:var(--font-head);font-weight:900;font-size:12px;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--navy)}.collection-card-buttons button:hover{border-color:var(--teal);color:var(--teal-dark)}
+.collection-activity-card:active{cursor:grabbing}.collection-activity-card.dragging{opacity:.45}.drag-grip{width:18px;height:36px;display:flex;align-items:center;justify-content:center;color:#9AA4B8;font-size:18px;line-height:1;flex-shrink:0;cursor:grab}.collection-activity-title{font-family:var(--font-head);font-weight:900;font-size:16px;line-height:1.2;color:var(--navy);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;overflow:hidden;text-overflow:ellipsis}.collection-activity-meta{font-size:12px;color:var(--navy-soft);margin-top:3px;font-weight:600}.collection-card-buttons{display:grid;grid-template-columns:1.1fr 1fr 34px;gap:6px;margin-top:10px;align-items:center}.collection-card-buttons.no-share{grid-template-columns:1fr 34px}.collection-card-buttons button{height:32px;border-radius:8px;font-family:var(--font-head);font-weight:900;font-size:12px;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--navy);transition:background .13s,border-color .13s,color .13s,transform .13s}.collection-card-buttons button:hover{border-color:var(--teal);color:var(--teal-dark)}.collection-card-buttons .open-collection-activity{background:var(--teal-dark);border-color:var(--teal-dark);color:#fff}.collection-card-buttons .open-collection-activity:hover{background:var(--teal);border-color:var(--teal);color:#fff;transform:translateY(-1px)}.collection-card-buttons .share-collection-activity{background:#fff;border-color:var(--teal);color:var(--teal-dark)}.collection-card-buttons .share-collection-activity:hover{background:var(--teal-light);color:var(--teal-dark);transform:translateY(-1px)}.collection-card-buttons .collection-activity-more-wrap{position:relative}.collection-card-buttons .collection-activity-more-btn{width:34px;padding:0;background:#fff;border-color:var(--border);color:var(--navy-soft);font-size:17px;line-height:1}.collection-card-buttons .collection-activity-more-btn:hover,.collection-card-buttons .collection-activity-more-btn.open{background:#F2FFFD;border-color:rgba(8,122,112,.34);color:var(--teal-dark)}
 .collection-btn{width:100%;background:#fff;color:var(--violet);border:1.5px solid var(--lavender);border-radius:10px;height:34px;font-family:var(--font-head);font-weight:900;font-size:12px;cursor:pointer;margin-top:8px;transition:all .13s}.collection-btn:hover{background:var(--lavender);transform:translateY(-1px)}
-.collection-empty{color:var(--navy-soft);background:#FBFCFE;border:1.5px dashed var(--border);border-radius:13px;padding:14px;text-align:center;font-size:12px;line-height:1.5;grid-column:1/-1}
-.activity-picker-overlay{position:fixed;inset:0;background:rgba(27,42,74,.42);display:none;align-items:center;justify-content:center;padding:18px;z-index:110}.activity-picker-overlay.open{display:flex}.activity-picker-modal{width:min(720px,100%);max-height:86vh;background:#fff;border-radius:16px;box-shadow:0 18px 60px rgba(27,42,74,.25);overflow:hidden;border:1px solid rgba(27,42,74,.12);display:flex;flex-direction:column}.activity-picker-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border)}.activity-picker-title{font-family:var(--font-head);font-weight:900;font-size:20px}.activity-picker-body{padding:16px 18px;overflow:auto;display:flex;flex-direction:column;gap:12px}.picker-row{display:grid;grid-template-columns:1fr 220px;gap:10px}.picker-list{display:flex;flex-direction:column;gap:7px;max-height:380px;overflow:auto;border:1.5px solid var(--border);border-radius:12px;padding:8px;background:#FBFCFE}.picker-item{display:flex;align-items:flex-start;gap:9px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px;cursor:pointer}.picker-item input{margin-top:2px}.picker-item-title{font-family:var(--font-head);font-weight:900;font-size:13px}.picker-item-meta{font-size:11px;color:var(--navy-soft);margin-top:2px}.picker-actions{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid var(--border);padding:14px 18px}.picker-close{width:34px;height:34px;border:1px solid var(--border);background:#fff;border-radius:8px;cursor:pointer;font-size:22px;line-height:1;color:var(--navy-soft)}
+.collection-empty{color:var(--navy-soft);background:rgba(251,252,254,.72);border:1.5px dashed rgba(225,228,234,.82);border-radius:12px;padding:10px 12px;text-align:center;font-size:12px;line-height:1.45;grid-column:1/-1}
+.activity-picker-overlay{position:fixed;inset:0;background:rgba(27,42,74,.42);display:none;align-items:center;justify-content:center;padding:18px;z-index:110}.activity-picker-overlay.open{display:flex}.activity-picker-modal{width:min(860px,100%);max-height:88vh;background:#fff;border-radius:18px;box-shadow:0 18px 60px rgba(27,42,74,.25);overflow:hidden;border:1px solid rgba(27,42,74,.12);display:flex;flex-direction:column}.activity-picker-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:20px 22px 14px;border-bottom:1px solid var(--border)}.activity-picker-title{font-family:var(--font-head);font-weight:900;font-size:22px;line-height:1.1}.activity-picker-sub{font-size:13px;line-height:1.45;color:var(--navy-soft);margin-top:5px;max-width:620px}.activity-picker-body{padding:18px 22px;overflow:auto;display:flex;flex-direction:column;gap:14px}.picker-row{display:grid;grid-template-columns:1fr 260px;gap:12px}.picker-list{display:flex;flex-direction:column;gap:7px;max-height:430px;overflow:auto;border:1.5px solid var(--border);border-radius:14px;padding:9px;background:#FBFCFE}.picker-item{display:grid;grid-template-columns:18px 26px minmax(0,1fr) auto;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:9px 10px;cursor:pointer}.picker-item:hover{border-color:rgba(46,196,182,.48);background:#F8FFFE}.picker-item:has(input:checked){border-color:rgba(8,122,112,.55);background:#F2FFFD;box-shadow:0 0 0 2px rgba(46,196,182,.10)}.picker-item input{margin:0;justify-self:center}.picker-item-icon{display:flex;align-items:center;justify-content:center}.picker-item-main{min-width:0}.picker-item-title{display:block;font-family:var(--font-head);font-weight:900;font-size:14px;color:var(--navy);line-height:1.18;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.picker-item-meta{display:block;font-size:12px;color:var(--navy-soft);margin-top:1px;font-weight:700}.picker-item-preview{display:-webkit-box;font-size:12px;color:var(--navy-soft);line-height:1.3;margin-top:4px;overflow:hidden;text-overflow:ellipsis;-webkit-line-clamp:2;-webkit-box-orient:vertical}.picker-add-pill{justify-self:end;align-self:center;border:1.5px solid var(--teal);color:var(--teal-dark);background:#fff;border-radius:999px;padding:4px 10px;font:800 12px var(--font-head);white-space:nowrap}.picker-item:has(input:checked) .picker-add-pill{background:var(--teal-dark);border-color:var(--teal-dark);color:#fff}.picker-actions{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid var(--border);padding:15px 22px}.picker-close{width:34px;height:34px;border:1px solid var(--border);background:#fff;border-radius:8px;cursor:pointer;font-size:22px;line-height:1;color:var(--navy-soft)}
+
+/* ── DASHBOARD MODALS ───────────────────────────────────────────────────── */
+.dashboard-modal-overlay{position:fixed;inset:0;background:rgba(27,42,74,.44);display:flex;align-items:center;justify-content:center;padding:18px;z-index:140}
+.dashboard-modal{width:min(460px,100%);background:#fff;border:1px solid rgba(27,42,74,.12);border-radius:18px;box-shadow:0 18px 60px rgba(27,42,74,.25);overflow:hidden}
+.dashboard-modal-head{padding:20px 22px 8px}
+.dashboard-modal-title{font-family:var(--font-head);font-size:22px;font-weight:900;line-height:1.1;color:var(--navy)}
+.dashboard-modal-text{font-size:13px;line-height:1.5;color:var(--navy-soft);margin-top:8px;font-weight:600}
+.dashboard-modal-body{padding:8px 22px 18px}
+.dashboard-modal-input{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:11px 12px;font:700 14px var(--font-body);color:var(--navy);outline:none;background:#FBFCFE}
+.dashboard-modal-input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12);background:#fff}
+.dashboard-modal-actions{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid var(--border);padding:14px 22px;background:#FCFDFE}
+.dashboard-modal-primary,.dashboard-modal-secondary{height:38px;border-radius:10px;padding:0 14px;font:900 13px var(--font-head);cursor:pointer}
+.dashboard-modal-primary{border:0;background:var(--teal-dark);color:#fff}.dashboard-modal-primary.danger{background:#B42318}.dashboard-modal-primary:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.dashboard-modal-secondary{background:#fff;color:var(--navy-soft);border:1.5px solid var(--border)}.dashboard-modal-secondary:hover{border-color:var(--teal);color:var(--teal-dark)}
 
 /* Reading-friendly dashboard polish: keep labels clear without making the whole page feel heavy */
 .la-wordmark{font-weight:800}
@@ -432,8 +452,8 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .collections-intro-text{font-weight:500;font-size:14px;line-height:1.5}
 .collection-card-title{font-weight:800;font-size:20px;letter-spacing:-.15px}
 .collection-card-sub{font-weight:500;font-size:13px;line-height:1.45}
-.collection-actions{grid-template-columns:1fr 1fr}.collection-actions button{font-weight:800}
-.collection-actions .color-btn{grid-column:1/-1;background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal)}
+.collection-actions button{font-weight:800}
+.collection-actions .color-btn{background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal)}
 .collection-actions .color-btn:hover{background:var(--teal-light)}
 .collection-detail-title{font-weight:800;font-size:32px;letter-spacing:-.25px}
 .collection-breadcrumb{font-weight:800}
@@ -458,11 +478,11 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .back-strip{display:none!important}
 .collection-detail-actions .subtle-action{height:34px;padding:0 12px;font-size:12px;background:#fff;color:var(--navy-soft);border-color:var(--border)}
 .collection-detail-actions .subtle-action:hover{border-color:var(--teal);color:var(--teal-dark);background:#F8FFFE}
-.collection-section{padding:12px 14px}
+.collection-section{padding:10px 12px}
 .section-stack{gap:12px}
-.section-head{margin-bottom:9px}
+.section-head{margin-bottom:8px}
 .section-list{gap:10px;min-height:24px}
-.collection-empty{padding:11px 14px}
+.collection-empty{padding:10px 12px}
 .collection-activity-card{padding:10px 12px}
 .color-picker-overlay{position:fixed;inset:0;background:rgba(27,42,74,.42);display:none;align-items:center;justify-content:center;padding:18px;z-index:120}
 .color-picker-overlay.open{display:flex}
@@ -590,10 +610,10 @@ main{max-width:1280px;padding:28px 18px 56px;}
   transform:translateY(-1px);
 }
 .collection-actions{
-  display:grid!important;
-  grid-template-columns:1fr 1fr!important;
+  display:flex!important;
   gap:7px!important;
   margin-top:2px!important;
+  align-items:center!important;
 }
 .collection-actions button{
   width:100%!important;
@@ -608,11 +628,8 @@ main{max-width:1280px;padding:28px 18px 56px;}
   box-shadow:none!important;
 }
 .collection-actions button:hover{border-color:var(--teal)!important;color:var(--teal-dark)!important;background:#F8FFFE!important;}
-.collection-actions .color-btn{
-  grid-column:auto!important;
-  color:var(--teal-dark)!important;
-  border-color:rgba(46,196,182,.55)!important;
-}
+.collection-actions .color-btn{color:var(--teal-dark)!important;border-color:rgba(46,196,182,.55)!important}
+.collection-actions .collection-more-btn{width:38px!important;min-width:38px!important;padding:0!important}
 .collection-actions .delete-btn{
   color:#B42318!important;
   border-color:#F3B4AE!important;
@@ -640,13 +657,44 @@ main{max-width:1280px;padding:28px 18px 56px;}
 }
 .section-drag-grip{
   width:18px;height:28px;display:inline-flex;align-items:center;justify-content:center;
-  color:#9AA4B8;font-size:18px;line-height:1;cursor:grab;flex:0 0 auto;
+  color:#8B96AA;background:color-mix(in srgb, var(--section-color,var(--teal)) 8%, white);
+  border:1px solid color-mix(in srgb, var(--section-color,var(--teal)) 20%, var(--border));
+  border-radius:7px;font-size:15px;line-height:1;cursor:grab;flex:0 0 auto;margin-right:-1px;
 }
 .section-drag-grip:active{cursor:grabbing}
 .collection-section.section-dragging{opacity:.45}
 .collection-section.section-drag-over{border-color:var(--teal);background:#F8FFFE}
 .collection-section.section-drop-before{box-shadow:0 -5px 0 rgba(46,196,182,.30), var(--shadow-sm)}
 .collection-section.section-drop-after{box-shadow:0 5px 0 rgba(46,196,182,.30), var(--shadow-sm)}
+.collection-detail-head{align-items:stretch!important}
+.collection-detail-title{font-size:28px!important}
+.collection-detail-more-menu button{border:0!important;background:none!important;color:var(--navy)!important;height:auto!important;box-shadow:none!important}
+.collection-detail-more-menu button:hover{background:var(--teal-light)!important;color:var(--teal-dark)!important}
+.collection-detail-more-menu .menu-delete{color:#B42318!important}
+.collection-detail-more-menu .menu-delete:hover{background:#FFF5F5!important;color:#B42318!important}
+@media(max-width:700px){
+  .collection-detail-actions{padding-top:0!important;justify-content:flex-start!important;width:100%}
+  .collection-detail-actions .collection-primary-btn,.collection-detail-actions .collection-secondary-btn{flex:1}
+}
+
+/* Typography hierarchy polish: keep main titles strong, soften secondary labels */
+.la-page-title{color:#1FA99C!important}
+.la-wordmark,.hero h1,.collection-detail-title{font-weight:900!important;color:var(--navy)}
+.section-title{font-weight:700!important;color:#243350!important;font-size:20px!important;letter-spacing:-.05px!important}
+.collection-activity-title{font-weight:700!important;color:#243350!important;font-size:16px!important}
+.collection-card-title{font-weight:800!important;color:var(--navy)!important}
+.collection-detail-sub,.collection-detail-meta,.collection-drag-hint,
+.collection-card-sub,.collection-activity-meta,.card-meta,.card-preview,
+.picker-item-meta,.picker-item-preview,.activity-picker-sub,.user-email{
+  color:var(--navy-soft)!important;
+}
+.collection-detail-sub,.collection-card-sub,.collection-activity-meta,.card-meta,
+.picker-item-meta,.activity-picker-sub{
+  font-weight:500!important;
+}
+.collection-detail-meta,.collection-drag-hint{
+  font-weight:700!important;
+}
 
 </style>
 </head>
@@ -778,7 +826,10 @@ main{max-width:1280px;padding:28px 18px 56px;}
 <div class="activity-picker-overlay" id="activityPickerOverlay">
   <div class="activity-picker-modal" role="dialog" aria-modal="true" aria-labelledby="activityPickerTitle">
     <div class="activity-picker-head">
-      <div class="activity-picker-title" id="activityPickerTitle">Add Activities to Collection</div>
+      <div>
+        <div class="activity-picker-title" id="activityPickerTitle">Add activities to this collection</div>
+        <p class="activity-picker-sub">Choose from your saved activities. Activities stay in My Activities even when added to a collection.</p>
+      </div>
       <button class="picker-close" type="button" id="activityPickerClose" aria-label="Close activity picker">&times;</button>
     </div>
     <div class="activity-picker-body">
@@ -869,7 +920,7 @@ const ACTIVITY_TYPES = {
   },
   'letterbox-lesson': {
     label: 'Letterbox Lesson',
-    icon: 'numberCircleOne',
+    icon: 'soundBoxes',
     colorClass: 'icon-teal',
     saveable: true,
     shareable: false,
@@ -901,7 +952,7 @@ const ACTIVITY_ICON_SVGS = {
   mapTrifold: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M160,72V216L96,184V40Z" opacity="0.2"/><path d="M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z"/></svg>`,
   arrowsClockwise: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,128a88,88,0,1,1-88-88A88,88,0,0,1,216,128Z" opacity="0.2"/><path d="M224,48V96a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h28.69L182.06,73.37a79.56,79.56,0,0,0-56.13-23.43h-.45A79.52,79.52,0,0,0,69.59,72.71,8,8,0,0,1,58.41,61.27a96,96,0,0,1,135,.79L208,76.69V48a8,8,0,0,1,16,0ZM186.41,183.29a80,80,0,0,1-112.47-.66L59.31,168H88a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V179.31l14.63,14.63A95.43,95.43,0,0,0,130,222.06h.53a95.36,95.36,0,0,0,67.07-27.33,8,8,0,0,0-11.18-11.44Z"/></svg>`,
   textAlignLeft: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M216,56V184a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H208A8,8,0,0,1,216,56Z" opacity="0.2"/><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM64,88a8,8,0,0,1,8-8H184a8,8,0,0,1,0,16H72A8,8,0,0,1,64,88Zm0,40a8,8,0,0,1,8-8H184a8,8,0,0,1,0,16H72A8,8,0,0,1,64,128Zm0,40a8,8,0,0,1,8-8h72a8,8,0,0,1,0,16H72A8,8,0,0,1,64,168Z"/></svg>`,
-  numberCircleOne: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z" opacity="0.2"/><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM140,80v96a8,8,0,0,1-16,0V95l-11.56,7.71a8,8,0,1,1-8.88-13.32l24-16A8,8,0,0,1,140,80Z"/></svg>`,
+  soundBoxes: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none"><rect x="34" y="78" width="52" height="70" rx="12" fill="currentColor" opacity=".18"/><rect x="102" y="78" width="52" height="70" rx="12" fill="currentColor" opacity=".18"/><rect x="170" y="78" width="52" height="70" rx="12" fill="currentColor" opacity=".18"/><rect x="34" y="78" width="52" height="70" rx="12" stroke="currentColor" stroke-width="14"/><rect x="102" y="78" width="52" height="70" rx="12" stroke="currentColor" stroke-width="14"/><rect x="170" y="78" width="52" height="70" rx="12" stroke="currentColor" stroke-width="14"/><circle cx="60" cy="177" r="10" fill="currentColor"/><circle cx="128" cy="177" r="10" fill="currentColor"/><circle cx="196" cy="177" r="10" fill="currentColor"/></svg>`,
   cards: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M192,88V200a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V88a8,8,0,0,1,8-8H184A8,8,0,0,1,192,88Z" opacity="0.2"/><path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"/></svg>`,
   bookOpenText: `<svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,56V200H160a32,32,0,0,0-32,32V88a32,32,0,0,1,32-32Z" opacity="0.2"/><path d="M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64ZM160,88h40a8,8,0,0,1,0,16H160a8,8,0,0,1,0-16Zm48,40a8,8,0,0,1-8,8H160a8,8,0,0,1,0-16h40A8,8,0,0,1,208,128Zm0,32a8,8,0,0,1-8,8H160a8,8,0,0,1,0-16h40A8,8,0,0,1,208,160Z"/></svg>`
 };
@@ -1195,18 +1246,114 @@ function renderAll() {
   });
 }
 
-function buildPreviewLine(activity, type) {
-  let items = [];
-  if (type === 'sentence-spinner') {
-    items = Array.isArray(activity.sentences) && activity.sentences.length
-      ? activity.sentences
-      : (Array.isArray(activity.words) ? activity.words : []);
-  } else if (Array.isArray(activity.words)) {
-    items = activity.words;
+const PREVIEW_FALLBACKS = {
+  'letterbox-lesson': 'Letterbox lesson saved',
+  'orf-fluency-calculator': 'Fluency assessment saved',
+  'repeated-reading-raceway': 'Repeated reading activity saved',
+  'repeatedreadingrockets': 'Repeated reading activity saved',
+  'word-spinner': 'Word spinner saved',
+  'sentence-spinner': 'Sentence spinner saved',
+  'read-and-race': 'Reading game saved',
+  'magic-word-road': 'Reading game saved',
+  'digital-reading-flashcards': 'Flashcards saved',
+  'vocabulary-flashcards': 'Vocabulary flashcards saved',
+  'word-wizard': 'Word game saved',
+  'spellbound': 'Spelling game saved',
+  'word-forge': 'Word-building game saved',
+  'quick-letter-knowledge-check': 'Letter knowledge assessment saved',
+  'quick-letter-sound-check': 'Letter sound assessment saved',
+  'phonics-knowledge-check': 'Phonics assessment saved'
+};
+
+function cleanPreviewText(value, maxLength = 140) {
+  if (value === undefined || value === null) return '';
+  if (typeof value === 'object') return '';
+  const text = String(value).replace(/\s+/g, ' ').trim();
+  if (!text || /^(undefined|null|\[object Object\])$/i.test(text)) return '';
+  return text.length > maxLength ? `${text.slice(0, maxLength - 1).trim()}…` : text;
+}
+
+function previewItemText(item) {
+  if (item === undefined || item === null) return '';
+  if (typeof item === 'string' || typeof item === 'number') return cleanPreviewText(item, 80);
+  if (typeof item !== 'object') return cleanPreviewText(item, 80);
+  const keys = ['word', 'term', 'text', 'sentence', 'title', 'name', 'activityName', 'passageTitle', 'studentName'];
+  for (const key of keys) {
+    const text = cleanPreviewText(item[key], 80);
+    if (text) return text;
   }
-  const clean = items.map(item => (item == null ? '' : String(item).trim())).filter(Boolean);
+  return '';
+}
+
+function previewFromArray(value, limit = 4) {
+  if (!Array.isArray(value)) return '';
+  const clean = value.map(previewItemText).filter(Boolean);
   if (!clean.length) return '';
-  return clean.slice(0, 3).join(', ');
+  const visible = clean.slice(0, limit).join(', ');
+  const extra = clean.length > limit ? ` + ${clean.length - limit} more` : '';
+  return `${visible}${extra}`;
+}
+
+function previewFromSentenceArray(value, limit = 3) {
+  if (!Array.isArray(value)) return '';
+  const clean = value.map(previewItemText).filter(Boolean);
+  if (!clean.length) return '';
+  const visible = clean.slice(0, limit).map(sentence => {
+    const text = sentence.replace(/\s+/g, ' ').trim();
+    return /[.!?]$/.test(text) ? text : `${text}.`;
+  }).join(' ');
+  const extra = clean.length > limit ? ` + ${clean.length - limit} more` : '';
+  return `${visible}${extra}`;
+}
+
+function firstReadablePreviewFromObject(obj, depth = 0) {
+  if (!obj || typeof obj !== 'object' || depth > 2) return '';
+  const arrayKeys = ['words', 'wordList', 'selectedWords', 'sentences', 'sentenceList', 'items', 'responses', 'sections', 'targetWords', 'cards', 'customWords', 'wheelEntries'];
+  for (const key of arrayKeys) {
+    const preview = previewFromArray(obj[key]);
+    if (preview) return preview;
+  }
+  const textKeys = ['preview', 'passageTitle', 'studentName', 'title', 'name', 'activityName', 'deckTitle', 'customText'];
+  for (const key of textKeys) {
+    const text = cleanPreviewText(obj[key]);
+    if (text) return text;
+  }
+  for (const key of ['settings', 'data']) {
+    const nested = firstReadablePreviewFromObject(obj[key], depth + 1);
+    if (nested) return nested;
+  }
+  return '';
+}
+
+function getActivityPreview(activity) {
+  const type = getActivityType(activity);
+  const fallback = PREVIEW_FALLBACKS[type] || 'Saved activity';
+  if (!activity || typeof activity !== 'object') return fallback;
+
+  const directPreview = cleanPreviewText(activity.preview);
+  if (directPreview) return directPreview;
+
+  if (type === 'letterbox-lesson') {
+    const letterboxWords = previewFromArray(activity.words)
+      || previewFromArray(activity.targetWords)
+      || previewFromArray(activity.settings?.words)
+      || previewFromArray(activity.settings?.targetWords)
+      || firstReadablePreviewFromObject(activity.settings);
+    return letterboxWords || 'Letterbox lesson saved';
+  }
+
+  if (type === 'sentence-spinner') {
+    const sentencePreview = previewFromSentenceArray(activity.sentences) || previewFromSentenceArray(activity.words) || firstReadablePreviewFromObject(activity.settings);
+    return sentencePreview || fallback;
+  }
+
+  const arrayPreview = previewFromArray(activity.words)
+    || previewFromArray(activity.sentences)
+    || previewFromArray(activity.cards)
+    || firstReadablePreviewFromObject(activity.settings)
+    || firstReadablePreviewFromObject(activity);
+
+  return arrayPreview || fallback;
 }
 
 function closeAllCardMenus(exceptEl = null) {
@@ -1214,9 +1361,77 @@ function closeAllCardMenus(exceptEl = null) {
     if (menu !== exceptEl) {
       menu.classList.remove('open');
       const btn = menu.previousElementSibling;
-      if (btn && btn.classList.contains('card-menu-btn')) btn.classList.remove('open');
+      if (btn && btn.classList.contains('card-menu-btn')) {
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      if (btn && btn.classList.contains('collection-more-btn')) btn.classList.remove('open');
     }
   });
+}
+
+function showDashboardModal(options = {}) {
+  const previousFocus = document.activeElement;
+  const cancelable = options.cancelable !== false;
+  const overlay = document.createElement('div');
+  overlay.className = 'dashboard-modal-overlay';
+  const titleId = `dashboardModalTitle_${Date.now()}`;
+  const primaryClass = options.danger ? 'dashboard-modal-primary danger' : 'dashboard-modal-primary';
+  const inputHtml = options.input
+    ? `<input class="dashboard-modal-input" id="dashboardModalInput" type="text" value="${escHtml(options.value || '')}" placeholder="${escHtml(options.placeholder || '')}" autocomplete="off"/>`
+    : '';
+  overlay.innerHTML = `
+    <div class="dashboard-modal" role="dialog" aria-modal="true" aria-labelledby="${titleId}">
+      <div class="dashboard-modal-head">
+        <div class="dashboard-modal-title" id="${titleId}">${escHtml(options.title || 'Literacy Arcade')}</div>
+        ${options.message ? `<div class="dashboard-modal-text">${escHtml(options.message)}</div>` : ''}
+      </div>
+      <div class="dashboard-modal-body">${inputHtml}</div>
+      <div class="dashboard-modal-actions">
+        ${cancelable ? `<button class="dashboard-modal-secondary" type="button" data-action="cancel">${escHtml(options.cancelText || 'Cancel')}</button>` : ''}
+        <button class="${primaryClass}" type="button" data-action="primary">${escHtml(options.primaryText || 'OK')}</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(overlay);
+  const input = overlay.querySelector('#dashboardModalInput');
+  const primary = overlay.querySelector('[data-action="primary"]');
+  const cancel = overlay.querySelector('[data-action="cancel"]');
+
+  return new Promise(resolve => {
+    const close = result => {
+      document.removeEventListener('keydown', onKeydown);
+      overlay.remove();
+      if (previousFocus && typeof previousFocus.focus === 'function') previousFocus.focus();
+      resolve(result);
+    };
+    const onKeydown = event => {
+      if (event.key === 'Escape' && cancelable) close(null);
+      if (event.key === 'Enter' && input) {
+        event.preventDefault();
+        close(input.value);
+      }
+    };
+    overlay.addEventListener('click', event => {
+      if (event.target === overlay && cancelable) close(null);
+    });
+    cancel?.addEventListener('click', () => close(null));
+    primary.addEventListener('click', () => close(input ? input.value : true));
+    document.addEventListener('keydown', onKeydown);
+    setTimeout(() => (input || primary).focus(), 0);
+  });
+}
+
+function showTextInputModal(options = {}) {
+  return showDashboardModal({ ...options, input: true });
+}
+
+function showConfirmModal(options = {}) {
+  return showDashboardModal({ ...options, input: false });
+}
+
+function showInfoModal(options = {}) {
+  return showDashboardModal({ ...options, input: false, cancelable: false, primaryText: options.primaryText || 'OK' });
 }
 
 function buildCard(activity, tool) {
@@ -1232,7 +1447,7 @@ function buildCard(activity, tool) {
   const savedDate = formatDate(activity.updatedAt || activity.createdAt);
   const shareable = Boolean(ACTIVITY_TYPES[type]?.shareable);
   const isShared = Boolean(activity.shareEnabled && activity.shareId);
-  const preview = buildPreviewLine(activity, type);
+  const preview = getActivityPreview(activity);
   const canDuplicate = Boolean(ACTIVITY_TYPES[type]);
 
   card.innerHTML = `
@@ -1306,13 +1521,19 @@ function openActivity(id, activity) {
     window.location.href = activity.url;
     return;
   }
-  alert('This saved activity type is not connected yet.');
+  showInfoModal({
+    title: 'Activity Not Connected Yet',
+    message: 'This saved activity type is not connected yet.'
+  });
 }
 
 async function shareActivity(id, activity) {
   const type = getActivityType(activity);
   if (!ACTIVITY_TYPES[type]?.shareable) {
-    alert('Sharing is not available for this activity type.');
+    await showInfoModal({
+      title: 'Sharing Not Available',
+      message: 'Sharing is not available for this activity type.'
+    });
     return;
   }
 
@@ -1321,17 +1542,26 @@ async function shareActivity(id, activity) {
   if (type === 'sentence-spinner') {
     const sentenceList = sentences.length ? sentences : words;
     if (!sentenceList.length) {
-      alert('This activity does not have saved sentences to share.');
+      await showInfoModal({
+        title: 'Nothing to Share Yet',
+        message: 'This activity does not have saved sentences to share.'
+      });
       return;
     }
   } else if (type === 'vocabulary-flashcards') {
     const vocabularyCards = cleanVocabularyFlashcardSettings(activity.settings || {}, words).cards;
     if (!vocabularyCards.length) {
-      alert('This activity does not have saved vocabulary cards to share.');
+      await showInfoModal({
+        title: 'Nothing to Share Yet',
+        message: 'This activity does not have saved vocabulary cards to share.'
+      });
       return;
     }
   } else if (!words.length) {
-    alert('This activity does not have saved words to share.');
+    await showInfoModal({
+      title: 'Nothing to Share Yet',
+      message: 'This activity does not have saved words to share.'
+    });
     return;
   }
 
@@ -1358,7 +1588,10 @@ async function shareActivity(id, activity) {
     openShareModal(buildStudentLink(type, shareId), activity.title || makeDefaultTitle(activity));
   } catch (err) {
     console.error(err);
-    alert('Something went wrong sharing this activity. Please try again.');
+    await showInfoModal({
+      title: 'Share Failed',
+      message: 'Something went wrong sharing this activity. Please try again.'
+    });
   }
 }
 
@@ -1528,13 +1761,19 @@ function buildStudentLink(type, shareId) {
 }
 
 async function renameActivity(id, currentTitle) {
-  const newTitle = prompt(
-    'Rename this saved activity:\n\nUse a skill, group, or lesson name — not a student name.',
-    currentTitle || 'Untitled Activity'
-  );
+  const newTitle = await showTextInputModal({
+    title: 'Rename Saved Activity',
+    message: 'Use a skill, group, or lesson name — not a student name.',
+    value: currentTitle || 'Untitled Activity',
+    primaryText: 'Save Name',
+    cancelText: 'Cancel'
+  });
   if (newTitle === null) return;
   const clean = newTitle.trim();
-  if (!clean) { alert('Please enter a name.'); return; }
+  if (!clean) {
+    await showInfoModal({ title: 'Name Required', message: 'Please enter a name.' });
+    return;
+  }
 
   try {
     await updateDoc(doc(db, `users/${currentUser.uid}/activities`, id), {
@@ -1545,7 +1784,10 @@ async function renameActivity(id, currentTitle) {
     renderAll();
   } catch (err) {
     console.error(err);
-    alert('Something went wrong renaming this activity. Please try again.');
+    await showInfoModal({
+      title: 'Rename Failed',
+      message: 'Something went wrong renaming this activity. Please try again.'
+    });
   }
 }
 
@@ -1564,22 +1806,54 @@ async function duplicateActivity(id) {
     renderAll();
   } catch (err) {
     console.error(err);
-    alert('Something went wrong duplicating this activity. Please try again.');
+    await showInfoModal({
+      title: 'Duplicate Failed',
+      message: 'Something went wrong duplicating this activity. Please try again.'
+    });
   }
 }
 
 async function deleteActivity(id, title) {
   const activity = allActivities.find(a => a.id === id);
   const isShared = Boolean(activity && activity.shareEnabled && activity.shareId);
-  const shareWarning = isShared ? ' Students with the shared link will still be able to open this activity.' : '';
-  if (!confirm(`Delete "${title || 'this activity'}"? This can't be undone.${shareWarning}`)) return;
+  const shareWarning = isShared
+    ? ' The shared student link will also be revoked and will stop working.'
+    : '';
+  const confirmed = await showConfirmModal({
+    title: 'Delete Saved Activity?',
+    message: `This removes the saved activity from your dashboard.${shareWarning}`,
+    primaryText: 'Delete Activity',
+    cancelText: 'Cancel',
+    danger: true
+  });
+  if (!confirmed) return;
+
+  let shareRevokeFailed = false;
+  if (isShared) {
+    try {
+      await deleteDoc(doc(db, 'sharedActivities', activity.shareId));
+    } catch (err) {
+      console.error(err);
+      shareRevokeFailed = true;
+    }
+  }
+
   try {
     await deleteDoc(doc(db, `users/${currentUser.uid}/activities`, id));
     allActivities = allActivities.filter(a => a.id !== id);
     renderAll();
+    if (isShared && shareRevokeFailed) {
+      await showInfoModal({
+        title: 'Shared Link Notice',
+        message: 'This saved activity was deleted, but the shared link may still work.'
+      });
+    }
   } catch (err) {
     console.error(err);
-    alert('Something went wrong deleting this activity. Please try again.');
+    await showInfoModal({
+      title: 'Delete Failed',
+      message: 'Something went wrong deleting this activity. Please try again.'
+    });
   }
 }
 
@@ -1664,7 +1938,7 @@ function renderCollectionsHome() {
     </section>
     <div class="stats-strip" style="display:flex;margin-bottom:10px">
       <div class="stat-pill"><strong>${teachingCollections.length}</strong> collection${teachingCollections.length===1?'':'s'}</div>
-      <div class="stat-pill"><strong>${totalInCollections}</strong> activity placement${totalInCollections===1?'':'s'}</div>
+      <div class="stat-pill"><strong>${totalInCollections}</strong> activit${totalInCollections===1?'y':'ies'} added</div>
     </div>
     <div id="collectionGridMount"></div>`;
   document.getElementById('collectionsIntroNew')?.addEventListener('click', createCollection);
@@ -1690,52 +1964,84 @@ function buildCollectionCard(col) {
       <span class="collection-folder-icon"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
       <div style="min-width:0;flex:1">
         <div class="collection-card-title" title="${escHtml(col.name)}">${escHtml(col.name)}</div>
-        <div class="collection-card-sub">${sectionCount} section${sectionCount===1?'':'s'} · ${activityCount} activity placement${activityCount===1?'':'s'}</div>
+        <div class="collection-card-sub">${sectionCount} section${sectionCount===1?'':'s'} · ${activityCount} activit${activityCount===1?'y':'ies'} added</div>
       </div>
     </div>
-    <button class="open-btn" type="button">Open Collection</button>
     <div class="collection-actions">
-      <button class="duplicate-btn" type="button">Duplicate</button>
-      <button class="color-btn" type="button">Change Color</button>
-      <button class="rename-btn" type="button">Rename</button>
-      <button class="delete-btn" type="button">Delete</button>
+      <button class="open-btn" type="button">Open Collection</button>
+      <div class="collection-more-wrap">
+        <button class="collection-more-btn card-menu-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="More collection actions">•••</button>
+        <div class="card-menu collection-more-menu" role="menu">
+          <button class="rename-btn" type="button" role="menuitem">Rename</button>
+          <button class="duplicate-btn" type="button" role="menuitem">Duplicate</button>
+          <button class="color-btn" type="button" role="menuitem">Change Color</button>
+          <button class="delete-btn menu-delete" type="button" role="menuitem">Delete</button>
+        </div>
+      </div>
     </div>`;
   card.querySelector('.open-btn').addEventListener('click', () => { activeCollectionId = col.id; renderAll(); });
-  card.querySelector('.color-btn').addEventListener('click', () => changeCollectionColor(col.id));
-  card.querySelector('.duplicate-btn').addEventListener('click', () => duplicateCollection(col.id));
-  card.querySelector('.rename-btn').addEventListener('click', () => renameCollection(col.id));
-  card.querySelector('.delete-btn').addEventListener('click', () => deleteCollection(col.id));
+  const menuBtn = card.querySelector('.collection-more-btn');
+  const menu = card.querySelector('.collection-more-menu');
+  menuBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const willOpen = !menu.classList.contains('open');
+    closeAllCardMenus();
+    menu.classList.toggle('open', willOpen);
+    menuBtn.classList.toggle('open', willOpen);
+    menuBtn.setAttribute('aria-expanded', String(willOpen));
+  });
+  card.querySelector('.color-btn').addEventListener('click', () => { closeAllCardMenus(); changeCollectionColor(col.id); });
+  card.querySelector('.duplicate-btn').addEventListener('click', () => { closeAllCardMenus(); duplicateCollection(col.id); });
+  card.querySelector('.rename-btn').addEventListener('click', () => { closeAllCardMenus(); renameCollection(col.id); });
+  card.querySelector('.delete-btn').addEventListener('click', () => { closeAllCardMenus(); deleteCollection(col.id); });
   return card;
 }
 
 function renderCollectionDetail(col) {
   const container = document.getElementById('activitiesContainer');
   const activityCount = getCollectionActivityCount(col);
+  const sectionCount = (col.sections || []).length;
   container.innerHTML = `
     <section class="collection-detail-head" style="--collection-color:${escHtml(col.color || fallbackCollectionColor(col.id))}">
-      <div>
+      <div class="collection-detail-main">
         <button class="collection-breadcrumb" type="button" id="backToCollections">← Teaching Collections</button>
         <h2 class="collection-detail-title"><span class="collection-title-dot" aria-hidden="true"></span>${escHtml(col.name)}</h2>
-        <p class="collection-detail-sub">Build a practice playlist for this group. Use sections for weeks, lessons, game types, skills, or anything that matches your teaching plan.</p>
-        <p class="collection-drag-hint">Tip: drag activity cards to move them between sections.</p>
+        <p class="collection-detail-sub">Build a practice playlist with sections for groups, skills, weeks, or lessons.</p>
+        <div class="collection-detail-meta">${sectionCount} section${sectionCount===1?'':'s'} · ${activityCount} activit${activityCount===1?'y':'ies'} added</div>
       </div>
       <div class="collection-detail-actions">
-        <button class="collection-secondary-btn" type="button" id="addSectionBtn">+ Add Section</button>
         <button class="collection-primary-btn" type="button" id="addActivitiesBtn">+ Add Activities</button>
-        <button class="collection-secondary-btn subtle-action" type="button" id="changeCollectionColorBtn">Change Color</button>
-        <button class="collection-secondary-btn subtle-action" type="button" id="duplicateCollectionBtn">Duplicate</button>
+        <button class="collection-secondary-btn" type="button" id="addSectionBtn">+ Add Section</button>
+        <div class="collection-detail-more-wrap collection-more-wrap">
+          <button class="collection-more-btn card-menu-btn" type="button" id="collectionDetailMoreBtn" aria-haspopup="true" aria-expanded="false" aria-label="More collection actions">•••</button>
+          <div class="card-menu collection-detail-more-menu" role="menu">
+            <button type="button" id="changeCollectionColorBtn" role="menuitem">Change Color</button>
+            <button type="button" id="duplicateCollectionBtn" role="menuitem">Duplicate</button>
+            <button type="button" id="renameCollectionBtn" role="menuitem">Rename Collection</button>
+            <button type="button" id="deleteCollectionBtn" class="menu-delete" role="menuitem">Delete Collection</button>
+          </div>
+        </div>
       </div>
     </section>
-    <div class="stats-strip" style="display:flex;margin-bottom:14px">
-      <div class="stat-pill"><strong>${(col.sections || []).length}</strong> section${(col.sections || []).length===1?'':'s'}</div>
-      <div class="stat-pill"><strong>${activityCount}</strong> activity placement${activityCount===1?'':'s'}</div>
-    </div>
+    ${sectionCount >= 2 ? '<p class="collection-drag-hint">Tip: Drag activity cards between sections.</p>' : ''}
     <div class="section-stack" id="sectionStack"></div>`;
   document.getElementById('backToCollections').addEventListener('click', () => { activeCollectionId = null; renderAll(); });
-  document.getElementById('changeCollectionColorBtn').addEventListener('click', () => changeCollectionColor(col.id));
-  document.getElementById('duplicateCollectionBtn').addEventListener('click', () => duplicateCollection(col.id));
   document.getElementById('addSectionBtn').addEventListener('click', () => createSection(col.id));
   document.getElementById('addActivitiesBtn').addEventListener('click', () => openActivityPicker({ collectionId: col.id }));
+  const menuBtn = document.getElementById('collectionDetailMoreBtn');
+  const menu = document.querySelector('.collection-detail-more-menu');
+  menuBtn.addEventListener('click', event => {
+    event.stopPropagation();
+    const willOpen = !menu.classList.contains('open');
+    closeAllCardMenus();
+    menu.classList.toggle('open', willOpen);
+    menuBtn.classList.toggle('open', willOpen);
+    menuBtn.setAttribute('aria-expanded', String(willOpen));
+  });
+  document.getElementById('changeCollectionColorBtn').addEventListener('click', () => { closeAllCardMenus(); changeCollectionColor(col.id); });
+  document.getElementById('duplicateCollectionBtn').addEventListener('click', () => { closeAllCardMenus(); duplicateCollection(col.id); });
+  document.getElementById('renameCollectionBtn').addEventListener('click', () => { closeAllCardMenus(); renameCollection(col.id); });
+  document.getElementById('deleteCollectionBtn').addEventListener('click', () => { closeAllCardMenus(); deleteCollection(col.id); });
 
   const stack = document.getElementById('sectionStack');
   (col.sections || []).forEach(section => stack.appendChild(buildSection(col, section)));
@@ -1754,14 +2060,21 @@ function buildSection(col, section) {
     <div class="section-head">
       <span class="section-drag-grip" title="Drag section to reorder" aria-hidden="true">⋮⋮</span>
       <span class="section-color-dot" aria-hidden="true"></span>
-      <span class="section-title">${escHtml(section.name)}</span>
-      <span class="section-count">${ids.length}</span>
+      <span class="section-title-wrap">
+        <span class="section-title" title="${escHtml(section.name)}">${escHtml(section.name)}</span>
+        <span class="section-count">${ids.length} activit${ids.length===1?'y':'ies'}</span>
+      </span>
       <span class="section-actions">
-        <button class="section-mini-btn section-toggle-btn toggle-section" type="button">${isCollapsed ? 'Show' : 'Hide'}</button>
-        <button class="section-mini-btn add-to-section" type="button">+ Add here</button>
-        <button class="section-mini-btn color-section section-color-btn" type="button">Section Color</button>
-        <button class="section-mini-btn rename-section" type="button">Rename</button>
-        <button class="section-mini-btn delete-section" type="button">Delete</button>
+        <button class="section-mini-btn add-to-section" type="button">Add Activity</button>
+        <span class="section-more-wrap">
+          <button class="section-mini-btn section-toggle-btn card-menu-btn section-more-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="More section actions">•••</button>
+          <span class="card-menu section-more-menu" role="menu">
+            <button class="toggle-section" type="button" role="menuitem">${isCollapsed ? 'Show Section' : 'Collapse Section'}</button>
+            <button class="color-section" type="button" role="menuitem">Section Color</button>
+            <button class="rename-section" type="button" role="menuitem">Rename Section</button>
+            <button class="delete-section menu-delete" type="button" role="menuitem">Delete Section</button>
+          </span>
+        </span>
       </span>
     </div>
     <div class="section-list" data-section-id="${section.id}"></div>`;
@@ -1801,11 +2114,21 @@ function buildSection(col, section) {
     const after = e.clientY > rect.top + rect.height / 2;
     await moveSectionInCollection(col.id, draggedSection.sectionId, section.id, after);
   });
-  el.querySelector('.toggle-section').addEventListener('click', () => toggleSectionCollapsed(col.id, section.id));
   el.querySelector('.add-to-section').addEventListener('click', () => openActivityPicker({ collectionId: col.id, sectionId: section.id }));
-  el.querySelector('.color-section').addEventListener('click', () => changeSectionColor(col.id, section.id));
-  el.querySelector('.rename-section').addEventListener('click', () => renameSection(col.id, section.id));
-  el.querySelector('.delete-section').addEventListener('click', () => deleteSection(col.id, section.id));
+  const sectionMenuBtn = el.querySelector('.section-more-btn');
+  const sectionMenu = el.querySelector('.section-more-menu');
+  sectionMenuBtn.addEventListener('click', event => {
+    event.stopPropagation();
+    const willOpen = !sectionMenu.classList.contains('open');
+    closeAllCardMenus();
+    sectionMenu.classList.toggle('open', willOpen);
+    sectionMenuBtn.classList.toggle('open', willOpen);
+    sectionMenuBtn.setAttribute('aria-expanded', String(willOpen));
+  });
+  el.querySelector('.toggle-section').addEventListener('click', () => { closeAllCardMenus(); toggleSectionCollapsed(col.id, section.id); });
+  el.querySelector('.color-section').addEventListener('click', () => { closeAllCardMenus(); changeSectionColor(col.id, section.id); });
+  el.querySelector('.rename-section').addEventListener('click', () => { closeAllCardMenus(); renameSection(col.id, section.id); });
+  el.querySelector('.delete-section').addEventListener('click', () => { closeAllCardMenus(); deleteSection(col.id, section.id); });
   const list = el.querySelector('.section-list');
   if (!ids.length) {
     list.innerHTML = `<div class="collection-empty">No activities in this section yet. Add activities or drag them here.</div>`;
@@ -1831,6 +2154,9 @@ function buildCollectionActivityCard(col, section, activity) {
   const type = getActivityType(activity);
   const tool = ACTIVITY_TYPES[type] || { label: formatToolKey(type), icon: '', colorClass: 'icon-teal', shareable: false };
   const title = activity.title || makeDefaultTitle(activity);
+  const preview = getActivityPreview(activity);
+  const isShared = Boolean(activity.shareEnabled && activity.shareId);
+  const shareable = Boolean(ACTIVITY_TYPES[type]?.shareable);
   const card = document.createElement('div');
   card.className = 'collection-activity-card';
   card.draggable = true;
@@ -1841,13 +2167,20 @@ function buildCollectionActivityCard(col, section, activity) {
       <span class="drag-grip" title="Drag to move" aria-hidden="true">⋮⋮</span>
       ${renderActivityIcon(tool, 'sm')}
       <div style="min-width:0;flex:1">
-        <div class="collection-activity-title" title="${escHtml(title)}">${escHtml(title)}</div>
+        <div class="collection-activity-title" title="${escHtml(title)}">${escHtml(title)} ${isShared ? '<span class="shared-badge">Shared</span>' : ''}</div>
         <div class="collection-activity-meta">${escHtml(tool.label)}</div>
+        <div class="card-preview" title="${escHtml(preview)}">${escHtml(preview)}</div>
       </div>
     </div>
-    <div class="collection-card-buttons">
+    <div class="collection-card-buttons ${shareable ? 'has-share' : 'no-share'}">
       <button type="button" class="open-collection-activity">Open</button>
-      <button type="button" class="remove-collection-activity">Remove</button>
+      ${shareable ? '<button type="button" class="share-collection-activity">Share</button>' : ''}
+      <div class="collection-activity-more-wrap">
+        <button class="collection-activity-more-btn card-menu-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="More activity actions">•••</button>
+        <div class="card-menu collection-activity-more-menu" role="menu">
+          <button type="button" class="remove-collection-activity menu-delete" role="menuitem">Remove from Collection</button>
+        </div>
+      </div>
     </div>`;
   card.addEventListener('dragstart', e => {
     draggedActivity = { collectionId: col.id, fromSectionId: section.id, activityId: activity.id };
@@ -1861,7 +2194,21 @@ function buildCollectionActivityCard(col, section, activity) {
     document.querySelectorAll('.collection-section').forEach(sec => sec.classList.remove('drag-over'));
   });
   card.querySelector('.open-collection-activity').addEventListener('click', () => openActivity(activity.id, activity));
-  card.querySelector('.remove-collection-activity').addEventListener('click', () => removeActivityFromSection(col.id, section.id, activity.id));
+  card.querySelector('.share-collection-activity')?.addEventListener('click', () => shareActivity(activity.id, activity));
+  const menuBtn = card.querySelector('.collection-activity-more-btn');
+  const menu = card.querySelector('.collection-activity-more-menu');
+  menuBtn.addEventListener('click', event => {
+    event.stopPropagation();
+    const willOpen = !menu.classList.contains('open');
+    closeAllCardMenus();
+    menu.classList.toggle('open', willOpen);
+    menuBtn.classList.toggle('open', willOpen);
+    menuBtn.setAttribute('aria-expanded', String(willOpen));
+  });
+  card.querySelector('.remove-collection-activity').addEventListener('click', () => {
+    closeAllCardMenus();
+    removeActivityFromSection(col.id, section.id, activity.id);
+  });
   return card;
 }
 
@@ -1948,12 +2295,26 @@ async function duplicateCollection(collectionId) {
     suggested = `${col.name} Copy ${counter}`;
     counter += 1;
   }
-  const name = prompt('Name the duplicated collection:', suggested);
+  const name = await showTextInputModal({
+    title: 'Duplicate Collection',
+    message: 'Choose a name for this copy. Your original collection will stay unchanged.',
+    value: suggested,
+    primaryText: 'Duplicate Collection',
+    cancelText: 'Cancel'
+  });
   if (name === null) return;
   const clean = name.trim();
-  if (!clean) { alert('Please enter a collection name.'); return; }
+  if (!clean) {
+    await showInfoModal({ title: 'Name Required', message: 'Please enter a collection name.' });
+    return;
+  }
   if (collectionNameExists(clean)) {
-    const keepGoing = confirm(`You already have a collection named "${clean}". Duplicate with this name anyway?`);
+    const keepGoing = await showConfirmModal({
+      title: 'Use Duplicate Name?',
+      message: `You already have a collection named "${clean}". Duplicate with this name anyway?`,
+      primaryText: 'Use This Name',
+      cancelText: 'Cancel'
+    });
     if (!keepGoing) return;
   }
   const newSections = (col.sections || []).map(section => ({
@@ -1978,7 +2339,10 @@ async function duplicateCollection(collectionId) {
     renderAll();
   } catch (err) {
     console.error(err);
-    alert('Something went wrong duplicating this collection. Please try again.');
+    await showInfoModal({
+      title: 'Duplicate Failed',
+      message: 'Something went wrong duplicating this collection. Please try again.'
+    });
   }
 }
 
@@ -1993,12 +2357,27 @@ async function changeCollectionColor(collectionId) {
 }
 
 async function createCollection() {
-  const name = prompt('Name this teaching collection:', 'Group A');
+  const name = await showTextInputModal({
+    title: 'New Teaching Collection',
+    message: 'Use collections for groups, skills, weekly plans, or student practice sets.',
+    placeholder: 'Example: Week 1 Short Vowels',
+    value: '',
+    primaryText: 'Create Collection',
+    cancelText: 'Cancel'
+  });
   if (name === null) return;
   const clean = name.trim();
-  if (!clean) { alert('Please enter a collection name.'); return; }
+  if (!clean) {
+    await showInfoModal({ title: 'Name Required', message: 'Please enter a collection name.' });
+    return;
+  }
   if (collectionNameExists(clean)) {
-    const keepGoing = confirm(`You already have a collection named "${clean}". Create another one with the same name anyway?`);
+    const keepGoing = await showConfirmModal({
+      title: 'Use Duplicate Name?',
+      message: `You already have a collection named "${clean}". Create another one with the same name anyway?`,
+      primaryText: 'Use This Name',
+      cancelText: 'Cancel'
+    });
     if (!keepGoing) return;
   }
   const defaultColor = COLLECTION_COLORS[teachingCollections.length % COLLECTION_COLORS.length];
@@ -2020,19 +2399,36 @@ async function createCollection() {
     renderAll();
   } catch (err) {
     console.error(err);
-    alert('Something went wrong creating this collection. Please try again.');
+    await showInfoModal({
+      title: 'Create Failed',
+      message: 'Something went wrong creating this collection. Please try again.'
+    });
   }
 }
 
 async function renameCollection(collectionId) {
   const col = teachingCollections.find(c => c.id === collectionId);
   if (!col) return;
-  const name = prompt('Rename this collection:', col.name);
+  const name = await showTextInputModal({
+    title: 'Rename Collection',
+    message: 'Update the name teachers will see on this collection.',
+    value: col.name,
+    primaryText: 'Save Name',
+    cancelText: 'Cancel'
+  });
   if (name === null) return;
   const clean = name.trim();
-  if (!clean) { alert('Please enter a collection name.'); return; }
+  if (!clean) {
+    await showInfoModal({ title: 'Name Required', message: 'Please enter a collection name.' });
+    return;
+  }
   if (collectionNameExists(clean, collectionId)) {
-    const keepGoing = confirm(`You already have a collection named "${clean}". Use this name anyway?`);
+    const keepGoing = await showConfirmModal({
+      title: 'Use Duplicate Name?',
+      message: `You already have a collection named "${clean}". Use this name anyway?`,
+      primaryText: 'Use This Name',
+      cancelText: 'Cancel'
+    });
     if (!keepGoing) return;
   }
   col.name = clean;
@@ -2043,7 +2439,14 @@ async function renameCollection(collectionId) {
 async function deleteCollection(collectionId) {
   const col = teachingCollections.find(c => c.id === collectionId);
   if (!col) return;
-  if (!confirm(`Delete "${col.name}"? The activities will stay in My Activities.`)) return;
+  const confirmed = await showConfirmModal({
+    title: 'Delete Collection?',
+    message: 'This removes the collection only. Your saved activities will stay in My Activities.',
+    primaryText: 'Delete Collection',
+    cancelText: 'Cancel',
+    danger: true
+  });
+  if (!confirmed) return;
   try {
     await deleteDoc(doc(db, `users/${currentUser.uid}/collections`, collectionId));
     teachingCollections = teachingCollections.filter(c => c.id !== collectionId);
@@ -2051,17 +2454,30 @@ async function deleteCollection(collectionId) {
     renderAll();
   } catch (err) {
     console.error(err);
-    alert('Could not delete the collection.');
+    await showInfoModal({
+      title: 'Delete Failed',
+      message: 'Could not delete the collection.'
+    });
   }
 }
 
 async function createSection(collectionId) {
   const col = teachingCollections.find(c => c.id === collectionId);
   if (!col) return;
-  const name = prompt('Name this section:', 'Week 1');
+  const name = await showTextInputModal({
+    title: 'New Section',
+    message: 'Sections can organize activities by lesson, week, skill, or student group.',
+    placeholder: 'Example: Lesson 2',
+    value: '',
+    primaryText: 'Create Section',
+    cancelText: 'Cancel'
+  });
   if (name === null) return;
   const clean = name.trim();
-  if (!clean) { alert('Please enter a section name.'); return; }
+  if (!clean) {
+    await showInfoModal({ title: 'Name Required', message: 'Please enter a section name.' });
+    return;
+  }
   const chosenColor = await chooseCollectionColor(col.color || fallbackCollectionColor(col.id), { title: 'Choose section color', subtitle: 'Choose a color for this section.' });
   if (!chosenColor) return;
   col.sections.push({ id: makeId('section'), name: clean, color: chosenColor, activityIds: [] });
@@ -2073,10 +2489,19 @@ async function renameSection(collectionId, sectionId) {
   const col = teachingCollections.find(c => c.id === collectionId);
   const section = col?.sections.find(s => s.id === sectionId);
   if (!section) return;
-  const name = prompt('Rename this section:', section.name);
+  const name = await showTextInputModal({
+    title: 'Rename Section',
+    message: 'Update this section name.',
+    value: section.name,
+    primaryText: 'Save Name',
+    cancelText: 'Cancel'
+  });
   if (name === null) return;
   const clean = name.trim();
-  if (!clean) { alert('Please enter a section name.'); return; }
+  if (!clean) {
+    await showInfoModal({ title: 'Name Required', message: 'Please enter a section name.' });
+    return;
+  }
   section.name = clean;
   await saveCollection(col);
   renderAll();
@@ -2086,8 +2511,21 @@ async function deleteSection(collectionId, sectionId) {
   const col = teachingCollections.find(c => c.id === collectionId);
   const section = col?.sections.find(s => s.id === sectionId);
   if (!col || !section) return;
-  if ((col.sections || []).length <= 1) { alert('A collection needs at least one section.'); return; }
-  if (!confirm(`Delete the "${section.name}" section? Activities will stay in My Activities.`)) return;
+  if ((col.sections || []).length <= 1) {
+    await showInfoModal({
+      title: 'Section Required',
+      message: 'A collection needs at least one section.'
+    });
+    return;
+  }
+  const confirmed = await showConfirmModal({
+    title: 'Delete Section?',
+    message: 'Activities in this section will be removed from the section, but the original saved activities will stay in My Activities.',
+    primaryText: 'Delete Section',
+    cancelText: 'Cancel',
+    danger: true
+  });
+  if (!confirmed) return;
   const target = col.sections.find(s => s.id !== sectionId);
   if (target) target.activityIds = [...new Set([...(target.activityIds || []), ...(section.activityIds || [])])];
   col.sections = col.sections.filter(s => s.id !== sectionId);
@@ -2096,6 +2534,13 @@ async function deleteSection(collectionId, sectionId) {
 }
 
 async function removeActivityFromSection(collectionId, sectionId, activityId) {
+  const confirmed = await showConfirmModal({
+    title: 'Remove from this collection?',
+    message: 'Your saved activity will stay in All Activities.',
+    primaryText: 'Remove',
+    cancelText: 'Cancel'
+  });
+  if (!confirmed) return;
   const col = teachingCollections.find(c => c.id === collectionId);
   const section = col?.sections.find(s => s.id === sectionId);
   if (!section) return;
@@ -2149,9 +2594,14 @@ async function saveCollection(col) {
   });
 }
 
-function openActivityPicker(context = {}) {
+async function openActivityPicker(context = {}) {
   if (!teachingCollections.length) {
-    const makeOne = confirm('Create a collection first?');
+    const makeOne = await showConfirmModal({
+      title: 'Create a Collection First?',
+      message: 'Teaching Collections hold saved activities. Create one now, then add activities to it.',
+      primaryText: 'Create Collection',
+      cancelText: 'Cancel'
+    });
     if (makeOne) createCollection();
     return;
   }
@@ -2183,7 +2633,11 @@ function renderActivityPicker() {
   const search = document.getElementById('activityPickerSearch').value.trim().toLowerCase();
   let list = [...allActivities];
   if (search) {
-    list = list.filter(a => (a.title || makeDefaultTitle(a)).toLowerCase().includes(search) || formatToolKey(getActivityType(a)).toLowerCase().includes(search));
+    list = list.filter(a =>
+      (a.title || makeDefaultTitle(a)).toLowerCase().includes(search) ||
+      formatToolKey(getActivityType(a)).toLowerCase().includes(search) ||
+      getActivityPreview(a).toLowerCase().includes(search)
+    );
   }
   const pickerList = document.getElementById('activityPickerList');
   if (!list.length) {
@@ -2192,12 +2646,20 @@ function renderActivityPicker() {
   }
   pickerList.innerHTML = list.map(activity => {
     const type = getActivityType(activity);
-    const tool = ACTIVITY_TYPES[type] || { label: formatToolKey(type) };
+    const tool = ACTIVITY_TYPES[type] || { label: formatToolKey(type), icon: '', colorClass: 'icon-teal' };
     const title = activity.title || makeDefaultTitle(activity);
     const checked = activityPickerContext.preselectedActivityId === activity.id ? 'checked' : '';
+    const preview = getActivityPreview(activity);
+    const sharedBadge = activity.shareEnabled && activity.shareId ? '<span class="shared-badge">Shared</span>' : '';
     return `<label class="picker-item">
       <input type="checkbox" value="${activity.id}" ${checked}/>
-      <span><span class="picker-item-title">${escHtml(title)}</span><span class="picker-item-meta">${escHtml(tool.label)}</span></span>
+      <span class="picker-item-icon">${renderActivityIcon(tool, 'sm')}</span>
+      <span class="picker-item-main">
+        <span class="picker-item-title">${escHtml(title)} ${sharedBadge}</span>
+        <span class="picker-item-meta">${escHtml(tool.label)}</span>
+        <span class="picker-item-preview" title="${escHtml(preview)}">${escHtml(preview)}</span>
+      </span>
+      <span class="picker-add-pill">Add</span>
     </label>`;
   }).join('');
 }
@@ -2209,7 +2671,13 @@ async function addPickedActivities() {
   if (!col) return;
   const section = col.sections.find(s => s.id === sectionId) || col.sections[0];
   const picked = [...document.querySelectorAll('#activityPickerList input[type="checkbox"]:checked')].map(input => input.value);
-  if (!picked.length) { alert('Choose at least one activity to add.'); return; }
+  if (!picked.length) {
+    await showInfoModal({
+      title: 'Choose an Activity',
+      message: 'Choose at least one activity to add.'
+    });
+    return;
+  }
   section.activityIds = [...new Set([...(section.activityIds || []), ...picked])];
   await saveCollection(col);
   closeActivityPicker();
@@ -2227,7 +2695,7 @@ function closeActivityPicker() {
 /* ── Controls ────────────────────────────────────────────────────────────── */
 
 document.addEventListener('click', e => {
-  if (!e.target.closest('.card-menu-wrap')) closeAllCardMenus();
+  if (!e.target.closest('.card-menu-wrap, .collection-more-wrap, .section-more-wrap, .collection-activity-more-wrap')) closeAllCardMenus();
 });
 
 document.getElementById('viewSwitch').addEventListener('click', e => {
