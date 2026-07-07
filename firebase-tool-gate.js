@@ -1,9 +1,13 @@
 import { auth, db } from './firebase-config.js';
 import {
-  GoogleAuthProvider,
   onAuthStateChanged,
-  signInWithPopup,
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import {
+  getEmailLinkErrorMessage,
+  rememberPostLoginDestination,
+  sendEmailMagicLink,
+  signInWithGoogleProvider,
+} from './literacy-arcade-auth.js';
 import {
   addDoc,
   collection,
@@ -16,7 +20,6 @@ import {
 const body = document.body;
 const toolId = body.dataset.toolId || location.pathname.split('/').pop().replace(/\.html$/i, '') || 'literacy-tool';
 const toolName = body.dataset.toolName || 'Literacy Arcade Tool';
-const provider = new GoogleAuthProvider();
 
 let currentUser = null;
 let authorizedUid = null;
@@ -47,16 +50,27 @@ function renderGate({ error = '' } = {}) {
       <button class="la-auth-gate-close" id="laAuthGateClose" type="button" aria-label="Return to game setup">×</button>
       <img class="la-auth-gate-mark" src="./apple-touch-icon.png" alt="Literacy Arcade">
       <h1 id="laAuthGateTitle">Create a free teacher account to use this fluency tool.</h1>
-      <p class="la-auth-gate-copy">Sign in with Google to open ${toolName}. Your account helps keep teacher tools and usage organized in one place.</p>
-      <button class="la-auth-google-btn" id="laAuthGoogleButton" type="button">
-        ${googleMark()}
-        <span>Sign in with Google</span>
-      </button>
+      <p class="la-auth-gate-copy">Sign in to open ${toolName}. Your account helps keep teacher tools and usage organized in one place.</p>
+      <div class="la-auth-gate-actions">
+        <button class="la-auth-provider-btn la-auth-google-btn" id="laAuthGoogleButton" type="button">
+          ${googleMark()}
+          <span>Continue with Google</span>
+        </button>
+        <div class="la-auth-email-panel">
+          <label class="la-auth-email-label" for="laAuthEmailInput">Email address</label>
+          <input class="la-auth-email-input" id="laAuthEmailInput" type="email" autocomplete="email" placeholder="teacher@example.com">
+          <p class="la-auth-email-helper">We’ll email you a secure sign-in link. No password needed.</p>
+          <button class="la-auth-provider-btn la-auth-email-btn" id="laAuthEmailButton" type="button">Continue with email</button>
+        </div>
+      </div>
+      <div class="la-auth-gate-sent" id="laAuthGateSent" aria-live="polite"></div>
       <div class="la-auth-gate-error${error ? ' is-visible' : ''}" id="laAuthGateError">${error}</div>
+      <p class="la-auth-gate-reminder">Saved activities are tied to the account you used when you created them. If your dashboard looks empty, try signing in with the same Google or email account you used before.</p>
       <p class="la-auth-gate-note">Free to use. Student accounts are not required.</p>
     </section>`;
 
-  gateElement.querySelector('#laAuthGoogleButton').addEventListener('click', signIn);
+  gateElement.querySelector('#laAuthGoogleButton').addEventListener('click', signInWithGoogle);
+  gateElement.querySelector('#laAuthEmailButton').addEventListener('click', sendGateEmailLink);
   gateElement.querySelector('#laAuthGateClose').addEventListener('click', () => closeGate(null));
   gateElement.querySelector('#laAuthGoogleButton').focus();
 }
@@ -154,17 +168,51 @@ async function requireSignIn() {
 
 window.LiteracyArcadeToolAccess = { requireSignIn };
 
-async function signIn() {
+function currentReturnTo() {
+  return `${location.pathname.replace(/^\//, '')}${location.search}${location.hash}` || `${toolId}.html`;
+}
+
+async function signInWithGoogle() {
   const button = gateElement?.querySelector('#laAuthGoogleButton');
   const label = button?.querySelector('span');
   if (button) button.disabled = true;
   if (label) label.textContent = 'Signing in…';
   try {
-    const result = await signInWithPopup(auth, provider);
-    await authorize(result.user);
+    rememberPostLoginDestination(currentReturnTo());
+    const user = await signInWithGoogleProvider();
+    await authorize(user);
   } catch (error) {
     console.error(error);
-    renderGate({ error: 'Google sign-in did not work. Check Firebase authorized domains and try again.' });
+    renderGate({ error: getEmailLinkErrorMessage(error) });
+  }
+}
+
+async function sendGateEmailLink() {
+  const button = gateElement?.querySelector('#laAuthEmailButton');
+  const input = gateElement?.querySelector('#laAuthEmailInput');
+  const sent = gateElement?.querySelector('#laAuthGateSent');
+  const errorBox = gateElement?.querySelector('#laAuthGateError');
+  if (errorBox) errorBox.classList.remove('is-visible');
+  if (sent) sent.classList.remove('is-visible');
+  if (button) {
+    button.disabled = true;
+    button.textContent = 'Sending link…';
+  }
+  try {
+    const email = await sendEmailMagicLink(input?.value || '', { returnTo: currentReturnTo() });
+    if (sent) {
+      sent.textContent = `Check ${email} for your secure Literacy Arcade sign-in link.`;
+      sent.classList.add('is-visible');
+    }
+  } catch (error) {
+    console.error(error);
+    renderGate({ error: getEmailLinkErrorMessage(error) });
+  } finally {
+    const nextButton = gateElement?.querySelector('#laAuthEmailButton');
+    if (nextButton) {
+      nextButton.disabled = false;
+      nextButton.textContent = 'Continue with email';
+    }
   }
 }
 

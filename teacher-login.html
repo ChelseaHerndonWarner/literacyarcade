@@ -11,13 +11,13 @@
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://literacyarcade.com/teacher-login.html" />
 <meta property="og:title" content="Teacher/Parent Login | Literacy Arcade" />
-<meta property="og:description" content="Sign in with Google to save Literacy Arcade activities, organize word lists, and return to games or lessons later." />
+<meta property="og:description" content="Sign in to save Literacy Arcade activities, organize word lists, and return to games or lessons later." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://literacyarcade.com/teacher-login.html" />
 <meta property="og:site_name" content="Literacy Arcade" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Teacher/Parent Login | Literacy Arcade" />
-<meta name="twitter:description" content="Sign in with Google to save Literacy Arcade activities and word lists." />
+<meta name="twitter:description" content="Sign in to save Literacy Arcade activities and word lists." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -38,11 +38,23 @@ main{flex:1;display:grid;place-items:center;padding:36px 18px}
 .badge{display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--teal);background:var(--teal-light);color:var(--teal-dark);border-radius:999px;padding:5px 14px;font-family:var(--font-head);font-size:11px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:14px}
 h1{font-family:var(--font-head);font-size:36px;line-height:1.05;margin:0 0 10px;color:var(--navy)}
 p{color:var(--navy-soft);line-height:1.55;font-size:15px;margin:0 0 24px}
-.google-btn{width:100%;min-height:54px;border:1.5px solid var(--border);border-radius:14px;background:#fff;color:var(--navy);font-family:var(--font-head);font-size:17px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 4px 0 rgba(27,42,74,.08)}
-.google-btn:hover{background:#F7FAFA;border-color:rgba(8,122,112,.35)}
+.auth-options{display:flex;flex-direction:column;gap:12px;text-align:left}
+.auth-btn{width:100%;min-height:54px;border:1.5px solid var(--border);border-radius:14px;background:#fff;color:var(--navy);font-family:var(--font-head);font-size:17px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 4px 0 rgba(27,42,74,.08);transition:transform .15s ease,box-shadow .15s ease,background .15s ease,border-color .15s ease}
+.auth-btn:hover:not(:disabled){background:#F7FAFA;border-color:rgba(8,122,112,.35);transform:translateY(-1px)}
+.auth-btn:disabled{opacity:.68;cursor:wait;transform:none}
+.email-btn{background:var(--teal);border-color:var(--teal);color:#fff;box-shadow:0 4px 0 var(--teal-dark)}
+.email-btn:hover:not(:disabled){background:var(--teal-dark);border-color:var(--teal-dark)}
 .google-mark{width:22px;height:22px;display:inline-block}
+.email-panel{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.email-label{font-family:var(--font-head);font-size:13px;font-weight:900;color:var(--navy);text-align:left}
+.email-input{width:100%;border:1.5px solid var(--border);border-radius:13px;padding:13px 14px;font-family:var(--font-body);font-size:15px;font-weight:600;color:var(--navy);background:#fff}
+.email-input:focus{outline:3px solid rgba(46,196,182,.22);border-color:var(--teal-dark)}
+.email-helper{font-size:12px;line-height:1.45;color:var(--navy-soft);margin:0;text-align:left}
+.email-sent{display:none;margin-top:10px;padding:12px 14px;border:1px solid rgba(46,196,182,.28);border-radius:13px;background:var(--teal-light);color:var(--teal-dark);font-family:var(--font-head);font-size:13px;font-weight:900;line-height:1.4;text-align:left}
+.email-sent.show{display:block}
+.account-reminder{margin-top:18px;padding:12px 14px;border-radius:14px;background:#F7FAFA;border:1px solid var(--border);font-size:12px;line-height:1.45;color:var(--navy-soft);text-align:left}
 .note{margin-top:18px;font-size:12px;color:rgba(27,42,74,.58)}
-.error{margin-top:14px;color:#B42318;font-family:var(--font-head);font-weight:800;font-size:13px;display:none}
+.error{margin-top:14px;color:#B42318;font-family:var(--font-head);font-weight:800;font-size:13px;display:none;text-align:left}
 .la-footer{text-align:center;padding:12px 18px;color:rgba(27,42,74,.35);font-family:var(--font-head);font-size:12px;font-weight:800}
 @media(max-width:560px){.login-card{padding:26px 20px}h1{font-size:31px}}
 </style>
@@ -59,63 +71,123 @@ p{color:var(--navy-soft);line-height:1.55;font-size:15px;margin:0 0 24px}
   <section class="login-card">
     <span class="badge">Teacher/Parent Account</span>
     <h1>Sign in to save activities</h1>
-    <p>Sign in with Google to save activities, organize word lists, and return to games or lessons later.</p>
-    <button class="google-btn" id="googleLoginBtn" type="button">
-      <svg class="google-mark" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.57-.14-3.08-.41-4.55H24v9.1h12.62c-.54 2.9-2.18 5.36-4.65 7.01l7.18 5.57C43.35 37.76 46.5 31.57 46.5 24.5z"/><path fill="#FBBC05" d="M10.54 28.59A14.43 14.43 0 0 1 9.75 24c0-1.59.28-3.14.79-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.92 7.53 2.56 10.78l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.47 0 11.9-2.13 15.87-5.78l-7.18-5.57c-2 1.34-4.55 2.13-8.69 2.13-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-      Sign in with Google
-    </button>
+    <p>Save activities, organize word lists, and return to games or lessons later.</p>
+    <div class="auth-options">
+      <button class="auth-btn google-btn" id="googleLoginBtn" type="button">
+        <svg class="google-mark" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.57-.14-3.08-.41-4.55H24v9.1h12.62c-.54 2.9-2.18 5.36-4.65 7.01l7.18 5.57C43.35 37.76 46.5 31.57 46.5 24.5z"/><path fill="#FBBC05" d="M10.54 28.59A14.43 14.43 0 0 1 9.75 24c0-1.59.28-3.14.79-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.92 7.53 2.56 10.78l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.47 0 11.9-2.13 15.87-5.78l-7.18-5.57c-2 1.34-4.55 2.13-8.69 2.13-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <span>Continue with Google</span>
+      </button>
+      <div class="email-panel">
+        <label class="email-label" for="emailLoginInput">Email address</label>
+        <input class="email-input" id="emailLoginInput" type="email" autocomplete="email" placeholder="teacher@example.com">
+        <p class="email-helper">We’ll email you a secure sign-in link. No password needed.</p>
+        <button class="auth-btn email-btn" id="emailLoginBtn" type="button">Continue with email</button>
+      </div>
+    </div>
+    <div class="email-sent" id="emailSentMsg" aria-live="polite"></div>
     <div class="error" id="errorMsg"></div>
+    <div class="account-reminder">Saved activities are tied to the account you used when you created them. If your dashboard looks empty, try signing in with the same Google or email account you used before.</div>
     <div class="note">Students do not need accounts to use Literacy Arcade activities.</div>
   </section>
 </main>
 <footer class="la-footer">Literacy Arcade • Teacher/Parent Login</footer>
 <script type="module">
-import { auth } from './firebase-config.js';
-import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  auth,
+  completeEmailMagicLink,
+  getEmailLinkErrorMessage,
+  getPostLoginDestination,
+  hasEmailSignInLink,
+  onAuthStateChanged,
+  rememberPostLoginDestination,
+  sendEmailMagicLink,
+  signInWithGoogleProvider,
+} from './literacy-arcade-auth.js';
 
 const loginBtn = document.getElementById('googleLoginBtn');
+const emailInput = document.getElementById('emailLoginInput');
+const emailBtn = document.getElementById('emailLoginBtn');
+const emailSentMsg = document.getElementById('emailSentMsg');
 const errorMsg = document.getElementById('errorMsg');
-const provider = new GoogleAuthProvider();
+const params = new URLSearchParams(window.location.search);
+const explicitReturnTo = params.get('returnTo') || params.get('return') || '';
+if (explicitReturnTo) rememberPostLoginDestination(explicitReturnTo);
 
-function getPostLoginDestination() {
-  // Preserve in-progress teacher work through Google sign-in.
-  // These keys are set by the individual tools before redirecting here.
-  if (sessionStorage.getItem('wordSpinnerPendingAuthSetup')) {
-    return 'reading-word-spinner.html';
-  }
-  if (sessionStorage.getItem('sentenceSpinnerPendingAuthSetup')) {
-    return 'sentence-spinner.html';
-  }
-  if (sessionStorage.getItem('readRacePendingAuthSetup')) {
-    return 'read-and-race.html';
-  }
-
-  // Existing assessment/tool pending-save flow.
-  const pending = sessionStorage.getItem('pendingActivityData');
-  if (pending) {
-    return 'phoneme-counter.html?autoSavePendingActivity=1';
-  }
-  return 'teacher-dashboard.html';
+function setError(message = '') {
+  errorMsg.textContent = message;
+  errorMsg.style.display = message ? 'block' : 'none';
 }
 
+function redirectAfterLogin() {
+  window.location.href = getPostLoginDestination();
+}
+
+async function finishEmailLinkIfPresent() {
+  if (!hasEmailSignInLink()) return false;
+  loginBtn.disabled = true;
+  emailBtn.disabled = true;
+  setError('');
+  emailSentMsg.classList.add('show');
+  emailSentMsg.textContent = 'Finishing sign-in…';
+  let result = await completeEmailMagicLink();
+  if (result?.needsEmail) {
+    const email = window.prompt('Confirm the email address you used for this sign-in link:');
+    if (!email) {
+      emailSentMsg.classList.remove('show');
+      setError('Enter your email address to finish signing in with this link.');
+      loginBtn.disabled = false;
+      emailBtn.disabled = false;
+      return true;
+    }
+    result = await completeEmailMagicLink(window.location.href, email);
+  }
+  if (result?.user) redirectAfterLogin();
+  return true;
+}
+
+finishEmailLinkIfPresent().catch(error => {
+  console.error(error);
+  setError(getEmailLinkErrorMessage(error));
+  emailSentMsg.classList.remove('show');
+  loginBtn.disabled = false;
+  emailBtn.disabled = false;
+});
 
 onAuthStateChanged(auth, (user) => {
-  if (user) window.location.href = getPostLoginDestination();
+  if (user && !hasEmailSignInLink()) redirectAfterLogin();
 });
 
 loginBtn.addEventListener('click', async () => {
-  errorMsg.style.display = 'none';
+  setError('');
+  emailSentMsg.classList.remove('show');
   loginBtn.disabled = true;
-  loginBtn.innerHTML = 'Signing in...';
+  loginBtn.querySelector('span').textContent = 'Signing in…';
   try {
-    await signInWithPopup(auth, provider);
-    window.location.href = getPostLoginDestination();
+    await signInWithGoogleProvider();
+    redirectAfterLogin();
   } catch (error) {
     console.error(error);
-    errorMsg.textContent = 'Google sign-in did not work. Check Firebase authorized domains and try again.';
-    errorMsg.style.display = 'block';
+    setError(getEmailLinkErrorMessage(error));
     loginBtn.disabled = false;
-    loginBtn.innerHTML = 'Sign in with Google';
+    loginBtn.querySelector('span').textContent = 'Continue with Google';
+  }
+});
+
+emailBtn.addEventListener('click', async () => {
+  setError('');
+  emailSentMsg.classList.remove('show');
+  emailBtn.disabled = true;
+  emailBtn.textContent = 'Sending link…';
+  try {
+    const email = await sendEmailMagicLink(emailInput.value, { returnTo: explicitReturnTo });
+    emailSentMsg.textContent = `Check ${email} for your secure Literacy Arcade sign-in link.`;
+    emailSentMsg.classList.add('show');
+  } catch (error) {
+    console.error(error);
+    setError(getEmailLinkErrorMessage(error));
+  } finally {
+    emailBtn.disabled = false;
+    emailBtn.textContent = 'Continue with email';
   }
 });
 </script>

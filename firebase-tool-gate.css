@@ -80,34 +80,66 @@ body.la-auth-gate-open { overflow: hidden; }
   line-height: 1.55;
 }
 
-.la-auth-google-btn {
+.la-auth-gate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.la-auth-provider-btn {
   width: 100%;
   min-height: 54px;
-  border: 2px solid var(--la-gate-navy);
   border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  color: white;
-  background: var(--la-gate-navy);
-  box-shadow: 0 5px 0 #0f1a30;
   cursor: pointer;
   font: 900 16px/1 Nunito, Arial, sans-serif;
   transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
-.la-auth-google-btn:hover:not(:disabled) {
+.la-auth-google-btn {
+  border: 2px solid var(--la-gate-navy);
+  color: white;
+  background: var(--la-gate-navy);
+  box-shadow: 0 5px 0 #0f1a30;
+}
+
+.la-auth-email-btn {
+  border: 2px solid var(--la-gate-teal);
+  color: white;
+  background: var(--la-gate-teal);
+  box-shadow: 0 5px 0 var(--la-gate-teal-dark);
+}
+
+.la-auth-provider-btn:hover:not(:disabled) {
   transform: translateY(-2px);
+}
+
+.la-auth-google-btn:hover:not(:disabled) {
   box-shadow: 0 7px 0 #0f1a30;
 }
 
-.la-auth-google-btn:active:not(:disabled) {
+.la-auth-email-btn:hover:not(:disabled) {
+  background: var(--la-gate-teal-dark);
+  border-color: var(--la-gate-teal-dark);
+  box-shadow: 0 7px 0 #0d6f69;
+}
+
+.la-auth-provider-btn:active:not(:disabled) {
   transform: translateY(2px);
+}
+
+.la-auth-google-btn:active:not(:disabled) {
   box-shadow: 0 3px 0 #0f1a30;
 }
 
-.la-auth-google-btn:disabled {
+.la-auth-email-btn:active:not(:disabled) {
+  box-shadow: 0 3px 0 #0d6f69;
+}
+
+.la-auth-provider-btn:disabled {
   cursor: wait;
   opacity: 0.72;
 }
@@ -118,11 +150,76 @@ body.la-auth-gate-open { overflow: hidden; }
   flex: 0 0 auto;
 }
 
+.la-auth-email-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.la-auth-email-label {
+  color: var(--la-gate-navy);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.la-auth-email-input {
+  width: 100%;
+  border: 1.5px solid rgba(27, 42, 74, 0.16);
+  border-radius: 13px;
+  padding: 13px 14px;
+  color: var(--la-gate-navy);
+  background: #fff;
+  font: 700 15px/1.2 Nunito, Arial, sans-serif;
+}
+
+.la-auth-email-input:focus {
+  outline: 3px solid rgba(46, 196, 182, 0.22);
+  border-color: var(--la-gate-teal-dark);
+}
+
+.la-auth-email-helper {
+  margin: 0;
+  color: #68748a;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
 .la-auth-gate-note {
   margin: 18px 0 0;
   color: #68748a;
   font-size: 13px;
   line-height: 1.45;
+}
+
+.la-auth-gate-reminder {
+  margin: 16px 0 0;
+  padding: 11px 13px;
+  border: 1px solid rgba(27, 42, 74, 0.1);
+  border-radius: 13px;
+  color: #536078;
+  background: #f7fafa;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.la-auth-gate-sent {
+  display: none;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(46, 196, 182, 0.35);
+  border-radius: 12px;
+  color: var(--la-gate-teal-dark);
+  background: rgba(46, 196, 182, 0.12);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
+.la-auth-gate-sent.is-visible {
+  display: block;
 }
 
 .la-auth-gate-error {
