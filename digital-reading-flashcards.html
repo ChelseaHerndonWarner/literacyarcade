@@ -1831,6 +1831,10 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
     return;
   }
 
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) { showUpgradeModal(gate); return; }
+
   const defaultTitle = buildDefaultTitle(tab, words.length);
   const title = prompt('Name this saved activity:', defaultTitle);
   if (title === null) return;
@@ -2092,6 +2096,15 @@ window.saveDigitalReadingFlashcardsSharedActivity = async function(activity) {
   if (!currentUser || isSharedStudentMode) throw new Error('Teacher must be signed in to share.');
   const settings = cleanSharedSettings(activity?.settings || {}, activity?.words || []);
   if (!settings.selectedWords.length) throw new Error('At least one reading word is required.');
+
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) {
+    showUpgradeModal(gate, { leadIn: 'Sharing saves a copy to your dashboard — and your free toolbox is full.' });
+    const guardErr = new Error('Save limit reached.');
+    guardErr.saveGuardHandled = true;
+    throw guardErr;
+  }
   const title = cleanPublicText(activity?.title, 140) || buildDefaultTitle(settings.tab, settings.selectedWords.length);
   const sharedData = {
     title,

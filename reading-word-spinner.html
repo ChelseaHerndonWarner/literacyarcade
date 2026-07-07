@@ -3698,6 +3698,10 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
     return;
   }
 
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) { showUpgradeModal(gate); return; }
+
   const defaultTitle = buildDefaultTitle(entries);
   const title = prompt('Name this saved activity:', defaultTitle);
   if (title === null) return;
@@ -3932,6 +3936,16 @@ window.addEventListener('load', () => setTimeout(tryLoadSavedActivity, 150));
 
 window.saveWordSpinnerSharedActivity = async function(activity) {
   if (!currentUser) throw new Error('Teacher must be signed in to share.');
+
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) {
+    showUpgradeModal(gate, { leadIn: 'Sharing saves a copy to your dashboard — and your free toolbox is full.' });
+    const guardErr = new Error('Save limit reached.');
+    guardErr.saveGuardHandled = true;
+    throw guardErr;
+  }
+
   const sharedData = {
     title:        activity.title,
     toolType:     'word-spinner',
@@ -4179,7 +4193,9 @@ window.loadWordSpinnerSharedActivity = async function(shareId) {
     } catch (err) {
       console.error('Share error:', err);
       setShareButtonState('Share Activity', false);
-      alert('Share failed. Please make sure you are signed in and try again.');
+      if (!err || !err.saveGuardHandled) {
+        alert('Share failed. Please make sure you are signed in and try again.');
+      }
     }
   }
 

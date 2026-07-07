@@ -1797,6 +1797,11 @@ async function renameActivity(id, currentTitle) {
 async function duplicateActivity(id) {
   const source = allActivities.find(a => a.id === id);
   if (!source) return;
+
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) { showUpgradeModal(gate); return; }
+
   const {
     id: _id, shareId: _shareId, shareEnabled: _shareEnabled, sharedSetup: _sharedSetup,
     createdAt: _createdAt, updatedAt: _updatedAt, ...rest

@@ -1896,6 +1896,10 @@ if (saveActivityBtn) {
     return;
   }
 
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) { showUpgradeModal(gate); return; }
+
   // Prompt for activity name — use the pre-login title as the default if one was restored.
   const restoredTitle = sessionStorage.getItem('readRacePendingSaveTitle') || localStorage.getItem('readRacePendingSaveTitle') || '';
   const defaultTitle = restoredTitle || buildDefaultTitle();
@@ -2105,6 +2109,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
 window.saveReadRaceSharedActivity = async function(activity) {
   if (!currentUser) throw new Error('Teacher must be signed in to share.');
+
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) {
+    showUpgradeModal(gate, { leadIn: 'Sharing saves a copy to your dashboard — and your free toolbox is full.' });
+    const guardErr = new Error('Save limit reached.');
+    guardErr.saveGuardHandled = true;
+    throw guardErr;
+  }
+
   const sharedData = {
     title:        activity.title,
     toolType:     'read-and-race',

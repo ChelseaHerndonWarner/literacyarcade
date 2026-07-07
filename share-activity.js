@@ -298,7 +298,9 @@
         await handleShareClick(config);
       } catch (err) {
         console.error('Share Activity error:', err);
-        alert('This activity could not be shared. Please try again.');
+        if (!err || !err.saveGuardHandled) {
+          alert('This activity could not be shared. Please try again.');
+        }
       } finally {
         btn.disabled = false;
         if (label) label.textContent = originalText || 'Share this game';

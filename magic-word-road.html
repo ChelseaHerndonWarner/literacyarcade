@@ -2221,6 +2221,10 @@ if (saveActivityBtn) {
       return;
     }
 
+    const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+    const gate = await canCreateActivity(currentUser, db);
+    if (!gate.allowed) { showUpgradeModal(gate); return; }
+
     const restoredTitle = sessionStorage.getItem('magicWordRoadPendingSaveTitle') || localStorage.getItem('magicWordRoadPendingSaveTitle') || '';
     const title = prompt('Name this saved activity:', restoredTitle || buildDefaultTitle());
     if (title === null) return;
@@ -2421,6 +2425,16 @@ window.addEventListener('DOMContentLoaded', () => { setTimeout(tryLoadSavedActiv
 
 window.saveMagicWordRoadSharedActivity = async function(activity) {
   if (!currentUser) throw new Error('Teacher must be signed in to share.');
+
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) {
+    showUpgradeModal(gate, { leadIn: 'Sharing saves a copy to your dashboard — and your free toolbox is full.' });
+    const guardErr = new Error('Save limit reached.');
+    guardErr.saveGuardHandled = true;
+    throw guardErr;
+  }
+
   const sharedData = {
     title:        activity.title,
     toolType:     'magic-word-road',

@@ -1356,6 +1356,10 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
     return;
   }
 
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) { showUpgradeModal(gate); return; }
+
   const customText = document.getElementById('customArea')?.value || '';
   const enteredDeckTitle = vf ? vf.getEnteredDeckTitle() : '';
 
@@ -1537,6 +1541,15 @@ window.saveVocabularyFlashcardsSharedActivity = async function(activity) {
   const incomingSettings = activity?.settings && typeof activity.settings === 'object' ? activity.settings : {};
   const cards = sanitizeVocabularyCardsForShare(incomingSettings.cards);
   if (!cards.length) throw new Error('At least one vocabulary card is required.');
+
+  const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
+  const gate = await canCreateActivity(currentUser, db);
+  if (!gate.allowed) {
+    showUpgradeModal(gate, { leadIn: 'Sharing saves a copy to your dashboard — and your free toolbox is full.' });
+    const guardErr = new Error('Save limit reached.');
+    guardErr.saveGuardHandled = true;
+    throw guardErr;
+  }
 
   const deckTitle = cleanVocabularyPublicText(incomingSettings.deckTitle, 100)
     || cleanVocabularyPublicText(activity?.title, 100)

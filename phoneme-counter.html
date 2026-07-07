@@ -2904,9 +2904,10 @@ async function saveCurrentActivity() {
   if (!title) return;
 
   try {
-    const [{ auth, db }, firestore] = await Promise.all([
+    const [{ auth, db }, firestore, saveGuard] = await Promise.all([
       import('./firebase-config.js'),
-      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js')
+      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'),
+      import('./activity-save-guard.js')
     ]);
 
     const user = auth.currentUser;
@@ -2917,6 +2918,9 @@ async function saveCurrentActivity() {
       window.location.href = 'teacher-login.html';
       return;
     }
+
+    const gate = await saveGuard.canCreateActivity(user, db);
+    if (!gate.allowed) { saveGuard.showUpgradeModal(gate); return; }
 
     const activityData = buildLetterboxActivityData(title.trim());
     activityData.createdAt = firestore.serverTimestamp();
@@ -3004,15 +3008,23 @@ async function savePendingActivityAfterLogin() {
   }
 
   try {
-    const [{ auth, db }, authSdk, firestore] = await Promise.all([
+    const [{ auth, db }, authSdk, firestore, saveGuard] = await Promise.all([
       import('./firebase-config.js'),
       import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js'),
-      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js')
+      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'),
+      import('./activity-save-guard.js')
     ]);
 
     authSdk.onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = 'teacher-login.html';
+        return;
+      }
+
+      const gate = await saveGuard.canCreateActivity(user, db);
+      if (!gate.allowed) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+        saveGuard.showUpgradeModal(gate);
         return;
       }
 
