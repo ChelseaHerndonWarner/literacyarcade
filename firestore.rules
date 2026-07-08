@@ -2,6 +2,16 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isKnownStripePrice(priceId) {
+      return [
+        'price_1TqmEK3PzX3bHrbQEkK6vaes',
+        'price_1TqmEJ3PzX3bHrbQ2cWDevb5',
+        'price_1TqmEM3PzX3bHrbQh3wylsSF',
+        'price_1TqY6k4Gz51pZDtQR6oFrYDp',
+        'price_1TqY5P4Gz51pZDtQOiymXQZ4',
+        'price_1TqY444Gz51pZDtQmTMOq3Gv'
+      ].hasAny([priceId]);
+    }
 
     match /users/{userId} {
       allow get: if request.auth != null && request.auth.uid == userId;
@@ -36,6 +46,51 @@ service cloud.firestore {
       allow create: if request.auth != null;
       allow delete: if request.auth != null
         && request.auth.uid == resource.data.ownerUid;
+    }
+
+    // Firebase Stripe Payments extension paths.
+    // Clients may create checkout sessions for their own account, then read
+    // extension-created subscription/payment records. Clients must never write
+    // subscription/payment/product records or users/{uid}.plan.
+    match /customers/{userId} {
+      allow read: if request.auth != null
+        && request.auth.uid == userId;
+
+      match /checkout_sessions/{sessionId} {
+        allow read: if request.auth != null
+          && request.auth.uid == userId;
+        allow create: if request.auth != null
+          && request.auth.uid == userId
+          && request.resource.data.keys().hasOnly([
+            'price',
+            'success_url',
+            'cancel_url',
+            'allow_promotion_codes',
+            'metadata'
+          ])
+          && isKnownStripePrice(request.resource.data.price);
+        allow update, delete: if false;
+      }
+
+      match /subscriptions/{subscriptionId} {
+        allow read: if request.auth != null
+          && request.auth.uid == userId;
+        allow write: if false;
+      }
+
+      match /payments/{paymentId} {
+        allow read: if request.auth != null
+          && request.auth.uid == userId;
+        allow write: if false;
+      }
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+
+      match /prices/{priceId} {
+        allow read: if true;
+      }
     }
   }
 }

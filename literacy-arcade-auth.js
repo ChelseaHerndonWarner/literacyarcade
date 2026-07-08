@@ -1,12 +1,16 @@
 import { auth, db } from './firebase-config.js';
 import {
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail,
   isSignInWithEmailLink,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   sendSignInLinkToEmail,
   signInWithEmailLink,
+  signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import {
   doc,
@@ -19,6 +23,14 @@ const CANONICAL_LOGIN_URL = 'https://literacyarcade.com/teacher-login.html';
 const EMAIL_STORAGE_KEY = 'literacyArcadeEmailForSignIn';
 const RETURN_STORAGE_KEY = 'literacyArcadePostLoginReturnTo';
 const googleProvider = new GoogleAuthProvider();
+
+export function getEmailActionUrl() {
+  const hostname = window.location.hostname;
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return `${window.location.origin}/teacher-login.html`;
+  }
+  return CANONICAL_LOGIN_URL;
+}
 
 function cleanPath(value) {
   const fallback = 'teacher-dashboard.html';
@@ -96,16 +108,47 @@ export async function signInWithGoogleProvider() {
   return result.user;
 }
 
+export async function signInWithEmailPassword(email, password) {
+  const cleanEmail = String(email || '').trim();
+  const result = await signInWithEmailAndPassword(auth, cleanEmail, password);
+  await recordUserProfile(result.user);
+  return result.user;
+}
+
+export async function createEmailPasswordAccount(email, password) {
+  const cleanEmail = String(email || '').trim();
+  const result = await createUserWithEmailAndPassword(auth, cleanEmail, password);
+  await recordUserProfile(result.user);
+  return result.user;
+}
+
+export async function sendEmailPasswordReset(email) {
+  const cleanEmail = String(email || '').trim();
+  await sendPasswordResetEmail(auth, cleanEmail, {
+    url: getEmailActionUrl(),
+  });
+  return cleanEmail;
+}
+
+export async function signOutCurrentUser() {
+  await signOut(auth);
+}
+
 export function getEmailLinkErrorMessage(error) {
   const code = error?.code || '';
   if (
     code === 'auth/account-exists-with-different-credential' ||
-    code === 'auth/email-already-in-use' ||
     code === 'auth/credential-already-in-use'
   ) {
     return 'This email may already be connected to another sign-in method. Try Continue with Google to access your saved activities.';
   }
   if (code === 'auth/invalid-email') return 'Enter a valid email address.';
+  if (code === 'auth/missing-password') return 'Enter your password.';
+  if (code === 'auth/weak-password') return 'Use a password with at least 6 characters.';
+  if (code === 'auth/email-already-in-use') return 'An account already exists for this email. Try signing in instead.';
+  if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
+    return 'That email and password did not match. Check your password or create an account.';
+  }
   if (code === 'auth/too-many-requests') return 'Too many attempts. Please wait a few minutes and try again.';
   if (code === 'auth/invalid-action-code' || code === 'auth/expired-action-code') {
     return 'This sign-in link is expired or invalid. Please request a new email link.';
@@ -136,10 +179,31 @@ export async function sendEmailMagicLink(email, options = {}) {
     console.warn('Could not check existing sign-in methods before sending an email link.', error);
   }
 
-  await sendSignInLinkToEmail(auth, cleanEmail, {
-    url: CANONICAL_LOGIN_URL,
+  const actionCodeSettings = {
+    url: getEmailActionUrl(),
     handleCodeInApp: true,
+  };
+  console.info('Literacy Arcade email sign-in: sending link.', {
+    email: cleanEmail,
+    actionCodeSettings,
+    authDomain: auth?.app?.options?.authDomain || '',
   });
+
+  try {
+    await sendSignInLinkToEmail(auth, cleanEmail, actionCodeSettings);
+    console.info('Literacy Arcade email sign-in: Firebase accepted the email-link request.', {
+      email: cleanEmail,
+      actionUrl: actionCodeSettings.url,
+    });
+  } catch (error) {
+    console.error('Literacy Arcade email sign-in: Firebase rejected the email-link request.', {
+      code: error?.code || '',
+      message: error?.message || '',
+      actionCodeSettings,
+      authDomain: auth?.app?.options?.authDomain || '',
+    });
+    throw error;
+  }
   return cleanEmail;
 }
 

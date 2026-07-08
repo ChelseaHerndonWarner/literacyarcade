@@ -30,7 +30,7 @@ body{margin:0;min-height:100vh;font-family:var(--font-body);color:var(--navy);ba
 .la-logo img{width:100%;height:100%;object-fit:cover;display:block}
 .la-wordmark{font-family:var(--font-head);font-weight:900;font-size:18px}
 .la-divider{width:1px;height:22px;background:var(--border)}
-.la-page-title{font-family:var(--font-head);font-weight:800;color:var(--teal-dark)}
+.la-page-title{font-family:var(--font-head);font-weight:700;color:#1FA99C;letter-spacing:-.1px;line-height:1}
 .home-btn{margin-left:auto;height:36px;width:36px;border:1.5px solid var(--border);border-radius:10px;background:#fff;display:grid;place-items:center;color:var(--navy-soft);text-decoration:none}
 .home-btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 main{flex:1;display:grid;place-items:center;padding:36px 18px}
@@ -44,19 +44,39 @@ p{color:var(--navy-soft);line-height:1.55;font-size:15px;margin:0 0 24px}
 .auth-btn:disabled{opacity:.68;cursor:wait;transform:none}
 .email-btn{background:var(--teal);border-color:var(--teal);color:#fff;box-shadow:0 4px 0 var(--teal-dark)}
 .email-btn:hover:not(:disabled){background:var(--teal-dark);border-color:var(--teal-dark)}
+.auth-divider{display:flex;align-items:center;gap:12px;color:rgba(27,42,74,.48);font-family:var(--font-head);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin:4px 0}
+.auth-divider::before,.auth-divider::after{content:"";height:1px;background:var(--border);flex:1}
 .google-mark{width:22px;height:22px;display:inline-block}
 .email-panel{display:flex;flex-direction:column;gap:8px;margin-top:2px}
 .email-label{font-family:var(--font-head);font-size:13px;font-weight:900;color:var(--navy);text-align:left}
 .email-input{width:100%;border:1.5px solid var(--border);border-radius:13px;padding:13px 14px;font-family:var(--font-body);font-size:15px;font-weight:600;color:var(--navy);background:#fff}
 .email-input:focus{outline:3px solid rgba(46,196,182,.22);border-color:var(--teal-dark)}
 .email-helper{font-size:12px;line-height:1.45;color:var(--navy-soft);margin:0;text-align:left}
+.email-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.auth-btn.secondary-btn{min-height:48px;background:#fff;color:var(--teal-dark);border-color:rgba(46,196,182,.38);box-shadow:0 3px 0 rgba(27,42,74,.08);font-size:15px}
+.auth-link-btn{align-self:flex-start;border:none;background:none;color:var(--teal-dark);font-family:var(--font-head);font-size:13px;font-weight:900;cursor:pointer;padding:2px 0;text-decoration:underline;text-underline-offset:3px}
+.auth-link-btn:disabled{opacity:.65;cursor:wait}
+.magic-link-row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px;margin-top:2px}
+.magic-link-note{font-size:12px;color:var(--navy-soft);line-height:1.4}
+.finish-email-link{display:none;margin-top:10px;padding:12px 14px;border-radius:14px;border:1px solid rgba(46,196,182,.28);background:#F7FAFA;text-align:left}
+.finish-email-link.show{display:block}
+.finish-email-link strong{display:block;font-family:var(--font-head);font-size:13px;font-weight:900;color:var(--navy);margin-bottom:4px}
+.finish-email-link span{display:block;font-size:12px;line-height:1.45;color:var(--navy-soft);margin-bottom:10px}
+.signed-in-panel{display:none;text-align:left;border:1.5px solid rgba(46,196,182,.28);background:#F7FAFA;border-radius:18px;padding:18px;margin-top:18px}
+.signed-in-panel.show{display:block}
+.signed-in-label{font-family:var(--font-head);font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:6px}
+.signed-in-email{font-family:var(--font-head);font-size:18px;font-weight:900;color:var(--navy);overflow-wrap:anywhere;margin-bottom:14px}
+.signed-in-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.signed-in-actions .auth-btn{min-height:48px;font-size:15px;text-decoration:none}
+#switchAccountBtn{grid-column:1 / -1}
+.is-hidden{display:none!important}
 .email-sent{display:none;margin-top:10px;padding:12px 14px;border:1px solid rgba(46,196,182,.28);border-radius:13px;background:var(--teal-light);color:var(--teal-dark);font-family:var(--font-head);font-size:13px;font-weight:900;line-height:1.4;text-align:left}
 .email-sent.show{display:block}
 .account-reminder{margin-top:18px;padding:12px 14px;border-radius:14px;background:#F7FAFA;border:1px solid var(--border);font-size:12px;line-height:1.45;color:var(--navy-soft);text-align:left}
 .note{margin-top:18px;font-size:12px;color:rgba(27,42,74,.58)}
 .error{margin-top:14px;color:#B42318;font-family:var(--font-head);font-weight:800;font-size:13px;display:none;text-align:left}
 .la-footer{text-align:center;padding:12px 18px;color:rgba(27,42,74,.35);font-family:var(--font-head);font-size:12px;font-weight:800}
-@media(max-width:560px){.login-card{padding:26px 20px}h1{font-size:31px}}
+@media(max-width:560px){.login-card{padding:26px 20px}h1{font-size:31px}.email-actions,.signed-in-actions{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -70,19 +90,44 @@ p{color:var(--navy-soft);line-height:1.55;font-size:15px;margin:0 0 24px}
 <main>
   <section class="login-card">
     <span class="badge">Teacher/Parent Account</span>
-    <h1>Sign in to save activities</h1>
-    <p>Save activities, organize word lists, and return to games or lessons later.</p>
-    <div class="auth-options">
+    <h1 id="loginTitle">Sign in to save activities</h1>
+    <p id="loginIntro">Save activities, organize word lists, and return to games or lessons later.</p>
+    <div class="auth-options" id="authOptions">
       <button class="auth-btn google-btn" id="googleLoginBtn" type="button">
         <svg class="google-mark" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.57-.14-3.08-.41-4.55H24v9.1h12.62c-.54 2.9-2.18 5.36-4.65 7.01l7.18 5.57C43.35 37.76 46.5 31.57 46.5 24.5z"/><path fill="#FBBC05" d="M10.54 28.59A14.43 14.43 0 0 1 9.75 24c0-1.59.28-3.14.79-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.92 7.53 2.56 10.78l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.47 0 11.9-2.13 15.87-5.78l-7.18-5.57c-2 1.34-4.55 2.13-8.69 2.13-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
         <span>Continue with Google</span>
       </button>
+      <div class="auth-divider">or</div>
       <div class="email-panel">
         <label class="email-label" for="emailLoginInput">Email address</label>
         <input class="email-input" id="emailLoginInput" type="email" autocomplete="email" placeholder="teacher@example.com">
-        <p class="email-helper">We’ll email you a secure sign-in link. No password needed.</p>
-        <button class="auth-btn email-btn" id="emailLoginBtn" type="button">Continue with email</button>
+        <label class="email-label" for="passwordLoginInput">Password</label>
+        <input class="email-input" id="passwordLoginInput" type="password" autocomplete="current-password" placeholder="Password">
+        <p class="email-helper">Use your Literacy Arcade email and password, or create an account if this is your first time.</p>
+        <button class="auth-btn email-btn" id="emailPasswordSignInBtn" type="button">Sign in</button>
+        <div class="email-actions">
+          <button class="auth-btn secondary-btn" id="createAccountBtn" type="button">Create account</button>
+          <button class="auth-btn secondary-btn" id="resetPasswordBtn" type="button">Forgot password?</button>
+        </div>
+        <div class="magic-link-row">
+          <span class="magic-link-note">Prefer no password?</span>
+          <button class="auth-link-btn" id="emailLoginBtn" type="button">Email me a secure sign-in link</button>
+        </div>
       </div>
+    </div>
+    <div class="signed-in-panel" id="signedInPanel" aria-live="polite">
+      <div class="signed-in-label">Signed in account</div>
+      <div class="signed-in-email" id="signedInEmail"></div>
+      <div class="signed-in-actions">
+        <a class="auth-btn email-btn" href="teacher-dashboard.html">Go to Dashboard</a>
+        <button class="auth-btn secondary-btn" id="logoutBtn" type="button">Log out</button>
+        <button class="auth-btn secondary-btn" id="switchAccountBtn" type="button">Use a different account</button>
+      </div>
+    </div>
+    <div class="finish-email-link" id="finishEmailLinkBox" aria-live="polite">
+      <strong>Finish email-link sign-in</strong>
+      <span>Enter the same email address you used to request the link.</span>
+      <button class="auth-btn email-btn" id="finishEmailLinkBtn" type="button">Finish sign-in</button>
     </div>
     <div class="email-sent" id="emailSentMsg" aria-live="polite"></div>
     <div class="error" id="errorMsg"></div>
@@ -95,18 +140,36 @@ p{color:var(--navy-soft);line-height:1.55;font-size:15px;margin:0 0 24px}
 import {
   auth,
   completeEmailMagicLink,
+  createEmailPasswordAccount,
   getEmailLinkErrorMessage,
+  getEmailActionUrl,
   getPostLoginDestination,
   hasEmailSignInLink,
   onAuthStateChanged,
   rememberPostLoginDestination,
   sendEmailMagicLink,
+  sendEmailPasswordReset,
+  signInWithEmailPassword,
   signInWithGoogleProvider,
+  signOutCurrentUser,
 } from './literacy-arcade-auth.js';
 
+const loginTitle = document.getElementById('loginTitle');
+const loginIntro = document.getElementById('loginIntro');
+const authOptions = document.getElementById('authOptions');
 const loginBtn = document.getElementById('googleLoginBtn');
 const emailInput = document.getElementById('emailLoginInput');
+const passwordInput = document.getElementById('passwordLoginInput');
 const emailBtn = document.getElementById('emailLoginBtn');
+const emailPasswordSignInBtn = document.getElementById('emailPasswordSignInBtn');
+const createAccountBtn = document.getElementById('createAccountBtn');
+const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+const finishEmailLinkBox = document.getElementById('finishEmailLinkBox');
+const finishEmailLinkBtn = document.getElementById('finishEmailLinkBtn');
+const signedInPanel = document.getElementById('signedInPanel');
+const signedInEmail = document.getElementById('signedInEmail');
+const logoutBtn = document.getElementById('logoutBtn');
+const switchAccountBtn = document.getElementById('switchAccountBtn');
 const emailSentMsg = document.getElementById('emailSentMsg');
 const errorMsg = document.getElementById('errorMsg');
 const params = new URLSearchParams(window.location.search);
@@ -118,28 +181,86 @@ function setError(message = '') {
   errorMsg.style.display = message ? 'block' : 'none';
 }
 
+function setSuccess(message = '') {
+  emailSentMsg.textContent = message;
+  emailSentMsg.classList.toggle('show', Boolean(message));
+}
+
+function setEmailButtonsDisabled(disabled) {
+  emailBtn.disabled = disabled;
+  emailPasswordSignInBtn.disabled = disabled;
+  createAccountBtn.disabled = disabled;
+  resetPasswordBtn.disabled = disabled;
+  finishEmailLinkBtn.disabled = disabled;
+}
+
+function getVisibleAuthError(error) {
+  const friendly = getEmailLinkErrorMessage(error);
+  const detail = [error?.code, error?.message].filter(Boolean).join(' — ');
+  return detail ? `${friendly} Firebase says: ${detail}` : friendly;
+}
+
 function redirectAfterLogin() {
   window.location.href = getPostLoginDestination();
 }
 
+function renderSignedOutState() {
+  loginTitle.textContent = 'Sign in to save activities';
+  loginIntro.textContent = 'Save activities, organize word lists, and return to games or lessons later.';
+  authOptions.classList.remove('is-hidden');
+  signedInPanel.classList.remove('show');
+  finishEmailLinkBox.classList.remove('show');
+  emailInput.value = '';
+  passwordInput.value = '';
+}
+
+function renderSignedInState(user) {
+  const email = user?.email || 'this account';
+  loginTitle.textContent = 'You’re signed in';
+  loginIntro.textContent = 'Choose where to go next, or sign out to use a different account.';
+  signedInEmail.textContent = email;
+  authOptions.classList.add('is-hidden');
+  finishEmailLinkBox.classList.remove('show');
+  signedInPanel.classList.add('show');
+  setSuccess('');
+  setError('');
+}
+
+async function signOutToLoginForm() {
+  setError('');
+  setSuccess('');
+  logoutBtn.disabled = true;
+  switchAccountBtn.disabled = true;
+  try {
+    await signOutCurrentUser();
+    renderSignedOutState();
+  } catch (error) {
+    console.error(error);
+    setError(getVisibleAuthError(error));
+  } finally {
+    logoutBtn.disabled = false;
+    switchAccountBtn.disabled = false;
+  }
+}
+
 async function finishEmailLinkIfPresent() {
   if (!hasEmailSignInLink()) return false;
+  console.info('Literacy Arcade email sign-in: email link detected on login page.', {
+    url: window.location.href,
+  });
   loginBtn.disabled = true;
-  emailBtn.disabled = true;
+  setEmailButtonsDisabled(true);
   setError('');
-  emailSentMsg.classList.add('show');
-  emailSentMsg.textContent = 'Finishing sign-in…';
+  setSuccess('Finishing sign-in…');
   let result = await completeEmailMagicLink();
   if (result?.needsEmail) {
-    const email = window.prompt('Confirm the email address you used for this sign-in link:');
-    if (!email) {
-      emailSentMsg.classList.remove('show');
-      setError('Enter your email address to finish signing in with this link.');
-      loginBtn.disabled = false;
-      emailBtn.disabled = false;
-      return true;
-    }
-    result = await completeEmailMagicLink(window.location.href, email);
+    console.info('Literacy Arcade email sign-in: stored email missing; waiting for teacher to confirm email.');
+    setSuccess('');
+    finishEmailLinkBox.classList.add('show');
+    loginBtn.disabled = false;
+    setEmailButtonsDisabled(false);
+    emailInput.focus();
+    return true;
   }
   if (result?.user) redirectAfterLogin();
   return true;
@@ -147,19 +268,24 @@ async function finishEmailLinkIfPresent() {
 
 finishEmailLinkIfPresent().catch(error => {
   console.error(error);
-  setError(getEmailLinkErrorMessage(error));
-  emailSentMsg.classList.remove('show');
+  setError(getVisibleAuthError(error));
+  setSuccess('');
   loginBtn.disabled = false;
-  emailBtn.disabled = false;
+  setEmailButtonsDisabled(false);
 });
 
 onAuthStateChanged(auth, (user) => {
-  if (user && !hasEmailSignInLink()) redirectAfterLogin();
+  if (hasEmailSignInLink()) return;
+  if (user) {
+    renderSignedInState(user);
+  } else {
+    renderSignedOutState();
+  }
 });
 
 loginBtn.addEventListener('click', async () => {
   setError('');
-  emailSentMsg.classList.remove('show');
+  setSuccess('');
   loginBtn.disabled = true;
   loginBtn.querySelector('span').textContent = 'Signing in…';
   try {
@@ -175,21 +301,94 @@ loginBtn.addEventListener('click', async () => {
 
 emailBtn.addEventListener('click', async () => {
   setError('');
-  emailSentMsg.classList.remove('show');
+  setSuccess('');
   emailBtn.disabled = true;
   emailBtn.textContent = 'Sending link…';
   try {
+    console.info('Literacy Arcade email sign-in: starting send from login page.', {
+      email: emailInput.value.trim(),
+      actionUrl: getEmailActionUrl(),
+    });
     const email = await sendEmailMagicLink(emailInput.value, { returnTo: explicitReturnTo });
-    emailSentMsg.textContent = `Check ${email} for your secure Literacy Arcade sign-in link.`;
-    emailSentMsg.classList.add('show');
+    setSuccess(`Check ${email} for your secure Literacy Arcade sign-in link.`);
   } catch (error) {
     console.error(error);
-    setError(getEmailLinkErrorMessage(error));
+    setError(getVisibleAuthError(error));
   } finally {
     emailBtn.disabled = false;
-    emailBtn.textContent = 'Continue with email';
+    emailBtn.textContent = 'Email me a secure sign-in link';
   }
 });
+
+emailPasswordSignInBtn.addEventListener('click', async () => {
+  setError('');
+  setSuccess('');
+  setEmailButtonsDisabled(true);
+  emailPasswordSignInBtn.textContent = 'Signing in…';
+  try {
+    await signInWithEmailPassword(emailInput.value, passwordInput.value);
+    redirectAfterLogin();
+  } catch (error) {
+    console.error(error);
+    setError(getVisibleAuthError(error));
+  } finally {
+    setEmailButtonsDisabled(false);
+    emailPasswordSignInBtn.textContent = 'Sign in';
+  }
+});
+
+createAccountBtn.addEventListener('click', async () => {
+  setError('');
+  setSuccess('');
+  setEmailButtonsDisabled(true);
+  createAccountBtn.textContent = 'Creating…';
+  try {
+    await createEmailPasswordAccount(emailInput.value, passwordInput.value);
+    redirectAfterLogin();
+  } catch (error) {
+    console.error(error);
+    setError(getVisibleAuthError(error));
+  } finally {
+    setEmailButtonsDisabled(false);
+    createAccountBtn.textContent = 'Create account';
+  }
+});
+
+resetPasswordBtn.addEventListener('click', async () => {
+  setError('');
+  setSuccess('');
+  resetPasswordBtn.disabled = true;
+  resetPasswordBtn.textContent = 'Sending…';
+  try {
+    const email = await sendEmailPasswordReset(emailInput.value);
+    setSuccess(`Password reset email sent to ${email}.`);
+  } catch (error) {
+    console.error(error);
+    setError(getVisibleAuthError(error));
+  } finally {
+    resetPasswordBtn.disabled = false;
+    resetPasswordBtn.textContent = 'Forgot password?';
+  }
+});
+
+finishEmailLinkBtn.addEventListener('click', async () => {
+  setError('');
+  setSuccess('Finishing sign-in…');
+  finishEmailLinkBtn.disabled = true;
+  try {
+    const result = await completeEmailMagicLink(window.location.href, emailInput.value);
+    if (result?.user) redirectAfterLogin();
+  } catch (error) {
+    console.error(error);
+    setSuccess('');
+    setError(getVisibleAuthError(error));
+  } finally {
+    finishEmailLinkBtn.disabled = false;
+  }
+});
+
+logoutBtn.addEventListener('click', signOutToLoginForm);
+switchAccountBtn.addEventListener('click', signOutToLoginForm);
 </script>
 </body>
 </html>

@@ -1849,6 +1849,7 @@ async function deleteActivity(id, title) {
   try {
     await deleteDoc(doc(db, `users/${currentUser.uid}/activities`, id));
     allActivities = allActivities.filter(a => a.id !== id);
+    await removeDeletedActivityFromCollections(id);
     renderAll();
     if (isShared && shareRevokeFailed) {
       await showInfoModal({
@@ -1863,6 +1864,23 @@ async function deleteActivity(id, title) {
       message: 'Something went wrong deleting this activity. Please try again.'
     });
   }
+}
+
+async function removeDeletedActivityFromCollections(activityId) {
+  const updates = [];
+  teachingCollections.forEach(col => {
+    let changed = false;
+    col.sections = (col.sections || []).map(section => {
+      const activityIds = Array.isArray(section.activityIds) ? section.activityIds : [];
+      const filteredIds = activityIds.filter(id => id !== activityId);
+      if (filteredIds.length !== activityIds.length) changed = true;
+      return { ...section, activityIds: filteredIds };
+    });
+    if (changed) {
+      updates.push(saveCollection(col));
+    }
+  });
+  await Promise.all(updates);
 }
 
 
@@ -1911,8 +1929,13 @@ function renderCollectionsView() {
 }
 
 function getCollectionActivityCount(col) {
+  const existingActivityIds = new Set(allActivities.map(activity => activity.id));
   const ids = new Set();
-  (col.sections || []).forEach(section => (section.activityIds || []).forEach(id => ids.add(id)));
+  (col.sections || []).forEach(section => {
+    (section.activityIds || []).forEach(id => {
+      if (existingActivityIds.has(id)) ids.add(id);
+    });
+  });
   return ids.size;
 }
 
@@ -2060,7 +2083,8 @@ function buildSection(col, section) {
   el.className = 'collection-section';
   el.dataset.sectionId = section.id;
   el.style.setProperty('--section-color', section.color || col.color || fallbackCollectionColor(col.id));
-  const ids = section.activityIds || [];
+  const existingActivityIds = new Set(allActivities.map(activity => activity.id));
+  const ids = (section.activityIds || []).filter(id => existingActivityIds.has(id));
   const collapseKey = getSectionCollapseKey(col.id, section.id);
   const isCollapsed = collapsedCollectionSections.has(collapseKey);
   if (isCollapsed) el.classList.add('is-collapsed');

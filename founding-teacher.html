@@ -4,614 +4,1317 @@
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Become a Founding Teacher — Literacy Arcade</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{min-height:100%;font-family:"Nunito",sans-serif;background:#f5f3ee;}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upgrade to Literacy Arcade Plus</title>
+  <meta name="description" content="Upgrade to Literacy Arcade Plus to save, reuse, organize, and share classroom-ready literacy activities." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://literacyarcade.com/founding-teacher.html" />
+  <meta name="theme-color" content="#2EC4B6" />
 
-/* ── HEADER ── */
-.la-header{
-  background:#fff;border-bottom:1px solid rgba(26,35,64,.1);
-  padding:0 24px;height:58px;
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:50;
-  box-shadow:0 1px 3px rgba(26,35,64,.06);
-}
-.la-logo-group{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
-.la-icon{width:36px;height:36px;border-radius:9px;overflow:hidden;flex-shrink:0;}
-.la-icon img{width:36px;height:36px;object-fit:cover;display:block;}
-.la-wordmark{font-size:18px;font-weight:900;color:#1a2340;letter-spacing:-.2px;}
-.la-pipe{width:1px;height:18px;background:rgba(26,35,64,.12);margin:0 4px;}
-.la-page-name{font-size:15px;font-weight:700;color:#0F6E56;}
-.back-btn{
-  display:flex;align-items:center;gap:6px;
-  font-size:13px;font-weight:700;color:#6b7a99;
-  text-decoration:none;padding:6px 12px;border-radius:8px;
-  transition:background .15s,color .15s;
-}
-.back-btn:hover{background:#f0f0f0;color:#1a2340;}
-.back-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-/* ── PAGE ── */
-.page{max-width:680px;margin:0 auto;padding:40px 20px 60px;}
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── HERO ── */
-.hero{text-align:center;margin-bottom:36px;}
-.hero h1{
-  font-size:clamp(1.9rem,5vw,2.75rem);font-weight:900;
-  color:#1a2340;letter-spacing:-.5px;line-height:1.1;margin-bottom:14px;
-}
-.hero h1 span{
-  background:linear-gradient(135deg,#0F6E56,#38b2a0);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.hero p{
-  font-size:1.05rem;color:#4a5568;line-height:1.65;
-  max-width:520px;margin:0 auto 24px;font-weight:600;
-}
-.perks{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:8px;}
-.perk{
-  display:flex;align-items:center;gap:6px;
-  background:#fff;border:1.5px solid rgba(26,35,64,.09);
-  border-radius:20px;padding:6px 14px;
-  font-size:12px;font-weight:700;color:#2d3748;
-}
-/* ── FORM CARD ── */
-.form-card{
-  background:#fff;border-radius:20px;
-  box-shadow:0 4px 24px rgba(26,35,64,.08),0 1px 4px rgba(26,35,64,.06);
-  padding:32px 32px 28px;
-  border:1.5px solid rgba(26,35,64,.07);
-}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
-label{font-size:12px;font-weight:800;color:#2d3748;letter-spacing:.3px;text-transform:uppercase;}
-input,select{
-  width:100%;padding:11px 14px;
-  border:1.5px solid rgba(26,35,64,.14);
-  border-radius:10px;font-family:"Nunito",sans-serif;
-  font-size:14px;font-weight:600;color:#1a2340;
-  background:#fafafa;outline:none;
-  transition:border-color .18s,box-shadow .18s,background .18s;
-  -webkit-appearance:none;appearance:none;
-}
-input::placeholder{color:#a0aec0;font-weight:600;}
-input:focus,select:focus{
-  border-color:#0F6E56;
-  box-shadow:0 0 0 3px rgba(15,110,86,.12);
-  background:#fff;
-}
-select{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a99' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;background-size:12px;padding-right:36px;
-}
-.submit-btn{
-  width:100%;padding:15px;margin-top:20px;
-  background:linear-gradient(135deg,#0F6E56,#0a5442);
-  border:none;border-radius:12px;
-  color:#fff;font-family:"Nunito",sans-serif;
-  font-size:16px;font-weight:900;letter-spacing:.2px;
-  cursor:pointer;
-  box-shadow:0 4px 18px rgba(15,110,86,.32);
-  transition:all .18s;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-}
-.submit-btn:hover{background:linear-gradient(135deg,#0d5f4a,#094838);box-shadow:0 6px 24px rgba(15,110,86,.42);transform:translateY(-1px);}
-.submit-btn:active{transform:translateY(0) scale(.99);}
-.submit-btn:disabled{opacity:.6;cursor:default;transform:none;}
-/* ── SUCCESS ── */
-.success-state{display:none;text-align:center;padding:16px 0 8px;}
-.success-icon{
-  width:72px;height:72px;border-radius:50%;
-  background:linear-gradient(135deg,#e8f5f0,#c6e8dc);
-  border:2.5px solid rgba(15,110,86,.2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:32px;margin:0 auto 16px;
-  animation:popIn .4s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-@keyframes popIn{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
-.success-title{font-size:1.4rem;font-weight:900;color:#1a2340;margin-bottom:8px;}
-.success-sub{font-size:.95rem;color:#4a5568;font-weight:600;line-height:1.6;max-width:380px;margin:0 auto 16px;}
-.success-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:linear-gradient(135deg,#0F6E56,#38b2a0);
-  border-radius:30px;padding:8px 20px;
-  font-size:13px;font-weight:800;color:#fff;letter-spacing:.3px;
-  margin-bottom:20px;
-}
-.confetti-wrap{position:relative;height:0;}
-.confetti-dot{
-  position:absolute;width:8px;height:8px;border-radius:50%;
-  opacity:0;
-  animation:confettiFly var(--cd,1s) ease-out var(--cdl,0s) forwards;
-}
-@keyframes confettiFly{
-  0%{opacity:1;}
-  100%{transform:translate(var(--cx,0px),var(--cy,-80px)) rotate(var(--cr,180deg));opacity:0;}
-}
+    :root {
+      --cream:    #FDFBF7;
+      --white:    #FFFFFF;
+      --ink:      #1A1A2E;
+      --ink-soft: #4A4A6A;
+      --teal:     #2EC4B6;
+      --teal-dk:  #1FA99C;
+      --coral:    #FF6B6B;
+      --amber:    #FFB830;
+      --violet:   #7B5EA7;
+      --mint:     #D8F5F2;
+      --blush:    #FFF0EE;
+      --lavender: #EEE8F8;
+      --border:   #E8E4F0;
+      --radius:   16px;
+      --radius-sm:10px;
+      --shadow:   0 4px 24px rgba(26,26,46,.07);
+      --shadow-hover: 0 8px 40px rgba(26,26,46,.14);
+      --font-head: 'Nunito', sans-serif;
+      --font-body: 'Nunito', sans-serif;
+    }
 
-/* ── TRUST ROW ── */
-.trust-row{
-  display:flex;align-items:center;justify-content:center;gap:24px;
-  margin-top:28px;flex-wrap:wrap;
-}
-.trust-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#718096;}
-.trust-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+    html { scroll-behavior: smooth; }
 
-/* ── FOOTER ── */
-.la-footer{text-align:center;font-size:12px;color:#a0aec0;padding:16px 0 24px;font-weight:600;}
-.la-footer a{color:#0F6E56;text-decoration:none;}
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* ── RESPONSIVE ── */
-@media(max-width:520px){
-  .form-card{padding:22px 18px 20px;}
-  .form-row{grid-template-columns:1fr;}
-  .hero h1{font-size:1.7rem;}
-  .page{padding:24px 16px 48px;}
-  .trust-row{gap:14px;}
-}
+    a { color: inherit; text-decoration: none; }
 
+    :focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
 
-/* ===== FOUNDING TEACHER POLISH PASS ===== */
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
 
-body{
-  background:
-    radial-gradient(circle at 18% 18%, rgba(29,158,117,.10), transparent 28%),
-    radial-gradient(circle at 86% 20%, rgba(216,90,48,.08), transparent 26%),
-    radial-gradient(circle at 52% 88%, rgba(29,158,117,.08), transparent 28%),
-    #FAF8F4 !important;
-  color:#1A2340 !important;
-  overflow-x:hidden;
-}
+    .section { padding: 72px 0; }
+    .section-sm { padding: 48px 0; }
 
-.page{
-  max-width:760px !important;
-  padding:46px 20px 54px !important;
-  position:relative;
-}
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.2;
+      text-align: center;
+    }
 
-.page::before,
-.page::after{
-  content:"✦";
-  position:absolute;
-  color:rgba(29,158,117,.22);
-  font-size:24px;
-  animation:foundingFloat 5.5s ease-in-out infinite;
-  pointer-events:none;
-}
-.page::before{left:4%;top:86px;}
-.page::after{right:5%;top:176px;animation-delay:1.4s;color:rgba(216,90,48,.18);}
+    .section-sub {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      max-width: 660px;
+      margin: 12px auto 0;
+      text-align: center;
+      font-weight: 650;
+    }
 
-@keyframes foundingFloat{
-  0%,100%{transform:translateY(0) rotate(0deg);opacity:.45;}
-  50%{transform:translateY(-10px) rotate(8deg);opacity:.8;}
-}
+    .pain-point-line {
+      font-family: var(--font-head);
+      font-size: 1.05rem;
+      color: var(--ink);
+      max-width: 620px;
+      margin: 14px auto 0;
+      text-align: center;
+      font-weight: 800;
+    }
 
-.hero{
-  margin-bottom:30px !important;
-  position:relative;
-}
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(253,251,247,.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
 
-.hero::before{
-  content:none;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  background:#E1F5EE;
-  color:#0F6E56;
-  border:1.5px solid #A8DDD9;
-  border-radius:999px;
-  padding:7px 16px;
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  margin-bottom:10px;
-  box-shadow:0 6px 20px rgba(29,158,117,.10);
-}
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 62px;
+    }
 
-.hero h1{
-  color:#1A2340 !important;
-  font-size:clamp(1.8rem,4vw,2.7rem) !important;
-  line-height:1.2 !important;
-  letter-spacing:-.7px !important;
-  margin-bottom:28px !important;
-  position:relative;
-}
+    .nav .container {
+      max-width: none;
+      padding-left: 28px;
+      padding-right: 28px;
+    }
 
-.hero h1::after{
-  content:"";
-  display:block;
-  width:86px;
-  height:5px;
-  border-radius:999px;
-  background:linear-gradient(90deg,#1D9E75,#D85A30);
-  margin:16px auto 0;
-  opacity:.85;
-}
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: -.2px;
+      color: var(--ink);
+    }
 
-.hero p{
-  color:#43506b !important;
-  font-size:.96rem !important;
-  line-height:1.9 !important;
-  max-width:460px !important;
-  margin-bottom:42px !important;
-}
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      display: block;
+      background-image: url("apple-touch-icon.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 10px;
+    }
 
-.perks{
-  gap:9px !important;
-  margin-bottom:0px !important;
-}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
 
-.perk{
-  background:rgba(255,255,255,.78) !important;
-  border:1.5px solid rgba(29,158,117,.16) !important;
-  color:#34405a !important;
-  box-shadow:0 3px 12px rgba(26,35,64,.05);
-}
+    .nav-links a {
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      transition: background .18s, color .18s;
+      display: inline-block;
+    }
 
-.perk::before{
-  content:"✦";
-  color:#1D9E75;
-  font-size:11px;
-}
+    .nav-links a:hover {
+      background: var(--mint);
+      color: var(--teal-dk);
+    }
 
+    .nav-links a.nav-active {
+      background: var(--mint);
+      color: var(--teal-dk);
+    }
 
+    .nav-account {
+      background: var(--teal) !important;
+      color: var(--white) !important;
+      padding: 9px 18px !important;
+      border-radius: 100px !important;
+    }
+    .nav-account:hover { background: var(--teal-dk) !important; color: var(--white) !important; }
 
-.form-card{
-  border-radius:24px !important;
-  padding:34px 36px 30px !important;
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,255,255,.94)),
-    #fff !important;
-  border:1.5px solid rgba(26,35,64,.08) !important;
-  box-shadow:
-    0 22px 54px rgba(26,35,64,.12),
-    0 3px 10px rgba(26,35,64,.05) !important;
-  position:relative;
-  overflow:hidden;
-}
+    .nav-mobile-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-mobile-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+    }
 
-.form-card::before{
-  content:"";
-  position:absolute;
-  inset:0 0 auto 0;
-  height:6px;
-  background:linear-gradient(90deg,#1D9E75,#38B2A0,#D85A30);
-}
+    .page-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+    }
 
-label{
-  color:#1A2340 !important;
-  font-size:12px !important;
-}
+    .hero {
+      padding: 58px 0 44px;
+      background: linear-gradient(160deg, #E8F9F8 0%, var(--cream) 58%, #F3EEFB 100%);
+      border-bottom: 1px solid var(--border);
+    }
 
-input,select{
-  background:#fff !important;
-  border:1.8px solid rgba(26,35,64,.14) !important;
-  border-radius:13px !important;
-  padding:13px 15px !important;
-  font-size:15px !important;
-}
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(300px, .7fr);
+      gap: 36px;
+      align-items: center;
+    }
 
-input:hover,select:hover{
-  border-color:rgba(29,158,117,.35) !important;
-}
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(2.2rem, 4vw, 3.15rem);
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.12;
+      letter-spacing: -.8px;
+      margin-bottom: 18px;
+      max-width: 660px;
+    }
 
-.submit-btn{
-  margin-top:22px !important;
-  padding:17px 18px !important;
-  border-radius:16px !important;
-  font-size:17px !important;
-  background:linear-gradient(135deg,#1D9E75,#0F6E56) !important;
-  box-shadow:0 7px 0 #0A4F40, 0 16px 30px rgba(15,110,86,.24) !important;
-}
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      font-weight: 650;
+      line-height: 1.62;
+      max-width: 680px;
+      margin-bottom: 20px;
+    }
 
-.submit-btn:hover{
-  transform:translateY(-2px) !important;
-  box-shadow:0 9px 0 #0A4F40, 0 20px 34px rgba(15,110,86,.32) !important;
-}
+    .hero-bullets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      list-style: none;
+      max-width: 720px;
+    }
 
-.submit-btn:active{
-  transform:translateY(4px) !important;
-  box-shadow:0 3px 0 #0A4F40, 0 10px 20px rgba(15,110,86,.22) !important;
-}
+    .hero-bullets li {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 8px 14px;
+      color: var(--ink-soft);
+      font-size: .88rem;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
 
-.trust-row{
-  margin-top:26px !important;
-  gap:18px !important;
-}
+    .hero-bullets li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--teal);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
 
-.trust-item{
-  color:#6B7A99 !important;
-  font-size:12px !important;
-}
+    .account-card,
+    .plan-card,
+    .value-card,
+    .compare-card,
+    .faq-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
 
-.trust-item svg{
-  color:#1D9E75 !important;
-}
+    .account-card {
+      padding: 18px;
+      overflow: hidden;
+    }
 
-.la-footer{
-  color:#6B7A99 !important;
-}
+    .account-label,
+    .plan-label {
+      color: var(--teal-dk);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
 
-@media(max-width:620px){
-  .page{padding:30px 16px 44px !important;}
-  .form-card{padding:26px 20px 24px !important;}
-  .founding-note{padding:16px 18px;}
-  .hero p{font-size:.96rem !important;}
-}
+    .account-title {
+      font-family: var(--font-head);
+      color: var(--ink);
+      font-size: 1.08rem;
+      line-height: 1.2;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
 
-</style>
+    .account-text {
+      color: var(--ink-soft);
+      font-size: .84rem;
+      font-weight: 650;
+      line-height: 1.45;
+    }
 
-<style>
-.hero{
-  padding-top: 8px !important;
-  margin-bottom: 42px !important;
-}
+    .account-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--cream);
+      border: 1px solid var(--border);
+      color: var(--ink-soft);
+      font-size: .84rem;
+      font-weight: 800;
+    }
 
-.hero h1{
-  font-size: clamp(1.9rem, 4vw, 2.7rem) !important;
-  line-height: 1.22 !important;
-  margin-bottom: 28px !important;
-}
+    .plus-mockup {
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: linear-gradient(160deg, #ffffff 0%, #F6FFFE 58%, #F8F3FF 100%);
+      box-shadow: 0 6px 18px rgba(26,26,46,.07);
+      overflow: hidden;
+    }
 
-.hero-subtitle{
-  max-width: 430px !important;
-  margin: 0 auto 38px auto !important;
-  font-size: .97rem !important;
-  line-height: 1.95 !important;
-  font-weight: 600 !important;
-  color: #51607a !important;
-}
+    .mockup-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 11px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.7);
+    }
 
-.perks{
-  margin-top: 12px !important;
-}
-</style>
+    .mockup-title {
+      color: var(--ink);
+      font-size: .82rem;
+      font-weight: 900;
+      line-height: 1.2;
+    }
 
+    .mockup-pill,
+    .launch-callout {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 100px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .66rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 4px 7px;
+      white-space: nowrap;
+    }
 
-<style>
-/* ===== CHELSEA REQUESTED CLEANUP ===== */
+    .mockup-body {
+      display: grid;
+      gap: 6px;
+      padding: 10px;
+    }
 
-/* Remove little early-access banner */
-.hero::before{
-  content:none !important;
-  display:none !important;
-}
+    .mockup-row {
+      display: grid;
+      grid-template-columns: 26px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 7px 8px;
+      border: 1px solid rgba(232,228,240,.85);
+      border-radius: 11px;
+      background: rgba(255,255,255,.86);
+    }
 
-/* Keep the nice color styling, but change title text in markup */
-.hero{
-  padding-top: 18px !important;
-}
+    .mockup-icon {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-weight: 900;
+      font-size: .66rem;
+    }
 
-/* Remove perks and trust row from screen */
-.perks,
-.trust-row{
-  display:none !important;
-}
+    .mockup-row:nth-child(2) .mockup-icon { background: var(--blush); color: #B94B4B; }
+    .mockup-row:nth-child(3) .mockup-icon { background: var(--lavender); color: var(--violet); }
 
-/* Restore simple footer only */
-.la-footer{
-  display:block !important;
-  text-align:center !important;
-  font-size:12px !important;
-  color:#a0aec0 !important;
-  padding:16px 0 24px !important;
-  font-weight:600 !important;
-}
-.la-footer a{
-  color:#0F6E56 !important;
-  text-decoration:none !important;
-}
+    .mockup-name {
+      color: var(--ink);
+      font-size: .8rem;
+      font-weight: 900;
+      line-height: 1.2;
+    }
 
-/* Make header right-side home button match other tools */
-.back-btn{
-  width:36px !important;
-  height:36px !important;
-  border-radius:10px !important;
-  border:1.5px solid rgba(26,35,64,.12) !important;
-  background:#F8F7F3 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  padding:0 !important;
-  color:#6b7a99 !important;
-}
-.back-btn:hover{
-  background:#FAF8F4 !important;
-  border-color:#9090A8 !important;
-  color:#0F6E56 !important;
-}
-.back-btn svg{
-  width:18px !important;
-  height:18px !important;
-}
-.back-btn span{
-  display:none !important;
-}
-</style>
+    .mockup-meta {
+      color: var(--ink-soft);
+      font-size: .68rem;
+      font-weight: 750;
+    }
 
+    .mockup-action {
+      color: var(--teal-dk);
+      font-size: .68rem;
+      font-weight: 900;
+    }
+
+    .launch-callout {
+      margin: 0 0 10px;
+      background: #FFF5D7;
+      color: #8A5A00;
+      border: 1px solid rgba(255,184,48,.38);
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: .78rem;
+      padding: 6px 10px;
+    }
+
+    .account-status a {
+      color: var(--teal-dk);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--mint);
+      color: var(--teal-dk);
+      border-radius: 100px;
+      padding: 5px 10px;
+      font-size: .76rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .pricing {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .checkout-message {
+      display: none;
+      max-width: 820px;
+      margin: 24px auto 0;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(46,196,182,.35);
+      background: #F1FFFD;
+      color: var(--teal-dk);
+      font-weight: 800;
+      line-height: 1.45;
+    }
+    .checkout-message.show { display: block; }
+    .checkout-message.error { background: #FFF1F1; border-color: rgba(255,107,107,.42); color: #A33B3B; }
+    .checkout-message.success { background: #EEFDF2; border-color: rgba(46,196,106,.3); color: #12753E; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .plan-card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .plan-card.featured {
+      border-color: rgba(46,196,182,.45);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .plan-card.secondary {
+      box-shadow: none;
+    }
+
+    .plan-card[hidden] { display: none !important; }
+
+    .plan-card.founding {
+      border-color: rgba(255,184,48,.55);
+      box-shadow: 0 0 0 1px rgba(255,184,48,.22), 0 12px 36px rgba(255,184,48,.22), var(--shadow-hover);
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .plan-card.founding::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      border: 2px solid rgba(255,184,48,.38);
+      opacity: .75;
+      pointer-events: none;
+      animation: foundingGlow 2.8s ease-in-out infinite;
+    }
+
+    .plan-card.founding::after {
+      content: "";
+      position: absolute;
+      top: 70px;
+      right: 24px;
+      width: 14px;
+      height: 14px;
+      background: linear-gradient(135deg, var(--amber), var(--coral));
+      clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+      opacity: .78;
+      animation: launchSparkTwinkle 2.5s ease-in-out infinite .25s;
+    }
+
+    @keyframes foundingGlow {
+      0%, 100% { box-shadow: 0 0 0 rgba(255,184,48,0); opacity: .5; }
+      50% { box-shadow: 0 0 28px rgba(255,184,48,.42); opacity: 1; }
+    }
+
+    .plan-badge {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      background: var(--mint);
+      color: var(--teal-dk);
+      border-radius: 100px;
+      padding: 5px 10px;
+      font-size: .72rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .plan-card.founding .plan-badge {
+      background: #FFF5D7;
+      color: #8A5A00;
+    }
+
+    .launch-spark {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      margin-left: 6px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--amber), var(--coral));
+      clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+      animation: launchSparkTwinkle 2.2s ease-in-out infinite;
+    }
+
+    @keyframes launchSparkTwinkle {
+      0%, 100% { opacity: .55; transform: scale(.7) rotate(0deg); }
+      50%      { opacity: 1;   transform: scale(1.15) rotate(12deg); }
+    }
+
+    .plan-name {
+      font-family: var(--font-head);
+      font-size: 1.28rem;
+      font-weight: 900;
+      line-height: 1.22;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .plan-price {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      color: var(--ink);
+    }
+
+    .plan-price strong {
+      font-size: 2.25rem;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -.6px;
+    }
+
+    .plan-price span {
+      color: var(--ink-soft);
+      font-size: .92rem;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .limited-pill {
+      display: inline-flex;
+      align-self: flex-start;
+      margin-top: -4px;
+      border-radius: 100px;
+      background: #FFF5D7;
+      color: #8A5A00;
+      border: 1px solid rgba(255,184,48,.36);
+      padding: 4px 9px;
+      font-size: .72rem;
+      font-weight: 900;
+    }
+
+    .plan-card p {
+      color: var(--ink-soft);
+      font-size: .94rem;
+      font-weight: 650;
+      line-height: 1.55;
+    }
+
+    .plan-list,
+    .compare-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .plan-list li,
+    .compare-list li {
+      display: flex;
+      gap: 8px;
+      color: var(--ink-soft);
+      font-size: .91rem;
+      font-weight: 700;
+      line-height: 1.38;
+    }
+
+    .plan-list li::before,
+    .compare-list li::before {
+      content: "✓";
+      color: var(--teal-dk);
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      border-radius: 100px;
+      border: 0;
+      padding: 11px 18px;
+      font-family: var(--font-head);
+      font-size: .94rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .18s, background .18s, box-shadow .18s;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--teal); color: var(--white); box-shadow: 0 8px 22px rgba(46,196,182,.24); }
+    .btn-primary:hover { background: var(--teal-dk); }
+    .btn-secondary { background: var(--white); color: var(--teal-dk); border: 1.5px solid var(--teal); }
+    .btn-secondary:hover { background: var(--mint); }
+    .btn:disabled { opacity: .56; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .pricing-callouts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .pricing-callout {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--cream);
+      padding: 18px;
+    }
+
+    .pricing-callout h3 {
+      color: var(--ink);
+      font-size: 1rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .pricing-callout p {
+      color: var(--ink-soft);
+      font-size: .91rem;
+      font-weight: 650;
+      line-height: 1.52;
+    }
+
+    .pricing-callout a,
+    .faq-card a {
+      color: var(--teal-dk);
+      font-weight: 900;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .value-card {
+      padding: 22px;
+      position: relative;
+    }
+
+    .value-card.featured-value {
+      border-color: rgba(46,196,182,.45);
+      background: linear-gradient(160deg, #fff 0%, #F1FFFD 100%);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .value-badge {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .88rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .value-card:nth-child(3) .value-badge { background: var(--blush); color: #B94B4B; }
+    .value-card:nth-child(4) .value-badge { background: var(--lavender); color: var(--violet); }
+    .value-card:nth-child(5) .value-badge { background: #FFF5D7; color: #8A5A00; }
+
+    .value-card h3,
+    .compare-card h3,
+    .faq-card h3 {
+      font-family: var(--font-head);
+      color: var(--ink);
+      font-size: 1.08rem;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .value-card p,
+    .faq-card p {
+      color: var(--ink-soft);
+      font-size: .93rem;
+      font-weight: 650;
+      line-height: 1.58;
+    }
+
+    .compare {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .compare-card {
+      padding: 24px;
+      position: relative;
+    }
+
+    .compare-card.plus {
+      border-color: rgba(46,196,182,.45);
+      background: linear-gradient(160deg, #fff 0%, #F8FFFE 100%);
+    }
+
+    .compare-card h3::after {
+      content: "";
+      display: block;
+      width: 42px;
+      height: 4px;
+      border-radius: 100px;
+      background: var(--lavender);
+      margin-top: 10px;
+    }
+
+    .compare-card.plus h3::after {
+      background: var(--teal);
+    }
+
+    .compare-sublabel {
+      color: var(--teal-dk);
+      font-size: .82rem;
+      font-weight: 800;
+      margin-top: 12px;
+      margin-bottom: 14px;
+    }
+
+    .compare-card:not(.plus) .compare-sublabel {
+      color: var(--ink-soft);
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .faq-card {
+      padding: 18px;
+      box-shadow: none;
+    }
+
+    .trust-research {
+      background: linear-gradient(160deg, #E8F9F8 0%, var(--cream) 68%, #F3EEFB 100%);
+      border-top: 1px solid var(--border);
+    }
+
+    .trust-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      text-align: center;
+    }
+
+    .trust-panel p {
+      color: var(--ink-soft);
+      max-width: 820px;
+      margin: 12px auto 0;
+      font-size: 1rem;
+      font-weight: 650;
+      line-height: 1.6;
+    }
+
+    .trust-strip {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 28px 0 20px;
+      text-align: center;
+    }
+    .trust-strip-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px 28px;
+    }
+    .trust-strip-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+    }
+    .trust-strip-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--teal);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .trust-strip-badge-link { display: inline-flex; align-items: center; }
+    .trust-strip-badge-link:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+    .trust-strip-badge-img { height: 40px; width: auto; display: block; opacity: .92; }
+    .trust-strip-credential {
+      margin-top: 12px;
+      color: var(--ink-soft);
+      font-size: .84rem;
+      font-weight: 700;
+    }
+
+    .footer {
+      background: var(--ink);
+      color: rgba(255,255,255,.72);
+      padding: 56px 0 24px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .footer-brand .nav-logo { color: var(--white); }
+    .footer-desc {
+      margin-top: 14px;
+      font-size: .9rem;
+      max-width: 340px;
+      line-height: 1.6;
+    }
+    .footer-col-title {
+      font-family: var(--font-head);
+      font-weight: 800;
+      color: var(--white);
+      font-size: .95rem;
+      margin-bottom: 14px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a, .footer-links span { color: inherit; font-size: .9rem; }
+    .footer-links a:hover { color: var(--teal); }
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 20px;
+      font-size: .82rem;
+    }
+    .footer-legal { display: flex; gap: 18px; }
+    .footer-legal a:hover { color: var(--teal); }
+
+    @media (max-width: 960px) {
+      .hero-layout,
+      .pricing-grid,
+      .value-grid,
+      .pricing-callouts {
+        grid-template-columns: 1fr;
+      }
+      .value-grid { gap: 14px; }
+      .value-card.featured-value { grid-row: auto; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: absolute;
+        top: 62px; left: 0; right: 0;
+        background: var(--cream);
+        border-bottom: 1px solid var(--border);
+        padding: 16px;
+        gap: 4px;
+        z-index: 99;
+      }
+      .nav-mobile-toggle { display: flex; }
+      .section { padding: 56px 0; }
+      .section-sm { padding: 42px 0; }
+      .hero { padding: 46px 0 38px; }
+      .compare-grid,
+      .faq-grid,
+      .footer-inner {
+        grid-template-columns: 1fr;
+      }
+      .footer-inner { gap: 28px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .account-status { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <header>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Literacy Arcade home">
+          <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+          Literacy Arcade
+        </a>
 
-<header class="la-header">
-  <a href="https://literacyarcade.com" class="la-logo-group">
-    <div class="la-icon">
-      <img src="data:image/png;base64,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" alt="Literacy Arcade logo">
-    </div>
-    <span class="la-wordmark">Literacy Arcade</span>
-    <div class="la-pipe"></div>
-    <span class="la-page-name">Founding Teacher</span>
-  </a>
-  <a href="https://literacyarcade.com" class="back-btn" aria-label="Return to Literacy Arcade" title="Return to Literacy Arcade">
-    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-  </a>
-</header>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="assessments.html">Assessments</a></li>
+          <li><a href="fluency.html">Fluency</a></li>
+          <li><a href="build-and-play.html">Build &amp; Play</a></li>
+          <li><a href="teacher-tools.html">Teacher Tools</a></li>
+          <li><a href="teacher-login.html" class="nav-account">Dashboard / Log in</a></li>
+        </ul>
 
-<main class="page">
-  
-<div class="hero">
-    <h1>Become a <span>Founding Teacher</span></h1>
-
-    <p class="hero-subtitle">
-      Help shape the future of Literacy Arcade with early access to upcoming literacy games, classroom tools, and beta features.
-    </p>
-
-    </div>
-  </div>
-
-
-  <div style="height:12px;"></div>
-
-  <div class="form-card">
-    <!-- TODO: Replace YOUR_FORM_ID with the real Formspree endpoint before publishing. -->
-    <form action="https://formspree.io/f/xykvjvpo" method="POST">
-<input type="hidden" name="_captcha" value="false">
-<input type="hidden" name="_subject" value="New Literacy Arcade Founding Teacher Signup">
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="firstName">First Name</label>
-          <input type="text" id="firstName" name="firstName" placeholder="e.g. Sarah" required autocomplete="given-name">
-        </div>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" name="email" required id="email" name="email" placeholder="you@school.edu" required autocomplete="email">
+        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0">
+          <span></span><span></span><span></span>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="role">Your Role</label>
-          <select id="role" name="role" required>
-            <option value="" disabled selected>Select your role</option>
-            <option>Classroom Teacher</option>
-            <option>Reading Specialist</option>
-            <option>Interventionist</option>
-            <option>Special Education Teacher</option>
-            <option>Tutor</option>
-            <option>Homeschool Parent</option>
-            <option>Instructional Coach</option>
-            <option>Administrator</option>
-            <option>Other</option>
-          </select>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-label="Literacy Arcade Plus upgrade">
+      <div class="container hero-layout">
+        <div>
+          <span class="page-eyebrow">Literacy Arcade Plus</span>
+          <h1 class="hero-title">Save and reuse the literacy tools you build.</h1>
+          <p class="hero-sub">Literacy Arcade Plus lets you save unlimited games, flashcards, spinners, lesson tools, and assessment reports — then organize them in your dashboard and share student-ready links through Google Classroom, direct links, or embedded activities.</p>
+          <ul class="hero-bullets" aria-label="Plus benefits">
+            <li>Save unlimited classroom activities and tools</li>
+            <li>Share student-ready practice links</li>
+            <li>Organize everything in your teacher dashboard</li>
+            <li>Print assessment reports and lesson plans</li>
+          </ul>
         </div>
-        <div class="form-group">
-          <label for="grade">Grade Level</label>
-          <select id="grade" name="grade" required>
-            <option value="" disabled selected>Select grade(s)</option>
-            <option>Pre-K / Kindergarten</option>
-            <option>Grades 1-2</option>
-            <option>Grades 3-4</option>
-            <option>Grades 5-6</option>
-            <option>Grades 7-8</option>
-            <option>High School</option>
-            <option>Multiple grades</option>
-            <option>Adult learners</option>
-          </select>
+
+        <aside class="account-card" aria-label="Account status">
+          <div class="plus-mockup" aria-hidden="true">
+            <div class="mockup-top">
+              <div class="mockup-title">Plus workspace</div>
+              <div class="mockup-pill">Unlimited</div>
+            </div>
+            <div class="mockup-body">
+              <div class="mockup-row">
+                <div class="mockup-icon">RF</div>
+                <div>
+                  <div class="mockup-name">ORF Report</div>
+                  <div class="mockup-meta">Printable PDF</div>
+                </div>
+                <div class="mockup-action">Saved</div>
+              </div>
+              <div class="mockup-row">
+                <div class="mockup-icon">GC</div>
+                <div>
+                  <div class="mockup-name">Flashcards</div>
+                  <div class="mockup-meta">Google Classroom link</div>
+                </div>
+                <div class="mockup-action">Share</div>
+              </div>
+              <div class="mockup-row">
+                <div class="mockup-icon">LB</div>
+                <div>
+                  <div class="mockup-name">Letterbox Lesson</div>
+                  <div class="mockup-meta">Lesson-plan PDF</div>
+                </div>
+                <div class="mockup-action">Reuse</div>
+              </div>
+            </div>
+          </div>
+          <div class="launch-callout">Launch week: Founding Teacher access is $49/year</div>
+          <div class="account-label">Account</div>
+          <h2 class="account-title" id="accountTitle">Sign in before checkout</h2>
+          <p class="account-text" id="accountText">Your upgrade is connected to the Literacy Arcade account shown here. Saved activities are tied to the account used when they were created.</p>
+          <div class="account-status">
+            <span id="accountEmail">Checking sign-in status…</span>
+            <span class="status-pill" id="planPill">Free</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="pricing section-sm" id="plans" aria-label="Upgrade plans">
+      <div class="container">
+        <h2 class="section-title">Choose your Plus plan</h2>
+        <p class="pain-point-line">Stop rebuilding the same literacy activities every time you need them.</p>
+        <p class="section-sub">Every Plus plan includes the same full access. The only difference is whether you join during the founding launch offer, pay yearly, or pay month to month.</p>
+        <div class="checkout-message" id="checkoutMessage" role="status" aria-live="polite"></div>
+
+        <div class="pricing-grid">
+          <article class="plan-card founding" data-founding-offer>
+            <span class="plan-badge">Launch Week Offer<span class="launch-spark" aria-hidden="true"></span></span>
+            <div>
+              <div class="plan-label">Founding Teacher Annual</div>
+              <h3 class="plan-name">Early supporter access</h3>
+            </div>
+            <div class="plan-price"><strong>$49</strong><span>/ year</span></div>
+            <div class="limited-pill">Limited launch price</div>
+            <p>Same full Plus access at the founding teacher rate when you join during launch week.</p>
+            <ul class="plan-list">
+              <li>Full Plus access</li>
+              <li>Unlimited saves and shares</li>
+              <li>Dashboard organization</li>
+              <li>PDF reports and lesson plans</li>
+              <li>New tools added over time</li>
+            </ul>
+            <button class="btn btn-primary checkout-button" type="button" data-price-id="price_1TqmEK3PzX3bHrbQEkK6vaes" data-test-price-id="price_1TqY6k4Gz51pZDtQR6oFrYDp" data-plan="founding">Start founding access</button>
+          </article>
+
+          <article class="plan-card featured">
+            <span class="plan-badge">Best Value</span>
+            <div>
+              <div class="plan-label">Plus Annual</div>
+              <h3 class="plan-name">Full-year classroom access</h3>
+            </div>
+            <div class="plan-price"><strong>$79</strong><span>/ year</span></div>
+            <p>Full Plus access for the year after the founding offer ends.</p>
+            <ul class="plan-list">
+              <li>Full Plus access</li>
+              <li>Unlimited saves and shares</li>
+              <li>Dashboard organization</li>
+              <li>PDF reports and lesson plans</li>
+              <li>New tools added over time</li>
+            </ul>
+            <button class="btn btn-primary checkout-button" type="button" data-price-id="price_1TqmEJ3PzX3bHrbQ2cWDevb5" data-test-price-id="price_1TqY5P4Gz51pZDtQOiymXQZ4" data-plan="plus">Start annual Plus</button>
+          </article>
+
+          <article class="plan-card secondary">
+            <span class="plan-badge">Plus Monthly</span>
+            <div>
+              <div class="plan-label">Plus Monthly</div>
+              <h3 class="plan-name">Flexible monthly access</h3>
+            </div>
+            <div class="plan-price"><strong>$7.99</strong><span>/ month</span></div>
+            <p>Full Plus access month to month with the same teacher account.</p>
+            <ul class="plan-list">
+              <li>Full Plus access</li>
+              <li>Unlimited saves and shares</li>
+              <li>Dashboard organization</li>
+              <li>PDF reports and lesson plans</li>
+              <li>New tools added over time</li>
+            </ul>
+            <button class="btn btn-secondary checkout-button" type="button" data-price-id="price_1TqmEM3PzX3bHrbQh3wylsSF" data-test-price-id="price_1TqY444Gz51pZDtQmTMOq3Gv" data-plan="plus">Start monthly Plus</button>
+          </article>
+        </div>
+
+        <div class="pricing-callouts" aria-label="Pricing notes">
+          <article class="pricing-callout">
+            <h3>Free tools stay useful.</h3>
+            <p>Use Literacy Arcade tools live for free. Upgrade when you need unlimited saved/shared activities and tools.</p>
+          </article>
+          <article class="pricing-callout">
+            <h3>Need access for a school or team?</h3>
+            <p>Email <a href="mailto:hello@literacyarcade.com">hello@literacyarcade.com</a> for group pricing or school access options.</p>
+          </article>
         </div>
       </div>
-      <input type="text" name="_gotcha" style="display:none">
-      <input type="hidden" name="_subject" value="New Founding Teacher Signup - Literacy Arcade">
-      <button type="submit" class="submit-btn" id="submitBtn"><span id="btnText">Become a Founding Teacher</span>
-      </button>
-      </form>
+    </section>
 
-    <div class="success-state" id="successState">
-      <div class="confetti-wrap" id="confettiWrap"></div>
-      <div class="success-icon"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="success-title">You're in!</div>
-      <p class="success-sub">Welcome to the Literacy Arcade founding teacher community. We'll be in touch soon with early access and updates.</p>
-      <div class="success-badge">Founding Teacher &mdash; Literacy Arcade</div>
-      <p style="font-size:13px;color:#718096;font-weight:600;">Keep an eye on your inbox &mdash; including your spam folder just in case.</p>
-    </div>
-  </div>
+    <section class="section" aria-label="What Plus helps you do">
+      <div class="container">
+        <h2 class="section-title">What you get with Plus</h2>
+        <p class="section-sub">Plus is for teachers who want to keep and reuse the activities they already build.</p>
 
+        <div class="value-grid">
+          <article class="value-card featured-value">
+            <div class="value-badge">01</div>
+            <h3>Build once. Reuse anytime.</h3>
+            <p>Save word lists, flashcards, spinners, games, lesson tools, and assessment reports so you do not have to rebuild the same activity later.</p>
+          </article>
+          <article class="value-card">
+            <div class="value-badge">02</div>
+            <h3>Share student-ready practice</h3>
+            <p>Send locked links through Google Classroom, direct links, or embedded activities so students can practice without needing accounts.</p>
+          </article>
+          <article class="value-card">
+            <div class="value-badge">03</div>
+            <h3>Organize everything in your dashboard</h3>
+            <p>Keep saved activities and tools together by group, skill, class, or lesson.</p>
+          </article>
+          <article class="value-card">
+            <div class="value-badge">04</div>
+            <h3>Print reports and lesson plans</h3>
+            <p>Create printable assessment reports and lesson-plan PDFs, including Letterbox Lesson plans.</p>
+          </article>
+          <article class="value-card">
+            <div class="value-badge">05</div>
+            <h3>Research-aligned tools added over time</h3>
+            <p>Plus supports continued development of practical, Science of Reading-aligned games, assessments, and lesson-planning tools for teachers.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="compare section-sm" aria-label="Free vs Plus">
+      <div class="container">
+        <h2 class="section-title">Free vs. Plus</h2>
+        <p class="section-sub">The free account stays useful for live teaching. Plus is for saving, sharing, and organizing more activities over time.</p>
+
+        <div class="compare-grid">
+          <article class="compare-card">
+            <h3>Free account</h3>
+            <p class="compare-sublabel">Best for live use</p>
+            <ul class="compare-list">
+              <li>Use Literacy Arcade tools live</li>
+              <li>Create up to 5 saved/shared classroom activities or tools</li>
+              <li>Existing saved/shared work stays available</li>
+              <li>Student links do not require student accounts</li>
+            </ul>
+          </article>
+          <article class="compare-card plus">
+            <h3>Literacy Arcade Plus</h3>
+            <p class="compare-sublabel">Best for saving, sharing, and reusing</p>
+            <ul class="compare-list">
+              <li>Unlimited saved/shared activities and tools</li>
+              <li>Unlimited student-ready share links</li>
+              <li>Teacher dashboard organization</li>
+              <li>Printable assessment reports and lesson PDFs</li>
+              <li>Access updates automatically after checkout</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Upgrade questions">
+      <div class="container">
+        <h2 class="section-title">Questions teachers usually ask</h2>
+        <p class="section-sub">A few quick details before you choose a plan.</p>
+
+        <div class="faq-grid">
+          <article class="faq-card">
+            <h3>Do students need accounts?</h3>
+            <p>No. Student-ready links do not require student accounts.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Can I keep using the free tools?</h3>
+            <p>Yes. Free accounts can still use Literacy Arcade tools live and create up to 5 saved/shared classroom activities or tools.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What happens after checkout?</h3>
+            <p>Stripe handles checkout securely. After payment is confirmed, Firebase updates your Literacy Arcade account automatically.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Which email should I use?</h3>
+            <p>Sign in with the Literacy Arcade account you want upgraded before checkout. Your upgrade is connected to that signed-in account.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What happens to activities I already saved?</h3>
+            <p>Existing saved and shared activities stay available.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What if I want access for my school or team?</h3>
+            <p>Email <a href="mailto:hello@literacyarcade.com">hello@literacyarcade.com</a> for group pricing or school access options.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Can I cancel the monthly plan?</h3>
+            <p>Yes. Monthly Plus is flexible and can be canceled before the next billing cycle. Billing management is handled through Stripe.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What if my account does not update after checkout?</h3>
+            <p>Most upgrades update automatically after checkout. If something looks wrong, contact support with the email shown on your Literacy Arcade account.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-research section-sm" aria-label="Research alignment">
+      <div class="container">
+        <div class="trust-panel">
+          <h2 class="section-title">Built for targeted literacy practice and planning</h2>
+          <p>Literacy Arcade supports targeted practice and lesson planning across phonemic awareness, phonics, word reading, fluency, vocabulary, and comprehension — with tools built around Science of Reading-aligned principles.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Trust and credibility">
+      <div class="container trust-strip-inner">
+        <span class="trust-strip-item"><span class="trust-strip-dot"></span>No student accounts required</span>
+        <span class="trust-strip-item"><span class="trust-strip-dot"></span>Google Classroom sharing supported</span>
+        <span class="trust-strip-item"><span class="trust-strip-dot"></span>Listed on EdTech Index</span>
+        <!-- EdTech Index badge — directory listing mark, reused as-is from index.html.
+             Do not modify, recolor, or crop the artwork. -->
+        <a class="trust-strip-badge-link" href="https://edtechindex.org/product/ultid/P934-3FE3-514A-31A3-6B/" target="_blank" rel="noopener" aria-label="View Literacy Arcade on the EdTech Index (opens in a new tab)">
+          <img class="trust-strip-badge-img" src="data:image/png;base64,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" width="86" height="92" alt="Find us on the EdTech Index — Literacy Arcade directory listing" />
+        </a>
+      </div>
+      <p class="trust-strip-credential">Created by a reading researcher with a Ph.D. in Reading Education</p>
+    </section>
   </main>
 
-<footer class="la-footer"><a href="https://literacyarcade.com">Literacy Arcade</a> &bull; Founding Teacher</footer>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+            Literacy Arcade
+          </a>
+          <p class="footer-desc">Literacy tools for teachers, tutors, interventionists, and homeschool families. No student accounts required.</p>
+        </div>
 
+        <div>
+          <div class="footer-col-title">Explore</div>
+          <ul class="footer-links">
+            <li><a href="assessments.html">Assessments</a></li>
+            <li><a href="fluency.html">Fluency</a></li>
+            <li><a href="build-and-play.html">Build &amp; Play</a></li>
+            <li><a href="teacher-tools.html">Teacher Tools</a></li>
+            <li><a href="teacher-dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
 
+        <div>
+          <div class="footer-col-title">Support</div>
+          <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="mailto:hello@literacyarcade.com">Contact</a></li>
+            <li><a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
 
-<script>
-const form = document.getElementById("signupForm");
-const successState = document.getElementById("successState");
-const submitBtn = document.getElementById("submitBtn");
-const btnText = document.getElementById("btnText");
+      <div class="footer-bottom">
+        <p>© 2026 Literacy Arcade. Free literacy tools for teachers.</p>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy Policy</a>
+          <span>Terms of Use</span>
+          <a href="mailto:hello@literacyarcade.com">Contact</a>
+          <a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-form.addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  const firstName = document.getElementById("firstName").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const role = document.getElementById("role").value;
-  const grade = document.getElementById("grade").value;
-
-  // Validate
-  let valid = true;
-  [
-    { el: document.getElementById("firstName"), val: firstName },
-    { el: document.getElementById("email"), val: email },
-    { el: document.getElementById("role"), val: role },
-    { el: document.getElementById("grade"), val: grade }
-  ].forEach(function(field) {
-    if (!field.val) {
-      valid = false;
-      field.el.style.borderColor = "#e53e3e";
-      field.el.style.boxShadow = "0 0 0 3px rgba(229,62,62,.12)";
-      field.el.addEventListener("input", function() {
-        field.el.style.borderColor = "";
-        field.el.style.boxShadow = "";
-      }, { once: true });
-    }
-  });
-  if (!valid) return;
-
-  submitBtn.disabled = true;
-  btnText.textContent = "Submitting…";
-
-  try {
-    const response = await fetch(form.action, {
-      method: "POST",
-      body: new FormData(form),
-      headers: { "Accept": "application/json" }
+  <script>
+    const toggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
     });
-    showSuccess();
-  } catch (err) {
-    showSuccess(); // still show success — user did their part
-  }
-});
-
-function showSuccess() {
-  form.style.display = "none";
-  successState.style.display = "block";
-  spawnConfetti();
-  successState.scrollIntoView({ behavior: "smooth", block: "center" });
-}
-
-function spawnConfetti() {
-  const wrap = document.getElementById("confettiWrap");
-  const colors = ["#0F6E56","#38b2a0","#f6ad55","#fc8181","#76e4f7","#b794f4","#f6e05e"];
-  for (var i = 0; i < 22; i++) {
-    var dot = document.createElement("div");
-    dot.className = "confetti-dot";
-    var angle = (i / 22) * Math.PI * 2;
-    var dist = 55 + Math.random() * 80;
-    dot.style.cssText =
-      "background:" + colors[i % colors.length] + ";" +
-      "left:50%;" +
-      "top:0;" +
-      "--cx:" + (Math.cos(angle) * dist) + "px;" +
-      "--cy:" + (-(40 + Math.random() * 80)) + "px;" +
-      "--cr:" + (Math.random() * 360) + "deg;" +
-      "--cd:" + (0.6 + Math.random() * 0.6) + "s;" +
-      "--cdl:" + (Math.random() * 0.3) + "s;";
-    wrap.appendChild(dot);
-  }
-}
-</script>
+    toggle.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') navLinks.classList.toggle('open');
+    });
+  </script>
+  <script type="module" src="./stripe-upgrade.js"></script>
 </body>
 </html>

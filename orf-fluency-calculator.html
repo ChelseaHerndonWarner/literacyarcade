@@ -30,7 +30,7 @@
   <meta name="description" content="Free oral reading fluency calculator for WCPM, accuracy, errors, and Hasbrouck &amp; Tindal Fluency Norms. Teacher tool for grades 1–6 screening and progress monitoring." />
   <meta name="keywords" content="oral reading fluency calculator, ORF calculator, WCPM calculator, words correct per minute, reading fluency, reading accuracy, Hasbrouck Tindal fluency norms, fluency benchmark, progress monitoring, science of reading, reading intervention, K-6 fluency norms, Literacy Arcade" />
   <meta name="author" content="Literacy Arcade" />
-  <meta name="application-name" content="ORF Fluency Calculator" />
+  <meta name="application-name" content="Oral Reading Fluency Calculator" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="theme-color" content="#2EC4B6" />
   <link rel="canonical" href="https://literacyarcade.com/orf-fluency-calculator.html" />
@@ -364,6 +364,32 @@
     .metric-value.teal{color:var(--teal-dk);}
     .metric-value.coral{color:var(--coral-dk);}
     .metric-sub{font-size:12px;font-weight:700;color:var(--navy-mid);margin-top:6px;min-height:16px;}
+
+    .extension-callout{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border:1.5px solid rgba(46,196,182,.28);
+      border-radius:16px;
+      background:rgba(217,248,245,.45);
+      padding:12px 14px;
+    }
+    .extension-callout span{
+      color:var(--navy-mid);
+      font-size:13px;
+      font-weight:800;
+      line-height:1.35;
+    }
+    .extension-callout a{
+      color:var(--teal-dk);
+      font-size:13px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .extension-callout a:hover{text-decoration:underline;}
 
     .panel{padding:22px;}
     .panel-title{font-size:21px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px;}
@@ -916,6 +942,10 @@
       <div class="eyebrow">Oral Reading Fluency</div>
       <h1 class="title">Calculate WCPM and accuracy in seconds.</h1>
       <p class="subtitle">Calculate WCPM, reading accuracy, and fluency benchmark ranges using Hasbrouck & Tindal Fluency Norms.</p>
+      <div class="extension-callout">
+        <span>Want to use the calculator alongside any online passage? Try the Literacy Arcade ORF Chrome extension.</span>
+        <a href="https://chromewebstore.google.com/detail/miaemldmllaajndjebafphgkonhlikmd?utm_source=item-share-cb" target="_blank" rel="noopener">Get the Chrome extension →</a>
+      </div>
 
       <div class="quick-results" aria-live="polite">
         <div class="metric">
@@ -1047,7 +1077,7 @@
     </section>
   </main>
 
-  <p class="footer-note">Literacy Arcade • ORF Fluency Calculator</p>
+  <p class="footer-note">Literacy Arcade • Oral Reading Fluency Calculator</p>
 
   <div class="print-login-modal" id="printLoginModal" role="dialog" aria-modal="true" aria-labelledby="printLoginTitle" hidden>
     <div class="print-login-card">

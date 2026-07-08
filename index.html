@@ -350,6 +350,82 @@
     justify-content: flex-start;
   }
 
+  .plus-callout {
+    position: relative;
+    overflow: hidden;
+    margin-top: 22px;
+    max-width: 560px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border: 1.5px solid rgba(46,196,182,.32);
+    border-radius: 20px;
+    background: rgba(255,255,255,.78);
+    box-shadow: 0 12px 32px rgba(26,26,46,.08);
+  }
+
+  .plus-callout::before,
+  .plus-callout::after {
+    content: "✦";
+    position: absolute;
+    pointer-events: none;
+    color: var(--coral);
+    opacity: .42;
+    text-shadow: 0 0 16px rgba(255, 107, 107, .28);
+    animation: plusSparkle 5.6s ease-in-out infinite;
+  }
+
+  .plus-callout::before {
+    top: 10px;
+    right: 18px;
+    font-size: 15px;
+  }
+
+  .plus-callout::after {
+    content: "✧";
+    bottom: 12px;
+    right: 116px;
+    font-size: 12px;
+    color: var(--teal-dk);
+    opacity: .34;
+    animation-delay: 1.8s;
+  }
+
+  .plus-callout strong {
+    display: block;
+    color: var(--ink);
+    font-family: var(--font-head);
+    font-size: .98rem;
+    font-weight: 900;
+    margin-bottom: 3px;
+  }
+
+  .plus-callout span {
+    color: var(--ink-soft);
+    font-size: .9rem;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  .plus-callout-link {
+    color: var(--teal-dk);
+    font-family: var(--font-head);
+    font-size: .9rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .plus-callout-link:hover { text-decoration: underline; }
+
+  @keyframes plusSparkle {
+    0%, 100% { opacity: .24; transform: scale(.82) rotate(0deg); }
+    44% { opacity: .72; transform: scale(1.08) rotate(10deg); }
+    58% { opacity: .38; transform: scale(.94) rotate(16deg); }
+  }
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -1092,6 +1168,11 @@
       transition-duration: .001ms !important;
       scroll-behavior: auto !important;
     }
+
+    .plus-callout::before,
+    .plus-callout::after {
+      animation: none !important;
+    }
   }
 </style>
 </head>
@@ -1139,6 +1220,13 @@
             <div class="hero-actions" aria-label="Primary homepage actions">
               <a class="btn btn-primary" href="#categories">Explore tools →</a>
               <a class="btn btn-secondary" href="teacher-login.html">Log in</a>
+            </div>
+            <div class="plus-callout" aria-label="Literacy Arcade Plus launch week offer">
+              <div>
+                <strong>Launch week: Founding Teacher discount available</strong>
+                <span>Save unlimited activities, organize your teacher dashboard, and print reports with Literacy Arcade Plus.</span>
+              </div>
+              <a class="plus-callout-link" href="founding-teacher.html">See Plus plans →</a>
             </div>
           </div>
 
@@ -1382,12 +1470,12 @@
       <div class="container">
         <h2 class="section-title">Popular tools</h2>
         <div class="shortcut-row">
-          <a class="shortcut-card" href="orf-fluency-calculator.html" data-tool="ORF Fluency Calculator">
+          <a class="shortcut-card" href="orf-fluency-calculator.html" data-tool="Oral Reading Fluency Calculator">
             <span class="shortcut-preview has-image">
-              <img src="images/home-popular-orf.png" alt="ORF Fluency Calculator preview" loading="lazy" decoding="async">
+              <img src="images/home-popular-orf.png" alt="Oral Reading Fluency Calculator preview" loading="lazy" decoding="async">
             </span>
             <span class="shortcut-body">
-              <span class="shortcut-name">ORF Fluency Calculator</span>
+              <span class="shortcut-name">Oral Reading Fluency Calculator</span>
               <span class="shortcut-desc">Time oral reading, calculate WCPM and accuracy, compare to fluency norms, and print a teacher report.</span>
               <span class="shortcut-action">Open tool →</span>
             </span>
@@ -1524,6 +1612,7 @@
             <li><a href="privacy.html">Privacy Policy</a></li>
             <li><span>Terms of Use</span></li>
             <li><a href="mailto:hello@literacyarcade.com">Contact</a></li>
+            <li><a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a></li>
           </ul>
         </div>
       </div>
@@ -1534,6 +1623,7 @@
           <a href="privacy.html">Privacy Policy</a>
           <span>Terms of Use</span>
           <a href="mailto:hello@literacyarcade.com">Contact</a>
+          <a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a>
         </div>
       </div>
     </div>
