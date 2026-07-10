@@ -232,20 +232,55 @@
       margin-bottom: 18px;
     }
 
+    .hero-copy {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .hero-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .hero-badge-row .page-eyebrow {
+      margin-bottom: 0;
+    }
+
+    .launch-rate-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: #FFF5D7;
+      border: 1px solid rgba(255,184,48,.56);
+      color: #744A00;
+      box-shadow: 0 8px 20px rgba(255,184,48,.16);
+      padding: 6px 12px;
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
     .hero {
-      padding: 58px 0 44px;
+      padding: 44px 0 34px;
       background: linear-gradient(160deg, #E8F9F8 0%, var(--cream) 58%, #F3EEFB 100%);
       border-bottom: 1px solid var(--border);
+      overflow: hidden;
     }
 
     .hero-layout {
       display: grid;
       grid-template-columns: minmax(0, 1.05fr) minmax(300px, .7fr);
-      gap: 36px;
+      gap: 28px;
       align-items: center;
     }
 
     .hero-title {
+      position: relative;
+      z-index: 1;
       font-family: var(--font-head);
       font-size: clamp(2.2rem, 4vw, 3.15rem);
       font-weight: 900;
@@ -256,13 +291,43 @@
       max-width: 660px;
     }
 
+    .hero-price-highlight {
+      position: relative;
+      display: inline-block;
+      color: #D84E48;
+      white-space: nowrap;
+      text-shadow: 0 8px 24px rgba(255,107,107,.14);
+    }
+
+    .hero-price-highlight::after {
+      content: "";
+      position: absolute;
+      left: -.08em;
+      right: -.08em;
+      bottom: .03em;
+      height: .34em;
+      border-radius: 999px;
+      background: rgba(255,184,48,.38);
+      z-index: -1;
+      transform: rotate(-1.3deg);
+    }
+
     .hero-sub {
       font-size: 1.1rem;
       color: var(--ink-soft);
       font-weight: 650;
       line-height: 1.62;
       max-width: 680px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+    }
+
+    .hero-product-note {
+      color: var(--ink-soft);
+      font-size: .98rem;
+      font-weight: 700;
+      line-height: 1.55;
+      max-width: 680px;
+      margin: 0 0 16px;
     }
 
     .hero-bullets {
@@ -296,6 +361,160 @@
       flex-shrink: 0;
     }
 
+    .hero-deal-card {
+      margin: 22px 0 20px;
+      max-width: 680px;
+      border: 2px solid rgba(255,184,48,.58);
+      border-radius: 18px;
+      background: linear-gradient(135deg, #FFF8E7 0%, #FFF0EE 56%, #F1FFFD 100%);
+      box-shadow: 0 14px 38px rgba(26,26,46,.12);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-deal-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 5px;
+      background: linear-gradient(90deg, var(--coral), var(--amber), var(--teal));
+    }
+
+    .hero-deal-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--coral);
+      color: var(--white);
+      padding: 6px 10px;
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .hero-deal-title {
+      color: var(--ink);
+      font-family: var(--font-head);
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      font-weight: 900;
+      line-height: 1.12;
+      margin-bottom: 7px;
+    }
+
+    .hero-deal-text {
+      color: var(--ink-soft);
+      font-size: 1rem;
+      font-weight: 750;
+      line-height: 1.48;
+      margin-bottom: 14px;
+    }
+
+    .hero-deal-footer,
+    .hero-offer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-offer-actions {
+      margin: 0 0 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .launch-accent {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      color: var(--coral);
+      opacity: .24;
+      pointer-events: none;
+      z-index: 0;
+      animation: launchAccentFloat 7.5s ease-in-out infinite;
+    }
+
+    .launch-accent::before {
+      content: "✦";
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .launch-accent.one { top: 8px; right: 38px; color: var(--coral); animation-delay: -.8s; }
+    .launch-accent.two { top: 122px; right: 120px; color: var(--amber); animation-delay: -2.5s; }
+    .launch-accent.three { top: 190px; left: -6px; color: var(--teal-dk); animation-delay: -4.2s; }
+    .launch-accent.four { bottom: 48px; right: 28px; color: var(--violet); animation-delay: -5.5s; }
+
+    @keyframes launchAccentFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(.92); opacity: .16; }
+      45% { transform: translate3d(0, -8px, 0) rotate(8deg) scale(1.04); opacity: .34; }
+      70% { transform: translate3d(4px, -4px, 0) rotate(-5deg) scale(.98); opacity: .22; }
+    }
+
+    .deal-countdown,
+    .plan-countdown {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: var(--white);
+      border: 1px solid rgba(255,184,48,.52);
+      color: #744A00;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .deal-countdown {
+      padding: 9px 13px;
+      font-size: .95rem;
+      animation: countdownLiveGlow 4.8s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes countdownLiveGlow {
+      0%, 74%, 100% {
+        box-shadow: 0 0 0 rgba(255,184,48,0);
+        transform: scale(1);
+      }
+      84% {
+        box-shadow: 0 0 0 4px rgba(255,184,48,.16), 0 10px 24px rgba(255,107,107,.18);
+        transform: scale(1.018);
+      }
+    }
+
+    .deal-countdown.is-expired,
+    .plan-countdown.is-expired {
+      white-space: normal;
+    }
+
+    .hero-deal-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      border-radius: 999px;
+      background: var(--teal);
+      color: var(--white);
+      padding: 11px 18px;
+      font-family: var(--font-head);
+      font-size: .94rem;
+      font-weight: 900;
+      box-shadow: 0 8px 22px rgba(46,196,182,.24);
+      transition: transform .18s, background .18s, box-shadow .18s;
+    }
+
+    .hero-deal-button:hover {
+      background: var(--teal-dk);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+    }
+
     .account-card,
     .plan-card,
     .value-card,
@@ -310,6 +529,45 @@
     .account-card {
       padding: 18px;
       overflow: hidden;
+    }
+
+    .account-claim {
+      margin-top: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,184,48,.46);
+      background: linear-gradient(135deg, #FFF8E7 0%, #FFF4F1 100%);
+      padding: 14px;
+    }
+
+    .account-claim p {
+      color: var(--ink);
+      font-family: var(--font-head);
+      font-size: .95rem;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .account-claim-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 42px;
+      border-radius: 999px;
+      background: var(--teal);
+      color: var(--white);
+      box-shadow: 0 8px 20px rgba(46,196,182,.2);
+      font-family: var(--font-head);
+      font-size: .9rem;
+      font-weight: 900;
+      transition: transform .18s, background .18s, box-shadow .18s;
+    }
+
+    .account-claim-link:hover {
+      background: var(--teal-dk);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
     }
 
     .account-label,
@@ -478,6 +736,11 @@
     .pricing {
       background: var(--white);
       border-bottom: 1px solid var(--border);
+      scroll-margin-top: 70px;
+    }
+
+    .pricing.section-sm {
+      padding-top: 34px;
     }
 
     .checkout-message {
@@ -500,7 +763,7 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
-      margin-top: 30px;
+      margin-top: 24px;
     }
 
     .plan-card {
@@ -524,7 +787,8 @@
 
     .plan-card.founding {
       border-color: rgba(255,184,48,.55);
-      box-shadow: 0 0 0 1px rgba(255,184,48,.22), 0 12px 36px rgba(255,184,48,.22), var(--shadow-hover);
+      transform: translateY(-6px);
+      box-shadow: 0 0 0 1px rgba(255,184,48,.3), 0 18px 46px rgba(255,184,48,.26), var(--shadow-hover);
       isolation: isolate;
       overflow: hidden;
     }
@@ -553,6 +817,23 @@
       animation: launchSparkTwinkle 2.5s ease-in-out infinite .25s;
     }
 
+    #plus-plans:target .plan-card.founding,
+    .plan-card.founding.plan-scroll-highlight {
+      animation: planScrollHighlight 1.65s ease-out 1;
+    }
+
+    @keyframes planScrollHighlight {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255,184,48,.58), 0 18px 46px rgba(255,184,48,.28), var(--shadow-hover);
+      }
+      44% {
+        box-shadow: 0 0 0 8px rgba(255,184,48,.22), 0 0 36px rgba(255,107,107,.26), var(--shadow-hover);
+      }
+      100% {
+        box-shadow: 0 0 0 1px rgba(255,184,48,.3), 0 18px 46px rgba(255,184,48,.26), var(--shadow-hover);
+      }
+    }
+
     @keyframes foundingGlow {
       0%, 100% { box-shadow: 0 0 0 rgba(255,184,48,0); opacity: .5; }
       50% { box-shadow: 0 0 28px rgba(255,184,48,.42); opacity: 1; }
@@ -573,8 +854,8 @@
     }
 
     .plan-card.founding .plan-badge {
-      background: #FFF5D7;
-      color: #8A5A00;
+      background: var(--coral);
+      color: var(--white);
     }
 
     .launch-spark {
@@ -621,6 +902,17 @@
       font-size: .92rem;
       font-weight: 800;
       margin-bottom: 3px;
+    }
+
+    .plan-card.founding .plan-price strong {
+      font-size: 2.55rem;
+    }
+
+    .plan-countdown {
+      align-self: flex-start;
+      margin-top: -4px;
+      padding: 6px 10px;
+      font-size: .82rem;
     }
 
     .limited-pill {
@@ -972,7 +1264,21 @@
       .nav-mobile-toggle { display: flex; }
       .section { padding: 56px 0; }
       .section-sm { padding: 42px 0; }
-      .hero { padding: 46px 0 38px; }
+      .hero { padding: 36px 0 30px; }
+      .hero-deal-card { padding: 18px; }
+      .hero-deal-footer,
+      .hero-offer-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .deal-countdown,
+      .hero-deal-button {
+        width: 100%;
+      }
+      .hero-badge-row { gap: 8px; }
+      .launch-rate-badge { font-size: .72rem; }
+      .launch-accent { display: none; }
+      .plan-card.founding { transform: none; }
       .compare-grid,
       .faq-grid,
       .footer-inner {
@@ -990,6 +1296,9 @@
         transition-duration: .001ms !important;
         scroll-behavior: auto !important;
       }
+
+      .launch-accent { display: none !important; }
+      .deal-countdown { transform: none !important; }
     }
   </style>
 </head>
@@ -1021,10 +1330,22 @@
   <main>
     <section class="hero" aria-label="Literacy Arcade Plus upgrade">
       <div class="container hero-layout">
-        <div>
-          <span class="page-eyebrow">Literacy Arcade Plus</span>
-          <h1 class="hero-title">Save and reuse the literacy tools you build.</h1>
-          <p class="hero-sub">Literacy Arcade Plus lets you save unlimited games, flashcards, spinners, lesson tools, and assessment reports — then organize them in your dashboard and share student-ready links through Google Classroom, direct links, or embedded activities.</p>
+        <div class="hero-copy">
+          <span class="launch-accent one" aria-hidden="true"></span>
+          <span class="launch-accent two" aria-hidden="true"></span>
+          <span class="launch-accent three" aria-hidden="true"></span>
+          <span class="launch-accent four" aria-hidden="true"></span>
+          <div class="hero-badge-row">
+            <span class="page-eyebrow">Founding Teacher Launch Offer</span>
+            <span class="launch-rate-badge">Launch week only</span>
+          </div>
+          <h1 class="hero-title">Get Literacy Arcade Plus for <span class="hero-price-highlight">$49/year</span></h1>
+          <p class="hero-sub">Save unlimited games, flashcards, spinners, reports, and lesson tools — then reuse them anytime.</p>
+          <div class="hero-offer-actions" aria-label="Founding Teacher launch offer">
+            <span class="deal-countdown" data-founding-countdown data-countdown-prefix="Founding rate ends in:" data-expired-text="Founding Teacher deal has ended">Founding rate ends in: loading</span>
+            <a class="hero-deal-button" href="#plus-plans" data-scroll-to-plans aria-label="Choose the 49 dollar Literacy Arcade Plus founding plan">Choose the $49 plan →</a>
+          </div>
+          <p class="hero-product-note">Literacy Arcade Plus helps you organize your teacher dashboard, share student-ready links, and print classroom reports without rebuilding the same tools again.</p>
           <ul class="hero-bullets" aria-label="Plus benefits">
             <li>Save unlimited classroom activities and tools</li>
             <li>Share student-ready practice links</li>
@@ -1066,7 +1387,7 @@
               </div>
             </div>
           </div>
-          <div class="launch-callout">Launch week: Founding Teacher access is $49/year</div>
+          <div class="launch-callout">Founding deal: $49/year ends soon</div>
           <div class="account-label">Account</div>
           <h2 class="account-title" id="accountTitle">Sign in before checkout</h2>
           <p class="account-text" id="accountText">Your upgrade is connected to the Literacy Arcade account shown here. Saved activities are tied to the account used when they were created.</p>
@@ -1074,11 +1395,15 @@
             <span id="accountEmail">Checking sign-in status…</span>
             <span class="status-pill" id="planPill">Free</span>
           </div>
+          <div class="account-claim">
+            <p>Ready to claim the founding rate?</p>
+            <a class="account-claim-link" href="#plus-plans" data-scroll-to-plans aria-label="Choose the 49 dollar Literacy Arcade Plus founding plan">Choose the $49 plan →</a>
+          </div>
         </aside>
       </div>
     </section>
 
-    <section class="pricing section-sm" id="plans" aria-label="Upgrade plans">
+    <section class="pricing section-sm" id="plus-plans" aria-label="Upgrade plans">
       <div class="container">
         <h2 class="section-title">Choose your Plus plan</h2>
         <p class="pain-point-line">Stop rebuilding the same literacy activities every time you need them.</p>
@@ -1087,12 +1412,13 @@
 
         <div class="pricing-grid">
           <article class="plan-card founding" data-founding-offer>
-            <span class="plan-badge">Launch Week Offer<span class="launch-spark" aria-hidden="true"></span></span>
+            <span class="plan-badge">Founding Deal — Ends Soon<span class="launch-spark" aria-hidden="true"></span></span>
             <div>
               <div class="plan-label">Founding Teacher Annual</div>
-              <h3 class="plan-name">Early supporter access</h3>
+              <h3 class="plan-name">$49 Founding Teacher Plan</h3>
             </div>
             <div class="plan-price"><strong>$49</strong><span>/ year</span></div>
+            <div class="plan-countdown" data-founding-countdown data-countdown-prefix="Founding rate ends in:" data-expired-text="Founding Teacher deal has ended">Founding rate ends in: loading</div>
             <div class="limited-pill">Limited launch price</div>
             <p>Same full Plus access at the founding teacher rate when you join during launch week.</p>
             <ul class="plan-list">
@@ -1102,11 +1428,11 @@
               <li>PDF reports and lesson plans</li>
               <li>New tools added over time</li>
             </ul>
-            <button class="btn btn-primary checkout-button" type="button" data-price-id="price_1TqmEK3PzX3bHrbQEkK6vaes" data-test-price-id="price_1TqY6k4Gz51pZDtQR6oFrYDp" data-plan="founding">Start founding access</button>
+            <button class="btn btn-primary checkout-button" type="button" data-price-id="price_1TqmEK3PzX3bHrbQEkK6vaes" data-test-price-id="price_1TqmEK3PzX3bHrbQEkK6vaes" data-plan="founding">Claim $49 Founding Rate</button>
           </article>
 
-          <article class="plan-card featured">
-            <span class="plan-badge">Best Value</span>
+          <article class="plan-card secondary">
+            <span class="plan-badge">After Launch Week</span>
             <div>
               <div class="plan-label">Plus Annual</div>
               <h3 class="plan-name">Full-year classroom access</h3>
@@ -1341,6 +1667,7 @@
       if (e.key === 'Enter' || e.key === ' ') navLinks.classList.toggle('open');
     });
   </script>
+  <script src="./founding-deal.js?v=launch-qa"></script>
   <script type="module" src="./stripe-upgrade.js"></script>
 </body>
 </html>

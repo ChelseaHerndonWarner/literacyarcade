@@ -242,6 +242,110 @@
     border-radius: 2px;
   }
 
+  .promo-announcement {
+    background: linear-gradient(135deg, #FFF8E7 0%, #FFF0EE 52%, #E8F9F8 100%);
+    border-bottom: 1px solid rgba(255,184,48,.44);
+    box-shadow: 0 10px 28px rgba(26,26,46,.07);
+  }
+
+  .promo-announcement-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 14px 24px;
+  }
+
+  .promo-announcement-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .promo-kicker {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--white);
+    padding: 6px 10px;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .promo-title {
+    display: block;
+    color: var(--ink);
+    font-family: var(--font-head);
+    font-size: 1.18rem;
+    font-weight: 900;
+    line-height: 1.18;
+  }
+
+  .promo-price {
+    color: #C4473F;
+    font-size: 1.28em;
+  }
+
+  .promo-copy {
+    color: var(--ink-soft);
+    font-size: .9rem;
+    font-weight: 700;
+    line-height: 1.38;
+  }
+
+  .promo-announcement-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .promo-countdown {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 154px;
+    border-radius: 999px;
+    background: var(--white);
+    border: 1px solid rgba(255,184,48,.5);
+    color: #744A00;
+    padding: 8px 12px;
+    font-size: .92rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .promo-countdown.is-expired {
+    min-width: 0;
+    white-space: normal;
+  }
+
+  .promo-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--teal);
+    color: var(--white);
+    padding: 10px 16px;
+    font-family: var(--font-head);
+    font-size: .9rem;
+    font-weight: 900;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px rgba(46,196,182,.24);
+    transition: transform .18s, background .18s, box-shadow .18s;
+  }
+
+  .promo-cta:hover {
+    background: var(--teal-dk);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-hover);
+  }
 
   .hero {
     position: relative;
@@ -361,10 +465,10 @@
     justify-content: space-between;
     gap: 14px;
     padding: 16px 18px;
-    border: 1.5px solid rgba(46,196,182,.32);
+    border: 2px solid rgba(255,184,48,.5);
     border-radius: 20px;
-    background: rgba(255,255,255,.78);
-    box-shadow: 0 12px 32px rgba(26,26,46,.08);
+    background: linear-gradient(135deg, rgba(255,248,231,.96) 0%, rgba(255,240,238,.94) 56%, rgba(255,255,255,.9) 100%);
+    box-shadow: 0 14px 36px rgba(255,184,48,.2), 0 10px 30px rgba(26,26,46,.08);
   }
 
   .plus-callout::before,
@@ -379,7 +483,7 @@
   }
 
   .plus-callout::before {
-    top: 10px;
+    top: 13px;
     right: 18px;
     font-size: 15px;
   }
@@ -398,7 +502,7 @@
     display: block;
     color: var(--ink);
     font-family: var(--font-head);
-    font-size: .98rem;
+    font-size: 1.12rem;
     font-weight: 900;
     margin-bottom: 3px;
   }
@@ -410,7 +514,28 @@
     line-height: 1.45;
   }
 
+  .plus-callout-countdown {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 8px;
+    border-radius: 999px;
+    background: var(--white);
+    border: 1px solid rgba(255,184,48,.5);
+    color: #744A00;
+    padding: 5px 9px;
+    font-size: .82rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .plus-callout-countdown.is-expired {
+    white-space: normal;
+  }
+
   .plus-callout-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     color: var(--teal-dk);
     font-family: var(--font-head);
     font-size: .9rem;
@@ -1152,6 +1277,22 @@
     .nav-mobile-toggle { display: flex; }
     .section { padding: 56px 0; }
     .section-sm { padding: 42px 0; }
+    .promo-announcement-inner,
+    .promo-announcement-main,
+    .promo-announcement-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .promo-announcement-inner {
+      padding: 14px 18px;
+      text-align: center;
+    }
+    .promo-kicker,
+    .promo-countdown,
+    .promo-cta {
+      align-self: center;
+    }
+    .promo-announcement-actions { gap: 10px; }
     .hero { padding: 72px 0 60px; }
     .hs1, .hs2, .hs3 { opacity: .15; }
     .hero-actions { justify-content: center; }
@@ -1202,6 +1343,21 @@
   </header>
 
   <main>
+    <section class="promo-announcement" aria-label="Founding Teacher launch offer">
+      <div class="container promo-announcement-inner">
+        <div class="promo-announcement-main">
+          <span class="promo-kicker">Founding Teacher Deal</span>
+          <div>
+            <strong class="promo-title"><span class="promo-price">$49/year</span> for launch week only</strong>
+            <p class="promo-copy">Save unlimited activities, organize your dashboard, and print reports with Literacy Arcade Plus.</p>
+          </div>
+        </div>
+        <div class="promo-announcement-actions">
+          <span class="promo-countdown" data-founding-countdown data-countdown-prefix="Ends in:" data-expired-text="Founding Teacher deal has ended">Ends in: loading</span>
+          <a class="promo-cta" href="founding-teacher.html#plus-plans" aria-label="Claim the Literacy Arcade Plus founding rate">Claim founding rate →</a>
+        </div>
+      </div>
+    </section>
 
     <section class="hero" aria-label="Literacy Arcade hero">
       <div class="hero-bg" aria-hidden="true">
@@ -1223,10 +1379,11 @@
             </div>
             <div class="plus-callout" aria-label="Literacy Arcade Plus launch week offer">
               <div>
-                <strong>Launch week: Founding Teacher discount available</strong>
-                <span>Save unlimited activities, organize your teacher dashboard, and print reports with Literacy Arcade Plus.</span>
+                <strong>Launch-week founding rate: $49/year</strong>
+                <span>Full Plus access before regular pricing begins.</span>
+                <div class="plus-callout-countdown" data-founding-countdown data-countdown-prefix="Ends in:" data-expired-text="Founding Teacher deal has ended">Ends in: loading</div>
               </div>
-              <a class="plus-callout-link" href="founding-teacher.html">See Plus plans →</a>
+              <a class="plus-callout-link" href="founding-teacher.html#plus-plans">Claim the $49 rate →</a>
             </div>
           </div>
 
@@ -1657,6 +1814,7 @@
       });
     });
   </script>
+  <script src="./founding-deal.js?v=launch-qa"></script>
 
 </body>
 </html>

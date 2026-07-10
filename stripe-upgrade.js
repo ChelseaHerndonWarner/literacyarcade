@@ -67,9 +67,7 @@ function setMessage(text = '', type = '') {
 function setButtonsDisabled(disabled) {
   checkoutButtons.forEach((button) => {
     button.disabled = disabled;
-    button.textContent = disabled && !currentUser
-      ? 'Sign in to checkout'
-      : button.dataset.defaultLabel || 'Start checkout';
+    button.textContent = button.dataset.defaultLabel || 'Start checkout';
   });
 }
 
