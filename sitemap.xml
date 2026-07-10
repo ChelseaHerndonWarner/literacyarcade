@@ -30,6 +30,9 @@
   <url><loc>https://literacyarcade.com/repeatedreadingrockets.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Account / info -->
-  <url><loc>https://literacyarcade.com/founding-teacher.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://literacyarcade.com/privacy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://literacyarcade.com/founding-teacher.html</loc><lastmod>2026-07-10</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://literacyarcade.com/privacy-policy.html</loc><lastmod>2026-07-10</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://literacyarcade.com/student-privacy.html</loc><lastmod>2026-07-10</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://literacyarcade.com/terms-of-use.html</loc><lastmod>2026-07-10</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://literacyarcade.com/refund-policy.html</loc><lastmod>2026-07-10</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>
