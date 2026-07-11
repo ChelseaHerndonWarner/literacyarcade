@@ -31,6 +31,7 @@ const planPill = document.getElementById('planPill');
 const checkoutMessage = document.getElementById('checkoutMessage');
 const checkoutButtons = Array.from(document.querySelectorAll('.checkout-button'));
 const foundingOffer = document.querySelector('[data-founding-offer]');
+const accountClaim = document.querySelector('[data-account-claim]');
 
 if (foundingOffer && !SHOW_FOUNDING_OFFER) {
   foundingOffer.hidden = true;
@@ -71,6 +72,23 @@ function setButtonsDisabled(disabled) {
   });
 }
 
+function updateAccountClaim(unlocked) {
+  if (!accountClaim) return;
+
+  if (unlocked) {
+    accountClaim.innerHTML = `
+      <p>Your Plus access is already active.</p>
+      <a class="account-claim-link" href="teacher-dashboard.html">Go to My Dashboard</a>
+    `;
+    return;
+  }
+
+  accountClaim.innerHTML = `
+    <p>Ready to claim the founding rate?</p>
+    <a class="account-claim-link" href="#plus-plans" data-scroll-to-plans aria-label="Choose the 49 dollar Literacy Arcade Plus founding plan">Choose the $49 plan →</a>
+  `;
+}
+
 function updateAccountUi(user, plan = 'free') {
   currentPlan = plan || 'free';
 
@@ -80,6 +98,7 @@ function updateAccountUi(user, plan = 'free') {
     accountEmail.innerHTML = '<a href="teacher-login.html?returnTo=founding-teacher.html">Sign in to continue</a>';
     planPill.textContent = 'Free';
     setButtonsDisabled(false);
+    updateAccountClaim(false);
     return;
   }
 
@@ -92,6 +111,7 @@ function updateAccountUi(user, plan = 'free') {
   accountEmail.textContent = `Signed in as: ${email}`;
   planPill.textContent = currentPlan === 'founding' ? 'Founding' : currentPlan === 'plus' ? 'Plus' : 'Free';
   setButtonsDisabled(false);
+  updateAccountClaim(unlocked);
 }
 
 function getCheckoutUrl(plan) {

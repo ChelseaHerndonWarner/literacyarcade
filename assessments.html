@@ -293,6 +293,7 @@
       line-height: 1.15;
       margin-bottom: 18px;
     }
+    .hero-title .text-nowrap { white-space: nowrap; }
 
     .hero-sub {
       font-size: 1.15rem;
@@ -699,10 +700,21 @@
 
     @media (max-width: 480px) {
       .trust-strip-inner { gap: 16px; }
-      .footer { padding-top: 44px; }
-      .footer-inner { gap: 22px; }
-      .footer-desc { margin-left: auto; margin-right: auto; }
-      .footer-links { gap: 2px; }
+      .hero-title { font-size: clamp(1.95rem, 9.9vw, 2.45rem); }
+      .footer { padding-top: 30px; }
+      .footer-inner {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 16px 18px;
+        padding-bottom: 20px;
+      }
+      .footer-brand { grid-column: 1 / -1; }
+      .footer-desc {
+        margin: 10px 0 0;
+        line-height: 1.48;
+      }
+      .footer-col-title { margin-bottom: 6px; }
+      .footer-links { gap: 0; }
+      .footer-bottom { padding-top: 14px; gap: 8px; }
     }
   </style>
 </head>
@@ -737,7 +749,7 @@
     <section class="hero" aria-label="Assessments hero">
       <div class="container">
         <span class="page-eyebrow">Assessments</span>
-        <h1 class="hero-title">Research-informed literacy checks</h1>
+        <h1 class="hero-title"><span class="text-nowrap">Research-informed</span> literacy checks</h1>
         <p class="hero-sub">Assess letter-name knowledge, letter-sound knowledge, phonics patterns, and oral reading fluency — with clear results teachers can use to plan what comes next.</p>
         <p class="hero-support">Results appear on screen right away, with reports teachers can print or save for their own records. No student accounts required.</p>
         <div class="hero-chips">

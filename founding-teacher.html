@@ -1292,6 +1292,18 @@
       .section-sm { padding: 42px 0; }
       .hero { padding: 36px 0 30px; }
       .hero-deal-card { padding: 18px; }
+      .account-card {
+        width: min(100%, 340px);
+        margin: 0 auto;
+        padding: 14px;
+      }
+      .plus-mockup {
+        width: min(100%, 300px);
+        margin: 0 auto 10px;
+      }
+      .mockup-top { padding: 8px 10px; }
+      .mockup-body { padding: 10px; }
+      .mockup-row { padding: 8px 9px; }
       .hero-deal-footer,
       .hero-offer-actions {
         flex-direction: column;
@@ -1322,6 +1334,8 @@
       .footer-desc { margin-left: auto; margin-right: auto; }
       .footer-links { align-items: center; gap: 2px; }
       .footer-legal { justify-content: center; gap: 2px 16px; }
+      .account-card { width: min(100%, 316px); }
+      .plus-mockup { width: min(100%, 276px); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1430,7 +1444,7 @@
             <span id="accountEmail">Checking sign-in status…</span>
             <span class="status-pill" id="planPill">Free</span>
           </div>
-          <div class="account-claim">
+          <div class="account-claim" data-account-claim>
             <p>Ready to claim the founding rate?</p>
             <a class="account-claim-link" href="#plus-plans" data-scroll-to-plans aria-label="Choose the 49 dollar Literacy Arcade Plus founding plan">Choose the $49 plan →</a>
           </div>
