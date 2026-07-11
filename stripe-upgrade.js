@@ -79,7 +79,7 @@ function updateAccountUi(user, plan = 'free') {
     accountText.textContent = 'Your upgrade is connected to the Literacy Arcade account shown here. Saved activities are tied to the account used when they were created.';
     accountEmail.innerHTML = '<a href="teacher-login.html?returnTo=founding-teacher.html">Sign in to continue</a>';
     planPill.textContent = 'Free';
-    setButtonsDisabled(true);
+    setButtonsDisabled(false);
     return;
   }
 

@@ -215,10 +215,22 @@
 
     .nav-mobile-toggle {
       display: none;
+      align-items: center;
+      justify-content: center;
       flex-direction: column;
       gap: 5px;
       cursor: pointer;
-      padding: 4px;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      margin-right: -6px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      touch-action: manipulation;
+    }
+    .nav-mobile-toggle:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 2px;
     }
     .nav-mobile-toggle span {
       display: block;
@@ -332,8 +344,16 @@
       gap: 10px;
       padding: 18px 26px;
       border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
     }
     .routing-row:last-child { border-bottom: none; }
+    .routing-row:hover { background: var(--white); }
+    .routing-row:hover .routing-tool { text-decoration: underline; }
+    .routing-row:focus-visible {
+      outline: 2px solid var(--teal-dk);
+      outline-offset: -2px;
+    }
 
     .routing-q {
       font-style: italic;
@@ -341,19 +361,21 @@
       flex: 1 1 360px;
     }
 
-    .routing-arrow {
-      color: var(--ink-soft);
-      opacity: .6;
-      flex-shrink: 0;
-    }
-
     .routing-tool {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-weight: 800;
       color: var(--teal-dk);
       flex-shrink: 0;
       width: 260px;
     }
-    .routing-tool:hover { text-decoration: underline; }
+
+    .routing-arrow {
+      color: var(--ink-soft);
+      opacity: .6;
+      flex-shrink: 0;
+    }
 
     .steps-grid {
       display: grid;
@@ -548,6 +570,7 @@
       padding-bottom: 32px;
       border-bottom: 1px solid rgba(255,255,255,.12);
     }
+    .footer-inner > * { min-width: 0; }
     .footer-brand .nav-logo { color: var(--white); }
     .footer-desc {
       margin-top: 14px;
@@ -564,6 +587,7 @@
     }
     .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
     .footer-links a, .footer-links span { color: inherit; font-size: .9rem; }
+    .footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
     .footer-links a:hover { color: var(--teal); }
     .footer-bottom {
       display: flex;
@@ -572,9 +596,9 @@
       gap: 12px;
       padding-top: 20px;
       font-size: .82rem;
+      min-width: 0;
     }
-    .footer-legal { display: flex; gap: 18px; }
-    .footer-legal a:hover { color: var(--teal); }
+    .footer-bottom > * { min-width: 0; max-width: 100%; }
 
     @media (max-width: 900px) {
       .assess-grid,
@@ -594,17 +618,37 @@
         top: 62px; left: 0; right: 0;
         background: var(--cream);
         border-bottom: 1px solid var(--border);
-        padding: 16px;
+        padding: 16px max(16px, env(safe-area-inset-right)) 16px max(16px, env(safe-area-inset-left));
         gap: 4px;
         z-index: 99;
+      }
+      .nav-links.open a {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        width: 100%;
       }
       .nav-mobile-toggle { display: flex; }
       .section { padding: 56px 0; }
       .section-sm { padding: 44px 0; }
       .footer-inner { grid-template-columns: 1fr; gap: 28px; }
-      .footer-bottom { flex-direction: column; text-align: center; }
-      .routing-row { flex-direction: column; align-items: flex-start; }
+      .footer-bottom { flex-direction: column; align-items: center; text-align: center; }
+      .footer-brand .nav-logo { justify-content: center; }
+      .routing-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 14px 16px;
+      }
+      .routing-q { flex: none; width: 100%; }
       .routing-tool { width: auto; max-width: none; }
+    }
+
+    @media (max-width: 480px) {
+      .footer { padding-top: 44px; }
+      .footer-inner { gap: 22px; }
+      .footer-desc { margin-left: auto; margin-right: auto; }
+      .footer-links { gap: 2px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -634,7 +678,7 @@
           <li><a href="teacher-login.html" class="nav-account">Dashboard / Log in</a></li>
         </ul>
 
-        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0">
+        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0" aria-expanded="false">
           <span></span><span></span><span></span>
         </div>
       </div>
@@ -663,21 +707,18 @@
         <p class="routing-intro">Choose the question that sounds most like what you need today.</p>
 
         <div class="routing-list">
-          <div class="routing-row">
+          <a class="routing-row" href="#phoneme-counter">
             <span class="routing-q">“How many phonemes are in this word?”</span>
-            <span class="routing-arrow">→</span>
-            <a class="routing-tool" href="#phoneme-counter">Phoneme Counter</a>
-          </div>
-          <div class="routing-row">
+            <span class="routing-tool">Phoneme Counter<span class="routing-arrow" aria-hidden="true">→</span></span>
+          </a>
+          <a class="routing-row" href="#letterbox-lesson">
             <span class="routing-q">“How do I build and teach a letterbox lesson?”</span>
-            <span class="routing-arrow">→</span>
-            <a class="routing-tool" href="#letterbox-lesson">Phoneme Counter → Letterbox Lesson</a>
-          </div>
-          <div class="routing-row">
+            <span class="routing-tool">Phoneme Counter → Letterbox Lesson</span>
+          </a>
+          <a class="routing-row" href="#phoneme-map">
             <span class="routing-q">“How do I explain or model a specific speech sound?”</span>
-            <span class="routing-arrow">→</span>
-            <a class="routing-tool" href="#phoneme-map">Interactive Phoneme Map</a>
-          </div>
+            <span class="routing-tool">Interactive Phoneme Map<span class="routing-arrow" aria-hidden="true">→</span></span>
+          </a>
         </div>
       </div>
     </section>
@@ -807,14 +848,6 @@
 
       <div class="footer-bottom">
         <p>© 2026 Literacy Arcade. Free literacy tools for teachers.</p>
-        <div class="footer-legal">
-          <a href="privacy-policy.html">Privacy Policy</a>
-          <a href="student-privacy.html">Student Privacy</a>
-          <a href="terms-of-use.html">Terms of Use</a>
-          <a href="refund-policy.html">Billing &amp; Refunds</a>
-          <a href="mailto:hello@literacyarcade.com">Contact</a>
-          <a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a>
-        </div>
       </div>
     </div>
   </footer>
@@ -822,11 +855,19 @@
   <script>
     const toggle = document.getElementById('mobileToggle');
     const navLinks = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => {
+    const syncMenuState = () => {
+      toggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+    };
+    const toggleMenu = () => {
       navLinks.classList.toggle('open');
-    });
+      syncMenuState();
+    };
+    toggle.addEventListener('click', toggleMenu);
     toggle.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') navLinks.classList.toggle('open');
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleMenu();
+      }
     });
   </script>
 

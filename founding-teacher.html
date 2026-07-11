@@ -204,10 +204,22 @@
 
     .nav-mobile-toggle {
       display: none;
+      align-items: center;
+      justify-content: center;
       flex-direction: column;
       gap: 5px;
       cursor: pointer;
-      padding: 4px;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      margin-right: -6px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      touch-action: manipulation;
+    }
+    .nav-mobile-toggle:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 2px;
     }
     .nav-mobile-toggle span {
       display: block;
@@ -977,10 +989,13 @@
     }
 
     .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
     .btn-primary { background: var(--teal); color: var(--white); box-shadow: 0 8px 22px rgba(46,196,182,.24); }
     .btn-primary:hover { background: var(--teal-dk); }
-    .btn-secondary { background: var(--white); color: var(--teal-dk); border: 1.5px solid var(--teal); }
-    .btn-secondary:hover { background: var(--mint); }
+    .btn-primary:active { background: var(--teal-dk); }
+    .btn-secondary { background: var(--teal-dk); color: var(--white); border: 1.5px solid var(--teal-dk); box-shadow: 0 6px 18px rgba(31,169,156,.2); }
+    .btn-secondary:hover { background: var(--teal); border-color: var(--teal); }
+    .btn-secondary:active { background: var(--teal-dk); }
     .btn:disabled { opacity: .56; cursor: not-allowed; transform: none; box-shadow: none; }
 
     .pricing-callouts {
@@ -1208,6 +1223,7 @@
       padding-bottom: 32px;
       border-bottom: 1px solid rgba(255,255,255,.12);
     }
+    .footer-inner > * { min-width: 0; }
     .footer-brand .nav-logo { color: var(--white); }
     .footer-desc {
       margin-top: 14px;
@@ -1224,6 +1240,7 @@
     }
     .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
     .footer-links a, .footer-links span { color: inherit; font-size: .9rem; }
+    .footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
     .footer-links a:hover { color: var(--teal); }
     .footer-bottom {
       display: flex;
@@ -1232,8 +1249,11 @@
       gap: 12px;
       padding-top: 20px;
       font-size: .82rem;
+      min-width: 0;
     }
-    .footer-legal { display: flex; gap: 18px; }
+    .footer-bottom > * { min-width: 0; max-width: 100%; }
+    .footer-legal { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+    .footer-legal a { display: inline-flex; align-items: center; min-height: 44px; }
     .footer-legal a:hover { color: var(--teal); }
 
     @media (max-width: 960px) {
@@ -1257,9 +1277,15 @@
         top: 62px; left: 0; right: 0;
         background: var(--cream);
         border-bottom: 1px solid var(--border);
-        padding: 16px;
+        padding: 16px max(16px, env(safe-area-inset-right)) 16px max(16px, env(safe-area-inset-left));
         gap: 4px;
         z-index: 99;
+      }
+      .nav-links.open a {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        width: 100%;
       }
       .nav-mobile-toggle { display: flex; }
       .section { padding: 56px 0; }
@@ -1285,8 +1311,17 @@
         grid-template-columns: 1fr;
       }
       .footer-inner { gap: 28px; }
-      .footer-bottom { flex-direction: column; text-align: center; }
+      .footer-bottom { flex-direction: column; align-items: center; text-align: center; }
+      .footer-brand .nav-logo { justify-content: center; }
       .account-status { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (max-width: 480px) {
+      .footer { padding-top: 44px; }
+      .footer-inner { gap: 22px; }
+      .footer-desc { margin-left: auto; margin-right: auto; }
+      .footer-links { align-items: center; gap: 2px; }
+      .footer-legal { justify-content: center; gap: 2px 16px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1320,7 +1355,7 @@
           <li><a href="teacher-login.html" class="nav-account">Dashboard / Log in</a></li>
         </ul>
 
-        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0">
+        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0" aria-expanded="false">
           <span></span><span></span><span></span>
         </div>
       </div>
@@ -1665,11 +1700,19 @@
   <script>
     const toggle = document.getElementById('mobileToggle');
     const navLinks = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => {
+    const syncMenuState = () => {
+      toggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+    };
+    const toggleMenu = () => {
       navLinks.classList.toggle('open');
-    });
+      syncMenuState();
+    };
+    toggle.addEventListener('click', toggleMenu);
     toggle.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') navLinks.classList.toggle('open');
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleMenu();
+      }
     });
   </script>
   <script src="./founding-deal.js?v=launch-qa"></script>
