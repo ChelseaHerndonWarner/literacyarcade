@@ -585,6 +585,18 @@
   <!-- Firebase Auth — used only to gate report printing; no data is saved -->
   <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+  <script>
+    window.LA_FIREBASE_CONFIG = window.LA_FIREBASE_CONFIG || {
+      apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
+      authDomain: "literacy-arcade.firebaseapp.com",
+      projectId: "literacy-arcade",
+      storageBucket: "literacy-arcade.firebasestorage.app",
+      messagingSenderId: "628621471724",
+      appId: "1:628621471724:web:7ddfd231d1261b6c781ac9",
+      measurementId: "G-LNWHB69FV1"
+    };
+    window.firebaseConfig = window.firebaseConfig || window.LA_FIREBASE_CONFIG;
+  </script>
 </head>
 <body>
   <header class="topbar" aria-label="Literacy Arcade header">
@@ -895,7 +907,7 @@
           printContent('report');
           return;
         }
-        if(window.firebase && firebase.auth){
+        if(window.firebase && firebase.auth && ((firebase.apps && firebase.apps.length) || LA_FIREBASE_CONFIG)){
           if(firebase.apps && !firebase.apps.length && LA_FIREBASE_CONFIG) firebase.initializeApp(LA_FIREBASE_CONFIG);
           const provider = new firebase.auth.GoogleAuthProvider();
           await firebase.auth().signInWithPopup(provider);
@@ -904,11 +916,23 @@
           printContent('report');
           return;
         }
-        // Fallback: redirect to dashboard
-        window.location.href = 'teacher-dashboard.html?return=phonics-knowledge-check.html&print=report';
-      }catch(e){
-        $('printLoginError').textContent = 'Sign-in did not finish. Please try again, or sign in from My Activities and return to print.';
+        $('printLoginError').textContent = 'Sign-in is not available on this page. Check that Firebase Auth scripts and config are loading.';
         $('printLoginError').classList.add('show');
+      }catch(e){
+        const authCode = e && e.code ? String(e.code) : '';
+        if(authCode === 'auth/unauthorized-domain'){
+          $('printLoginError').textContent = 'Google sign-in is not authorized for this local preview yet. Add localhost to Firebase Authorized domains, then try again.';
+        }else if(authCode === 'auth/popup-blocked'){
+          $('printLoginError').textContent = 'The browser blocked the Google sign-in window. Allow pop-ups for localhost, then try again.';
+        }else if(authCode === 'auth/popup-closed-by-user' || authCode === 'auth/cancelled-popup-request'){
+          $('printLoginError').textContent = 'The Google sign-in window closed before sign-in finished. Please try again and keep the window open.';
+        }else if(authCode === 'auth/operation-not-supported-in-this-environment'){
+          $('printLoginError').textContent = 'Google sign-in is not supported in this preview browser. Open the localhost page in Chrome or Safari and try again.';
+        }else{
+          $('printLoginError').textContent = `Sign-in did not finish${authCode ? ` (${authCode})` : ''}. Please try again, or sign in from My Activities and return to print.`;
+        }
+        $('printLoginError').classList.add('show');
+        console.warn('Phonics Check: print sign-in failed.', e);
       }
     }
 
