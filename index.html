@@ -210,13 +210,16 @@
     color: var(--ink-soft);
     padding: 8px 16px;
     border-radius: var(--radius-sm);
-    transition: background .18s, color .18s;
+    transition: background .18s ease, color .18s ease, transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease;
     display: inline-block;
   }
 
-  .nav-links a:hover {
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
     background: var(--mint);
     color: var(--teal-dk);
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 10px 20px rgba(46,196,182,.38);
   }
 
   .nav-account {
@@ -224,8 +227,15 @@
     color: var(--white) !important;
     padding: 9px 18px !important;
     border-radius: 100px !important;
+    transition: background .18s ease, transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .4s ease !important;
   }
-  .nav-account:hover { background: var(--teal-dk) !important; color: var(--white) !important; }
+  .nav-account:hover,
+  .nav-account:focus-visible {
+    background: var(--teal-dk) !important;
+    color: var(--white) !important;
+    transform: translateY(-4px) scale(1.14) !important;
+    box-shadow: 0 16px 36px rgba(46,196,182,.55), 0 0 0 5px rgba(46,196,182,.22) !important;
+  }
 
   .nav-mobile-toggle {
     display: none;
@@ -350,8 +360,13 @@
   .hero {
     position: relative;
     overflow: hidden;
-    padding: 92px 0 48px;
-    background: linear-gradient(160deg, #E8F9F8 0%, var(--cream) 55%, #F3EEFB 100%);
+    padding: 62px 0 20px;
+    background:
+      radial-gradient(circle at 10% 28%, rgba(191,242,237,.34) 0, rgba(191,242,237,.14) 22%, transparent 45%),
+      radial-gradient(circle at 73% 24%, rgba(255,235,194,.24) 0, rgba(255,235,194,.10) 24%, transparent 46%),
+      radial-gradient(circle at 91% 77%, rgba(226,211,247,.36) 0, rgba(226,211,247,.14) 25%, transparent 48%),
+      radial-gradient(circle at 54% 88%, rgba(255,218,211,.16) 0, transparent 40%),
+      linear-gradient(155deg, #EDF9F8 0%, #FFFDF8 54%, #F5F0FA 100%);
     text-align: left;
   }
 
@@ -364,7 +379,7 @@
   .hero-shape { position: absolute; border-radius: 50%; }
   .hs1 {
     width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(46,196,182,.13), transparent 68%);
+    background: radial-gradient(circle, rgba(46,196,182,.12), transparent 68%);
     top: -140px; right: -60px;
   }
   .hs2 {
@@ -374,8 +389,29 @@
   }
   .hs3 {
     width: 220px; height: 220px;
-    background: radial-gradient(circle, rgba(255,184,48,.12), transparent 70%);
+    background: radial-gradient(circle, rgba(255,184,48,.10), transparent 70%);
     top: 50%; left: -80px;
+  }
+
+  .hero-sparkle {
+    position: absolute;
+    z-index: 3;
+    line-height: 1;
+    font-family: Georgia, serif;
+    filter: drop-shadow(0 3px 8px currentColor);
+    animation: heroTwinkle 4.8s ease-in-out infinite;
+  }
+  .hero-sparkle.s1 { top: 15%; left: 53%; color: #F4BC53; font-size: 16px; }
+  .hero-sparkle.s2 { top: 28%; right: 5.5%; color: #38BFB4; font-size: 15px; animation-delay: .8s; }
+  .hero-sparkle.s3 { top: 57%; right: 2%; color: #F2B52F; font-size: 10px; animation-delay: 1.7s; }
+  .hero-sparkle.s4 { bottom: 8%; right: 8%; color: #8969B3; font-size: 16px; animation-delay: 2.3s; }
+  .hero-sparkle.s5 { bottom: 14%; left: 53%; color: #FF7777; font-size: 13px; animation-delay: 1.2s; }
+  .hero-sparkle.s6 { top: 72%; left: 61%; color: #39BDB2; font-size: 9px; animation-delay: 3s; }
+
+  @keyframes heroTwinkle {
+    0%, 100% { opacity: .42; transform: scale(.78) rotate(0deg); }
+    45% { opacity: 1; transform: scale(1.16) rotate(12deg); }
+    62% { opacity: .68; transform: scale(.94) rotate(18deg); }
   }
 
   .hero-layout {
@@ -463,12 +499,12 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
-    padding: 16px 18px;
-    border: 2px solid rgba(255,184,48,.5);
-    border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255,248,231,.96) 0%, rgba(255,240,238,.94) 56%, rgba(255,255,255,.9) 100%);
-    box-shadow: 0 14px 36px rgba(255,184,48,.2), 0 10px 30px rgba(26,26,46,.08);
+    gap: 12px;
+    padding: 11px 16px;
+    border: 1.5px solid rgba(255,184,48,.58);
+    border-radius: 999px;
+    background: rgba(255,251,241,.86);
+    box-shadow: 0 12px 28px rgba(255,184,48,.13), 0 8px 22px rgba(26,26,46,.06);
   }
 
   .plus-callout::before,
@@ -499,31 +535,29 @@
   }
 
   .plus-callout strong {
-    display: block;
+    display: inline;
     color: var(--ink);
     font-family: var(--font-head);
-    font-size: 1.12rem;
+    font-size: .94rem;
     font-weight: 900;
-    margin-bottom: 3px;
+    margin-bottom: 0;
   }
 
   .plus-callout span {
-    color: var(--ink-soft);
-    font-size: .9rem;
-    font-weight: 700;
-    line-height: 1.45;
+    display: none;
   }
 
   .plus-callout-countdown {
     display: inline-flex;
     align-items: center;
-    margin-top: 8px;
+    margin-top: 0;
+    margin-left: 14px;
     border-radius: 999px;
-    background: var(--white);
-    border: 1px solid rgba(255,184,48,.5);
+    background: transparent;
+    border: 0;
     color: #744A00;
-    padding: 5px 9px;
-    font-size: .82rem;
+    padding: 0;
+    font-size: .78rem;
     font-weight: 900;
     white-space: nowrap;
   }
@@ -535,10 +569,10 @@
   .plus-callout-link {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-height: 0;
     color: var(--teal-dk);
     font-family: var(--font-head);
-    font-size: .9rem;
+    font-size: .82rem;
     font-weight: 900;
     white-space: nowrap;
   }
@@ -571,10 +605,23 @@
 
   .hero-stage {
     position: relative;
-    height: 480px;
+    height: 470px;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .hero-stage::before {
+    content: '';
+    position: absolute;
+    width: 82%;
+    height: 50%;
+    left: 10%;
+    bottom: 5%;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(77,61,100,.11) 0%, rgba(123,94,167,.06) 38%, transparent 72%);
+    filter: blur(25px);
+    transform: rotate(-3deg);
   }
 
   .hc {
@@ -582,7 +629,8 @@
     background: rgba(255,255,255,.96);
     border: 1px solid var(--border);
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(26,26,46,.09), 0 2px 8px rgba(26,26,46,.05);
+    border-color: rgba(210,203,226,.82);
+    box-shadow: 0 26px 52px rgba(42,34,63,.22), 0 10px 24px rgba(26,26,46,.14), inset 0 1px 0 rgba(255,255,255,.9);
     overflow: hidden;
     font-family: var(--font-body);
   }
@@ -594,6 +642,7 @@
     transform: translate(-50%, -48%) rotate(1deg);
     animation: floatB 8s ease-in-out infinite;
     z-index: 4;
+    box-shadow: 0 34px 64px rgba(42,34,63,.28), 0 14px 30px rgba(26,26,46,.16), inset 0 1px 0 rgba(255,255,255,.95);
   }
   .hc-orf-head {
     padding: 14px 18px 10px;
@@ -816,9 +865,17 @@
     flex-direction: column;
     gap: 14px;
     min-height: 270px;
-    transition: transform .22s, box-shadow .22s;
+    color: inherit;
+    text-decoration: none;
+    transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s ease, border-color .28s ease;
   }
-  .category-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+  .category-card:hover,
+  .category-card:focus-visible {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 42px rgba(26,26,46,.15);
+    border-color: rgba(46,196,182,.45);
+    outline: none;
+  }
 
   .category-title {
     font-family: var(--font-head);
@@ -860,7 +917,8 @@
     font-weight: 900;
     margin-top: 4px;
   }
-  .category-link:hover { text-decoration: underline; }
+  .category-card:hover .category-link,
+  .category-card:focus-visible .category-link { text-decoration: underline; }
 
   .loop-strip {
     background: var(--white);
@@ -896,196 +954,82 @@
   .shortcut-section { background: var(--cream); }
   .shortcut-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
     margin-top: 30px;
+    max-width: 1040px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .shortcut-row.games { grid-template-columns: repeat(3, 1fr); max-width: 930px; margin-left: auto; margin-right: auto; }
+  .shortcut-row.games { grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: none; margin-left: 0; margin-right: 0; }
 
   .shortcut-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
     background: var(--white);
     border: 1px solid var(--border);
     border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 3px 16px rgba(26,26,46,.055);
-    transition: transform .2s, box-shadow .2s, border-color .2s;
-    display: flex;
-    flex-direction: column;
-    min-height: 292px;
+    box-shadow: 0 3px 16px rgba(26,26,46,.08);
+    transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s ease, border-color .28s ease;
+    aspect-ratio: 1200 / 555;
   }
-  .shortcut-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(46,196,182,.38); }
-
-  .shortcut-preview {
-    min-height: 132px;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #eefbf8 0%, #f7f4ff 100%);
-    border-bottom: 1px solid var(--border);
+  .shortcut-row.games .shortcut-card { aspect-ratio: 1200 / 750; }
+  .shortcut-card:hover,
+  .shortcut-card:focus-visible {
+    transform: translateY(-8px);
+    box-shadow: 0 22px 46px rgba(26,26,46,.16);
+    border-color: rgba(46,196,182,.4);
+    outline: none;
   }
 
-  .shortcut-preview::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 18% 18%, rgba(46,196,182,.28), transparent 28%),
-      radial-gradient(circle at 84% 22%, rgba(255,111,97,.18), transparent 26%),
-      radial-gradient(circle at 70% 90%, rgba(98,88,183,.14), transparent 34%);
-    pointer-events: none;
-  }
-
-  .shortcut-preview.has-image {
-    background: var(--white);
-  }
-  .shortcut-preview.has-image::before {
-    display: none;
-  }
-  .shortcut-preview img {
+  .shortcut-media { position: absolute; inset: 0; }
+  .shortcut-media img {
     display: block;
     width: 100%;
-    height: 132px;
-    object-fit: contain;
-    object-position: center;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform .45s cubic-bezier(.22,1,.36,1);
   }
 
-  .preview-image {
-    background-size: cover;
-    background-position: center;
-  }
-  .preview-image::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(26,26,46,.10));
-  }
-  .preview-orf { background-image: url("images/orf-fluency-calculator.png"); }
-  .preview-rockets { background-image: url("images/og-repeated-reading-rockets.png"); }
+  .shortcut-card:hover .shortcut-media img,
+  .shortcut-card:focus-visible .shortcut-media img { transform: scale(1.025); }
 
-  .mock-window {
+  .shortcut-panel {
     position: absolute;
-    inset: 18px;
-    border-radius: 16px;
-    background: rgba(255,255,255,.88);
-    border: 1px solid rgba(255,255,255,.78);
-    box-shadow: 0 16px 34px rgba(26,26,46,.14);
-    z-index: 1;
-  }
-
-  .race-lane {
-    position: absolute;
-    left: 18px;
-    right: 18px;
-    height: 18px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, rgba(31,169,156,.18), rgba(255,111,97,.20));
-  }
-  .race-lane.one { top: 34px; }
-  .race-lane.two { top: 72px; }
-  .race-car {
-    position: absolute;
-    top: -7px;
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
-    background: var(--coral);
-    box-shadow: 0 6px 12px rgba(255,111,97,.22);
-  }
-  .race-lane.two .race-car { left: 45%; background: var(--teal); }
-  .race-lane.one .race-car { left: 64%; }
-  .finish-flag {
-    position: absolute;
-    right: 18px;
-    top: 26px;
-    bottom: 26px;
-    width: 16px;
-    border-radius: 7px;
-    background: repeating-linear-gradient(45deg, var(--ink), var(--ink) 5px, var(--white) 5px, var(--white) 10px);
-    opacity: .82;
-  }
-
-  .spinner-wheel {
-    position: absolute;
-    width: 92px;
-    height: 92px;
-    border-radius: 50%;
-    left: 24px;
-    top: 20px;
-    background: conic-gradient(from 20deg, var(--teal), #7fd8ce, var(--coral), #ffd5cf, #7564b9, var(--teal));
-    box-shadow: 0 16px 26px rgba(31,169,156,.20);
-    z-index: 1;
-  }
-  .spinner-wheel::after {
-    content: "read";
-    position: absolute;
-    inset: 22px;
-    border-radius: 50%;
+    left: 0; right: 0; bottom: 0;
     background: var(--white);
-    display: grid;
-    place-items: center;
-    color: var(--ink);
-    font-family: var(--font-head);
-    font-weight: 900;
-    font-size: .78rem;
-  }
-  .spinner-list {
-    position: absolute;
-    right: 20px;
-    top: 28px;
-    display: grid;
-    gap: 9px;
-    z-index: 1;
-  }
-  .spinner-list span {
-    width: 88px;
-    height: 18px;
-    border-radius: 999px;
-    background: rgba(255,255,255,.86);
-    box-shadow: 0 7px 16px rgba(26,26,46,.08);
+    padding: 16px 20px 14px;
+    box-shadow: 0 -10px 22px rgba(26,26,46,.08);
+    height: 66px;
+    overflow: hidden;
+    transition: height .38s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
   }
 
-  .game-preview {
-    display: grid;
-    place-items: center;
-    min-height: 116px;
+  .shortcut-row:not(.games) .shortcut-card:hover .shortcut-panel,
+  .shortcut-row:not(.games) .shortcut-card:focus-visible .shortcut-panel {
+    height: 72%;
+    box-shadow: 0 -18px 34px rgba(26,26,46,.14);
   }
-  .game-badge {
-    position: relative;
-    z-index: 1;
-    width: 82px;
-    height: 82px;
-    border-radius: 24px;
-    background: linear-gradient(135deg, var(--teal), #7564b9);
-    box-shadow: 0 18px 34px rgba(26,26,46,.16);
-    display: grid;
-    place-items: center;
-  }
-  .game-badge svg {
-    width: 40px;
-    height: 40px;
-    color: var(--white);
-  }
-  .game-badge.spellbound { background: linear-gradient(135deg, #7564b9, var(--coral)); }
-  .game-badge.forge { background: linear-gradient(135deg, var(--coral), #f6b44b); }
 
-  .shortcut-body {
-    padding: 18px 18px 16px;
+  .shortcut-row.games .shortcut-card:hover .shortcut-panel,
+  .shortcut-row.games .shortcut-card:focus-visible .shortcut-panel {
+    height: 58%;
+    box-shadow: 0 -18px 34px rgba(26,26,46,.14);
+  }
+  .shortcut-panel-row {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
   .shortcut-name {
     display: block;
     font-weight: 900;
     color: var(--ink);
     line-height: 1.25;
-  }
-  .shortcut-desc {
-    display: block;
-    color: var(--ink-soft);
-    font-size: .9rem;
-    line-height: 1.45;
   }
   .shortcut-action {
     display: inline-flex;
@@ -1095,11 +1039,35 @@
     font-family: var(--font-head);
     font-weight: 900;
     font-size: .9rem;
-    margin-top: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .shortcut-desc {
+    display: block;
+    max-height: 0;
+    margin-top: 0;
+    opacity: 0;
+    overflow: hidden;
+    color: var(--ink-soft);
+    font-size: .88rem;
+    line-height: 1.5;
+    transition: max-height .35s cubic-bezier(.22,1,.36,1), opacity .25s ease, margin-top .35s cubic-bezier(.22,1,.36,1);
+  }
+  .shortcut-card:hover .shortcut-desc,
+  .shortcut-card:focus-visible .shortcut-desc {
+    max-height: 130px;
+    margin-top: 8px;
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    .shortcut-desc { max-height: 130px; margin-top: 8px; opacity: 1; }
+    .shortcut-panel { height: 46%; }
+    .shortcut-row.games .shortcut-panel { height: 48%; }
   }
 
   .trust-strip-top {
-    padding: 18px 0;
+    padding: 14px 0;
     border-bottom: 1px solid var(--border);
     background: var(--white);
   }
@@ -1108,7 +1076,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 28px;
+    row-gap: 8px;
+    column-gap: 28px;
     flex-wrap: wrap;
   }
 
@@ -1160,13 +1129,16 @@
   .trust-chip.blush svg { stroke: var(--coral); }
 
   .trust-strip-top-credential {
+    order: 3;
+    flex-basis: 100%;
     color: var(--ink-soft);
     font-size: .88rem;
     font-weight: 600;
     max-width: 640px;
   }
 
-  .trust-strip-top-badge-link { display: inline-flex; flex-shrink: 0; }
+  .trust-strip-top-main { order: 1; }
+  .trust-strip-top-badge-link { order: 2; display: inline-flex; flex-shrink: 0; }
   .trust-strip-top-badge-link:focus-visible { outline: 3px solid var(--amber); outline-offset: 4px; }
   .trust-strip-top-badge-img { height: 58px; width: auto; display: block; }
 
@@ -1209,22 +1181,23 @@
   .footer {
     background: var(--ink);
     color: rgba(255,255,255,.72);
-    padding: 56px 0 24px;
+    padding: 34px 0 18px;
   }
   .footer-inner {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    gap: 40px;
-    padding-bottom: 32px;
+    gap: 28px;
+    padding-bottom: 20px;
     border-bottom: 1px solid rgba(255,255,255,.12);
   }
   .footer-brand .nav-logo { color: var(--white); }
-  .footer-desc { margin-top: 14px; font-size: .9rem; max-width: 340px; line-height: 1.6; }
-  .footer-col-title { font-family: var(--font-head); font-weight: 800; color: var(--white); font-size: .95rem; margin-bottom: 14px; }
-  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-desc { margin-top: 8px; font-size: .9rem; max-width: 340px; line-height: 1.45; }
+  .footer-col-title { font-family: var(--font-head); font-weight: 800; color: var(--white); font-size: .95rem; margin-bottom: 8px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 2px; }
   .footer-links a, .footer-links span { color: inherit; font-size: .9rem; }
+  .footer-links a { display: inline-flex; align-items: center; min-height: 32px; }
   .footer-links a:hover { color: var(--teal); }
-  .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 20px; font-size: .82rem; }
+  .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 14px; font-size: .82rem; }
   .footer-legal { display: flex; gap: 18px; }
   .footer-legal a:hover { color: var(--teal); }
 
@@ -1232,6 +1205,23 @@
     .category-grid { grid-template-columns: 1fr; }
     .shortcut-row,
     .shortcut-row.games { grid-template-columns: 1fr; max-width: 560px; }
+
+    .shortcut-row .shortcut-card,
+    .shortcut-row.games .shortcut-card { aspect-ratio: auto; }
+    .shortcut-card:hover,
+    .shortcut-card:focus-visible { transform: none; }
+    .shortcut-media { position: static; display: block; width: 100%; height: 190px; }
+    .shortcut-panel {
+      position: static;
+      display: block;
+      box-shadow: none;
+      border-top: 1px solid var(--border);
+    }
+    .shortcut-desc {
+      max-height: none;
+      margin-top: 8px;
+      opacity: 1;
+    }
 
     .nav-logo { flex-shrink: 0; }
 
@@ -1256,8 +1246,9 @@
     .trust-strip-top-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
     .trust-strip-top-list { gap: 8px 14px; font-size: .84rem; }
     .trust-strip-top-list li { font-size: .82rem; }
-    .trust-strip-sep { display: none; }
+    .trust-strip-top-list li.trust-strip-sep { display: none; }
     .trust-strip-top-badge-img { height: 46px; }
+    .trust-strip-top-credential { flex-basis: auto; }
   }
 
   @media (max-width: 768px) {
@@ -1295,12 +1286,58 @@
     .promo-announcement-actions { gap: 10px; }
     .hero { padding: 72px 0 60px; }
     .hs1, .hs2, .hs3 { opacity: .15; }
-    .hero-actions { justify-content: center; }
+    .hero-layout { display: flex; flex-direction: column; gap: 0; }
+    .hero-inner { display: contents; }
+    .page-eyebrow { order: 1; align-self: center; }
+    .hero-title { order: 2; }
+    .hero-sub { order: 3; }
+    .hero-support { order: 4; margin-bottom: 18px; }
+    .hero-stage {
+      order: 5;
+      display: block;
+      position: relative;
+      width: 100%;
+      max-width: 390px;
+      height: 430px;
+      margin: 0 auto 22px;
+    }
+    .hero-actions { order: 6; flex-direction: column; align-items: stretch; justify-content: center; gap: 12px; width: 100%; max-width: 320px; margin: 0 auto; }
+    .hero-actions .btn { width: 100%; }
+    .plus-callout { order: 7; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-left: auto; margin-right: auto; }
+    .hero-sparkle { display: none; }
+    .hc-spinner {
+      display: block;
+      width: 250px;
+      top: 10px;
+      left: 4px;
+      animation: none;
+    }
+    .hc-orf {
+      position: absolute;
+      width: min(310px, 88vw);
+      max-width: none;
+      top: 150px;
+      left: 50%;
+      margin: 0;
+      transform: translateX(-42%) rotate(1deg);
+    }
     .hero { text-align: center; }
     .hero-sub, .hero-support { margin-left: auto; margin-right: auto; }
     .hero-stage { margin: 0 auto; }
-    .footer-inner { grid-template-columns: 1fr; gap: 28px; }
-    .footer-bottom { flex-direction: column; text-align: center; }
+    .footer { padding: 36px 0 18px; }
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 22px 18px; padding-bottom: 20px; }
+    .footer-brand { grid-column: 1 / -1; }
+    .footer-desc { margin-top: 8px; }
+    .footer-col-title { margin-bottom: 8px; }
+    .footer-links { gap: 8px; }
+    .footer-bottom { flex-direction: column; text-align: center; gap: 6px; padding-top: 14px; }
+    .footer-legal { display: none; }
+
+    .section { padding: 44px 0; }
+    .section-sm { padding: 32px 0; }
+    .section-sub { margin-top: 8px; }
+    .shortcut-row,
+    .shortcut-row.games { margin-top: 20px; gap: 16px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1343,43 +1380,33 @@
   </header>
 
   <main>
-    <section class="promo-announcement" aria-label="Founding Teacher launch offer">
-      <div class="container promo-announcement-inner">
-        <div class="promo-announcement-main">
-          <span class="promo-kicker">Founding Teacher Deal</span>
-          <div>
-            <strong class="promo-title"><span class="promo-price">$49/year</span> for launch week only</strong>
-            <p class="promo-copy">Save unlimited activities, organize your dashboard, and print reports with Literacy Arcade Plus.</p>
-          </div>
-        </div>
-        <div class="promo-announcement-actions">
-          <span class="promo-countdown" data-founding-countdown data-countdown-prefix="Ends in:" data-expired-text="Founding Teacher deal has ended">Ends in: loading</span>
-          <a class="promo-cta" href="founding-teacher.html#plus-plans" aria-label="Claim the Literacy Arcade Plus founding rate">Claim founding rate →</a>
-        </div>
-      </div>
-    </section>
-
     <section class="hero" aria-label="Literacy Arcade hero">
       <div class="hero-bg" aria-hidden="true">
         <div class="hero-shape hs1"></div>
         <div class="hero-shape hs2"></div>
         <div class="hero-shape hs3"></div>
+        <span class="hero-sparkle s1">✦</span>
+        <span class="hero-sparkle s2">✦</span>
+        <span class="hero-sparkle s3">✧</span>
+        <span class="hero-sparkle s4">✦</span>
+        <span class="hero-sparkle s5">✦</span>
+        <span class="hero-sparkle s6">✧</span>
       </div>
 
       <div class="container">
         <div class="hero-layout">
           <div class="hero-inner">
-            <span class="page-eyebrow">Literacy Arcade</span>
+            <span class="page-eyebrow">Science of Reading–aligned</span>
             <h1 class="hero-title">Literacy tools for teaching reading</h1>
-            <p class="hero-sub">Science of Reading–aligned games, assessments, fluency tools, and lesson-planning tools — built for classroom teachers, interventionists, tutors, and homeschool families.</p>
-            <p class="hero-support">Start with free, classroom-ready tools — no setup required.</p>
+            <p class="hero-sub">Classroom-ready games, assessments, and teaching tools that make literacy instruction easier and practice more engaging.</p>
+            <p class="hero-support">Start free—no setup or student accounts required.</p>
             <div class="hero-actions" aria-label="Primary homepage actions">
               <a class="btn btn-primary" href="#categories">Explore tools →</a>
-              <a class="btn btn-secondary" href="teacher-login.html">Log in</a>
+              <a class="btn btn-secondary" href="word-wizard.html">Try a free game →</a>
             </div>
             <div class="plus-callout" aria-label="Literacy Arcade Plus launch week offer">
               <div>
-                <strong>Launch-week founding rate: $49/year</strong>
+                <strong>$49/year founding rate</strong>
                 <span>Full Plus access before regular pricing begins.</span>
                 <div class="plus-callout-countdown" data-founding-countdown data-countdown-prefix="Ends in:" data-expired-text="Founding Teacher deal has ended">Ends in: loading</div>
               </div>
@@ -1404,8 +1431,8 @@
                     <path d="M57 57 L103.9 30.5 A53 53 0 0 1 103.9 83.5 Z" fill="#FF6B6B"/>
                     <path d="M57 57 L103.9 83.5 A53 53 0 0 1 57 110 Z" fill="#FFB830"/>
                     <path d="M57 57 L57 110 A53 53 0 0 1 10.1 83.5 Z" fill="#7B5EA7"/>
-                    <path d="M57 57 L10.1 83.5 A53 53 0 0 1 10.1 30.5 Z" fill="#2EC4B6" opacity=".68"/>
-                    <path d="M57 57 L10.1 30.5 A53 53 0 0 1 57 4 Z" fill="#FF6B6B" opacity=".62"/>
+                    <path d="M57 57 L10.1 83.5 A53 53 0 0 1 10.1 30.5 Z" fill="#1FA99C" opacity=".92"/>
+                    <path d="M57 57 L10.1 30.5 A53 53 0 0 1 57 4 Z" fill="#E8534F" opacity=".92"/>
                     <line x1="57" y1="57" x2="57" y2="4" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
                     <line x1="57" y1="57" x2="103.9" y2="30.5" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
                     <line x1="57" y1="57" x2="103.9" y2="83.5" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
@@ -1549,12 +1576,12 @@
             <li class="trust-strip-sep">|</li>
             <li><span class="trust-chip blush"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 6.5h15M4.5 12h15M4.5 17.5h9"></path></svg></span>Listed on EdTech Index</li>
           </ul>
-          <p class="trust-strip-top-credential">Created by a reading researcher with a Ph.D. in Reading Education</p>
         </div>
         <a class="trust-strip-top-badge-link" href="https://edtechindex.org/product/ultid/P934-3FE3-514A-31A3-6B/" target="_blank" rel="noopener" aria-label="View Literacy Arcade on the EdTech Index (opens in a new tab)"><img class="trust-strip-top-badge-img"
           src="data:image/png;base64,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"
           width="110" height="118"
           alt="Find us on the EdTech Index — Literacy Arcade directory listing" /></a>
+        <p class="trust-strip-top-credential">Created by a reading researcher with a Ph.D. in Reading Education</p>
       </div>
     </section>
 
@@ -1563,7 +1590,7 @@
         <h2 class="section-title">Choose where to start</h2>
 
         <div class="category-grid">
-          <article class="category-card">
+          <a class="category-card" data-category="Assessments" href="assessments.html">
             <h2 class="category-title">Assessments</h2>
             <p class="category-copy">Quick, research-informed checks for letter names, letter sounds, phonics patterns, and oral reading fluency — with results on screen right away.</p>
             <div class="micro-tags" aria-label="Assessment topics">
@@ -1572,20 +1599,20 @@
               <span class="micro-tag">Phonics</span>
               <span class="micro-tag">ORF</span>
             </div>
-            <a class="category-link" data-category="Assessments" href="assessments.html">Explore assessments →</a>
-          </article>
+            <span class="category-link">Explore assessments →</span>
+          </a>
 
-          <article class="category-card">
+          <a class="category-card" data-category="Fluency" href="fluency.html">
             <h2 class="category-title">Fluency</h2>
             <p class="category-copy">Repeated reading practice and an ORF calculator, using passages you choose. Goal-based, with WCPM and accuracy tracked.</p>
             <div class="micro-tags" aria-label="Fluency topics">
               <span class="micro-tag">ORF calculator</span>
               <span class="micro-tag">Repeated reading games</span>
             </div>
-            <a class="category-link" data-category="Fluency" href="fluency.html">Explore fluency tools →</a>
-          </article>
+            <span class="category-link">Explore fluency tools →</span>
+          </a>
 
-          <article class="category-card">
+          <a class="category-card" data-category="Build & Play" href="build-and-play.html">
             <h2 class="category-title">Build &amp; Play</h2>
             <p class="category-copy">Turn built-in word lists — or your own words, sentences, and sounds — into games, flashcards, and practice routines students actually want to do.</p>
             <div class="micro-tags" aria-label="Build and Play topics">
@@ -1593,10 +1620,10 @@
               <span class="micro-tag">Phonics patterns</span>
               <span class="micro-tag">Custom words</span>
             </div>
-            <a class="category-link" data-category="Build & Play" href="build-and-play.html">Explore Build &amp; Play →</a>
-          </article>
+            <span class="category-link">Explore Build &amp; Play →</span>
+          </a>
 
-          <article class="category-card">
+          <a class="category-card" data-category="Teacher Tools" href="teacher-tools.html">
             <h2 class="category-title">Teacher Tools</h2>
             <p class="category-copy">Plan phoneme-grapheme mapping lessons, teach letterbox lessons on screen, and explore speech sounds — with word banks organized by phonics pattern.</p>
             <div class="micro-tags" aria-label="Teacher Tools topics">
@@ -1604,8 +1631,8 @@
               <span class="micro-tag">Letterbox Lesson</span>
               <span class="micro-tag">Phoneme Map</span>
             </div>
-            <a class="category-link" data-category="Teacher Tools" href="teacher-tools.html">Explore teacher tools →</a>
-          </article>
+            <span class="category-link">Explore teacher tools →</span>
+          </a>
         </div>
       </div>
     </section>
@@ -1628,43 +1655,51 @@
         <h2 class="section-title">Popular tools</h2>
         <div class="shortcut-row">
           <a class="shortcut-card" href="orf-fluency-calculator.html" data-tool="Oral Reading Fluency Calculator">
-            <span class="shortcut-preview has-image">
+            <span class="shortcut-media">
               <img src="images/home-popular-orf.png" alt="Oral Reading Fluency Calculator preview" loading="lazy" decoding="async">
             </span>
-            <span class="shortcut-body">
-              <span class="shortcut-name">Oral Reading Fluency Calculator</span>
+            <span class="shortcut-panel">
+              <span class="shortcut-panel-row">
+                <span class="shortcut-name">Oral Reading Fluency Calculator</span>
+                <span class="shortcut-action">Open tool →</span>
+              </span>
               <span class="shortcut-desc">Time oral reading, calculate WCPM and accuracy, compare to fluency norms, and print a teacher report.</span>
-              <span class="shortcut-action">Open tool →</span>
             </span>
           </a>
           <a class="shortcut-card" href="read-and-race.html" data-tool="Read & Race">
-            <span class="shortcut-preview has-image">
+            <span class="shortcut-media">
               <img src="images/home-popular-read-and-race.png" alt="Read &amp; Race preview" loading="lazy" decoding="async">
             </span>
-            <span class="shortcut-body">
-              <span class="shortcut-name">Read &amp; Race</span>
+            <span class="shortcut-panel">
+              <span class="shortcut-panel-row">
+                <span class="shortcut-name">Read &amp; Race</span>
+                <span class="shortcut-action">Open tool →</span>
+              </span>
               <span class="shortcut-desc">Turn a custom word list into a two-player reading race for quick practice.</span>
-              <span class="shortcut-action">Open tool →</span>
             </span>
           </a>
           <a class="shortcut-card" href="repeatedreadingrockets.html" data-tool="Repeated Reading Rockets">
-            <span class="shortcut-preview has-image">
+            <span class="shortcut-media">
               <img src="images/og-repeated-reading-rockets.png" alt="Repeated Reading Rockets preview" loading="lazy" decoding="async">
             </span>
-            <span class="shortcut-body">
-              <span class="shortcut-name">Repeated Reading Rockets</span>
+            <span class="shortcut-panel">
+              <span class="shortcut-panel-row">
+                <span class="shortcut-name">Repeated Reading Rockets</span>
+                <span class="shortcut-action">Open tool →</span>
+              </span>
               <span class="shortcut-desc">Use goal-based repeated reading practice with three reads and fluency progress.</span>
-              <span class="shortcut-action">Open tool →</span>
             </span>
           </a>
           <a class="shortcut-card" href="reading-word-spinner.html" data-tool="Reading Word Spinner">
-            <span class="shortcut-preview has-image">
+            <span class="shortcut-media">
               <img src="images/home-popular-word-spinner.png" alt="Reading Word Spinner preview" loading="lazy" decoding="async">
             </span>
-            <span class="shortcut-body">
-              <span class="shortcut-name">Reading Word Spinner</span>
+            <span class="shortcut-panel">
+              <span class="shortcut-panel-row">
+                <span class="shortcut-name">Reading Word Spinner</span>
+                <span class="shortcut-action">Open tool →</span>
+              </span>
               <span class="shortcut-desc">Spin through custom word lists for decoding, word reading, or quick fluency practice.</span>
-              <span class="shortcut-action">Open tool →</span>
             </span>
           </a>
         </div>
@@ -1677,48 +1712,39 @@
         <p class="section-sub">No setup, no word lists to build — just open and play.</p>
         <div class="shortcut-row games">
           <a class="shortcut-card" href="word-wizard.html" data-tool="Word Wizard Quest">
-            <span class="shortcut-preview game-preview" aria-hidden="true">
-              <span class="game-badge">
-                <svg viewBox="0 0 256 256" aria-hidden="true" fill="currentColor">
-                  <path d="M176,112,74.34,213.66a8,8,0,0,1-11.31,0L42.34,193a8,8,0,0,1,0-11.31L144,80Z" opacity="0.2"></path>
-                  <path d="M248,152a8,8,0,0,1-8,8H224v16a8,8,0,0,1-16,0V160H192a8,8,0,0,1,0-16h16V128a8,8,0,0,1,16,0v16h16A8,8,0,0,1,248,152ZM56,72H72V88a8,8,0,0,0,16,0V72h16a8,8,0,0,0,0-16H88V40a8,8,0,0,0-16,0V56H56a8,8,0,0,0,0,16ZM184,192h-8v-8a8,8,0,0,0-16,0v8h-8a8,8,0,0,0,0,16h8v8a8,8,0,0,0,16,0v-8h8a8,8,0,0,0,0-16ZM219.31,80,80,219.31a16,16,0,0,1-22.62,0L36.68,198.63a16,16,0,0,1,0-22.63L176,36.69a16,16,0,0,1,22.63,0l20.68,20.68A16,16,0,0,1,219.31,80Zm-54.63,32L144,91.31l-96,96L68.68,208ZM208,68.69,187.31,48l-32,32L176,100.69Z"></path>
-                </svg>
-              </span>
+            <span class="shortcut-media">
+              <img src="images/home-games/word-wizard-quest.png" alt="Word Wizard Quest game screen with Literacy Arcade header" loading="lazy" decoding="async">
             </span>
-            <span class="shortcut-body">
-              <span class="shortcut-name">Word Wizard Quest</span>
+            <span class="shortcut-panel">
+              <span class="shortcut-panel-row">
+                <span class="shortcut-name">Word Wizard Quest</span>
+                <span class="shortcut-action">Play game →</span>
+              </span>
               <span class="shortcut-desc">Solve word puzzles with clues and letter-by-letter feedback.</span>
-              <span class="shortcut-action">Play game →</span>
             </span>
           </a>
           <a class="shortcut-card" href="spellbound.html" data-tool="Spellbound">
-            <span class="shortcut-preview game-preview" aria-hidden="true">
-              <span class="game-badge spellbound">
-                <svg viewBox="0 0 256 256" aria-hidden="true" fill="currentColor">
-                  <path d="M208,32V192H72a24,24,0,0,0-24,24V56A24,24,0,0,1,72,32Z" opacity="0.2"></path>
-                  <path d="M208,24H72A32,32,0,0,0,40,56V224a8,8,0,0,0,8,8H192a8,8,0,0,0,0-16H56a16,16,0,0,1,16-16H208a8,8,0,0,0,8-8V32A8,8,0,0,0,208,24Zm-8,160H72a31.82,31.82,0,0,0-16,4.29V56A16,16,0,0,1,72,40H200Z"></path>
-                </svg>
-              </span>
+            <span class="shortcut-media">
+              <img src="images/home-games/spellbound.png" alt="Spellbound game screen with Literacy Arcade header" loading="lazy" decoding="async">
             </span>
-            <span class="shortcut-body">
-              <span class="shortcut-name">Spellbound</span>
+            <span class="shortcut-panel">
+              <span class="shortcut-panel-row">
+                <span class="shortcut-name">Spellbound</span>
+                <span class="shortcut-action">Play game →</span>
+              </span>
               <span class="shortcut-desc">Use picture clues and spelling practice in a quick fantasy-themed game.</span>
-              <span class="shortcut-action">Play game →</span>
             </span>
           </a>
           <a class="shortcut-card" href="word-forge.html" data-tool="Word Forge">
-            <span class="shortcut-preview game-preview" aria-hidden="true">
-              <span class="game-badge forge">
-                <svg viewBox="0 0 256 256" aria-hidden="true" fill="currentColor">
-                  <path d="M245.66,129,217,157.66a8,8,0,0,1-11.3,0L168.1,120l-28,28-32-32,28-28L80,31.78a87.81,87.81,0,0,1,98.31,18l67.35,67.89A8,8,0,0,1,245.66,129Z" opacity="0.2"></path>
-                  <path d="M251.34,112,183.88,44.08a96.1,96.1,0,0,0-135.77,0l-.09.09L34.25,58.4A8,8,0,0,0,45.74,69.53L59.47,55.35a79.92,79.92,0,0,1,18.71-13.9L124.68,88l-96,96a16,16,0,0,0,0,22.63l20.69,20.69a16,16,0,0,0,22.63,0l96-96,14.34,14.34h0L200,163.3a16,16,0,0,0,22.63,0l28.69-28.69A16,16,0,0,0,251.34,112ZM60.68,216,40,195.31l68-68L128.68,148ZM162.34,114.32,140,136.67,119.31,116l22.35-22.35a8,8,0,0,0,0-11.32L94.32,35a80,80,0,0,1,78.23,20.41l44.22,44.51L188,128.66l-14.34-14.34A8,8,0,0,0,162.34,114.32Zm49,37.66-12-12L228,111.25l12,12Z"></path>
-                </svg>
-              </span>
+            <span class="shortcut-media">
+              <img src="images/home-games/word-forge.png" alt="Word Forge game screen with Literacy Arcade header" loading="lazy" decoding="async">
             </span>
-            <span class="shortcut-body">
-              <span class="shortcut-name">Word Forge</span>
+            <span class="shortcut-panel">
+              <span class="shortcut-panel-row">
+                <span class="shortcut-name">Word Forge</span>
+                <span class="shortcut-action">Play game →</span>
+              </span>
               <span class="shortcut-desc">Build words from word parts in a fast-paced practice game.</span>
-              <span class="shortcut-action">Play game →</span>
             </span>
           </a>
         </div>
