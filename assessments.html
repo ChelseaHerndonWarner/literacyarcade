@@ -663,12 +663,12 @@
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 22px;
-      box-shadow: 0 18px 50px rgba(26,26,46,.10);
+      box-shadow: 0 22px 46px rgba(26,26,46,.20), 0 8px 18px rgba(26,26,46,.12);
       transform: translateY(0);
       transition: transform .25s ease, box-shadow .25s ease;
     }
     .preview-card:nth-child(2) { transform: translateY(18px); }
-    .preview-card:hover { transform: translateY(-5px); box-shadow: 0 24px 58px rgba(26,26,46,.15); }
+    .preview-card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px rgba(26,26,46,.26), 0 12px 24px rgba(26,26,46,.16); }
     .preview-card:nth-child(2):hover { transform: translateY(10px); }
     .preview-card img {
       display: block;
@@ -700,12 +700,13 @@
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 12px;
-      box-shadow: 0 14px 38px rgba(26,26,46,.13);
+      box-shadow: 0 18px 40px rgba(26,26,46,.22), 0 6px 14px rgba(26,26,46,.14);
+      transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
     }
-    .report-sheet.results { left: 4px; top: 0; transform: rotate(-2deg); z-index: 2; }
-    .report-sheet.analysis { right: 2px; top: 70px; transform: rotate(2.5deg); z-index: 1; }
-    .report-pair:hover .report-sheet.results { transform: rotate(-3deg) translateY(-5px); }
-    .report-pair:hover .report-sheet.analysis { transform: rotate(3deg) translateY(4px); }
+    .report-sheet.results { left: 4px; top: 0; transform: rotate(-3deg); z-index: 2; }
+    .report-sheet.analysis { right: 2px; top: 78px; transform: rotate(3.5deg); z-index: 1; box-shadow: 0 12px 30px rgba(26,26,46,.18), 0 4px 10px rgba(26,26,46,.10); }
+    .report-pair:hover .report-sheet.results { transform: rotate(-4.5deg) translateY(-8px); box-shadow: 0 26px 52px rgba(26,26,46,.28), 0 10px 20px rgba(26,26,46,.16); }
+    .report-pair:hover .report-sheet.analysis { transform: rotate(5deg) translateY(6px); }
     .report-label {
       position: absolute;
       left: 14px; right: 14px; bottom: 0;
