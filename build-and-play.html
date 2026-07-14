@@ -24,7 +24,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free Phonics &amp; Reading Games for K–5 — Dolch, Fry &amp; Phonics Word Lists | Literacy Arcade</title>
-  <meta name="description" content="Free phonics and reading games for K–5: built-in Dolch and Fry high-frequency word lists and phonics-pattern lists, plus tools for adding your own words, sentences, sounds, and vocabulary definitions. No student accounts required." />
+  <meta name="description" content="Create and customize literacy games, flashcards, spinners, sentence practice, vocabulary tools, and comprehension questions with built-in or teacher-created content." />
   <meta name="author" content="Literacy Arcade" />
   <meta name="application-name" content="Literacy Arcade" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -38,7 +38,7 @@
   <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content="Literacy Arcade" />
   <meta property="og:title" content="Free Phonics & Reading Games for K–5 — Dolch, Fry & Phonics Word Lists | Literacy Arcade" />
-  <meta property="og:description" content="Built-in Dolch and Fry high-frequency word lists and phonics-pattern lists, plus tools for adding your own words, sentences, sounds, and vocabulary definitions. No student accounts required." />
+  <meta property="og:description" content="Create and customize literacy games, flashcards, spinners, sentence practice, vocabulary tools, and comprehension questions with built-in or teacher-created content." />
   <meta property="og:url" content="https://literacyarcade.com/build-and-play.html" />
   <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
   <meta property="og:image:type" content="image/png" />
@@ -50,7 +50,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@LiteracyArcade" />
   <meta name="twitter:title" content="Free Phonics & Reading Games for K–5 — Dolch, Fry & Phonics Word Lists | Literacy Arcade" />
-  <meta name="twitter:description" content="Built-in Dolch and Fry high-frequency word lists and phonics-pattern lists, plus tools for adding your own words, sentences, sounds, and vocabulary definitions. No student accounts required." />
+  <meta name="twitter:description" content="Create and customize literacy games, flashcards, spinners, sentence practice, vocabulary tools, and comprehension questions with built-in or teacher-created content." />
   <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
   <meta name="twitter:image:alt" content="Literacy Arcade Build & Play: turn built-in word lists or your own words, sentences, sounds, and vocabulary into games and flashcards." />
 
@@ -117,7 +117,7 @@
       padding: 0 24px;
     }
 
-    .section { padding: 88px 0; }
+    .section { padding: 56px 0 40px; }
     .section-sm { padding: 56px 0; }
 
     .visually-hidden {
@@ -274,12 +274,12 @@
       text-transform: uppercase;
       padding: 6px 16px;
       border-radius: 100px;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
 
     /* ── Hero ── */
     .hero {
-      padding: 72px 0 64px;
+      padding: 32px 0 26px;
       background: var(--cream);
       text-align: center;
     }
@@ -287,33 +287,33 @@
 
     .hero-title {
       font-family: var(--font-head);
-      font-size: clamp(2.3rem, 4.6vw, 3.2rem);
+      font-size: clamp(2.1rem, 4.2vw, 2.9rem);
       font-weight: 900;
       color: var(--ink);
       line-height: 1.15;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
     }
 
     .hero-sub {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       color: var(--ink-soft);
       font-weight: 600;
-      line-height: 1.6;
-      margin-bottom: 14px;
+      line-height: 1.55;
+      margin-bottom: 10px;
     }
 
     .hero-support {
-      font-size: 1rem;
+      font-size: .96rem;
       color: var(--ink-soft);
-      line-height: 1.6;
-      margin-bottom: 30px;
+      line-height: 1.55;
+      margin-bottom: 18px;
     }
 
     .hero-chips {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .hero-chip {
@@ -336,19 +336,78 @@
       flex-shrink: 0;
     }
 
+    /* ── Hero product visual strip ── */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 16px;
+    }
+    .hero-visual-card {
+      width: 244px;
+      height: 152px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(26,26,46,.12);
+      border: 4px solid var(--white);
+      background: var(--mint);
+      flex-shrink: 0;
+    }
+    .hero-visual-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-visual-card:nth-child(1) {
+      transform: rotate(-3deg) translateY(6px) scale(.92);
+      margin-right: -34px;
+      z-index: 1;
+    }
+    .hero-visual-card:nth-child(2) {
+      transform: translateY(-6px) scale(1.06);
+      box-shadow: 0 16px 40px rgba(26,26,46,.18);
+      z-index: 2;
+    }
+    .hero-visual-card:nth-child(3) {
+      transform: rotate(3deg) translateY(6px) scale(.92);
+      margin-left: -34px;
+      z-index: 1;
+    }
+    @media (max-width: 960px) {
+      .hero-visual-card { width: 210px; height: 130px; }
+    }
+    @media (max-width: 640px) {
+      .hero-visual { display: none; }
+    }
+
     /* ── How it works / step strip ── */
+    .howitworks { padding: 40px 0 44px; }
+
     .steps-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-      margin-top: 48px;
+      gap: 28px;
+      margin-top: 28px;
     }
 
-    .step-card { text-align: center; }
+    .step-card {
+      text-align: center;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 20px 20px;
+      box-shadow: 0 4px 16px rgba(26,26,46,.06);
+      transition: transform .22s, box-shadow .22s;
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 34px rgba(26,26,46,.12);
+    }
 
     .step-num {
-      width: 44px; height: 44px;
-      margin: 0 auto 16px;
+      width: 38px; height: 38px;
+      margin: 0 auto 10px;
       background: var(--mint);
       color: var(--teal-dk);
       border-radius: 50%;
@@ -357,28 +416,30 @@
       justify-content: center;
       font-family: var(--font-head);
       font-weight: 900;
-      font-size: 1.15rem;
+      font-size: 1.02rem;
+      box-shadow: 0 0 0 6px var(--white);
     }
 
     .step-title {
       font-family: var(--font-head);
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 800;
       color: var(--ink);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .step-body {
-      font-size: .93rem;
+      font-size: .91rem;
       color: var(--ink-soft);
-      line-height: 1.6;
+      line-height: 1.55;
     }
 
     /* ── Routing guide ── */
     .routing {
-      background: var(--white);
+      background: var(--mint);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      padding: 36px 0 40px;
     }
 
     .routing-intro {
@@ -392,10 +453,11 @@
     .routing-list {
       max-width: 760px;
       margin: 0 auto;
-      background: var(--cream);
+      background: var(--white);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
+      box-shadow: var(--shadow);
     }
 
     .routing-row {
@@ -403,17 +465,26 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 10px;
-      padding: 18px 26px;
+      padding: 14px 22px;
       border-bottom: 1px solid var(--border);
       text-decoration: none;
       color: inherit;
+      cursor: pointer;
+      transition: background .18s ease;
     }
     .routing-row:last-child { border-bottom: none; }
-    .routing-row:hover { background: var(--white); }
+    .routing-row:hover {
+      background: rgba(46,196,182,.09);
+    }
     .routing-row:hover .routing-tool { text-decoration: underline; }
+    .routing-row:hover .routing-arrow {
+      opacity: 1;
+      transform: translateX(4px);
+    }
     .routing-row:focus-visible {
       outline: 2px solid var(--teal-dk);
       outline-offset: -2px;
+      background: rgba(46,196,182,.09);
     }
 
     .routing-q {
@@ -425,152 +496,306 @@
     .routing-tool {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: space-between;
+      gap: 10px;
       font-weight: 800;
       color: var(--teal-dk);
       flex-shrink: 0;
       width: 360px;
     }
 
+    .routing-tool-compact {
+      font-size: .88rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
     .routing-arrow {
       color: var(--ink-soft);
       opacity: .6;
       flex-shrink: 0;
+      display: inline-block;
+      transition: transform .18s, opacity .18s;
     }
 
     /* ── Tool groups & cards ── */
-    .tool-group { margin-top: 0; }
-    .tool-group + .tool-group { margin-top: 48px; }
+    .tool-group { margin-top: 0; scroll-margin-top: 84px; }
+    .tool-group + .tool-group {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
 
-    .group-label {
-      font-size: .8rem;
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
+    .group-heading { margin-bottom: 22px; }
+
+    .group-title {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--ink);
+      letter-spacing: -.2px;
+      line-height: 1.25;
+    }
+
+    .group-sub {
+      font-size: .95rem;
       color: var(--ink-soft);
-      opacity: .7;
-      margin-bottom: 16px;
-      scroll-margin-top: 84px;
+      margin-top: 6px;
+      max-width: 560px;
+      line-height: 1.55;
     }
 
     .assess-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      gap: 20px;
     }
 
+    .assess-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* ── Slide-up reveal product cards ── */
     .assess-card {
       position: relative;
+      display: block;
+      overflow: hidden;
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px 28px;
-      box-shadow: var(--shadow);
-      transition: transform .22s, box-shadow .22s;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(26,26,46,.12);
+      transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease;
+      aspect-ratio: 16 / 10;
       scroll-margin-top: 84px;
+      color: inherit;
+      text-decoration: none;
     }
-    .assess-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-hover);
+    .assess-card:hover,
+    .assess-card:focus-visible {
+      transform: translateY(-8px);
+      box-shadow: 0 28px 56px rgba(26,26,46,.20);
+      border-color: rgba(46,196,182,.5);
+    }
+    .assess-card:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 3px;
+    }
+
+    /* Image fills the card. Full-image cards use contain (nothing cropped); the rest cover. */
+    .assess-media {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--mint), var(--cream) 52%, var(--lavender));
+    }
+    .assess-media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform .45s cubic-bezier(.22,1,.36,1);
+    }
+    .assess-media--full img {
+      object-fit: contain;
+      object-position: top center;
+    }
+    .assess-card:hover .assess-media img,
+    .assess-card:focus-visible .assess-media img { transform: scale(1.03); }
+
+    /* Bottom panel: title + Open at rest; description + tags roll up on hover/focus. */
+    .assess-panel {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 15px 20px 16px;
+      background: var(--white);
+      box-shadow: 0 -12px 28px rgba(26,26,46,.10);
+      transition: box-shadow .3s ease;
+    }
+    .assess-card:hover .assess-panel,
+    .assess-card:focus-visible .assess-panel {
+      box-shadow: 0 -20px 40px rgba(26,26,46,.16);
+    }
+
+    .assess-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
 
     .assess-name {
       font-family: var(--font-head);
-      font-size: 1.32rem;
+      font-size: 1.12rem;
       font-weight: 800;
-      color: var(--teal-dk);
+      color: var(--ink);
       line-height: 1.25;
     }
 
+    .assess-action {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--teal-dk);
+      font-family: var(--font-head);
+      font-size: .86rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .assess-action .assess-arrow {
+      display: inline-block;
+      transition: transform .2s ease;
+    }
+    .assess-card:hover .assess-action .assess-arrow,
+    .assess-card:focus-visible .assess-action .assess-arrow { transform: translateX(3px); }
+
+    /* Revealed content — generous max-height so text can never clip.
+       display:block is required so max-height/overflow apply (a span is inline by default). */
+    .assess-details {
+      display: block;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      margin-top: 0;
+      transition: max-height .4s cubic-bezier(.22,1,.36,1), opacity .28s ease, margin-top .4s cubic-bezier(.22,1,.36,1);
+    }
+    .assess-card:hover .assess-details,
+    .assess-card:focus-visible .assess-details {
+      max-height: 320px;
+      opacity: 1;
+      margin-top: 11px;
+    }
+
     .assess-desc {
-      font-size: .97rem;
+      display: block;
+      font-size: .88rem;
       color: var(--ink-soft);
-      line-height: 1.6;
+      line-height: 1.5;
+      margin-bottom: 11px;
     }
 
     .assess-chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 7px;
     }
 
     .chip-lavender {
-      font-size: .76rem;
+      font-size: .74rem;
       font-weight: 700;
-      padding: 5px 12px;
+      padding: 4px 11px;
       border-radius: 100px;
       background: var(--lavender);
       color: var(--violet);
     }
 
-    .assess-btn {
-      align-self: flex-start;
-      margin-top: auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--teal);
-      color: var(--white);
-      font-weight: 800;
-      font-size: .92rem;
-      padding: 12px 22px;
-      border-radius: 100px;
-      transition: background .2s, transform .2s;
+    /* Touch / no-hover: stack the full image over an always-open panel (no hover needed).
+       position:static clears the base absolute offsets so media/panel flow normally. */
+    @media (hover: none) {
+      .assess-card { aspect-ratio: auto; }
+      .assess-media { position: static; aspect-ratio: 16 / 10; }
+      .assess-panel { position: static; box-shadow: none; border-top: 1px solid var(--border); }
+      .assess-details { max-height: none; opacity: 1; margin-top: 11px; }
     }
-    .assess-btn:hover { background: var(--teal-dk); transform: translateY(-2px); }
 
-    /* ── Share it callout ── */
+    /* ── Closing section: share callout + next-step callout ── */
+    .closing-section { padding: 24px 0 44px; }
+
+    .closing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .reports-callout,
+    .next-callout {
+      border-radius: var(--radius);
+      padding: 26px 30px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     .reports-callout {
       background: var(--blush);
       border: 1px solid rgba(255,107,107,.25);
-      border-radius: var(--radius);
-      padding: 44px 40px;
-      max-width: 780px;
-      margin: 0 auto;
-      text-align: center;
     }
 
-    .reports-callout h2 {
+    .next-callout {
+      background: var(--mint);
+      border: 1px solid rgba(46,196,182,.25);
+    }
+
+    .callout-icon {
+      width: 44px; height: 44px;
+      margin: 0 auto 10px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+    }
+    .callout-icon svg { width: 21px; height: 21px; }
+
+    .reports-callout h2,
+    .next-callout h2 {
       font-family: var(--font-head);
-      font-size: clamp(1.6rem, 3vw, 2rem);
+      font-size: clamp(1.35rem, 2.5vw, 1.6rem);
       font-weight: 900;
       color: var(--ink);
-      margin-bottom: 14px;
+      margin-bottom: 8px;
     }
 
-    .reports-callout p {
-      font-size: 1rem;
+    .reports-callout p,
+    .next-callout p {
+      font-size: .94rem;
       color: var(--ink-soft);
-      line-height: 1.65;
+      line-height: 1.5;
     }
 
     .reports-callout .callout-note {
-      font-size: .85rem;
+      font-size: .82rem;
       opacity: .8;
+      margin-top: 8px;
+    }
+
+    .next-callout-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
       margin-top: 14px;
     }
 
-    /* ── Keep going strip ── */
-    .keepgoing {
+    .next-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--teal);
+      color: var(--white);
+      font-weight: 800;
+      font-size: .84rem;
+      padding: 10px 18px;
+      border-radius: 100px;
+      transition: background .2s, transform .2s;
+    }
+    .next-btn:hover { background: var(--teal-dk); transform: translateY(-2px); }
+
+    .next-btn-alt {
       background: var(--white);
-      border-top: 1px solid var(--border);
+      color: var(--teal-dk);
+      border: 1px solid var(--border);
     }
+    .next-btn-alt:hover { background: var(--mint); }
 
-    .keepgoing-inner {
-      max-width: 780px;
-      margin: 0 auto;
-      text-align: center;
-      font-size: 1.02rem;
-      color: var(--ink-soft);
-      line-height: 1.75;
+    @media (max-width: 860px) {
+      .closing-grid { grid-template-columns: 1fr; }
     }
-
-    .keepgoing-inner strong { color: var(--ink); }
-    .keepgoing-inner a { color: var(--teal-dk); font-weight: 800; }
-    .keepgoing-inner a:hover { text-decoration: underline; }
 
     /* ── Trust strip (secondary, above footer) ── */
     .trust-strip {
@@ -607,13 +832,14 @@
     .footer {
       background: var(--ink);
       color: rgba(255,255,255,.72);
-      padding: 56px 0 24px;
+      padding: 42px 0 20px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
     }
     .footer-inner {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
-      gap: 40px;
-      padding-bottom: 32px;
+      gap: 32px 48px;
+      padding-bottom: 24px;
       border-bottom: 1px solid rgba(255,255,255,.12);
     }
     .footer-inner > * { min-width: 0; }
@@ -631,9 +857,9 @@
       font-size: .95rem;
       margin-bottom: 14px;
     }
-    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 6px; }
     .footer-links a, .footer-links span { color: inherit; font-size: .9rem; }
-    .footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
+    .footer-links a { display: inline-flex; align-items: center; min-height: 34px; }
     .footer-links a:hover { color: var(--teal); }
     .footer-bottom {
       display: flex;
@@ -648,7 +874,7 @@
 
     /* ── Responsive ── */
     @media (max-width: 860px) {
-      .assess-grid { grid-template-columns: 1fr; }
+      .assess-grid, .assess-grid-3 { grid-template-columns: 1fr; }
       .steps-grid { grid-template-columns: 1fr; gap: 36px; }
     }
 
@@ -675,6 +901,8 @@
       .nav-mobile-toggle { display: flex; }
       .section { padding: 56px 0; }
       .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+      .footer-links { gap: 4px; }
+      .footer-links a { min-height: 44px; }
       .footer-bottom { flex-direction: column; align-items: center; text-align: center; }
       .footer-brand .nav-logo { justify-content: center; }
       .routing-row {
@@ -746,18 +974,29 @@
       <div class="container">
         <span class="page-eyebrow">Build &amp; Play</span>
         <h1 class="hero-title">Build the practice your students need</h1>
-        <p class="hero-sub">Start with built-in lists — Dolch and Fry high-frequency words and phonics-pattern words in a research-informed sequence — or add your own words, sentences, sounds, and vocabulary definitions. Then turn your content into a game, flashcards, or practice routine students actually want to do.</p>
-        <p class="hero-support">Ready-made when you need speed. Customizable when students need precision. No student accounts required.</p>
+        <p class="hero-sub">Start with built-in Dolch, Fry, and phonics-pattern lists — or add your own words, sentences, vocabulary definitions, and comprehension questions.</p>
+        <p class="hero-support">Turn it into a game, flashcards, a spinner, or a discussion routine. No student accounts required.</p>
         <div class="hero-chips">
-          <span class="hero-chip"><span class="hero-chip-dot"></span>Built-in word lists</span>
+          <span class="hero-chip"><span class="hero-chip-dot"></span>Built-in word &amp; question lists</span>
           <span class="hero-chip"><span class="hero-chip-dot"></span>Add your own content</span>
           <span class="hero-chip"><span class="hero-chip-dot"></span>No student logins</span>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-visual-card">
+            <img src="images/build-and-play-previews/magic-word-road-preview.png" alt="Magic Word Road gameplay preview" loading="lazy" width="2496" height="1378">
+          </div>
+          <div class="hero-visual-card">
+            <img src="images/home-popular-word-spinner.png" alt="Reading Word Spinner preview" loading="lazy" width="1200" height="630">
+          </div>
+          <div class="hero-visual-card">
+            <img src="images/build-and-play-previews/comprehension-spinner-preview.png" alt="Comprehension Question Spinner preview" loading="lazy" width="2048" height="1113">
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ── How it works (before the cards) ── -->
-    <section class="section section-sm" style="background:var(--white);" aria-label="How it works">
+    <section class="howitworks" style="background:var(--white);" aria-label="How it works">
       <div class="container">
         <h2 class="section-title">How it works</h2>
 
@@ -789,19 +1028,23 @@
         <div class="routing-list">
           <a class="routing-row" href="#word-practice">
             <span class="routing-q">High-frequency words (Dolch or Fry)</span>
-            <span class="routing-tool">Read &amp; Race, Magic Word Road, Reading Word Spinner, Digital Reading Flashcards<span class="routing-arrow" aria-hidden="true">→</span></span>
+            <span class="routing-tool routing-tool-compact">Read &amp; Race, Magic Word Road, Reading Word Spinner, or Digital Reading Flashcards<span class="routing-arrow" aria-hidden="true">→</span></span>
           </a>
           <a class="routing-row" href="#word-practice">
             <span class="routing-q">Words with a specific phonics pattern</span>
-            <span class="routing-tool">The same four tools, loaded with built-in phonics-pattern lists<span class="routing-arrow" aria-hidden="true">→</span></span>
+            <span class="routing-tool routing-tool-compact">Use the same four tools with built-in phonics-pattern lists<span class="routing-arrow" aria-hidden="true">→</span></span>
           </a>
-          <a class="routing-row" href="#sentence-practice">
+          <a class="routing-row" href="#sentence-vocab-comprehension">
             <span class="routing-q">Reading sentences smoothly</span>
             <span class="routing-tool">Sentence Spinner<span class="routing-arrow" aria-hidden="true">→</span></span>
           </a>
-          <a class="routing-row" href="#vocabulary">
+          <a class="routing-row" href="#sentence-vocab-comprehension">
             <span class="routing-q">Vocabulary words and meanings</span>
             <span class="routing-tool">Vocabulary Flashcards<span class="routing-arrow" aria-hidden="true">→</span></span>
+          </a>
+          <a class="routing-row" href="#sentence-vocab-comprehension">
+            <span class="routing-q">Discussing and responding to a text</span>
+            <span class="routing-tool">Comprehension Question Spinner<span class="routing-arrow" aria-hidden="true">→</span></span>
           </a>
         </div>
       </div>
@@ -813,89 +1056,120 @@
 
         <!-- Group: Word practice -->
         <div class="tool-group" id="word-practice">
-          <div class="group-label">Word practice</div>
+          <div class="group-heading">
+            <h3 class="group-title">Word Practice</h3>
+            <p class="group-sub">Built-in lists and customizable activities for high-frequency words and phonics patterns.</p>
+          </div>
           <div class="assess-grid">
 
-            <article class="assess-card">
-              <h3 class="assess-name">Read &amp; Race</h3>
-              <p class="assess-desc">Students read words to move their racer along the track. Load a built-in Dolch, Fry, or phonics-pattern list — or type in your own words.</p>
-              <div class="assess-chips">
-                <span class="chip-lavender">Built-in word lists</span>
-                <span class="chip-lavender">Custom words</span>
-                <span class="chip-lavender">Shareable</span>
-              </div>
-              <a class="assess-btn" href="read-and-race.html">Open Read &amp; Race →</a>
-            </article>
+            <a class="assess-card" href="read-and-race.html">
+              <span class="assess-media assess-media--full"><img src="images/home-popular-read-and-race.png" alt="Read &amp; Race preview" loading="lazy"></span>
+              <span class="assess-panel">
+                <span class="assess-panel-head">
+                  <span class="assess-name">Read &amp; Race</span>
+                  <span class="assess-action">Open <span class="assess-arrow" aria-hidden="true">→</span></span>
+                </span>
+                <span class="assess-details">
+                  <span class="assess-desc">Read words to move your racer down the track — built-in Dolch, Fry, and phonics lists, or your own words.</span>
+                  <span class="assess-chips"><span class="chip-lavender">Built-in word lists</span><span class="chip-lavender">Custom words</span><span class="chip-lavender">Shareable</span></span>
+                </span>
+              </span>
+            </a>
 
-            <article class="assess-card">
-              <h3 class="assess-name">Magic Word Road</h3>
-              <p class="assess-desc">Read words to travel the road in a gentle, story-like format. Built-in Dolch, Fry, and phonics-pattern lists, or your own words.</p>
-              <div class="assess-chips">
-                <span class="chip-lavender">Built-in word lists</span>
-                <span class="chip-lavender">Custom words</span>
-                <span class="chip-lavender">Shareable</span>
-              </div>
-              <a class="assess-btn" href="magic-word-road.html">Open Magic Word Road →</a>
-            </article>
+            <a class="assess-card" href="magic-word-road.html">
+              <span class="assess-media"><img src="images/build-and-play-previews/magic-word-road-preview.png" alt="Magic Word Road preview" loading="lazy"></span>
+              <span class="assess-panel">
+                <span class="assess-panel-head">
+                  <span class="assess-name">Magic Word Road</span>
+                  <span class="assess-action">Open <span class="assess-arrow" aria-hidden="true">→</span></span>
+                </span>
+                <span class="assess-details">
+                  <span class="assess-desc">Read words to travel a gentle, story-like road — built-in Dolch, Fry, and phonics lists, or your own words.</span>
+                  <span class="assess-chips"><span class="chip-lavender">Built-in word lists</span><span class="chip-lavender">Custom words</span><span class="chip-lavender">Shareable</span></span>
+                </span>
+              </span>
+            </a>
 
-            <article class="assess-card">
-              <h3 class="assess-name">Reading Word Spinner</h3>
-              <p class="assess-desc">Spin to a word, read it, spin again. A quick routine for word practice with built-in lists or your own words — great for warm-ups and partner turns.</p>
-              <div class="assess-chips">
-                <span class="chip-lavender">Built-in word lists</span>
-                <span class="chip-lavender">Custom words</span>
-                <span class="chip-lavender">Shareable</span>
-              </div>
-              <a class="assess-btn" href="reading-word-spinner.html">Open the spinner →</a>
-            </article>
+            <a class="assess-card" href="reading-word-spinner.html">
+              <span class="assess-media assess-media--full"><img src="images/home-popular-word-spinner.png" alt="Reading Word Spinner preview" loading="lazy"></span>
+              <span class="assess-panel">
+                <span class="assess-panel-head">
+                  <span class="assess-name">Reading Word Spinner</span>
+                  <span class="assess-action">Open <span class="assess-arrow" aria-hidden="true">→</span></span>
+                </span>
+                <span class="assess-details">
+                  <span class="assess-desc">Spin, read, repeat — a quick word-practice routine for warm-ups and partner turns, with built-in lists or your own words.</span>
+                  <span class="assess-chips"><span class="chip-lavender">Built-in word lists</span><span class="chip-lavender">Custom words</span><span class="chip-lavender">Shareable</span></span>
+                </span>
+              </span>
+            </a>
 
-            <article class="assess-card">
-              <h3 class="assess-name">Digital Reading Flashcards</h3>
-              <p class="assess-desc">Classic flashcard practice with built-in Dolch, Fry, and phonics-pattern lists, or any words you enter.</p>
-              <div class="assess-chips">
-                <span class="chip-lavender">Built-in word lists</span>
-                <span class="chip-lavender">Custom words</span>
-                <span class="chip-lavender">Shareable</span>
-              </div>
-              <a class="assess-btn" href="digital-reading-flashcards.html">Open flashcards →</a>
-            </article>
+            <a class="assess-card" href="digital-reading-flashcards.html">
+              <span class="assess-media assess-media--full"><img src="images/build-and-play-previews/digital-reading-flashcards-preview.png" alt="Digital Reading Flashcards card showing the word make with progress, Need Practice, Skip, and Got It controls" loading="lazy"></span>
+              <span class="assess-panel">
+                <span class="assess-panel-head">
+                  <span class="assess-name">Digital Reading Flashcards</span>
+                  <span class="assess-action">Open <span class="assess-arrow" aria-hidden="true">→</span></span>
+                </span>
+                <span class="assess-details">
+                  <span class="assess-desc">Classic flashcard practice with built-in Dolch, Fry, and phonics lists, or any words you enter.</span>
+                  <span class="assess-chips"><span class="chip-lavender">Built-in word lists</span><span class="chip-lavender">Custom words</span><span class="chip-lavender">Shareable</span></span>
+                </span>
+              </span>
+            </a>
 
           </div>
         </div>
 
-        <!-- Group: Sentence practice -->
-        <div class="tool-group" id="sentence-practice">
-          <div class="group-label">Sentence practice</div>
-          <div class="assess-grid">
-
-            <article class="assess-card">
-              <h3 class="assess-name">Sentence Spinner</h3>
-              <p class="assess-desc">Enter the sentences you want students to practice reading — decodable sentences, sentences with target words, or anything you're working on — and spin to practice them.</p>
-              <div class="assess-chips">
-                <span class="chip-lavender">Custom sentences</span>
-                <span class="chip-lavender">Shareable</span>
-              </div>
-              <a class="assess-btn" href="sentence-spinner.html">Open Sentence Spinner →</a>
-            </article>
-
+        <!-- Group: Sentence, Vocabulary & Comprehension -->
+        <div class="tool-group" id="sentence-vocab-comprehension">
+          <div class="group-heading">
+            <h3 class="group-title">Sentence, Vocabulary &amp; Comprehension</h3>
+            <p class="group-sub">Create practice using your own sentences, definitions, and text-based questions.</p>
           </div>
-        </div>
+          <div class="assess-grid-3">
 
-        <!-- Group: Vocabulary -->
-        <div class="tool-group" id="vocabulary">
-          <div class="group-label">Vocabulary</div>
-          <div class="assess-grid">
+            <a class="assess-card" href="sentence-spinner.html">
+              <span class="assess-media"><img src="images/build-and-play-previews/sentence-spinner-preview.png" alt="Sentence Spinner result popup showing a practice sentence with phrasing guidance and Keep It / Remove controls" loading="lazy"></span>
+              <span class="assess-panel">
+                <span class="assess-panel-head">
+                  <span class="assess-name">Sentence Spinner</span>
+                  <span class="assess-action">Open <span class="assess-arrow" aria-hidden="true">→</span></span>
+                </span>
+                <span class="assess-details">
+                  <span class="assess-desc">Practice phrasing, expression, and smooth sentence reading with your own sentences.</span>
+                  <span class="assess-chips"><span class="chip-lavender">Custom sentences</span><span class="chip-lavender">Shareable</span></span>
+                </span>
+              </span>
+            </a>
 
-            <article class="assess-card">
-              <h3 class="assess-name">Vocabulary Flashcards</h3>
-              <p class="assess-desc">Create flashcards with your own vocabulary words and definitions for any subject, unit, or text.</p>
-              <div class="assess-chips">
-                <span class="chip-lavender">Custom vocabulary</span>
-                <span class="chip-lavender">Add definitions</span>
-                <span class="chip-lavender">Shareable</span>
-              </div>
-              <a class="assess-btn" href="vocabulary-flashcards.html">Open vocabulary flashcards →</a>
-            </article>
+            <a class="assess-card" href="vocabulary-flashcards.html">
+              <span class="assess-media"><img src="images/build-and-play-previews/vocabulary-flashcards-preview.png" alt="Vocabulary Flashcards card showing the word determine with its definition and Need Practice, Show Word, Skip, and Got It controls" loading="lazy"></span>
+              <span class="assess-panel">
+                <span class="assess-panel-head">
+                  <span class="assess-name">Vocabulary Flashcards</span>
+                  <span class="assess-action">Open <span class="assess-arrow" aria-hidden="true">→</span></span>
+                </span>
+                <span class="assess-details">
+                  <span class="assess-desc">Build custom vocabulary cards with your own words and definitions for any subject or unit.</span>
+                  <span class="assess-chips"><span class="chip-lavender">Custom vocabulary</span><span class="chip-lavender">Add definitions</span><span class="chip-lavender">Shareable</span></span>
+                </span>
+              </span>
+            </a>
+
+            <a class="assess-card" href="comprehension-spinner.html">
+              <span class="assess-media"><img src="images/build-and-play-previews/comprehension-spinner-preview.png" alt="Comprehension Spinner setup screen showing Fiction, Nonfiction, and Any Text options, Bloom's levels, question types, and the spinner wheel" loading="lazy"></span>
+              <span class="assess-panel">
+                <span class="assess-panel-head">
+                  <span class="assess-name">Comprehension Question Spinner</span>
+                  <span class="assess-action">Open <span class="assess-arrow" aria-hidden="true">→</span></span>
+                </span>
+                <span class="assess-details">
+                  <span class="assess-desc">Create text-based questions from Bloom's levels for discussion and written response.</span>
+                  <span class="assess-chips"><span class="chip-lavender">Built-in question bank</span><span class="chip-lavender">Custom questions</span><span class="chip-lavender">Shareable</span></span>
+                </span>
+              </span>
+            </a>
 
           </div>
         </div>
@@ -903,25 +1177,38 @@
       </div>
     </section>
 
-    <!-- ── Share it ── -->
-    <section class="section-sm" aria-label="Built it? Share it.">
-      <div class="container">
+    <!-- ── Share it + Need help choosing the target ── -->
+    <section class="closing-section" aria-label="Share your activity and next steps">
+      <div class="container closing-grid">
         <div class="reports-callout">
+          <div class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="5" r="3" stroke="#FF6B6B" stroke-width="2"/>
+              <circle cx="6" cy="12" r="3" stroke="#FF6B6B" stroke-width="2"/>
+              <circle cx="18" cy="19" r="3" stroke="#FF6B6B" stroke-width="2"/>
+              <path d="M8.6 10.5L15.4 6.5M8.6 13.5L15.4 17.5" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
           <h2>Built it? Share it.</h2>
           <p>Built an activity your students need? Share it through Google Classroom or a link — students play exactly what you made, locked to your setup, no student accounts needed.</p>
           <p class="callout-note">Look for the Shareable tag on the cards above.</p>
         </div>
-      </div>
-    </section>
 
-    <!-- ── Keep going strip ── -->
-    <section class="keepgoing section-sm" aria-label="Keep going">
-      <h2 class="visually-hidden">Keep going</h2>
-      <div class="container">
-        <p class="keepgoing-inner">
-          Not sure which words or patterns to target? Run a quick check on the <a href="assessments.html">Assessments</a> page and build practice from what you find.
-          Working on reading connected text? The <a href="fluency.html">Fluency tools</a> are built for repeated reading.
-        </p>
+        <div class="next-callout">
+          <div class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="8" stroke="#1FA99C" stroke-width="2"/>
+              <circle cx="12" cy="12" r="4.3" stroke="#1FA99C" stroke-width="2"/>
+              <circle cx="12" cy="12" r="1.3" fill="#1FA99C"/>
+            </svg>
+          </div>
+          <h2>Need help choosing the target?</h2>
+          <p>Run a quick assessment to identify the next skill, or use the fluency tools for repeated reading with connected text.</p>
+          <div class="next-callout-actions">
+            <a class="next-btn" href="assessments.html">Explore Assessments →</a>
+            <a class="next-btn next-btn-alt" href="fluency.html">Explore Fluency Tools →</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -934,7 +1221,7 @@
       <!-- EdTech Index badge — directory listing mark, reused as-is from index.html.
            Do not modify, recolor, or crop the artwork. -->
       <a class="trust-strip-badge-link" href="https://edtechindex.org/product/ultid/P934-3FE3-514A-31A3-6B/" target="_blank" rel="noopener" aria-label="View Literacy Arcade on the EdTech Index (opens in a new tab)">
-        <img class="trust-strip-badge-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAToAAAFQCAMAAAAY80JSAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAECUExURf///xBrTwlWNglZQwVcQgRiRQhkRwhqTAZpSwZlSAxtUP7+/vP29uPq563UyW2vlUWTdRd0VxSGXRWQcxGffxelhSSqhTKwjiiyhyebfQ5uUDKKZl2biI3KttTi3en08Y67rQRcPAFUNBabgBCykBG7nzHBl1fCjze4hjScfARWN9bs5glqU0y6lUi6hTmleSB4XwyZgQ2nghGogbHDvla9iT2KcmvDlUKog0WqeSidf0ChfQObcwVVOgVJNUOzfQZDLAU4J27EljSsegtMMBlYQ3TLsIDLnyZsUgtEI9na2VnCp6PdzgKUZwCabQulfQGhd2mGfgYuGgEeFgMxJrC0s2es9yIAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+oGFxMsIVK9bhsAADoUSURBVHja7Z2LQ9pI9/efXTK5gShYbyBgUnfV2Cripa0FqxX71K23H/X9//+V95wzl8wk4Spa+yynuy2EEJJPvmfOmTOT5D//eWX2B7c//8xZzLZth8yFVyyX+/NP/uGv3sdXZMQqxwSnEc3O/fnvxYjALJOHK60fsMzP2Z//GoZwoLlYYuiNg2B5ntuXI35V0+H/MkDQGdOQmcBcoORBo2aBMYt53Fzfd/krhovpQ/xM/y4yVG+tXwkwny/kp2EFMP5qrji/UBLqQULaceNbJMLo4P1SqbyI9ubNEtry8vLKyuoy2RrZ4mK5XCn5oFPOWNuYGyvUrVTXa/Xkbkx6HPn86OimaI3ixkIpCMOAueB8rn6cDHXk2cCrDLzeLm2C/SXsb/oLbAXsb2VbZH9v/b29vb2zs1YulxyH6xEY6i7OgigMKgvzxemo4MXR7dbWkVoE1HxdZoTMe1cygG3qtpqyFWHA7D3ZlrD3e9v7ALHkuHyz8tzALzL4cdZcL8497TBeWnX1jYVKwKkpbASNMztYWjJYbZJ/tg6XUrZMbqtMcgSEewmGoMNyxfcQYMzPZSC/0vrR7pOO5sXQFeerHuwwi6lBywQtv/2uVBI6U7SWWq2l1oEygnfYB5tpBHFbITwWBLer1ZLjUZwR+HyB7wnO+yLo6hsnHrRsXuyiHujA9kpNBQ1pLR2krYWW1N1yBr6UNxNAIHgMtvXhAyhwHwToYhPoCnwO4GPV+forRTdXW/AjHRuGQeaAf3JqqLEsZjG6wwx0y6Oh4wYAER/xO0Z+cN48ic+Fts+ZSHzPi66IISFiMTZwGhuxLcW+eTDQ+qhuOLptjR3nJ+QH/D7ulB2MHwIfie9kY9zA8XzoGrUFj7BJbpB42D666LKgRmwWF4eTSwWKrFZuua/qNHzE7xjx7e1USX1CfF4QBs2N3VeArr5RDTQvpXwNsJFe0N6+RWoHw4077GGqrVseqrp+xvF9QNvbL9u6+Maj9xzowE2hdXOl3NBJUW10hBLbyJZyWI4tU3ijodPxbW19qpaYEh+n1/hF6IrrFcg5Y7lZzC8tni6vSmxv3rwZjxvaUtw2ygRlKTs4DGW3F5sU3/HnsmPQOzl6eXR14BZHBUzl/fIaHB/p5C1ye4s2MrLWQRv6ruXSu3fvLCuH1kE7A6MXHVxk27yTu7a2PBzdXsIEvq0vVQgc3HUx6HrrxZdEV58vxXpzMXGTckNuoDbObSA7zuuA4wIswOj8QrPzi3N8T3/B3/pn5+eAM2dXACNC3Ibebaa77mXT+/phD11X0IPsvTTMcaeFblfn5qCbNteWV1aIG3npW010+EczFS5AOkTs7EzxOMswITv59jy2i3P5tU6uUlpcu0SCQ3Sn6H39+uEY6XnKcReKz46usFGNdG6Wv7i2IrmtvY3Vli06TO2AmaWQpVBh/QnHJTz4T6tNUS0PYqRlM8LZ1TjyDXVzpfLa5bYBcG8vm94W0durynYPHbe0UXhOdMUFOEGanzplye10bW3NYJZs6sA5QWglFNrF2YWJK4dddmc8w9Y1F3Q0LZInd+xSdQeYQTa31w8d0ftA9D5h1HCF9Nh6/ZnQ1echMHixn1YMbqdvM0zE2KWDN4scmk4NidkZ1XN3LISOYzMrBwi7sQK7QaW6c7mN+PqAU477detTyRPS86KoWnwGdLUmOKrI31Bv1dMVAnfKq7drpyC6tbexx/JYgUnKYpPatDOdWUJk7ri4MsyzrUAT4EX3qrSzjbWUPi3eMTkuwPt6XLV5zPAd8NvadNHV1zVHxc7CGufGwZ2unZ7Ci7drutoQ21uMBQa1nEzoh3ijS4NfnhygGDRKlgCIClT8AF/1ci+N71gZtXrouCzg0mOhszE9dEcQGaSjQnehRNxOiZv6b42LTsdWNsQGUhs00spB2YwxPnbTx+BjW9ActDFmCX7Y/nUq1csEvWPdpPQciwl4bH4q6HbnHRKcyx21Qo56esrbt1PlrqcUJdbWgBs4KTRtdk6lFQOouYQrSWeQGWvaAxh6gK+r1Ffd18V3nDCE9+3DTkX4rZeENwm64kkALZw8lZXmDnE7Pd0hbgLdKXnsW1Qex0ZO2uHssqmZyCQWb3TTMdI3Mwm6dtAR+M67leo+0DvOQsdDxrevHyHXy4I3NrrCRkm1cB44anWFg9sBE+Sk6shjl5YpJPB8g7B5faCZyMYgls0wFmEWQJCfcN7zoLmzR/SO+8E7rsbwNiZFNwehwRDc9jaCQ27wl6Y6wocDpdxLOzmuuXTe4Spo02DWhyBjGfxcS4rvotMk102C2xKN3rf/ArxAwHNqk6ArLgQyNJDgtj9unwrBkfGoKhyWuFUgtAG2DvYIUnsP1Ayl9UXgjmae25dgP35eTuA7737f6UMP4f33v/OQrLg8YDSL4w4mHjVVaICQWt3/CIo7Pd2X2HbWBLZT4na6Vq6A0nixI9W2Ka0NgDYisAyEg/ilGkCXSfFxeiY5bgTv64lw2yBcaIyjuo2K7KWip1Y/fvwI4Pb3leCorePoUG/ArSOKRMnGjUZeFbbpERsBIecHzV/iTEp650H1iya9LYHuw5ZUHofnRMH8yOj+sGUTB57a3EFw2/sAbj+GR+g4t2YlJ4pruUSyK7Flii3r8J0xbThBgc8Un+/YkPRdY9S4qmqOK9CRSXi4uhs2N0YDl3PiJq76GcGdcm6EL0YnuAm95RIdKx3bEGrjEhuKcDg+pNcVjls9/rCl++uHGN7XaoeR10YjTJ76w8bet2ziPu8hOcENcMWyWwZvrZauOrmrK9Kb2R73xTZlZoMAJvBl0LOgv9EFegFID+ml2AG89RLvnjnD2TkONfK8iUNwn/eVKY/FQAvcQG3IzWzeXLsPtmeE1hdgWnxmy+da3fPrLkrvUwzvwwddeP/9TF5rO+4weC7fYq558hG5gaXQna6cVpsgtqurqyS3fnJ7GWrZADNc19hlcFyQHrR6wIzgffhgwKuB13pUCBuqOrDc9500OO6z+yi471dkZlwQrVsS24tTG4wvgx5Ir9u9vri4qtJw94cPCXbgtXaA642Azr062ePgTHZKcMStY3KzhnB7WWxpfCnP1fcIpIf0us09UJ5BDv77LwhvARvzUVR3dXUiycXsdvZXVmLBWTq3uHmbIrZ4Vt608A2g57tB9xrhfT9Oqo6H2tHRfU+hOwVwTeWoQ7hNiI2v7QXSmJvG138++1j0MhwX/baLEQO1psMDm58c3el2LDjdUQdzG0tYLIxwurHjOVWwk5OFhWoJK9PmSIULZCN55lw2Bsc+9HTHZRAxUHl7CXBfv02oup39bQAnHVU7T3FcGJObQOaGYRgEYlmwXq83ihG8OImrZI2jKnRstE354VF+bnc+EDAqLAg8tVF/mI8n6Ymurn5IZ6i88+/HX78a6CZS3f7nj9snze+pFs5lKcENxSYOjSZmY2jZKBbn5kNC44dYWJxDdFVz9NINNHZ+iANWtZA2xJoAd67EhGjDUJ/dNzI8kp4Gr0Nu2zw22E3msNJTc1oLl9HADcSGenCZmMvO1jeO6usAhBGbBWLnBwv5Qr4BHxvocEy5FGg+G9Vh2TxHx9esMPiYhc35WnFjvhkFzhBL0BPw4lbI5/CuFniT9wTV7QC4798NwXl6WXsEcB6HVjqZ36jXAyfchQPegKMP6oTGx2MXfup5PmoJgJ6cnKyLOqOnRaVgDr6zHnF0CwgXm3rmyNHT+kI4jJ2iZ7qt5rceCe/kqeg+Nq++X2m5L441JcANcVPXLS3MH9XFpATPCWtw9EVAF/Kh9rnIFd6HEhLoIEAEUchoAlcxpuEy3MxCgOj8aB2bwwA05xW4QAt0UoazGwoPom3zJPbXiRx2/+Me9UOU4Dp9wPXfzcCYjFBl0TwcYj0S7RahwatDKviyKdGVPB9nrp4Tu6byQs+lbdB7bB4L+V2+IYQ2x8/OejhSRqjDE+wC1ej51vfqidbWTRJh9z9+3I9zgY4AF5MbIZyKAyOBFTeaXiDE4oey8I9tl4Tis5JowXgmUoAv1xQMCZhveAPPQQgOT67qBWydNjfq7BUNntSdyiBY00A3mcMCOlcKLhvc4B3ksbNQ3FhvYmxlPm/dHYaHLqUYQdBocFfk6HjcdDmeOaU66dZ8w9zzK7yZbEK4Oafxv4WhocKAp5WlgF2HZztutao77ER53cePHxGOh4M1CXKjJb6iSTrHjJdfuFXiyqmQwxVJeow5wS4FgIqOjgIvmCt1xLHzy3C4nGuAboHzrMCmG0LE48OTI5IdK41uwjDx8SMGQAvJ5eKrUUeUXKyUkhdfF8Cb+goxnQvnyO1k2mGiE6zkO06yIYJWiN/YAHRV3mIGOK3fLa1X2fCd6s+uwzR0XydHty9Vh94a6ORG76DypugkqPjYojkqwRCOFlHztRFGRQ6CN2cKXdNAB7Rj/412RY4X0GzWOg7iYSY0DjkBT2NnoHuq6iS6ychJVOd4TSz18EMJiWMJyd/Wr494zqJHApnuORJdKKIzHR0RwxxPZtHFKijPGbviYrLr2AJd9cNT8zqFLqe1c2MVRXibVFnfKO6C+FTzrgICDxdsXiz1Y3QuZ9UIXIluQ+SETuz4vutHVZHYgfLGBaexI3SBge4JeZ1ExwzRjVVN0iIpJV1KOiofoUarvs6Xcv9u8uTEoZawKNt9ju5IdGEdmeO5fkDTQwoUI57KLkN1T4qwTIpubM2JECt784COh1zmqq4BoxcNSvccjxPBkWDf4dnGicw2lOri/gc2g75fcUNvfqyMOMVuELonhQk2sejiWggkxBT9ZGKnOqQ+DwbUI3W5Fpshw54vkasrIYmzwBiEHJ7bFLBggDcW8KHrxmd1uWOGiSS7aTnsvoFuInIOb73WGePFJpXY+bIMAk2aFCZ4sUdpbaXZPJnnl16WYhb8q0XYUBQ2+ctKMF9bXyh5DmTEtBVRHBgbnZtAN60Im0A33m5BKCxgcUkU7FRiJ0Ktz3sGApOoRQkViq6Gkh3v9zY21kVZpUlbASOfDqhbNwk6TXbPhG4Scip3VUckE7vwSDX6riijgEOzgujz0t/1UqSXiZmn1xJwozzq5DG08hRxItX1Q/e0PmyMbjLRqcY9RsnVVtKXM2risP+pq664HulFYoi5AfW1xF1favhd7sSNahA49biHOyG7Z0U3vujMPoDWb1dFdcwvopN8Ya6O6DY25snWq04YJYd1fBbMi0vh6guh68TJT2GOlFqcJMLq6DK6/5MN60wBnegSqMgnxyEIaaHIhJ6glaPBLjcKySKsF6QwuODbrLkOYJtRJJapxBGUODf2BVMGOi+BbnLVmcnJhE2dCqkSHSKbK2JdveSxQG1Ojgz60vpsjm5bYgzhhAuynFpkk7lrHGOz0D09TEyKDmtxBa359vymFyAyb5yBVINeAmwQNaGfV5svhWzsK8w0dml0kztsWnUTzYMI58ykwZvUq/obIzefVHJD0D05TEza1MG319ebzkjXhk1uIwxhj4LOy3TYp4aJydGBQwXPTO7pNgjdk8JE8CR04xfRfnt0nw10E0aJ38Rm6J6IjocJd5q9if99dIJdZkr8lDBhx7nJ/zg6pqP7OgXV2U9J634T66+6p7V1/1J000iJp4fuiZnri6KbhsNOC53vBVFolERYgLd6EFv14I0+Ic003A8czVRfFW/gO9LGHb8egG5hSlXi6bR1fhC6J+vz6wsVNb/aa1abVV8csOfDm6a6o7XbNM1xPfzHF+zoTcVzvFJVrVItTd47TqL7Op3pOlNA5zpeWNVmX/L51dFcXs5OFPM01SQvXqvSrMlHHdcDMSeZ3kSVUL8hzjhzdUZH95QRsaejw3t700RDURwvOlQ6j+pijIFmo5zkxRRXQldJoxMzyTi6OYEuvnlf4XnQ/WqHZWw3vi++ml/N0YmJmwl0paHoCgl001Kd+6rQuQJScV4OBBawoiuWzoVpdK5zclI9adI0nuYJGESRPqqTa1RPptPWKXTT7U1Mtl9i8KXu0PCznF/tS3TcZU10josXO53TsNk5C7Cu3B/dBq0RTDPCPrGtmxo6MeEX70UGxuT8al+iQ/dNokOrRIQuqnCWhE6MzBroanyNp1gWulfQEeOjYHmfh1WcX53ns1kJHQLZDSF3SaFzjXlhYkodznJE/gl00ykTZ4aJX+qwNANAzFFSRBoBnwe7LibDZqguA131mg83nuuTCDb4wpFnYD8/umklJy5Nh9DCn5w7zdGJSYpsJHT1oyK3Qj5OTnZrxaOjo+L6E9j1d9hfGmF5UycbeEfOjmsyutpp/qJGV4+MpjrDEslJbfLcZFBb9ytVx9Pbk1gTPGmrCnQhF+X1witF9ytV57HEJCQ5q5/PsQvE1XXNUdDt1oXp6ObIhevzU3bY15AS00z9mgwTYi56gbliemKJT+EpjYLu5DyI0LLCxNPHsF9dXscJFOIJJuEuJyJndnrUmS+Ogg6SE/roBfK6r68gTIhrRzbOeepV4TNgIbmV6HCSmOjeDkOX2Zt4SiPXH92ryOscXhqaDwOGlxZTaoJT67T5xEdPRPfU+vWAPuyv7f7z9CRfXKh4zklRlUviK9K5y06KTvVhJwfYv3Lya7v/eElNMq9AoSh0rnTZSdDhnE6yxnow1aIThzdWW/dZQ+dMp+jkR028HIkuNKcp7IQjVh25bGEIOgyqGfW6+Jb9Uy51jh8mrj5P3WHV5Ujcjir8GCPtClae/OUT6I6o4iLQ6dlhIPO6V1Vgfw50wM4L3fWNYr1eW6/IW7+w+dpG7URcTBec1DY2NsyZnsE6rCC6pi6Dj2vyele2UcM3Pq4hrbYweWY3pZT4OdA5/GEsIU0EVtqI4kTW5Td6SfxCoBVEXG1t+YaudFI25VLn+BH2WVTH4fmOY9zMyayyZdXc9EV+5hvfHzZ1+2nofnVb9+ptOnndvx3dTHUTo3PNPuyUVPerD/BF0U3isB//3eiSDjtGR+zfrrppoNufoRvVYZlA9y932Kw5JyzJyixm0EWr7r/aYakH7TrV6ueEwwaJh0D/p2BYnXo8Mbr9nX8dOkuiW1C3dUaHhe5e3WSVUF0jwg2gwwoj1UF/XFxKzKb5dI3XZuraf3jpLFQ/fVX236+ALkoMZKpHEPHhuWKAGwB0ON+KZl3t7Oyg2Jh5b87/WUN09KLarGrPffrIPDcoxkOYMTocPaYBOlWh8OLJz1O/dPW3MM/z9BnguIgPYYZzSXRPH4v7lxibEzVpjq4x4X1V/oXmsnpBQ1eYKxA6FsxsoLmI7p8EOqxgs+bCycwG2ALeKoT902gUNHRz64HjGzPBZ5ZhTQbojuYy0G3kC0/b9P+6lTi6uRhdoy7RzWygEbqihq4wQzeipVQ3QzeqzdBNbDN0E9sM3cQ2QzexzdBNbDN0E9sM3cQ2QzexzdBNbDN0E9sM3cQ2QzexzdBNbDN0E9sM3cQ2QzexzdBNbDN0E9szoCv8QPs2nf27eY8bu5nyUU9lF8dBd/MtbbX0Jhu3d3ft28M+X8j8Sn+r3bZhY4MPsk6bHQcv38X7l0P3DQ4jYVk/33g4PDx8WIFXP9JfyP5Kf7u5WzpcuhtM+xvh/THGVgu0i6sviK69dJiwrJ9vtO/v+QcZXxh3j2/uDu8Ph6CrId72OO5XeLi/v39YfkF0cBhgY6DjXzDscLw9Hg0drjMuujF3ZBroHtoPbWkPd4eD0d2nrb30b0X3sLSi2er7Iege0AQ0ev0wGbpB819+E3T9FVDAeHrT0NHxAy7w42//EG8L8eq13TR4Wn4jUcWqo81nEtTR7ZIV+PZr9X67mEJXr+Gvqp2o02bk13b1d09Al312Gz94MG2DDGN0cr/oiz+0JbvvRew9NM/EzapY/vB+10B388AXZ/26ju49Rds6RCha//5G38UHcxdjdN/u5a/yiemYvMBmxJcPb7U3U0dXb9/x8HF/d1i/T6K7SaKr3bVFtHm4W9Km0a/cPojlcCy1+Ks3N7cPfHFWDqKj+9HG17s/bvl2Hm5r/XdRotu9v3tQv3oTn+yHB+2w0787HXR1ODIZe6lpG4zuGxwYrIz/gSPfSy9swEEd0lZwC5zSDbWvyw+0Li5On30THYWy1TbfCGzlblfs4p2+i4caul36RP4ntv9D7fLuHa6bkYxOpa0r0L5A8LxDNd0PQ3dzS3t+B6vjqncrYvlSm3YeFtOxkGBueFQ/hBhDWz58SEeZNDpt/bv3fXdxOf4E9gZ2B1/c33EvwG0c3kFjuYRflCfgKejMCLu0G+8v/PpKrfa+zU/uAHSFNgd2s1v/cacJiW+l/fDj27dlOIpb5bC4ufbKygOSvW+ljyKN7vDuYWWl/dCisB7ve8vcRY7uPffN2u5ujXC1V4QWD0ls/cP3BHmdZre7igUspze7h9wb+qPj4n0vPlHH0BBE6aTfPIh+6w3nuQpLC+9JlXcpj02hg9+C49klvXDBUPcBdrGu7+KyRHT/IBqNw4d7pbBvPC2ARYftzDTmab2J9m6sDKkGjmAAOthR0kIB8xQ61Du8fR3tatx0f4u/Cqvn1ZFlKCCJTm5FnIy6SI/iXSw8xKrjjdoN3QRJpALiB4g8qSLLXaeD7ofZlHEGfdFRs6tazILY83x+lRqX5E4aX+0Tp1LopDBX2ocCXWIXazHgZTyRamdXH5TH0o7eq0Z3Guge9CrIrr6H+fgnB6DjMfNHjRegvpGQfsgeeSoGGB2xm1HRiX2J3yR2saHaCf6zKzVRD1tBkDKafrulNlGifCq6w4cVvfbW4CcOYcTp2WCH5SdAVaNo596LPkg71a+bErpVcj5tFx8EujneTsu94U2iXG/lQWstno4uIzlZojMX95Fov4agUz5vovvxTOj42Y138VCi2+UVCm1vNMQC3e600H1LdcW5N6gfaLQHqq4m6i+a3a7Ib6V8Y6oOm9hFRNfgtQl9b9ois5Mn+aFPbXYavYkf5vKbwWFCHH9jt0G2S3/yIjFoJ+/SPBV0hexdpDBB8X61MBfvTUMQrt+JHkZGJ2xa6IwEQqQQA5KT1Mf6caq9rE8VndhF6S9LceWEksXUGZNQ73l+kznuMQ10Dd7Wr/IdW7kbkhJz55GbuVkqaCdAUfqmpcRTcFie4rWX+W+9v4tTYuwVxr27xpKiRBlnuyaz0KejSxTYDykavRddqG/QmTlsD+uI7fL09Mcuvn4PMVac8lX6JnXQakt3h5zdlNCpXt63Ouzind4RW6LeFyFrfHuQpROOFPo8Na3v82R0ek/sgZpUkh11oXnPfUj3nw6jdXd3uHwP4KB/eiOQ3h9qWzlUlZNpoMvaRY6uLooR98uHWJa65/tZoAJQuyDQZtRrJkFnGM+B4BQlKzqDik6rvAEG8lh5upfZ+s3t/aHYCP5z+36K6GDjrXgXqXYiO301/rMPVGs5FIWcFdUr4elLRms4Hrr02KBIH2tUisQdu3uo479GmkGDqXrO9l5ULqm62L6J17tTzcEDL2oa47D8TQa6eDDxB45fKnRtXL8u19J2celeG83r97OiG/FNez0xutuMAWlxNupLd3ftB+gjQLDA1W5bOjpaorcXN7T6A37hvZYmNn6oxYc34pzgV7/l028S+yXKxyv0+kaeIe1Nvr6c2EXV+GOLK352iddW+JGKY7vXtj8hut2bDFOf1r+tLK/8qOPgifkBDtWgmWMsuPry6vtawhEatfery8srahoE/83djDfJ/eKL6/Rank/9zcBd3BU/K1Mi44d2Uwc0NrqZGTZDN7HN0E1sM3QT2wzdxDZDN7HN0E1sM3QT2wzdxDZDN7HN0E1sM3QT2wzdxDZDN7HN0E1sM3QT2wzdxDZDN7HN0E1sM3QT2wzdxDZDN7HN0E1sM3QT2wzdxDYI3ewe7AOtP7qxbgzxb7S+6KKNxtzMBlijH7rZU06Gmuf0Qzez4TZDN7FloGOzh2HRo/+U9VvHeFQHPSDmnNl9zLJt+TV6RSv2Xfu3NWY7tsEoe7UoOjLR/fPP/533LrLt58+f3e9Xwr5//37xCAt7hj2a33h81D/TPo6X8/fatx/l4ke56DFzQU/bjtzoY2IvHnu9x/57x/dPX4GWXdDBxXaV+hpt+er//fNPw0T3z/87ueidn52n7Oyi9/NC22Tz6gIXP4LJDZpfSP1exifGe+116oW+IPXqInuzGfuQOiodB99iF46tWm1yg9fnqS+dnfe660DKeKJTY+6foyOAd35xlmFwXr43Fblm8xwXxnuVWDu5j+cZn+jv+Qq0oxdq6YAX8eqJDcXvtRVSH2hrSONviRzZyclJdeF7+isXZ/939M8RoCto6KCx+wcXHp2cn3dShjKVp6MJW746g4VnF2KXzHWT+6d9fHZuLpTvte/hq3P5glY1X5yrb5ubj38w/WvpHYlX4YdAr+EIq58X0D7Dn4VP35NfOD9fAEKx6OTjJoEdOu1codg8D3M5y7AOuGZV2c7OSSeApWeKmxWoNcOzULezjtpIoD4SC4Mz7V3njL8M+KsQl6lP1YuAb0B9ARYH+raMXxywL/QVMI6c3p6BJj5pttDRV8/lwvNmsUDggJyODtg1eCeskAd4EcQb3aA9aO7gk+92qvBnZaXUsZkXnGlbp9WsTmSeqChQm4g/kwv5gqgTv4ks8Yov7GQsitQGjK8zS/1yZKmHkyZ2J+pY8SFJgJ2zDq5vXS2cfN7jdnx8/Om42tEQ2MH59yLmIcBNgosfrZtXzynO54ul0HK0x826ZxePVzvKVlZ2LFzc6eQs/YG7Vqdj9Fo6nfhJvEx91rH4koAv4OuwDq0vl3cCvn3xsdWRH2rrsY6xOaZ+Wy5J7xG8Y/pDdIkf/ZTXqX7aUc/R3YL/K/FWHBbaGzEgVQtIPNA5z28FtlEJWZwfOh60pdWVGN1KhTkef8azIOe66f6vFW9A+9ByjCX8Z+Rrz7XVK0++Euva+oqpLaR/Ahfa6Z3ynPjZzfSoZdpW5dP+ly0BDv7d+hzEmXEYzAsspqXRcdvwQtd3eErtOhAprrYlutOV91ULl3NXJXBeuqvMHEdm5DpWvkFPe6uOEI5KYsJHYqpXEqertkQbkZtwUz9iiZ+Gv6ys/XIkPNh/+q5V/bSPYtsC+/AB/vnOxJE7QbjeyEbUD10+Px8gPNFBAdntnGqys/Epz3YHRQfkvPQOBlpHJkkOTL619Xd0ELJC4XjxgUoeciEtjSXV/2eczGqQp55Tj88Mx63aJLqtLYlugRN1fBZW6/0A9UeXb6xHkSPgQWv3fXtnf38/JTvG26KMUzuAHDPe6zxi7l7WQp2yk/wx/QTGZy7DISzQNCcnRfcFRSfQwYsSE+BKxf58/pNl8sM5hMeP9eKiu3PKyZHsHCU7K4hS+6Z3BjMOyDbfwxq4koetKr0KnCx0ngadGVDkz/VRfYZPMF10rr3/6dPWMffXLRDdsQ3f9t3QqQ3mNABdPr+7EAZSds2VnRhdNRCyg5g/yFmNwxHPcletFJNvozDkD3+38IXujyw+dgOXKV63/49lO22EsVaKjjW/7O9tSXJbxx/IpyKKDpOjy+frAtLFY/dUb+2E7KIo6iRUpzurm3UwCfcNwsgt3bbvW63W/X37FtykE6Oz4kO39C/b5tazfk6TfobTRgE4DO2RawnRHSvRwfLAjA6ToIN4EWKDdx7L7hRau5U1OpIoBHSm7HRn9bI+YMYCz2JlpIbc7vmLdsllrs7L1rQlv21uimWx089h2mmjSJwMKyG6LRCdH62P0LANRZfHffYhP+mucIc9lbKD4wujBDu3HzmWJEeJCfNvBbXY4H3Zs+0YkaepVsIxYnOs6MyfzHJa6F2EoqWTOR0X3fFWBTYWzk0FHckO8pNHmRZrsusQu8ydNRNSljo22EHbvVXclPI4vFInjhiuvgmpn8TW3EE/mnZa7NvxTVB4Fckwie4zim5hlHA6HF1Dyc5o7SrU2hmyM8qsxnm2UmEDDov59xxWa3MTaLXb9ELAu40iy0QXGGzshCNmnjBL3yHdaVF0RNuLOxJCdJiZhLvTQZdfj3zXkN0OyS6QsuuISOH2JRekl8LrsmjgNu/Ldvca0u7r6wgcmNNr3VvITuftGs1ZonFjg3/Y/AR2OYxzuj2FbmtvawdEF5yMlMSNgK4B2Z2Lsrs63ddkR4mjK2UXWXHPK9Uup3eeOexWgGvb170eYAPDknu3BCxJeAzYudrGPGPLXmKLXja7zMYXTjbPWFnliyY6cNfjCoquPi10+YWU7NZAdqd03gJiF0XMGEYKMndfa28kuc17u9e71u2id10m4SE7I6wywyOt5C+52adNS/Dk2rC/Id9YTrV0VDLZ28JcLKiO1nUYBd1uKGW3kpKdg+iiDi8DiL13s8nph2mXObnyhQmOwwvIlVv3QZTOSByTSdy2WX1OnMGORVx0Hf6upNwVe2JYbfKyRDc5urTsTneWgR12BilB4YUwic7ts+uxGpjnc3KVNDi03jUFkNataMuNc8BMVNpW+7CLo5eL1TFsm0OZDSdFZ2WK7gnoUHYQZB8fu1RAgf9P17A7JvLiwGIaO6/PjmttkOsRmk0nmxwI76JNK/hGiLVNt/eSrYA6SYmTx2JyWE2NVIxo7inRUaFuDzsSqfD6JHRcds4FdSlEa7cmi09ex+LVJy+rvqikoB2ibVND109zxI5017r3XI0EMzVlpU/JQHayyBmIGEHFpqToUh2Jp6KbC7C1g57seSy7ZZkXWx1R8/TMcm1fJ3Id7o79yYHPdjdpHaZ/N8HKS23ZyThRirIqD8ukUI8RILnjT9gCBY3posuvhyg76Ml+X5Exdk1FCkvJrj85Lex5JLpW6/riehC7CrGjOoOlmBtY0rKLfy9ZXFeiY8xiKkbIsjoXHRyNH87np4yuEGBIsB4fZbl4jWS3zIu3ymUT+xsHPfPwKET4g0SHPksuS7KT37YTMnNTsvOyflGsq8rq3H1z+xmi81h+2uiwJ4uye4QERZdd2XDZZNkz038cSkxa99dDrOdsUmunYWAJKixj633ZecJdLU+5614suj0huo3po8t7OLDCLh4xQcHOLKA7lYU7JyDZJfZVOwzDhxlGT4gRvSGy45HCtx1jGMgIApljOv3YscHuivkCq+SfAV0NZeefoexOKcKuaZECa+1WlNBc3LnQ83s4AdTP6vbK/sVg2ZU3hccmh7+SbZseULVySaJKF7F4PMK1wV33NHfd+5LzQHTF50BH87chL37kCcra6ekpJShNOcSTrHq6maffdmxMh1vtnvPXZncwugDRtW0NjZ3cYFp2eu8hITucGqC7q5aYfOGJyUL+WdAVQx+7Y488QUF03GUpuTNKKIkj0Jsi4ExN3Wa5d7vZHqy6i2tqEzHP7qsylgHJ6ccOK8Oau+oxYm8fyxdR43nQ5U94XvzYwwQF/fWUuyzta7JgbGfvP45DY2qyafcQ35AYi40ipSdWAoulbzCZi2jNnZkaq74rRNdL0133+icm00A3h1UATFAeq6c7p6S62GX9wGDXp8XBxTZFieiiNTQ96VH+53vpwS/b2GLWr2QoXvVdE+56vPeFxwgn/1zoeIICkaLXIWprpstGGjtt54045yh03esWKG8IurIMscl0RFNTVrXGy2KH9U3lrpe6u37Z+zQoRkwDXd4RkaLXXFkjdnqU9Ti6CEfqHDejRie8mNC1ut3WZjAU3aZAZyfQGUXTPqfIMQUaD0d44K6XhujIXaOT/DOi45EigD7F2jLXHI+yJXJZS8guCrTp8/oB8UZoEtV5SSjaGckawNYHJZhyVzGXIeGuIDp01+zO69TQiQrK+WMPkjth3GWZjLI4pK3V7ozUStTbbsdv62J3TA2EK9n1GQxzVXlTNnTNvZS7ukOuaZ0CugZ1Zb1HclkeKERflrCEoVYxdpNeJLtRlJw4I0bY1j3OAEklwfqWMzMRiZim5UVATjV0lcvLyxjcFrgrjkcEzfzzostvUKToPPbQZamtAwN2i3FzJ+tPrpso/Uh1+GPldW3LUK90RS+tsKxf4+USChGiobNTDR25azT33OjyJexJYXJ3JWW3Fjd3mN1ptTszq5KZnmtTpgu9+1Y0UHY9mzpige8kJg0kNZYZzK2YnOdBO9eRDR26a8zuyxceXQdfgj4VdDy5Y+CypWXdZXmG4geq/uS5iVxeHuC76F7GicEeSwF207dMdF6aU+aUE5pXKsh5LIpE21sGd+WTrQW5Edx1SuhEcgcu+yiirNncWYGqe5qVizjXOick5Z/lzVZ3IDscF2tFXnYO7GacleQvxtOGZWEYMjpwV0Vub3+PTwmbewl0wmUhyuaWRVvHXXZRDNXLmjGLEhqQTVLXQkdsXXRbrfYAdD2f/PU60Y6l52BovT5T53z2Jk249vSMLlbd5Resbw7ogU0XHbqsQ1EWXVakxnFz5/KZ7QlyRu2OCnGbpZ+lzc1Sb4jo7ssuMzWWJTF1WhLsxDx/0el3O/t7BrkvX76Au/rD3HVq6MhlXZ/6sst6pwIvCnBEud1i5pTFuBrAAnbNhx26vXar/3gitXR8yhheTJqRdmRt3nDZiBlzhilEXMrrSpDc/h72v71ByfB00YHLUl+21zs/Nditcr+gKyoCc6asLjor4oICb2317VJQsU7MemrDz1l85pPu+lbG9s1IQcXNmFzTJIcNHcTdQX3XqaNr8HB18fjzalk2dlpnFocqArPwaY62sAscdsDcrtv6KzvKwictbbKi78DZCvmUO9XY2UNlBz8ck6NcOL6a6fh4/8u+jQ3d+tADnh46LLaLDKVJzR3vzK5CqOgIdpFRvWO66FB2PT64X/rZ9bM1d32vzfVstW3XbbXKQSha/wyFGT8Qyy4AcqL/Z2vkkN3l/pcKlpr84cc7RXT5hVC47OPispIddmbL/Bg6ocEurrWLiek8BqDuBmmuJaeLXds29ckqNPyRMYlFW6hrEYslMrhSL2IvVt2X/S+Ul2TNk3hOdHmXLjw67/V4DQXJvSV2PMzy3mxcvUtNdhJN2Wb7Omumk83B3vLpYhBKXJre09psO2EUa9jOlJ2lkxMzhnFmzvbltoZuD8hRQzfSnaymia5OGQo2d5jdUY7y9u0ihlmfjszV2cUlKJk8sIhGWakZu+gZXdler3vLsd7D66i9uXnfY25bTZRlYbZzpufqEDkVXLc10YHH7l/ugzMMLNI9EzqeoWC1/WcJ6wAgOjDqVdgJdvqsRXWgrIt9WD4d1r/u8WmdeCOFi0jMkwVBXnThE7sVXDvlVhwyynGgyC5vsixyewa548tLzOgc5o10sNNFxwd5/A4cdVNmxshuFdh5dPWhYKeX7/RyB/buxZTY1q0f0Lhi1y7fb/KkZPP2ohcxWNy7vrAdI2jwRC+VAcuLgYTsiFzAL3Kzyobm9vYu9y+pZQnrox3sdNHx5k6FitNTkh2x67h0rSZnF8U1KHPspdvrtkXuxqewY1iQM9g3K6A/Flgs6vYi99a4tAJWrTAv5bFibBpnW3UkOaG5kkkOgyuGiNFvnjZldLK545kxkEOfXXuzvLq6ZmnsAnEtd7J8x/xur1dpbcZAYqfcbHd71xHjQALb30xdldL2WaqU6jniBjlektylSQ4aOk5uhIzuWdCJ7M597P3sYK/iLf55++bN6upflBoLdqIEhfU7M1mFNvqi1y23ElxAeW2cmh0ILHhVbul+8z4J7xb7tl5CdnIiGE4MDzsyFd5OkdvHkvrwruuzoaNJd64PmTGGWXRY1B2xo9SY2AWy9CmvTtda9XfQ4PWu/Tb5K9kmtHTlCBZ2A32Sf++i1ErBgybPS54NWZ8LNHL25XaKHDbHjI1+k8ipo8s3qTNr9XoUZt9y4+ykz2o3CDAOk8ohvhNhdO3aeGkiXpdY9nHBRTcySps2z1jS15I5bqIwLOtzVkzOudQTOrD9/cvKOCHiedAVaOYYhtmfEGYFOfhD7BytjJKu34mr8323i6kc3liJX3ECWUrX9i1DSuBbPMVLwrtPVJk8UWXCuo2mue2M4Dre/TWnjy6/G7kizPYWJTvdZ3V2QccQiDDPsqIuZSZ0pRN4quv7qXoSl6eTbPJat3bi2hx5OwRrADkIEe4YIeKZ0OWLPMye8xRFsdN053Z4yb1P0RgOnSY1RhgRsZDhO266FOc67zxM8RJNXqvtJQp0Q8ntiOC6MM5RPgs6HF3kKcpP7M1q7DYVu4DYBWl/1TIzmhSKwTR16YWcZeJ7EXi02eThDDIDHS8yDSE3XnB9PnQ8zFKKcr62tPbGYCcSqxzN+dTrd8pfs2fZZKDDzj6LEk0ezls05hdEg8l92dnnwXXE/tczo8tXiR17RN0tvUnoTgzhdfhNnUwv7F/8yEQHC6ljpjV5ONJobIHqc6y/5jg5L5gb8xifCR3V2zG9A3ZvlzDAZrEza5/KX7M78HYWOhIo79WKJg/6uYZucTJTTM7PJIefjlBRfyF0eYfYYXp39jalO9HZFHWUSCZgGWUjKxNd4oJD6NVe807IZqvc6+KohU4u6nj9NLcH5HhCN/5tv58NXYNRemeyQ/ltbv711k6zi5iTdRFjXIZn/dHBatTkda2g27tw41tCBXSntVBO1K5kaQ7rTMMHXV8SXb7OE1f0WUN3b4DdEq/f8dl3osHz5AQ8o6GyM9EF6aW8yYPuGvPjmS0oOTkPDGslQG47rTl3InLPiC5fD/E6orTP6uwYn0LWoQqeYJeqfIyEjuB1u5Hr01Ysfls7kJyYWOJYFSK3nUVurFT4BdBBapxk94azW9r8a/Od6JTJ4mc8AU9H1OdCi+zgEXg+Js9kkGzTGZHdVqxsEjkN3c7OfonIjZcKvwQ6Yudk+OwisivxG9W5UXy1u+f1m3/XF11ybQ6OXxysledcSS4Gtw3kuOZGG4p4WXT5o5ByftLdm5jdAbDb5OwcMcgYyHtU9r2xRsY02mRMCeL7HyK6eBhCkYvhba9JzVUnO7ZnRpevxewuYnYHB+Cz2LFwVaBV9/dMl6EyUhbNjxOrK3QWBgibD0N4uaoEJ9FtS2+Nxux+vRg6Yifi7MWiZHcA7DBJWcx5MlioK4+9p6CTxTmcVdJRAYLZ+zE5ju6yuoNZyVPIPTs6YKdihWJ3gD7LEzweaO1+Fbw+l0b1vTpYkcO76ElPp0RYgiN2SO6JmnsBdJwdpHC67kB2nN2mLXRlCXjgaNmIRkOn3SNXXe1U2tY0ty00t2M/ldwLoIM46yV0d0C2iAmeuPVGzK6TXYfqM307kZ1ElpCcZUm4nQS5bSS3tvNUb30ZdDG7nz8fm0sKHbDDYCEm8/Arj8HPDHbOUHSJOZvytsxyUoZV3V5d3d7WVYeamwK5F0EH7Kg/6+FzKkpLCh3Aa1Gg9UQGIUp4neHoWJ/lEdOLcxAg1rYNcIAONFe1kVz4NHIvgw76s9SzdJDdu6W3b2J2B3GvTJTw9KuP42qKM1LSgjdoB3BSk9j3Wk2g25kWuRdCp7HrAbuDBLuWbUmn1eoBIk/LdMxMdMQ8dlYXm7kEuO216k4V7xw+cR/ixdHlGy4Ozzr+GbDLHejsqFcms2PZLdMKUa47CJ1WmpO38pesU80cJ1dGtJP2W38FunyhRDV3YncGgVZjRw1eTt6cKYyFx6eSZZSi1LhOfNcjwh2FssJE2VyKXFWQcyarlfwidPl8k6ajOB0ItJCkHBwkGjxRSvFtxS5S5ZTUHbWYAMdrJFJyUdiRzmqVVleT5C6r1TU+wXSi+twvRIeTjXnhGJKU0hIQi4UH7P4qySyON3gIT86HSt1Sy1I1EkJHVZK4ty+cNU2uSsV0dzoP0XxJdPl17NDiYA8FWo3dgem0TMzC63jxZLLEBP64usTowlYEF8XOupYmtwbkKLSy8Udwfj26/AZ1aB33Is2OIu07WSTiwgvU41KS1+UFav6S5yUlR866nCYnkpKAjTEl5/Wgyx+FPEk5B3Zni61kg7fZzMmBhJDuWRnXohI3FFLg8EEzJDl1U3J7MdNZ18qUlESVoVcwvU50+ToLRKDlwSLptAe5WHihmJjCtAfvGP18UV2K4mqwjA8JdDxAUFJSndaRvDi6fKOiBYt3eqAVwiupUdOwox4NlboLnuTG8MozaOXE80OYVSZnNdmpADGVpOSXocvnTzg7Cha5g1SD99eBrcriHfVcreRt8JgEh08HU8OyVmVNktPQrZUpQOAY0jSfiv4L0IlAy3u0ZoPHnXazIvtSdiCfS8b4c7+EUTdfPflLSs4T8SFBDiRXzlFojaYTWn8hunyNBwve4JUOUk4LaYoUktURz8GLjIen8W4+mao/WU4suRgdSo43c5GzO9Wj+CXoKFjw0jFmKYbTHhyQ8Eoy1HrCa2WWLNGJR83FF+lQK6fISXbkrHSfnykGiF+JLl+gXpnIjnOm07YPQHea8OxOR6KLjbTYsdS1nHorF5NbrZarZZv3IKbR93oN6LDBo+zYQad9LBnspPDUCAQ+rS9MoevEvsrshOQA3ap0Vo+auaOpH8EvQ6caPMxSMNKmhff2nbqbmoXdC41e2Ml1tFnbpeUkuVUuuWqFZ3NTbuZ+Mbp83eFZip0RaQ8OlhBeWVXfbP35pFhc0nzVXkyBA3SXZXRW/iCCpxfnXhc6LKU4sdO+O0gYsluqqKEtFsM7O+t4CV9NoVsDcsJZp5rNvRJ0+Q3ptI9ZwmshvDe2GlG0zs7OODim+eoaJ2eiWy6XRHyAnGRK3f3XhS5f9yJfDZZdJKMF5XibZT7ABWs5AT4yOIyr65YtwZnoSHK5Z3TWV4AOnZYird/h/TITXhuF9/dqkzd5BC/Upsja5WUJTke3vFgql3l8eC5nfRXo8hsRT4/dbOEtba7+9fdSRZTU44EwyIFLGjgN3Vq5VJaSKz2Ts74OdPndkowWkKb03hnCa8GbzdWVv/9+41va/BMEV4l9VUenJIfxYYp1kleJDtNjFhdTTOG1AF5raWXl75U1O4bH4uiQQLdYAsmJ+MCm2tt/nejyRYf3y0h4eovHLyZuH64ivEWb9y88PTrE5Ja5r4pWzgtPRr8q+DdGh9FCCI9avHetlobucOlwaUnAw65rZW05CY6zI8nl+H24g6mMev0O6PJFjw/TOmcix2vF7JaWlg4PBbxK2lUFubVmqQm+yp8eXJ3WCMRvgC4WHoXannfA4Ql0YG84vNXVJSC1lJJcGSRXyfGbgwbPl5K8SnQoPB5qOyJctJTHSgN4HJqJTvkqBlbvJST3ytDFwoNwAfHirIzh1UAH8JKCQ8ktliqlkkMRGALrs7dyrxEdhloSnm/hdLKe3d5EeDo6Mh0fxlUAV6EkGHK5hWcOrK8VHd5SK+DhAry29/PxXQvgJdDpDsvjaomHB+g+OM+by71qdPl6M/SE1z6i175Lq85s5CoIjoeHaOpV9N8KXT5fY8JrvQtq8hZT/ipEJ8A50lebz9hj/T3Q5Qvr5LV4mzGE1wN4m2nZIThfNXJO6L1QeHjV6MhrRazNcXjlzZTDArgKgKNGDnz1Wbv6vxG6fP7ICV0Or/OI8HK68jRwHvfVk3HvF/E/jA5iLTR5Kl4AvM4iJCUKnOOXfAWu9HJx9bdAl2+sR4GIF1x5ZyWemCxWHL/iCHDQBXnhRu43QAdN3gLdWRPhofJ6vbPK4mL5ne37EpwbspdMSCZD91JJumnFKs46xGqI08H7sf28eJd7984mcNBhDaP1wi/ZtcJrVx3Ba4pboPiQqjz2Ht+9y1FUdfH2iOsv0tHPttePLp/fuOLPdUF45xcdCc5h1elPJHkGdL/Y/pDDYbx/iyK0//jVO/W72B+2o+5cBP/kZuDGsD9yJD3E9+ev3pffz/6gSU8zwU1kf7xqT/3/3PNbsKb6GxwAAAAgdEVYdFNvZnR3YXJlAEdQTCBHaG9zdHNjcmlwdCAxMC4wMi4xw1/UiQAAAABJRU5ErkJggg==" width="86" height="92" alt="Find us on the EdTech Index — Literacy Arcade directory listing" />
+          <img class="trust-strip-badge-img" src="data:image/png;base64,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" width="86" height="92" alt="Find us on the EdTech Index — Literacy Arcade directory listing" />
       </a>
     </div>
   </section>
