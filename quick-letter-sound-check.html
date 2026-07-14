@@ -1281,7 +1281,10 @@
     $('resetTimerBtn').addEventListener('click',resetTimer);
     $('finishedSheetBtn').addEventListener('click',finishedSheet);
     $('backSetupBtn').addEventListener('click',backToSetup);
-    $('printReportBtn').addEventListener('click',()=>printContent('report'));
+    $('printReportBtn').addEventListener('click', async (e) => {
+      const { guardReportPrint } = await import('./report-print-gate.js');
+      guardReportPrint(() => printContent('report'), e.currentTarget);
+    });
     $('editScoringCompleteBtn').addEventListener('click',editScoring);
     $('newAssessmentBtn').addEventListener('click',newAssessment);
     $('saveResponseBtn').addEventListener('click',()=>{ closeResponsePopover(true); renderAll(); });

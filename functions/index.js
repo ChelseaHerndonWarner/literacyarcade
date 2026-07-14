@@ -8,17 +8,16 @@ const db = admin.firestore();
 
 const ACTIVE_STATUSES = new Set(['active', 'trialing']);
 const PRICE_TO_PLAN = {
-  price_1TqmEK3PzX3bHrbQEkK6vaes: 'founding',
   price_1TqmEJ3PzX3bHrbQ2cWDevb5: 'plus',
   price_1TqmEM3PzX3bHrbQh3wylsSF: 'plus',
-  price_1TqY6k4Gz51pZDtQR6oFrYDp: 'founding',
   price_1TqY5P4Gz51pZDtQOiymXQZ4: 'plus',
   price_1TqY444Gz51pZDtQmTMOq3Gv: 'plus',
+  price_1TssAC3PzX3bHrbQg4qIhxOH: 'family',
 };
 const PLAN_PRIORITY = {
   free: 0,
   plus: 1,
-  founding: 2,
+  family: 2,
 };
 
 function addPriceId(ids, value) {

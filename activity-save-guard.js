@@ -10,7 +10,7 @@ import {
   getCountFromServer
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const UNLIMITED_PLANS = new Set(['plus', 'founding']);
+const UNLIMITED_PLANS = new Set(['plus', 'family']);
 const FREE_LIMIT = 5;
 
 export async function canCreateActivity(user, db) {
@@ -132,7 +132,7 @@ export function showUpgradeModal(gate, opts = {}) {
   backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
   backdrop.querySelector(`#${MODAL_ID}-close`).addEventListener('click', close);
   backdrop.querySelector(`#${MODAL_ID}-upgrade`).addEventListener('click', () => {
-    window.location.href = 'founding-teacher.html';
+    window.location.href = 'plus-subscriptions.html';
   });
 
   return { close };

@@ -139,21 +139,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Firebase Auth is used only to check whether a teacher is signed in before printing. ORF assessment results are not saved. -->
-  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-  <script>
-    window.LA_FIREBASE_CONFIG = window.LA_FIREBASE_CONFIG || {
-      apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
-      authDomain: "literacy-arcade.firebaseapp.com",
-      projectId: "literacy-arcade",
-      storageBucket: "literacy-arcade.firebasestorage.app",
-      messagingSenderId: "628621471724",
-      appId: "1:628621471724:web:7ddfd231d1261b6c781ac9",
-      measurementId: "G-LNWHB69FV1"
-    };
-    window.firebaseConfig = window.firebaseConfig || window.LA_FIREBASE_CONFIG;
-  </script>
 
   <style>
     :root{
@@ -561,79 +546,6 @@
       line-height:1.45;
     }
 
-    .print-login-modal[hidden]{display:none!important;}
-    .print-login-modal{
-      position:fixed;
-      inset:0;
-      z-index:200;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      background:rgba(26,26,46,.46);
-      backdrop-filter:blur(5px);
-    }
-    .print-login-card{
-      width:min(430px,100%);
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:22px;
-      box-shadow:0 24px 70px rgba(26,26,46,.24);
-      padding:22px;
-      color:var(--navy);
-    }
-    .print-login-card h2{
-      font-family:Nunito,Arial,sans-serif;
-      font-size:1.45rem;
-      line-height:1.12;
-      letter-spacing:-.03em;
-      margin:0 0 8px;
-      color:var(--navy);
-      font-weight:900;
-    }
-    .print-login-card p{
-      margin:0 0 16px;
-      color:var(--navy-mid);
-      font-size:14px;
-      font-weight:650;
-      line-height:1.45;
-    }
-    .print-login-actions{display:grid;gap:9px;}
-    .google-login-btn,
-    .print-login-cancel{
-      min-height:44px;
-      border-radius:13px;
-      padding:11px 14px;
-      font-family:Nunito,Arial,sans-serif;
-      font-size:15px;
-      font-weight:900;
-    }
-    .google-login-btn{
-      background:var(--teal);
-      color:#fff;
-      box-shadow:0 4px 0 var(--teal-dk);
-    }
-    .google-login-btn:hover{background:var(--teal-dk);}
-    .print-login-cancel{
-      background:#E8E4F0;
-      color:var(--navy-mid);
-      border:1.5px solid var(--border);
-    }
-    .print-login-cancel:hover{background:#fff;border-color:var(--teal);color:var(--teal-dk);}
-    .print-login-error{
-      display:none;
-      margin-top:12px;
-      border:1px solid #FFC4C4;
-      border-radius:12px;
-      background:var(--red-bg);
-      color:var(--red);
-      padding:10px 11px;
-      font-size:13px;
-      font-weight:800;
-      line-height:1.35;
-    }
-    .print-login-error.show{display:block;}
-
     .footer-note{
       width:min(1240px,calc(100% - 32px));
       margin:20px auto 26px;
@@ -824,79 +736,6 @@
       line-height:1.45;
     }
 
-    .print-login-modal[hidden]{display:none!important;}
-    .print-login-modal{
-      position:fixed;
-      inset:0;
-      z-index:200;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      background:rgba(26,26,46,.46);
-      backdrop-filter:blur(5px);
-    }
-    .print-login-card{
-      width:min(430px,100%);
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:22px;
-      box-shadow:0 24px 70px rgba(26,26,46,.24);
-      padding:22px;
-      color:var(--navy);
-    }
-    .print-login-card h2{
-      font-family:Nunito,Arial,sans-serif;
-      font-size:1.45rem;
-      line-height:1.12;
-      letter-spacing:-.03em;
-      margin:0 0 8px;
-      color:var(--navy);
-      font-weight:900;
-    }
-    .print-login-card p{
-      margin:0 0 16px;
-      color:var(--navy-mid);
-      font-size:14px;
-      font-weight:650;
-      line-height:1.45;
-    }
-    .print-login-actions{display:grid;gap:9px;}
-    .google-login-btn,
-    .print-login-cancel{
-      min-height:44px;
-      border-radius:13px;
-      padding:11px 14px;
-      font-family:Nunito,Arial,sans-serif;
-      font-size:15px;
-      font-weight:900;
-    }
-    .google-login-btn{
-      background:var(--teal);
-      color:#fff;
-      box-shadow:0 4px 0 var(--teal-dk);
-    }
-    .google-login-btn:hover{background:var(--teal-dk);}
-    .print-login-cancel{
-      background:#E8E4F0;
-      color:var(--navy-mid);
-      border:1.5px solid var(--border);
-    }
-    .print-login-cancel:hover{background:#fff;border-color:var(--teal);color:var(--teal-dk);}
-    .print-login-error{
-      display:none;
-      margin-top:12px;
-      border:1px solid #FFC4C4;
-      border-radius:12px;
-      background:var(--red-bg);
-      color:var(--red);
-      padding:10px 11px;
-      font-size:13px;
-      font-weight:800;
-      line-height:1.35;
-    }
-    .print-login-error.show{display:block;}
-
     .footer-note{
       width:min(var(--shell-wide),calc(100% - 32px));
       margin:auto auto 0;
@@ -1079,18 +918,6 @@
 
   <p class="footer-note">Literacy Arcade • Oral Reading Fluency Calculator</p>
 
-  <div class="print-login-modal" id="printLoginModal" role="dialog" aria-modal="true" aria-labelledby="printLoginTitle" hidden>
-    <div class="print-login-card">
-      <h2 id="printLoginTitle">Print reports with a free Literacy Arcade account</h2>
-      <p>Create a free account to print student reports. Your ORF results are generated in your browser and are not saved to your dashboard.</p>
-      <div class="print-login-actions">
-        <button class="google-login-btn" id="printLoginGoogle" type="button">Sign in with Google</button>
-        <button class="print-login-cancel" id="printLoginCancel" type="button">Continue without printing</button>
-      </div>
-      <div class="print-login-error" id="printLoginError" role="alert"></div>
-    </div>
-  </div>
-
   <section id="orfReport" class="print-page" aria-hidden="true"></section>
 
   <script>
@@ -1100,94 +927,6 @@
     let timerInterval = null;
     let lastResult = null;
     const history = [];
-    let printGateUser = null;
-    let pendingPrintResult = null;
-
-    // This page only uses authentication to unlock printing. It does not write ORF data to Firestore.
-    // The Firebase config is exposed above so the Google sign-in popup can run on this page.
-    const LA_FIREBASE_CONFIG = window.LA_FIREBASE_CONFIG || window.firebaseConfig || null;
-
-    function getCurrentPrintUser(){
-      try{
-        if(window.LA_AUTH && typeof window.LA_AUTH.getCurrentUser === 'function'){
-          const sharedUser = window.LA_AUTH.getCurrentUser();
-          if(sharedUser) return sharedUser;
-        }
-        if(window.firebase && firebase.auth && firebase.auth().currentUser) return firebase.auth().currentUser;
-      }catch(err){}
-      return printGateUser;
-    }
-
-    function isPrintUserSignedIn(){
-      return !!getCurrentPrintUser();
-    }
-
-    function initPrintAuthGate(){
-      try{
-        if(window.LA_AUTH && typeof window.LA_AUTH.onAuthStateChanged === 'function'){
-          window.LA_AUTH.onAuthStateChanged(user => { printGateUser = user; });
-          return;
-        }
-        if(window.firebase && firebase.auth){
-          if(firebase.apps && firebase.apps.length){
-            firebase.auth().onAuthStateChanged(user => { printGateUser = user; });
-            return;
-          }
-          if(LA_FIREBASE_CONFIG){
-            firebase.initializeApp(LA_FIREBASE_CONFIG);
-            firebase.auth().onAuthStateChanged(user => { printGateUser = user; });
-          }
-        }
-      }catch(err){
-        console.warn('Print login gate could not initialize Firebase Auth.', err);
-      }
-    }
-
-    function openPrintLoginModal(result){
-      pendingPrintResult = result || lastResult;
-      $('printLoginError').textContent = '';
-      $('printLoginError').classList.remove('show');
-      $('printLoginModal').hidden = false;
-      setTimeout(() => $('printLoginGoogle').focus(), 0);
-    }
-
-    function closePrintLoginModal(){
-      $('printLoginModal').hidden = true;
-      pendingPrintResult = null;
-    }
-
-    async function signInToPrint(){
-      $('printLoginError').textContent = '';
-      $('printLoginError').classList.remove('show');
-      try{
-        if(window.LA_AUTH && typeof window.LA_AUTH.signInWithGoogle === 'function'){
-          const user = await window.LA_AUTH.signInWithGoogle();
-          printGateUser = user || getCurrentPrintUser();
-          const resultToPrint = pendingPrintResult || lastResult;
-          closePrintLoginModal();
-          doPrintReport(resultToPrint);
-          return;
-        }
-        if(window.firebase && firebase.auth && ((firebase.apps && firebase.apps.length) || LA_FIREBASE_CONFIG)){
-          if(firebase.apps && !firebase.apps.length && LA_FIREBASE_CONFIG){
-            firebase.initializeApp(LA_FIREBASE_CONFIG);
-          }
-          const provider = new firebase.auth.GoogleAuthProvider();
-          await firebase.auth().signInWithPopup(provider);
-          printGateUser = firebase.auth().currentUser;
-          const resultToPrint = pendingPrintResult || lastResult;
-          closePrintLoginModal();
-          doPrintReport(resultToPrint);
-          return;
-        }
-        $('printLoginError').textContent = 'Sign-in is not available on this page. Check that Firebase Auth scripts and config are loading.';
-        $('printLoginError').classList.add('show');
-      }catch(err){
-        $('printLoginError').textContent = 'Sign-in did not finish. Please try again, or sign in from My Activities and return to print.';
-        $('printLoginError').classList.add('show');
-        console.warn('Print sign-in failed.', err);
-      }
-    }
 
     // Hasbrouck & Tindal Oral Reading Fluency Norms, 2017.
     // Values represent WCPM by grade, season, and percentile.
@@ -1420,7 +1159,7 @@
         printButton.className = 'history-print-btn';
         printButton.textContent = 'Print report';
         printButton.setAttribute('aria-label', `Print report for ${item.name}`);
-        printButton.addEventListener('click', () => printReport(item));
+        printButton.addEventListener('click', () => printReport(item, printButton));
         row.lastElementChild.appendChild(printButton);
         body.appendChild(row);
       });
@@ -1459,16 +1198,14 @@
     $('nextStudentBtn').addEventListener('click', nextStudent);
     $('clearHistory').addEventListener('click', () => { history.length = 0; renderHistory(); });
 
-    function printReport(result = lastResult){
+    function printReport(result = lastResult, triggerElement){
       if(!result){
         doPrintReport(result);
         return;
       }
-      if(isPrintUserSignedIn()){
-        doPrintReport(result);
-      } else {
-        openPrintLoginModal(result);
-      }
+      import('./report-print-gate.js').then(({ guardReportPrint }) => {
+        guardReportPrint(() => doPrintReport(result), triggerElement);
+      });
     }
 
     function doPrintReport(result = lastResult){
@@ -1533,16 +1270,7 @@
       }
     }
 
-    $('downloadResults').addEventListener('click', printReport);
-    initPrintAuthGate();
-    $('printLoginGoogle').addEventListener('click', signInToPrint);
-    $('printLoginCancel').addEventListener('click', closePrintLoginModal);
-    $('printLoginModal').addEventListener('click', event => {
-      if(event.target === $('printLoginModal')) closePrintLoginModal();
-    });
-    document.addEventListener('keydown', event => {
-      if(event.key === 'Escape' && !$('printLoginModal').hidden) closePrintLoginModal();
-    });
+    $('downloadResults').addEventListener('click', event => printReport(lastResult, event.currentTarget));
 
     const passageInfoButton = $('passageWordInfo');
     const passageTooltip = $('passageWordsTooltip');

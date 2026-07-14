@@ -7,17 +7,15 @@ import {
   onSnapshot,
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-const SHOW_FOUNDING_OFFER = true;
-const UNLOCKED_PLANS = new Set(['plus', 'founding']);
+const UNLOCKED_PLANS = new Set(['plus', 'family']);
 const DEFAULT_RETURN = 'teacher-dashboard.html';
 
 const PRICE_TO_PLAN = {
-  price_1TqmEK3PzX3bHrbQEkK6vaes: 'founding',
   price_1TqmEJ3PzX3bHrbQ2cWDevb5: 'plus',
   price_1TqmEM3PzX3bHrbQh3wylsSF: 'plus',
-  price_1TqY6k4Gz51pZDtQR6oFrYDp: 'founding',
   price_1TqY5P4Gz51pZDtQOiymXQZ4: 'plus',
   price_1TqY444Gz51pZDtQmTMOq3Gv: 'plus',
+  price_1TssAC3PzX3bHrbQg4qIhxOH: 'family',
 };
 
 let currentUser = null;
@@ -30,12 +28,7 @@ const accountEmail = document.getElementById('accountEmail');
 const planPill = document.getElementById('planPill');
 const checkoutMessage = document.getElementById('checkoutMessage');
 const checkoutButtons = Array.from(document.querySelectorAll('.checkout-button'));
-const foundingOffer = document.querySelector('[data-founding-offer]');
 const accountClaim = document.querySelector('[data-account-claim]');
-
-if (foundingOffer && !SHOW_FOUNDING_OFFER) {
-  foundingOffer.hidden = true;
-}
 
 checkoutButtons.forEach((button) => {
   button.dataset.defaultLabel = button.textContent;
@@ -84,8 +77,8 @@ function updateAccountClaim(unlocked) {
   }
 
   accountClaim.innerHTML = `
-    <p>Ready to claim the founding rate?</p>
-    <a class="account-claim-link" href="#plus-plans" data-scroll-to-plans aria-label="Choose the 49 dollar Literacy Arcade Plus founding plan">Choose the $49 plan →</a>
+    <p>Ready to upgrade to Plus?</p>
+    <a class="account-claim-link" href="#plus-plans" data-scroll-to-plans>Choose a plan →</a>
   `;
 }
 
@@ -95,7 +88,7 @@ function updateAccountUi(user, plan = 'free') {
   if (!user) {
     accountTitle.textContent = 'Sign in before checkout';
     accountText.textContent = 'Your upgrade is connected to the Literacy Arcade account shown here. Saved activities are tied to the account used when they were created.';
-    accountEmail.innerHTML = '<a href="teacher-login.html?returnTo=founding-teacher.html">Sign in to continue</a>';
+    accountEmail.innerHTML = '<a href="teacher-login.html?returnTo=plus-subscriptions.html">Sign in to continue</a>';
     planPill.textContent = 'Free';
     setButtonsDisabled(false);
     updateAccountClaim(false);
@@ -109,13 +102,13 @@ function updateAccountUi(user, plan = 'free') {
     ? 'This signed-in account already has unlimited saved and shared classroom activities.'
     : 'Choose a plan below. Checkout will open in Stripe and return you here when complete.';
   accountEmail.textContent = `Signed in as: ${email}`;
-  planPill.textContent = currentPlan === 'founding' ? 'Founding' : currentPlan === 'plus' ? 'Plus' : 'Free';
+  planPill.textContent = currentPlan === 'family' ? 'Plus Family' : currentPlan === 'plus' ? 'Plus' : 'Free';
   setButtonsDisabled(false);
   updateAccountClaim(unlocked);
 }
 
 function getCheckoutUrl(plan) {
-  const url = new URL('founding-teacher.html', window.location.origin);
+  const url = new URL('plus-subscriptions.html', window.location.origin);
   url.searchParams.set('checkout', 'success');
   url.searchParams.set('plan', plan);
   const returnTo = getReturnTo();
@@ -124,7 +117,7 @@ function getCheckoutUrl(plan) {
 }
 
 function getCancelUrl() {
-  const url = new URL('founding-teacher.html', window.location.origin);
+  const url = new URL('plus-subscriptions.html', window.location.origin);
   url.searchParams.set('checkout', 'cancel');
   const returnTo = getReturnTo();
   if (returnTo && returnTo !== DEFAULT_RETURN) url.searchParams.set('returnTo', returnTo);
@@ -178,7 +171,7 @@ function watchPlan(user) {
     const params = new URLSearchParams(window.location.search);
     if (params.get('checkout') === 'success') {
       if (UNLOCKED_PLANS.has(plan)) {
-        setMessage(`Your Literacy Arcade account is now ${plan === 'founding' ? 'Founding' : 'Plus'}. Unlimited saves and shares are unlocked.`, 'success');
+        setMessage(`Your Literacy Arcade account is now ${plan === 'family' ? 'Plus Family' : 'Plus'}. Unlimited saves and shares are unlocked.`, 'success');
         addSuccessActions();
       } else {
         setMessage('Checking your upgrade… Stripe may take a moment to confirm your subscription.', '');
@@ -191,7 +184,7 @@ function watchPlan(user) {
 
 async function startCheckout(button) {
   if (!currentUser) {
-    window.location.href = 'teacher-login.html?returnTo=founding-teacher.html';
+    window.location.href = 'teacher-login.html?returnTo=plus-subscriptions.html';
     return;
   }
 
