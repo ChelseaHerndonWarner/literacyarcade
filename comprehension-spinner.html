@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script>
+    if (!new URLSearchParams(window.location.search).has('activity')) {
+      var gaScript = document.createElement('script');
+      gaScript.async = true;
+      gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2';
+      document.head.appendChild(gaScript);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CL8QW5CGB2');
+    }
+  </script>
+  <script>
+    if (!new URLSearchParams(window.location.search).has('activity')) {
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xc6rwdrkw5");
+    }
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comprehension Question Spinner | Literacy Arcade</title>
+  <meta name="description" content="Create and customize fiction and nonfiction comprehension questions by Bloom's level, then spin for student-ready reading discussion and response practice." />
+  <meta name="author" content="Literacy Arcade" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2EC4B6" />
+  <link rel="canonical" href="https://literacyarcade.com/comprehension-spinner.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Literacy Arcade" />
+  <meta property="og:title" content="Comprehension Question Spinner | Literacy Arcade" />
+  <meta property="og:description" content="Create and customize fiction and nonfiction comprehension questions by Bloom's level, then spin for student-ready reading discussion and response practice." />
+  <meta property="og:url" content="https://literacyarcade.com/comprehension-spinner.html" />
+  <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Comprehension Question Spinner | Literacy Arcade" />
+  <meta name="twitter:description" content="Create and customize fiction and nonfiction comprehension questions by Bloom's level, then spin for student-ready reading discussion and response practice." />
+  <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Comprehension Question Spinner",
+    "url": "https://literacyarcade.com/comprehension-spinner.html",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "isAccessibleForFree": true,
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "publisher": {"@type": "Organization", "name": "Literacy Arcade"},
+    "audience": {"@type": "EducationalAudience", "educationalRole": ["teacher", "tutor", "reading interventionist", "parent"]},
+    "description": "Create and customize fiction and nonfiction comprehension questions by Bloom's level, then spin for student-ready reading discussion and response practice."
+  }
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://literacyarcade.com/"},{"@type":"ListItem","position":2,"name":"Build & Play","item":"https://literacyarcade.com/build-and-play.html"},{"@type":"ListItem","position":3,"name":"Comprehension Question Spinner","item":"https://literacyarcade.com/comprehension-spinner.html"}]}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--teal:#2EC4B6;--teal-dk:#1FA99C;--teal-bg:#E8FAF7;--teal-border:#BFEDEA;--coral:#FF6B6B;--coral-dk:#E85555;--coral-bg:#FFF0EE;--navy:#1A1A2E;--navy-mid:#4A4A64;--navy-lt:#8F8AA6;--cream:#FFFDF8;--white:#fff;--border:#E4DEF2;--amber:#D8BE72;--amber-bg:#FEF5E2;--blue:#5F93D8;--violet:#7465B5;--green:#5DCAA5;--orange:#E3845C;--shadow-sm:0 2px 8px rgba(15,23,42,.06);--shadow-md:0 8px 24px rgba(15,23,42,.10);--shadow-lg:0 16px 48px rgba(15,23,42,.14);--r-sm:10px;--r-md:14px;--r-lg:20px;--r-xl:26px}
+    body{min-height:100vh;background:radial-gradient(circle at 0% 0%,rgba(46,196,182,.13),transparent 32%),radial-gradient(circle at 100% 100%,rgba(173,151,236,.22),transparent 34%),linear-gradient(135deg,#F4FFFD 0%,#FFFDF9 58%,#F3EFFD 100%);color:var(--navy);font-family:'Nunito',system-ui,sans-serif;overflow-x:hidden}
+    button,textarea,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.52;transform:none!important}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid #F6C54A;outline-offset:3px}
+    #app{width:100%;min-height:100vh;display:flex;flex-direction:column;padding:0 24px 30px;gap:14px}
+    .la-header{height:62px;padding:0 clamp(16px,3vw,24px);display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);border-bottom:1px solid var(--border);box-shadow:0 2px 14px rgba(26,26,46,.05);margin:0 -24px}
+    .la-logo-group{min-width:0;display:flex;align-items:center;gap:10px;flex-shrink:0;color:inherit;text-decoration:none}.la-icon{width:38px;height:38px;border-radius:10px;display:block;overflow:hidden;flex-shrink:0}.la-icon img{width:100%;height:100%;object-fit:cover;display:block}.la-wordmark,.la-tool-name{font-family:'Nunito',sans-serif;line-height:1;white-space:nowrap;letter-spacing:-.1px}.la-wordmark{color:var(--navy);font-size:1.15rem;font-weight:900;letter-spacing:-.2px}.la-tool-name{color:var(--teal-dk);font-size:17px;font-weight:700}.la-pipe{width:1px;height:22px;background:var(--border);flex-shrink:0}.hdr-btns{display:flex;align-items:center;gap:6px}
+    .icon-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);border-radius:var(--r-sm);background:#F8F7F3;color:var(--navy-mid);transition:background .15s,border-color .15s,color .15s;flex-shrink:0}.icon-btn:hover{background:var(--cream);border-color:var(--navy-lt);color:var(--navy)}.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round}
+    main{width:min(1180px,100%);margin:0 auto;flex:1}.hero{text-align:center;margin:10px auto 8px}.hero h1{font-family:'Nunito',sans-serif;font-size:clamp(2rem,4vw,2.65rem);font-weight:900;line-height:1.05;color:var(--navy);letter-spacing:-.5px}.hero h1 strong{font-style:normal;color:var(--teal-dk)}.hero p{margin:6px auto 0;color:var(--navy-lt);font-size:14px;font-weight:700;max-width:760px}.view{display:none}.view.active{display:block}
+    .setup-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.72fr);gap:24px;align-items:start;margin-top:8px}.setup-copy{display:grid;gap:12px}.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r-xl);padding:16px 18px;box-shadow:var(--shadow-md)}.card-title{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--navy-lt);margin-bottom:9px;display:flex;align-items:center;gap:7px}.card-title::before{content:"";display:block;width:3px;height:13px;border-radius:2px;background:var(--teal)}.field-note{color:var(--navy-lt);font-size:12px;font-weight:700;line-height:1.4;margin:-1px 0 10px}.control-label{display:block;font-size:12px;font-weight:900;color:var(--navy-mid);margin-bottom:5px}
+    .step-label{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-dk);margin-bottom:3px}
+    .option-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.option-card{border:1.5px solid var(--border);background:#fff;color:var(--navy-mid);border-radius:var(--r-md);padding:8px 10px;min-height:44px;font-weight:900;font-size:13px;text-align:left;transition:transform .12s,background .12s,border-color .12s,color .12s;position:relative;display:flex;flex-direction:column;justify-content:center}.option-card span{display:block;color:var(--navy-lt);font-size:10px;font-weight:800;line-height:1.2;margin-top:1px}.option-card[aria-pressed="true"]{border-color:var(--teal-dk);background:var(--teal-bg);color:var(--teal-dk);box-shadow:inset 0 0 0 2px rgba(31,169,156,.12)}.option-card[aria-pressed="true"]::after{content:"✓";position:absolute;right:8px;top:6px;font-size:12px;color:var(--teal-dk);font-weight:900}.option-card:hover{transform:translateY(-1px);border-color:var(--teal);background:var(--teal-bg)}
+    .bloom-select-wrap{position:relative;margin-bottom:2px}.dropdown-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1.5px solid var(--border);background:#fff;border-radius:var(--r-sm);padding:10px 12px;font-weight:800;font-size:13px;color:var(--navy);text-align:left;transition:border-color .12s}.dropdown-trigger:hover,.dropdown-trigger[aria-expanded="true"]{border-color:var(--teal)}.dropdown-trigger .chevron{width:16px;height:16px;flex-shrink:0;transition:transform .2s ease;color:var(--navy-lt)}.dropdown-trigger[aria-expanded="true"] .chevron{transform:rotate(180deg)}
+    .dropdown-panel{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:25;background:#fff;border:1.5px solid var(--border);border-radius:var(--r-md);box-shadow:var(--shadow-lg);padding:10px;display:grid;gap:8px}.dropdown-panel[hidden]{display:none}
+    .level-check-list{display:grid;gap:2px}.level-check-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;font-weight:800;color:var(--navy-mid);font-size:13px;cursor:pointer}.level-check-row:hover{background:var(--cream)}.level-check-row input{width:16px;height:16px;accent-color:var(--teal-dk);flex:0 0 auto}.level-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+    .level-check-row.remember .level-dot{background:var(--blue)}.level-check-row.understand .level-dot{background:var(--teal-dk)}.level-check-row.apply .level-dot{background:var(--green)}.level-check-row.analyze .level-dot{background:var(--violet)}.level-check-row.evaluate .level-dot{background:var(--amber)}.level-check-row.create .level-dot{background:var(--coral)}
+    .filter-summary{font-size:12px;font-weight:700;color:var(--navy-lt);margin:-4px 0 4px}
+    .accordion-card{padding:0}.accordion-header{width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:none;border:none;padding:16px 18px;text-align:left}.accordion-header .card-title{margin-bottom:2px}.accordion-header .field-note{margin:0}.accordion-header .chevron{width:18px;height:18px;flex-shrink:0;margin-top:2px;transition:transform .2s ease;color:var(--navy-lt)}.accordion-header[aria-expanded="true"] .chevron{transform:rotate(180deg)}
+    .accordion-body{max-height:0;opacity:0;overflow:hidden;transition:max-height .28s ease,opacity .2s ease;padding:0 18px}.accordion-body.open{max-height:2400px;opacity:1;padding:0 18px 16px}
+    .qbank-groups{display:grid;gap:8px;margin-top:10px}.qbank-group{border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;background:#fff}.qbank-group-header{width:100%;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--cream);border:none;font-weight:900;color:var(--navy-mid);font-size:13px;text-align:left}.qbank-group-header:hover{background:var(--teal-bg);color:var(--teal-dk)}.qbank-group-header .chevron{width:16px;height:16px;flex-shrink:0;transition:transform .2s ease}.qbank-group.open .qbank-group-header .chevron{transform:rotate(180deg)}
+    .qbank-group-body{display:grid;gap:5px;padding:8px}.qbank-item{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:7px 9px;border-radius:8px}.qbank-item:hover{background:var(--cream)}.qbank-item .qtext{flex:1 1 220px;font-size:13px;font-weight:700;color:var(--navy);line-height:1.3}
+    .btn-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.btn{min-height:40px;padding:8px 16px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--white);color:var(--navy-mid);font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;transition:transform .12s,background .12s,border-color .12s,color .12s;white-space:nowrap}.btn:hover{transform:translateY(-1px);border-color:var(--teal);background:var(--teal-bg);color:var(--teal-dk)}.btn.primary,.btn.sage{border-color:var(--teal-dk);background:var(--teal-dk);color:#fff;box-shadow:0 4px 0 #0a7a6e}.btn.primary:hover,.btn.sage:hover{background:var(--teal);border-color:var(--teal-dk);color:#fff;box-shadow:0 5px 0 #0a7a6e}.btn.clr{color:var(--navy-mid);border-color:var(--border);background:var(--white)}.btn.clr:hover{border-color:var(--coral);background:var(--coral-bg);color:#8b351b}.btn.marked{border-color:var(--amber);background:var(--amber-bg);color:#6f4b06}
+    .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field-grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}.input-field,.custom-textarea,.edit-textarea{width:100%;border:1.5px solid var(--border);border-radius:var(--r-sm);background:#fff;color:var(--navy);padding:9px 10px;outline:none;font-weight:800}.input-field:focus,.custom-textarea:focus,.edit-textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.12)}.custom-textarea{min-height:118px;resize:vertical;line-height:1.4}.edit-textarea{min-height:68px;resize:vertical;line-height:1.35}.field-section{display:grid;gap:10px;padding-top:5px}.field-section h3{font-size:15px;color:var(--navy);font-weight:900}.checkbox-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.check-row{display:flex;align-items:flex-start;gap:8px;padding:10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--cream);color:var(--navy-mid);font-size:13px;font-weight:900}.check-row input{width:18px;height:18px;margin-top:1px;accent-color:var(--teal-dk);flex:0 0 auto}
+    .message{display:none;margin-top:8px;padding:9px 11px;border:1px solid rgba(232,85,85,.32);border-radius:var(--r-sm);background:var(--coral-bg);color:#8b351b;font-size:12px;font-weight:900}.message.show{display:block}.count-line{font-family:'Lexend',sans-serif;font-weight:800;color:var(--navy);font-size:18px;margin:2px 0 4px}.meta-row{display:flex;gap:6px;flex-wrap:wrap}.tag{display:inline-flex;align-items:center;min-height:24px;border:1px solid var(--border);border-radius:999px;padding:3px 8px;background:#fff;color:var(--navy-mid);font-size:11px;font-weight:900}.tag.bloom{border-color:var(--teal-border);background:var(--teal-bg);color:var(--teal-dk)}.preview-actions{display:flex;gap:6px;flex-wrap:wrap}.small-btn{min-height:32px;padding:6px 10px;border:1.5px solid var(--border);border-radius:9px;background:#fff;color:var(--navy-mid);font-size:12px;font-weight:900}.small-btn:hover{border-color:var(--teal);background:var(--teal-bg);color:var(--teal-dk)}.small-btn.delete:hover{border-color:var(--coral);background:var(--coral-bg);color:#8b351b}.empty-note{color:var(--navy-lt);font-size:13px;font-style:italic;text-align:center;padding:14px}.setup-actions{justify-content:flex-start;margin-top:10px}
+    .wheel-card{display:grid;gap:11px;justify-items:center;text-align:center;position:sticky;top:78px}.wheel-area{position:relative;display:flex;flex-direction:column;align-items:center;width:100%}.pointer{position:absolute;top:-7px;left:50%;z-index:3;width:0;height:0;transform:translateX(-50%);border-top:27px solid var(--amber);border-right:14px solid transparent;border-left:14px solid transparent;filter:drop-shadow(0 2px 3px rgba(0,0,0,.16))}.wheel-canvas{width:min(360px,100%);max-width:100%;aspect-ratio:1;display:block;border-radius:50%;box-shadow:0 7px 28px rgba(78,120,90,.2),0 2px 8px rgba(0,0,0,.08)}.setup-wheel-note{color:var(--navy-lt);font-size:12px;font-weight:700;line-height:1.4}.wheel-summary-line{font-family:'Lexend',sans-serif;color:var(--navy-mid);font-size:13px;font-weight:800;margin-top:-4px}
+    .play-shell{display:none;position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 20% 10%,rgba(46,196,182,.16),transparent 34%),linear-gradient(135deg,#F4FFFD 0%,#FFFDF9 60%,#F3EFFD 100%);padding:28px 16px 22px;overflow:hidden}.play-shell.active{display:flex;align-items:center;justify-content:center}.play-controls{position:fixed;top:16px;right:16px;display:flex;gap:8px;z-index:85}.play-icon-btn{min-width:42px;height:42px;border:1.5px solid var(--border);border-radius:14px;background:rgba(255,255,255,.94);box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;color:var(--navy-mid);font-weight:900;padding:0 12px}.play-icon-btn:hover{border-color:var(--teal);background:var(--teal-bg);color:var(--teal-dk)}.play-icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.edit-questions-btn{gap:8px;min-width:auto;padding:0 16px}.play-stage{width:100%;min-height:calc(100svh - 50px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px 0 0}.play-wheel{width:min(820px,90vw,calc(100svh - 150px));height:min(820px,90vw,calc(100svh - 150px));max-width:90vw;max-height:calc(100svh - 150px)}.play-stage .pointer{top:-12px;border-top-width:31px;border-left-width:16px;border-right-width:16px}.spin-btn{flex:0 0 auto;width:min(420px,calc(100vw - 48px));max-width:420px;min-height:58px;padding:14px 24px;border:0;border-radius:18px;background:var(--teal-dk);color:#fff;font-family:'Lexend',sans-serif;font-size:clamp(22px,3.2vw,30px);font-weight:800;box-shadow:0 5px 0 #0a7a6e;transition:.12s}.spin-btn:hover{background:var(--teal);transform:translateY(-2px);box-shadow:0 7px 0 #0a7a6e}.spin-btn:disabled{box-shadow:none}
+    .result-overlay{display:none;position:fixed;inset:0;z-index:100;align-items:center;justify-content:center;background:rgba(26,26,46,.48);backdrop-filter:blur(3px);padding:22px}.result-overlay.open{display:flex}.result-card{width:min(860px,94vw);background:#fff;border-radius:28px;box-shadow:0 22px 70px rgba(0,0,0,.28);overflow:hidden;animation:popBounce .34s cubic-bezier(.22,1.35,.36,1)}@keyframes popBounce{0%{transform:translateY(18px) scale(.78);opacity:0}62%{transform:translateY(0) scale(1.055);opacity:1}82%{transform:scale(.982)}100%{transform:scale(1)}}.result-head{background:var(--teal);color:white;text-align:center;padding:15px 24px}.result-head p{font-family:'Lexend',sans-serif;font-size:clamp(18px,2.4vw,24px);font-weight:800}.result-body{padding:26px 30px 30px;text-align:center;min-height:250px}.result-meta{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}.result-question{font-family:'Lexend',sans-serif;color:var(--navy);font-size:clamp(28px,4.1vw,54px);font-weight:800;line-height:1.14;margin:0 auto 18px;overflow-wrap:anywhere}.result-prompt{font-size:clamp(15px,1.8vw,20px);color:var(--navy-lt);font-weight:800;margin-bottom:20px}.result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.saved-panel{position:fixed;left:18px;bottom:18px;z-index:86;width:min(360px,calc(100vw - 36px));max-height:34vh;display:grid;gap:8px;padding:12px;border:1px solid var(--border);border-radius:var(--r-lg);background:rgba(255,255,255,.95);box-shadow:var(--shadow-md);overflow:auto}.saved-panel h2{font-size:13px;font-weight:900;color:var(--navy);letter-spacing:.02em}.saved-list{display:grid;gap:6px}.saved-item{padding:8px 9px;border:1px solid var(--teal-border);border-radius:var(--r-sm);background:var(--teal-bg);font-size:12px;font-weight:800;color:var(--navy-mid);line-height:1.3}.hidden{display:none!important}.footer-note{width:min(1240px,calc(100% - 32px));margin:auto auto 0;padding:16px 0 6px;color:#9692AD;font-family:'Nunito',Arial,sans-serif;font-size:.84rem;font-weight:900;line-height:1.35;text-align:center}#confettiCanvas{position:fixed;inset:0;z-index:130;display:none;pointer-events:none}.seo-copy{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:900px){.setup-grid{grid-template-columns:1fr;gap:16px}.wheel-card{position:static}.play-wheel{width:min(680px,84vw,calc(100svh - 145px));height:min(680px,84vw,calc(100svh - 145px))}.saved-panel{position:static;width:min(760px,92vw);max-height:180px;margin-top:8px}.play-shell{overflow:auto}.play-stage{min-height:auto;padding-top:60px}}
+    @media(max-width:640px){#app{padding:0 14px 24px}.la-header{height:62px;padding:0 12px;margin:0 -14px}.la-icon{width:36px;height:36px}.la-wordmark,.la-pipe{display:none}.la-tool-name{font-size:.98rem;font-weight:700}.hero h1{font-size:32px}.hero p{font-size:12px}.card{padding:16px}.option-grid,.field-grid,.checkbox-grid{grid-template-columns:1fr}.qbank-item .qtext{flex-basis:100%}.setup-actions .btn{flex:1 1 100%}.result-body{padding:20px}.result-question{font-size:clamp(25px,7vw,42px)}.edit-questions-btn span{display:none}.play-controls{top:10px;right:10px}}
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="la-header" aria-label="Literacy Arcade navigation">
+      <a class="la-logo-group" href="https://literacyarcade.com" aria-label="Literacy Arcade home">
+        <div class="la-icon"><img src="data:image/jpeg;base64,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" alt="Literacy Arcade logo"></div>
+        <span class="la-wordmark">Literacy Arcade</span><span class="la-pipe" aria-hidden="true"></span><span class="la-tool-name">Comprehension Spinner</span>
+      </a>
+      <div class="hdr-btns">
+        <button class="icon-btn" id="headerSoundBtn" type="button" aria-label="Toggle sound" title="Toggle sound"><svg id="headerSoundOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><svg id="headerSoundOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></button>
+        <button class="icon-btn" type="button" aria-label="All tools" title="Return to all tools" onclick="window.location.href='https://literacyarcade.com'"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></button>
+      </div>
+    </header>
+    <main>
+      <div class="hero"><h1>Comprehension <strong>Spinner</strong></h1><p>Bloom's question stems for fiction, nonfiction, discussion, writing, and text evidence practice.</p></div>
+      <section class="view active" id="setupView" aria-label="Comprehension Spinner setup">
+        <div class="setup-grid">
+          <div class="setup-copy">
+
+            <!-- STEP 1: Choose Your Question Set -->
+            <div class="card">
+              <div class="step-label">Step 1</div>
+              <div class="card-title">Choose Your Question Set</div>
+              <p class="field-note">Pick a text type, choose Bloom's levels, and spin — customizing for your text is optional.</p>
+
+              <label class="control-label">Text Type</label>
+              <div class="option-grid" id="textTypeOptions" role="group" aria-label="Text type">
+                <button class="option-card" type="button" data-text-type="fiction" aria-pressed="true">Fiction<span>Stories, characters, setting</span></button>
+                <button class="option-card" type="button" data-text-type="nonfiction" aria-pressed="false">Nonfiction<span>Topics, evidence, features</span></button>
+                <button class="option-card" type="button" data-text-type="any" aria-pressed="false">Any Text / Mixed<span>Full question bank</span></button>
+              </div>
+
+              <label class="control-label" style="margin-top:12px">Bloom's Levels</label>
+              <div class="bloom-select-wrap">
+                <button type="button" class="dropdown-trigger" id="bloomDropdownBtn" aria-expanded="false" aria-haspopup="true">
+                  <span id="bloomSummaryText">Understand, Analyze, Evaluate</span>
+                  <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="dropdown-panel" id="bloomDropdownPanel" role="group" aria-label="Bloom's Taxonomy levels" hidden>
+                  <div class="btn-row"><button class="btn" type="button" id="selectAllBtn">Select All</button><button class="btn clr" type="button" id="clearLevelsBtn">Clear All</button></div>
+                  <div class="level-check-list" id="levelOptions"></div>
+                </div>
+              </div>
+
+              <label class="control-label" style="margin-top:12px">Question Type</label>
+              <select class="input-field" id="responseTypeSelect">
+                <option value="all">All Questions</option>
+                <option value="Quick Answer">Quick Answer</option>
+                <option value="Text Evidence">Text Evidence</option>
+                <option value="Discussion">Discussion</option>
+                <option value="Written Response">Written Response</option>
+                <option value="Creative Response">Creative Response</option>
+              </select>
+
+              <div class="count-line" id="questionCount" style="margin-top:14px">0 questions ready</div>
+              <div class="filter-summary" id="filterSummaryTop"></div>
+              <div class="message" id="setupMessage" role="alert"></div>
+              <div class="btn-row setup-actions"><button class="btn primary" type="button" id="startBtnTop">Start Spinner</button><button class="btn" type="button" id="restartBtn">Restart</button></div>
+            </div>
+
+            <!-- STEP 2 (optional): Customize for your text -->
+            <div class="card accordion-card">
+              <button type="button" class="accordion-header" id="customizeAccordionBtn" aria-expanded="false" aria-controls="customizeAccordionBody">
+                <div>
+                  <div class="step-label">Step 2 · Optional</div>
+                  <div class="card-title">Customize questions for your text</div>
+                  <p class="field-note">Optional — add character names, topics, settings, or main ideas to personalize the stems.</p>
+                </div>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-body" id="customizeAccordionBody">
+                <div id="customFields" class="field-section"></div>
+              </div>
+            </div>
+
+            <!-- STEP 2b (optional): Add your own questions -->
+            <div class="card accordion-card">
+              <button type="button" class="accordion-header" id="customQAccordionBtn" aria-expanded="false" aria-controls="customQAccordionBody">
+                <div>
+                  <div class="card-title">Add your own questions</div>
+                  <p class="field-note">Optional — type one question per line and add them to the spinner.</p>
+                </div>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-body" id="customQAccordionBody">
+                <label class="control-label" for="customQuestions">Custom questions</label>
+                <textarea id="customQuestions" class="custom-textarea" spellcheck="true" placeholder="What is one question you still have?&#10;Which detail helped you most?"></textarea>
+                <div class="checkbox-grid">
+                  <label class="check-row" for="includePresets"><input type="checkbox" id="includePresets" checked>Include preset questions</label>
+                  <label class="check-row" for="includeCustom"><input type="checkbox" id="includeCustom" checked>Include my custom questions</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 3: Question Bank (compact by default) -->
+            <div class="card">
+              <div class="step-label">Step 3</div>
+              <div class="card-title">Question Bank</div>
+              <div class="count-line" id="questionCountBank">0 questions ready</div>
+              <div class="filter-summary" id="filterSummaryBank"></div>
+              <div class="btn-row setup-actions">
+                <button class="btn" type="button" id="previewBtn">Preview Questions</button>
+                <button class="btn" type="button" id="editBankBtn">Edit Question Bank</button>
+                <button class="btn primary" type="button" id="startBtn">Start Spinner</button>
+              </div>
+              <div class="qbank-groups" id="questionGroups"></div>
+            </div>
+          </div>
+
+          <div class="card wheel-card setup-wheel">
+            <div class="card-title">Spinner Preview</div>
+            <div class="wheel-area"><div class="pointer"></div><canvas id="setupWheelCanvas" class="wheel-canvas" aria-label="Comprehension spinner preview"></canvas></div>
+            <p class="setup-wheel-note">The full question appears after the spin.</p>
+            <p class="wheel-summary-line" id="wheelSummaryLine"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <section class="seo-copy" aria-label="About this Literacy Arcade comprehension spinner">
+      <h2>Comprehension Spinner for Bloom's Taxonomy Questions</h2>
+      <p>Teachers can spin classroom-ready comprehension question stems for fiction, nonfiction, and mixed texts, with support for text evidence, discussion, writing, and creative responses.</p>
+    </section>
+    <p class="footer-note">Literacy Arcade • Comprehension Spinner</p>
+  </div>
+  <section class="play-shell" id="playShell" aria-label="Comprehension Spinner game">
+    <div class="play-controls">
+      <button class="play-icon-btn" id="playSoundBtn" type="button" aria-label="Toggle sound"><svg id="playSoundOn" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg><svg id="playSoundOff" viewBox="0 0 24 24" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></button>
+      <button class="play-icon-btn edit-questions-btn" id="editBtn" type="button"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Back to Setup</span></button>
+      <button class="play-icon-btn" type="button" aria-label="Home" onclick="window.location.href='https://literacyarcade.com'"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></button>
+    </div>
+    <div class="play-stage"><div class="wheel-area"><div class="pointer"></div><canvas id="gameWheelCanvas" class="wheel-canvas play-wheel" aria-label="Active comprehension spinner"></canvas></div><button class="spin-btn" type="button" id="spinBtn">SPIN!</button><aside class="saved-panel" aria-label="Saved Questions"><h2>Saved Questions</h2><div class="saved-list" id="savedList"><div class="empty-note">No saved questions yet.</div></div></aside></div>
+  </section>
+  <div class="result-overlay" id="resultOverlay" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+    <div class="result-card" id="resultCard">
+      <div class="result-head"><p id="resultTitle">Comprehension Spinner</p></div>
+      <div class="result-body">
+        <div class="result-meta" id="resultMeta"></div>
+        <div class="result-question" id="selectedQuestion" aria-live="polite"></div>
+        <div class="result-prompt" id="resultPrompt"></div>
+        <div class="result-actions"><button class="btn sage" type="button" id="spinAgainBtn">Spin Again</button><button class="btn" type="button" id="saveQuestionBtn">Save for Later</button><button class="btn clr" type="button" id="removeQuestionBtn">Remove Question</button><button class="btn" type="button" id="backSetupBtn">Back to Setup</button></div>
+      </div>
+    </div>
+  </div>
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+  <script>
+    const WHEEL_COLORS=['#1FA99C','#E85555','#5F93D8','#D8BE72','#7465B5','#5DCAA5','#E3845C','#62A39F'];
+    const BLOOM_LEVELS=['Remember','Understand','Apply','Analyze','Evaluate','Create'];
+    const LEVEL_COLORS={Remember:'#5F93D8',Understand:'#1FA99C',Apply:'#5DCAA5',Analyze:'#7465B5',Evaluate:'#D8BE72',Create:'#FF6B6B'};
+    const TEXT_TYPE_LABELS={fiction:'Fiction',nonfiction:'Nonfiction',any:'Any Text',custom:'Custom'};
+    const TEXT_TYPE_SUMMARY={fiction:'Fiction + Any Text',nonfiction:'Nonfiction + Any Text',any:'Fiction + Nonfiction + Any Text'};
+    const HELPERS={
+      'Text Evidence':'Use details from the text to support your answer.',
+      Discussion:'Turn and talk, then be ready to share.',
+      'Written Response':'Write your answer in complete sentences.',
+      'Creative Response':'Use the text as inspiration for your response.',
+      'Quick Answer':'Answer in your own words.',
+      'Teacher Added':'Answer the question your teacher added.'
+    };
+    const FIELD_GROUPS={
+      any:[
+        ['Text title','[title]'],
+        ['Focus question','[focus question]']
+      ],
+      fiction:[
+        ['Main character','[character]'],
+        ['Character 1','[character 1]'],
+        ['Character 2','[character 2]'],
+        ['Setting','[setting]'],
+        ['Problem','[problem]'],
+        ['Important event','[event]'],
+        ['Character action/choice','[action]'],
+        ['Lesson or theme','[lesson/theme]']
+      ],
+      nonfiction:[
+        ['Topic','[topic]'],
+        ['Main idea','[main idea]'],
+        ['Claim','[claim]'],
+        ['Evidence/detail','[evidence]'],
+        ['Text feature','[text feature]'],
+        ['Vocabulary word or phrase','[word/phrase]'],
+        ['Section/chapter','[section]'],
+        ['Event/problem','[event/problem]']
+      ]
+    };
+    const QUESTION_GROUPS=[
+      {textType:'fiction',bloom:'Remember',questions:[
+        {responseType:'Quick Answer',stem:'Who is the main character in the story?'},
+        {responseType:'Quick Answer',stem:'Where and when does the story take place?'},
+        {responseType:'Quick Answer',stem:'What problem does [character] face?'},
+        {responseType:'Quick Answer',stem:'What happens at the beginning of the story?'},
+        {responseType:'Quick Answer',stem:'What happens at the end of the story?'},
+        {responseType:'Quick Answer',stem:'What are three important events from the story?'},
+        {responseType:'Quick Answer',stem:'What does [character] want?'},
+        {responseType:'Quick Answer',stem:'Who helps [character] in the story?'},
+        {responseType:'Quick Answer',stem:'What is one important detail about [setting]?'},
+        {responseType:'Quick Answer',stem:'What words would you use to describe [character]?'}
+      ]},
+      {textType:'nonfiction',bloom:'Remember',questions:[
+        {responseType:'Quick Answer',stem:'What is the topic of this text?'},
+        {responseType:'Quick Answer',stem:'What is one fact you learned about [topic]?'},
+        {responseType:'Quick Answer',stem:'What are three important details from the text?'},
+        {responseType:'Quick Answer',stem:'Who or what is this text mostly about?'},
+        {responseType:'Quick Answer',stem:'What happened first?'},
+        {responseType:'Quick Answer',stem:'What happened next?'},
+        {responseType:'Quick Answer',stem:'What important words did the author use to explain [topic]?'},
+        {responseType:'Quick Answer',stem:'What does the text say about [topic]?'},
+        {responseType:'Quick Answer',stem:'What question does the text answer?'},
+        {responseType:'Text Evidence',stem:'What is one detail from the [text feature]?'}
+      ]},
+      {textType:'any',bloom:'Remember',questions:[
+        {responseType:'Quick Answer',stem:'What is this text mostly about?'},
+        {responseType:'Quick Answer',stem:'What is one important detail you remember?'},
+        {responseType:'Quick Answer',stem:'What part stood out to you?'},
+        {responseType:'Quick Answer',stem:'What word or phrase was important?'},
+        {responseType:'Quick Answer',stem:'What happened or was explained in this section?'},
+        {responseType:'Quick Answer',stem:'What is one thing you would tell someone who has not read this yet?'}
+      ]},
+      {textType:'fiction',bloom:'Understand',questions:[
+        {responseType:'Written Response',stem:'Retell the story in your own words.'},
+        {responseType:'Quick Answer',stem:'What is the main problem in the story?'},
+        {responseType:'Discussion',stem:'Why is [character] important to the story?'},
+        {responseType:'Discussion',stem:'What lesson might [character] learn?'},
+        {responseType:'Written Response',stem:'How would you explain the story to a younger student?'},
+        {responseType:'Text Evidence',stem:'What does [character] feel during this part of the story? How do you know?'},
+        {responseType:'Discussion',stem:'What is the most important event in the story so far?'},
+        {responseType:'Discussion',stem:'Why did [character] make that choice?'},
+        {responseType:'Discussion',stem:'What does the ending tell us about the story?'},
+        {responseType:'Discussion',stem:'What message might the author want readers to understand?'}
+      ]},
+      {textType:'nonfiction',bloom:'Understand',questions:[
+        {responseType:'Written Response',stem:'Explain the main idea in your own words.'},
+        {responseType:'Written Response',stem:'What is the author teaching us about [topic]?'},
+        {responseType:'Written Response',stem:'How would you explain this information to a younger student?'},
+        {responseType:'Text Evidence',stem:'What detail best explains the main idea?'},
+        {responseType:'Discussion',stem:'What does this section help you understand?'},
+        {responseType:'Discussion',stem:'Why is [topic] important?'},
+        {responseType:'Discussion',stem:'What does the author want readers to know?'},
+        {responseType:'Discussion',stem:'How does the [text feature] help you understand the text?'},
+        {responseType:'Discussion',stem:'What is the difference between two ideas in this text?'},
+        {responseType:'Discussion',stem:'What is the author explaining in this part?'}
+      ]},
+      {textType:'any',bloom:'Understand',questions:[
+        {responseType:'Written Response',stem:'Summarize the most important part of the text.'},
+        {responseType:'Quick Answer',stem:'What is the big idea?'},
+        {responseType:'Discussion',stem:'What does this part mean?'},
+        {responseType:'Discussion',stem:'What is something the author wants you to understand?'},
+        {responseType:'Text Evidence',stem:'Which detail helped you understand the text better?'},
+        {responseType:'Discussion',stem:'What would you say this text is really about?'}
+      ]},
+      {textType:'fiction',bloom:'Apply',questions:[
+        {responseType:'Discussion',stem:'What would you do if you were [character]?'},
+        {responseType:'Discussion',stem:'How would you solve [problem]?'},
+        {responseType:'Discussion',stem:'How does this story connect to your life?'},
+        {responseType:'Discussion',stem:'How does this story connect to another book, movie, or experience?'},
+        {responseType:'Discussion',stem:'What advice would you give [character]?'},
+        {responseType:'Discussion',stem:'What could [character] do differently next time?'},
+        {responseType:'Discussion',stem:'How could the lesson in this story help someone in real life?'},
+        {responseType:'Discussion',stem:'When have you seen someone face a similar problem?'},
+        {responseType:'Discussion',stem:'How would the story change if it happened today?'},
+        {responseType:'Discussion',stem:'What would happen if [character] made a different choice?'}
+      ]},
+      {textType:'nonfiction',bloom:'Apply',questions:[
+        {responseType:'Discussion',stem:'How could someone use this information in real life?'},
+        {responseType:'Discussion',stem:'How does this information connect to something you already know?'},
+        {responseType:'Discussion',stem:'What could you do with what you learned from this text?'},
+        {responseType:'Discussion',stem:'How could this information help a person solve a problem?'},
+        {responseType:'Discussion',stem:'Where might you see this idea in the real world?'},
+        {responseType:'Discussion',stem:'How does this text connect to science, history, school, or your community?'},
+        {responseType:'Written Response',stem:'What would you teach someone else about [topic]?'},
+        {responseType:'Discussion',stem:'How could this information change what someone thinks or does?'},
+        {responseType:'Discussion',stem:'What is an example of [topic] outside the text?'},
+        {responseType:'Discussion',stem:'How could you use this information to make a decision?'}
+      ]},
+      {textType:'any',bloom:'Apply',questions:[
+        {responseType:'Discussion',stem:'How does this connect to something you know?'},
+        {responseType:'Discussion',stem:'How could you use this idea?'},
+        {responseType:'Discussion',stem:'What does this remind you of?'},
+        {responseType:'Discussion',stem:'What would you do next after reading this?'},
+        {responseType:'Discussion',stem:'How could this text help someone?'},
+        {responseType:'Discussion',stem:'What is one real-life connection you can make?'}
+      ]},
+      {textType:'fiction',bloom:'Analyze',questions:[
+        {responseType:'Discussion',stem:'How did [character] change from the beginning to the end?'},
+        {responseType:'Discussion',stem:'What caused the main problem in the story?'},
+        {responseType:'Discussion',stem:'How did one event lead to another event?'},
+        {responseType:'Text Evidence',stem:'What details show how [character] feels?'},
+        {responseType:'Discussion',stem:'How are [character 1] and [character 2] alike and different?'},
+        {responseType:'Discussion',stem:'How does [setting] affect what happens?'},
+        {responseType:'Discussion',stem:'Why did the author include [event]?'},
+        {responseType:'Discussion',stem:"What does [character]'s action tell you about them?"},
+        {responseType:'Text Evidence',stem:"What clues helped you figure out [character]'s motivation?"},
+        {responseType:'Discussion',stem:'How does [problem] affect the characters?'},
+        {responseType:'Discussion',stem:'What is the turning point in the story?'},
+        {responseType:'Discussion',stem:'How does the author build suspense, humor, sadness, or excitement?'}
+      ]},
+      {textType:'nonfiction',bloom:'Analyze',questions:[
+        {responseType:'Discussion',stem:'How are two ideas in the text connected?'},
+        {responseType:'Discussion',stem:'What caused [event/problem]?'},
+        {responseType:'Discussion',stem:'What effect did [event/problem] have?'},
+        {responseType:'Discussion',stem:'How does the author organize the information?'},
+        {responseType:'Text Evidence',stem:'What evidence does the author use to support the main idea?'},
+        {responseType:'Discussion',stem:'How do the details work together to explain [topic]?'},
+        {responseType:'Discussion',stem:'What problem and solution are described in the text?'},
+        {responseType:'Discussion',stem:'How are two ideas in this text alike and different?'},
+        {responseType:'Discussion',stem:'Why did the author include [text feature]?'},
+        {responseType:'Discussion',stem:'What is the relationship between a cause and an effect in this text?'},
+        {responseType:'Text Evidence',stem:'Which detail is most connected to the main idea?'},
+        {responseType:'Discussion',stem:'What pattern do you notice in the information?'}
+      ]},
+      {textType:'any',bloom:'Analyze',questions:[
+        {responseType:'Discussion',stem:'What details are most important? Why?'},
+        {responseType:'Discussion',stem:'How do the parts of the text fit together?'},
+        {responseType:'Discussion',stem:'What caused something to happen or change?'},
+        {responseType:'Text Evidence',stem:'What evidence helped you figure that out?'},
+        {responseType:'Discussion',stem:'What do you notice about how the author wrote this?'},
+        {responseType:'Text Evidence',stem:'Which detail changed your thinking?'}
+      ]},
+      {textType:'fiction',bloom:'Evaluate',questions:[
+        {responseType:'Discussion',stem:"Do you agree with [character]'s choice? Why or why not?"},
+        {responseType:'Text Evidence',stem:'Was [character] right to [action]? Use evidence from the text.'},
+        {responseType:'Discussion',stem:'Which character made the best decision? Explain.'},
+        {responseType:'Discussion',stem:'Was the ending satisfying? Why or why not?'},
+        {responseType:'Discussion',stem:'What was the most important moment in the story?'},
+        {responseType:'Text Evidence',stem:'Which character changed the most? How do you know?'},
+        {responseType:'Discussion',stem:'Did the author do a good job showing the problem? Explain.'},
+        {responseType:'Discussion',stem:'Was the solution fair or realistic?'},
+        {responseType:'Discussion',stem:'What would you have done differently from [character]?'},
+        {responseType:'Discussion',stem:'Which part of the story was most powerful? Why?'},
+        {responseType:'Discussion',stem:'What lesson from the story is most important?'},
+        {responseType:'Discussion',stem:'Did the title fit the story? Why or why not?'}
+      ]},
+      {textType:'nonfiction',bloom:'Evaluate',questions:[
+        {responseType:'Text Evidence',stem:'Which fact or detail was most important? Why?'},
+        {responseType:'Text Evidence',stem:'Did the author give enough evidence to support the main idea?'},
+        {responseType:'Text Evidence',stem:"Which detail best supports the author's point?"},
+        {responseType:'Discussion',stem:'Is this information useful? Why or why not?'},
+        {responseType:'Discussion',stem:'What question do you still have after reading?'},
+        {responseType:'Discussion',stem:'What part of the text was most convincing?'},
+        {responseType:'Discussion',stem:'What information would make this text stronger?'},
+        {responseType:'Discussion',stem:'Did the author explain [topic] clearly? Why or why not?'},
+        {responseType:'Discussion',stem:'Which source of information in the text was most helpful: words, images, captions, charts, or headings?'},
+        {responseType:'Text Evidence',stem:'What is the strongest evidence in the text?'},
+        {responseType:'Written Response',stem:'What claim can you make after reading this?'},
+        {responseType:'Discussion',stem:'How well does the author help readers understand [topic]?'}
+      ]},
+      {textType:'any',bloom:'Evaluate',questions:[
+        {responseType:'Text Evidence',stem:'What is the best evidence for your answer?'},
+        {responseType:'Discussion',stem:'Which part was most important? Why?'},
+        {responseType:'Discussion',stem:'What did the author do well?'},
+        {responseType:'Discussion',stem:'What could the author explain better?'},
+        {responseType:'Text Evidence',stem:'What opinion can you support with evidence?'},
+        {responseType:'Discussion',stem:'How would you rate this text? Explain your thinking.'}
+      ]},
+      {textType:'fiction',bloom:'Create',questions:[
+        {responseType:'Creative Response',stem:'Write a new ending for the story.'},
+        {responseType:'Creative Response',stem:'Create a new problem for [character] to solve.'},
+        {responseType:'Creative Response',stem:"Write a diary entry from [character]'s point of view."},
+        {responseType:'Creative Response',stem:'Write a conversation between two characters.'},
+        {responseType:'Creative Response',stem:'Design a new cover for the story and explain your choices.'},
+        {responseType:'Creative Response',stem:'Create a new title for the story.'},
+        {responseType:'Creative Response',stem:'Write what could happen in the next chapter.'},
+        {responseType:'Creative Response',stem:'Change [setting] and explain how the story would be different.'},
+        {responseType:'Creative Response',stem:'Create a new character who could fit into the story.'},
+        {responseType:'Creative Response',stem:'Write a letter from one character to another.'},
+        {responseType:'Creative Response',stem:'Turn the story into a short comic strip.'},
+        {responseType:'Creative Response',stem:'Create a character profile for [character].'}
+      ]},
+      {textType:'nonfiction',bloom:'Create',questions:[
+        {responseType:'Creative Response',stem:'Create a poster that teaches the most important idea from the text.'},
+        {responseType:'Creative Response',stem:'Write three quiz questions about [topic].'},
+        {responseType:'Creative Response',stem:'Make a diagram or chart to explain the information.'},
+        {responseType:'Creative Response',stem:'Create a new heading for [section].'},
+        {responseType:'Creative Response',stem:'Write a short speech teaching others about [topic].'},
+        {responseType:'Creative Response',stem:'Design an infographic using the most important facts.'},
+        {responseType:'Creative Response',stem:'Create a glossary for the important vocabulary in the text.'},
+        {responseType:'Creative Response',stem:'Write a new paragraph that could be added to the text.'},
+        {responseType:'Creative Response',stem:'Create a timeline, cycle, or steps chart from the information.'},
+        {responseType:'Creative Response',stem:'Make a "Did You Know?" fact card about [topic].'},
+        {responseType:'Creative Response',stem:'Write a question you would ask an expert about [topic].'},
+        {responseType:'Creative Response',stem:'Create a teaching slide for someone who has not read the text.'}
+      ]},
+      {textType:'any',bloom:'Create',questions:[
+        {responseType:'Creative Response',stem:'Create a question for another student to answer.'},
+        {responseType:'Written Response',stem:'Write a response using evidence from the text.'},
+        {responseType:'Creative Response',stem:'Make a visual that shows the most important idea.'},
+        {responseType:'Creative Response',stem:'Create a new title and explain why it fits.'},
+        {responseType:'Written Response',stem:'Write a summary in exactly three sentences.'},
+        {responseType:'Creative Response',stem:'Create a one-minute explanation of the text.'}
+      ]}
+    ];
+    const QUESTION_BANK=QUESTION_GROUPS.flatMap(group=>group.questions.map((question,index)=>({
+      id:`${group.textType}-${group.bloom.toLowerCase()}-${String(index+1).padStart(3,'0')}`,
+      textType:group.textType,
+      bloom:group.bloom,
+      responseType:question.responseType,
+      stem:question.stem
+    })));
+    const state={textType:'fiction',levels:new Set(['Understand','Analyze','Evaluate']),responseType:'all',edits:new Map(),deleted:new Set(),activeBank:[],originalBank:[],previewBank:[],bankMode:'hidden',expandedGroups:new Set(),selected:null,angle:0,spinning:false,sound:true,audio:null,saved:[]};
+    const el={setupView:document.getElementById('setupView'),playShell:document.getElementById('playShell'),textTypes:document.getElementById('textTypeOptions'),levels:document.getElementById('levelOptions'),responseTypeSelect:document.getElementById('responseTypeSelect'),bloomBtn:document.getElementById('bloomDropdownBtn'),bloomPanel:document.getElementById('bloomDropdownPanel'),bloomSummary:document.getElementById('bloomSummaryText'),customizeBtn:document.getElementById('customizeAccordionBtn'),customizeBody:document.getElementById('customizeAccordionBody'),customQBtn:document.getElementById('customQAccordionBtn'),customQBody:document.getElementById('customQAccordionBody'),fields:document.getElementById('customFields'),custom:document.getElementById('customQuestions'),includePresets:document.getElementById('includePresets'),includeCustom:document.getElementById('includeCustom'),count:document.getElementById('questionCount'),countBank:document.getElementById('questionCountBank'),filterTop:document.getElementById('filterSummaryTop'),filterBank:document.getElementById('filterSummaryBank'),wheelSummary:document.getElementById('wheelSummaryLine'),previewBtn:document.getElementById('previewBtn'),editBankBtn:document.getElementById('editBankBtn'),bankGroups:document.getElementById('questionGroups'),message:document.getElementById('setupMessage'),setupCanvas:document.getElementById('setupWheelCanvas'),gameCanvas:document.getElementById('gameWheelCanvas'),spin:document.getElementById('spinBtn'),resultOverlay:document.getElementById('resultOverlay'),resultTitle:document.getElementById('resultTitle'),resultMeta:document.getElementById('resultMeta'),selected:document.getElementById('selectedQuestion'),resultPrompt:document.getElementById('resultPrompt'),saveQuestion:document.getElementById('saveQuestionBtn'),savedList:document.getElementById('savedList')};
+    function textTypesForSelection(){if(state.textType==='fiction')return['fiction','any'];if(state.textType==='nonfiction')return['nonfiction','any'];return['fiction','nonfiction','any']}
+    function labelFor(type){return TEXT_TYPE_LABELS[type]||type}
+    function cleanText(text){return String(text||'').trim().replace(/\s+/g,' ')}
+    function esc(value){return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]))}
+    function renderBloomOptions(){el.levels.innerHTML='';BLOOM_LEVELS.forEach(level=>{const row=document.createElement('label');row.className=`level-check-row ${level.toLowerCase()}`;row.innerHTML=`<input type="checkbox" data-level="${level}" ${state.levels.has(level)?'checked':''}><span class="level-dot"></span>${level}`;el.levels.appendChild(row)})}
+    function levelsSummaryText(){if(!state.levels.size)return 'None selected';return BLOOM_LEVELS.filter(l=>state.levels.has(l)).join(', ')}
+    function updateBloomSummary(){el.bloomSummary.textContent=levelsSummaryText()}
+    function setBloomDropdown(open){el.bloomPanel.hidden=!open;el.bloomBtn.setAttribute('aria-expanded',open?'true':'false')}
+    function textTypeSummaryText(){return TEXT_TYPE_SUMMARY[state.textType]||''}
+    function responseTypeSummaryText(){return state.responseType==='all'?'All question types':state.responseType}
+    function filterSummaryText(){return `${textTypeSummaryText()} · ${levelsSummaryText()} · ${responseTypeSummaryText()}`}
+    function renderFields(){const groups=[['any','Any Text Details']];if(state.textType==='fiction'||state.textType==='any')groups.push(['fiction','Fiction Details']);if(state.textType==='nonfiction'||state.textType==='any')groups.push(['nonfiction','Nonfiction Details']);el.fields.innerHTML='';groups.forEach(([key,title])=>{const section=document.createElement('div');section.className='field-section';section.innerHTML=`<h3>${title}</h3><div class="field-grid"></div>`;const grid=section.querySelector('.field-grid');FIELD_GROUPS[key].forEach(([label,placeholder])=>{const id=`field-${placeholder.replace(/[\[\]\/\s]/g,'-').replace(/-+/g,'-')}`;const wrap=document.createElement('label');wrap.innerHTML=`<span class="control-label">${esc(label)} <small>${esc(placeholder)}</small></span><input class="input-field placeholder-field" id="${id}" data-placeholder="${esc(placeholder)}" type="text" autocomplete="off">`;grid.appendChild(wrap)});el.fields.appendChild(section)})}
+    function placeholderMap(){const map={};document.querySelectorAll('.placeholder-field').forEach(input=>{const value=cleanText(input.value);if(value)map[input.dataset.placeholder]=value});return map}
+    function applyPlaceholders(stem){let output=stem;const map=placeholderMap();Object.keys(map).forEach(key=>{output=output.split(key).join(map[key])});return output}
+    function customQuestions(){return el.custom.value.split(/\r?\n/).map(cleanText).filter(Boolean)}
+    function buildQuestions(){const types=textTypesForSelection();let bank=[];if(el.includePresets.checked){bank=QUESTION_BANK.filter(q=>types.includes(q.textType)&&state.levels.has(q.bloom)&&!state.deleted.has(q.id)&&(state.responseType==='all'||q.responseType===state.responseType)).map(q=>{const edited=state.edits.get(q.id);return{...q,displayStem:edited||applyPlaceholders(q.stem),sourceId:q.id}})}if(el.includeCustom.checked){customQuestions().forEach((stem,index)=>{const id=`custom-${String(index+1).padStart(3,'0')}`;if(!state.deleted.has(id)){const edited=state.edits.get(id);bank.push({id,textType:'custom',bloom:'Custom',responseType:'Teacher Added',stem,displayStem:edited||applyPlaceholders(stem),sourceId:id})}})}return bank}
+    function setType(type){state.textType=type;document.querySelectorAll('[data-text-type]').forEach(btn=>btn.setAttribute('aria-pressed',btn.dataset.textType===type?'true':'false'));const previousValues={};document.querySelectorAll('.placeholder-field').forEach(input=>{previousValues[input.dataset.placeholder]=input.value});renderFields();document.querySelectorAll('.placeholder-field').forEach(input=>{input.value=previousValues[input.dataset.placeholder]||'';input.addEventListener('input',updatePreview)});updatePreview()}
+    function questionCountText(count){return `${count} question${count===1?'':'s'} ready`}
+    function updatePreview(){const questions=buildQuestions();state.previewBank=questions;const text=questionCountText(questions.length);el.count.textContent=text;el.countBank.textContent=text;const summary=filterSummaryText();el.filterTop.textContent=summary;el.filterBank.textContent=summary;el.wheelSummary.textContent=`${questions.length} question${questions.length===1?'':'s'} · ${levelsSummaryText()}`;if(!questions.length)showMessage("Choose at least one Bloom's level or add your own question to start the spinner.");else clearMessage();document.querySelectorAll('#startBtnTop,#startBtn').forEach(btn=>{btn.disabled=!questions.length});renderQuestionBank(questions);drawWheel(el.setupCanvas,wheelDecorativeItems(),true,-1,true)}
+    function groupByBloom(questions){const groups=new Map();questions.forEach(q=>{if(!groups.has(q.bloom))groups.set(q.bloom,[]);groups.get(q.bloom).push(q)});const order=[...BLOOM_LEVELS,'Custom'];return order.filter(name=>groups.has(name)).map(name=>({bloom:name,items:groups.get(name)}))}
+    function qbankItemHTML(q){const editControls=state.bankMode==='edit'?`<div class="preview-actions"><button class="small-btn edit" type="button">Edit</button><button class="small-btn delete" type="button">Delete</button></div>`:'';return `<div class="qbank-item" data-id="${esc(q.id)}"><div class="qtext">${esc(q.displayStem)}</div><div class="meta-row"><span class="tag bloom">${esc(q.bloom)}</span><span class="tag">${esc(labelFor(q.textType))}</span><span class="tag">${esc(q.responseType)}</span></div>${editControls}</div>`}
+    function renderQuestionBank(questions){if(state.bankMode==='hidden'){el.bankGroups.innerHTML='';return}if(!questions.length){el.bankGroups.innerHTML="<div class=\"empty-note\">Choose at least one Bloom's level or add your own question to start the spinner.</div>";return}const groups=groupByBloom(questions);el.bankGroups.innerHTML=groups.map(({bloom,items})=>{const isOpen=state.expandedGroups.has(bloom);return `<div class="qbank-group${isOpen?' open':''}"><button type="button" class="qbank-group-header" data-bloom="${esc(bloom)}" aria-expanded="${isOpen}"><span>${esc(bloom)} — ${items.length} question${items.length===1?'':'s'}</span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button><div class="qbank-group-body">${isOpen?items.map(qbankItemHTML).join(''):''}</div></div>`}).join('')}
+    function toggleGroup(bloom){if(state.expandedGroups.has(bloom))state.expandedGroups.delete(bloom);else state.expandedGroups.add(bloom);renderQuestionBank(state.previewBank)}
+    function updateBankButtonStates(){el.previewBtn.setAttribute('aria-pressed',state.bankMode==='preview'?'true':'false');el.editBankBtn.setAttribute('aria-pressed',state.bankMode==='edit'?'true':'false');el.previewBtn.textContent=state.bankMode==='preview'?'Hide Preview':'Preview Questions';el.editBankBtn.textContent=state.bankMode==='edit'?'Done Editing':'Edit Question Bank'}
+    function setBankMode(mode){state.bankMode=state.bankMode===mode?'hidden':mode;renderQuestionBank(state.previewBank);updateBankButtonStates()}
+    function editBankItem(item){const id=item.dataset.id;const question=(state.previewBank||[]).find(q=>q.id===id);if(!question)return;item.innerHTML=`<div style="flex:1 1 100%;display:grid;gap:8px"><textarea class="edit-textarea">${esc(question.displayStem)}</textarea><div class="meta-row">${metaTags(question)}</div><div class="preview-actions"><button class="small-btn save-edit" type="button">Save</button><button class="small-btn cancel-edit" type="button">Cancel</button></div></div>`;item.querySelector('textarea').focus()}
+    function toggleAccordion(btn,body){const open=!body.classList.contains('open');btn.setAttribute('aria-expanded',open?'true':'false');body.classList.toggle('open',open)}
+    function wheelDecorativeItems(){const levels=BLOOM_LEVELS.filter(l=>state.levels.has(l));if(!levels.length)return[];const target=Math.max(levels.length,Math.min(12,levels.length*3));return Array.from({length:target},(_,i)=>({bloom:levels[i%levels.length],displayStem:levels[i%levels.length],id:'decorative-'+i}))}
+    function clearMessage(){el.message.classList.remove('show');el.message.textContent=''}
+    function showMessage(text){el.message.textContent=text;el.message.classList.add('show')}
+    function initCanvas(canvas){const size=Math.round(canvas.getBoundingClientRect().width||340),dpr=Math.min(devicePixelRatio||1,3);canvas.width=size*dpr;canvas.height=size*dpr;canvas.dataset.size=size;const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=true}
+    function initAndDraw(){initCanvas(el.setupCanvas);initCanvas(el.gameCanvas);drawWheel(el.setupCanvas,wheelDecorativeItems(),true,-1,true);drawWheel(el.gameCanvas,state.activeBank||[],false)}
+    function shortenForWheel(text,count){const clean=cleanText(text);const max=count<=4?54:count<=6?44:count<=8?34:count<=12?26:20;if(clean.length<=max)return clean;const cut=clean.slice(0,max).replace(/\s+\S*$/,'').trim();return (cut||clean.slice(0,max-1)).trim()+'...'}
+    function wrapLabel(ctx,text,maxWidth,maxLines){const words=String(text).split(/\s+/).filter(Boolean),lines=[];let line='';words.forEach(word=>{const test=line?line+' '+word:word;if(ctx.measureText(test).width<=maxWidth||!line)line=test;else{lines.push(line);line=word}});if(line)lines.push(line);if(lines.length>maxLines){const kept=lines.slice(0,maxLines);let last=kept[kept.length-1];while(last.length>1&&ctx.measureText(last+'...').width>maxWidth)last=last.slice(0,-1).trim();kept[kept.length-1]=(last||'...')+'...';return kept}return lines}
+    function drawWheel(canvas,questions,demo=false,highlight=-1,decorative=false){
+      if(!canvas)return;
+      const size=Number(canvas.dataset.size)||340;
+      const ctx=canvas.getContext('2d');
+      const cx=size/2,cy=size/2,r=size/2-9;
+      const demoItems=decorative?BLOOM_LEVELS.map(l=>({bloom:l,displayStem:l})):QUESTION_BANK.filter(q=>q.bloom==='Analyze').slice(0,8).map(q=>({...q,displayStem:q.stem}));
+      const items=(questions&&questions.length)?questions:(demo?demoItems:[]);
+      const count=items.length||1,slice=Math.PI*2/count;
+      ctx.clearRect(0,0,size,size);
+      if(!items.length)return;
+      items.forEach((q,i)=>{
+        const start=state.angle+i*slice,end=start+slice;
+        ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
+        ctx.globalAlpha=(!questions||!questions.length)&&demo ? .52 : 1;
+        ctx.fillStyle=highlight===i?'#B89D33':(decorative?(LEVEL_COLORS[q.bloom]||WHEEL_COLORS[i%WHEEL_COLORS.length]):WHEEL_COLORS[i%WHEEL_COLORS.length]);
+        ctx.fill();
+        ctx.globalAlpha=1;
+        ctx.strokeStyle='rgba(255,255,255,.95)';
+        ctx.lineWidth=3;
+        ctx.stroke();
+        const mid=start+slice/2,tx=cx+Math.cos(mid)*r*.62,ty=cy+Math.sin(mid)*r*.62,norm=((mid%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+        ctx.save();ctx.translate(tx,ty);ctx.rotate(mid+(norm>Math.PI/2&&norm<Math.PI*1.5?Math.PI:0));
+        const isLarge=size>430;
+        const base=count<=4?Math.min(isLarge?30:20,size*.058):count<=6?Math.min(isLarge?24:18,size*.05):count<=8?Math.min(isLarge?20:15,size*.043):Math.min(isLarge?16:12,size*.035);
+        ctx.font=`800 ${base}px Lexend,sans-serif`;
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.lineJoin='round';
+        // Large game wheels (>12 slices) fall back to short Bloom labels — cramming
+        // question snippets into 50+ tiny slices is unreadable no matter how we wrap them.
+        const label=decorative?(q.displayStem||q.bloom):(count>12?q.bloom:shortenForWheel(q.displayStem||q.stem,count));
+        const maxWidth=r*(count<=4 ? .58 : count<=8 ? .50 : .42);
+        const maxLines=count<=4?3:2;
+        const lines=wrapLabel(ctx,label,maxWidth,maxLines);
+        const lineHeight=base*1.08;
+        ctx.lineWidth=Math.max(2.5,base*.18);
+        ctx.strokeStyle='rgba(26,26,46,.58)';
+        ctx.fillStyle='#fff';
+        lines.forEach((line,idx)=>{
+          const y=(idx-(lines.length-1)/2)*lineHeight;
+          ctx.strokeText(line,0,y);
+          ctx.fillText(line,0,y);
+        });
+        ctx.restore();
+      });
+      ctx.beginPath();
+      ctx.arc(cx,cy,Math.max(14,size*.04),0,Math.PI*2);
+      ctx.fillStyle='#fff';
+      ctx.fill();
+      ctx.strokeStyle='rgba(160,200,190,.9)';
+      ctx.lineWidth=2;
+      ctx.stroke();
+    }
+    function showView(name){el.setupView.classList.toggle('active',name==='setup');el.playShell.classList.toggle('active',name==='play');requestAnimationFrame(initAndDraw)}
+    function startFromSetup(){const questions=buildQuestions();if(!questions.length){showMessage("Choose at least one Bloom's level or add your own question to start the spinner.");return}state.originalBank=questions.map(q=>({...q}));state.activeBank=questions.map(q=>({...q}));state.selected=null;state.angle=0;state.spinning=false;state.saved=[];hideResult();renderSaved();showView('play')}
+    function getAudio(){if(!state.audio)state.audio=new (window.AudioContext||window.webkitAudioContext)();return state.audio}
+    function tone(freq,duration=.03,volume=.035,delay=0){if(!state.sound)return;try{const ctx=getAudio(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type='triangle';osc.frequency.setValueAtTime(freq,ctx.currentTime+delay);gain.gain.setValueAtTime(0,ctx.currentTime+delay);gain.gain.linearRampToValueAtTime(volume,ctx.currentTime+delay+.01);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+delay+duration);osc.start(ctx.currentTime+delay);osc.stop(ctx.currentTime+delay+duration+.05)}catch(e){}}
+    function spin(){if(state.spinning||state.activeBank.length<1)return;getAudio();state.spinning=true;hideResult();el.spin.disabled=true;runSpin()}
+    function runSpin(){const total=(6+Math.random()*5)*Math.PI*2,duration=3000+Math.random()*900,start=state.angle,t0=performance.now();let last=-1;function frame(now){const raw=Math.min((now-t0)/duration,1),p=1-Math.pow(1-raw,3);state.angle=start+total*p;const slice=Math.PI*2/state.activeBank.length,norm=((-state.angle%(Math.PI*2))+Math.PI*2)%(Math.PI*2),adjusted=(norm+Math.PI*1.5)%(Math.PI*2),seg=Math.floor(adjusted/slice)%state.activeBank.length;if(seg!==last){tone(520);last=seg}drawWheel(el.gameCanvas,state.activeBank,false);if(raw<1){requestAnimationFrame(frame);return}state.spinning=false;el.spin.disabled=false;state.selected=state.activeBank[seg];requestAnimationFrame(()=>{drawWheel(el.gameCanvas,state.activeBank,false,seg);showQuestionResult();tone(523,.18,.13,0);tone(659,.18,.13,.16);tone(784,.18,.13,.32);launchConfetti()})}requestAnimationFrame(frame)}
+    function metaTags(q){return `<span class="tag bloom">${esc(q.bloom)}</span><span class="tag">${esc(labelFor(q.textType))} · ${esc(q.responseType)}</span>`}
+    function showQuestionResult(){const q=state.selected;if(!q)return;el.resultTitle.textContent=q.bloom;el.resultMeta.innerHTML=metaTags(q);el.selected.textContent=q.displayStem;el.resultPrompt.textContent=HELPERS[q.responseType]||'Answer in your own words.';el.saveQuestion.textContent=state.saved.some(item=>item.id===q.id)?'Saved':'Save for Later';el.saveQuestion.classList.toggle('marked',state.saved.some(item=>item.id===q.id));el.resultOverlay.classList.add('open')}
+    function hideResult(){el.resultOverlay.classList.remove('open')}
+    function saveSelected(){if(!state.selected)return;if(!state.saved.some(q=>q.id===state.selected.id))state.saved.push(state.selected);renderSaved();el.saveQuestion.textContent='Saved';el.saveQuestion.classList.add('marked')}
+    function renderSaved(){el.savedList.innerHTML='';if(!state.saved.length){el.savedList.innerHTML='<div class="empty-note">No saved questions yet.</div>';return}state.saved.forEach(q=>{const item=document.createElement('div');item.className='saved-item';item.textContent=q.displayStem;el.savedList.appendChild(item)})}
+    function removeSelected(){if(!state.selected)return;const id=state.selected.id;state.activeBank=state.activeBank.filter(q=>q.id!==id);state.selected=null;hideResult();if(!state.activeBank.length){showView('setup');showMessage('All questions have been removed. Add or select at least one question to spin again.');updatePreview();return}drawWheel(el.gameCanvas,state.activeBank,false)}
+    function backToSetup(){hideResult();showView('setup');updatePreview()}
+    function restart(){state.edits.clear();state.deleted.clear();state.levels=new Set(['Understand','Analyze','Evaluate']);state.responseType='all';state.bankMode='hidden';state.expandedGroups.clear();el.custom.value='';el.includePresets.checked=true;el.includeCustom.checked=true;el.responseTypeSelect.value='all';setBloomDropdown(false);el.customizeBtn.setAttribute('aria-expanded','false');el.customizeBody.classList.remove('open');el.customQBtn.setAttribute('aria-expanded','false');el.customQBody.classList.remove('open');renderBloomOptions();updateBloomSummary();updateBankButtonStates();setType('fiction')}
+    function setSoundButtons(){['header','play'].forEach(prefix=>{document.getElementById(prefix+'SoundOn').style.display=state.sound?'':'none';document.getElementById(prefix+'SoundOff').style.display=state.sound?'none':''})}
+    function toggleSound(){state.sound=!state.sound;setSoundButtons()}
+    let confetti=[];function launchConfetti(){const canvas=document.getElementById('confettiCanvas'),ctx=canvas.getContext('2d');canvas.style.display='block';canvas.width=innerWidth;canvas.height=innerHeight;confetti=Array.from({length:70},()=>({x:Math.random()*canvas.width,y:-Math.random()*100,w:6+Math.random()*5,h:8+Math.random()*6,vx:(Math.random()-.5)*2.5,vy:2+Math.random()*2.5,r:Math.random()*6,dr:(Math.random()-.5)*.14,a:1,c:WHEEL_COLORS[Math.floor(Math.random()*WHEEL_COLORS.length)]}));function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);let alive=false;confetti.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.04;p.r+=p.dr;if(p.y>canvas.height*.7)p.a=Math.max(0,p.a-.03);alive||=p.a>0;ctx.save();ctx.globalAlpha=p.a;ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore()});if(alive)requestAnimationFrame(draw);else canvas.style.display='none'}draw()}
+    el.textTypes.addEventListener('click',event=>{const btn=event.target.closest('[data-text-type]');if(btn)setType(btn.dataset.textType)});
+    el.levels.addEventListener('change',event=>{const input=event.target;if(!input.matches('input[type="checkbox"]'))return;const level=input.dataset.level;if(input.checked)state.levels.add(level);else state.levels.delete(level);updateBloomSummary();updatePreview()});
+    document.getElementById('selectAllBtn').addEventListener('click',()=>{state.levels=new Set(BLOOM_LEVELS);renderBloomOptions();updateBloomSummary();updatePreview()});
+    document.getElementById('clearLevelsBtn').addEventListener('click',()=>{state.levels.clear();renderBloomOptions();updateBloomSummary();updatePreview()});
+    el.bloomBtn.addEventListener('click',event=>{event.stopPropagation();setBloomDropdown(el.bloomPanel.hidden)});
+    document.addEventListener('click',event=>{if(!el.bloomPanel.hidden&&!el.bloomPanel.contains(event.target)&&event.target!==el.bloomBtn)setBloomDropdown(false)});
+    el.responseTypeSelect.addEventListener('change',()=>{state.responseType=el.responseTypeSelect.value;updatePreview()});
+    [el.customizeBtn,el.customQBtn].forEach(btn=>btn.addEventListener('click',()=>{const body=btn===el.customizeBtn?el.customizeBody:el.customQBody;toggleAccordion(btn,body)}));
+    [el.custom,el.includePresets,el.includeCustom].forEach(input=>input.addEventListener('input',updatePreview));
+    [el.includePresets,el.includeCustom].forEach(input=>input.addEventListener('change',updatePreview));
+    el.previewBtn.addEventListener('click',()=>setBankMode('preview'));
+    el.editBankBtn.addEventListener('click',()=>setBankMode('edit'));
+    el.bankGroups.addEventListener('click',event=>{
+      const header=event.target.closest('.qbank-group-header');
+      if(header){toggleGroup(header.dataset.bloom);return}
+      const item=event.target.closest('.qbank-item');
+      if(!item)return;
+      if(event.target.classList.contains('delete')){state.deleted.add(item.dataset.id);updatePreview()}
+      else if(event.target.classList.contains('edit')){editBankItem(item)}
+      else if(event.target.classList.contains('save-edit')){const value=cleanText(item.querySelector('textarea').value);if(value)state.edits.set(item.dataset.id,value);updatePreview()}
+      else if(event.target.classList.contains('cancel-edit')){renderQuestionBank(state.previewBank)}
+    });
+    document.getElementById('startBtnTop').addEventListener('click',startFromSetup);
+    document.getElementById('startBtn').addEventListener('click',startFromSetup);
+    document.getElementById('restartBtn').addEventListener('click',restart);
+    document.getElementById('spinBtn').addEventListener('click',spin);
+    document.getElementById('spinAgainBtn').addEventListener('click',()=>{hideResult();spin()});
+    document.getElementById('saveQuestionBtn').addEventListener('click',saveSelected);
+    document.getElementById('removeQuestionBtn').addEventListener('click',removeSelected);
+    document.getElementById('backSetupBtn').addEventListener('click',backToSetup);
+    document.getElementById('editBtn').addEventListener('click',backToSetup);
+    document.getElementById('headerSoundBtn').addEventListener('click',toggleSound);
+    document.getElementById('playSoundBtn').addEventListener('click',toggleSound);
+    el.resultOverlay.addEventListener('click',event=>{if(event.target===el.resultOverlay)hideResult()});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'){hideResult();setBloomDropdown(false)}if(event.key==='Enter'&&event.ctrlKey&&el.playShell.classList.contains('active'))spin()});
+    window.addEventListener('resize',initAndDraw);
+    renderBloomOptions();updateBloomSummary();updateBankButtonStates();setType('fiction');requestAnimationFrame(()=>{initAndDraw();setSoundButtons()});
+    window.comprehensionSpinner={QUESTION_BANK,getCurrentQuestions:buildQuestions,start:startFromSetup};
+  </script>
+</body>
+</html>
