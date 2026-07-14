@@ -229,7 +229,8 @@ async function startCheckout(button) {
   } catch (error) {
     button.disabled = false;
     button.textContent = originalText;
-    setMessage(error?.message || 'Checkout could not start. Please try again.', 'error');
+    console.error('Literacy Arcade checkout: could not create checkout session.', error);
+    setMessage("We couldn't start checkout. Please refresh and try again, or contact hello@literacyarcade.com if the problem continues.", 'error');
   }
 }
 

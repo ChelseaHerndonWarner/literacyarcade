@@ -9,7 +9,8 @@ service cloud.firestore {
         'price_1TqmEM3PzX3bHrbQh3wylsSF',
         'price_1TqY6k4Gz51pZDtQR6oFrYDp',
         'price_1TqY5P4Gz51pZDtQOiymXQZ4',
-        'price_1TqY444Gz51pZDtQmTMOq3Gv'
+        'price_1TqY444Gz51pZDtQmTMOq3Gv',
+        'price_1TssAC3PzX3bHrbQg4qIhxOH'
       ].hasAny([priceId]);
     }
 
