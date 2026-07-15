@@ -826,33 +826,58 @@
   }
 
 
-  /* Compact gameplay mode so the board fits better on laptop screens */
-  body.game-active main{padding-top:6px;padding-bottom:6px;}
-  body.game-active .collection-shelf{min-height:76px;padding:10px 14px;margin-bottom:8px;}
-  body.game-active .shelf-chip{width:48px;height:48px;font-size:26px;}
-  body.game-active .message-bar{min-height:20px;margin-bottom:3px;}
-  body.game-active .grid{gap:4px;margin-bottom:8px;}
-  body.game-active .grid-row{gap:4px;}
+  /* Gameplay scale — larger than setup controls, while remaining viewport-safe */
+  body.game-active main{padding-top:10px;padding-bottom:6px;}
+  body.game-active #gameScreen{max-width:660px;}
+  body.game-active .game-wrap{max-width:600px;}
+  body.game-active .collection-shelf{
+    min-height:110px;padding:14px 18px;margin-bottom:12px;gap:10px;
+  }
+  body.game-active .shelf-title{font-size:12px;}
+  body.game-active .shelf-count{font-size:11px;min-width:28px;padding:3px 9px;}
+  body.game-active .shelf-clear-btn{font-size:11px;padding:3px 9px;}
+  body.game-active .shelf-emojis{gap:8px;min-height:78px;}
+  body.game-active .shelf-chip{width:62px;height:62px;font-size:34px;border-radius:12px;}
+  body.game-active .message-bar{min-height:24px;margin-bottom:4px;}
+  body.game-active .grid{gap:5px;margin-bottom:12px;}
+  body.game-active .grid-row{gap:5px;}
   /* All word lengths use the same tile size — consistent visual weight */
-  body.game-active .tile{width:46px;height:46px;font-size:19px;border-radius:8px;}
-  body.game-active .len-4 .tile{width:46px;height:46px;font-size:19px;}
-  body.game-active .len-6 .tile{width:46px;height:46px;font-size:19px;}
-  body.game-active .keyboard{gap:3px;max-width:400px;}
-  body.game-active .kb-row{gap:3px;}
-  body.game-active .kb-key{height:38px;max-width:36px;font-size:12px;border-radius:7px;}
-  body.game-active .kb-key.wide{min-width:54px;max-width:62px;font-size:10px;}
+  body.game-active .tile{width:60px;height:60px;font-size:24px;border-radius:10px;}
+  body.game-active .len-4 .tile{width:60px;height:60px;font-size:24px;}
+  body.game-active .len-6 .tile{width:60px;height:60px;font-size:24px;}
+  body.game-active .keyboard{gap:4px;max-width:500px;}
+  body.game-active .kb-row{gap:4px;}
+  body.game-active .kb-key{height:48px;max-width:46px;font-size:14px;border-radius:8px;}
+  body.game-active .kb-key.wide{min-width:64px;max-width:74px;font-size:11px;}
   body.game-active footer{
     font-size:11px;padding:6px 0 10px;
     background:transparent;opacity:.7;
   }
 
   @media(max-height:760px){
-    body.game-active .collection-shelf{min-height:64px;padding:8px 10px;}
-    body.game-active .shelf-chip{width:42px;height:42px;font-size:23px;}
-    body.game-active .tile{width:42px;height:42px;font-size:17px;}
-    body.game-active .len-4 .tile{width:42px;height:42px;font-size:17px;}
-    body.game-active .len-6 .tile{width:42px;height:42px;font-size:17px;}
-    body.game-active .kb-key{height:35px;max-width:34px;font-size:11px;}
+    body.game-active main{padding-top:4px;padding-bottom:0;}
+    body.game-active .collection-shelf{min-height:88px;padding:10px 14px;}
+    body.game-active .shelf-emojis{min-height:64px;}
+    body.game-active .shelf-chip{width:50px;height:50px;font-size:28px;}
+    body.game-active .tile{width:52px;height:52px;font-size:21px;}
+    body.game-active .len-4 .tile{width:52px;height:52px;font-size:21px;}
+    body.game-active .len-6 .tile{width:52px;height:52px;font-size:21px;}
+    body.game-active .kb-key{height:40px;max-width:40px;font-size:12px;}
+    body.game-active footer{margin-top:3px;padding:2px 0 4px;}
+  }
+
+  @media(max-width:480px){
+    body.game-active #gameScreen,
+    body.game-active .game-wrap{max-width:100%;}
+    body.game-active .collection-shelf{min-height:88px;padding:10px 12px;}
+    body.game-active .shelf-emojis{min-height:64px;}
+    body.game-active .shelf-chip{width:50px;height:50px;font-size:28px;}
+    body.game-active .tile,
+    body.game-active .len-4 .tile,
+    body.game-active .len-6 .tile{width:44px;height:44px;font-size:18px;}
+    body.game-active .keyboard{max-width:100%;}
+    body.game-active .kb-key{height:38px;max-width:36px;font-size:11px;}
+    body.game-active .kb-key.wide{min-width:52px;max-width:60px;font-size:10px;}
   }
 
   /* ── MAGICAL COUNTDOWN OVERLAY ── */
