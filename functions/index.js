@@ -8,6 +8,10 @@ const db = admin.firestore();
 
 const ACTIVE_STATUSES = new Set(['active', 'trialing']);
 const PRICE_TO_PLAN = {
+  // Preserve Plus access for active subscriptions purchased through the
+  // discontinued Founding Teacher offer (live and test prices).
+  price_1TqmEK3PzX3bHrbQEkK6vaes: 'plus',
+  price_1TqY6k4Gz51pZDtQR6oFrYDp: 'plus',
   price_1TqmEJ3PzX3bHrbQ2cWDevb5: 'plus',
   price_1TqmEM3PzX3bHrbQh3wylsSF: 'plus',
   price_1TqY5P4Gz51pZDtQOiymXQZ4: 'plus',

@@ -10,10 +10,14 @@ import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-const PAID_PLANS = new Set(['plus', 'family']);
 const PLUS_PLANS_URL = 'plus-subscriptions.html';
 const LOGIN_URL = 'teacher-login.html';
 const DASHBOARD_URL = 'teacher-dashboard.html';
+
+function isPaidPlan(plan) {
+  const normalizedPlan = String(plan || '').trim().toLowerCase();
+  return normalizedPlan === 'plus' || normalizedPlan === 'family';
+}
 
 let currentUser = null;
 let resolveAuthReady;
@@ -45,7 +49,7 @@ async function getEntitlement() {
   try {
     const snap = await getDoc(doc(db, 'users', currentUser.uid));
     const plan = snap.exists() ? (snap.data().plan || 'free') : 'free';
-    return { status: PAID_PLANS.has(plan) ? 'paid' : 'free', plan };
+    return { status: isPaidPlan(plan) ? 'paid' : 'free', plan };
   } catch (err) {
     console.warn('Literacy Arcade report gate: could not confirm entitlement.', err);
     return { status: 'unknown' };

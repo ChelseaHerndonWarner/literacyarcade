@@ -562,6 +562,226 @@
       .assess-details { max-height: 220px; opacity: 1; margin-top: 12px; }
     }
 
+    /* ── Oral reading fluency feature ── */
+    .orf-feature-section {
+      padding-top: 24px;
+      padding-bottom: 24px;
+      background:
+        radial-gradient(circle at 7% 10%, rgba(46,196,182,.13), transparent 27%),
+        radial-gradient(circle at 93% 88%, rgba(123,94,167,.10), transparent 29%),
+        linear-gradient(135deg, #f2fbf9 0%, var(--cream) 52%, #f5f0fb 100%);
+      border-top: 1px solid rgba(46,196,182,.16);
+      border-bottom: 1px solid rgba(123,94,167,.12);
+    }
+
+    .orf-feature-shell {
+      max-width: 974px;
+      margin: 0 auto;
+    }
+
+    .orf-feature-intro {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: clamp(24px, 4vw, 48px);
+      align-items: center;
+    }
+
+    .orf-feature-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      border-radius: 100px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .orf-feature-copy h2 {
+      margin-top: 10px;
+      font-family: var(--font-head);
+      font-size: clamp(1.85rem, 3vw, 2.25rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -.025em;
+      color: var(--ink);
+    }
+
+    .orf-feature-copy > p {
+      margin-top: 11px;
+      color: var(--ink-soft);
+      font-size: .95rem;
+      line-height: 1.45;
+    }
+
+    .orf-feature-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      margin-top: 12px;
+      padding: 7px 15px;
+      border-radius: 100px;
+      background: var(--teal);
+      color: var(--white);
+      font-weight: 900;
+      box-shadow: 0 9px 22px rgba(46,196,182,.23);
+      transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+
+    .orf-feature-link:hover,
+    .orf-feature-link:focus-visible {
+      background: var(--teal-dk);
+      transform: translateY(-2px);
+      box-shadow: 0 13px 28px rgba(46,196,182,.3);
+    }
+
+    .orf-feature-points {
+      display: grid;
+      gap: 6px;
+    }
+
+    .orf-feature-point {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      gap: 10px;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 7px 24px rgba(26,26,46,.06);
+    }
+
+    .orf-feature-point-icon {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .75rem;
+      font-weight: 900;
+    }
+
+    .orf-feature-point:nth-child(2) .orf-feature-point-icon {
+      background: var(--lavender);
+      color: var(--violet);
+    }
+
+    .orf-feature-point:nth-child(3) .orf-feature-point-icon {
+      background: var(--blush);
+      color: var(--coral-dk);
+    }
+
+    .orf-feature-point h3 {
+      font-family: var(--font-head);
+      font-size: .93rem;
+      font-weight: 900;
+      line-height: 1.3;
+    }
+
+    .orf-feature-point p {
+      margin-top: 2px;
+      color: var(--ink-soft);
+      font-size: .82rem;
+      line-height: 1.35;
+    }
+
+    .orf-feature-visual {
+      --orf-visual-inset: 6px;
+      --orf-visual-inset-double: 12px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      width: 78%;
+      max-width: 760px;
+      aspect-ratio: 760 / 414;
+      min-height: 0;
+      margin: 12px auto 0;
+      padding: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(123,94,167,.2);
+      border-radius: 19px;
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 24px 58px rgba(26,26,46,.17), 0 8px 20px rgba(26,26,46,.09);
+    }
+
+    .orf-feature-visual img {
+      position: absolute;
+      inset: var(--orf-visual-inset);
+      display: block;
+      width: calc(100% - var(--orf-visual-inset-double));
+      height: calc(100% - var(--orf-visual-inset-double));
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .orf-extension-callout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      max-width: 940px;
+      margin: 8px auto 0;
+      padding: 9px 14px;
+      border: 1px solid rgba(46,196,182,.28);
+      border-radius: 16px;
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 10px 30px rgba(26,26,46,.07);
+    }
+
+    .orf-extension-callout h3 {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .orf-extension-callout p {
+      margin-top: 3px;
+      color: var(--ink-soft);
+      font-size: .82rem;
+      line-height: 1.3;
+    }
+
+    .orf-extension-actions {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px 12px;
+    }
+
+    .orf-extension-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 6px 12px;
+      border-radius: 100px;
+      background: var(--violet);
+      color: var(--white);
+      font-size: .84rem;
+      font-weight: 900;
+      white-space: nowrap;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .orf-extension-button:hover,
+    .orf-extension-button:focus-visible { background: #654b8d; transform: translateY(-2px); }
+
+    .orf-extension-secondary {
+      color: var(--teal-dk);
+      font-size: .84rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .orf-extension-secondary:hover { text-decoration: underline; }
+
     /* ── How results work ── */
     .steps-grid {
       position: relative;
@@ -786,6 +1006,12 @@
     /* ── Responsive ── */
     @media (max-width: 860px) {
       .assess-grid { grid-template-columns: 1fr; max-width: 680px; margin-left: auto; margin-right: auto; }
+      .orf-feature-section { padding-top: 34px; padding-bottom: 34px; }
+      .orf-feature-intro { grid-template-columns: 1fr; gap: 16px; }
+      .orf-feature-copy { max-width: 700px; }
+      .orf-feature-visual { width: 94%; }
+      .orf-extension-callout { grid-template-columns: 1fr; gap: 16px; }
+      .orf-extension-actions { justify-content: flex-start; }
       .steps-grid { grid-template-columns: 1fr; gap: 16px; }
       .steps-grid::before { display: none; }
       .preview-grid { grid-template-columns: 1fr; max-width: 680px; margin-left: auto; margin-right: auto; }
@@ -817,6 +1043,7 @@
       }
       .nav-mobile-toggle { display: flex; }
       .section { padding: 48px 0; }
+      .orf-feature-section { padding-top: 34px; padding-bottom: 34px; }
       .section-sm { padding: 36px 0; }
       .hero { padding: 44px 0 40px; }
       .footer-inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
@@ -884,6 +1111,16 @@
       .trust-strip-inner { gap: 16px; }
       .report-pair { min-height: 390px; }
       .hero-title { font-size: clamp(1.95rem, 9.9vw, 2.45rem); }
+      .orf-feature-section { padding-top: 26px; padding-bottom: 26px; }
+      .orf-feature-copy h2 { font-size: clamp(1.85rem, 8vw, 2.1rem); }
+      .orf-feature-point { grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 9px 11px; }
+      .orf-feature-point-icon { width: 30px; height: 30px; }
+      .orf-feature-visual { --orf-visual-inset: 4px; --orf-visual-inset-double: 8px; width: 100%; margin-top: 18px; padding: 4px; border-radius: 14px; }
+      .orf-feature-visual img { border-radius: 10px; }
+      .orf-extension-callout { margin-top: 8px; padding: 12px; gap: 10px; }
+      .orf-extension-actions { align-items: flex-start; flex-direction: column; }
+      .orf-extension-button { width: 100%; white-space: normal; text-align: center; }
+      .orf-extension-secondary { white-space: normal; }
       .footer { padding-top: 30px; }
       .footer-inner {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -1041,18 +1278,73 @@
 
           <!-- Card 4 — Oral Reading Fluency Calculator -->
           <a class="assess-card" id="orf-check" href="orf-fluency-calculator.html">
-            <span class="assess-corner-tag">Also under Fluency</span>
+            <span class="assess-corner-tag">Assessment + Fluency Tool</span>
             <span class="assess-media"><img src="images/assessment-suite-previews/orf-results.png" alt="Oral Reading Fluency Calculator showing WCPM, accuracy, and benchmark results" loading="lazy"></span>
             <span class="assess-panel">
-              <span class="assess-panel-head"><span class="assess-name">Oral Reading Fluency Calculator</span><span class="assess-action">Open calculator →</span></span>
+              <span class="assess-panel-head"><span class="assess-name">Oral Reading Fluency Calculator</span><span class="assess-action">Open ORF calculator →</span></span>
               <span class="assess-details">
-                <span class="assess-desc">Time a teacher-selected passage and calculate WCPM and accuracy. Compare results with Hasbrouck &amp; Tindal fluency norms.</span>
+                <span class="assess-desc">Time a teacher-selected passage, enter miscues, and calculate WCPM and accuracy with seasonal benchmark ranges.</span>
                 <span class="assess-chips"><span class="chip-lavender">Teacher-selected passage</span><span class="chip-lavender">WCPM + accuracy</span></span>
                 <span class="assess-getline">Printable report + Chrome extension available</span>
               </span>
             </span>
           </a>
 
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Oral reading fluency feature ── -->
+    <section class="section orf-feature-section" aria-labelledby="orf-feature-title">
+      <div class="container">
+        <div class="orf-feature-shell">
+          <div class="orf-feature-intro">
+            <div class="orf-feature-copy">
+              <span class="orf-feature-eyebrow">Oral reading fluency</span>
+              <h2 id="orf-feature-title">Measure oral reading fluency in seconds</h2>
+              <p>Time a passage, enter the number of words and miscues, and instantly calculate words correct per minute, accuracy, and seasonal benchmark information.</p>
+              <a class="orf-feature-link" href="orf-fluency-calculator.html">Open ORF calculator <span aria-hidden="true">→</span></a>
+            </div>
+
+            <div class="orf-feature-points">
+              <article class="orf-feature-point">
+                <span class="orf-feature-point-icon" aria-hidden="true">01</span>
+                <div>
+                  <h3>Built-in timer</h3>
+                  <p>Time a live reading and send the result directly into the calculation fields.</p>
+                </div>
+              </article>
+              <article class="orf-feature-point">
+                <span class="orf-feature-point-icon" aria-hidden="true">02</span>
+                <div>
+                  <h3>Immediate fluency results</h3>
+                  <p>See words correct per minute, accuracy, miscues, and benchmark information together.</p>
+                </div>
+              </article>
+              <article class="orf-feature-point">
+                <span class="orf-feature-point-icon" aria-hidden="true">03</span>
+                <div>
+                  <h3>Continue with the next read</h3>
+                  <p>Start another reading or move directly to the next student without rebuilding the assessment.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <figure class="orf-feature-visual">
+            <img src="images/fluency-orf-chrome.png" width="2048" height="1374" alt="Oral Reading Fluency Calculator Chrome extension open beside a digital reading record, showing WCPM, accuracy, miscues, assessment fields, timer, and reading controls" loading="lazy">
+          </figure>
+
+          <aside class="orf-extension-callout" aria-labelledby="orf-extension-title">
+            <div>
+              <h3 id="orf-extension-title">Assess beside any digital passage</h3>
+              <p>Use the free Chrome extension to calculate WCPM and accuracy alongside online passages, digital reading records, and browser-based reading materials.</p>
+            </div>
+            <div class="orf-extension-actions">
+              <a class="orf-extension-button" href="https://chromewebstore.google.com/detail/miaemldmllaajndjebafphgkonhlikmd" target="_blank" rel="noopener">Get the free Chrome extension <span aria-hidden="true">↗</span></a>
+              <a class="orf-extension-secondary" href="fluency.html">Explore all fluency tools →</a>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
@@ -1081,8 +1373,8 @@
         </div>
 
         <div class="report-gallery" aria-label="Examples of printable assessment reports">
-          <h3 class="section-title" style="font-size:clamp(1.45rem,2.6vw,2rem);">Results on page one. Instructional analysis on page two.</h3>
-          <p class="section-sub">Each printable report keeps the score easy to find while giving teachers a separate page for patterns and possible next steps.</p>
+          <h3 class="section-title" style="font-size:clamp(1.45rem,2.6vw,2rem);">Foundational-skills results on page one. Instructional analysis on page two.</h3>
+          <p class="section-sub">Each letter and phonics report keeps the score easy to find while providing a separate page for patterns and possible next steps.</p>
           <div class="report-gallery-grid">
             <figure class="report-pair">
               <img class="report-sheet results" src="images/assessment-report-previews/letter-knowledge-results.png" alt="Quick Letter Knowledge Check printable results page" loading="lazy">
@@ -1109,7 +1401,7 @@
       <div class="container">
         <div class="reports-callout">
           <h2>More than a score</h2>
-          <p>Each check generates a print-ready report that organizes results by skill and suggests possible areas of instructional focus. These are informal checks to guide teaching — not diagnostic tools or formal screeners — designed to help you see what a student knows and plan what to teach next.</p>
+          <p>Each foundational-skills check generates a print-ready report that organizes results by skill and suggests possible areas of instructional focus. These are informal checks to guide teaching — not diagnostic tools or formal screeners — designed to help you see what a student knows and plan what to teach next.</p>
         </div>
       </div>
     </section>
