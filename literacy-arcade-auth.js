@@ -23,6 +23,7 @@ const CANONICAL_LOGIN_URL = 'https://literacyarcade.com/teacher-login.html';
 const EMAIL_STORAGE_KEY = 'literacyArcadeEmailForSignIn';
 const RETURN_STORAGE_KEY = 'literacyArcadePostLoginReturnTo';
 const googleProvider = new GoogleAuthProvider();
+let initialAuthStatePromise = null;
 
 export function getEmailActionUrl() {
   const hostname = window.location.hostname;
@@ -223,6 +224,28 @@ export async function completeEmailMagicLink(url = window.location.href, emailOv
 
 export function getCurrentUser() {
   return auth.currentUser;
+}
+
+export function waitForInitialAuthState() {
+  if (!initialAuthStatePromise) {
+    initialAuthStatePromise = new Promise((resolve, reject) => {
+      let unsubscribe = () => {};
+      unsubscribe = onAuthStateChanged(
+        auth,
+        (user) => {
+          unsubscribe();
+          resolve(user);
+        },
+        (error) => {
+          unsubscribe();
+          const authError = new Error('Literacy Arcade authentication could not initialize.', { cause: error });
+          authError.code = 'auth-initialization-failed';
+          reject(authError);
+        }
+      );
+    });
+  }
+  return initialAuthStatePromise;
 }
 
 export { auth, onAuthStateChanged };

@@ -23,14 +23,26 @@ let currentUser = null;
 let resolveAuthReady;
 const authReady = new Promise((resolve) => { resolveAuthReady = resolve; });
 let authReadyDone = false;
+let authInitializationFailed = false;
 
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-  if (!authReadyDone) {
-    authReadyDone = true;
-    resolveAuthReady();
+onAuthStateChanged(
+  auth,
+  (user) => {
+    currentUser = user;
+    if (!authReadyDone) {
+      authReadyDone = true;
+      resolveAuthReady();
+    }
+  },
+  (error) => {
+    authInitializationFailed = true;
+    console.warn('Literacy Arcade paid-feature gate: authentication did not initialize.', error);
+    if (!authReadyDone) {
+      authReadyDone = true;
+      resolveAuthReady();
+    }
   }
-});
+);
 
 function track(eventName) {
   try {
@@ -45,6 +57,7 @@ function returnToParam() {
 
 async function getEntitlement() {
   await authReady;
+  if (authInitializationFailed) return { status: 'unknown' };
   if (!currentUser) return { status: 'signed-out' };
   try {
     const snap = await getDoc(doc(db, 'users', currentUser.uid));
@@ -76,7 +89,8 @@ function ensureStyles() {
 #${MODAL_ID} {
   width: min(460px, 100%); background: #fff; border: 1px solid #EEE8F8;
   border-radius: 16px; box-shadow: 0 18px 60px rgba(27,42,74,.25);
-  overflow: hidden; font-family: 'Nunito', sans-serif; color: #1B2A4A;
+  max-height: calc(100dvh - 40px); overflow-y: auto;
+  font-family: 'Nunito', sans-serif; color: #1B2A4A;
 }
 #${MODAL_ID}-head { padding: 20px 22px 0; position: relative; }
 #${MODAL_ID}-close {
@@ -234,6 +248,35 @@ function openUnknownStatusModal(retry) {
   });
 }
 
+function openLessonSignedOutModal() {
+  renderModal({
+    heading: 'Print and download lesson plans with Literacy Arcade Plus',
+    body: 'Sign in to check your plan, or view Plus options to create printable Letterbox Lesson plans.',
+    primary: { key: 'primary', label: 'Sign in', href: `${LOGIN_URL}?returnTo=${returnToParam()}` },
+    secondary: { key: 'secondary', label: 'View Plus plans', href: PLUS_PLANS_URL },
+    link: { label: 'Continue without downloading', onClick: closeModal },
+  });
+}
+
+function openLessonFreeAccountModal() {
+  renderModal({
+    heading: 'Printable lesson plans are included with Literacy Arcade Plus',
+    body: 'Upgrade to Plus to download and print Letterbox Lesson plans while keeping the interactive lesson tools available for free.',
+    primary: { key: 'primary', label: 'View Plus plans', href: PLUS_PLANS_URL },
+    secondary: { key: 'secondary', label: 'Continue without downloading', onClick: closeModal },
+  });
+}
+
+function openLessonUnknownStatusModal(retry) {
+  renderModal({
+    heading: 'We could not confirm your Plus access',
+    body: 'We could not check your plan right now. Please try again; your Letterbox Lesson list will stay here.',
+    primary: { key: 'primary', label: 'Try again', onClick: () => { closeModal(); retry(); } },
+    secondary: { key: 'secondary', label: 'View Plus plans', href: PLUS_PLANS_URL },
+    link: { label: 'Continue without downloading', onClick: closeModal },
+  });
+}
+
 /**
  * Gate a "Print Report" action behind active-paid-plan entitlement.
  * printFn is only invoked for signed-in accounts with an active Plus plan.
@@ -260,6 +303,33 @@ async function guardReportPrint(printFn, triggerElement) {
   openUnknownStatusModal(() => guardReportPrint(printFn, triggerEl));
 }
 
+/**
+ * Gate the printable Letterbox Lesson action without restricting the
+ * interactive Phoneme Counter or Letterbox Lesson tools.
+ */
+async function guardLetterboxLessonPdf(pdfFn, triggerElement) {
+  const retryTrigger = triggerElement || document.activeElement;
+  triggerEl = retryTrigger;
+  const entitlement = await getEntitlement();
+
+  if (entitlement.status === 'paid') {
+    track('letterbox_lesson_pdf_success_paid');
+    pdfFn();
+    return;
+  }
+  if (entitlement.status === 'signed-out') {
+    track('letterbox_lesson_pdf_attempt_signed_out');
+    openLessonSignedOutModal();
+    return;
+  }
+  if (entitlement.status === 'free') {
+    track('letterbox_lesson_pdf_attempt_free');
+    openLessonFreeAccountModal();
+    return;
+  }
+  openLessonUnknownStatusModal(() => guardLetterboxLessonPdf(pdfFn, retryTrigger));
+}
+
 function trackUpgradeClick() {
   track('report_upgrade_click');
 }
@@ -269,4 +339,4 @@ document.addEventListener('click', (event) => {
   if (target && target.getAttribute('href') === PLUS_PLANS_URL) trackUpgradeClick();
 });
 
-export { guardReportPrint, getEntitlement };
+export { guardReportPrint, guardLetterboxLessonPdf, getEntitlement };
