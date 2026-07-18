@@ -22,8 +22,8 @@
 </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Literacy Arcade — Free Science of Reading Games, Assessments &amp; Literacy Tools</title>
-<meta name="description" content="Science of Reading aligned games, assessments, fluency tools, and lesson-planning tools for classroom teachers, interventionists, tutors, and homeschool families. No student accounts required." />
+<title>Literacy Arcade | Science of Reading Games &amp; Tools</title>
+<meta name="description" content="Literacy Arcade is a Science of Reading-aligned platform with reading games, assessments, fluency tools, and teacher tools for educators and families." />
 <meta name="author" content="Literacy Arcade" />
 <meta name="application-name" content="Literacy Arcade" />
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -34,8 +34,8 @@
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
 <meta property="og:site_name" content="Literacy Arcade" />
-<meta property="og:title" content="Literacy Arcade — Free Science of Reading Games, Assessments &amp; Literacy Tools" />
-<meta property="og:description" content="Games, assessments, fluency tools, and lesson-planning tools for teachers, interventionists, tutors, and homeschool families. No student accounts required." />
+<meta property="og:title" content="Literacy Arcade | Science of Reading Games &amp; Tools" />
+<meta property="og:description" content="Literacy Arcade is a Science of Reading-aligned platform with reading games, assessments, fluency tools, and teacher tools for educators and families." />
 <meta property="og:url" content="https://literacyarcade.com/" />
 <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
 <meta property="og:image:type" content="image/png" />
@@ -45,8 +45,8 @@
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@LiteracyArcade" />
-<meta name="twitter:title" content="Literacy Arcade — Free Science of Reading Games, Assessments &amp; Literacy Tools" />
-<meta name="twitter:description" content="Games, assessments, fluency tools, and lesson-planning tools for teachers, interventionists, tutors, and homeschool families. No student accounts required." />
+<meta name="twitter:title" content="Literacy Arcade | Science of Reading Games &amp; Tools" />
+<meta name="twitter:description" content="Literacy Arcade is a Science of Reading-aligned platform with reading games, assessments, fluency tools, and teacher tools for educators and families." />
 <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
 <meta name="twitter:image:alt" content="Literacy Arcade literacy tools for reading instruction" />
 
@@ -56,8 +56,8 @@
   "@type": "WebSite",
   "name": "Literacy Arcade",
   "url": "https://literacyarcade.com/",
-  "description": "Science of Reading aligned games, assessments, fluency tools, and lesson-planning tools for teachers, interventionists, tutors, and homeschool families. No student accounts required.",
-  "dateModified": "2026-07-07",
+  "description": "Literacy Arcade is a Science of Reading-aligned platform with reading games, assessments, fluency tools, and teacher tools for educators and families.",
+  "dateModified": "2026-07-17",
   "publisher": {
     "@type": "Organization",
     "name": "Literacy Arcade",
@@ -1119,40 +1119,41 @@
   .trust-strip-top-badge-img { height: 42px; width: auto; display: block; }
 
   .program-approvals {
-    margin-top: 14px;
-    padding-top: 14px;
+    margin-top: 8px;
+    padding-top: 11px;
     border-top: 1px solid var(--border);
   }
   .program-approvals-title {
-    margin-bottom: 10px;
+    margin: 0 0 4px;
     color: var(--ink-soft);
     font-size: .82rem;
     font-weight: 800;
   }
   .program-approvals-list {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    max-width: 820px;
+    grid-template-columns: minmax(290px, 1.12fr) repeat(3, minmax(0, 1fr));
+    gap: 14px;
   }
   .program-approval-item {
     min-width: 0;
-    min-height: 56px;
+    min-height: 76px;
+    height: 100%;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 9px 14px;
+    gap: 13px;
+    padding: 14px 16px;
     border: 1px solid var(--border);
     border-radius: 14px;
     background: var(--cream);
     color: var(--ink);
-    font-size: .88rem;
-    font-weight: 800;
-    line-height: 1.3;
     text-decoration: none;
     box-shadow: 0 2px 8px rgba(26,26,46,.05);
     transform-origin: center;
     transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  }
+  .program-approval-item--new-hampshire {
+    gap: 10px;
+    padding-inline: 12px;
   }
   .program-approval-item:hover {
     border-color: rgba(14,154,145,.45);
@@ -1163,13 +1164,46 @@
     outline: 3px solid var(--amber);
     outline-offset: 3px;
   }
+  .program-approval-icon-wrap {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 46px;
+  }
+  .program-approval-item--new-hampshire .program-approval-icon-wrap {
+    width: 42px;
+    flex-basis: 42px;
+  }
   .program-approval-icon {
     display: block;
-    height: auto;
-    flex-shrink: 0;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
-  .program-approval-icon.new-hampshire { width: 22px; }
-  .program-approval-icon.texas { width: 38px; }
+  .program-approval-icon.new-hampshire { width: 28px; max-height: 45px; }
+  .program-approval-icon.texas { width: 45px; max-height: 40px; }
+  .program-approval-icon.louisiana { width: 45px; max-height: 40px; }
+  .program-approval-icon.utah { width: 42px; max-height: 42px; transform: scale(1.14); }
+  .program-approval-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    line-height: 1.2;
+  }
+  .program-approval-name {
+    color: var(--ink);
+    font-size: .88rem;
+    font-weight: 900;
+  }
+  .program-approval-status {
+    color: var(--ink-soft);
+    font-size: .76rem;
+    font-weight: 750;
+  }
+  .program-approval-item--new-hampshire .program-approval-status { white-space: nowrap; }
 
   .trust-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
 
@@ -1278,9 +1312,34 @@
     .trust-strip-top-badge-img { height: 40px; }
   }
 
+  @media (max-width: 1100px) {
+    .program-approvals-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .program-approval-item--new-hampshire .program-approval-status { white-space: normal; }
+  }
+
   @media (max-width: 640px) {
+    .program-approvals-list { gap: 12px; }
+    .program-approval-item {
+      min-height: 68px;
+      gap: 8px;
+      padding: 10px 8px;
+    }
+    .program-approval-icon-wrap {
+      width: 42px;
+      height: 42px;
+      flex-basis: 42px;
+    }
+    .program-approval-icon.new-hampshire { width: 26px; max-height: 41px; }
+    .program-approval-icon.texas,
+    .program-approval-icon.louisiana { width: 41px; max-height: 36px; }
+    .program-approval-icon.utah { width: 38px; max-height: 38px; }
+    .program-approval-name { font-size: .8rem; }
+    .program-approval-status { font-size: .71rem; }
+  }
+
+  @media (max-width: 339px) {
     .program-approvals-list { grid-template-columns: 1fr; }
-    .program-approval-item { padding: 9px 12px; }
+    .program-approval-item { min-height: 68px; }
   }
 
   @media (max-width: 768px) {
@@ -1616,10 +1675,12 @@
         </div>
         <p class="trust-strip-top-credential">Created by a reading researcher with a Ph.D. in Reading Education</p>
         <div class="program-approvals" aria-labelledby="program-approvals-title">
-          <h2 class="program-approvals-title" id="program-approvals-title">Approved for Official U.S. State Education Funding Programs</h2>
+          <h2 class="program-approvals-title" id="program-approvals-title">Approved State Education Funding Programs</h2>
           <div class="program-approvals-list">
-            <a class="program-approval-item" href="https://app.nh.scholarshipfund.org/marketplace?range=50&amp;upper_grade=6&amp;lower_grade=0&amp;lat=43.20622059999999&amp;lng=-71.5398156&amp;is_microschool=false&amp;page=discovery&amp;subschools%5B%5D=traditional+public&amp;subschools%5B%5D=public+charter&amp;subschools%5B%5D=private&amp;subschools%5B%5D=virtual&amp;organizations%5B%5D=vendor&amp;organizations%5B%5D=provider&amp;organizations%5B%5D=school" target="_blank" rel="noopener noreferrer" aria-label="View Literacy Arcade in the New Hampshire EFA marketplace"><img class="program-approval-icon new-hampshire" src="images/new-hampshire-efa.svg" alt="" aria-hidden="true" /><span>Approved New Hampshire EFA provider</span></a>
-            <a class="program-approval-item" href="https://finder.educationfreedom.texas.gov/?q=literacy+arcade&amp;t=curriculum" target="_blank" rel="noopener noreferrer" aria-label="View Literacy Arcade in the Texas TEFA Finder"><img class="program-approval-icon texas" src="images/texas-tefa.svg" alt="" aria-hidden="true" /><span>Approved Texas TEFA service provider</span></a>
+            <a class="program-approval-item program-approval-item--new-hampshire" href="new-hampshire-efa.html" aria-label="Learn about Literacy Arcade for New Hampshire EFA families"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon new-hampshire" src="images/new-hampshire-efa.svg" alt="" /></span><span class="program-approval-copy"><span class="program-approval-name">New Hampshire EFA</span><span class="program-approval-status">Approved Education Service Provider</span></span></a>
+            <a class="program-approval-item" href="https://finder.educationfreedom.texas.gov/?q=literacy+arcade&amp;t=curriculum" target="_blank" rel="noopener noreferrer" aria-label="Literacy Arcade is an approved Texas TEFA service provider"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon texas" src="images/texas-tefa.svg" alt="" /></span><span class="program-approval-copy"><span class="program-approval-name">Texas TEFA</span><span class="program-approval-status">Approved service provider</span></span></a>
+            <a class="program-approval-item" href="https://support.withodyssey.com/hc/en-us/categories/31145573599259-Louisiana-GATOR-Scholarship-Program" target="_blank" rel="noopener noreferrer" aria-label="Learn about the Louisiana LA GATOR Scholarship Program"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon louisiana" src="images/louisiana-la-gator.svg" alt="" /></span><span class="program-approval-copy"><span class="program-approval-name">Louisiana LA GATOR</span><span class="program-approval-status">Approved service provider</span></span></a>
+            <a class="program-approval-item" href="https://support.withodyssey.com/hc/en-us/articles/37894468672283-Eligible-Expense-Guide" target="_blank" rel="noopener noreferrer" aria-label="Learn about eligible expenses for Utah Fits All"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon utah" src="images/utah-fits-all.svg" alt="" /></span><span class="program-approval-copy"><span class="program-approval-name">Utah Fits All</span><span class="program-approval-status">Approved service provider</span></span></a>
           </div>
         </div>
       </div>
