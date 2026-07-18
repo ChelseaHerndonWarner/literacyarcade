@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<!-- ============================================================================
+     STATE PROGRAM PAGE — New Hampshire EFA
+     ---------------------------------------------------------------------------
+     This page is the BASE TEMPLATE for state approval / marketplace pages
+     (Texas TEFA, future states). All shared styling lives in state-program.css.
+
+     TO CLONE FOR A NEW STATE, change only the blocks marked  [STATE-SPECIFIC]:
+       1. <head> meta / title / canonical / JSON-LD
+       2. STATE CONFIG comment block below (marketplace URL, labels)
+       3. Hero: eyebrow label, H1, subhead, approval statement, state art
+       4. Purchase steps wording + marketplace links
+       5. FAQ answers that name the state
+     Everything else (header, sections, screenshot cluster, footer) stays as-is.
+
+     STATE CONFIG [STATE-SPECIFIC]
+       State label ....... New Hampshire Education Freedom Account (EFA)
+       Marketplace URL ... https://app.nh.scholarshipfund.org/marketplace?...
+       State art ......... images/new-hampshire-efa.svg
+       Direct purchase ... plus-subscriptions.html
+     ============================================================================ -->
+<html lang="en">
+<head>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CL8QW5CGB2');
+  </script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xc6rwdrkw5");
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- [STATE-SPECIFIC] -->
+  <title>Literacy Arcade for New Hampshire EFA Families | Reading Tools K–6</title>
+  <meta name="description" content="Literacy Arcade is an approved New Hampshire EFA provider offering Science of Reading–aligned games, assessments, fluency tools, and supplemental reading support for grades K–6." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://literacyarcade.com/new-hampshire-efa.html" />
+  <meta property="og:title" content="Literacy Arcade for New Hampshire EFA Families" />
+  <meta property="og:description" content="Science of Reading–aligned games, assessments, fluency tools, and supplemental literacy support for eligible New Hampshire families." />
+  <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta name="theme-color" content="#2EC4B6" />
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebPage","name":"Literacy Arcade for New Hampshire EFA Families","url":"https://literacyarcade.com/new-hampshire-efa.html","description":"Information for New Hampshire Education Freedom Account families considering Literacy Arcade supplemental reading tools.","isPartOf":{"@type":"WebSite","name":"Literacy Arcade","url":"https://literacyarcade.com/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://literacyarcade.com/"},{"@type":"ListItem","position":2,"name":"New Hampshire EFA","item":"https://literacyarcade.com/new-hampshire-efa.html"}]}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="state-program.css" />
+</head>
+<body class="nh-efa-page">
+
+  <!-- ══ SITE HEADER — standard Literacy Arcade nav (do not customise) ══ -->
+  <header>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Literacy Arcade home">
+          <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+          Literacy Arcade
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="assessments.html">Assessments</a></li>
+          <li><a href="fluency.html">Fluency</a></li>
+          <li><a href="build-and-play.html">Build &amp; Play</a></li>
+          <li><a href="teacher-tools.html">Teacher Tools</a></li>
+          <li><a href="teacher-login.html" class="nav-account">Dashboard / Log in</a></li>
+        </ul>
+
+        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ══ 1 · HERO [STATE-SPECIFIC] ══ -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">New Hampshire EFA</span>
+          <h1>Literacy Arcade for New Hampshire EFA Families</h1>
+          <p class="hero-sub">Science of Reading–aligned games, assessments, fluency tools, and guided instructional support for eligible New Hampshire families.</p>
+
+          <p class="provider-status">Literacy Arcade is an approved Education Service Provider for the New Hampshire Education Freedom Account program.</p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://app.nh.scholarshipfund.org/marketplace?range=50&amp;upper_grade=6&amp;lower_grade=0&amp;lat=43.20622059999999&amp;lng=-71.5398156&amp;is_microschool=false&amp;page=discovery&amp;subschools%5B%5D=traditional+public&amp;subschools%5B%5D=public+charter&amp;subschools%5B%5D=private&amp;subschools%5B%5D=virtual&amp;organizations%5B%5D=vendor&amp;organizations%5B%5D=provider&amp;organizations%5B%5D=school" target="_blank" rel="noopener noreferrer">View the New Hampshire EFA Marketplace →</a>
+            <a class="btn btn-quiet" href="plus-subscriptions.html">Explore Literacy Arcade Plus Family →</a>
+          </div>
+          <p class="hero-note">Grades K–6 · Supplemental reading support · No student accounts required</p>
+        </div>
+
+        <!-- state art card — swap the <img> + label per state.
+             The outline is the focus; the approval pill sits BELOW it in flow. -->
+        <div class="state-art">
+          <div class="state-art-frame">
+            <img src="images/new-hampshire-efa.svg" alt="" aria-hidden="true" />
+          </div>
+          <span class="state-art-label nh-provider-label">Approved Education Service Provider</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 2 · WHAT FAMILIES RECEIVE (product overview) ══ -->
+    <!-- `lift` overlaps the hero slightly — the visual bridge between sections.
+         Promo images below are shared across ALL state pages (not state-specific). -->
+    <section class="state-section white lift" id="family-benefits">
+      <div class="container">
+
+        <div class="section-heading">
+          <h2>What families receive with Literacy Arcade Plus Family</h2>
+          <p>Literacy Arcade Plus Family is a one-year digital subscription for children in grades K–6 — including beginning readers, struggling readers, and children with dyslexia. It combines reading assessments, fluency tools, customizable practice, and guided instructional support across the five essential areas of reading: phonemic awareness, phonics, fluency, vocabulary, and comprehension.</p>
+          <p>Use built-in content or add your own words, sentences, vocabulary, and comprehension questions to support your curriculum, intervention plan, or reading goals. Literacy Arcade is supplemental — it strengthens a core curriculum rather than replacing it.</p>
+        </div>
+
+        <div class="overview-grid">
+          <figure class="overview-figure overview-figure--platform">
+            <button type="button" class="img-zoom" data-full="images/state-program/literacy-arcade-thumbnail.png" aria-label="Enlarge Literacy Arcade platform overview">
+              <img src="images/state-program/literacy-arcade-thumbnail.png" alt="Literacy Arcade platform overview showing reading games, assessments, fluency practice, teacher tools, and the five essential components of reading." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+          </figure>
+
+          <div class="overview-side">
+            <!-- The distinctive Plus Family benefit — deliberately highlighted.
+                 Sparkle accents appear ONLY on the two guidance lines below. -->
+            <div class="guidance-card">
+              <span class="guidance-eyebrow">Included with Plus Family</span>
+              <h3><span class="spark" aria-hidden="true"></span>Monthly guidance for reading at home</h3>
+              <p>Families can ask a literacy specialist about assessment results, what to teach next, and how to use Literacy Arcade tools to support their child's reading needs.</p>
+              <p class="guidance-by"><span class="spark" aria-hidden="true"></span>Included through a monthly live group literacy Q&amp;A with Chelsea Herndon Warner, Ph.D., a literacy specialist and the creator of Literacy Arcade.</p>
+            </div>
+
+            <!-- Product + price summary (informational — no direct checkout here) -->
+            <div class="product-summary">
+              <div class="ps-title">Literacy Arcade Plus Family</div>
+              <div class="ps-sub">One-Year Digital Subscription</div>
+              <div class="ps-price">$99 <span>for one year</span></div>
+              <ul class="ps-list">
+                <li>For children in one household</li>
+                <li>Includes the full Literacy Arcade Plus platform</li>
+                <li>Includes monthly guidance and the live group Q&amp;A</li>
+                <li>No physical product is shipped</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3 · WHAT'S INCLUDED — polished product-category cards (2×2) ══ -->
+    <section class="state-section tint" id="whats-included">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>What's included with Literacy Arcade Plus Family</h2>
+        </div>
+
+        <!-- Cards are <article> (not links) so the image can open a lightbox and
+             the CTA can be a normal link without nesting interactive elements. -->
+        <div class="category-grid">
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/assessment-results-larger.png" aria-label="Enlarge the Literacy Arcade assessment results and printable reports image">
+              <img src="images/state-program/assessment-results-larger.png" alt="Literacy Arcade assessment results and printable reports showing letter knowledge, letter sounds, phonics, and oral reading fluency results." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Assessments and printable reports</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Quick checks for letter knowledge, letter sounds, phonics, decoding, and oral reading fluency, with results analysis, instructional focus areas, and printable reports.</p>
+                <a class="cc-link" href="assessments.html">Explore assessments →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/fluency-larger.png" aria-label="Enlarge the Literacy Arcade fluency tools image">
+              <img src="images/state-program/fluency-larger.png" alt="Literacy Arcade fluency tools showing the ORF Calculator with WCPM and accuracy, Repeated Reading Rockets, and a Repeated Reading Raceway progress tracker." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Fluency measurement and practice</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Use the ORF Calculator, built-in timers, WCPM and accuracy tracking, repeated-reading tools, benchmark ranges, and prosody support.</p>
+                <a class="cc-link" href="fluency.html">Explore fluency tools →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/build-and-play-larger.png" aria-label="Enlarge the Literacy Arcade Build and Play image">
+              <img src="images/state-program/build-and-play-larger.png" alt="Literacy Arcade Build &amp; Play showing Read &amp; Race, Magic Word Road, vocabulary flashcards, a reading word spinner, and sentence and comprehension spinners." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Customizable literacy practice</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Use built-in or custom words, sentences, vocabulary, and comprehension content in games, flashcards, spinners, and student-ready practice activities.</p>
+                <a class="cc-link" href="build-and-play.html">Explore Build &amp; Play →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/teacher-tools-larger.png" aria-label="Enlarge the Literacy Arcade Teacher Tools image">
+              <img src="images/state-program/teacher-tools-larger.png" alt="Literacy Arcade Teacher Tools showing the Phoneme Counter, an Interactive Phoneme Chart, a printable Letterbox Lesson plan, and an interactive Letterbox Lesson with sound boxes." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Explicit and systematic phonics lesson tools</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Use the Phoneme Counter, sound boxes, letter tiles, Interactive Letterbox Lessons, the Interactive Phoneme Chart, and printable lesson plans.</p>
+                <a class="cc-link" href="teacher-tools.html">Explore teacher tools →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Compact benefit strip — secondary to the image cards above.
+             Six items; monthly guidance lives in the callout, not repeated here. -->
+        <ul class="benefit-strip">
+          <li><strong>Assess and plan</strong> Review assessment results, printable reports, skill patterns, and instructional next steps.</li>
+          <li><strong>Teach with Letterbox Lessons</strong> Use sound boxes, letter tiles, supported word banks, and printable lesson plans.</li>
+          <li><strong>Build fluency</strong> Measure WCPM and accuracy, support repeated reading, and track growth.</li>
+          <li><strong>Customize practice</strong> Use built-in or custom words, sentences, vocabulary, and comprehension content.</li>
+          <li><strong>Organize and reuse activities</strong> Save activities, build teaching collections, and return to customized tools without rebuilding them.</li>
+          <li><strong>Share without student accounts</strong> Use student-ready links and Google Classroom without requiring student email addresses.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ══ 4 · PLUS FAMILY vs PLUS ══ -->
+    <section class="state-section white" id="plans-compare">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>Choose the option that fits your family</h2>
+          <p>Both options include the full Literacy Arcade digital platform. Plus Family adds monthly live guidance for reading at home — the live group literacy Q&amp;A.</p>
+        </div>
+
+        <div class="compare-grid">
+          <article class="compare-card featured">
+            <span class="compare-badge">Recommended for families</span>
+            <h3>Literacy Arcade Plus Family</h3>
+            <div class="compare-price">$99 <span>/ year</span></div>
+            <ul class="compare-list">
+              <li>Full Literacy Arcade Plus platform</li>
+              <li>For children in one household</li>
+              <li class="hl">Monthly guidance for reading at home</li>
+              <li class="hl">Live group literacy Q&amp;A with a literacy specialist</li>
+            </ul>
+            <a class="btn btn-primary" href="https://app.nh.scholarshipfund.org/marketplace?range=50&amp;upper_grade=6&amp;lower_grade=0&amp;lat=43.20622059999999&amp;lng=-71.5398156&amp;is_microschool=false&amp;page=discovery&amp;subschools%5B%5D=traditional+public&amp;subschools%5B%5D=public+charter&amp;subschools%5B%5D=private&amp;subschools%5B%5D=virtual&amp;organizations%5B%5D=vendor&amp;organizations%5B%5D=provider&amp;organizations%5B%5D=school" target="_blank" rel="noopener noreferrer">View in the EFA Marketplace →</a>
+          </article>
+
+          <article class="compare-card">
+            <h3>Literacy Arcade Plus</h3>
+            <div class="compare-price muted">Also available</div>
+            <ul class="compare-list">
+              <li>Full Literacy Arcade digital platform</li>
+              <li>Assessments, fluency tools, customizable practice, and teacher tools</li>
+              <li class="no">Does not include the monthly live group literacy Q&amp;A</li>
+            </ul>
+            <a class="btn btn-quiet" href="plus-subscriptions.html">View Plus plans →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 5 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
+    <section class="state-section tint" id="efa-purchase">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>How to purchase with New Hampshire EFA funds</h2>
+          <p>To use New Hampshire EFA funds, begin in the official EFA marketplace rather than Literacy Arcade's direct checkout. The marketplace and your EFA account guide each step.</p>
+        </div>
+
+        <div class="purchase-steps">
+          <article class="purchase-step">
+            <h3>Open the New Hampshire EFA marketplace</h3>
+            <p>Search for or locate Literacy Arcade in the approved provider marketplace.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Follow the instructions in your EFA account</h3>
+            <p>Your marketplace and EFA account show the current purchasing steps and eligibility requirements.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Complete the approved purchasing process</h3>
+            <p>After the approved purchase is processed, you'll receive the information needed to access Literacy Arcade.</p>
+          </article>
+        </div>
+
+        <div class="purchase-cta">
+          <a class="btn btn-primary" href="https://app.nh.scholarshipfund.org/marketplace?range=50&amp;upper_grade=6&amp;lower_grade=0&amp;lat=43.20622059999999&amp;lng=-71.5398156&amp;is_microschool=false&amp;page=discovery&amp;subschools%5B%5D=traditional+public&amp;subschools%5B%5D=public+charter&amp;subschools%5B%5D=private&amp;subschools%5B%5D=virtual&amp;organizations%5B%5D=vendor&amp;organizations%5B%5D=provider&amp;organizations%5B%5D=school" target="_blank" rel="noopener noreferrer">Open the New Hampshire EFA Marketplace →</a>
+          <a class="btn btn-quiet" href="plus-subscriptions.html">Not using EFA funds? View Plus plans →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 6 · FAQ ══ -->
+    <section class="state-section" id="faq">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>New Hampshire EFA questions</h2>
+        </div>
+        <div class="faq-grid">
+          <article class="faq-card">
+            <h3>Is Literacy Arcade approved for New Hampshire EFA?</h3>
+            <p>Yes. Literacy Arcade is an approved Education Service Provider for the New Hampshire Education Freedom Account program.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What does Plus Family include?</h3>
+            <p>The full Literacy Arcade Plus platform for children in one household, plus monthly guidance for reading at home through a live group literacy Q&amp;A with a literacy specialist.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Is Literacy Arcade Plus also available?</h3>
+            <p>Yes. Plus includes the full digital platform. It does not include the monthly live group literacy Q&amp;A, which is part of Plus Family.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What is the difference between Plus and Plus Family?</h3>
+            <p>Both include the full platform. Plus Family adds monthly guidance for reading at home through the live group literacy Q&amp;A.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Is Literacy Arcade a complete curriculum?</h3>
+            <p>No. It is supplemental — it strengthens a family's core curriculum or intervention program with assessment, targeted instruction, and reading practice.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What grades does Literacy Arcade support?</h3>
+            <p>Literacy Arcade primarily supports literacy learning in grades K–6.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Do children need accounts?</h3>
+            <p>No. Children can use shared activities without creating Literacy Arcade accounts or providing student email addresses.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Can I purchase directly without using EFA funds?</h3>
+            <p>Yes. Families not using EFA funds may purchase a direct Literacy Arcade Plus plan on the <a href="plus-subscriptions.html">Plus pricing page</a>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox for promotional images (built once; controlled by JS below) -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image" hidden>
+    <button type="button" class="lb-close" id="lbClose" aria-label="Close enlarged image">&times;</button>
+    <img class="lb-img" id="lbImg" src="" alt="" />
+  </div>
+
+  <!-- ══ 6 · SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
+  <footer class="footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+            Literacy Arcade
+          </a>
+          <p class="footer-desc">Literacy tools for teachers, tutors, interventionists, and homeschool families. No student accounts required.</p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Explore</div>
+          <ul class="footer-links">
+            <li><a href="assessments.html">Assessments</a></li>
+            <li><a href="fluency.html">Fluency</a></li>
+            <li><a href="build-and-play.html">Build &amp; Play</a></li>
+            <li><a href="teacher-tools.html">Teacher Tools</a></li>
+            <li><a href="teacher-dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Support</div>
+          <ul class="footer-links">
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="student-privacy.html">Student Privacy</a></li>
+            <li><a href="terms-of-use.html">Terms of Use</a></li>
+            <li><a href="refund-policy.html">Billing &amp; Refunds</a></li>
+            <li><a href="mailto:hello@literacyarcade.com">Contact</a></li>
+            <li><a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Literacy Arcade.</p>
+        <div class="footer-legal">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="student-privacy.html">Student Privacy</a>
+          <a href="terms-of-use.html">Terms of Use</a>
+          <a href="refund-policy.html">Billing &amp; Refunds</a>
+          <a href="mailto:hello@literacyarcade.com">Contact</a>
+          <a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    const toggleMenu = () => {
+      navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+    };
+    toggle.addEventListener('click', toggleMenu);
+    toggle.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleMenu();
+      }
+    });
+
+    /* ── Image lightbox: click a promotional image to view it larger.
+          Accessible: opens on click/Enter/Space (native <button>), closes on
+          the close button, backdrop click, or Escape, and restores focus. ── */
+    (function () {
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbClose = document.getElementById('lbClose');
+      let lastTrigger = null;
+
+      const open = (src, alt) => {
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lb.hidden = false;
+        document.body.style.overflow = 'hidden';
+        lbClose.focus();
+      };
+      const close = () => {
+        lb.hidden = true;
+        lbImg.src = '';
+        document.body.style.overflow = '';
+        if (lastTrigger) lastTrigger.focus();
+      };
+
+      document.querySelectorAll('.img-zoom').forEach(btn => {
+        btn.addEventListener('click', () => {
+          lastTrigger = btn;
+          const img = btn.querySelector('img');
+          open(btn.dataset.full || (img && img.src), img && img.alt);
+        });
+      });
+
+      lbClose.addEventListener('click', close);
+      lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !lb.hidden) close();
+        // keep focus on the close button while the dialog is open
+        if (e.key === 'Tab' && !lb.hidden) { e.preventDefault(); lbClose.focus(); }
+      });
+    })();
+  </script>
+</body>
+</html>
