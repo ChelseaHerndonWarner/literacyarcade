@@ -443,6 +443,11 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; }
   padding-inline: 14px;
   white-space: nowrap;
 }
+/* neutral shared equivalent of .nh-provider-label for other state pages */
+.state-art-label--fixed {
+  padding-inline: 14px;
+  white-space: nowrap;
+}
 
 /* NOTE: `.state-name` is an INLINE label used inside link cards
    (texas-tefa.html "Related information"). Keep it in normal flow —
@@ -554,6 +559,8 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; }
 .img-zoom:hover .zoom-hint,
 .img-zoom:focus-visible .zoom-hint { opacity: 1; transform: none; }
 .nh-efa-page .img-zoom:focus .zoom-hint { opacity: 1; transform: none; }
+.alabama-choose-act-page .img-zoom:focus .zoom-hint,
+.arkansas-efa-page .img-zoom:focus .zoom-hint { opacity: 1; transform: none; }
 
 /* ── Sparkle accent — used ONLY on the two Plus Family guidance lines ────── */
 .spark {
@@ -860,6 +867,8 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; }
   box-shadow: 0 30px 80px rgba(0,0,0,.5);
 }
 .nh-efa-page .lb-img { object-fit: contain; }
+.alabama-choose-act-page .lb-img,
+.arkansas-efa-page .lb-img { object-fit: contain; }
 .lb-close {
   position: fixed;
   top: 16px;
@@ -1065,6 +1074,8 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; }
   .benefit-strip { grid-template-columns: 1fr; }
   .zoom-hint { opacity: 1; transform: none; }   /* no hover on touch — always show */
   .nh-efa-page .zoom-hint { opacity: 0; transform: translateY(4px); }
+  .alabama-choose-act-page .zoom-hint,
+  .arkansas-efa-page .zoom-hint { opacity: 0; transform: translateY(4px); }
 }
 
 @media (max-width: 480px) {
@@ -1074,6 +1085,7 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; }
 
 @media (max-width: 360px) {
   .nh-provider-label { padding-inline: 18px; white-space: normal; }
+  .state-art-label--fixed { padding-inline: 18px; white-space: normal; }
 }
 
 @media (hover: none) {
