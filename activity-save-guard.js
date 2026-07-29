@@ -16,14 +16,28 @@ const FREE_LIMIT = 5;
 export async function canCreateActivity(user, db) {
   if (!user) return { allowed: false, reason: 'signed-out', count: 0, plan: 'free' };
 
-  const profileSnap = await getDoc(doc(db, 'users', user.uid));
+  let profileSnap;
+  try {
+    profileSnap = await getDoc(doc(db, 'users', user.uid));
+  } catch (error) {
+    const guardError = new Error('Literacy Arcade could not read the account plan.', { cause: error });
+    guardError.code = 'plan-read-failed';
+    throw guardError;
+  }
   const plan = profileSnap.exists() ? profileSnap.data().plan : undefined;
 
   if (UNLIMITED_PLANS.has(plan)) {
     return { allowed: true, reason: null, count: null, plan };
   }
 
-  const countSnap = await getCountFromServer(collection(db, `users/${user.uid}/activities`));
+  let countSnap;
+  try {
+    countSnap = await getCountFromServer(collection(db, `users/${user.uid}/activities`));
+  } catch (error) {
+    const guardError = new Error('Literacy Arcade could not count saved activities.', { cause: error });
+    guardError.code = 'save-count-read-failed';
+    throw guardError;
+  }
   const count = countSnap.data().count;
 
   if (count < FREE_LIMIT) {
