@@ -1426,6 +1426,116 @@
 
     .program-approval-item:hover { transform: none; }
   }
+
+  /* ══ Plus promo popup (scoped to this page) ══ */
+  .plus-popup-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,46,.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .plus-popup-backdrop.is-open { display: flex; opacity: 1; }
+  /* Fallback for browsers without `inert` support: blocks pointer
+     interaction with the backgrounded content while the popup is open. */
+  .plus-popup-inert-fallback { pointer-events: none; }
+  .plus-popup {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    background: var(--white);
+    color: var(--ink);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-hover);
+    padding: 30px 26px 26px;
+    font-family: var(--font-body);
+    transform: translateY(10px);
+    opacity: 0;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .plus-popup-backdrop.is-open .plus-popup { transform: translateY(0); opacity: 1; }
+  .plus-popup-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--cream);
+    color: var(--ink-soft);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .plus-popup-close:hover { background: var(--border); }
+  .plus-popup-heading {
+    font-family: var(--font-head);
+    font-size: 1.28rem;
+    font-weight: 900;
+    color: var(--ink);
+    margin: 0 22px 12px 0;
+    line-height: 1.25;
+  }
+  .plus-popup-body {
+    font-size: .94rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0 0 10px;
+  }
+  .plus-popup-support {
+    font-size: .84rem;
+    color: var(--ink-soft);
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  .plus-popup-price {
+    font-size: .84rem;
+    color: var(--coral);
+    font-weight: 800;
+    margin: 0 0 20px;
+  }
+  .plus-popup-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .plus-popup-actions .btn { width: 100%; }
+  .plus-popup-secondary {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-weight: 700;
+    font-size: .86rem;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 4px;
+    font-family: var(--font-body);
+  }
+  .plus-popup-close:focus-visible,
+  .plus-popup-secondary:focus-visible,
+  .plus-popup .btn:focus-visible,
+  .plus-popup:focus-visible {
+    outline: 3px solid var(--amber);
+    outline-offset: 2px;
+  }
+  @media (max-width: 640px) {
+    .plus-popup-backdrop { align-items: flex-end; padding: 0; }
+    .plus-popup {
+      max-width: 100%;
+      border-radius: 20px 20px 0 0;
+      padding: 22px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+    }
+  }
 </style>
 </head>
 <body>
@@ -1901,6 +2011,21 @@
     </div>
   </footer>
 
+  <!-- ══ Plus promo popup — scoped to the homepage only ══ -->
+  <div class="plus-popup-backdrop" id="plusPopupBackdrop" hidden>
+    <div class="plus-popup" id="plusPopup" role="dialog" aria-modal="true" aria-labelledby="plusPopupHeading" tabindex="-1">
+      <button type="button" class="plus-popup-close" id="plusPopupClose" aria-label="Close popup">&times;</button>
+      <h2 class="plus-popup-heading" id="plusPopupHeading">Unlock more with Literacy Arcade Plus</h2>
+      <p class="plus-popup-body">Save unlimited activities, organize your teaching materials, view complete assessment results, and print reports and lesson plans.</p>
+      <p class="plus-popup-support">No student accounts required.</p>
+      <p class="plus-popup-price">Plans start at $7.99 per month.</p>
+      <div class="plus-popup-actions">
+        <a class="btn btn-primary" id="plusPopupCta" href="plus-subscriptions.html">Explore Plus Plans</a>
+        <button type="button" class="plus-popup-secondary" id="plusPopupSecondary">Keep exploring</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const toggle = document.getElementById('mobileToggle');
     const navLinks = document.getElementById('navLinks');
@@ -1929,6 +2054,172 @@
       });
     });
 
+  </script>
+
+  <!-- ══ Plus promo popup logic — scoped to the homepage only ══ -->
+  <script>
+    (function () {
+      var STORAGE_KEY = 'laPlusPopupSuppressUntil';
+      var SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+      var SHOW_DELAY_MS = 25000;
+
+      // Fails safely: any localStorage access is wrapped so a blocked or
+      // unavailable store (private browsing, disabled storage, etc.) never
+      // breaks the homepage — it just means the popup can't remember state.
+      function safeGet(key) {
+        try { return window.localStorage.getItem(key); } catch (e) { return null; }
+      }
+      function safeSet(key, value) {
+        try { window.localStorage.setItem(key, value); } catch (e) { /* ignore */ }
+      }
+
+      function isSuppressed() {
+        var raw = safeGet(STORAGE_KEY);
+        if (!raw) return false;
+        var until = parseInt(raw, 10);
+        if (isNaN(until)) return false;
+        return Date.now() < until;
+      }
+
+      function suppressForSevenDays() {
+        safeSet(STORAGE_KEY, String(Date.now() + SEVEN_DAYS_MS));
+      }
+
+      function sendEvent(name, params) {
+        if (typeof gtag === 'function') {
+          gtag('event', name, params || {});
+        }
+      }
+
+      var backdrop = document.getElementById('plusPopupBackdrop');
+      var popup = document.getElementById('plusPopup');
+      var closeBtn = document.getElementById('plusPopupClose');
+      var secondaryBtn = document.getElementById('plusPopupSecondary');
+      var ctaLink = document.getElementById('plusPopupCta');
+
+      if (!backdrop || !popup || !closeBtn || !secondaryBtn || !ctaLink) return;
+
+      var isOpen = false;
+      var viewSent = false;
+      var previousActiveElement = null;
+
+      // Background containers to make inert (unreachable to interaction and
+      // screen readers) while the popup is open. The popup/backdrop itself
+      // is deliberately excluded — only these siblings are affected.
+      var inertTargets = [
+        document.querySelector('header'),
+        document.querySelector('main'),
+        document.querySelector('footer')
+      ].filter(Boolean);
+      var supportsInert = 'inert' in HTMLElement.prototype;
+
+      function setBackgroundInert(on) {
+        inertTargets.forEach(function (el) {
+          if (on) {
+            if (supportsInert) el.inert = true;
+            // Safe fallback for browsers without inert support (and a
+            // harmless belt-and-suspenders addition where inert IS
+            // supported): screen readers skip it, and pointer-events:none
+            // blocks clicks/taps without needing per-element handlers.
+            el.setAttribute('aria-hidden', 'true');
+            el.classList.add('plus-popup-inert-fallback');
+          } else {
+            if (supportsInert) el.inert = false;
+            el.removeAttribute('aria-hidden');
+            el.classList.remove('plus-popup-inert-fallback');
+          }
+        });
+      }
+
+      function focusableElements() {
+        return [closeBtn, ctaLink, secondaryBtn];
+      }
+
+      function trapKeydown(e) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closePopup('escape');
+          return;
+        }
+        if (e.key === 'Tab') {
+          var items = focusableElements();
+          var first = items[0];
+          var last = items[items.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+
+      function onBackdropClick(e) {
+        if (e.target === backdrop) closePopup('backdrop');
+      }
+
+      function openPopup() {
+        if (isOpen || isSuppressed()) return;
+        isOpen = true;
+        previousActiveElement = document.activeElement;
+        backdrop.hidden = false;
+        // Force layout so the transition runs, then trigger it.
+        void backdrop.offsetHeight;
+        backdrop.classList.add('is-open');
+        setBackgroundInert(true);
+        popup.focus();
+        document.addEventListener('keydown', trapKeydown, true);
+        backdrop.addEventListener('click', onBackdropClick);
+        if (!viewSent) {
+          viewSent = true;
+          sendEvent('plus_popup_view');
+        }
+      }
+
+      function closePopup(reason) {
+        if (!isOpen) return;
+        isOpen = false;
+        backdrop.classList.remove('is-open');
+        setBackgroundInert(false);
+        document.removeEventListener('keydown', trapKeydown, true);
+        backdrop.removeEventListener('click', onBackdropClick);
+        suppressForSevenDays();
+        if (reason) sendEvent('plus_popup_close', { close_method: reason });
+        window.setTimeout(function () {
+          backdrop.hidden = true;
+          if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+            previousActiveElement.focus();
+          }
+        }, 250);
+      }
+
+      closeBtn.addEventListener('click', function () { closePopup('close_button'); });
+      secondaryBtn.addEventListener('click', function () { closePopup('keep_exploring'); });
+      ctaLink.addEventListener('click', function () {
+        sendEvent('plus_popup_click');
+        suppressForSevenDays();
+        // No preventDefault: the link must still navigate to
+        // plus-subscriptions.html normally even if analytics is blocked.
+      });
+
+      window.addEventListener('load', function () {
+        if (isSuppressed()) return;
+        window.setTimeout(openPopup, SHOW_DELAY_MS);
+      });
+
+      // Guard against the back-forward cache restoring the page with the
+      // popup mid-open: force the background back to normal and the popup
+      // fully hidden so nothing stays inert after navigating back.
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) {
+          setBackgroundInert(false);
+          isOpen = false;
+          backdrop.classList.remove('is-open');
+          backdrop.hidden = true;
+        }
+      });
+    })();
   </script>
 
 </body>
