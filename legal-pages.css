@@ -363,7 +363,11 @@ ul {
 
 }
 
-@media (max-width: 768px) {
+/* site-standard mobile nav breakpoint — raised to 1100px so the 7-item
+   nav (Shop / Plus Plans / Assessments / Fluency / Build & Play /
+   Teacher Tools / Dashboard) switches to the hamburger before it wraps,
+   without affecting the 768px breakpoint used for everything else below. */
+@media (max-width: 1100px) {
   .nav-links { display: none; }
 
   .nav-links.open {
@@ -382,7 +386,9 @@ ul {
   }
 
   .nav-mobile-toggle { display: flex; }
+}
 
+@media (max-width: 768px) {
   .legal-hero {
     padding: 42px 0 22px;
   }

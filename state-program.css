@@ -1018,8 +1018,11 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; }
   .about-grid, .privacy-grid, .program-links-grid { grid-template-columns: 1fr; }
 }
 
-/* site-standard mobile nav breakpoint */
-@media (max-width: 768px) {
+/* site-standard mobile nav breakpoint — raised to 1100px so the 7-item
+   nav (Shop / Plus Plans / Assessments / Fluency / Build & Play /
+   Teacher Tools / Dashboard) switches to the hamburger before it wraps,
+   without affecting the 768px breakpoint used for everything else below. */
+@media (max-width: 1100px) {
   .nav-links { display: none; }
   .nav-links.open {
     display: flex;
@@ -1034,7 +1037,9 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; }
     z-index: 99;
   }
   .nav-mobile-toggle { display: flex; }
+}
 
+@media (max-width: 768px) {
   /* footer — index.html's exact mobile treatment */
   .footer { padding: 36px 0 18px; }
   .footer-inner { grid-template-columns: 1fr 1fr; gap: 22px 18px; padding-bottom: 20px; }

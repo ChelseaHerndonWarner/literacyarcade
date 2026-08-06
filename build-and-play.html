@@ -880,7 +880,11 @@
       .steps-grid { grid-template-columns: 1fr; gap: 36px; }
     }
 
-    @media (max-width: 768px) {
+    /* site-standard mobile nav breakpoint — raised to 1100px so the 7-item
+       nav (Shop / Plus Plans / Assessments / Fluency / Build & Play /
+       Teacher Tools / Dashboard) switches to the hamburger before it wraps,
+       without affecting the 768px breakpoint used for everything else below. */
+    @media (max-width: 1100px) {
       .nav-links { display: none; }
       .nav-links.open {
         display: flex;
@@ -901,6 +905,9 @@
         width: 100%;
       }
       .nav-mobile-toggle { display: flex; }
+    }
+
+    @media (max-width: 768px) {
       .section { padding: 56px 0; }
       .footer-inner { grid-template-columns: 1fr; gap: 28px; }
       .footer-links { gap: 4px; }
@@ -955,6 +962,8 @@
         </a>
 
         <ul class="nav-links" id="navLinks">
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="plus-subscriptions.html">Plus Plans</a></li>
           <li><a href="assessments.html">Assessments</a></li>
           <li><a href="fluency.html">Fluency</a></li>
           <li><a href="build-and-play.html" class="nav-active" aria-current="page">Build &amp; Play</a></li>
@@ -1242,6 +1251,8 @@
         <div>
           <div class="footer-col-title">Explore</div>
           <ul class="footer-links">
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="plus-subscriptions.html">Plus Plans</a></li>
             <li><a href="assessments.html">Assessments</a></li>
             <li><a href="fluency.html">Fluency</a></li>
             <li><a href="build-and-play.html">Build &amp; Play</a></li>
