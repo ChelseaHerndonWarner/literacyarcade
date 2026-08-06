@@ -230,6 +230,8 @@
        Padding is ~1/3 less than the standard .state-section since this
        hero is a single short heading + line, not a full content section. ── */
     #shop-intro {
+      position: relative;
+      overflow: hidden;
       padding: 80px 0 76px;
       background: linear-gradient(135deg, #eefcf9 0%, #fffaf1 54%, #f8f2ff 100%);
       border-block: 1px solid var(--border);
@@ -237,6 +239,58 @@
     }
     @media (max-width: 640px) {
       #shop-intro { padding: 36px 0 34px; }
+    }
+    #shop-intro .container { position: relative; z-index: 2; }
+
+    /* ── Hero decorative depth: same technique as index.html's hero
+       (.hero-bg / .hero-shape / .hero-sparkle + heroTwinkle), reused here
+       under page-local class names so nothing shared is touched. Kept
+       deliberately faint and positioned near the outer edges so it never
+       overlaps the pill, heading, or description. Hidden on mobile,
+       matching index.html's own sparkle behavior at small widths. Motion
+       is already neutralized under prefers-reduced-motion by the sitewide
+       rule in state-program.css (animation-duration: .001ms !important). ── */
+    .shop-hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .shop-hero-shape { position: absolute; border-radius: 50%; }
+    .shop-hero-shape.shs1 {
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(46,196,182,.10), transparent 68%);
+      top: -110px; right: -50px;
+    }
+    .shop-hero-shape.shs2 {
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(123,94,167,.08), transparent 70%);
+      bottom: -60px; left: 6%;
+    }
+    .shop-hero-shape.shs3 {
+      width: 170px; height: 170px;
+      background: radial-gradient(circle, rgba(255,184,48,.08), transparent 70%);
+      top: 28%; left: -70px;
+    }
+    .shop-hero-sparkle {
+      position: absolute;
+      line-height: 1;
+      font-family: Georgia, serif;
+      filter: drop-shadow(0 3px 8px currentColor);
+      animation: shopHeroTwinkle 4.8s ease-in-out infinite;
+    }
+    .shop-hero-sparkle.ss1 { top: 16%; left: 10%; color: #F4BC53; font-size: 14px; }
+    .shop-hero-sparkle.ss2 { top: 22%; right: 11%; color: #38BFB4; font-size: 13px; animation-delay: .8s; }
+    .shop-hero-sparkle.ss3 { bottom: 22%; right: 17%; color: #8969B3; font-size: 12px; animation-delay: 1.7s; }
+    .shop-hero-sparkle.ss4 { bottom: 18%; left: 17%; color: #FF7777; font-size: 11px; animation-delay: 2.3s; }
+    @keyframes shopHeroTwinkle {
+      0%, 100% { opacity: .38; transform: scale(.78) rotate(0deg); }
+      45% { opacity: .9; transform: scale(1.12) rotate(12deg); }
+      62% { opacity: .6; transform: scale(.94) rotate(18deg); }
+    }
+    @media (max-width: 640px) {
+      .shop-hero-bg { display: none; }
     }
     .page-eyebrow {
       display: inline-flex;
@@ -286,6 +340,19 @@
       line-height: 1.2;
       font-weight: 900;
     }
+
+    /* ── Product-image lightbox: reuses the shared .lightbox / .lb-close /
+       .lb-img / .img-zoom / .zoom-hint pattern already defined in
+       state-program.css (same one used on texas-efa.html etc.) — only the
+       enlarged-image sizing is bumped locally per the requested spec. ── */
+    .shop-page .lb-img {
+      max-width: min(94vw, 1400px);
+      max-height: 90vh;
+      object-fit: contain;
+    }
+    /* .img-zoom already sets width:100% / cursor:zoom-in / etc.; this just
+       lets it host our .product-image sizing/aspect-ratio unchanged. */
+    .img-zoom .product-image { pointer-events: none; }
   </style>
 </head>
 <body class="shop-page">
@@ -320,6 +387,15 @@
 
     <!-- ══ 1 · PAGE INTRO — compact, interior-page spacing ══ -->
     <section class="state-section" id="shop-intro">
+      <div class="shop-hero-bg" aria-hidden="true">
+        <div class="shop-hero-shape shs1"></div>
+        <div class="shop-hero-shape shs2"></div>
+        <div class="shop-hero-shape shs3"></div>
+        <span class="shop-hero-sparkle ss1">✦</span>
+        <span class="shop-hero-sparkle ss2">✦</span>
+        <span class="shop-hero-sparkle ss3">✧</span>
+        <span class="shop-hero-sparkle ss4">✦</span>
+      </div>
       <div class="container">
         <div class="section-heading center">
           <span class="page-eyebrow">Shop</span>
@@ -333,13 +409,16 @@
     <section class="state-section" id="products">
       <div class="container">
         <div class="section-heading center">
-          <h2>Available resources</h2>
+          <h2>Available Resources</h2>
         </div>
         <div class="product-grid">
 
           <!-- Product 1 · The Letter Box -->
           <article class="product-card">
-            <img class="product-image" src="images/letter-box-product-infographic.png" alt="The Letter Box: a divided letter tile case showing lowercase letter tiles, heart markers for irregular word parts, a dedicated lesson-preparation space, and divided storage to keep materials organized." width="1254" height="1254" loading="lazy" />
+            <button type="button" class="img-zoom" data-full="images/letter-box-product-infographic.png" aria-label="Enlarge The Letter Box product image">
+              <img class="product-image" src="images/letter-box-product-infographic.png" alt="The Letter Box: a divided letter tile case showing lowercase letter tiles, heart markers for irregular word parts, a dedicated lesson-preparation space, and divided storage to keep materials organized." width="1254" height="1254" loading="lazy" />
+              <span class="zoom-hint" aria-hidden="true">Click or tap to enlarge</span>
+            </button>
             <div class="product-body">
               <h2 class="product-name">The Letter Box</h2>
               <p class="product-desc">A ready-to-use set of lowercase letter tiles and heart markers for hands-on Letter Box lessons. The divided case includes dedicated space for preparing the letters needed for each lesson.</p>
@@ -371,7 +450,10 @@
 
           <!-- Product 2 · Heart Word Flash Cards -->
           <article class="product-card">
-            <img class="product-image" src="images/heart-word-flash-cards-product.png" alt="Heart Word Flash Cards: one flashcard set with two sides — the word side shows the plain spelling, and the heart side shows the same word with a heart marking the irregular part, illustrated with example cards like want, call, peer, and does." width="1254" height="1254" loading="lazy" />
+            <button type="button" class="img-zoom" data-full="images/heart-word-flash-cards-product.png" aria-label="Enlarge Heart Word Flash Cards product image">
+              <img class="product-image" src="images/heart-word-flash-cards-product.png" alt="Heart Word Flash Cards: one flashcard set with two sides — the word side shows the plain spelling, and the heart side shows the same word with a heart marking the irregular part, illustrated with example cards like want, call, peer, and does." width="1254" height="1254" loading="lazy" />
+              <span class="zoom-hint" aria-hidden="true">Click or tap to enlarge</span>
+            </button>
             <div class="product-body">
               <h2 class="product-name">Heart Word Flash Cards</h2>
               <p class="product-desc">A physical set of two-sided flash cards for explicit instruction in high-frequency words with irregular spellings. The heart side identifies the irregular part or parts, while the word side shows the same word without markings for reading practice.</p>
@@ -398,6 +480,12 @@
     </section>
 
   </main>
+
+  <!-- Lightbox for product images (built once; controlled by JS below) -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged product image" hidden>
+    <button type="button" class="lb-close" id="lbClose" aria-label="Close enlarged image">&times;</button>
+    <img class="lb-img" id="lbImg" src="" alt="" />
+  </div>
 
   <!-- ══ SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
   <footer class="footer" aria-label="Site footer">
@@ -465,6 +553,48 @@
         toggleMenu();
       }
     });
+
+    /* ── Image lightbox: click/tap a product image to view it larger.
+          Accessible: opens on click/Enter/Space (native <button>), closes on
+          the close button, backdrop click, or Escape, and restores focus.
+          Uses data-full — the same original, full-resolution image file
+          already used for the on-page display — never a smaller/compressed
+          copy. ── */
+    (function () {
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbClose = document.getElementById('lbClose');
+      let lastTrigger = null;
+
+      const open = (src, alt) => {
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lb.hidden = false;
+        document.body.style.overflow = 'hidden';
+        lbClose.focus();
+      };
+      const close = () => {
+        lb.hidden = true;
+        lbImg.src = '';
+        document.body.style.overflow = '';
+        if (lastTrigger) lastTrigger.focus();
+      };
+
+      document.querySelectorAll('.img-zoom').forEach(btn => {
+        btn.addEventListener('click', () => {
+          lastTrigger = btn;
+          const img = btn.querySelector('img');
+          open(btn.dataset.full || (img && img.src), img && img.alt);
+        });
+      });
+
+      lbClose.addEventListener('click', close);
+      lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !lb.hidden) close();
+        if (e.key === 'Tab' && !lb.hidden) { e.preventDefault(); lbClose.focus(); }
+      });
+    })();
   </script>
 </body>
 </html>
