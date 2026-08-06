@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<!-- ============================================================================
+     Shop Literacy Arcade
+     ---------------------------------------------------------------------------
+     STATUS: LAUNCHED. Linked from the primary navigation and footer Explore
+     column on all standard Literacy Arcade pages (see the "Shop" / "Plus
+     Plans" nav-link launch pass).
+
+     Built on the established Literacy Arcade interior-page shell: header/nav
+     copied verbatim from index.html / texas-efa.html, section spacing and
+     typography from texas-efa.html (.container, .state-section,
+     .section-heading, h1/h2, .btn variants), and the standard site footer.
+     All shared styling still comes from state-program.css — no shared files
+     were modified. The product-card layout below is page-local CSS built
+     from the same design tokens (var(--radius), var(--shadow), var(--border),
+     var(--teal-dk), var(--font-head)) rather than a new design system.
+
+     KNOWN GAPS (not blockers for this initial launch):
+       - The Letter Box availability status (currently no placeholder shown;
+         price + shipping + Buy button are final)
+       - Heart Word Flash Cards price (currently marked Sold out, no price)
+     Decodable Books is intentionally not listed on this page.
+     ============================================================================ -->
+<html lang="en">
+<head>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CL8QW5CGB2');
+  </script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xc6rwdrkw5");
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Shop Literacy Arcade</title>
+  <meta name="description" content="Hands-on literacy resources from Literacy Arcade — The Letter Box and Heart Word Flash Cards." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2EC4B6" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="state-program.css" />
+
+  <!-- Page-scoped styles for the shop draft only. Reuses existing design
+       tokens (colors, radius, shadow, font) from state-program.css; adds
+       no new colors or typography of its own. -->
+  <style>
+    /* .nav-active isn't in state-program.css (no page using it currently
+       marks itself active); mirrors the exact rule already used locally by
+       assessments.html / build-and-play.html / fluency.html / teacher-tools.html
+       / plus-subscriptions.html. */
+    .nav-links a.nav-active {
+      background: var(--mint);
+      color: var(--teal-dk);
+    }
+
+    /* ── Lean local product-card system, built from existing tokens ──── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin-inline: auto;
+    }
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(46,196,182,.35);
+    }
+    .product-image {
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #F4F1FB;
+      border-bottom: 1px solid var(--border);
+      object-fit: contain;
+      object-position: center;
+    }
+    @media (min-width: 641px) {
+      .product-image { aspect-ratio: 4 / 3; }
+    }
+    .product-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+      padding: 18px 20px 20px;
+    }
+    .product-name {
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--ink);
+    }
+    .product-desc {
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+    .product-meta-label {
+      font-family: var(--font-head);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--teal-dk);
+      margin-bottom: 4px;
+    }
+    .product-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+    }
+    .product-features li {
+      padding-left: 18px;
+      position: relative;
+    }
+    .product-features li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--mint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231FA99C' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 8px no-repeat;
+    }
+    .product-secondary-link {
+      font-family: var(--font-head);
+      font-size: .84rem;
+      font-weight: 900;
+      color: var(--teal-dk);
+    }
+    .product-secondary-link:hover { color: var(--teal); }
+    .product-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2px 0;
+    }
+    .product-meta-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .product-price {
+      font-family: var(--font-head);
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--teal-dk);
+    }
+    .product-shipping {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+    }
+    .product-status-area {
+      margin-top: auto;
+      padding: 12px 14px;
+      background: var(--blush);
+      border-radius: var(--radius-sm);
+    }
+    .product-status {
+      font-family: var(--font-head);
+      font-size: .84rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+      color: var(--coral);
+    }
+    .product-status-note {
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      margin-top: 2px;
+    }
+    .product-actions .btn {
+      width: 100%;
+      text-align: center;
+      min-height: 40px;
+      padding: 9px 18px;
+    }
+    @media (min-width: 641px) {
+      .product-actions { text-align: center; }
+      .product-actions .btn {
+        width: auto;
+        min-width: 220px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .product-grid { grid-template-columns: 1fr; max-width: 480px; }
+    }
+
+    /* ── Hero: emulates the Assessments page hero (page-eyebrow pill,
+       soft multicolor gradient, compact centered title) using the same
+       gradient stops and pill treatment, kept local to this page and
+       scoped to #shop-intro rather than touching .state-section itself.
+       Padding is ~1/3 less than the standard .state-section since this
+       hero is a single short heading + line, not a full content section. ── */
+    #shop-intro {
+      padding: 80px 0 76px;
+      background: linear-gradient(135deg, #eefcf9 0%, #fffaf1 54%, #f8f2ff 100%);
+      border-block: 1px solid var(--border);
+      text-align: center;
+    }
+    @media (max-width: 640px) {
+      #shop-intro { padding: 36px 0 34px; }
+    }
+    .page-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-family: var(--font-head);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 640px) {
+      .page-eyebrow { margin-bottom: 18px; }
+    }
+    #shop-intro h1 {
+      font-size: clamp(2.15rem, 4.2vw, 2.85rem);
+      line-height: 1.15;
+      font-weight: 900;
+      color: var(--ink);
+    }
+    @media (max-width: 480px) {
+      #shop-intro h1 { font-size: clamp(1.95rem, 9.9vw, 2.45rem); }
+    }
+    #shop-intro .section-heading p {
+      font-weight: 600;
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+
+    /* ── Products section: same soft multicolor gradient wash as the
+       Assessments preview section, instead of the flat lavender
+       .state-section.tint background — scoped locally to #products. ── */
+    #products {
+      padding: 28px 0;
+      background: linear-gradient(135deg, #eefcf9 0%, #fffaf1 52%, #f7f1ff 100%);
+      border-block: 1px solid var(--border);
+    }
+    #products .section-heading { margin-bottom: 14px; }
+    #products h2 {
+      font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+      line-height: 1.2;
+      font-weight: 900;
+    }
+  </style>
+</head>
+<body class="shop-page">
+
+  <!-- ══ SITE HEADER — standard Literacy Arcade nav (do not customise) ══ -->
+  <header>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Literacy Arcade home">
+          <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+          Literacy Arcade
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="shop.html" class="nav-active" aria-current="page">Shop</a></li>
+          <li><a href="plus-subscriptions.html">Plus Plans</a></li>
+          <li><a href="assessments.html">Assessments</a></li>
+          <li><a href="fluency.html">Fluency</a></li>
+          <li><a href="build-and-play.html">Build &amp; Play</a></li>
+          <li><a href="teacher-tools.html">Teacher Tools</a></li>
+          <li><a href="teacher-login.html" class="nav-account">Dashboard / Log in</a></li>
+        </ul>
+
+        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ══ 1 · PAGE INTRO — compact, interior-page spacing ══ -->
+    <section class="state-section" id="shop-intro">
+      <div class="container">
+        <div class="section-heading center">
+          <span class="page-eyebrow">Shop</span>
+          <h1>Shop Literacy Arcade</h1>
+          <p>Hands-on literacy resources designed to support clear, purposeful reading instruction at home, in classrooms, and in tutoring settings.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 2 · PRODUCTS ══ -->
+    <section class="state-section" id="products">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>Available resources</h2>
+        </div>
+        <div class="product-grid">
+
+          <!-- Product 1 · The Letter Box -->
+          <article class="product-card">
+            <img class="product-image" src="images/letter-box-product-infographic.png" alt="The Letter Box: a divided letter tile case showing lowercase letter tiles, heart markers for irregular word parts, a dedicated lesson-preparation space, and divided storage to keep materials organized." width="1254" height="1254" loading="lazy" />
+            <div class="product-body">
+              <h2 class="product-name">The Letter Box</h2>
+              <p class="product-desc">A ready-to-use set of lowercase letter tiles and heart markers for hands-on Letter Box lessons. The divided case includes dedicated space for preparing the letters needed for each lesson.</p>
+
+              <div>
+                <div class="product-meta-label">What's included</div>
+                <ul class="product-features">
+                  <li>Lowercase letter tiles</li>
+                  <li>Heart markers</li>
+                  <li>Divided carrying and storage case</li>
+                  <li>Dedicated lesson-preparation space</li>
+                </ul>
+              </div>
+
+              <a class="product-secondary-link" href="letterbox-lesson.html">Try the free Letterbox Lesson tool →</a>
+
+              <hr class="product-divider" />
+
+              <div class="product-meta-row">
+                <span class="product-price">$42.00</span>
+                <span class="product-shipping">Free U.S. shipping</span>
+              </div>
+
+              <div class="product-actions">
+                <a class="btn btn-primary" href="https://buy.stripe.com/cNi3cob2V0jz2WKfyi8EM00" target="_blank" rel="noopener noreferrer">Buy The Letter Box</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 2 · Heart Word Flash Cards -->
+          <article class="product-card">
+            <img class="product-image" src="images/heart-word-flash-cards-product.png" alt="Heart Word Flash Cards: one flashcard set with two sides — the word side shows the plain spelling, and the heart side shows the same word with a heart marking the irregular part, illustrated with example cards like want, call, peer, and does." width="1254" height="1254" loading="lazy" />
+            <div class="product-body">
+              <h2 class="product-name">Heart Word Flash Cards</h2>
+              <p class="product-desc">A physical set of two-sided flash cards for explicit instruction in high-frequency words with irregular spellings. The heart side identifies the irregular part or parts, while the word side shows the same word without markings for reading practice.</p>
+
+              <div>
+                <div class="product-meta-label">What's included</div>
+                <ul class="product-features">
+                  <li>Two-sided physical flash cards</li>
+                  <li>Heart side highlighting irregular parts</li>
+                  <li>Unmarked word side for reading practice</li>
+                  <li>Teaching guide</li>
+                </ul>
+              </div>
+
+              <div class="product-status-area">
+                <div class="product-status">Sold out</div>
+                <p class="product-status-note">This item is currently unavailable.</p>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══ SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
+  <footer class="footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+            Literacy Arcade
+          </a>
+          <p class="footer-desc">Literacy tools for teachers, tutors, interventionists, and homeschool families. No student accounts required.</p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Explore</div>
+          <ul class="footer-links">
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="plus-subscriptions.html">Plus Plans</a></li>
+            <li><a href="assessments.html">Assessments</a></li>
+            <li><a href="fluency.html">Fluency</a></li>
+            <li><a href="build-and-play.html">Build &amp; Play</a></li>
+            <li><a href="teacher-tools.html">Teacher Tools</a></li>
+            <li><a href="teacher-dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Support</div>
+          <ul class="footer-links">
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="student-privacy.html">Student Privacy</a></li>
+            <li><a href="terms-of-use.html">Terms of Use</a></li>
+            <li><a href="refund-policy.html">Billing &amp; Refunds</a></li>
+            <li><a href="mailto:hello@literacyarcade.com">Contact</a></li>
+            <li><a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Literacy Arcade.</p>
+        <div class="footer-legal">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="student-privacy.html">Student Privacy</a>
+          <a href="terms-of-use.html">Terms of Use</a>
+          <a href="refund-policy.html">Billing &amp; Refunds</a>
+          <a href="mailto:hello@literacyarcade.com">Contact</a>
+          <a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    const toggleMenu = () => {
+      navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+    };
+    toggle.addEventListener('click', toggleMenu);
+    toggle.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleMenu();
+      }
+    });
+  </script>
+</body>
+</html>
