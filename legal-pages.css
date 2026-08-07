@@ -343,13 +343,6 @@ ul {
   font-size: .82rem;
 }
 
-.footer-legal {
-  display: flex;
-  gap: 18px;
-}
-
-.footer-legal a:hover { color: var(--teal); }
-
 @media (max-width: 900px) {
   .footer-inner {
     grid-template-columns: 1fr;
@@ -427,9 +420,5 @@ ul {
 
   .footer {
     padding-top: 44px;
-  }
-
-  .footer-legal {
-    flex-wrap: wrap;
   }
 }
