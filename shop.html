@@ -205,6 +205,124 @@
       color: var(--ink-soft);
       margin-top: 2px;
     }
+
+    /* ── Back-in-stock waitlist form (Heart Word Flash Cards only) ──── */
+    .visually-hidden {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .product-waitlist {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(26,26,46,.08);
+    }
+    .product-waitlist-heading {
+      font-family: var(--font-head);
+      font-size: .82rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+    .product-waitlist-copy {
+      font-size: .78rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+    .product-waitlist-row {
+      display: flex;
+      gap: 8px;
+    }
+    .product-waitlist-row[hidden] { display: none; }
+    .product-waitlist-input {
+      flex: 1;
+      min-width: 0;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: .84rem;
+    }
+    .product-waitlist-input::placeholder { color: var(--ink-soft); opacity: .8; }
+    .product-waitlist-input:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 1px;
+      border-color: var(--teal);
+    }
+    .product-waitlist-submit {
+      flex-shrink: 0;
+      min-height: 38px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 100px;
+      background: var(--teal);
+      color: var(--white);
+      font-family: var(--font-head);
+      font-size: .82rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background .18s ease, opacity .18s ease;
+    }
+    .product-waitlist-submit:hover:not(:disabled) { background: var(--teal-dk); }
+    .product-waitlist-submit:disabled { opacity: .6; cursor: not-allowed; }
+    .product-waitlist-submit:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 2px;
+    }
+    .product-waitlist-privacy {
+      margin-top: 6px;
+      font-size: .7rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+    .product-waitlist-status {
+      margin-top: 6px;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .product-waitlist-status:empty { display: none; }
+    .product-waitlist-status.is-success { color: var(--teal-dk); }
+    .product-waitlist-status.is-error { color: var(--coral); }
+
+    /* Formspree's official AJAX library toggles a data-fs-active attribute
+       on the success/error elements it manages; the show/hide CSS itself is
+       left to us. Hidden by default, shown only once Formspree activates
+       them. */
+    [data-fs-success], [data-fs-error] { display: none; }
+    [data-fs-success][data-fs-active], [data-fs-error][data-fs-active] { display: block; }
+
+    .product-waitlist-field-error {
+      margin-top: 4px;
+      font-size: .74rem;
+      font-weight: 700;
+      color: var(--coral);
+    }
+    .product-waitlist-field-error:empty { display: none; }
+
+    /* On success, collapse the waitlist prompt/input/privacy note down to
+       just the confirmation — the outer "Sold out" / unavailability text
+       stays visible since it lives outside this form entirely. */
+    form:has(> [data-fs-success][data-fs-active]) .product-waitlist-heading,
+    form:has(> [data-fs-success][data-fs-active]) .product-waitlist-copy,
+    form:has(> [data-fs-success][data-fs-active]) .product-waitlist-row,
+    form:has(> [data-fs-success][data-fs-active]) .product-waitlist-privacy,
+    form:has(> [data-fs-success][data-fs-active]) .product-waitlist-field-error {
+      display: none;
+    }
+    @media (max-width: 640px) {
+      .product-waitlist-row { flex-direction: column; align-items: stretch; }
+      .product-waitlist-submit { width: 100%; }
+    }
+
     .product-actions .btn {
       width: 100%;
       text-align: center;
@@ -471,6 +589,28 @@
               <div class="product-status-area">
                 <div class="product-status">Sold out</div>
                 <p class="product-status-note">This item is currently unavailable.</p>
+
+                <form class="product-waitlist" id="flashCardsWaitlistForm" action="https://formspree.io/f/mqpzalog" method="POST">
+                  <p class="product-waitlist-heading">Want to know when these are back?</p>
+                  <p class="product-waitlist-copy">Enter your email to be notified when Heart Word Flash Cards are available again.</p>
+
+                  <div class="product-waitlist-row">
+                    <label class="visually-hidden" for="flashCardsWaitlistEmail">Email address</label>
+                    <input type="email" name="email" id="flashCardsWaitlistEmail" class="product-waitlist-input" placeholder="Email address" required autocomplete="email" data-fs-field>
+                    <button type="submit" class="product-waitlist-submit" data-fs-submit-btn>Notify me</button>
+                  </div>
+                  <p class="product-waitlist-field-error" data-fs-error="email" aria-live="polite"></p>
+
+                  <p class="product-waitlist-privacy">We&rsquo;ll only use your email to send availability updates for this product.</p>
+
+                  <p class="product-waitlist-status is-error" data-fs-error role="alert" aria-live="assertive">Something went wrong. Please try again.</p>
+                  <p class="product-waitlist-status is-success" data-fs-success role="status" aria-live="polite">You&rsquo;re on the list! I&rsquo;ll let you know when Heart Word Flash Cards are available again.</p>
+
+                  <input type="hidden" name="_subject" value="Heart Word Flash Cards restock request">
+                  <input type="hidden" name="product" value="Heart Word Flash Cards">
+                  <input type="hidden" name="request_type" value="Back-in-stock notification">
+                  <input type="hidden" name="source_page" value="Literacy Arcade Shop">
+                </form>
               </div>
             </div>
           </article>
@@ -596,5 +736,23 @@
       });
     })();
   </script>
+
+  <!-- ── Heart Word Flash Cards back-in-stock waitlist: official Formspree
+       AJAX integration (https://formspree.io/f/mqpzalog). Replaces the
+       previous custom fetch() handler — Formspree's library now owns all
+       submission state (button disable/enable, success/error activation). ── -->
+  <script>
+    window.formspree =
+      window.formspree ||
+      function () {
+        (formspree.q = formspree.q || []).push(arguments);
+      };
+
+    formspree('initForm', {
+      formElement: '#flashCardsWaitlistForm',
+      formId: 'mqpzalog'
+    });
+  </script>
+  <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </body>
 </html>
