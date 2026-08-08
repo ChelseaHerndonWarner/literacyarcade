@@ -178,6 +178,20 @@
     stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;display:block;
   }
 
+  /* ── MOBILE HEADER FIX ──
+     Below ~480px the logo group (icon + wordmark + pipe + tool name) no
+     longer fits next to the header buttons, which forced the whole page
+     wider than the viewport. Shrink/hide the lowest-priority pieces so
+     the header actually fits, instead of just clipping the overflow. */
+  html,body{overflow-x:hidden}
+  @media(max-width:480px){
+    .la-header{padding:0 14px}
+    .la-logo-group{gap:8px;flex-shrink:1;min-width:0}
+    .la-icon{width:32px;height:32px}
+    .la-wordmark{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+    .la-pipe,.la-tool-name{display:none}
+  }
+
   /* ════════════════════════════════════
      MAIN / SCREENS
   ════════════════════════════════════ */
@@ -318,19 +332,6 @@
   .game-wrap{width:100%;max-width:460px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
 
   /* ── SPELL SHELF — compact horizontal strip ── */
-  .collection-shelf{
-    width:100%;
-    background:var(--white);
-    border-radius:var(--r-sm);
-    box-shadow:var(--shadow-sm);
-    border:1.5px solid rgba(123,94,167,.14);
-    padding:6px 10px;
-    margin-bottom:8px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    min-height:44px;
-  }
   .shelf-header{
     display:flex;align-items:center;gap:5px;flex-shrink:0;
   }
@@ -1002,7 +1003,7 @@
           </div>
         </div>
         <div class="divider"></div>
-        <button class="start-btn" id="startBtn" onclick="startGame()">
+        <button class="start-btn" id="startBtn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Start Game
         </button>
@@ -2141,10 +2142,10 @@ ANSWER_WORDS[4] = [
   'able','also','area','army','aunt','baby','back','bake','ball','band','bank','base','bean','bear','beat','bell','belt','best','bike','bird','blue','boat','book','bowl','bunk','cake','call','calm','camp','card','care','cart','case','cave','chip','city','clap','clay','clip','club','coat','cold','come','cone','cook','cool','corn','cube','cute','dark','dawn','deer','desk','dive','door','dove','draw','drop','duck','dust','each','earn','east','easy','edge','face','fair','fall','farm','fern','find','fine','fire','fish','five','flag','flat','flee','flip','flow','food','fork','frog','from','game','gate','gave','gift','girl','give','glow','goat','gold','good','grow','hand','hare','hawk','help','here','hill','home','hope','jump','just','keep','kind','king','kite','lake','lamb','land','lane','last','leaf','left','life','like','lime','line','lion','list','live','long','look','love','made','make','many','mask','maze','meal','milk','mine','mint','moon','more','moth','move','name','near','need','nest','nice','nine','note','only','open','over','page','park','part','path','pear','pine','plan','play','plum','pond','pony','read','real','reef','ring','road','rock','roll','root','rose','safe','same','sand','seal','seed','ship','shop','show','sing','snow','soft','soil','song','star','stem','step','stop','take','tall','team','tell','time','tree','trip','turn','unit','very','vine','walk','warm','wave','west','wind','wing','wink','wise','wish','wood','wool','word','work','year','zero','zone'
 ];
 ANSWER_WORDS[5] = [
-  'about','above','after','again','apple','beach','begin','below','berry','black','blend','block','bloom','board','brain','brave','bread','bring','brown','brush','build','bunny','cabin','camel','candy','carry','chair','charm','check','cheer','chest','child','chime','class','clean','clear','climb','cloud','coach','color','comet','coral','could','crown','dance','dream','drink','eager','early','earth','eight','entry','every','fairy','faith','field','first','flame','flash','float','floor','flute','found','frame','fresh','friend','funny','garden','giant','glide','globe','grace','grade','grain','grand','grant','grape','grass','great','green','group','happy','heart','hello','honey','horse','house','human','jelly','jolly','juice','kitty','kneel','laugh','learn','lemon','light','lucky','magic','mango','maple','march','melon','merry','might','money','month','music','never','night','north','ocean','often','olive','order','other','paint','paper','party','peach','pearl','piano','place','plain','plane','plant','plate','point','power','prize','quick','quiet','rainy','raise','reach','river','round','royal','seven','shape','share','shiny','short','silly','skill','sleep','slide','small','smart','smile','snail','snake','snowy','sound','space','spark','speak','spoon','spring','stand','start','stone','story','study','sunny','sweet','table','teach','thank','their','there','these','think','three','tiger','today','train','treat','under','until','visit','voice','water','wheel','where','which','while','white','world','would','write','young'
+  'about','above','after','again','apple','beach','begin','below','berry','black','blend','block','bloom','board','brain','brave','bread','bring','brown','brush','build','bunny','cabin','camel','candy','carry','chair','charm','check','cheer','chest','child','chime','class','clean','clear','climb','cloud','coach','color','comet','coral','could','crown','dance','dream','drink','eager','early','earth','eight','entry','every','fairy','faith','field','first','flame','flash','float','floor','flute','found','frame','fresh','funny','giant','glide','globe','grace','grade','grain','grand','grant','grape','grass','great','green','group','happy','heart','hello','honey','horse','house','human','jelly','jolly','juice','kitty','kneel','laugh','learn','lemon','light','lucky','magic','mango','maple','march','melon','merry','might','money','month','music','never','night','north','ocean','often','olive','order','other','paint','paper','party','peach','pearl','piano','place','plain','plane','plant','plate','point','power','prize','quick','quiet','rainy','raise','reach','river','round','royal','seven','shape','share','shiny','short','silly','skill','sleep','slide','small','smart','smile','snail','snake','snowy','sound','space','spark','speak','spoon','stand','start','stone','story','study','sunny','sweet','table','teach','thank','their','there','these','think','three','tiger','today','train','treat','under','until','visit','voice','water','wheel','where','which','while','white','world','would','write','young'
 ];
 ANSWER_WORDS[6] = [
-  'almost','always','animal','answer','around','artist','autumn','banana','basket','beacon','before','behind','belong','better','breeze','bridge','bright','bubble','button','cactus','camera','candle','castle','center','chance','circle','clever','cloudy','coming','common','corner','cotton','cousin','crayon','dinner','dragon','dreams','eagles','easily','either','family','farmer','father','flower','forest','friend','frozen','garden','gentle','ginger','golden','grapes','ground','happy','health','helped','hidden','hiking','honest','jacket','jingle','joyful','jungle','kitten','ladder','latest','letter','listen','little','lively','lizard','lovely','market','meadow','mirror','monkey','mother','muffin','nature','nearby','nicely','nimble','noodle','normal','notice','orange','palace','parent','people','person','pickle','picnic','planet','player','please','pocket','pollen','pretty','prince','puzzle','rabbit','random','reason','record','relate','repeat','rescue','ribbon','ripple','rocket','saddle','sample','school','screen','second','secret','settle','shadow','silver','simple','single','sister','sketch','sleeve','smiles','smooth','soccer','soften','spider','spiral','splash','spring','stable','stream','string','strong','summer','sunset','switch','symbol','talent','temple','tender','thread','ticket','timber','turtle','useful','valley','velvet','violet','vision','voyage','wander','warmth','weekly','window','winter','wonder','yellow','zipper'
+  'almost','always','animal','answer','around','artist','autumn','banana','basket','beacon','before','behind','belong','better','breeze','bridge','bright','bubble','button','cactus','camera','candle','castle','center','chance','circle','clever','cloudy','coming','common','corner','cotton','cousin','crayon','dinner','dragon','dreams','eagles','easily','either','family','farmer','father','flower','forest','friend','frozen','garden','gentle','ginger','golden','grapes','ground','health','helped','hidden','hiking','honest','jacket','jingle','joyful','jungle','kitten','ladder','latest','letter','listen','little','lively','lizard','lovely','market','meadow','mirror','monkey','mother','muffin','nature','nearby','nicely','nimble','noodle','normal','notice','orange','palace','parent','people','person','pickle','picnic','planet','player','please','pocket','pollen','pretty','prince','puzzle','rabbit','random','reason','record','relate','repeat','rescue','ribbon','ripple','rocket','saddle','sample','school','screen','second','secret','settle','shadow','silver','simple','single','sister','sketch','sleeve','smiles','smooth','soccer','soften','spider','spiral','splash','spring','stable','stream','string','strong','summer','sunset','switch','symbol','talent','temple','tender','thread','ticket','timber','turtle','useful','valley','velvet','violet','vision','voyage','wander','warmth','weekly','window','winter','wonder','yellow','zipper'
 ];
 
 const ALLOWED_GUESSES = {
@@ -2195,6 +2196,7 @@ function isValidGuess(word){
 ══════════════════════════════════════════════════════════ */
 let wordLen=5,target='',tileValues=[],curRow=0,curCol=0;
 let over=false,keyStates={},soundOn=true;
+let submitting=false;
 let hintUsed=false;
 const MAX=6;
 let lastRewardNew=false,lastRewardEmoji='',lastRewardWord='';
@@ -2572,6 +2574,7 @@ function startGame(){
   hintUsed=false;
   // Keep input locked during the countdown so students cannot type early.
   over=true;
+  submitting=false;
   keyStates={};
   lastRewardNew=false;lastRewardEmoji='';lastRewardWord='';
 
@@ -2748,6 +2751,7 @@ function handleKey(k){
 }
 
 function submitGuess(){
+  if(submitting)return;
   if(tileValues[curRow].some(l=>l==='')){
     showMsg(`Fill all ${wordLen} boxes first! 🤔`,'warn');
     shakeRow();return;
@@ -2759,9 +2763,11 @@ function submitGuess(){
   if(!VALID_GUESSES[wordLen].has(word)){
     showMsg("That word is not in the wizard's dictionary.",'warn');shakeRow();return;
   }
+  submitting=true;
   sndSubmit();
   const result=scoreGuess(word,target);
   revealRow(result,()=>{
+    submitting=false;
     const won=result.every(x=>x==='green');
     if(won){
       over=true;setTimeout(()=>endGame(true),1400);
@@ -2985,11 +2991,9 @@ document.getElementById('playAgainBtn').addEventListener('click',()=>{
 });
 document.getElementById('chooseLenBtn').addEventListener('click',()=>{
   document.getElementById('endCard').classList.remove('win-card');
-  sparkleActive=true;animateSparkles();
   showScreen('setupScreen');
 });
 document.getElementById('changeLenBtn').addEventListener('click',()=>{
-  sparkleActive=true;animateSparkles();
   showScreen('setupScreen');
 });
 document.getElementById('soundBtn').addEventListener('click',()=>{
