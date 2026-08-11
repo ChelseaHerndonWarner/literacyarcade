@@ -409,6 +409,32 @@
     .path-copy strong { display: block; font-size: .98rem; line-height: 1.25; }
     .path-copy span { display: block; margin-top: 3px; color: var(--ink-soft); font-size: .82rem; line-height: 1.35; }
 
+    /* ── Video demo section (reused from build-and-play.html) ── */
+    .video-demo { padding: 36px 0 44px; background: var(--cream); text-align: center; }
+
+    .video-demo-caption {
+      font-size: .92rem;
+      color: var(--ink-soft);
+      max-width: 800px;
+      margin: 14px auto 0;
+      line-height: 1.55;
+    }
+
+    .video-demo-wrap {
+      max-width: 700px;
+      margin: 28px auto 0;
+    }
+
+    .video-demo-frame {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: var(--ink);
+    }
+
     .routing {
       background: linear-gradient(180deg, var(--white), #fbf9ff);
       border-bottom: 1px solid var(--border);
@@ -1234,6 +1260,20 @@
             <span class="path-copy"><strong>Make growth visible</strong><span>Show progress across purposeful rereads.</span></span>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ── Video demo (reused .video-demo classes from build-and-play.html) ── -->
+    <section class="video-demo" aria-label="See Fluency Practice in Action">
+      <div class="container">
+        <h2 class="section-title">See Fluency Practice in Action</h2>
+        <div class="video-demo-wrap">
+          <video class="video-demo-frame" controls playsinline preload="metadata">
+            <source src="videos/fluency-demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p class="video-demo-caption">Set a fluency goal, record each reading, and watch progress build.</p>
       </div>
     </section>
 
