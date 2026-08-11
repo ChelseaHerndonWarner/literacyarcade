@@ -435,6 +435,32 @@
       line-height: 1.55;
     }
 
+    /* ── Video demo section (reusable — e.g. also usable on Fluency page) ── */
+    .video-demo { padding: 36px 0 44px; background: var(--cream); text-align: center; }
+
+    .video-demo-caption {
+      font-size: .92rem;
+      color: var(--ink-soft);
+      max-width: 800px;
+      margin: 14px auto 0;
+      line-height: 1.55;
+    }
+
+    .video-demo-wrap {
+      max-width: 700px;
+      margin: 28px auto 0;
+    }
+
+    .video-demo-frame {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: var(--ink);
+    }
+
     /* ── Routing guide ── */
     .routing {
       background: var(--mint);
@@ -970,6 +996,20 @@
             <img src="images/build-and-play-previews/comprehension-spinner-preview.png" alt="Comprehension Question Spinner preview" loading="lazy" width="2048" height="1113">
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ── Video demo (reusable video-demo classes) ── -->
+    <section class="video-demo" aria-label="See Build & Play in action">
+      <div class="container">
+        <h2 class="section-title">See Build &amp; Play in Action</h2>
+        <div class="video-demo-wrap">
+          <video class="video-demo-frame" controls playsinline preload="metadata">
+            <source src="videos/build-and-play-demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p class="video-demo-caption">Choose a game, customize the practice, and let students play.</p>
       </div>
     </section>
 
