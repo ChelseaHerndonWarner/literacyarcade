@@ -7,6 +7,7 @@
   <url><loc>https://literacyarcade.com/fluency.html</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://literacyarcade.com/build-and-play.html</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://literacyarcade.com/teacher-tools.html</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://literacyarcade.com/shop.html</loc><lastmod>2026-08-06</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
   <!-- Teacher Tools -->
   <url><loc>https://literacyarcade.com/orf-fluency-calculator.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
@@ -29,6 +30,12 @@
   <url><loc>https://literacyarcade.com/comprehension-spinner.html</loc><lastmod>2026-07-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://literacyarcade.com/repeated-reading-raceway.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://literacyarcade.com/repeatedreadingrockets.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- State Program Pages -->
+  <url><loc>https://literacyarcade.com/alabama-choose-act.html</loc><lastmod>2026-08-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://literacyarcade.com/arkansas-efa.html</loc><lastmod>2026-08-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://literacyarcade.com/new-hampshire-efa.html</loc><lastmod>2026-08-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://literacyarcade.com/texas-efa.html</loc><lastmod>2026-08-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- Account / info -->
   <url><loc>https://literacyarcade.com/plus-subscriptions.html</loc><lastmod>2026-07-13</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
