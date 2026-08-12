@@ -1040,6 +1040,32 @@
       .hero-shot,
       .lesson-plan-paper { transform: none !important; }
     }
+
+    /* ── Video demo section (reusable — matches build-and-play.html / fluency.html) ── */
+    .video-demo { padding: 36px 0 44px; background: var(--cream); text-align: center; }
+
+    .video-demo-caption {
+      font-size: .92rem;
+      color: var(--ink-soft);
+      max-width: 800px;
+      margin: 14px auto 0;
+      line-height: 1.55;
+    }
+
+    .video-demo-wrap {
+      max-width: 700px;
+      margin: 28px auto 0;
+    }
+
+    .video-demo-frame {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: var(--ink);
+    }
   </style>
 </head>
 <body>
@@ -1099,6 +1125,20 @@
             <figcaption class="hero-shot-label">Model speech sounds</figcaption>
           </figure>
         </div>
+      </div>
+    </section>
+
+    <!-- ── Video demo (reused .video-demo classes from build-and-play.html / fluency.html) ── -->
+    <section class="video-demo" aria-label="See Teacher Tools in action">
+      <div class="container">
+        <h2 class="section-title">See Teacher Tools in Action</h2>
+        <div class="video-demo-wrap">
+          <video class="video-demo-frame" controls playsinline preload="metadata">
+            <source src="videos/teacher-tools-demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p class="video-demo-caption">Plan a lesson, then teach it in person with The Letter Box tiles or virtually on screen.</p>
       </div>
     </section>
 
