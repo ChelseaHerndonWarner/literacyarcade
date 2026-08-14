@@ -11,19 +11,69 @@
      this one file. If Alabama is ever re-cloned into a new state page,
      review that <style> block too, not just the sections below.
 
-     Section order (current):
-       1. Hero — approval statement + "Choose → Request invoice → Submit"
-          overview + primary "Request a CHOOSE Act Invoice" CTA
-       2. How to purchase — 4-step Pay Vendor process + "don't pay out of
-          pocket" note panel (id="how-to-purchase")
-       3. What families receive (platform overview)
-       4. What's included (category cards)
-       5. What can families purchase — Plus Family vs Plus pricing + neutral
-          physical-product note (id="plans-compare")
-       6. Your CHOOSE Act invoice — explains the invoice; the CTA opens the
-          on-page invoice-request modal (id="invoice-info",
-          id="invoice-request-tool")
-       7. FAQ
+     Section order (current) — this is the reusable ClassWallet state-page
+     pattern. Each section is tagged [STATE-SPECIFIC] or [SHARED] below;
+     when cloning this page for another state (e.g. Arkansas, New
+     Hampshire), only the [STATE-SPECIFIC] sections need real rewriting —
+     [SHARED] sections should carry over close to as-is, since they
+     describe the Literacy Arcade platform itself, not any one state's
+     program:
+       1. Hero [STATE-SPECIFIC] — state badge, approval statement, 3-step
+          "Choose → Request invoice → Submit" process indicator, primary
+          "Request a CHOOSE Act Invoice" CTA
+       2. How to purchase [STATE-SPECIFIC] — this state's 4-step purchase
+          process + "don't pay out of pocket" note panel
+          (id="how-to-purchase")
+       3. What's included with Literacy Arcade Plus [SHARED] — the one
+          feature-explanation section on the page (category cards + benefit
+          strip). Describes the core Plus platform, which is identical for
+          BOTH annual plans — do not add Plus-Family-only language or
+          pricing here, and do not add a second, competing feature section
+          (id="whats-included")
+       4. Plus Family value [SHARED] — a visual spotlight, not a pricing
+          section. Explains why the added monthly guidance/Q&A is useful
+          for homeschool families. Reuses the shared .overview-grid image
+          + copy layout (same platform-thumbnail image used elsewhere on
+          the site — do not create a new image for this section).
+          Deliberately carries NO price and does not repeat the Plus
+          feature list from section 3 — that duplication is exactly what
+          an earlier version of this page did wrong. Keep this the one
+          place the Q&A benefit gets a full explanation
+          (id="plus-family-value")
+       5. Choose your annual plan [SHARED plan data, STATE-SPECIFIC CTA] —
+          the one place the two annual plans ($79 Plus / $99 Plus Family)
+          are compared and priced. Both cards reference "the same full
+          Literacy Arcade Plus platform" — Plus Family is the same
+          platform plus household access and monthly guidance, not a
+          different product. Both cards use a short, comparable bullet
+          list (what differs between the plans) rather than the full
+          platform feature list — that's what section 3 is for — so
+          neither plan visually looks more feature-rich than the other.
+          Both cards carry exactly one CTA (Request a CHOOSE Act Invoice);
+          no secondary link on either card, to keep the funnel focused.
+          Monthly pricing and physical products are deliberately absent
+          here — the invoice generator only supports these two annual
+          plans. A short "Generate your PDF invoice instantly — no account
+          or waiting required" note sits below the cards — this is now the
+          page's only reminder of that benefit, so don't duplicate it
+          elsewhere (id="plans-compare")
+       6. FAQ [MOSTLY STATE-SPECIFIC WORDING] — short, direct answers only;
+          do not let FAQ answers re-explain features or pricing already
+          covered above
+
+     Do NOT reintroduce a standalone "what families receive" / platform
+     overview section between sections 2 and 3 — that content used to
+     duplicate both section 3 (features) and section 5 (pricing) and was
+     removed for that reason. Do not let section 4 (Plus Family value)
+     regress back into that pattern either — it must stay price-free and
+     must not repeat the full Plus feature list.
+
+     There is deliberately no standalone "Your CHOOSE Act invoice" section
+     anymore — it used to duplicate the hero, the 4-step purchase section,
+     and the plan cards, all of which already explain/trigger invoice
+     generation. Do not reintroduce one. The four remaining invoice-request
+     CTA locations are: hero, after the 4-step purchase section, and the
+     two plan cards in section 5 — that is the intended full set.
 
      Every "Request a CHOOSE Act Invoice" button is a
      <button data-invoice-trigger> (optionally data-plan="<plan id>" to
@@ -108,34 +158,49 @@
   <style>
     .alabama-choose-act-page .hero-flow-label {
       font-family: var(--font-head);
-      font-size: 1rem;
-      font-weight: 900;
-      color: var(--teal-dk);
-      margin: 18px 0 10px;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin: 20px 0 10px;
     }
     .alabama-choose-act-page .hero-flow {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       margin: 0 0 20px;
       list-style: none;
       padding: 0;
     }
     .alabama-choose-act-page .hero-flow li {
-      padding: 7px 14px;
-      border-radius: 100px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      padding: 2px 0;
       font-family: var(--font-head);
-      font-size: .82rem;
-      font-weight: 800;
-      color: var(--ink);
+      font-size: .84rem;
+      font-weight: 750;
+      color: var(--ink-soft);
+    }
+    .alabama-choose-act-page .hero-flow .flow-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .7rem;
+      font-weight: 900;
+      flex-shrink: 0;
     }
     .alabama-choose-act-page .hero-flow .arrow {
-      color: var(--teal-dk);
-      font-weight: 900;
+      color: var(--border);
+      font-weight: 700;
+      padding: 0 2px;
     }
     .alabama-choose-act-page .purchase-steps--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     @media (max-width: 1100px) {
@@ -144,22 +209,139 @@
     @media (max-width: 640px) {
       .alabama-choose-act-page .purchase-steps--4 { grid-template-columns: 1fr; }
     }
-    .alabama-choose-act-page .compare-price-alt {
-      margin: -8px 0 14px;
-      font-size: .85rem;
-      font-weight: 800;
+    /* Small "Plus Annual" / "Plus Family Annual" plan-type pill — mirrors
+       .plan-badge on plus-subscriptions.html so the two pricing pages read
+       as the same product line. Sits above the .compare-badge ribbon on
+       the featured card and above the h3 on both cards. */
+    .alabama-choose-act-page .compare-plan-badge {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      margin: 14px 0 2px;
+      padding: 5px 10px;
+      border-radius: 100px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-family: var(--font-head);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .alabama-choose-act-page .compare-plan-badge--family {
+      background: var(--violet);
+      color: var(--white);
+    }
+    .alabama-choose-act-page .compare-desc {
+      font-size: .88rem;
+      font-weight: 650;
       color: var(--ink-soft);
+      line-height: 1.5;
+      margin: 2px 0 16px;
+    }
+
+    /* Plan cards now hold different amounts of content, so the shared
+       .compare-grid { align-items: stretch } + .compare-card .btn
+       { margin-top: auto } combination (state-program.css) was forcing
+       both cards to equal height and stranding the CTA at the bottom of
+       whichever card is shorter, leaving a large gap above it. Override
+       both, scoped to this page only, so each card sizes to its own
+       content and its CTA sits close to its bullet list. */
+    .alabama-choose-act-page .compare-grid { align-items: start; }
+    .alabama-choose-act-page .compare-card .btn { margin-top: 20px; align-self: flex-start; }
+
+    /* ── Plus Family value section — visual spotlight, not a pricing card ── */
+    .alabama-choose-act-page .pf-value-detail {
+      margin: 0 0 20px;
+      font-size: .92rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+    .alabama-choose-act-page .pf-benefit-list {
+      display: grid;
+      gap: 14px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .alabama-choose-act-page .pf-benefit-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .alabama-choose-act-page .pf-benefit-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: var(--violet);
+      color: var(--white);
+      font-size: .72rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .alabama-choose-act-page .pf-benefit-list strong {
+      display: block;
+      font-family: var(--font-head);
+      font-size: .92rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .alabama-choose-act-page .pf-benefit-list span {
+      display: block;
+      font-size: .85rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.45;
     }
     .alabama-choose-act-page .invoice-assist-note {
-      margin-top: 16px;
-      padding: 12px 16px;
+      max-width: fit-content;
+      margin: 20px auto 0;
+      padding: 10px 18px;
       border: 1px dashed rgba(123,94,167,.4);
-      border-radius: 12px;
+      border-radius: 100px;
       background: #FCFAFF;
       font-size: .82rem;
       font-weight: 700;
       color: var(--violet);
       line-height: 1.5;
+      text-align: center;
+    }
+
+    /* ── Hero primary CTA — the one action this page most wants a family to
+         take. Coral, not teal, so it reads as distinct from the process
+         steps, the secondary "See how it works" link, and the rest of the
+         page's teal buttons. Restrained: one small sparkle, one shadow. ── */
+    .alabama-choose-act-page .hero-actions .btn-hero-primary {
+      background: var(--coral);
+      box-shadow: 0 10px 28px rgba(255,107,107,.32);
+      font-size: 1.02rem;
+      padding: 15px 26px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .alabama-choose-act-page .hero-actions .btn-hero-primary:hover,
+    .alabama-choose-act-page .hero-actions .btn-hero-primary:active {
+      background: #F0524F;
+    }
+    .alabama-choose-act-page .btn-hero-primary .hero-cta-spark {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M12 0c.6 5.9 5.5 10.8 12 11.4-6.5.6-11.4 5.5-12 12-.6-6.5-5.5-11.4-12-12C6.5 10.8 11.4 5.9 12 0z'/%3E%3C/svg%3E") no-repeat center / contain;
+      flex-shrink: 0;
+    }
+    .alabama-choose-act-page .hero-cta-support {
+      margin: 10px 0 0;
+      font-size: .84rem;
+      font-weight: 700;
+      color: var(--ink-soft);
     }
 
     /* ── CHOOSE Act invoice request modal ─────────────────────────────── */
@@ -339,17 +521,18 @@
 
           <p class="hero-flow-label">Use your CHOOSE Act funds for Literacy Arcade</p>
           <ul class="hero-flow">
-            <li>Choose your option</li>
+            <li><span class="flow-num" aria-hidden="true">1</span>Choose your option</li>
             <li class="arrow" aria-hidden="true">→</li>
-            <li>Request an invoice</li>
+            <li><span class="flow-num" aria-hidden="true">2</span>Request an invoice</li>
             <li class="arrow" aria-hidden="true">→</li>
-            <li>Submit it in ClassWallet Pay Vendor</li>
+            <li><span class="flow-num" aria-hidden="true">3</span>Submit it in ClassWallet Pay Vendor</li>
           </ul>
 
           <div class="hero-actions">
-            <button type="button" class="btn btn-primary" data-invoice-trigger>Request a CHOOSE Act Invoice →</button>
+            <button type="button" class="btn btn-primary btn-hero-primary" data-invoice-trigger><span class="hero-cta-spark" aria-hidden="true"></span>Request a CHOOSE Act Invoice →</button>
             <a class="btn btn-quiet" href="#how-to-purchase">See how it works ↓</a>
           </div>
+          <p class="hero-cta-support">Get your PDF invoice instantly</p>
           <p class="hero-note">Grades K–6 · Supplemental reading support · No student accounts required</p>
         </div>
 
@@ -378,20 +561,20 @@
 
         <div class="purchase-steps purchase-steps--4">
           <article class="purchase-step">
-            <h3>Choose your Literacy Arcade purchase</h3>
-            <p>Select the Literacy Arcade membership or approved option you'd like to purchase.</p>
+            <h3>Choose your annual plan</h3>
+            <p>Select Plus Annual or Plus Family Annual.</p>
           </article>
           <article class="purchase-step">
-            <h3>Request your Literacy Arcade invoice</h3>
-            <p>Literacy Arcade provides the invoice needed for your ClassWallet Pay Vendor request.</p>
+            <h3>Generate your invoice</h3>
+            <p>Enter your information and download your PDF instantly.</p>
           </article>
           <article class="purchase-step">
-            <h3>Submit the invoice in ClassWallet</h3>
-            <p>Log in to ClassWallet, choose Pay Vendor, select Literacy Arcade, upload the invoice, and submit the request.</p>
+            <h3>Submit it in ClassWallet</h3>
+            <p>Choose Pay Vendor, select Literacy Arcade, and upload your invoice.</p>
           </article>
           <article class="purchase-step">
-            <h3>Literacy Arcade completes your order</h3>
-            <p>After the ClassWallet payment is approved and processed, Literacy Arcade activates or fulfills your purchase.</p>
+            <h3>Activate your subscription</h3>
+            <p>After Literacy Arcade receives your payment request, watch for your activation email.</p>
           </article>
         </div>
 
@@ -402,7 +585,7 @@
           <span class="note-icon" aria-hidden="true">i</span>
           <div>
             <h2>No need to pay out of pocket</h2>
-            <p>Families using CHOOSE Act funds don't pay Literacy Arcade directly and wait to be reimbursed. Just request your invoice and submit it through ClassWallet's Pay Vendor option — Literacy Arcade completes your order once the payment is processed.</p>
+            <p>Don't pay Literacy Arcade directly — submit your invoice through ClassWallet's Pay Vendor option instead. Literacy Arcade completes your order once the payment is processed.</p>
           </div>
         </div>
 
@@ -413,57 +596,14 @@
       </div>
     </section>
 
-    <!-- ══ 3 · WHAT FAMILIES RECEIVE (product overview) ══ -->
-    <!-- Promo images below are shared across ALL state pages (not state-specific). -->
-    <section class="state-section tint" id="family-benefits">
-      <div class="container">
-
-        <div class="section-heading">
-          <h2>What families receive with Literacy Arcade Plus Family</h2>
-          <p>Literacy Arcade Plus Family is a one-year digital subscription for children in grades K–6 — including beginning readers, struggling readers, and children with dyslexia. It combines reading assessments, fluency tools, customizable practice, and guided instructional support across the five essential areas of reading: phonemic awareness, phonics, fluency, vocabulary, and comprehension.</p>
-          <p>Use built-in content or add your own words, sentences, vocabulary, and comprehension questions to support your curriculum, intervention plan, or reading goals. Literacy Arcade is supplemental — it strengthens a core curriculum rather than replacing it.</p>
-        </div>
-
-        <div class="overview-grid">
-          <figure class="overview-figure overview-figure--platform">
-            <button type="button" class="img-zoom" data-full="images/state-program/literacy-arcade-thumbnail.png" aria-label="Enlarge Literacy Arcade platform overview">
-              <img src="images/state-program/literacy-arcade-thumbnail.png" alt="Literacy Arcade platform overview showing reading games, assessments, fluency practice, teacher tools, and the five essential components of reading." loading="lazy" decoding="async" width="1536" height="1024" />
-              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
-            </button>
-          </figure>
-
-          <div class="overview-side">
-            <!-- The distinctive Plus Family benefit — deliberately highlighted.
-                 Sparkle accents appear ONLY on the two guidance lines below. -->
-            <div class="guidance-card">
-              <span class="guidance-eyebrow">Included with Plus Family</span>
-              <h3><span class="spark" aria-hidden="true"></span>Monthly guidance for reading at home</h3>
-              <p>Families can ask a literacy specialist about assessment results, what to teach next, and how to use Literacy Arcade tools to support their child's reading needs.</p>
-              <p class="guidance-by"><span class="spark" aria-hidden="true"></span>Included through a monthly live group literacy Q&amp;A with Chelsea Herndon Warner, Ph.D., a literacy specialist and the creator of Literacy Arcade.</p>
-            </div>
-
-            <!-- Product + price summary (informational — no direct checkout here) -->
-            <div class="product-summary">
-              <div class="ps-title">Literacy Arcade Plus Family</div>
-              <div class="ps-sub">One-Year Digital Subscription</div>
-              <div class="ps-price">$99 <span>for one year</span></div>
-              <ul class="ps-list">
-                <li>For children in one household</li>
-                <li>Includes the full Literacy Arcade Plus platform</li>
-                <li>Includes monthly guidance and the live group Q&amp;A</li>
-                <li>No physical product is shipped</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ 4 · WHAT'S INCLUDED — polished product-category cards (2×2) ══ -->
+    <!-- ══ 3 · WHAT'S INCLUDED — polished product-category cards (2×2) [SHARED] ══
+         Core platform feature section — applies to BOTH annual plans, so it
+         must not carry Plus-Family-only language. This is the page's one
+         and only feature-explanation section; do not add a second one. -->
     <section class="state-section white" id="whats-included">
       <div class="container">
         <div class="section-heading center">
-          <h2>What's included with Literacy Arcade Plus Family</h2>
+          <h2>What's included with Literacy Arcade Plus</h2>
         </div>
 
         <!-- Cards are <article> (not links) so the image can open a lightbox and
@@ -543,63 +683,113 @@
       </div>
     </section>
 
-    <!-- ══ 5 · PLUS FAMILY vs PLUS — what families can purchase [STATE-SPECIFIC pricing/CTA] ══ -->
+    <!-- ══ 4 · PLUS FAMILY VALUE — visual spotlight, not another pricing card
+         [SHARED]. Job of this section: explain why the added monthly
+         guidance is useful. It must NOT show pricing, repeat the Plus
+         feature list, or become a second product-comparison table — that's
+         what section 5 (plans-compare) is for. Keep this the only place
+         the Q&A benefit gets a full explanation; the plan cards and FAQ
+         should only reference it briefly.
+         Reuses the shared .overview-grid/.overview-figure/.overview-side
+         pattern (image left, copy right; image-above-copy on mobile via
+         the existing media query in state-program.css) with the same
+         platform-thumbnail asset used elsewhere on the site — no new image
+         was created for this pass. -->
+    <section class="state-section white" id="plus-family-value">
+      <div class="container">
+        <div class="overview-grid">
+          <figure class="overview-figure overview-figure--platform">
+            <button type="button" class="img-zoom" data-full="images/state-program/literacy-arcade-thumbnail.png" aria-label="Enlarge Literacy Arcade platform overview">
+              <img src="images/state-program/literacy-arcade-thumbnail.png" alt="Literacy Arcade platform overview showing reading games, assessments, fluency practice, teacher tools, and the five essential components of reading." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+          </figure>
+
+          <div class="overview-side">
+            <div class="section-heading">
+              <span class="guidance-eyebrow">Recommended for homeschool families</span>
+              <h2>Plus Family adds support for what comes next</h2>
+              <p>Literacy Arcade Plus gives families the tools to assess, teach, and practice reading skills. Plus Family adds monthly guidance so you don't have to figure out the next step alone.</p>
+            </div>
+
+            <p class="pf-value-detail">Join a monthly live group literacy Q&amp;A with Chelsea Herndon Warner, Ph.D., to ask questions about your child's assessment results, what skills to work on next, and how to use Literacy Arcade activities to support their reading needs.</p>
+
+            <ul class="pf-benefit-list">
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true">✓</span>
+                <div>
+                  <strong>Understand assessment results</strong>
+                  <span>Get help interpreting patterns and identifying what to focus on.</span>
+                </div>
+              </li>
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true">✓</span>
+                <div>
+                  <strong>Know what to teach next</strong>
+                  <span>Ask questions about skills, instruction, and reading goals.</span>
+                </div>
+              </li>
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true">✓</span>
+                <div>
+                  <strong>Use Literacy Arcade with confidence</strong>
+                  <span>Get guidance on choosing tools and activities for your child.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 5 · CHOOSE YOUR ANNUAL PLAN — the one place plans/pricing are
+         compared [SHARED plan data, STATE-SPECIFIC CTA]. The invoice
+         generator only supports these two annual plans, so no monthly
+         pricing or physical-product mention belongs in this section —
+         both would suggest purchase paths this tool can't actually invoice. ══ -->
     <section class="state-section tint" id="plans-compare">
       <div class="container">
         <div class="section-heading center">
-          <h2>What can families purchase?</h2>
-          <p>Both options include the full Literacy Arcade digital platform and can be purchased with CHOOSE Act funds through ClassWallet Pay Vendor. Plus Family adds monthly live guidance for reading at home — the live group literacy Q&amp;A.</p>
+          <h2>Choose your annual Literacy Arcade plan</h2>
+          <p>Both annual plans include the same full Literacy Arcade Plus platform. Plus Family adds household access and monthly literacy guidance through a live group Q&amp;A.</p>
         </div>
 
         <div class="compare-grid">
           <article class="compare-card featured">
             <span class="compare-badge">Recommended for families</span>
-            <h3>Literacy Arcade Plus Family</h3>
+            <span class="compare-plan-badge compare-plan-badge--family">Plus Family Annual</span>
+            <h3>Homeschool literacy support</h3>
             <div class="compare-price">$99 <span>/ year</span></div>
+            <p class="compare-desc">Everything in Literacy Arcade Plus for children in one household, plus monthly literacy guidance for families.</p>
             <ul class="compare-list">
-              <li>Full Literacy Arcade Plus platform</li>
-              <li>For children in one household</li>
-              <li class="hl">Monthly guidance for reading at home</li>
-              <li class="hl">Live group literacy Q&amp;A with a literacy specialist</li>
+              <li>Everything included with Literacy Arcade Plus</li>
+              <li>Use with children in one household</li>
+              <li class="hl">Monthly live group literacy Q&amp;A with a reading specialist</li>
+              <li>Children do not need accounts</li>
             </ul>
             <button type="button" class="btn btn-primary" data-invoice-trigger data-plan="plus-family-annual">Request a CHOOSE Act Invoice →</button>
           </article>
 
           <article class="compare-card">
-            <h3>Literacy Arcade Plus</h3>
+            <span class="compare-plan-badge">Plus Annual</span>
+            <h3>Full-year educator access</h3>
             <div class="compare-price">$79 <span>/ year</span></div>
-            <p class="compare-price-alt">Also available monthly at $7.99/month</p>
+            <p class="compare-desc">Full Literacy Arcade Plus access for one educator account, billed annually.</p>
             <ul class="compare-list">
-              <li>Full Literacy Arcade digital platform</li>
-              <li>Assessments, fluency tools, customizable practice, and teacher tools</li>
-              <li class="no">Does not include the monthly live group literacy Q&amp;A</li>
+              <li>Everything included in the Literacy Arcade Plus platform</li>
+              <li>One educator account</li>
+              <li>Students do not need accounts</li>
+              <li class="no">Does not include the monthly family Q&amp;A</li>
             </ul>
-            <a class="btn btn-quiet" href="plus-subscriptions.html#plus-plans">View Plus plan details →</a>
+            <button type="button" class="btn btn-primary" data-invoice-trigger data-plan="plus-annual">Request a CHOOSE Act Invoice →</button>
           </article>
         </div>
 
-        <p class="hero-note" style="margin-top:22px;">Interested in purchasing a Literacy Arcade physical product, like The Letter Box or Heart Word Flash Cards, with CHOOSE Act funds? <a href="mailto:hello@literacyarcade.com?subject=Alabama%20CHOOSE%20Act%20%E2%80%94%20Physical%20Product%20Purchasing">Contact us</a> for current purchasing instructions.</p>
+        <p class="invoice-assist-note">Generate your PDF invoice instantly — no account or waiting required.</p>
       </div>
     </section>
 
-    <!-- ══ 6 · YOUR CHOOSE ACT INVOICE [STATE-SPECIFIC] ══ -->
-    <!-- The button below opens the on-page invoice-request modal (markup
-         lives near the lightbox, JS in alabama-invoice-generator.js). -->
-    <section class="state-section white" id="invoice-info">
-      <div class="container">
-        <div class="section-heading center">
-          <h2>Your Literacy Arcade CHOOSE Act invoice</h2>
-          <p>Parents using ClassWallet's Pay Vendor option need an invoice from Literacy Arcade to complete their request. Your invoice will include the information needed for the ClassWallet submission.</p>
-        </div>
-
-        <div class="purchase-cta" id="invoice-request-tool">
-          <button type="button" class="btn btn-primary" data-invoice-trigger>Request a CHOOSE Act Invoice →</button>
-        </div>
-        <p class="invoice-assist-note">Your invoice is generated instantly in your browser as a PDF you can download right away — no account or waiting required. We don't yet email a copy automatically or keep a saved record of requests; download and keep your PDF for your records.</p>
-      </div>
-    </section>
-
-    <!-- ══ 7 · FAQ ══ -->
+    <!-- ══ 6 · FAQ ══ -->
     <section class="state-section" id="faq">
       <div class="container">
         <div class="section-heading center">
@@ -616,7 +806,7 @@
           </article>
           <article class="faq-card">
             <h3>How do I get an invoice?</h3>
-            <p>Literacy Arcade provides it. <a href="#invoice-request-tool">Request your invoice</a> and it will include the information needed for your ClassWallet submission.</p>
+            <p>Literacy Arcade provides it. <a href="#plans-compare">Request your invoice</a> and it will include the information needed for your ClassWallet submission.</p>
           </article>
           <article class="faq-card">
             <h3>Where do I submit the invoice?</h3>
@@ -628,11 +818,11 @@
           </article>
           <article class="faq-card">
             <h3>Can I use CHOOSE Act funds for Literacy Arcade physical products?</h3>
-            <p>Interested in purchasing a Literacy Arcade physical product, like The Letter Box or Heart Word Flash Cards, with CHOOSE Act funds? <a href="mailto:hello@literacyarcade.com?subject=Alabama%20CHOOSE%20Act%20%E2%80%94%20Physical%20Product%20Purchasing">Contact us</a> for current purchasing instructions.</p>
+            <p>Literacy Arcade also offers physical literacy products. Please <a href="mailto:hello@literacyarcade.com?subject=Alabama%20CHOOSE%20Act%20%E2%80%94%20Physical%20Product%20Purchasing">contact Literacy Arcade</a> for current CHOOSE Act purchasing instructions for physical items.</p>
           </article>
           <article class="faq-card">
             <h3>What is the difference between Plus and Plus Family?</h3>
-            <p>Both include the full digital platform. Plus Family adds monthly guidance for reading at home through a live group literacy Q&amp;A with a literacy specialist.</p>
+            <p>Both include the full Literacy Arcade digital platform. Plus Family adds monthly guidance for reading at home through a live group literacy Q&amp;A with a literacy specialist.</p>
           </article>
           <article class="faq-card">
             <h3>Is Literacy Arcade a complete curriculum?</h3>
