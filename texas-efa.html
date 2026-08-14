@@ -2,25 +2,55 @@
 <!-- ============================================================================
      STATE PROGRAM PAGE — Texas TEFA (Texas Education Freedom Accounts)
      ---------------------------------------------------------------------------
-     This page is cloned from new-hampshire-efa.html, the base template for
-     state-program pages. Texas purchases run through Odyssey (not ClassWallet).
-     All shared styling lives in state-program.css.
+     Rebuilt to closely mirror alabama-choose-act.html's finalized structure
+     and page-local styling. Most shared styling lives in state-program.css;
+     this page carries a page-local <style> block (in <head>) for the
+     purchase-flow layout (hero flow chips, 4-step grid, compare-grid
+     pricing note) mirroring Alabama's page-local block — scoped to
+     .tx-tefa-page throughout.
 
-     TO CLONE FOR A NEW STATE, change only the blocks marked  [STATE-SPECIFIC]:
-       1. <head> meta / title / canonical / JSON-LD
-       2. STATE CONFIG comment block below (marketplace URL, labels)
-       3. Hero: eyebrow label, H1, subhead, approval statement, state art
-       4. Purchase steps wording + marketplace links
-       5. FAQ answers that name the state
-     Everything else (header, sections, screenshot cluster, footer) stays as-is.
+     Texas is the one state page whose purchase path is Odyssey (browse and
+     buy inside the TEFA marketplace), not ClassWallet/an invoice tool like
+     Alabama or New Hampshire — so there is no invoice-request modal here,
+     no "Request an invoice" step, and the hero/purchase CTAs are plain
+     links to the Texas TEFA portal rather than data-invoice-trigger
+     buttons. Both annual plans are approved Odyssey offerings; do not
+     reintroduce "once an offering becomes available" language — that
+     reflected an earlier pre-approval state that no longer applies.
+
+     Section order — the reusable state-page pattern, Texas purchase path:
+       1. Hero [STATE-SPECIFIC] — state badge, approval statement, 3-step
+          "Choose → Open portal → Complete purchase" process indicator,
+          primary "Open the Texas TEFA Portal" CTA
+       2. How to purchase with Texas TEFA funds [STATE-SPECIFIC] — 4-step
+          Odyssey flow + activation-email note panel (id="how-to-purchase")
+       3. What's included with Literacy Arcade Plus [SHARED] — identical to
+          Alabama/New Hampshire: same four image cards + benefit strip,
+          same copy, same assets. Universal — no Texas/TEFA/Odyssey
+          language belongs here (id="whats-included")
+       4. Plus Family value [SHARED] — identical to Alabama's spotlight
+          (badge, heading, intro, Q&A paragraph, three benefits). Also
+          universal — no state-program language here either
+          (id="plus-family-value")
+       5. Choose your annual plan [SHARED plan data, STATE-SPECIFIC CTA] —
+          the two annual plans ($79 Plus / $99 Plus Family), same copy
+          pattern as Alabama, but both CTAs link out to the Texas TEFA
+          portal instead of opening an invoice modal (id="plans-compare")
+       6. FAQ [STATE-SPECIFIC wording] (id="faq")
+       7. Footer
 
      STATE CONFIG [STATE-SPECIFIC]
        State label ....... Texas TEFA (Texas Education Freedom Accounts)
+       Purchase process .. Odyssey marketplace, reached through the official
+                           Texas TEFA portal. No invoice/ClassWallet flow —
+                           families browse and buy directly in Odyssey.
        Marketplace URL ... https://educationfreedom.texas.gov/ — the stable
-                           official Texas TEFA portal. The portal itself
-                           contains the Odyssey Login link; that login URL is
-                           NOT hardcoded here because it carries changing
-                           auth/session parameters.
+                           official Texas TEFA portal (verified, already in
+                           use on this page and on plus-subscriptions.html).
+                           The portal itself contains the Odyssey Login
+                           link; that login URL is NOT hardcoded here
+                           because it carries changing auth/session
+                           parameters.
        State art ......... images/texas-tefa.svg
        Direct purchase ... plus-subscriptions.html
      ============================================================================ -->
@@ -71,16 +101,187 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="state-program.css" />
-  <!-- Page-scoped parity rules: mirror the .alabama-choose-act-page /
-       .arkansas-efa-page rules already in state-program.css (Safari
-       zoom-hint focus fallback, lightbox object-fit, and hiding "Click to
-       enlarge" by default on mobile) so Texas matches those pages. Kept
-       page-local rather than added to the shared stylesheet this round. -->
+  <link rel="stylesheet" href="shop-announcement.css" />
+
+  <!-- [STATE-SPECIFIC] Page-local styles for the Texas TEFA purchase flow.
+       Mirrors alabama-choose-act.html's page-local block (hero flow chips,
+       4-step grid, compare-grid pricing badges, Plus Family spotlight,
+       hero primary CTA) so this page reads as the same component system.
+       Scoped to .tx-tefa-page throughout. No invoice-modal styles are
+       needed here since Texas has no invoice tool. -->
   <style>
     .tx-tefa-page .img-zoom:focus .zoom-hint { opacity: 1; transform: none; }
     .tx-tefa-page .lb-img { object-fit: contain; }
     @media (max-width: 640px) {
       .tx-tefa-page .zoom-hint { opacity: 0; transform: translateY(4px); }
+    }
+
+    .tx-tefa-page .hero-flow-label {
+      font-family: var(--font-head);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin: 20px 0 10px;
+    }
+    .tx-tefa-page .hero-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin: 0 0 20px;
+      list-style: none;
+      padding: 0;
+    }
+    .tx-tefa-page .hero-flow li {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      padding: 2px 0;
+      font-family: var(--font-head);
+      font-size: .84rem;
+      font-weight: 750;
+      color: var(--ink-soft);
+    }
+    .tx-tefa-page .hero-flow .flow-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .7rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .tx-tefa-page .hero-flow .arrow {
+      color: var(--border);
+      font-weight: 700;
+      padding: 0 2px;
+    }
+
+    /* ── Hero primary CTA — the one action this page most wants a family to
+         take. Coral, not teal, so it reads as distinct from the process
+         steps, the secondary "See how it works" link, and the rest of the
+         page's teal buttons. Same treatment as Alabama/New Hampshire's
+         hero primary CTA, applied here to a plain link (Texas has no
+         invoice modal to open). ── */
+    .tx-tefa-page .hero-actions .btn-hero-primary {
+      background: var(--coral);
+      box-shadow: 0 10px 28px rgba(255,107,107,.32);
+      font-size: 1.02rem;
+      padding: 15px 26px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tx-tefa-page .hero-actions .btn-hero-primary:hover,
+    .tx-tefa-page .hero-actions .btn-hero-primary:active {
+      background: #F0524F;
+    }
+
+    .tx-tefa-page .purchase-steps--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    @media (max-width: 1100px) {
+      .tx-tefa-page .purchase-steps--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .tx-tefa-page .purchase-steps--4 { grid-template-columns: 1fr; }
+    }
+    .tx-tefa-page .note-panel a { color: var(--teal-dk); font-weight: 800; text-decoration: underline; text-underline-offset: 2px; }
+
+    /* Small "Plus Annual" / "Plus Family Annual" plan-type pill — mirrors
+       .plan-badge on plus-subscriptions.html so all pricing pages read as
+       the same product line. Sits above the .compare-badge ribbon on the
+       featured card and above the h3 on both cards. */
+    .tx-tefa-page .compare-plan-badge {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      margin: 14px 0 2px;
+      padding: 5px 10px;
+      border-radius: 100px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-family: var(--font-head);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .tx-tefa-page .compare-plan-badge--family {
+      background: var(--violet);
+      color: var(--white);
+    }
+    .tx-tefa-page .compare-desc {
+      font-size: .88rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin: 2px 0 16px;
+    }
+    /* Plan cards hold different amounts of content, so override the shared
+       .compare-grid { align-items: stretch } + .compare-card .btn
+       { margin-top: auto } combination, scoped to this page only, so each
+       card sizes to its own content and its CTA sits close to its bullets. */
+    .tx-tefa-page .compare-grid { align-items: start; }
+    .tx-tefa-page .compare-card .btn { margin-top: 20px; align-self: flex-start; }
+
+    /* ── Plus Family value section — visual spotlight, not a pricing card ── */
+    .tx-tefa-page .pf-value-detail {
+      margin: 0 0 20px;
+      font-size: .92rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+    .tx-tefa-page .pf-benefit-list {
+      display: grid;
+      gap: 14px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .tx-tefa-page .pf-benefit-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    /* Compound selector (not just .pf-benefit-icon) so this beats
+       .pf-benefit-list span's `display: block` on specificity — that rule
+       is meant for the description-text span in each list item, but it
+       also matches this icon span since both are <span> elements inside
+       .pf-benefit-list. Same fix applied to alabama-choose-act.html. */
+    .tx-tefa-page .pf-benefit-list .pf-benefit-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: var(--violet);
+      color: var(--white);
+      font-size: .72rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .tx-tefa-page .pf-benefit-list strong {
+      display: block;
+      font-family: var(--font-head);
+      font-size: .92rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .tx-tefa-page .pf-benefit-list span {
+      display: block;
+      font-size: .85rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.45;
     }
   </style>
 </head>
@@ -122,11 +323,20 @@
           <h1>Literacy Arcade for Texas TEFA Families</h1>
           <p class="hero-sub">Science of Reading–aligned games, assessments, fluency tools, and guided instructional support for eligible Texas families.</p>
 
-          <p class="provider-status">Literacy Arcade is an approved provider for the Texas Education Freedom Accounts (TEFA) program. Once an approved Literacy Arcade offering is available in Odyssey, eligible families can locate and purchase it through their TEFA account.</p>
+          <p class="provider-status">Literacy Arcade is an approved provider for the Texas Education Freedom Accounts (TEFA) program. Literacy Arcade Plus Annual and Plus Family Annual are both approved Odyssey offerings, and eligible families can purchase directly through their TEFA account.</p>
+
+          <p class="hero-flow-label">Use your TEFA funds for Literacy Arcade</p>
+          <ul class="hero-flow">
+            <li><span class="flow-num" aria-hidden="true">1</span>Choose your annual plan</li>
+            <li class="arrow" aria-hidden="true">→</li>
+            <li><span class="flow-num" aria-hidden="true">2</span>Open the Texas TEFA portal</li>
+            <li class="arrow" aria-hidden="true">→</li>
+            <li><span class="flow-num" aria-hidden="true">3</span>Complete your purchase in Odyssey</li>
+          </ul>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://educationfreedom.texas.gov/" target="_blank" rel="noopener noreferrer">Open the Texas TEFA Portal →</a>
-            <a class="btn btn-quiet" href="plus-subscriptions.html">Explore Literacy Arcade Plus Family →</a>
+            <a class="btn btn-primary btn-hero-primary" href="https://educationfreedom.texas.gov/" target="_blank" rel="noopener noreferrer">Open the Texas TEFA Portal →</a>
+            <a class="btn btn-quiet" href="#how-to-purchase">See how it works ↓</a>
           </div>
           <p class="hero-note">Grades K–6 · Supplemental reading support · No student accounts required</p>
         </div>
@@ -142,58 +352,67 @@
       </div>
     </section>
 
-    <!-- ══ 2 · WHAT FAMILIES RECEIVE (product overview) ══ -->
-    <!-- `lift` overlaps the hero slightly — the visual bridge between sections.
-         Promo images below are shared across ALL state pages (not state-specific). -->
-    <section class="state-section white lift" id="family-benefits">
+    <!-- ══ 2 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
+    <!-- `lift` overlaps the hero slightly — the visual bridge between
+         sections. Intentionally near the top of the page, directly after
+         the hero: the purchase/payment process should not be buried under
+         general program copy — same placement rule as Alabama/New
+         Hampshire. -->
+    <section class="state-section white lift" id="how-to-purchase">
       <div class="container">
-
-        <div class="section-heading">
-          <h2>What families receive with Literacy Arcade Plus Family</h2>
-          <p>Literacy Arcade Plus Family is a one-year digital subscription for children in grades K–6 — including beginning readers, struggling readers, and children with dyslexia. It combines reading assessments, fluency tools, customizable practice, and guided instructional support across the five essential areas of reading: phonemic awareness, phonics, fluency, vocabulary, and comprehension.</p>
-          <p>Use built-in content or add your own words, sentences, vocabulary, and comprehension questions to support your curriculum, intervention plan, or reading goals. Literacy Arcade is supplemental — it strengthens a core curriculum rather than replacing it.</p>
+        <div class="section-heading center">
+          <h2>How to purchase with Texas TEFA funds</h2>
+          <p>Texas Education Freedom Accounts are administered through Odyssey. Here's how to purchase Literacy Arcade in four steps.</p>
         </div>
 
-        <div class="overview-grid">
-          <figure class="overview-figure overview-figure--platform">
-            <button type="button" class="img-zoom" data-full="images/state-program/literacy-arcade-thumbnail.png" aria-label="Enlarge Literacy Arcade platform overview">
-              <img src="images/state-program/literacy-arcade-thumbnail.png" alt="Literacy Arcade platform overview showing reading games, assessments, fluency practice, teacher tools, and the five essential components of reading." loading="lazy" decoding="async" width="1536" height="1024" />
-              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
-            </button>
-          </figure>
+        <div class="purchase-steps purchase-steps--4">
+          <article class="purchase-step">
+            <h3>Choose your annual plan</h3>
+            <p>Select Plus Annual or Plus Family Annual.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Open the Texas TEFA portal</h3>
+            <p>Sign in to your Texas TEFA account and access Odyssey.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Purchase Literacy Arcade in Odyssey</h3>
+            <p>Search for Literacy Arcade, select your approved annual plan, and complete the purchase using available TEFA funds.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Activate your subscription</h3>
+            <p>After Literacy Arcade receives your Odyssey order, watch for your activation email.</p>
+          </article>
+        </div>
 
-          <div class="overview-side">
-            <!-- The distinctive Plus Family benefit — deliberately highlighted.
-                 Sparkle accents appear ONLY on the two guidance lines below. -->
-            <div class="guidance-card">
-              <span class="guidance-eyebrow">Included with Plus Family</span>
-              <h3><span class="spark" aria-hidden="true"></span>Monthly guidance for reading at home</h3>
-              <p>Families can ask a literacy specialist about assessment results, what to teach next, and how to use Literacy Arcade tools to support their child's reading needs.</p>
-              <p class="guidance-by"><span class="spark" aria-hidden="true"></span>Included through a monthly live group literacy Q&amp;A with Chelsea Herndon Warner, Ph.D., a literacy specialist and the creator of Literacy Arcade.</p>
-            </div>
-
-            <!-- Product + price summary (informational — no direct checkout here) -->
-            <div class="product-summary">
-              <div class="ps-title">Literacy Arcade Plus Family</div>
-              <div class="ps-sub">One-Year Digital Subscription</div>
-              <div class="ps-price">$99 <span>for one year</span></div>
-              <ul class="ps-list">
-                <li>For children in one household</li>
-                <li>Includes the full Literacy Arcade Plus platform</li>
-                <li>Includes monthly guidance and the live group Q&amp;A</li>
-                <li>No physical product is shipped</li>
-              </ul>
-            </div>
+        <!-- Warm, non-alarming activation clarification — reuses the
+             existing .note-panel component (same one used on Alabama/New
+             Hampshire). -->
+        <div class="note-panel">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <div>
+            <h2>After you complete your Odyssey purchase</h2>
+            <p>After Literacy Arcade receives your Odyssey order, watch for an email from <a href="mailto:hello@literacyarcade.com">hello@literacyarcade.com</a> within 24 hours with directions for activating your subscription.</p>
           </div>
+        </div>
+
+        <div class="purchase-cta">
+          <a class="btn btn-primary" href="https://educationfreedom.texas.gov/" target="_blank" rel="noopener noreferrer">Open the Texas TEFA Portal →</a>
+          <a class="btn btn-quiet" href="plus-subscriptions.html">Not using TEFA funds? View Plus plans →</a>
         </div>
       </div>
     </section>
 
-    <!-- ══ 3 · WHAT'S INCLUDED — polished product-category cards (2×2) ══ -->
-    <section class="state-section tint" id="whats-included">
+    <!-- ══ 3 · WHAT'S INCLUDED — polished product-category cards (2×2) [SHARED]
+         Identical to alabama-choose-act.html / new-hampshire-efa.html
+         #whats-included — same four cards, same copy, same assets, same
+         benefit strip. Core platform feature section, applies to BOTH
+         annual plans, so it must not carry Plus-Family-only or
+         Texas/TEFA/Odyssey language. This is the page's one and only
+         feature-explanation section; do not add a second one. ══ -->
+    <section class="state-section white" id="whats-included">
       <div class="container">
         <div class="section-heading center">
-          <h2>What's included with Literacy Arcade Plus Family</h2>
+          <h2>What's included with Literacy Arcade Plus</h2>
         </div>
 
         <!-- Cards are <article> (not links) so the image can open a lightbox and
@@ -261,7 +480,8 @@
         </div>
 
         <!-- Compact benefit strip — secondary to the image cards above.
-             Six items; monthly guidance lives in the callout, not repeated here. -->
+             Six items; monthly guidance lives in the Plus Family spotlight
+             below, not repeated here. -->
         <ul class="benefit-strip">
           <li><strong>Assess and plan</strong> Review assessment results, printable reports, skill patterns, and instructional next steps.</li>
           <li><strong>Teach with Letterbox Lessons</strong> Use sound boxes, letter tiles, supported word banks, and printable lesson plans.</li>
@@ -273,68 +493,101 @@
       </div>
     </section>
 
-    <!-- ══ 4 · PLUS FAMILY vs PLUS ══ -->
-    <section class="state-section white" id="plans-compare">
+    <!-- ══ 4 · PLUS FAMILY VALUE — visual spotlight, not another pricing card
+         [SHARED]. Identical to alabama-choose-act.html #plus-family-value —
+         same image, same layout, same purple styling, same copy, same
+         benefits. Universal wording only; no Texas/TEFA/Odyssey language
+         belongs here. Job of this section: explain why the added monthly
+         guidance is useful. It must NOT show pricing or repeat the Plus
+         feature list — that's what the plan comparison below is for. ══ -->
+    <section class="state-section white" id="plus-family-value">
+      <div class="container">
+        <div class="overview-grid">
+          <figure class="overview-figure overview-figure--platform">
+            <button type="button" class="img-zoom" data-full="images/state-program/literacy-arcade-thumbnail.png" aria-label="Enlarge Literacy Arcade platform overview">
+              <img src="images/state-program/literacy-arcade-thumbnail.png" alt="Literacy Arcade platform overview showing reading games, assessments, fluency practice, teacher tools, and the five essential components of reading." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+          </figure>
+
+          <div class="overview-side">
+            <div class="section-heading">
+              <span class="guidance-eyebrow">Recommended for homeschool families</span>
+              <h2>Plus Family adds support for what comes next</h2>
+              <p>Literacy Arcade Plus gives families the tools to assess, teach, and practice reading skills. Plus Family adds monthly guidance so you don't have to figure out the next step alone.</p>
+            </div>
+
+            <p class="pf-value-detail">Join a monthly live group literacy Q&amp;A with Chelsea Herndon Warner, Ph.D., to ask questions about your child's assessment results, what skills to work on next, and how to use Literacy Arcade activities to support their reading needs.</p>
+
+            <ul class="pf-benefit-list">
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <div>
+                  <strong>Understand assessment results</strong>
+                  <span>Get help interpreting patterns and identifying what to focus on.</span>
+                </div>
+              </li>
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <div>
+                  <strong>Know what to teach next</strong>
+                  <span>Ask questions about skills, instruction, and reading goals.</span>
+                </div>
+              </li>
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <div>
+                  <strong>Use Literacy Arcade with confidence</strong>
+                  <span>Get guidance on choosing tools and activities for your child.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 5 · CHOOSE YOUR ANNUAL PLAN — the one place plans/pricing are
+         compared [SHARED plan data, STATE-SPECIFIC CTA]. Texas has no
+         invoice tool — both CTAs link straight to the Texas TEFA portal
+         (Odyssey), where the family completes the purchase themselves. ══ -->
+    <section class="state-section tint" id="plans-compare">
       <div class="container">
         <div class="section-heading center">
-          <h2>Choose the option that fits your family</h2>
-          <p>Both options include the full Literacy Arcade digital platform. Plus Family adds monthly live guidance for reading at home — the live group literacy Q&amp;A.</p>
+          <h2>Choose your annual Literacy Arcade plan</h2>
+          <p>Both annual plans include the same full Literacy Arcade Plus platform. Plus Family adds monthly literacy guidance and a live group Q&amp;A for parents and guardians.</p>
         </div>
 
         <div class="compare-grid">
           <article class="compare-card featured">
             <span class="compare-badge">Recommended for families</span>
-            <h3>Literacy Arcade Plus Family</h3>
+            <span class="compare-plan-badge compare-plan-badge--family">Plus Family Annual</span>
+            <h3>Homeschool literacy support</h3>
             <div class="compare-price">$99 <span>/ year</span></div>
+            <p class="compare-desc">Everything in Literacy Arcade Plus for children in one household, plus monthly literacy guidance for families.</p>
             <ul class="compare-list">
-              <li>Full Literacy Arcade Plus platform</li>
-              <li>For children in one household</li>
-              <li class="hl">Monthly guidance for reading at home</li>
-              <li class="hl">Live group literacy Q&amp;A with a literacy specialist</li>
+              <li>Everything included with Literacy Arcade Plus</li>
+              <li>Use with children in one household</li>
+              <li class="hl">Monthly live group literacy Q&amp;A with a reading specialist</li>
+              <li>Parent/guardian guidance for assessment results and instructional next steps</li>
+              <li>Children do not need accounts</li>
             </ul>
             <a class="btn btn-primary" href="https://educationfreedom.texas.gov/" target="_blank" rel="noopener noreferrer">Open the Texas TEFA Portal →</a>
           </article>
 
           <article class="compare-card">
-            <h3>Literacy Arcade Plus</h3>
-            <div class="compare-price muted">Also available</div>
+            <span class="compare-plan-badge">Plus Annual</span>
+            <h3>Full-year Literacy Arcade access</h3>
+            <div class="compare-price">$79 <span>/ year</span></div>
+            <p class="compare-desc">Full Literacy Arcade Plus access for one parent or educator account, billed annually.</p>
             <ul class="compare-list">
-              <li>Full Literacy Arcade digital platform</li>
-              <li>Assessments, fluency tools, customizable practice, and teacher tools</li>
-              <li class="no">Does not include the monthly live group literacy Q&amp;A</li>
+              <li>Everything included in the Literacy Arcade Plus platform</li>
+              <li>One parent or educator account</li>
+              <li>Students do not need accounts</li>
+              <li class="no">Does not include the monthly family guidance/Q&amp;A</li>
             </ul>
-            <a class="btn btn-quiet" href="plus-subscriptions.html">View Plus plans →</a>
+            <a class="btn btn-primary" href="https://educationfreedom.texas.gov/" target="_blank" rel="noopener noreferrer">Open the Texas TEFA Portal →</a>
           </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ 5 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
-    <section class="state-section tint" id="efa-purchase">
-      <div class="container">
-        <div class="section-heading center">
-          <h2>How to purchase with Texas TEFA funds</h2>
-          <p>Texas Education Freedom Accounts are administered through Odyssey. To use TEFA funds, begin through the official Texas TEFA portal rather than Literacy Arcade's direct checkout.</p>
-        </div>
-
-        <div class="purchase-steps">
-          <article class="purchase-step">
-            <h3>Open the Texas TEFA portal</h3>
-            <p>Visit the official Texas Education Freedom Accounts website and select the Odyssey Login option.</p>
-          </article>
-          <article class="purchase-step">
-            <h3>Look for Literacy Arcade in Odyssey</h3>
-            <p>Sign in to your family's Odyssey account and search the marketplace for Literacy Arcade. Once an approved offering is available, it will appear there.</p>
-          </article>
-          <article class="purchase-step">
-            <h3>Complete the marketplace purchase</h3>
-            <p>Once you locate an approved Literacy Arcade offering, follow the Odyssey instructions to complete your purchase with available TEFA funds.</p>
-          </article>
-        </div>
-
-        <div class="purchase-cta">
-          <a class="btn btn-primary" href="https://educationfreedom.texas.gov/" target="_blank" rel="noopener noreferrer">Open the Texas TEFA Portal →</a>
-          <a class="btn btn-quiet" href="plus-subscriptions.html">Not using TEFA funds? View Plus plans →</a>
         </div>
       </div>
     </section>
@@ -348,31 +601,23 @@
         <div class="faq-grid">
           <article class="faq-card">
             <h3>Is Literacy Arcade approved for Texas TEFA?</h3>
-            <p>Yes. Literacy Arcade is an approved provider for the Texas Education Freedom Accounts program. Once an approved Literacy Arcade offering is available in Odyssey, families can locate it through their TEFA account.</p>
+            <p>Yes. Literacy Arcade is an approved Texas TEFA provider, and Literacy Arcade Plus Annual and Plus Family Annual are both approved Odyssey offerings.</p>
           </article>
           <article class="faq-card">
             <h3>How do I purchase Literacy Arcade with TEFA funds?</h3>
-            <p>Sign in to Odyssey through the official Texas TEFA portal and search for Literacy Arcade. Once an approved offering is available, you can complete your purchase through the marketplace using TEFA funds.</p>
+            <p>Sign in through the official Texas TEFA portal, access Odyssey, search for Literacy Arcade, select the approved annual plan you want, and complete your purchase in Odyssey.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What happens after I purchase through Odyssey?</h3>
+            <p>After Literacy Arcade receives your Odyssey order, watch for an email from <a href="mailto:hello@literacyarcade.com">hello@literacyarcade.com</a> within 24 hours with directions for activating your subscription.</p>
           </article>
           <article class="faq-card">
             <h3>What does Plus Family include?</h3>
-            <p>Plus Family includes the full Literacy Arcade Plus platform for children in one household, plus monthly guidance for reading at home through a live group literacy Q&amp;A with a literacy specialist.</p>
+            <p>Plus Family includes the full Literacy Arcade Plus platform for children in one household, plus monthly literacy guidance and a live group Q&amp;A with a reading specialist.</p>
           </article>
           <article class="faq-card">
             <h3>What is the difference between Plus and Plus Family?</h3>
-            <p>Both include the full Literacy Arcade digital platform. Plus Family also includes monthly guidance for reading at home through the live group literacy Q&amp;A.</p>
-          </article>
-          <article class="faq-card">
-            <h3>Is Literacy Arcade a complete curriculum?</h3>
-            <p>No. Literacy Arcade is supplemental. It strengthens a family's core curriculum or intervention program with assessments, targeted instruction, and reading practice.</p>
-          </article>
-          <article class="faq-card">
-            <h3>What grades does Literacy Arcade support?</h3>
-            <p>Literacy Arcade primarily supports literacy learning in grades K–6.</p>
-          </article>
-          <article class="faq-card">
-            <h3>Do children need accounts?</h3>
-            <p>No. Children can use shared activities without creating Literacy Arcade accounts or providing student email addresses.</p>
+            <p>Both include the same full Literacy Arcade Plus platform. Plus Family adds monthly literacy guidance and a live group Q&amp;A for parents and guardians.</p>
           </article>
           <article class="faq-card">
             <h3>Can I purchase directly without using TEFA funds?</h3>
@@ -390,7 +635,7 @@
     <img class="lb-img" id="lbImg" src="" alt="" />
   </div>
 
-  <!-- ══ 6 · SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
+  <!-- ══ SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
   <footer class="footer" aria-label="Site footer">
     <div class="container">
       <div class="footer-inner">
@@ -489,5 +734,13 @@
       });
     })();
   </script>
+  <!-- ══ Shop announcement — dismissible promo card (shop-announcement.js) ══ -->
+  <div class="shop-announce" id="shopAnnounce" aria-label="New Literacy Arcade Shop announcement" hidden>
+    <button type="button" class="shop-announce-close" id="shopAnnounceClose" aria-label="Close Shop announcement">&times;</button>
+    <p class="shop-announce-heading"><span class="shop-announce-spark" aria-hidden="true">✦</span>New at Literacy Arcade</p>
+    <p class="shop-announce-body">Explore hands-on literacy products in the new Literacy Arcade Shop.</p>
+    <a class="shop-announce-cta" id="shopAnnounceCta" href="shop.html">Visit the Shop <span aria-hidden="true">→</span></a>
+  </div>
+  <script defer src="shop-announcement.js"></script>
 </body>
 </html>
