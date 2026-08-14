@@ -303,7 +303,14 @@
       align-items: flex-start;
       gap: 12px;
     }
-    .alabama-choose-act-page .pf-benefit-icon {
+    /* Compound selector (not just .pf-benefit-icon) so this beats
+       .pf-benefit-list span's `display: block` on specificity — that rule
+       is meant for the description-text span in each list item, but it
+       also matches this icon span since both are <span> elements inside
+       .pf-benefit-list, and it was silently overriding this icon's
+       `display: inline-flex`, which is why the check mark centering never
+       actually applied. */
+    .alabama-choose-act-page .pf-benefit-list .pf-benefit-icon {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -769,21 +776,21 @@
 
             <ul class="pf-benefit-list">
               <li>
-                <span class="pf-benefit-icon" aria-hidden="true">✓</span>
+                <span class="pf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                 <div>
                   <strong>Understand assessment results</strong>
                   <span>Get help interpreting patterns and identifying what to focus on.</span>
                 </div>
               </li>
               <li>
-                <span class="pf-benefit-icon" aria-hidden="true">✓</span>
+                <span class="pf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                 <div>
                   <strong>Know what to teach next</strong>
                   <span>Ask questions about skills, instruction, and reading goals.</span>
                 </div>
               </li>
               <li>
-                <span class="pf-benefit-icon" aria-hidden="true">✓</span>
+                <span class="pf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                 <div>
                   <strong>Use Literacy Arcade with confidence</strong>
                   <span>Get guidance on choosing tools and activities for your child.</span>
