@@ -2,20 +2,96 @@
 <!-- ============================================================================
      STATE PROGRAM PAGE — New Hampshire EFA
      ---------------------------------------------------------------------------
-     This page is the BASE TEMPLATE for state approval / marketplace pages
-     (Texas TEFA, future states). All shared styling lives in state-program.css.
+     Rebuilt to follow the same polished structure/purchasing-flow pattern as
+     alabama-choose-act.html, with New Hampshire-specific rules and wording.
+     Most shared styling lives in state-program.css; this page carries a
+     page-local <style> block (in <head>) for the EFA purchase-flow layout
+     (hero flow chips, 4-step grid, compare-grid pricing note, invoice modal)
+     mirroring Alabama's page-local block — scoped to .nh-efa-page throughout.
 
-     TO CLONE FOR A NEW STATE, change only the blocks marked  [STATE-SPECIFIC]:
-       1. <head> meta / title / canonical / JSON-LD
-       2. STATE CONFIG comment block below (marketplace URL, labels)
-       3. Hero: eyebrow label, H1, subhead, approval statement, state art
-       4. Purchase steps wording + marketplace links
-       5. FAQ answers that name the state
-     Everything else (header, sections, screenshot cluster, footer) stays as-is.
+     Section order (current) — the reusable ClassWallet state-page pattern.
+     Each section is tagged [STATE-SPECIFIC] or [SHARED] below:
+       1. Hero [STATE-SPECIFIC] — state badge, approval statement, 3-step
+          "Choose → Generate → Submit" process indicator, primary
+          "Request a New Hampshire EFA Invoice" CTA
+       2. How to purchase [STATE-SPECIFIC] — New Hampshire's 4-step
+          ClassWallet Direct Pay process (covers both digital plans and
+          physical products) + "no need to pay out of pocket" note panel
+          (id="efa-purchase")
+       3. What's included with Literacy Arcade Plus [SHARED] — the one
+          feature-explanation section on the page. Describes the core Plus
+          platform, identical for BOTH annual plans (id="whats-included")
+       4. Plus Family value [SHARED layout, STATE-SPECIFIC student-centered
+          wording] — a visual spotlight, not a pricing section. New
+          Hampshire EFA funds are assigned to an individual student, so this
+          section frames the "Family" benefit as parent/guardian support
+          around the named EFA student, not sibling/household access
+          (id="plus-family-value")
+       5. Choose your annual plan [SHARED plan data, STATE-SPECIFIC CTA +
+          individual-student note] — the one place the two annual plans
+          ($79 Plus / $99 Plus Family) are compared and priced. Hand-built
+          markup (not config-rendered) for visual parity with Alabama's
+          pricing cards (id="plans-compare")
+       6. Physical literacy products [SHARED card pattern + CONFIG-DRIVEN
+          rendering, STATE-SPECIFIC framing] — a separate purchase from the
+          subscription tiers above, not a third pricing card. Cards are
+          rendered from the `offerings` list in
+          new-hampshire-invoice-config.js by renderProductCards() in
+          new-hampshire-invoice-generator.js, so a future physical product
+          needs a config entry, not a markup change (id="physical-products")
+       7. FAQ [STATE-SPECIFIC wording] — short, direct answers only
+
+     Do NOT reintroduce a standalone "what families receive" / platform
+     overview section between sections 2 and 3 — that content used to
+     duplicate both section 3 (features) and section 5 (pricing) on the
+     Alabama page and was removed there for that reason; the same applies
+     here. Do NOT fold physical products into the $79/$99 cards in section 5
+     — they are a different kind of purchase (one-time, may ship) and stay
+     in their own section 6.
+
+     Every "Request a New Hampshire EFA Invoice" button is a
+     <button data-invoice-trigger> (optionally data-plan="<offering id>" to
+     preselect an item) that opens #invoiceModal near the end of <body>.
+     Behavior lives in new-hampshire-invoice-generator.js; provider info and
+     the full offerings list (digital plans + physical products) live in
+     new-hampshire-invoice-config.js — edit that file, not the generator, to
+     update pricing, business info, or add a future product. These are
+     separate files from the Alabama invoice generator/config — do not point
+     this page at the Alabama files or vice versa, and do not add New
+     Hampshire-only concepts (offerings, physical products) to Alabama's.
 
      STATE CONFIG [STATE-SPECIFIC]
-       State label ....... New Hampshire Education Freedom Account (EFA)
-       Marketplace URL ... https://app.nh.scholarshipfund.org/marketplace?...
+       State label ....... New Hampshire EFA (Education Freedom Account)
+       Purchase process .. ClassWallet Direct Pay to an approved provider.
+                           New Hampshire also allows reimbursement for
+                           eligible expenses, but Direct Pay is presented as
+                           the primary path since it avoids paying out of
+                           pocket first.
+       Funding unit ...... Individual student — New Hampshire EFA funds are
+                           assigned to one named student, even when the
+                           purchased plan (Plus Family) includes
+                           parent/guardian support, or the invoice is for a
+                           physical product. Do not describe Plus Family
+                           here as sibling/household access, and do not
+                           build a multi-student invoice.
+       Invoice tool ...... Client-side PDF generator (jsPDF), config in
+                           new-hampshire-invoice-config.js. Supports one
+                           offering per invoice in V1 (digital subscription
+                           OR physical product, not several at once) — see
+                           the generator's header comment for why multi-item
+                           invoices were deferred rather than built. No
+                           verified fixed New Hampshire program-year end
+                           date exists in this repo, so digital-subscription
+                           invoices state a one-year subscription term
+                           starting on the invoice date rather than a state
+                           eligibility window — see that file's comments.
+       Physical products . Rendered on-page and in the invoice modal from
+                           the same offerings config. This page never shows
+                           "Sold out"/inventory-status wording (it's used
+                           for tutorial recording and stays evergreen) —
+                           availability instead changes which CTA a product
+                           card gets. See inventoryStatusShown/
+                           invoiceEnabled in new-hampshire-invoice-config.js.
        State art ......... images/new-hampshire-efa.svg
        Direct purchase ... plus-subscriptions.html
      ============================================================================ -->
@@ -66,6 +142,478 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="state-program.css" />
+  <link rel="stylesheet" href="shop-announcement.css" />
+
+  <!-- [STATE-SPECIFIC] Page-local styles for the New Hampshire EFA purchase
+       flow. Mirrors alabama-choose-act.html's page-local block so this
+       redesign pass could stay scoped to this one file. Scoped to
+       .nh-efa-page throughout. -->
+  <style>
+    .nh-efa-page .hero-flow-label {
+      font-family: var(--font-head);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin: 20px 0 10px;
+    }
+    .nh-efa-page .hero-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin: 0 0 20px;
+      list-style: none;
+      padding: 0;
+    }
+    .nh-efa-page .hero-flow li {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      padding: 2px 0;
+      font-family: var(--font-head);
+      font-size: .84rem;
+      font-weight: 750;
+      color: var(--ink-soft);
+    }
+    .nh-efa-page .hero-flow .flow-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .7rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .nh-efa-page .hero-flow .arrow {
+      color: var(--border);
+      font-weight: 700;
+      padding: 0 2px;
+    }
+
+    .nh-efa-page .purchase-steps--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    @media (max-width: 1100px) {
+      .nh-efa-page .purchase-steps--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .nh-efa-page .purchase-steps--4 { grid-template-columns: 1fr; }
+    }
+
+    /* Small "Plus Annual" / "Plus Family Annual" plan-type pill — mirrors
+       .plan-badge on plus-subscriptions.html so the two pricing pages read
+       as the same product line. Sits above the .compare-badge ribbon on
+       the featured card and above the h3 on both cards. */
+    .nh-efa-page .compare-plan-badge {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      margin: 14px 0 2px;
+      padding: 5px 10px;
+      border-radius: 100px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-family: var(--font-head);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .nh-efa-page .compare-plan-badge--family {
+      background: var(--violet);
+      color: var(--white);
+    }
+    .nh-efa-page .compare-desc {
+      font-size: .88rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin: 2px 0 16px;
+    }
+
+    /* Plan cards hold different amounts of content, so override the shared
+       .compare-grid { align-items: stretch } + .compare-card .btn
+       { margin-top: auto } combination, scoped to this page only, so each
+       card sizes to its own content and its CTA sits close to its bullets. */
+    .nh-efa-page .compare-grid { align-items: start; }
+    .nh-efa-page .compare-card .btn { margin-top: 20px; align-self: flex-start; }
+
+    /* ── Plus Family value section — visual spotlight, not a pricing card ── */
+    .nh-efa-page .pf-value-detail {
+      margin: 0 0 20px;
+      font-size: .92rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+    .nh-efa-page .pf-benefit-list {
+      display: grid;
+      gap: 14px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nh-efa-page .pf-benefit-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .nh-efa-page .pf-benefit-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: var(--violet);
+      color: var(--white);
+      font-size: .72rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .nh-efa-page .pf-benefit-list strong {
+      display: block;
+      font-family: var(--font-head);
+      font-size: .92rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .nh-efa-page .pf-benefit-list span {
+      display: block;
+      font-size: .85rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.45;
+    }
+    /* Visually secondary supporting line under a section-heading paragraph —
+       smaller and softer than the primary intro text above it. */
+    .nh-efa-page .section-subnote {
+      margin: 6px 0 0;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      opacity: .85;
+    }
+    .nh-efa-page .invoice-assist-note {
+      max-width: fit-content;
+      margin: 20px auto 0;
+      padding: 10px 18px;
+      border: 1px dashed rgba(123,94,167,.4);
+      border-radius: 100px;
+      background: #FCFAFF;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--violet);
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* ── Physical-product cards — rendered from config by
+         renderProductCards() in new-hampshire-invoice-generator.js. Mirrors
+         the visual language of .category-card (shared feature cards above)
+         so a config-driven card reads as part of the same design system,
+         not a bolted-on component. ── */
+    .nh-efa-page .nh-product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    @media (max-width: 720px) {
+      .nh-efa-page .nh-product-grid { grid-template-columns: 1fr; }
+    }
+    .nh-efa-page .nh-product-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .nh-efa-page .nh-product-media {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      background: var(--cream);
+    }
+    .nh-efa-page .nh-product-media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .nh-efa-page .nh-product-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .nh-efa-page .nh-product-body h3 {
+      font-family: var(--font-head);
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin: 0 0 6px;
+    }
+    .nh-efa-page .nh-product-body p {
+      font-size: .88rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin: 0 0 12px;
+    }
+    .nh-efa-page .nh-product-price {
+      font-family: var(--font-head);
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--teal-dk);
+      margin-bottom: 14px;
+    }
+    .nh-efa-page .nh-product-price span {
+      display: block;
+      font-family: var(--font-body, inherit);
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin-top: 2px;
+    }
+    /* Invisible same-height stand-in for the price line on a currently
+       unpriced product (Heart Word Flash Cards) — keeps card rhythm/border
+       feeling consistent with priced cards without showing any price or
+       placeholder text ("TBD", "$0", etc). */
+    .nh-efa-page .nh-product-price-placeholder {
+      visibility: hidden;
+      font-size: 1.1rem;
+      line-height: 1.3;
+    }
+    .nh-efa-page .nh-product-actions { margin-top: auto; }
+    .nh-efa-page .nh-product-actions .btn { width: 100%; justify-content: center; }
+
+    /* ── New Hampshire individual-student EFA note — visible but restrained,
+         sits below the Plus Family spotlight and above the pricing cards. ── */
+    .nh-efa-page .student-note-panel {
+      max-width: 760px;
+      margin: 28px auto 0;
+      padding: 16px 20px;
+      border: 1.5px solid rgba(123,94,167,.35);
+      border-radius: var(--radius);
+      background: #FCFAFF;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .nh-efa-page .student-note-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--violet);
+      color: var(--white);
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: .82rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .nh-efa-page .student-note-panel p {
+      margin: 0;
+      font-size: .88rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .nh-efa-page .student-note-panel strong { color: var(--ink); }
+
+    /* ── Hero primary CTA — the one action this page most wants a family to
+         take. Coral, not teal, so it reads as distinct from the process
+         steps, the secondary link, and the rest of the page's teal
+         buttons. Restrained: one small sparkle, one shadow. ── */
+    .nh-efa-page .hero-actions .btn-hero-primary {
+      background: var(--coral);
+      box-shadow: 0 10px 28px rgba(255,107,107,.32);
+      font-size: 1.02rem;
+      padding: 15px 26px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nh-efa-page .hero-actions .btn-hero-primary:hover,
+    .nh-efa-page .hero-actions .btn-hero-primary:active {
+      background: #F0524F;
+    }
+    .nh-efa-page .btn-hero-primary .hero-cta-spark {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M12 0c.6 5.9 5.5 10.8 12 11.4-6.5.6-11.4 5.5-12 12-.6-6.5-5.5-11.4-12-12C6.5 10.8 11.4 5.9 12 0z'/%3E%3C/svg%3E") no-repeat center / contain;
+      flex-shrink: 0;
+    }
+    .nh-efa-page .hero-cta-support {
+      margin: 10px 0 0;
+      font-size: .84rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+    }
+
+    /* ── New Hampshire EFA invoice request modal ─────────────────────────── */
+    .nh-efa-page .ia-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(20,16,38,.82);
+      backdrop-filter: blur(3px);
+    }
+    .nh-efa-page .ia-modal-overlay[hidden] { display: none; }
+    .nh-efa-page .ia-modal {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+      padding: 36px 30px 28px;
+    }
+    .nh-efa-page .ia-modal-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 40px; height: 40px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .nh-efa-page .ia-modal-close:hover { background: var(--mint); }
+    .nh-efa-page .ia-modal-close:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+    .nh-efa-page .ia-modal h2 { font-size: 1.28rem; font-weight: 900; color: var(--ink); margin: 0 0 6px; }
+    .nh-efa-page .ia-modal-sub { color: var(--ink-soft); font-size: .92rem; font-weight: 650; margin: 0 0 22px; line-height: 1.5; }
+    .nh-efa-page .ia-field { margin-bottom: 16px; }
+    .nh-efa-page .ia-field fieldset { border: 0; padding: 0; margin: 0; }
+    .nh-efa-page .ia-field label,
+    .nh-efa-page .ia-field legend {
+      display: block;
+      font-family: var(--font-head);
+      font-size: .82rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .nh-efa-page .ia-field input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--cream);
+    }
+    .nh-efa-page .ia-field input:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 1px;
+      border-color: var(--teal);
+    }
+    .nh-efa-page .ia-field input[aria-invalid="true"] { border-color: #C6484D; }
+    .nh-efa-page .ia-plan-options { display: grid; gap: 18px; }
+    /* Groups the modal's offering list into "Annual digital plans" /
+       "Physical literacy products" so the form stays scannable as more
+       offerings are added via config, rather than one long flat list. */
+    .nh-efa-page .ia-plan-group { display: grid; gap: 10px; }
+    .nh-efa-page .ia-plan-group-label {
+      margin: 0;
+      font-family: var(--font-head);
+      font-size: .74rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .nh-efa-page .ia-plan-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .nh-efa-page .ia-plan-option:hover { border-color: rgba(46,196,182,.5); }
+    .nh-efa-page .ia-plan-option:has(input:checked) { border-color: var(--teal-dk); background: var(--mint); }
+    .nh-efa-page .ia-plan-option:has(input:focus-visible) { outline: 3px solid var(--amber); outline-offset: 2px; }
+    .nh-efa-page .ia-plan-option input {
+      margin-top: 3px;
+      width: 18px; height: 18px;
+      accent-color: var(--teal-dk);
+      flex-shrink: 0;
+    }
+    .nh-efa-page .ia-plan-option-body { flex: 1; min-width: 0; }
+    .nh-efa-page .ia-plan-option-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .nh-efa-page .ia-plan-name { font-weight: 900; color: var(--ink); font-size: .96rem; }
+    .nh-efa-page .ia-plan-price { font-weight: 900; color: var(--teal-dk); font-size: .96rem; white-space: nowrap; }
+    .nh-efa-page .ia-plan-sub { display: block; color: var(--ink-soft); font-size: .8rem; font-weight: 650; margin-top: 3px; }
+    .nh-efa-page .ia-error {
+      color: #C6484D;
+      font-size: .82rem;
+      font-weight: 750;
+      margin: 6px 0 0;
+    }
+    .nh-efa-page .ia-error[hidden] { display: none; }
+    .nh-efa-page .ia-error-general { margin: 4px 0 14px; }
+    .nh-efa-page .ia-submit { width: 100%; justify-content: center; }
+    .nh-efa-page .ia-submit:disabled { cursor: wait; }
+    .nh-efa-page .ia-modal-note { margin: 14px 0 0; text-align: center; font-size: .8rem; color: var(--ink-soft); font-weight: 650; }
+    .nh-efa-page #invoiceSuccessView h2 { color: var(--teal-dk); }
+    .nh-efa-page .ia-success-summary {
+      margin: 0 0 18px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--mint);
+      color: var(--ink);
+      font-size: .88rem;
+      font-weight: 800;
+    }
+    .nh-efa-page #invoiceDownloadBtn { width: 100%; justify-content: center; margin-bottom: 18px; }
+    .nh-efa-page .ia-next-steps-label { font-family: var(--font-head); font-size: .82rem; font-weight: 800; color: var(--ink); margin: 0 0 8px; }
+    .nh-efa-page .ia-next-steps { list-style: decimal; padding-left: 20px; margin: 0 0 22px; display: grid; gap: 7px; }
+    .nh-efa-page .ia-next-steps li { font-size: .92rem; font-weight: 700; color: var(--ink); }
+    .nh-efa-page .ia-activation-note {
+      margin: 4px 0 20px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--mint);
+      color: var(--ink);
+      font-size: .85rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+    .nh-efa-page .ia-activation-note a { color: var(--teal-dk); font-weight: 800; text-decoration: underline; text-underline-offset: 2px; }
+    .nh-efa-page #invoiceStartOverBtn { width: 100%; justify-content: center; }
+    @media (max-width: 640px) {
+      .nh-efa-page .ia-modal { padding: 30px 18px 22px; max-height: 92vh; }
+      .nh-efa-page .ia-plan-option-top { flex-direction: column; align-items: flex-start; gap: 2px; }
+    }
+  </style>
 </head>
 <body class="nh-efa-page">
 
@@ -107,76 +655,90 @@
 
           <p class="provider-status">Literacy Arcade is an approved Education Service Provider for the New Hampshire Education Freedom Account program.</p>
 
+          <p class="hero-flow-label">Use your EFA funds for Literacy Arcade</p>
+          <ul class="hero-flow">
+            <li><span class="flow-num" aria-hidden="true">1</span>Choose what to purchase</li>
+            <li class="arrow" aria-hidden="true">→</li>
+            <li><span class="flow-num" aria-hidden="true">2</span>Generate an invoice</li>
+            <li class="arrow" aria-hidden="true">→</li>
+            <li><span class="flow-num" aria-hidden="true">3</span>Submit it through ClassWallet</li>
+          </ul>
+
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://app.nh.scholarshipfund.org/marketplace?range=50&amp;upper_grade=6&amp;lower_grade=0&amp;lat=43.20622059999999&amp;lng=-71.5398156&amp;is_microschool=false&amp;page=discovery&amp;subschools%5B%5D=traditional+public&amp;subschools%5B%5D=public+charter&amp;subschools%5B%5D=private&amp;subschools%5B%5D=virtual&amp;organizations%5B%5D=vendor&amp;organizations%5B%5D=provider&amp;organizations%5B%5D=school" target="_blank" rel="noopener noreferrer">View the New Hampshire EFA Marketplace →</a>
-            <a class="btn btn-quiet" href="plus-subscriptions.html">Explore Literacy Arcade Plus Family →</a>
+            <button type="button" class="btn btn-primary btn-hero-primary" data-invoice-trigger><span class="hero-cta-spark" aria-hidden="true"></span>Request a New Hampshire EFA Invoice →</button>
+            <a class="btn btn-quiet" href="#efa-purchase">See how it works ↓</a>
           </div>
+          <p class="hero-cta-support">Get your PDF invoice instantly</p>
           <p class="hero-note">Grades K–6 · Supplemental reading support · No student accounts required</p>
         </div>
 
-        <!-- state art card — swap the <img> + label per state.
-             The outline is the focus; the approval pill sits BELOW it in flow. -->
+        <!-- state art card — the outline is the focus; the approval pill sits
+             BELOW it in flow. -->
         <div class="state-art">
           <div class="state-art-frame">
             <img src="images/new-hampshire-efa.svg" alt="" aria-hidden="true" />
           </div>
-          <span class="state-art-label nh-provider-label">Approved Education Service Provider</span>
+          <span class="state-art-label state-art-label--fixed">Approved Education Service Provider</span>
         </div>
       </div>
     </section>
 
-    <!-- ══ 2 · WHAT FAMILIES RECEIVE (product overview) ══ -->
-    <!-- `lift` overlaps the hero slightly — the visual bridge between sections.
-         Promo images below are shared across ALL state pages (not state-specific). -->
-    <section class="state-section white lift" id="family-benefits">
-      <div class="container">
-
-        <div class="section-heading">
-          <h2>What families receive with Literacy Arcade Plus Family</h2>
-          <p>Literacy Arcade Plus Family is a one-year digital subscription for children in grades K–6 — including beginning readers, struggling readers, and children with dyslexia. It combines reading assessments, fluency tools, customizable practice, and guided instructional support across the five essential areas of reading: phonemic awareness, phonics, fluency, vocabulary, and comprehension.</p>
-          <p>Use built-in content or add your own words, sentences, vocabulary, and comprehension questions to support your curriculum, intervention plan, or reading goals. Literacy Arcade is supplemental — it strengthens a core curriculum rather than replacing it.</p>
-        </div>
-
-        <div class="overview-grid">
-          <figure class="overview-figure overview-figure--platform">
-            <button type="button" class="img-zoom" data-full="images/state-program/literacy-arcade-thumbnail.png" aria-label="Enlarge Literacy Arcade platform overview">
-              <img src="images/state-program/literacy-arcade-thumbnail.png" alt="Literacy Arcade platform overview showing reading games, assessments, fluency practice, teacher tools, and the five essential components of reading." loading="lazy" decoding="async" width="1536" height="1024" />
-              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
-            </button>
-          </figure>
-
-          <div class="overview-side">
-            <!-- The distinctive Plus Family benefit — deliberately highlighted.
-                 Sparkle accents appear ONLY on the two guidance lines below. -->
-            <div class="guidance-card">
-              <span class="guidance-eyebrow">Included with Plus Family</span>
-              <h3><span class="spark" aria-hidden="true"></span>Monthly guidance for reading at home</h3>
-              <p>Families can ask a literacy specialist about assessment results, what to teach next, and how to use Literacy Arcade tools to support their child's reading needs.</p>
-              <p class="guidance-by"><span class="spark" aria-hidden="true"></span>Included through a monthly live group literacy Q&amp;A with Chelsea Herndon Warner, Ph.D., a literacy specialist and the creator of Literacy Arcade.</p>
-            </div>
-
-            <!-- Product + price summary (informational — no direct checkout here) -->
-            <div class="product-summary">
-              <div class="ps-title">Literacy Arcade Plus Family</div>
-              <div class="ps-sub">One-Year Digital Subscription</div>
-              <div class="ps-price">$99 <span>for one year</span></div>
-              <ul class="ps-list">
-                <li>For children in one household</li>
-                <li>Includes the full Literacy Arcade Plus platform</li>
-                <li>Includes monthly guidance and the live group Q&amp;A</li>
-                <li>No physical product is shipped</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ 3 · WHAT'S INCLUDED — polished product-category cards (2×2) ══ -->
-    <section class="state-section tint" id="whats-included">
+    <!-- ══ 2 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
+    <!-- `lift` overlaps the hero slightly — the visual bridge between
+         sections. Intentionally near the top of the page: the
+         purchase/payment process should not be buried under general
+         program copy. -->
+    <section class="state-section white lift" id="efa-purchase">
       <div class="container">
         <div class="section-heading center">
-          <h2>What's included with Literacy Arcade Plus Family</h2>
+          <h2>How to purchase with New Hampshire EFA funds</h2>
+          <p>New Hampshire families use ClassWallet's Direct Pay option to send EFA funds straight to Literacy Arcade. Here's how it works, in four steps.</p>
+        </div>
+
+        <div class="purchase-steps purchase-steps--4">
+          <article class="purchase-step">
+            <h3>Choose what you want to purchase</h3>
+            <p>Select an annual Literacy Arcade subscription or an available physical literacy product.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Generate your Literacy Arcade invoice</h3>
+            <p>Enter the student information needed for the New Hampshire EFA purchase.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Submit it through ClassWallet</h3>
+            <p>Use New Hampshire EFA Direct Pay to submit the invoice for the student named on the EFA account.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Complete your Literacy Arcade purchase</h3>
+            <p>After Literacy Arcade receives the approved payment, digital subscriptions are activated and physical products are prepared for shipment.</p>
+          </article>
+        </div>
+
+        <!-- Warm, non-alarming payment clarification — reuses the existing
+             .note-panel component. -->
+        <div class="note-panel">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <div>
+            <h2>No need to pay out of pocket</h2>
+            <p>ClassWallet Direct Pay allows eligible EFA purchases to be paid directly from the student's account. New Hampshire also allows reimbursement for eligible expenses.</p>
+          </div>
+        </div>
+
+        <div class="purchase-cta">
+          <button type="button" class="btn btn-primary" data-invoice-trigger>Request a New Hampshire EFA Invoice →</button>
+          <a class="btn btn-quiet" href="#plans-compare">See annual plans ↓</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3 · WHAT'S INCLUDED — polished product-category cards (2×2) [SHARED] ══
+         Core platform feature section — applies to BOTH annual plans, so it
+         must not carry Plus-Family-only language. This is the page's one
+         and only feature-explanation section; do not add a second one. -->
+    <section class="state-section white" id="whats-included">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>What's included with Literacy Arcade Plus</h2>
         </div>
 
         <!-- Cards are <article> (not links) so the image can open a lightbox and
@@ -244,7 +806,8 @@
         </div>
 
         <!-- Compact benefit strip — secondary to the image cards above.
-             Six items; monthly guidance lives in the callout, not repeated here. -->
+             Six items; monthly guidance lives in the spotlight below, not
+             repeated here. -->
         <ul class="benefit-strip">
           <li><strong>Assess and plan</strong> Review assessment results, printable reports, skill patterns, and instructional next steps.</li>
           <li><strong>Teach with Letterbox Lessons</strong> Use sound boxes, letter tiles, supported word banks, and printable lesson plans.</li>
@@ -256,73 +819,148 @@
       </div>
     </section>
 
-    <!-- ══ 4 · PLUS FAMILY vs PLUS ══ -->
-    <section class="state-section white" id="plans-compare">
+    <!-- ══ 4 · PLUS FAMILY VALUE — visual spotlight, not another pricing card
+         [SHARED layout, STATE-SPECIFIC student-centered wording]. Job of
+         this section: explain why the added monthly guidance is useful. It
+         must NOT show pricing, repeat the Plus feature list, or become a
+         second product-comparison table — that's what section 5
+         (plans-compare) is for.
+
+         CRITICAL New Hampshire rule: EFA funds are assigned to an
+         individual student, not the whole family. This copy frames "Family"
+         as parent/guardian support around the named EFA student — not
+         sibling/multi-child access — unlike a household-access framing that
+         would misstate how New Hampshire EFA funding works. -->
+    <section class="state-section white" id="plus-family-value">
+      <div class="container">
+        <div class="overview-grid">
+          <figure class="overview-figure overview-figure--platform">
+            <button type="button" class="img-zoom" data-full="images/state-program/literacy-arcade-thumbnail.png" aria-label="Enlarge Literacy Arcade platform overview">
+              <img src="images/state-program/literacy-arcade-thumbnail.png" alt="Literacy Arcade platform overview showing reading games, assessments, fluency practice, teacher tools, and the five essential components of reading." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+          </figure>
+
+          <div class="overview-side">
+            <div class="section-heading">
+              <span class="guidance-eyebrow">Recommended for homeschool families</span>
+              <h2>Plus Family adds support for what comes next</h2>
+              <p>Literacy Arcade Plus gives families the tools to assess, teach, and practice reading skills. Plus Family adds monthly guidance for parents and guardians supporting their child's reading.</p>
+            </div>
+
+            <p class="pf-value-detail">Join a monthly live group literacy Q&amp;A with Chelsea Herndon Warner, Ph.D., to ask questions about the student's assessment results, what skills to work on next, and how to use Literacy Arcade activities to support that student's reading development.</p>
+
+            <ul class="pf-benefit-list">
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true">✓</span>
+                <div>
+                  <strong>Understand assessment results</strong>
+                  <span>Get help interpreting patterns and identifying what to focus on for the student.</span>
+                </div>
+              </li>
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true">✓</span>
+                <div>
+                  <strong>Know what to teach next</strong>
+                  <span>Ask questions about skills, instruction, and reading goals.</span>
+                </div>
+              </li>
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true">✓</span>
+                <div>
+                  <strong>Use Literacy Arcade with confidence</strong>
+                  <span>Get guidance on choosing tools and activities to support the student's reading needs.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- New Hampshire individual-student EFA note — visible enough to
+             prevent confusion, without dominating the page. Do not describe
+             Plus Family funds as shareable among siblings. -->
+        <div class="student-note-panel">
+          <span class="student-note-icon" aria-hidden="true">i</span>
+          <p><strong>New Hampshire EFA funds are assigned to individual students.</strong> Plus Family should be purchased for the student named on the EFA account; the Family benefits provide additional guidance and support for the parent or guardian supporting that student.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 5 · CHOOSE YOUR ANNUAL PLAN — the one place plans/pricing are
+         compared [SHARED plan data, STATE-SPECIFIC CTA]. The invoice
+         generator only supports these two annual plans, so no monthly
+         pricing or physical-product mention belongs in this section. ══ -->
+    <section class="state-section tint" id="plans-compare">
       <div class="container">
         <div class="section-heading center">
-          <h2>Choose the option that fits your family</h2>
-          <p>Both options include the full Literacy Arcade digital platform. Plus Family adds monthly live guidance for reading at home — the live group literacy Q&amp;A.</p>
+          <h2>Choose your annual Literacy Arcade plan</h2>
+          <p>Both annual plans include the same full Literacy Arcade Plus platform. Plus Family adds monthly literacy guidance and a live group Q&amp;A for parents and guardians.</p>
         </div>
 
         <div class="compare-grid">
           <article class="compare-card featured">
-            <span class="compare-badge">Recommended for families</span>
-            <h3>Literacy Arcade Plus Family</h3>
+            <span class="compare-badge">Recommended for homeschool families</span>
+            <span class="compare-plan-badge compare-plan-badge--family">Plus Family Annual</span>
+            <h3>Homeschool literacy support</h3>
             <div class="compare-price">$99 <span>/ year</span></div>
+            <p class="compare-desc">Everything in Literacy Arcade Plus for the EFA student, plus monthly literacy guidance for the parent or guardian supporting that student.</p>
             <ul class="compare-list">
-              <li>Full Literacy Arcade Plus platform</li>
-              <li>For children in one household</li>
-              <li class="hl">Monthly guidance for reading at home</li>
-              <li class="hl">Live group literacy Q&amp;A with a literacy specialist</li>
+              <li>Everything included with Literacy Arcade Plus</li>
+              <li>Full digital access supporting the named EFA student</li>
+              <li class="hl">Monthly live group literacy Q&amp;A with a reading specialist</li>
+              <li>Parent/guardian guidance for assessment results and next instructional steps</li>
             </ul>
-            <a class="btn btn-primary" href="https://app.nh.scholarshipfund.org/marketplace?range=50&amp;upper_grade=6&amp;lower_grade=0&amp;lat=43.20622059999999&amp;lng=-71.5398156&amp;is_microschool=false&amp;page=discovery&amp;subschools%5B%5D=traditional+public&amp;subschools%5B%5D=public+charter&amp;subschools%5B%5D=private&amp;subschools%5B%5D=virtual&amp;organizations%5B%5D=vendor&amp;organizations%5B%5D=provider&amp;organizations%5B%5D=school" target="_blank" rel="noopener noreferrer">View in the EFA Marketplace →</a>
+            <button type="button" class="btn btn-primary" data-invoice-trigger data-plan="plus-family-annual">Request a New Hampshire EFA Invoice →</button>
           </article>
 
           <article class="compare-card">
-            <h3>Literacy Arcade Plus</h3>
-            <div class="compare-price muted">Also available</div>
+            <span class="compare-plan-badge">Plus Annual</span>
+            <h3>Full-year Literacy Arcade access</h3>
+            <div class="compare-price">$79 <span>/ year</span></div>
+            <p class="compare-desc">Full Literacy Arcade Plus access for one parent or educator account, billed annually.</p>
             <ul class="compare-list">
-              <li>Full Literacy Arcade digital platform</li>
-              <li>Assessments, fluency tools, customizable practice, and teacher tools</li>
-              <li class="no">Does not include the monthly live group literacy Q&amp;A</li>
+              <li>Everything included in the Literacy Arcade Plus platform</li>
+              <li>One parent or educator account</li>
+              <li>Students do not need accounts</li>
+              <li class="no">Does not include the monthly family guidance/Q&amp;A</li>
             </ul>
-            <a class="btn btn-quiet" href="plus-subscriptions.html">View Plus plans →</a>
+            <button type="button" class="btn btn-primary" data-invoice-trigger data-plan="plus-annual">Request a New Hampshire EFA Invoice →</button>
           </article>
         </div>
+
+        <p class="invoice-assist-note">Generate your PDF invoice instantly — no account or waiting required.</p>
       </div>
     </section>
 
-    <!-- ══ 5 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
-    <section class="state-section tint" id="efa-purchase">
+    <!-- ══ 6 · PHYSICAL LITERACY PRODUCTS [STATE-SPECIFIC framing, SHARED
+         card pattern + config-driven rendering] ══
+         Kept separate from the $79/$99 subscription cards above — physical
+         products are a different purchase, not a subscription tier.
+         Cards are rendered entirely from window.NewHampshireInvoiceConfig
+         (new-hampshire-invoice-config.js) by renderProductCards() in
+         new-hampshire-invoice-generator.js — this markup only provides the
+         empty #nhProductGrid container. Adding a future physical product
+         should mean adding one config entry, not editing this section.
+
+         Evergreen-for-tutorial rule: this section never renders "Sold
+         out"/stock-count wording, even for a currently-unavailable product
+         (see inventoryStatusShown in the config). Availability instead
+         changes which CTA a card gets — "Request a New Hampshire EFA
+         Invoice" when invoiceEnabled is true, or a neutral "View product
+         details" link to shop.html when it's false — never a status badge. -->
+    <section class="state-section white" id="physical-products">
       <div class="container">
         <div class="section-heading center">
-          <h2>How to purchase with New Hampshire EFA funds</h2>
-          <p>Begin through your New Hampshire EFA account and follow the approved purchasing instructions provided by Children&rsquo;s Scholarship Fund New Hampshire and ClassWallet.</p>
+          <h2>Physical literacy products</h2>
+          <p>Add hands-on Literacy Arcade materials for phonics instruction, word mapping, and reading practice.</p>
+          <p class="section-subnote">New Hampshire EFA purchases are submitted for the student associated with the EFA account.</p>
         </div>
 
-        <div class="purchase-steps">
-          <article class="purchase-step">
-            <h3>Open the Children&rsquo;s Scholarship Fund New Hampshire provider directory</h3>
-            <p>Search for or locate Literacy Arcade in the approved provider directory.</p>
-          </article>
-          <article class="purchase-step">
-            <h3>Follow the ClassWallet purchasing instructions in your EFA account</h3>
-            <p>Children&rsquo;s Scholarship Fund New Hampshire and ClassWallet provide the current purchasing steps and eligibility requirements for your account.</p>
-          </article>
-          <article class="purchase-step">
-            <h3>Complete the approved purchase through ClassWallet</h3>
-            <p>After the approved payment is processed, you&rsquo;ll receive the information needed to access Literacy Arcade.</p>
-          </article>
-        </div>
-
-        <div class="purchase-cta">
-          <a class="btn btn-primary" href="https://app.nh.scholarshipfund.org/marketplace?range=50&amp;upper_grade=6&amp;lower_grade=0&amp;lat=43.20622059999999&amp;lng=-71.5398156&amp;is_microschool=false&amp;page=discovery&amp;subschools%5B%5D=traditional+public&amp;subschools%5B%5D=public+charter&amp;subschools%5B%5D=private&amp;subschools%5B%5D=virtual&amp;organizations%5B%5D=vendor&amp;organizations%5B%5D=provider&amp;organizations%5B%5D=school" target="_blank" rel="noopener noreferrer">View the New Hampshire EFA Provider Directory →</a>
-          <a class="btn btn-quiet" href="plus-subscriptions.html">Not using EFA funds? View Plus plans →</a>
-        </div>
+        <div class="nh-product-grid" id="nhProductGrid"></div>
       </div>
     </section>
 
-    <!-- ══ 6 · FAQ ══ -->
+    <!-- ══ 7 · FAQ ══ -->
     <section class="state-section" id="faq">
       <div class="container">
         <div class="section-heading center">
@@ -330,36 +968,36 @@
         </div>
         <div class="faq-grid">
           <article class="faq-card">
-            <h3>Is Literacy Arcade approved for New Hampshire EFA?</h3>
+            <h3>Can I use New Hampshire EFA funds for Literacy Arcade?</h3>
             <p>Yes. Literacy Arcade is an approved Education Service Provider for the New Hampshire Education Freedom Account program.</p>
           </article>
           <article class="faq-card">
-            <h3>What does Plus Family include?</h3>
-            <p>The full Literacy Arcade Plus platform for children in one household, plus monthly guidance for reading at home through a live group literacy Q&amp;A with a literacy specialist.</p>
+            <h3>How do I pay Literacy Arcade through ClassWallet?</h3>
+            <p>Generate a Literacy Arcade invoice, then submit it through ClassWallet's Direct Pay process for the student named on your EFA account.</p>
           </article>
           <article class="faq-card">
-            <h3>Is Literacy Arcade Plus also available?</h3>
-            <p>Yes. Plus includes the full digital platform. It does not include the monthly live group literacy Q&amp;A, which is part of Plus Family.</p>
+            <h3>Do I need to pay out of pocket first?</h3>
+            <p>No. ClassWallet Direct Pay lets you use EFA funds without paying Literacy Arcade out of pocket first.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Can I request reimbursement instead?</h3>
+            <p>Yes. New Hampshire also allows reimbursement for eligible EFA expenses, though Direct Pay is the simpler path since it doesn't require paying out of pocket first.</p>
+          </article>
+          <article class="faq-card">
+            <h3>How do I get an invoice?</h3>
+            <p>Literacy Arcade provides it. <a href="#plans-compare">Request your invoice</a> and it will include the information needed for your ClassWallet submission.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Why does Plus Family still name one EFA student?</h3>
+            <p>New Hampshire EFA funds belong to individual students. Plus Family is invoiced for the student named on the EFA account, while the added Family benefits provide guidance and support for the parent or guardian helping that student with reading.</p>
           </article>
           <article class="faq-card">
             <h3>What is the difference between Plus and Plus Family?</h3>
-            <p>Both include the full platform. Plus Family adds monthly guidance for reading at home through the live group literacy Q&amp;A.</p>
+            <p>Both include the same full Literacy Arcade Plus platform. Plus Family adds monthly literacy guidance and a live group Q&amp;A for the parent or guardian supporting the EFA student.</p>
           </article>
           <article class="faq-card">
-            <h3>Is Literacy Arcade a complete curriculum?</h3>
-            <p>No. It is supplemental — it strengthens a family's core curriculum or intervention program with assessment, targeted instruction, and reading practice.</p>
-          </article>
-          <article class="faq-card">
-            <h3>What grades does Literacy Arcade support?</h3>
-            <p>Literacy Arcade primarily supports literacy learning in grades K–6.</p>
-          </article>
-          <article class="faq-card">
-            <h3>Do children need accounts?</h3>
-            <p>No. Children can use shared activities without creating Literacy Arcade accounts or providing student email addresses.</p>
-          </article>
-          <article class="faq-card">
-            <h3>Can I purchase directly without using EFA funds?</h3>
-            <p>Yes. Families not using EFA funds may purchase a direct Literacy Arcade Plus plan on the <a href="plus-subscriptions.html">Plus pricing page</a>.</p>
+            <h3>Can I purchase Literacy Arcade physical products with EFA funds?</h3>
+            <p>Currently-available physical literacy products, like The Letter Box, can be added to a New Hampshire EFA invoice for the named student. Eligible educational expenses remain subject to New Hampshire EFA review.</p>
           </article>
         </div>
       </div>
@@ -373,7 +1011,78 @@
     <img class="lb-img" id="lbImg" src="" alt="" />
   </div>
 
-  <!-- ══ 6 · SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
+  <!-- ══ New Hampshire EFA invoice request modal [STATE-SPECIFIC] ══
+       Opened by any [data-invoice-trigger] button. Behavior lives in
+       new-hampshire-invoice-generator.js; selectable items are rendered
+       from the `offerings` list in new-hampshire-invoice-config.js, grouped
+       into "Annual digital plans" and "Physical literacy products", so
+       adding a future offering only means adding a config entry. Only
+       offerings with invoiceEnabled:true appear here — Plus Monthly and any
+       currently-unavailable physical product (e.g. Heart Word Flash Cards
+       while sold out) are excluded that way. Version 1 supports one
+       offering per invoice — see the generator's header comment for why
+       multi-item invoices were deferred. The invoice always names exactly
+       one student, regardless of which offering is selected. -->
+  <div class="ia-modal-overlay" id="invoiceModal" role="dialog" aria-modal="true" aria-labelledby="invoiceModalTitle" hidden>
+    <div class="ia-modal" role="document">
+      <button type="button" class="ia-modal-close" id="invoiceModalClose" aria-label="Close invoice request form">&times;</button>
+
+      <div id="invoiceFormView">
+        <h2 id="invoiceModalTitle">Request your New Hampshire EFA invoice</h2>
+        <p class="ia-modal-sub">A few quick details, then download a Literacy Arcade invoice to submit through ClassWallet for the named EFA student.</p>
+
+        <form id="invoiceForm" novalidate>
+          <div class="ia-field">
+            <label for="invParentName">Parent / Guardian Name</label>
+            <input type="text" id="invParentName" name="parentName" autocomplete="name" maxlength="80" required />
+            <p class="ia-error" id="invParentNameError" role="alert" hidden></p>
+          </div>
+
+          <div class="ia-field">
+            <label for="invStudentName">Student name on the New Hampshire EFA account</label>
+            <input type="text" id="invStudentName" name="studentName" autocomplete="off" maxlength="80" required />
+            <p class="ia-error" id="invStudentNameError" role="alert" hidden></p>
+          </div>
+
+          <div class="ia-field">
+            <fieldset>
+              <legend>What are you purchasing?</legend>
+              <div class="ia-plan-options" id="invPlanOptions"></div>
+              <p class="ia-error" id="invPlanError" role="alert" hidden></p>
+            </fieldset>
+          </div>
+
+          <p class="ia-error ia-error-general" id="invGeneralError" role="alert" hidden></p>
+
+          <button type="submit" class="btn btn-primary ia-submit">Generate My Invoice PDF →</button>
+          <p class="ia-modal-note">Prices are set by Literacy Arcade and can't be edited. Only currently-eligible plans and products are listed here. This invoice names one EFA student and covers one item.</p>
+        </form>
+      </div>
+
+      <div id="invoiceSuccessView" hidden>
+        <h2>Your New Hampshire EFA invoice is ready.</h2>
+        <p class="ia-success-summary" id="invoiceSuccessSummary"></p>
+
+        <button type="button" class="btn btn-primary" id="invoiceDownloadBtn">Download Invoice PDF →</button>
+
+        <p class="ia-next-steps-label">Next steps:</p>
+        <ol class="ia-next-steps">
+          <li>Download your invoice.</li>
+          <li>Log in to ClassWallet.</li>
+          <li>Choose Direct Pay (or reimbursement, if you prefer).</li>
+          <li>Select Literacy Arcade.</li>
+          <li>Upload the invoice.</li>
+          <li>Submit the payment request.</li>
+        </ol>
+
+        <p class="ia-activation-note">After the approved payment is received by Literacy Arcade, you'll receive an email from <a href="mailto:hello@literacyarcade.com">hello@literacyarcade.com</a> within 24 hours — with activation directions for a digital subscription, or shipping confirmation for a physical product.</p>
+
+        <button type="button" class="btn btn-quiet" id="invoiceStartOverBtn">Request another invoice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
   <footer class="footer" aria-label="Site footer">
     <div class="container">
       <div class="footer-inner">
@@ -455,13 +1164,22 @@
         if (lastTrigger) lastTrigger.focus();
       };
 
-      document.querySelectorAll('.img-zoom').forEach(btn => {
-        btn.addEventListener('click', () => {
-          lastTrigger = btn;
-          const img = btn.querySelector('img');
-          open(btn.dataset.full || (img && img.src), img && img.alt);
+      // Exposed so markup inserted after page load (the config-driven
+      // physical-product cards in new-hampshire-invoice-generator.js) can
+      // wire its own .img-zoom buttons into this same lightbox instead of
+      // duplicating the open/close logic.
+      window.__nhBindImgZoom = (root) => {
+        (root || document).querySelectorAll('.img-zoom').forEach(btn => {
+          if (btn.dataset.zoomBound) return;
+          btn.dataset.zoomBound = 'true';
+          btn.addEventListener('click', () => {
+            lastTrigger = btn;
+            const img = btn.querySelector('img');
+            open(btn.dataset.full || (img && img.src), img && img.alt);
+          });
         });
-      });
+      };
+      window.__nhBindImgZoom();
 
       lbClose.addEventListener('click', close);
       lb.addEventListener('click', e => { if (e.target === lb) close(); });
@@ -472,5 +1190,24 @@
       });
     })();
   </script>
+  <!-- ══ Shop announcement — dismissible promo card (shop-announcement.js) ══ -->
+  <div class="shop-announce" id="shopAnnounce" aria-label="New Literacy Arcade Shop announcement" hidden>
+    <button type="button" class="shop-announce-close" id="shopAnnounceClose" aria-label="Close Shop announcement">&times;</button>
+    <p class="shop-announce-heading"><span class="shop-announce-spark" aria-hidden="true">✦</span>New at Literacy Arcade</p>
+    <p class="shop-announce-body">Explore hands-on literacy products in the new Literacy Arcade Shop.</p>
+    <a class="shop-announce-cta" id="shopAnnounceCta" href="shop.html">Visit the Shop <span aria-hidden="true">→</span></a>
+  </div>
+  <script defer src="shop-announcement.js"></script>
+
+  <!-- ══ New Hampshire EFA invoice generator [STATE-SPECIFIC] ══
+       jsPDF (MIT-licensed, widely used, pinned version) is the only new
+       dependency this feature adds — loaded from a CDN, no build step or
+       npm install required. Config must load before the generator; both
+       are plain scripts (not modules) so they can freely use the jsPDF UMD
+       global. Separate from Alabama's invoice files — see the STATE CONFIG
+       note at the top of this file. -->
+  <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script src="new-hampshire-invoice-config.js"></script>
+  <script src="new-hampshire-invoice-generator.js"></script>
 </body>
 </html>
