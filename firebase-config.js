@@ -7,6 +7,9 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-aut
 // Firestore Database
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// Cloud Functions (callable)
+import { getFunctions } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
 // Analytics (optional)
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
@@ -26,10 +29,11 @@ const app = initializeApp(firebaseConfig);
 // Services
 const auth = getAuth(app);
 const db = getFirestore(app);
+const functions = getFunctions(app);
 
 // Skip Firebase Analytics in shared student activity mode (?activity=...)
 const isSharedActivityMode = new URLSearchParams(window.location.search).has('activity');
 const analytics = isSharedActivityMode ? null : getAnalytics(app);
 
 // Export services
-export { auth, db };
+export { auth, db, functions };

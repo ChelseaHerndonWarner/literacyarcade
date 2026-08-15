@@ -19,16 +19,25 @@ service cloud.firestore {
 
       allow create: if request.auth != null
         && request.auth.uid == userId
-        && !('plan' in request.resource.data);
+        && !('plan' in request.resource.data)
+        && !('assessmentUses' in request.resource.data);
 
       allow update: if request.auth != null
         && request.auth.uid == userId
-        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['plan']);
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['plan', 'assessmentUses']);
     }
 
     match /users/{userId}/activities/{activityId} {
       allow read, write: if request.auth != null
         && request.auth.uid == userId;
+    }
+
+    // Assessment-completion history (assessment type + timestamp only, no
+    // student data). Written only by the recordAssessmentCompletion Cloud
+    // Function via the Admin SDK, which bypasses these rules entirely, so
+    // clients get no read or write access here.
+    match /users/{userId}/assessmentHistory/{historyId} {
+      allow read, write: if false;
     }
 
     match /users/{userId}/collections/{collectionId} {
