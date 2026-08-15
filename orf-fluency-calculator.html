@@ -757,8 +757,10 @@
     }
     }
   </style>
+  <link rel="stylesheet" href="./firebase-tool-gate.css">
+  <script type="module" src="./firebase-tool-gate.js"></script>
 </head>
-<body>
+<body data-auth-required="true" data-tool-id="orf-fluency-calculator" data-tool-name="ORF Fluency Calculator">
   <header class="la-header" aria-label="Literacy Arcade navigation">
     <a href="https://literacyarcade.com" class="la-logo-group" aria-label="Literacy Arcade home">
       <div class="la-icon">
@@ -894,6 +896,7 @@
         <button class="secondary-btn" id="resetBtn">New Read</button>
         <button class="secondary-btn" id="nextStudentBtn">Next Student</button>
       </div>
+      <div id="assessmentQuotaNote" class="assessment-quota-note" aria-live="polite"></div>
 
       <div class="error" id="errorBox"></div>
 
@@ -1016,7 +1019,14 @@
       $('passageLengthNote').hidden = !(passageWords !== null && passageWords > 200);
     }
 
-    function calculate(){
+    // Pure scoring computation — identical formulas to before. Does not
+    // touch any result-output DOM and does not set lastResult/addHistory,
+    // so nothing is "revealed" yet. Returns null on validation failure
+    // (input-level feedback via showError is fine to show immediately —
+    // that's not an assessment result), or the computed result object on
+    // success. Call revealOrfResult() separately, only after the server has
+    // accepted the completion.
+    function computeOrfResult(){
       clearError();
 
       const passageWords = getNumber('passageWords');
@@ -1026,25 +1036,25 @@
 
       if(!passageWords || passageWords <= 0){
         showError('Enter the total number of words in the passage.');
-        return;
+        return null;
       }
       if(errors === null || errors < 0){
         showError('Enter the number of errors. Use 0 if there were no errors.');
-        return;
+        return null;
       }
       if(errors > passageWords){
         showError('Errors cannot be greater than the total number of words in the passage.');
-        return;
+        return null;
       }
       if(minutes < 0 || seconds < 0 || seconds >= 60){
         showError('Enter a valid time. Seconds should be between 0 and 59.');
-        return;
+        return null;
       }
 
       const totalSeconds = (minutes * 60) + seconds;
       if(totalSeconds <= 0){
         showError('Enter the reading time or use the timer.');
-        return;
+        return null;
       }
 
       const wordsCorrect = passageWords - errors;
@@ -1053,12 +1063,8 @@
 
       if(wcpm > 350){
         showError('This WCPM score is unusually high. Please double-check the passage word count and reading time.');
-        return;
+        return null;
       }
-
-      $('wcpmOutput').textContent = wcpm;
-      $('accuracyOutput').textContent = `${accuracy}%`;
-      $('errorsOutput').textContent = errors;
 
       let summary = `${wordsCorrect} of ${passageWords} words read correctly in ${formatTime(totalSeconds)}.`;
       if(accuracy >= 98){
@@ -1071,18 +1077,30 @@
         summary += ' Accuracy suggests the passage may be too difficult or the student may need additional support.';
       }
 
-      $('summaryTitle').textContent = 'Result calculated';
-      $('summaryText').textContent = summary;
-
-      const norm = updateNormPanel(wcpm);
-      lastResult = {
+      return {
         name: $('studentName').value.trim() || 'Student',
         grade: $('grade').value,
         season: $('season').value,
         passageWords, errors, wordsCorrect,
         wcpm, accuracy,
         time: formatTime(totalSeconds),
-        summary,
+        summary
+      };
+    }
+
+    // Reveals a previously-computed result. Only call this after the
+    // server has accepted the completion — never right after computing.
+    function revealOrfResult(result){
+      $('wcpmOutput').textContent = result.wcpm;
+      $('accuracyOutput').textContent = `${result.accuracy}%`;
+      $('errorsOutput').textContent = result.errors;
+
+      $('summaryTitle').textContent = 'Result calculated';
+      $('summaryText').textContent = result.summary;
+
+      const norm = updateNormPanel(result.wcpm);
+      lastResult = {
+        ...result,
         benchmarkActive: norm.active,
         benchmarkBand: norm.band,
         p50: norm.p50
@@ -1170,6 +1188,8 @@
     }
 
     function reset(){
+      orfUsageRecorded = false;
+      orfCompletionId = null;
       ['passageWords','errors','minutes','seconds'].forEach(id => $(id).value = '');
       updatePassageLengthNote();
       $('wcpmOutput').textContent = '—';
@@ -1188,11 +1208,51 @@
       $('studentName').focus();
     }
 
-    $('startTimer').addEventListener('click', startTimer);
+    let orfUsageRecorded = false;
+    let orfCompletionInFlight = false;
+    let orfCompletionId = null;
+
+    // Administering the assessment (timing a live read) now requires sign-in
+    // up front, at the point that actually starts the timed session — not
+    // deferred until Calculate. Free users already at the 5-assessment quota
+    // are blocked here too, before any timing happens.
+    $('startTimer').addEventListener('click', async () => {
+      const { requireAssessmentAccess } = await import('./assessment-use-guard.js');
+      const gate = await requireAssessmentAccess('orf-fluency-calculator', { usageNoteEl: $('assessmentQuotaNote') });
+      if(!gate.allowed) return;
+      startTimer();
+    });
     $('stopTimer').addEventListener('click', stopTimer);
     $('useTimer').addEventListener('click', useTimer);
     $('clearTimer').addEventListener('click', clearTimer);
-    $('calculateBtn').addEventListener('click', calculate);
+
+    $('calculateBtn').addEventListener('click', async () => {
+      if(orfCompletionInFlight) return;
+      const { requireAssessmentAccess, finalizeAssessmentCompletion, newCompletionId, canStartAssessment, renderUsageNote, auth: gateAuth } = await import('./assessment-use-guard.js');
+      // Covers the manual-entry path (no timer used) and re-checks a stale
+      // session that started under quota but may have since been consumed
+      // by another tab/device.
+      const gate = await requireAssessmentAccess('orf-fluency-calculator', { usageNoteEl: $('assessmentQuotaNote') });
+      if(!gate.allowed) return;
+
+      const pending = computeOrfResult();
+      if(!pending) return;
+      if(orfUsageRecorded) return;
+
+      if(!orfCompletionId) orfCompletionId = newCompletionId();
+      orfCompletionInFlight = true;
+      $('calculateBtn').disabled = true;
+      // Results are only revealed once the server has authoritatively
+      // accepted this completion — never right after computing.
+      const outcome = await finalizeAssessmentCompletion('orf-fluency-calculator', orfCompletionId, {
+        onAccepted: () => { orfUsageRecorded = true; revealOrfResult(pending); }
+      });
+      orfCompletionInFlight = false;
+      $('calculateBtn').disabled = false;
+
+      const refreshedGate = await canStartAssessment(gateAuth.currentUser);
+      renderUsageNote($('assessmentQuotaNote'), refreshedGate);
+    });
     $('resetBtn').addEventListener('click', reset);
     $('nextStudentBtn').addEventListener('click', nextStudent);
     $('clearHistory').addEventListener('click', () => { history.length = 0; renderHistory(); });
@@ -1323,7 +1383,7 @@
 
     ['passageWords','errors','minutes','seconds'].forEach(id => {
       $(id).addEventListener('keydown', e => {
-        if(e.key === 'Enter') calculate();
+        if(e.key === 'Enter') $('calculateBtn').click();
       });
     });
   </script>

@@ -49,7 +49,7 @@ function renderGate({ error = '' } = {}) {
     <section class="la-auth-gate-card" aria-labelledby="laAuthGateTitle">
       <button class="la-auth-gate-close" id="laAuthGateClose" type="button" aria-label="Return to game setup">×</button>
       <img class="la-auth-gate-mark" src="./apple-touch-icon.png" alt="Literacy Arcade">
-      <h1 id="laAuthGateTitle">Create a free teacher account to use this fluency tool.</h1>
+      <h1 id="laAuthGateTitle">Create a free teacher account to use ${toolName}.</h1>
       <p class="la-auth-gate-copy">Sign in to open ${toolName}. Your account helps keep teacher tools and usage organized in one place.</p>
       <div class="la-auth-gate-actions">
         <button class="la-auth-provider-btn la-auth-google-btn" id="laAuthGoogleButton" type="button">
