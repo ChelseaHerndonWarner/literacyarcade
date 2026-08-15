@@ -68,7 +68,7 @@ export function getPostLoginDestination() {
   if (sessionStorage.getItem('magicWordRoadPendingAuthSetup')) return 'magic-word-road.html';
   if (sessionStorage.getItem('digitalReadingFlashcardsPendingAuthSetup')) return 'digital-reading-flashcards.html';
   if (sessionStorage.getItem('vocabularyFlashcardsPendingAuthSetup')) return 'vocabulary-flashcards.html';
-  if (sessionStorage.getItem('pendingActivityData')) return 'phoneme-counter.html?autoSavePendingActivity=1';
+  if (localStorage.getItem('pendingActivityData')) return 'phoneme-counter.html?autoSavePendingActivity=1';
 
   const urlReturnTo = getReturnToFromUrl();
   if (urlReturnTo) return cleanPath(urlReturnTo);
