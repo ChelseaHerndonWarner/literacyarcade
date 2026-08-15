@@ -1,18 +1,22 @@
-// Shared paid-entitlement gate for assessment "Print Report" buttons.
-// Source of truth: Firestore users/{uid}.plan, synced from Stripe by
-// functions/index.js (syncUserPlanFromStripeSubscription). Do not duplicate
-// that logic here — this module only reads the resolved `plan` field.
-// Self-contained styling (hardcoded brand tokens), same approach as
-// activity-save-guard.js, so it renders consistently regardless of the
-// host page's own CSS variable names.
+// Shared Plus-only download gate (e.g. the Letterbox Lesson PDF).
+// Mirrors report-print-gate.js's entitlement pattern — same
+// users/{uid}.plan check, same self-contained modal styling approach —
+// but with download/lesson-appropriate wording instead of assessment-report
+// wording. report-print-gate.js itself is not imported or modified by this
+// module, so assessment report gating is unaffected.
+//
+// Sign-in (when signed out) is handled via firebase-tool-gate.js's existing
+// in-page requireSignIn() gate rather than a full-page redirect to
+// teacher-login.html. The host page never navigates away, so any
+// in-progress builder state on that page (e.g. a Letterbox Lesson being
+// built in phoneme-counter.html) is never destroyed by the sign-in step.
+// The host page must already include firebase-tool-gate.js.
 
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 const PLUS_PLANS_URL = 'plus-subscriptions.html';
-const LOGIN_URL = 'teacher-login.html';
-const DASHBOARD_URL = 'teacher-dashboard.html';
 
 function isPaidPlan(plan) {
   const normalizedPlan = String(plan || '').trim().toLowerCase();
@@ -23,56 +27,32 @@ let currentUser = null;
 let resolveAuthReady;
 const authReady = new Promise((resolve) => { resolveAuthReady = resolve; });
 let authReadyDone = false;
-let authInitializationFailed = false;
 
-onAuthStateChanged(
-  auth,
-  (user) => {
-    currentUser = user;
-    if (!authReadyDone) {
-      authReadyDone = true;
-      resolveAuthReady();
-    }
-  },
-  (error) => {
-    authInitializationFailed = true;
-    console.warn('Literacy Arcade paid-feature gate: authentication did not initialize.', error);
-    if (!authReadyDone) {
-      authReadyDone = true;
-      resolveAuthReady();
-    }
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if (!authReadyDone) {
+    authReadyDone = true;
+    resolveAuthReady();
   }
-);
-
-function track(eventName) {
-  try {
-    if (typeof window.gtag === 'function') window.gtag('event', eventName);
-  } catch (e) { /* analytics must never block printing */ }
-}
-
-function returnToParam() {
-  const path = `${window.location.pathname.split('/').pop()}${window.location.search}`;
-  return encodeURIComponent(path || DASHBOARD_URL);
-}
+});
 
 async function getEntitlement() {
   await authReady;
-  if (authInitializationFailed) return { status: 'unknown' };
   if (!currentUser) return { status: 'signed-out' };
   try {
     const snap = await getDoc(doc(db, 'users', currentUser.uid));
     const plan = snap.exists() ? (snap.data().plan || 'free') : 'free';
     return { status: isPaidPlan(plan) ? 'paid' : 'free', plan };
   } catch (err) {
-    console.warn('Literacy Arcade report gate: could not confirm entitlement.', err);
+    console.warn('Literacy Arcade download gate: could not confirm entitlement.', err);
     return { status: 'unknown' };
   }
 }
 
-/* ---------------- shared modal ---------------- */
+/* ---------------- shared modal (mirrors report-print-gate.js styling) ---------------- */
 
-const STYLE_ID = 'la-report-gate-styles';
-const MODAL_ID = 'la-report-gate-modal';
+const STYLE_ID = 'la-download-gate-styles';
+const MODAL_ID = 'la-download-gate-modal';
 let triggerEl = null;
 let keydownHandler = null;
 
@@ -89,8 +69,7 @@ function ensureStyles() {
 #${MODAL_ID} {
   width: min(460px, 100%); background: #fff; border: 1px solid #EEE8F8;
   border-radius: 16px; box-shadow: 0 18px 60px rgba(27,42,74,.25);
-  max-height: calc(100dvh - 40px); overflow-y: auto;
-  font-family: 'Nunito', sans-serif; color: #1B2A4A;
+  overflow: hidden; font-family: 'Nunito', sans-serif; color: #1B2A4A;
 }
 #${MODAL_ID}-head { padding: 20px 22px 0; position: relative; }
 #${MODAL_ID}-close {
@@ -113,15 +92,10 @@ function ensureStyles() {
   font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 14px;
   cursor: pointer; border: 0; text-decoration: none; box-sizing: border-box;
 }
-.la-rg-primary { background: #2EC4B6; color: #fff; }
-.la-rg-primary:hover { background: #087A70; }
-.la-rg-secondary { background: #fff; color: #087A70; border: 1.5px solid #2EC4B6 !important; }
-.la-rg-secondary:hover { background: #EAF7E7; }
-.la-rg-link {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-height: 44px; font-size: 13px; font-weight: 800; color: #6A4F92;
-  text-decoration: underline; cursor: pointer; background: none; border: 0;
-}
+.la-dg-primary { background: #2EC4B6; color: #fff; }
+.la-dg-primary:hover { background: #087A70; }
+.la-dg-secondary { background: #fff; color: #087A70; border: 1.5px solid #2EC4B6 !important; }
+.la-dg-secondary:hover { background: #EAF7E7; }
 @media (max-width: 360px) {
   #${MODAL_ID}-backdrop { padding: 12px; }
   #${MODAL_ID}-title { font-size: 18px; }
@@ -162,7 +136,7 @@ function closeModal() {
   triggerEl = null;
 }
 
-function renderModal({ heading, body, primary, secondary, link }) {
+function renderModal({ heading, body, primary, secondary }) {
   ensureStyles();
   const existing = document.getElementById(`${MODAL_ID}-backdrop`);
   if (existing) existing.remove();
@@ -187,9 +161,8 @@ function renderModal({ heading, body, primary, secondary, link }) {
       <div id="${MODAL_ID}-body">
         <div id="${MODAL_ID}-text"><p>${body}</p></div>
         <div id="${MODAL_ID}-actions">
-          ${actionHtml(primary, 'la-rg-primary')}
-          ${actionHtml(secondary, 'la-rg-secondary')}
-          ${link ? `<button type="button" class="la-rg-link" id="${MODAL_ID}-link">${link.label}</button>` : ''}
+          ${actionHtml(primary, 'la-dg-primary')}
+          ${actionHtml(secondary, 'la-dg-secondary')}
         </div>
       </div>
     </div>
@@ -205,37 +178,23 @@ function renderModal({ heading, body, primary, secondary, link }) {
   if (secondary && secondary.onClick) {
     document.getElementById(`${MODAL_ID}-${secondary.key}`).addEventListener('click', secondary.onClick);
   }
-  if (link && link.onClick) {
-    document.getElementById(`${MODAL_ID}-link`).addEventListener('click', link.onClick);
-  }
 
   keydownHandler = trapFocus;
   document.addEventListener('keydown', keydownHandler);
 
   const focusTarget = document.getElementById(`${MODAL_ID}-close`);
   setTimeout(() => {
-    const firstAction = backdrop.querySelector('.la-rg-primary, .la-rg-secondary');
+    const firstAction = backdrop.querySelector('.la-dg-primary, .la-dg-secondary');
     (firstAction || focusTarget).focus();
   }, 0);
 }
 
-function openSignedOutModal() {
-  renderModal({
-    heading: 'Print complete reports with Literacy Arcade Plus',
-    body: 'Sign in to check your account or choose a Plus plan to access complete assessment reports, skill analysis, and instructional next-step guidance.',
-    primary: { key: 'primary', label: 'Sign in', href: `${LOGIN_URL}?returnTo=${returnToParam()}` },
-    secondary: { key: 'secondary', label: 'View Plus plans', href: PLUS_PLANS_URL },
-    link: { label: 'Not now', onClick: closeModal },
-  });
-}
-
 function openFreeAccountModal() {
   renderModal({
-    heading: 'Upgrade to Plus to print complete reports',
-    body: 'Your free account can still use available Literacy Arcade tools, but complete assessment reports, detailed skill analysis, and instructional next-step guidance require an active Plus plan.',
+    heading: 'Upgrade to Plus to download this PDF',
+    body: 'Your free account can still build and use Letterbox Lessons, but downloading a printable lesson PDF requires an active Plus plan.',
     primary: { key: 'primary', label: 'View Plus plans', href: PLUS_PLANS_URL },
-    secondary: { key: 'secondary', label: 'Continue without printing', onClick: closeModal },
-    link: { label: 'Go to dashboard', onClick: () => { window.location.href = DASHBOARD_URL; } },
+    secondary: { key: 'secondary', label: 'Continue without downloading', onClick: closeModal },
   });
 }
 
@@ -249,38 +208,31 @@ function openUnknownStatusModal(retry) {
 }
 
 /**
- * Gate a "Print Report" action behind active-paid-plan entitlement.
- * printFn is only invoked for signed-in accounts with an active Plus plan.
+ * Gate a Plus-only download/print action (e.g. the Letterbox Lesson PDF)
+ * behind active-paid-plan entitlement.
+ *
+ * If the visitor is signed out, this first requires sign-in via the host
+ * page's existing firebase-tool-gate.js in-page gate (no navigation away),
+ * then checks entitlement. downloadFn is only invoked for signed-in
+ * accounts with an active Plus plan.
  */
-async function guardReportPrint(printFn, triggerElement) {
+async function guardPlusDownload(downloadFn, triggerElement) {
   triggerEl = triggerElement || document.activeElement;
+
+  const user = await window.LiteracyArcadeToolAccess?.requireSignIn?.();
+  if (!user) return; // gate was closed without signing in
+
   const entitlement = await getEntitlement();
 
   if (entitlement.status === 'paid') {
-    track('report_print_success_paid');
-    printFn();
+    downloadFn();
     return;
   }
-  if (entitlement.status === 'signed-out') {
-    track('report_print_attempt_signed_out');
-    openSignedOutModal();
-    return;
-  }
-  if (entitlement.status === 'free') {
-    track('report_print_attempt_free');
+  if (entitlement.status === 'free' || entitlement.status === 'signed-out') {
     openFreeAccountModal();
     return;
   }
-  openUnknownStatusModal(() => guardReportPrint(printFn, triggerEl));
+  openUnknownStatusModal(() => guardPlusDownload(downloadFn, triggerEl));
 }
 
-function trackUpgradeClick() {
-  track('report_upgrade_click');
-}
-
-document.addEventListener('click', (event) => {
-  const target = event.target.closest('.la-rg-primary, .la-rg-secondary');
-  if (target && target.getAttribute('href') === PLUS_PLANS_URL) trackUpgradeClick();
-});
-
-export { guardReportPrint, getEntitlement };
+export { guardPlusDownload, getEntitlement };
