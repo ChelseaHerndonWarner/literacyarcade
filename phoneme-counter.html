@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2"></script>
@@ -2890,6 +2889,27 @@ function showSavedActivityMessage(msg) {
   msg.style.display = 'block';
 }
 
+function showLessonStatus(message, duration = 4500) {
+  const msg = document.getElementById('lessonMsg');
+  if (!msg) return;
+  msg.textContent = message;
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', duration);
+}
+
+function getSaveAccessErrorMessage(error) {
+  if (error?.code === 'auth-initialization-failed') {
+    return 'We could not check your sign-in status. Please refresh and try again.';
+  }
+  if (error?.code === 'plan-read-failed') {
+    return 'We could not check your account plan. Please try again.';
+  }
+  if (error?.code === 'save-count-read-failed') {
+    return 'We could not check your saved activity count. Please try again.';
+  }
+  return 'Something went wrong saving. Please try again.';
+}
+
 async function saveCurrentActivity() {
   const msg = document.getElementById('lessonMsg');
 
@@ -2909,13 +2929,14 @@ async function saveCurrentActivity() {
   if (!title) return;
 
   try {
-    const [{ auth, db }, firestore, saveGuard] = await Promise.all([
+    const [{ db }, authHelpers, firestore, saveGuard] = await Promise.all([
       import('./firebase-config.js'),
+      import('./literacy-arcade-auth.js'),
       import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'),
       import('./activity-save-guard.js')
     ]);
 
-    const user = auth.currentUser;
+    const user = await authHelpers.waitForInitialAuthState();
 
     if (!user) {
       // Stored in localStorage (not sessionStorage) so the built lesson
@@ -2952,14 +2973,8 @@ async function saveCurrentActivity() {
       alert('Activity saved!');
     }
   } catch (error) {
-    console.error(error);
-    if (msg) {
-      msg.textContent = 'Something went wrong saving. Please try again.';
-      msg.style.display = 'block';
-      setTimeout(() => msg.style.display = 'none', 4500);
-    } else {
-      alert('Something went wrong saving. Please try again.');
-    }
+    console.error('Literacy Arcade Letterbox save failed.', error);
+    showLessonStatus(getSaveAccessErrorMessage(error));
   }
 }
 
@@ -3038,61 +3053,56 @@ async function savePendingActivityAfterLogin() {
   }
 
   try {
-    const [{ auth, db }, authSdk, firestore, saveGuard] = await Promise.all([
+    const [{ db }, authHelpers, firestore, saveGuard] = await Promise.all([
       import('./firebase-config.js'),
-      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js'),
+      import('./literacy-arcade-auth.js'),
       import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js'),
       import('./activity-save-guard.js')
     ]);
 
-    authSdk.onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = 'teacher-login.html';
-        return;
+    const user = await authHelpers.waitForInitialAuthState();
+    if (!user) {
+      window.location.href = 'teacher-login.html';
+      return;
+    }
+
+    const gate = await saveGuard.canCreateActivity(user, db);
+    if (!gate.allowed) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      saveGuard.showUpgradeModal(gate);
+      return;
+    }
+
+    try {
+      const activityData = { ...pendingActivity };
+      delete activityData.savedAt;
+      activityData.createdAt = firestore.serverTimestamp();
+      activityData.updatedAt = firestore.serverTimestamp();
+      activityData.ownerUid = user.uid;
+      activityData.shareEnabled = false;
+
+      await firestore.addDoc(
+        firestore.collection(db, `users/${user.uid}/activities`),
+        activityData
+      );
+
+      localStorage.removeItem('pendingActivityData');
+
+      if (msg) showSavedActivityMessage(msg);
+
+      window.location.href = 'teacher-dashboard.html';
+    } catch (saveError) {
+      console.error('Literacy Arcade pending Letterbox save failed.', saveError);
+      if (msg) {
+        msg.textContent = 'Something went wrong saving. Please try again.';
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 4500);
       }
-
-      const gate = await saveGuard.canCreateActivity(user, db);
-      if (!gate.allowed) {
-        window.history.replaceState({}, document.title, window.location.pathname);
-        saveGuard.showUpgradeModal(gate);
-        return;
-      }
-
-      try {
-        const activityData = { ...pendingActivity };
-        delete activityData.savedAt;
-        activityData.createdAt = firestore.serverTimestamp();
-        activityData.updatedAt = firestore.serverTimestamp();
-        activityData.ownerUid = user.uid;
-        activityData.shareEnabled = false;
-
-        await firestore.addDoc(
-          firestore.collection(db, `users/${user.uid}/activities`),
-          activityData
-        );
-
-        localStorage.removeItem('pendingActivityData');
-
-        if (msg) showSavedActivityMessage(msg);
-
-        window.location.href = 'teacher-dashboard.html';
-      } catch (saveError) {
-        console.error(saveError);
-        if (msg) {
-          msg.textContent = 'Something went wrong saving. Please try again.';
-          msg.style.display = 'block';
-          setTimeout(() => msg.style.display = 'none', 4500);
-        }
-      }
-    });
+    }
 
   } catch (error) {
-    console.error(error);
-    if (msg) {
-      msg.textContent = 'Something went wrong saving. Please try again.';
-      msg.style.display = 'block';
-      setTimeout(() => msg.style.display = 'none', 4500);
-    }
+    console.error('Literacy Arcade pending Letterbox access check failed.', error);
+    showLessonStatus(getSaveAccessErrorMessage(error));
   }
 }
 

@@ -23,14 +23,26 @@ let currentUser = null;
 let resolveAuthReady;
 const authReady = new Promise((resolve) => { resolveAuthReady = resolve; });
 let authReadyDone = false;
+let authInitializationFailed = false;
 
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-  if (!authReadyDone) {
-    authReadyDone = true;
-    resolveAuthReady();
+onAuthStateChanged(
+  auth,
+  (user) => {
+    currentUser = user;
+    if (!authReadyDone) {
+      authReadyDone = true;
+      resolveAuthReady();
+    }
+  },
+  (error) => {
+    authInitializationFailed = true;
+    console.warn('Literacy Arcade paid-feature gate: authentication did not initialize.', error);
+    if (!authReadyDone) {
+      authReadyDone = true;
+      resolveAuthReady();
+    }
   }
-});
+);
 
 function track(eventName) {
   try {
@@ -45,6 +57,7 @@ function returnToParam() {
 
 async function getEntitlement() {
   await authReady;
+  if (authInitializationFailed) return { status: 'unknown' };
   if (!currentUser) return { status: 'signed-out' };
   try {
     const snap = await getDoc(doc(db, 'users', currentUser.uid));
@@ -76,7 +89,8 @@ function ensureStyles() {
 #${MODAL_ID} {
   width: min(460px, 100%); background: #fff; border: 1px solid #EEE8F8;
   border-radius: 16px; box-shadow: 0 18px 60px rgba(27,42,74,.25);
-  overflow: hidden; font-family: 'Nunito', sans-serif; color: #1B2A4A;
+  max-height: calc(100dvh - 40px); overflow-y: auto;
+  font-family: 'Nunito', sans-serif; color: #1B2A4A;
 }
 #${MODAL_ID}-head { padding: 20px 22px 0; position: relative; }
 #${MODAL_ID}-close {
