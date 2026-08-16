@@ -22,22 +22,30 @@
        1. Hero [STATE-SPECIFIC] — state badge, approval statement, 3-step
           "Choose → Open portal → Complete purchase" process indicator,
           primary "Open the Texas TEFA Portal" CTA
-       2. How to purchase with Texas TEFA funds [STATE-SPECIFIC] — 4-step
+       2. Tutorial video [STATE-SPECIFIC video, SHARED frame styling] —
+          short screen-recorded walkthrough. Supplementary only — the
+          written 4-step process in section 3 must stay complete on its
+          own for a parent who never presses play. Video file lives in
+          videos/Texas-TEFA-Tutorial.mp4; frame styling
+          (.video-demo-wrap/.video-demo-frame) mirrors
+          alabama-choose-act.html's tutorial-video section
+          (id="tutorial-video")
+       3. How to purchase with Texas TEFA funds [STATE-SPECIFIC] — 4-step
           Odyssey flow + activation-email note panel (id="how-to-purchase")
-       3. What's included with Literacy Arcade Plus [SHARED] — identical to
+       4. What's included with Literacy Arcade Plus [SHARED] — identical to
           Alabama/New Hampshire: same four image cards + benefit strip,
           same copy, same assets. Universal — no Texas/TEFA/Odyssey
           language belongs here (id="whats-included")
-       4. Plus Family value [SHARED] — identical to Alabama's spotlight
+       5. Plus Family value [SHARED] — identical to Alabama's spotlight
           (badge, heading, intro, Q&A paragraph, three benefits). Also
           universal — no state-program language here either
           (id="plus-family-value")
-       5. Choose your annual plan [SHARED plan data, STATE-SPECIFIC CTA] —
+       6. Choose your annual plan [SHARED plan data, STATE-SPECIFIC CTA] —
           the two annual plans ($79 Plus / $99 Plus Family), same copy
           pattern as Alabama, but both CTAs link out to the Texas TEFA
           portal instead of opening an invoice modal (id="plans-compare")
-       6. FAQ [STATE-SPECIFIC wording] (id="faq")
-       7. Footer
+       7. FAQ [STATE-SPECIFIC wording] (id="faq")
+       8. Footer
 
      STATE CONFIG [STATE-SPECIFIC]
        State label ....... Texas TEFA (Texas Education Freedom Accounts)
@@ -190,6 +198,44 @@
     @media (max-width: 640px) {
       .tx-tefa-page .purchase-steps--4 { grid-template-columns: 1fr; }
     }
+
+    /* ── Tutorial video — reuses the .video-demo-wrap/.video-demo-frame
+         visual treatment established on build-and-play.html / fluency.html
+         / teacher-tools.html (responsive 16:9 frame, rounded corners,
+         border, shadow), same as alabama-choose-act.html's tutorial-video
+         section. Redefined here scoped to this page rather than touching
+         shared CSS. */
+    .tx-tefa-page .video-demo-wrap {
+      max-width: 700px;
+      margin: 28px auto 0;
+    }
+    .tx-tefa-page .video-demo-frame {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: var(--ink);
+    }
+
+    /* Tutorial-video heading/subheading wrapping — "Texas TEFA" and
+       "Literacy Arcade" are each a touch longer than Alabama's equivalent
+       phrasing at the shared .section-heading 720px width, which breaks
+       them mid-phrase ("...Texas" / "TEFA" and "...Literacy" / "Arcade").
+       Widen the container just enough for the subheading to hold one line,
+       and give the heading its own narrower, independently centered
+       max-width so it breaks after "with" instead — same font-size/weight
+       as Alabama, no shared CSS touched. */
+    .tx-tefa-page #tutorial-video .section-heading {
+      max-width: 760px;
+    }
+    .tx-tefa-page #tutorial-video .section-heading h2 {
+      max-width: 660px;
+      margin-inline: auto;
+    }
+
     .tx-tefa-page .note-panel a { color: var(--teal-dk); font-weight: 800; text-decoration: underline; text-underline-offset: 2px; }
 
     /* Small "Plus Annual" / "Plus Family Annual" plan-type pill — mirrors
@@ -352,12 +398,33 @@
       </div>
     </section>
 
+    <!-- ══ TUTORIAL VIDEO [STATE-SPECIFIC video, SHARED frame styling] ══ -->
+    <!-- Short screen-recorded walkthrough. Supplementary only — the written
+         4-step process in the How to purchase section below must stay
+         complete and understandable on its own for a parent who never
+         presses play. Mirrors alabama-choose-act.html's tutorial-video
+         section (id="tutorial-video"). -->
+    <section class="state-section white" id="tutorial-video" aria-label="Texas TEFA tutorial video">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>See how Literacy Arcade works with Texas TEFA</h2>
+          <p>See what's included, compare annual plans, and learn how to use TEFA funds with Literacy Arcade</p>
+        </div>
+        <div class="video-demo-wrap">
+          <video class="video-demo-frame" controls playsinline preload="metadata" aria-label="Texas TEFA Literacy Arcade tutorial">
+            <source src="videos/Texas-TEFA-Tutorial.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+
     <!-- ══ 2 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
-    <!-- `lift` overlaps the hero slightly — the visual bridge between
-         sections. Intentionally near the top of the page, directly after
-         the hero: the purchase/payment process should not be buried under
-         general program copy — same placement rule as Alabama/New
-         Hampshire. -->
+    <!-- `lift` overlaps the tutorial-video section slightly — the visual
+         bridge between sections. Intentionally near the top of the page,
+         directly after the hero/video: the purchase/payment process should
+         not be buried under general program copy — same placement rule as
+         Alabama/New Hampshire. -->
     <section class="state-section white lift" id="how-to-purchase">
       <div class="container">
         <div class="section-heading center">
