@@ -1,114 +1,125 @@
-// Shared free-assessment quota gate for the four assessment tools (Quick
-// Letter Knowledge, Quick Letter Sound, Phonics Knowledge Check, ORF
-// Fluency Calculator).
+// Shared Plus-entitlement gate for the four assessment tools (Quick Letter
+// Knowledge, Quick Letter Sound, Phonics Knowledge Check, ORF Fluency
+// Calculator).
 //
-// This module controls two separate things:
-//   1. Requiring sign-in before an assessment can be administered (reuses
-//      the existing firebase-tool-gate.js sign-in wall — the page must
-//      already include that script and set data-tool-id/data-tool-name on
-//      <body>, same convention as repeated-reading-raceway.html).
-//   2. The shared 5-free-assessment quota for free accounts, unlimited for
-//      Plus/family. Source of truth: users/{uid}.assessmentUses, which is
-//      only ever written by the recordAssessmentCompletion Cloud Function
-//      (functions/index.js) via the Admin SDK. firestore.rules blocks
-//      clients from writing that field directly (same pattern as `plan`),
-//      so this module only ever reads it and calls the callable function.
+// Administering any of these assessments requires an active Literacy Arcade
+// Plus or Plus Family plan. There is no free-tier quota — a free account
+// (signed in or not) cannot administer an assessment at all.
 //
-// This is intentionally separate from report-print-gate.js, which controls
-// complete-report printing (Plus-only) and is unaffected by this module.
+// Source of truth: Firestore users/{uid}.plan, synced from Stripe by
+// functions/index.js (syncUserPlanFromStripeSubscription). This module only
+// reads the resolved `plan` field — same approach as report-print-gate.js
+// and plus-download-gate.js, which this module intentionally mirrors so all
+// three Plus gates on the site behave consistently. It does not import or
+// call firebase-tool-gate.js — the generic "create a free account" sign-in
+// wall is not appropriate here, since a free account is not sufficient.
+//
+// The gate must run BEFORE the teacher can start entering assessment data,
+// not only when they click Calculate — see guardAssessmentAccess() below.
 
-import { auth, db, functions } from './firebase-config.js';
+import { auth, db } from './firebase-config.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js';
 
-const UNLIMITED_PLANS = new Set(['plus', 'family']);
-const FREE_ASSESSMENT_LIMIT = 5;
 const PLUS_PLANS_URL = 'plus-subscriptions.html';
+const LOGIN_URL = 'teacher-login.html';
+const DASHBOARD_URL = 'teacher-dashboard.html';
 
-export async function canStartAssessment(user) {
-  if (!user) return { allowed: false, reason: 'signed-out', uses: 0, plan: 'free' };
-  const snap = await getDoc(doc(db, 'users', user.uid));
-  const data = snap.exists() ? snap.data() : {};
-  const plan = data.plan;
-  const uses = typeof data.assessmentUses === 'number' ? data.assessmentUses : 0;
-
-  if (UNLIMITED_PLANS.has(plan)) {
-    return { allowed: true, reason: null, uses, plan };
-  }
-  if (uses < FREE_ASSESSMENT_LIMIT) {
-    return { allowed: true, reason: null, uses, plan: 'free' };
-  }
-  return { allowed: false, reason: 'limit', uses, plan: 'free' };
+function isPaidPlan(plan) {
+  const normalizedPlan = String(plan || '').trim().toLowerCase();
+  return normalizedPlan === 'plus' || normalizedPlan === 'family';
 }
 
-let recordCallable = null;
+let currentUser = null;
+let resolveAuthReady;
+const authReady = new Promise((resolve) => { resolveAuthReady = resolve; });
+let authReadyDone = false;
+let authInitializationFailed = false;
 
-export function newCompletionId() {
-  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+onAuthStateChanged(
+  auth,
+  (user) => {
+    currentUser = user;
+    if (!authReadyDone) {
+      authReadyDone = true;
+      resolveAuthReady();
+    }
+  },
+  (error) => {
+    authInitializationFailed = true;
+    console.warn('Literacy Arcade assessment gate: authentication did not initialize.', error);
+    if (!authReadyDone) {
+      authReadyDone = true;
+      resolveAuthReady();
+    }
+  }
+);
+
+function returnToParam() {
+  const path = `${window.location.pathname.split('/').pop()}${window.location.search}`;
+  return encodeURIComponent(path || DASHBOARD_URL);
 }
 
 /**
- * Records completion of one of the four assessments against the
- * authoritative server-side quota. Never throws — returns a structured
- * result so the caller can tell a quota rejection apart from a transient
- * network/server error:
- *   { ok: true, uses, plan, unlimited }
- *   { ok: false, reason: 'quota' }
- *   { ok: false, reason: 'error', error }
- *
- * `completionId` must be a stable id generated once per assessment attempt
- * (e.g. at begin-assessment time) and reused on every retry of that same
- * attempt — the Cloud Function uses it to make retries idempotent, so a
- * dropped response and a subsequent retry can never double-count.
- *
- * Prefer finalizeAssessmentCompletion() over calling this directly — it
- * also handles showing the right UI for each outcome.
+ * Resolves the caller's assessment entitlement. Returns one of four
+ * distinct states — these must never be conflated:
+ *   { status: 'paid' }        - Plus or Plus Family, unlimited access
+ *   { status: 'free' }        - signed in, but not on a paid plan
+ *   { status: 'signed-out' }  - no authenticated user
+ *   { status: 'unknown' }     - auth or the Firestore read genuinely failed;
+ *                                we could not determine plan/free either way
  */
-export async function recordAssessmentCompletion(assessmentType, completionId) {
+export async function getAssessmentEntitlement() {
+  await authReady;
+  if (authInitializationFailed) return { status: 'unknown' };
+  if (!currentUser) return { status: 'signed-out' };
   try {
-    if (!recordCallable) recordCallable = httpsCallable(functions, 'recordAssessmentCompletion');
-    const result = await recordCallable({ assessmentType, completionId });
-    return { ok: true, ...result.data };
-  } catch (error) {
-    if (error?.code === 'functions/resource-exhausted') {
-      return { ok: false, reason: 'quota' };
-    }
-    console.warn('Literacy Arcade: could not record assessment completion.', error);
-    return { ok: false, reason: 'error', error };
+    const snap = await getDoc(doc(db, 'users', currentUser.uid));
+    const plan = snap.exists() ? (snap.data().plan || 'free') : 'free';
+    return { status: isPaidPlan(plan) ? 'paid' : 'free', plan, user: currentUser };
+  } catch (err) {
+    console.warn('Literacy Arcade assessment gate: could not confirm entitlement.', err);
+    return { status: 'unknown' };
   }
 }
 
-/* ---------------- shared modal (mirrors activity-save-guard.js styling) ---------------- */
+/* ---------------- full-page blocking gate ---------------- */
 
 const STYLE_ID = 'assessment-use-guard-styles';
-const MODAL_ID = 'assessment-use-guard-modal';
+const OVERLAY_ID = 'assessment-use-guard-overlay';
 
 function ensureStyles() {
   if (document.getElementById(STYLE_ID)) return;
   const style = document.createElement('style');
   style.id = STYLE_ID;
   style.textContent = `
-#${MODAL_ID}-backdrop {
-  position: fixed; inset: 0; background: rgba(27,42,74,.45);
+#${OVERLAY_ID} {
+  position: fixed; inset: 0; background: #F7F5FC;
   display: flex; align-items: center; justify-content: center;
-  z-index: 9999; padding: 20px;
+  z-index: 9999; padding: 20px; overflow-y: auto;
 }
-#${MODAL_ID} {
+#${OVERLAY_ID}-card {
   width: min(460px, 100%); background: #fff; border: 1px solid #EEE8F8;
-  border-radius: 16px; box-shadow: 0 18px 60px rgba(27,42,74,.25);
-  overflow: hidden; font-family: 'Nunito', sans-serif; color: #1B2A4A;
+  border-radius: 16px; box-shadow: 0 18px 60px rgba(27,42,74,.18);
+  padding: 28px 26px; font-family: 'Nunito', sans-serif; color: #1B2A4A;
+  text-align: center;
 }
-#${MODAL_ID}-head { padding: 20px 22px 0; }
-#${MODAL_ID}-title {
+#${OVERLAY_ID}-spinner {
+  width: 34px; height: 34px; margin: 0 auto 16px; border-radius: 50%;
+  border: 4px solid #EEE8F8; border-top-color: #2EC4B6;
+  animation: aug-spin 0.8s linear infinite;
+}
+@keyframes aug-spin { to { transform: rotate(360deg); } }
+#${OVERLAY_ID}-title {
   font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900;
-  line-height: 1.2; margin: 0;
+  line-height: 1.25; margin: 0 0 10px;
 }
-#${MODAL_ID}-body { padding: 12px 22px 22px; display: flex; flex-direction: column; gap: 12px; }
-#${MODAL_ID}-text p { font-size: 14px; font-weight: 600; line-height: 1.55; color: #4B5875; margin: 0; }
-#${MODAL_ID}-actions { display: flex; flex-direction: column; gap: 9px; margin-top: 4px; }
-#${MODAL_ID}-actions a,
-#${MODAL_ID}-actions button {
+#${OVERLAY_ID}-text {
+  font-size: 14px; font-weight: 600; line-height: 1.55; color: #4B5875; margin: 0 0 18px;
+}
+#${OVERLAY_ID}-actions { display: flex; flex-direction: column; gap: 9px; }
+#${OVERLAY_ID}-actions a,
+#${OVERLAY_ID}-actions button {
   display: flex; align-items: center; justify-content: center;
   border-radius: 10px; min-height: 44px; padding: 10px 14px;
   font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 14px;
@@ -118,155 +129,132 @@ function ensureStyles() {
 .aug-btn-primary:hover { background: #087A70; }
 .aug-btn-secondary { background: #fff; color: #087A70; border: 1.5px solid #2EC4B6 !important; }
 .aug-btn-secondary:hover { background: #EAF7E7; }
-.assessment-quota-note {
-  font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800;
-  color: #6A4F92; margin-top: 8px; display: none;
+.aug-btn-link {
+  background: none; border: 0; min-height: 32px; font-size: 13px; font-weight: 800;
+  color: #6A4F92; text-decoration: underline;
 }
 `;
   document.head.appendChild(style);
 }
 
-export function showAssessmentLimitModal() {
+function removeOverlay() {
+  const el = document.getElementById(OVERLAY_ID);
+  if (el) el.remove();
+  document.documentElement.style.overflow = '';
+}
+
+function actionHtml(action, className) {
+  if (!action) return '';
+  if (action.href) return `<a class="${className}" href="${action.href}">${action.label}</a>`;
+  return `<button type="button" class="${className}" data-aug-action="${action.key}">${action.label}</button>`;
+}
+
+function renderOverlay({ heading, body, primary, secondary, link, spinner }) {
   ensureStyles();
-  const existing = document.getElementById(`${MODAL_ID}-backdrop`);
+  const existing = document.getElementById(OVERLAY_ID);
   if (existing) existing.remove();
 
-  const backdrop = document.createElement('div');
-  backdrop.id = `${MODAL_ID}-backdrop`;
-  backdrop.innerHTML = `
-    <div id="${MODAL_ID}" role="dialog" aria-modal="true" aria-labelledby="${MODAL_ID}-title">
-      <div id="${MODAL_ID}-head">
-        <h2 id="${MODAL_ID}-title">You’ve used your 5 free assessments</h2>
-      </div>
-      <div id="${MODAL_ID}-body">
-        <div id="${MODAL_ID}-text"><p>Upgrade to Literacy Arcade Plus for unlimited assessments, complete printable reports, unlimited saved activities, and more.</p></div>
-        <div id="${MODAL_ID}-actions">
-          <a class="aug-btn-primary" href="${PLUS_PLANS_URL}">View Plus plans</a>
-          <button type="button" class="aug-btn-secondary" id="${MODAL_ID}-close">Not now</button>
-        </div>
+  const overlay = document.createElement('div');
+  overlay.id = OVERLAY_ID;
+  overlay.setAttribute('role', spinner ? 'status' : 'dialog');
+  overlay.setAttribute('aria-modal', spinner ? 'false' : 'true');
+  overlay.setAttribute('aria-live', 'polite');
+  overlay.innerHTML = `
+    <div id="${OVERLAY_ID}-card">
+      ${spinner ? `<div id="${OVERLAY_ID}-spinner" aria-hidden="true"></div>` : ''}
+      <h1 id="${OVERLAY_ID}-title">${heading}</h1>
+      <p id="${OVERLAY_ID}-text">${body}</p>
+      <div id="${OVERLAY_ID}-actions">
+        ${actionHtml(primary, 'aug-btn-primary')}
+        ${actionHtml(secondary, 'aug-btn-secondary')}
+        ${link ? `<button type="button" class="aug-btn-link" data-aug-action="${link.key}">${link.label}</button>` : ''}
       </div>
     </div>
   `;
 
-  document.body.appendChild(backdrop);
-  const close = () => backdrop.remove();
-  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
-  backdrop.querySelector(`#${MODAL_ID}-close`).addEventListener('click', close);
-  return { close };
+  document.body.appendChild(overlay);
+  document.documentElement.style.overflow = 'hidden';
+
+  if (primary?.onClick) overlay.querySelector(`[data-aug-action="${primary.key}"]`)?.addEventListener('click', primary.onClick);
+  if (secondary?.onClick) overlay.querySelector(`[data-aug-action="${secondary.key}"]`)?.addEventListener('click', secondary.onClick);
+  if (link?.onClick) overlay.querySelector(`[data-aug-action="${link.key}"]`)?.addEventListener('click', link.onClick);
 }
 
-/**
- * Shown for a transient/network/server error while confirming a completion
- * — distinct from the quota-limit modal above, so a connectivity hiccup is
- * never presented as "you're out of free assessments."
- */
-export function showAssessmentNetworkErrorModal({ onRetry, onDismiss } = {}) {
-  ensureStyles();
-  const existing = document.getElementById(`${MODAL_ID}-backdrop`);
-  if (existing) existing.remove();
-
-  const backdrop = document.createElement('div');
-  backdrop.id = `${MODAL_ID}-backdrop`;
-  backdrop.innerHTML = `
-    <div id="${MODAL_ID}" role="dialog" aria-modal="true" aria-labelledby="${MODAL_ID}-title">
-      <div id="${MODAL_ID}-head">
-        <h2 id="${MODAL_ID}-title">We couldn’t confirm this assessment</h2>
-      </div>
-      <div id="${MODAL_ID}-body">
-        <div id="${MODAL_ID}-text"><p>We couldn’t confirm this assessment right now. Please check your connection and try again.</p></div>
-        <div id="${MODAL_ID}-actions">
-          <button type="button" class="aug-btn-primary" id="${MODAL_ID}-retry">Try again</button>
-          <button type="button" class="aug-btn-secondary" id="${MODAL_ID}-close">Not now</button>
-        </div>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(backdrop);
-  const close = () => backdrop.remove();
-  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) { close(); if (onDismiss) onDismiss(); } });
-  backdrop.querySelector(`#${MODAL_ID}-close`).addEventListener('click', () => { close(); if (onDismiss) onDismiss(); });
-  backdrop.querySelector(`#${MODAL_ID}-retry`).addEventListener('click', () => { close(); if (onRetry) onRetry(); });
-  return { close };
+function renderLoadingOverlay() {
+  renderOverlay({
+    spinner: true,
+    heading: 'Checking your account…',
+    body: 'One moment while we confirm your Literacy Arcade Plus access.',
+  });
 }
 
-/**
- * Records a completion and only calls onAccepted(result) — i.e. only lets
- * the caller reveal/finalize results — once the server has authoritatively
- * accepted it. This is the only sanctioned way to finalize an assessment
- * completion; do not call recordAssessmentCompletion() directly and reveal
- * results without awaiting acceptance first.
- *
- *   - Server accepts            -> onAccepted(result) runs, then resolves
- *                                   { finalized: true }
- *   - Server rejects (quota)    -> shows the upgrade modal, resolves
- *                                   { finalized: false, reason: 'quota' }
- *   - Transient/network error   -> shows a recoverable error modal with a
- *                                   "Try again" action that retries with the
- *                                   SAME completionId (safe/idempotent); if
- *                                   dismissed instead, resolves
- *                                   { finalized: false, reason: 'error' }
- */
-export async function finalizeAssessmentCompletion(assessmentType, completionId, { onAccepted } = {}) {
-  const result = await recordAssessmentCompletion(assessmentType, completionId);
+function renderSignedOutOverlay(toolName, onRetry) {
+  renderOverlay({
+    heading: `${toolName} requires Literacy Arcade Plus`,
+    body: 'This assessment is available with an active Literacy Arcade Plus or Plus Family plan. Sign in with your Plus account to continue.',
+    primary: { key: 'signin', label: 'Sign in', href: `${LOGIN_URL}?returnTo=${returnToParam()}` },
+    secondary: { key: 'plans', label: 'View Plus plans', href: PLUS_PLANS_URL },
+  });
+}
 
-  if (result.ok) {
-    if (onAccepted) onAccepted(result);
-    return { finalized: true, result };
-  }
+function renderFreeAccountOverlay(toolName) {
+  renderOverlay({
+    heading: `Upgrade to Plus to use ${toolName}`,
+    body: 'Administering assessments is a Literacy Arcade Plus feature. Your free account can still use Literacy Arcade’s other tools — upgrade to Plus or Plus Family for unlimited assessments, complete printable reports, and more.',
+    primary: { key: 'plans', label: 'View Plus plans', href: PLUS_PLANS_URL },
+    secondary: { key: 'dashboard', label: 'Go to dashboard', href: DASHBOARD_URL },
+  });
+}
 
-  if (result.reason === 'quota') {
-    showAssessmentLimitModal();
-    return { finalized: false, reason: 'quota' };
-  }
-
-  return new Promise((resolve) => {
-    showAssessmentNetworkErrorModal({
-      onRetry: async () => {
-        resolve(await finalizeAssessmentCompletion(assessmentType, completionId, { onAccepted }));
-      },
-      onDismiss: () => resolve({ finalized: false, reason: 'error' }),
-    });
+function renderUnknownStatusOverlay(onRetry) {
+  renderOverlay({
+    heading: 'We couldn’t confirm your account status',
+    body: 'We couldn’t confirm your account status right now. Please try again.',
+    primary: { key: 'retry', label: 'Try again', onClick: () => onRetry() },
+    secondary: { key: 'plans', label: 'View Plus plans', href: PLUS_PLANS_URL },
   });
 }
 
 /**
- * Updates a subtle "N of 5 free assessments used" note. Only shown to free
- * signed-in accounts; hidden entirely for signed-out visitors and Plus/family
- * accounts.
+ * Gates an assessment page behind Plus/Plus Family entitlement. Call this
+ * once, as early as possible on page load — before the teacher can interact
+ * with any assessment fields — not from a button's click handler.
+ *
+ * Renders a full-page blocking overlay (not a dismissable modal) so the
+ * page never appears usable while entitlement is still being checked or
+ * once it's been denied:
+ *   - while checking          -> loading overlay
+ *   - Plus / Plus Family      -> overlay removed, assessment usable
+ *   - signed out              -> "requires Plus" overlay with a sign-in path
+ *   - signed in, free plan    -> "upgrade to Plus" overlay
+ *   - entitlement unknown     -> distinct "couldn't confirm your account
+ *                                 status" overlay with Try again, never
+ *                                 phrased as a Plus requirement and never
+ *                                 phrased as a connection/network problem
+ *
+ * Returns { allowed: true, entitlement } once Plus access is confirmed, or
+ * { allowed: false, entitlement } for every other state (the overlay stays
+ * up; retrying re-runs this same check).
  */
-export function renderUsageNote(el, gate) {
-  if (!el) return;
-  if (!gate || gate.plan !== 'free' || typeof gate.uses !== 'number') {
-    el.style.display = 'none';
-    el.textContent = '';
-    return;
+export async function guardAssessmentAccess(toolName) {
+  renderLoadingOverlay();
+  const entitlement = await getAssessmentEntitlement();
+
+  if (entitlement.status === 'paid') {
+    removeOverlay();
+    return { allowed: true, entitlement };
   }
-  const remaining = Math.max(0, FREE_ASSESSMENT_LIMIT - gate.uses);
-  el.textContent = `${remaining} of ${FREE_ASSESSMENT_LIMIT} free assessments remaining`;
-  el.style.display = '';
-}
 
-/**
- * Full begin-assessment flow: requires sign-in (via firebase-tool-gate.js's
- * existing full-page gate, already loaded on the page), then checks the
- * shared 5-assessment quota. Shows the upgrade modal and returns
- * allowed:false if the free quota is exhausted. Does not itself record a
- * completion — call recordAssessmentCompletion() separately once the
- * assessment actually finishes.
- */
-export async function requireAssessmentAccess(assessmentType, opts = {}) {
-  const user = await window.LiteracyArcadeToolAccess?.requireSignIn?.();
-  if (!user) return { allowed: false, reason: 'signed-out' };
+  const retry = () => guardAssessmentAccess(toolName);
 
-  const gate = await canStartAssessment(user);
-  if (opts.usageNoteEl) renderUsageNote(opts.usageNoteEl, gate);
-
-  if (!gate.allowed) {
-    showAssessmentLimitModal();
-    return { allowed: false, reason: gate.reason, user, gate };
+  if (entitlement.status === 'signed-out') {
+    renderSignedOutOverlay(toolName, retry);
+  } else if (entitlement.status === 'free') {
+    renderFreeAccountOverlay(toolName);
+  } else {
+    renderUnknownStatusOverlay(retry);
   }
-  return { allowed: true, user, gate };
+  return { allowed: false, entitlement };
 }
 
 export { auth, db };

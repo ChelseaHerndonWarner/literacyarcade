@@ -760,7 +760,7 @@
   <link rel="stylesheet" href="./firebase-tool-gate.css">
   <script type="module" src="./firebase-tool-gate.js"></script>
 </head>
-<body data-auth-required="true" data-tool-id="orf-fluency-calculator" data-tool-name="ORF Fluency Calculator">
+<body data-tool-id="orf-fluency-calculator" data-tool-name="ORF Fluency Calculator">
   <header class="la-header" aria-label="Literacy Arcade navigation">
     <a href="https://literacyarcade.com" class="la-logo-group" aria-label="Literacy Arcade home">
       <div class="la-icon">
@@ -896,8 +896,6 @@
         <button class="secondary-btn" id="resetBtn">New Read</button>
         <button class="secondary-btn" id="nextStudentBtn">Next Student</button>
       </div>
-      <div id="assessmentQuotaNote" class="assessment-quota-note" aria-live="polite"></div>
-
       <div class="error" id="errorBox"></div>
 
       <div class="history-card" id="historyCard" style="display:none;">
@@ -924,6 +922,12 @@
 
   <script>
     const $ = (id) => document.getElementById(id);
+
+    // Plus entitlement is checked before the teacher can start administering
+    // the assessment — not deferred to Calculate. See assessment-use-guard.js.
+    import('./assessment-use-guard.js').then(({ guardAssessmentAccess }) => {
+      guardAssessmentAccess('ORF Fluency Calculator');
+    });
 
     let timerSeconds = 0;
     let timerInterval = null;
@@ -1188,8 +1192,6 @@
     }
 
     function reset(){
-      orfUsageRecorded = false;
-      orfCompletionId = null;
       ['passageWords','errors','minutes','seconds'].forEach(id => $(id).value = '');
       updatePassageLengthNote();
       $('wcpmOutput').textContent = '—';
@@ -1208,50 +1210,17 @@
       $('studentName').focus();
     }
 
-    let orfUsageRecorded = false;
-    let orfCompletionInFlight = false;
-    let orfCompletionId = null;
-
-    // Administering the assessment (timing a live read) now requires sign-in
-    // up front, at the point that actually starts the timed session — not
-    // deferred until Calculate. Free users already at the 5-assessment quota
-    // are blocked here too, before any timing happens.
-    $('startTimer').addEventListener('click', async () => {
-      const { requireAssessmentAccess } = await import('./assessment-use-guard.js');
-      const gate = await requireAssessmentAccess('orf-fluency-calculator', { usageNoteEl: $('assessmentQuotaNote') });
-      if(!gate.allowed) return;
-      startTimer();
-    });
+    $('startTimer').addEventListener('click', startTimer);
     $('stopTimer').addEventListener('click', stopTimer);
     $('useTimer').addEventListener('click', useTimer);
     $('clearTimer').addEventListener('click', clearTimer);
 
-    $('calculateBtn').addEventListener('click', async () => {
-      if(orfCompletionInFlight) return;
-      const { requireAssessmentAccess, finalizeAssessmentCompletion, newCompletionId, canStartAssessment, renderUsageNote, auth: gateAuth } = await import('./assessment-use-guard.js');
-      // Covers the manual-entry path (no timer used) and re-checks a stale
-      // session that started under quota but may have since been consumed
-      // by another tab/device.
-      const gate = await requireAssessmentAccess('orf-fluency-calculator', { usageNoteEl: $('assessmentQuotaNote') });
-      if(!gate.allowed) return;
-
+    $('calculateBtn').addEventListener('click', () => {
+      // Plus entitlement was already confirmed by guardAssessmentAccess()
+      // before this page became interactive — no re-check needed here.
       const pending = computeOrfResult();
       if(!pending) return;
-      if(orfUsageRecorded) return;
-
-      if(!orfCompletionId) orfCompletionId = newCompletionId();
-      orfCompletionInFlight = true;
-      $('calculateBtn').disabled = true;
-      // Results are only revealed once the server has authoritatively
-      // accepted this completion — never right after computing.
-      const outcome = await finalizeAssessmentCompletion('orf-fluency-calculator', orfCompletionId, {
-        onAccepted: () => { orfUsageRecorded = true; revealOrfResult(pending); }
-      });
-      orfCompletionInFlight = false;
-      $('calculateBtn').disabled = false;
-
-      const refreshedGate = await canStartAssessment(gateAuth.currentUser);
-      renderUsageNote($('assessmentQuotaNote'), refreshedGate);
+      revealOrfResult(pending);
     });
     $('resetBtn').addEventListener('click', reset);
     $('nextStudentBtn').addEventListener('click', nextStudent);
