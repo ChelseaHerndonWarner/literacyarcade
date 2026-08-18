@@ -1,0 +1,16 @@
+# ── Robot Word Builder audio generator (tools/audio-generator/) ──
+# Never commit API keys or local run artifacts.
+.env
+tools/audio-generator/.env
+node_modules/
+tools/audio-generator/node_modules/
+tools/audio-generator/logs/
+tools/audio-generator/backups/
+
+# Voice/settings comparison history — development artifacts only, never
+# production audio. The approved production set lives in
+# assets/audio/word-audio/, not here.
+robot-word-builder/word-audio/
+
+# macOS
+.DS_Store

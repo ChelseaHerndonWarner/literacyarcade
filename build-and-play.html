@@ -943,6 +943,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="shop-announcement.css" />
 </head>
 <body>
 
@@ -1090,6 +1091,20 @@
                 <span class="assess-details">
                   <span class="assess-desc">Read words to move your racer down the track — built-in Dolch, Fry, and phonics lists, or your own words.</span>
                   <span class="assess-chips"><span class="chip-lavender">Built-in word lists</span><span class="chip-lavender">Custom words</span><span class="chip-lavender">Shareable</span></span>
+                </span>
+              </span>
+            </a>
+
+            <a class="assess-card" href="robot-word-builder.html">
+              <span class="assess-media assess-media--full"><img src="robot-word-builder/robot-word-builder-spelling-game.png" alt="Robot Word Builder gameplay preview" loading="lazy" width="2048" height="1044"></span>
+              <span class="assess-panel">
+                <span class="assess-panel-head">
+                  <span class="assess-name">Robot Word Builder</span>
+                  <span class="assess-action">Open <span class="assess-arrow" aria-hidden="true">→</span></span>
+                </span>
+                <span class="assess-details">
+                  <span class="assess-desc">Listen to the word, choose the letters, and build the robot while practicing Fry words, Dolch words, and targeted phonics patterns.</span>
+                  <span class="assess-chips"><span class="chip-lavender">Spelling practice</span><span class="chip-lavender">Fry &amp; Dolch</span><span class="chip-lavender">Phonics patterns</span></span>
                 </span>
               </span>
             </a>
@@ -1294,5 +1309,13 @@
     });
   </script>
 
+  <!-- ══ Shop announcement — dismissible promo card (shop-announcement.js) ══ -->
+  <div class="shop-announce" id="shopAnnounce" aria-label="New Literacy Arcade Shop announcement" hidden>
+    <button type="button" class="shop-announce-close" id="shopAnnounceClose" aria-label="Close Shop announcement">&times;</button>
+    <p class="shop-announce-heading"><span class="shop-announce-spark" aria-hidden="true">✦</span>New at Literacy Arcade</p>
+    <p class="shop-announce-body">Explore hands-on literacy products in the new Literacy Arcade Shop.</p>
+    <a class="shop-announce-cta" id="shopAnnounceCta" href="shop.html">Visit the Shop <span aria-hidden="true">→</span></a>
+  </div>
+  <script defer src="shop-announcement.js"></script>
 </body>
 </html>
