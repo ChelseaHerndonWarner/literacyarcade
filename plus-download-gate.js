@@ -5,12 +5,21 @@
 // wording. report-print-gate.js itself is not imported or modified by this
 // module, so assessment report gating is unaffected.
 //
-// Sign-in (when signed out) is handled via firebase-tool-gate.js's existing
-// in-page requireSignIn() gate rather than a full-page redirect to
-// teacher-login.html. The host page never navigates away, so any
-// in-progress builder state on that page (e.g. a Letterbox Lesson being
-// built in phoneme-counter.html) is never destroyed by the sign-in step.
-// The host page must already include firebase-tool-gate.js.
+// A signed-out click always sees this module's own Plus-branded "sign in
+// with Plus to download this PDF" modal first — never firebase-tool-gate.js's
+// generic "create a free account to use <tool>" wall, which would wrongly
+// imply a free account is enough for this specific action. The host tool
+// itself (e.g. Phoneme Counter) stays free to use; only this download
+// action is Plus-gated, so firebase-tool-gate.js and the rest of the host
+// page are untouched.
+//
+// Once the teacher chooses to sign in from that modal, sign-in itself is
+// still handled via firebase-tool-gate.js's existing in-page
+// requireSignIn() gate rather than a full-page redirect to
+// teacher-login.html, so the host page never navigates away and any
+// in-progress builder state (e.g. a Letterbox Lesson being built in
+// phoneme-counter.html) is never destroyed by the sign-in step. The host
+// page must already include firebase-tool-gate.js.
 
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
@@ -189,6 +198,15 @@ function renderModal({ heading, body, primary, secondary }) {
   }, 0);
 }
 
+function openSignedOutModal(onSignIn) {
+  renderModal({
+    heading: 'Sign in with Plus to download this PDF',
+    body: 'Downloading a printable Letterbox Lesson PDF requires an active Literacy Arcade Plus or Plus Family plan. Phoneme Counter itself stays free to use — sign in with your Plus account to continue.',
+    primary: { key: 'primary', label: 'Sign in', onClick: () => { closeModal(); onSignIn(); } },
+    secondary: { key: 'secondary', label: 'View Plus plans', href: PLUS_PLANS_URL },
+  });
+}
+
 function openFreeAccountModal() {
   renderModal({
     heading: 'Upgrade to Plus to download this PDF',
@@ -211,16 +229,28 @@ function openUnknownStatusModal(retry) {
  * Gate a Plus-only download/print action (e.g. the Letterbox Lesson PDF)
  * behind active-paid-plan entitlement.
  *
- * If the visitor is signed out, this first requires sign-in via the host
- * page's existing firebase-tool-gate.js in-page gate (no navigation away),
- * then checks entitlement. downloadFn is only invoked for signed-in
- * accounts with an active Plus plan.
+ * A signed-out visitor always sees this module's own Plus-branded
+ * openSignedOutModal() first — never firebase-tool-gate.js's generic
+ * sign-in wall directly — so the messaging is honest about this specific
+ * action requiring Plus before any sign-in step happens. Only once they
+ * choose "Sign in" from that modal do we hand off to the host page's
+ * existing firebase-tool-gate.js in-page gate (no navigation away, so any
+ * in-progress builder state is preserved) to actually authenticate, then
+ * re-run this same check. downloadFn is only invoked for signed-in
+ * accounts with an active Plus/Plus Family plan.
  */
 async function guardPlusDownload(downloadFn, triggerElement) {
   triggerEl = triggerElement || document.activeElement;
 
-  const user = await window.LiteracyArcadeToolAccess?.requireSignIn?.();
-  if (!user) return; // gate was closed without signing in
+  await authReady;
+  if (!currentUser) {
+    openSignedOutModal(async () => {
+      const user = await window.LiteracyArcadeToolAccess?.requireSignIn?.();
+      if (!user) return; // gate was closed without signing in
+      guardPlusDownload(downloadFn, triggerEl);
+    });
+    return;
+  }
 
   const entitlement = await getEntitlement();
 
