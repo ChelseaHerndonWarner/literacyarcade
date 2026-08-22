@@ -149,6 +149,38 @@
        redesign pass could stay scoped to this one file. Scoped to
        .nh-efa-page throughout. -->
   <style>
+    /* ── Tutorial video — reuses the .video-demo-wrap/.video-demo-frame
+         visual treatment established on build-and-play.html / fluency.html
+         / teacher-tools.html (responsive 16:9 frame, rounded corners,
+         border, shadow), same as alabama-choose-act.html / texas-efa.html /
+         arkansas-efa.html / south-carolina-estf.html's tutorial-video
+         section. Redefined here scoped to this page rather than touching
+         shared CSS. */
+    /* The heading text ("How to use your New Hampshire EFA funds") is a
+       touch wider than the shared .section-heading's 720px cap at full
+       heading size, so it wraps to an orphaned second line ("funds" alone)
+       instead of sitting centered like Arkansas's shorter heading. Widen
+       just this heading's container so it holds one balanced line — same
+       font-size/weight as every other state page, no shared CSS touched. */
+    .nh-efa-page #tutorial-video .section-heading {
+      max-width: 780px;
+    }
+
+    .nh-efa-page .video-demo-wrap {
+      max-width: 700px;
+      margin: 28px auto 0;
+    }
+    .nh-efa-page .video-demo-frame {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: var(--ink);
+    }
+
     .nh-efa-page .hero-flow-label {
       font-family: var(--font-head);
       font-size: .78rem;
@@ -689,9 +721,31 @@
       </div>
     </section>
 
-    <!-- ══ 2 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
-    <!-- `lift` overlaps the hero slightly — the visual bridge between
-         sections. Intentionally near the top of the page: the
+    <!-- ══ 2 · TUTORIAL VIDEO [STATE-SPECIFIC video, SHARED frame styling] ══ -->
+    <!-- Short screen-recorded walkthrough. Supplementary only — the written
+         4-step process in the How to purchase section below must stay
+         complete and understandable on its own for a parent who never
+         presses play. Mirrors alabama-choose-act.html / texas-efa.html /
+         arkansas-efa.html / south-carolina-estf.html's tutorial-video
+         section (id="tutorial-video"). -->
+    <section class="state-section white" id="tutorial-video" aria-label="New Hampshire EFA tutorial video">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>How to use your New Hampshire EFA funds</h2>
+          <p>Watch how New Hampshire families purchase Literacy Arcade with EFA funds through ClassWallet Direct Pay.</p>
+        </div>
+        <div class="video-demo-wrap">
+          <video class="video-demo-frame" controls playsinline preload="metadata" aria-label="New Hampshire EFA Literacy Arcade tutorial">
+            <source src="videos/New Hampshire-EFA-tutorial.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
+    <!-- `lift` overlaps the tutorial-video section slightly — the visual
+         bridge between sections. Intentionally near the top of the page: the
          purchase/payment process should not be buried under general
          program copy. -->
     <section class="state-section white lift" id="efa-purchase">
