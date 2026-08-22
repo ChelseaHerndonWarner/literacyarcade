@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<!-- ============================================================================
+     STATE PROGRAM PAGE — South Carolina ESTF
+     ---------------------------------------------------------------------------
+     Built to follow the same structure/purchasing-flow pattern as
+     new-hampshire-efa.html (visual/layout template) and arkansas-efa.html /
+     arkansas-invoice-config.js / arkansas-invoice-generator.js (functional
+     template: invoice modal, PDF generation, physical-product logic,
+     out-of-stock handling, ClassWallet purchase flow). Most shared styling
+     lives in state-program.css; this page carries a page-local <style>
+     block (in <head>) mirroring Arkansas's, scoped to
+     .south-carolina-estf-page throughout.
+
+     Section order (current) — the reusable ClassWallet state-page pattern.
+     Each section is tagged [STATE-SPECIFIC] or [SHARED] below:
+       1. Hero [STATE-SPECIFIC] — state badge, approval statement, 3-step
+          "Choose → Generate → Upload" process indicator, primary "Request a
+          South Carolina ESTF Invoice" CTA
+       2. How to purchase [STATE-SPECIFIC] — South Carolina's ClassWallet
+          Pay Vendor purchase process (covers both digital plans and
+          physical products) + note panel (id="estf-purchase")
+       3. What's included with Literacy Arcade Plus [SHARED] — the one
+          feature-explanation section on the page. Describes the core Plus
+          platform, identical for BOTH annual plans (id="whats-included")
+       4. Plus Family value [SHARED layout, STATE-SPECIFIC wording] — a
+          visual spotlight, not a pricing section. Focused on parent/
+          guardian guidance (monthly live Q&A, understanding assessment
+          results, instructional next steps) rather than implying the ESTF
+          purchase directly serves other, unfunded children in the
+          household (id="plus-family-value")
+       5. Choose your annual plan [SHARED plan data, STATE-SPECIFIC CTA] —
+          the one place the two annual plans ($79 Plus / $99 Plus Family)
+          are compared and priced (id="plans-compare")
+       6. Physical literacy products [SHARED card pattern + CONFIG-DRIVEN
+          rendering, STATE-SPECIFIC framing] — a separate purchase from the
+          subscription tiers above. Cards are rendered from the `offerings`
+          list in south-carolina-invoice-config.js by renderProductCards()
+          in south-carolina-invoice-generator.js (id="physical-products")
+       7. FAQ [STATE-SPECIFIC wording] — short, direct answers only
+
+     Every "Request a South Carolina ESTF Invoice" button is a
+     <button data-invoice-trigger> (optionally data-plan="<offering id>" to
+     preselect an item) that opens #invoiceModal near the end of <body>.
+     Behavior lives in south-carolina-invoice-generator.js; provider info
+     and the full offerings list (digital plans + physical products) live in
+     south-carolina-invoice-config.js — edit that file, not the generator,
+     to update pricing, business info, or add a future product.
+
+     South Carolina is NOT described as a homeschool-specific program —
+     participating families are "South Carolina ESTF families" throughout,
+     not "homeschool families." (Unlike Arkansas's finalized page, which
+     does use "homeschool families" wording because that framing was
+     confirmed correct there — do not copy that wording here.)
+
+     STATE CONFIG [STATE-SPECIFIC]
+       State label ....... South Carolina ESTF (Education Scholarship
+                           Trust Fund)
+       Purchase process .. South Carolina uses ClassWallet's Pay Vendor
+                           process, which requires the parent to upload an
+                           invoice. Unlike Arkansas (which has a vendor
+                           payment-request alternative to hedge around),
+                           there is no ambiguity here — the flow is stated
+                           directly: generate a Literacy Arcade invoice on
+                           this page, then the parent logs into the
+                           student's South Carolina ESTF ClassWallet account
+                           and submits/uploads it through Pay Vendor.
+       Funding unit ...... South Carolina ESTF funds are tied to an
+                           individual student's ESTF account. Plus Family's
+                           added benefits (monthly guidance, live group
+                           Q&A) are for the parent/guardian, not a claim
+                           that the ESTF purchase itself is directly
+                           providing services to other, unfunded children
+                           in the household.
+       Invoice tool ...... Client-side PDF generator (jsPDF), config in
+                           south-carolina-invoice-config.js. Adapted from
+                           the Arkansas invoice tool. Supports one offering
+                           per invoice in V1, same as Arkansas/New
+                           Hampshire. Required South Carolina Pay Vendor
+                           invoice fields (provider name, provider address,
+                           student name, parent/guardian name, invoice
+                           date, date/service information, what the
+                           payment is for, total amount due) are all
+                           rendered by buildInvoicePdf() in
+                           south-carolina-invoice-generator.js — see that
+                           file's header comment for how digital vs.
+                           physical offerings differ (service period vs.
+                           fulfillment language; no invented service date
+                           for physical products).
+       Physical products . Rendered on-page and in the invoice modal from
+                           the same offerings config, adapted from
+                           Arkansas's pattern. Heart Word Flash Cards has
+                           0 available inventory and stays invoiceEnabled:
+                           false — see south-carolina-invoice-config.js.
+       State art ......... images/south-carolina-estf.svg (added to the
+                           project) — rendered the same way as
+                           images/arkansas-efa.svg / images/new-hampshire-
+                           efa.svg: a plain <img> inside .state-art-frame,
+                           same sizing/spacing/responsive behavior as the
+                           other state pages. Do not alter the SVG file
+                           itself and do not substitute a different image.
+       Direct purchase ... plus-subscriptions.html
+     ============================================================================ -->
+<html lang="en">
+<head>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CL8QW5CGB2');
+  </script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xc6rwdrkw5");
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- [STATE-SPECIFIC] -->
+  <title>Literacy Arcade for South Carolina ESTF Families | Reading Tools K–6</title>
+  <meta name="description" content="Literacy Arcade is an approved South Carolina ESTF provider offering Science of Reading–aligned games, assessments, fluency tools, and supplemental reading support for grades K–6." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://literacyarcade.com/south-carolina-estf.html" />
+  <meta property="og:title" content="Literacy Arcade for South Carolina ESTF Families" />
+  <meta property="og:description" content="Science of Reading–aligned games, assessments, fluency tools, and supplemental literacy support for eligible South Carolina families using ESTF funds." />
+  <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta name="theme-color" content="#2EC4B6" />
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebPage","name":"Literacy Arcade for South Carolina ESTF Families","url":"https://literacyarcade.com/south-carolina-estf.html","description":"Information for South Carolina Education Scholarship Trust Fund families considering Literacy Arcade supplemental reading tools.","isPartOf":{"@type":"WebSite","name":"Literacy Arcade","url":"https://literacyarcade.com/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://literacyarcade.com/"},{"@type":"ListItem","position":2,"name":"South Carolina ESTF","item":"https://literacyarcade.com/south-carolina-estf.html"}]}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="state-program.css" />
+  <link rel="stylesheet" href="shop-announcement.css" />
+
+  <!-- [STATE-SPECIFIC] Page-local styles for the South Carolina ESTF
+       purchase flow. Mirrors arkansas-efa.html's page-local block so this
+       page reads as the same component system. Scoped to
+       .south-carolina-estf-page throughout. -->
+  <style>
+    .south-carolina-estf-page .hero-flow-label {
+      font-family: var(--font-head);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin: 20px 0 10px;
+    }
+    .south-carolina-estf-page .hero-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin: 0 0 20px;
+      list-style: none;
+      padding: 0;
+    }
+    .south-carolina-estf-page .hero-flow li {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      padding: 2px 0;
+      font-family: var(--font-head);
+      font-size: .84rem;
+      font-weight: 750;
+      color: var(--ink-soft);
+    }
+    .south-carolina-estf-page .hero-flow .flow-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-size: .7rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .south-carolina-estf-page .hero-flow .arrow {
+      color: var(--border);
+      font-weight: 700;
+      padding: 0 2px;
+    }
+
+    .south-carolina-estf-page .purchase-steps--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    @media (max-width: 1100px) {
+      .south-carolina-estf-page .purchase-steps--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .south-carolina-estf-page .purchase-steps--4 { grid-template-columns: 1fr; }
+    }
+
+    /* Small "Plus Annual" / "Plus Family Annual" plan-type pill — mirrors
+       .plan-badge on plus-subscriptions.html so the two pricing pages read
+       as the same product line. */
+    .south-carolina-estf-page .compare-plan-badge {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      margin: 14px 0 2px;
+      padding: 5px 10px;
+      border-radius: 100px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-family: var(--font-head);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .south-carolina-estf-page .compare-plan-badge--family {
+      background: var(--violet);
+      color: var(--white);
+    }
+    .south-carolina-estf-page .compare-desc {
+      font-size: .88rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin: 2px 0 16px;
+    }
+
+    .south-carolina-estf-page .compare-grid { align-items: start; }
+    .south-carolina-estf-page .compare-card .btn { margin-top: 20px; align-self: flex-start; }
+
+    /* ── Plus Family value section — visual spotlight, not a pricing card ── */
+    .south-carolina-estf-page .pf-value-detail {
+      margin: 0 0 20px;
+      font-size: .92rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+    .south-carolina-estf-page .pf-benefit-list {
+      display: grid;
+      gap: 14px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .south-carolina-estf-page .pf-benefit-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .south-carolina-estf-page .pf-benefit-list .pf-benefit-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: var(--violet);
+      color: var(--white);
+      font-size: .72rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .south-carolina-estf-page .pf-benefit-list strong {
+      display: block;
+      font-family: var(--font-head);
+      font-size: .92rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .south-carolina-estf-page .pf-benefit-list span {
+      display: block;
+      font-size: .85rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.45;
+    }
+    .south-carolina-estf-page .section-subnote {
+      margin: 6px 0 0;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      opacity: .85;
+    }
+    .south-carolina-estf-page .invoice-assist-note {
+      max-width: fit-content;
+      margin: 20px auto 0;
+      padding: 10px 18px;
+      border: 1px dashed rgba(123,94,167,.4);
+      border-radius: 100px;
+      background: #FCFAFF;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--violet);
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* ── Physical-product cards — rendered from config by
+         renderProductCards() in south-carolina-invoice-generator.js.
+         Mirrors the visual language of .category-card so a config-driven
+         card reads as part of the same design system. ── */
+    .south-carolina-estf-page .sc-product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    @media (max-width: 720px) {
+      .south-carolina-estf-page .sc-product-grid { grid-template-columns: 1fr; }
+    }
+    .south-carolina-estf-page .sc-product-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .south-carolina-estf-page .sc-product-media {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      background: var(--cream);
+    }
+    .south-carolina-estf-page .sc-product-media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .south-carolina-estf-page .sc-product-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .south-carolina-estf-page .sc-product-body h3 {
+      font-family: var(--font-head);
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin: 0 0 6px;
+    }
+    .south-carolina-estf-page .sc-product-body p {
+      font-size: .88rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin: 0 0 12px;
+    }
+    .south-carolina-estf-page .sc-product-price {
+      font-family: var(--font-head);
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--teal-dk);
+      margin-bottom: 14px;
+    }
+    .south-carolina-estf-page .sc-product-price span {
+      display: block;
+      font-family: var(--font-body, inherit);
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin-top: 2px;
+    }
+    .south-carolina-estf-page .sc-product-price-placeholder {
+      visibility: hidden;
+      font-size: 1.1rem;
+      line-height: 1.3;
+    }
+    /* ── Out-of-stock status badge — used on Heart Word Flash Cards while
+         inventory is 0. ── */
+    .south-carolina-estf-page .sc-product-status {
+      margin-bottom: 14px;
+    }
+    .south-carolina-estf-page .sc-product-status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      border-radius: 100px;
+      background: var(--blush);
+      color: #B23A3A;
+      font-family: var(--font-head);
+      font-size: .74rem;
+      font-weight: 900;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    .south-carolina-estf-page .sc-product-status-note {
+      display: block;
+      margin-top: 6px;
+      font-size: .82rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+    }
+    .south-carolina-estf-page .sc-product-actions { margin-top: auto; }
+    .south-carolina-estf-page .sc-product-actions .btn { width: 100%; justify-content: center; }
+
+    /* ── South Carolina ESTF-account note — visible but restrained, sits
+         below the Plus Family spotlight and above the pricing cards. ── */
+    .south-carolina-estf-page .student-note-panel {
+      max-width: 760px;
+      margin: 28px auto 0;
+      padding: 16px 20px;
+      border: 1.5px solid rgba(123,94,167,.35);
+      border-radius: var(--radius);
+      background: #FCFAFF;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .south-carolina-estf-page .student-note-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--violet);
+      color: var(--white);
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: .82rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .south-carolina-estf-page .student-note-panel p {
+      margin: 0;
+      font-size: .88rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .south-carolina-estf-page .student-note-panel strong { color: var(--ink); }
+
+    /* ── Hero primary CTA ── */
+    .south-carolina-estf-page .hero-actions .btn-hero-primary {
+      background: var(--coral);
+      box-shadow: 0 10px 28px rgba(255,107,107,.32);
+      font-size: 1.02rem;
+      padding: 15px 26px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .south-carolina-estf-page .hero-actions .btn-hero-primary:hover,
+    .south-carolina-estf-page .hero-actions .btn-hero-primary:active {
+      background: #F0524F;
+    }
+    .south-carolina-estf-page .btn-hero-primary .hero-cta-spark {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M12 0c.6 5.9 5.5 10.8 12 11.4-6.5.6-11.4 5.5-12 12-.6-6.5-5.5-11.4-12-12C6.5 10.8 11.4 5.9 12 0z'/%3E%3C/svg%3E") no-repeat center / contain;
+      flex-shrink: 0;
+    }
+    .south-carolina-estf-page .hero-cta-support {
+      margin: 10px 0 0;
+      font-size: .84rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+    }
+
+    /* ── South Carolina ESTF invoice request modal ───────────────────────── */
+    .south-carolina-estf-page .ia-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(20,16,38,.82);
+      backdrop-filter: blur(3px);
+    }
+    .south-carolina-estf-page .ia-modal-overlay[hidden] { display: none; }
+    .south-carolina-estf-page .ia-modal {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+      padding: 36px 30px 28px;
+    }
+    .south-carolina-estf-page .ia-modal-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 40px; height: 40px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .south-carolina-estf-page .ia-modal-close:hover { background: var(--mint); }
+    .south-carolina-estf-page .ia-modal-close:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+    .south-carolina-estf-page .ia-modal h2 { font-size: 1.28rem; font-weight: 900; color: var(--ink); margin: 0 0 6px; }
+    .south-carolina-estf-page .ia-modal-sub { color: var(--ink-soft); font-size: .92rem; font-weight: 650; margin: 0 0 22px; line-height: 1.5; }
+    .south-carolina-estf-page .ia-field { margin-bottom: 16px; }
+    .south-carolina-estf-page .ia-field fieldset { border: 0; padding: 0; margin: 0; }
+    .south-carolina-estf-page .ia-field label,
+    .south-carolina-estf-page .ia-field legend {
+      display: block;
+      font-family: var(--font-head);
+      font-size: .82rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .south-carolina-estf-page .ia-field input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--cream);
+    }
+    .south-carolina-estf-page .ia-field input:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 1px;
+      border-color: var(--teal);
+    }
+    .south-carolina-estf-page .ia-field input[aria-invalid="true"] { border-color: #C6484D; }
+    .south-carolina-estf-page .ia-plan-options { display: grid; gap: 18px; }
+    .south-carolina-estf-page .ia-plan-group { display: grid; gap: 10px; }
+    .south-carolina-estf-page .ia-plan-group-label {
+      margin: 0;
+      font-family: var(--font-head);
+      font-size: .74rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .south-carolina-estf-page .ia-plan-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .south-carolina-estf-page .ia-plan-option:hover { border-color: rgba(46,196,182,.5); }
+    .south-carolina-estf-page .ia-plan-option:has(input:checked) { border-color: var(--teal-dk); background: var(--mint); }
+    .south-carolina-estf-page .ia-plan-option:has(input:focus-visible) { outline: 3px solid var(--amber); outline-offset: 2px; }
+    .south-carolina-estf-page .ia-plan-option input {
+      margin-top: 3px;
+      width: 18px; height: 18px;
+      accent-color: var(--teal-dk);
+      flex-shrink: 0;
+    }
+    .south-carolina-estf-page .ia-plan-option-body { flex: 1; min-width: 0; }
+    .south-carolina-estf-page .ia-plan-option-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .south-carolina-estf-page .ia-plan-name { font-weight: 900; color: var(--ink); font-size: .96rem; }
+    .south-carolina-estf-page .ia-plan-price { font-weight: 900; color: var(--teal-dk); font-size: .96rem; white-space: nowrap; }
+    .south-carolina-estf-page .ia-plan-sub { display: block; color: var(--ink-soft); font-size: .8rem; font-weight: 650; margin-top: 3px; }
+    .south-carolina-estf-page .ia-error {
+      color: #C6484D;
+      font-size: .82rem;
+      font-weight: 750;
+      margin: 6px 0 0;
+    }
+    .south-carolina-estf-page .ia-error[hidden] { display: none; }
+    .south-carolina-estf-page .ia-error-general { margin: 4px 0 14px; }
+    .south-carolina-estf-page .ia-submit { width: 100%; justify-content: center; }
+    .south-carolina-estf-page .ia-submit:disabled { cursor: wait; }
+    .south-carolina-estf-page .ia-modal-note { margin: 14px 0 0; text-align: center; font-size: .8rem; color: var(--ink-soft); font-weight: 650; }
+    .south-carolina-estf-page #invoiceSuccessView h2 { color: var(--teal-dk); }
+    .south-carolina-estf-page .ia-success-summary {
+      margin: 0 0 18px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--mint);
+      color: var(--ink);
+      font-size: .88rem;
+      font-weight: 800;
+    }
+    .south-carolina-estf-page #invoiceDownloadBtn { width: 100%; justify-content: center; margin-bottom: 18px; }
+    .south-carolina-estf-page .ia-next-steps-label { font-family: var(--font-head); font-size: .82rem; font-weight: 800; color: var(--ink); margin: 0 0 8px; }
+    .south-carolina-estf-page .ia-next-steps { list-style: decimal; padding-left: 20px; margin: 0 0 22px; display: grid; gap: 7px; }
+    .south-carolina-estf-page .ia-next-steps li { font-size: .92rem; font-weight: 700; color: var(--ink); }
+    .south-carolina-estf-page .ia-activation-note {
+      margin: 4px 0 20px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--mint);
+      color: var(--ink);
+      font-size: .85rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+    .south-carolina-estf-page .ia-activation-note a { color: var(--teal-dk); font-weight: 800; text-decoration: underline; text-underline-offset: 2px; }
+    .south-carolina-estf-page #invoiceStartOverBtn { width: 100%; justify-content: center; }
+    @media (max-width: 640px) {
+      .south-carolina-estf-page .ia-modal { padding: 30px 18px 22px; max-height: 92vh; }
+      .south-carolina-estf-page .ia-plan-option-top { flex-direction: column; align-items: flex-start; gap: 2px; }
+    }
+  </style>
+</head>
+<body class="south-carolina-estf-page">
+
+  <!-- ══ SITE HEADER — standard Literacy Arcade nav (do not customise) ══ -->
+  <header>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Literacy Arcade home">
+          <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+          Literacy Arcade
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="plus-subscriptions.html">Plus Plans</a></li>
+          <li><a href="assessments.html">Assessments</a></li>
+          <li><a href="fluency.html">Fluency</a></li>
+          <li><a href="build-and-play.html">Build &amp; Play</a></li>
+          <li><a href="teacher-tools.html">Teacher Tools</a></li>
+          <li><a href="teacher-login.html" class="nav-account">Dashboard / Log in</a></li>
+        </ul>
+
+        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ══ 1 · HERO [STATE-SPECIFIC] ══ -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">South Carolina ESTF</span>
+          <h1>Literacy Arcade for South Carolina ESTF Families</h1>
+          <p class="hero-sub">Science of Reading–aligned games, assessments, fluency tools, and guided instructional support for eligible South Carolina families.</p>
+
+          <p class="provider-status">Literacy Arcade is an approved South Carolina Education Scholarship Trust Fund provider. Eligible families can use ESTF funds for approved Literacy Arcade purchases.</p>
+
+          <p class="hero-flow-label">Use your ESTF funds for Literacy Arcade</p>
+          <ul class="hero-flow">
+            <li><span class="flow-num" aria-hidden="true">1</span>Choose what to purchase</li>
+            <li class="arrow" aria-hidden="true">→</li>
+            <li><span class="flow-num" aria-hidden="true">2</span>Generate an invoice</li>
+            <li class="arrow" aria-hidden="true">→</li>
+            <li><span class="flow-num" aria-hidden="true">3</span>Upload it through ClassWallet</li>
+          </ul>
+
+          <div class="hero-actions">
+            <button type="button" class="btn btn-primary btn-hero-primary" data-invoice-trigger><span class="hero-cta-spark" aria-hidden="true"></span>Request a South Carolina ESTF Invoice →</button>
+            <a class="btn btn-quiet" href="#estf-purchase">See how it works ↓</a>
+          </div>
+          <p class="hero-cta-support">Get your PDF invoice instantly</p>
+          <p class="hero-note">Grades K–6 · Supplemental reading support · No student accounts required</p>
+        </div>
+
+        <!-- state art card — the outline is the focus; the approval pill
+             sits BELOW it in flow. Same placement/sizing/treatment as
+             new-hampshire-efa.html / arkansas-efa.html. -->
+        <div class="state-art">
+          <div class="state-art-frame">
+            <img src="images/south-carolina-estf.svg" alt="South Carolina outline in Literacy Arcade colors" />
+          </div>
+          <span class="state-art-label state-art-label--fixed">Approved South Carolina ESTF Provider</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 2 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
+    <!-- `lift` overlaps the hero slightly — the visual bridge between
+         sections. South Carolina uses ClassWallet's Pay Vendor process,
+         which requires the parent to upload an invoice — stated directly
+         below, no hedging language needed the way Arkansas's copy hedges
+         around its vendor-payment-request alternative. -->
+    <section class="state-section white lift" id="estf-purchase">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>How to purchase with South Carolina ESTF funds</h2>
+          <p>South Carolina families generate a Literacy Arcade invoice here, then upload it through Pay Vendor in the student's ClassWallet account. Here's how it works, in four steps.</p>
+        </div>
+
+        <div class="purchase-steps purchase-steps--4">
+          <article class="purchase-step">
+            <h3>Choose what you want to purchase</h3>
+            <p>Select an annual Literacy Arcade plan or an available physical literacy product.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Generate your South Carolina ESTF invoice</h3>
+            <p>Enter the required information and create your Literacy Arcade invoice.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Upload your invoice in ClassWallet</h3>
+            <p>Log in to the student's South Carolina ESTF ClassWallet account and submit/upload the Literacy Arcade invoice through Pay Vendor.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Complete your Literacy Arcade purchase</h3>
+            <p>After Literacy Arcade receives approved payment, digital access will be activated or physical products will be prepared for shipment.</p>
+          </article>
+        </div>
+
+        <!-- Warm, non-alarming payment clarification — reuses the existing
+             .note-panel component. -->
+        <div class="note-panel">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <div>
+            <h2>Pay through ClassWallet Pay Vendor</h2>
+            <p>South Carolina ESTF families generate a Literacy Arcade invoice here, then upload it through Pay Vendor in the student's ClassWallet account. Literacy Arcade does not initiate the ClassWallet payment — the parent submits the invoice.</p>
+          </div>
+        </div>
+
+        <div class="purchase-cta">
+          <button type="button" class="btn btn-primary" data-invoice-trigger>Request a South Carolina ESTF Invoice →</button>
+          <a class="btn btn-quiet" href="#plans-compare">See annual plans ↓</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3 · WHAT'S INCLUDED — polished product-category cards (2×2) [SHARED] ══
+         Core platform feature section — applies to BOTH annual plans, so it
+         must not carry Plus-Family-only language. -->
+    <section class="state-section white" id="whats-included">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>What's included with Literacy Arcade Plus</h2>
+        </div>
+
+        <div class="category-grid">
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/assessment-results-larger.png" aria-label="Enlarge the Literacy Arcade assessment results and printable reports image">
+              <img src="images/state-program/assessment-results-larger.png" alt="Literacy Arcade assessment results and printable reports showing letter knowledge, letter sounds, phonics, and oral reading fluency results." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Assessments and printable reports</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Quick checks for letter knowledge, letter sounds, phonics, decoding, and oral reading fluency, with results analysis, instructional focus areas, and printable reports.</p>
+                <a class="cc-link" href="assessments.html">Explore assessments →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/fluency-larger.png" aria-label="Enlarge the Literacy Arcade fluency tools image">
+              <img src="images/state-program/fluency-larger.png" alt="Literacy Arcade fluency tools showing the ORF Calculator with WCPM and accuracy, Repeated Reading Rockets, and a Repeated Reading Raceway progress tracker." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Fluency measurement and practice</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Use the ORF Calculator, built-in timers, WCPM and accuracy tracking, repeated-reading tools, benchmark ranges, and prosody support.</p>
+                <a class="cc-link" href="fluency.html">Explore fluency tools →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/build-and-play-larger.png" aria-label="Enlarge the Literacy Arcade Build and Play image">
+              <img src="images/state-program/build-and-play-larger.png" alt="Literacy Arcade Build &amp; Play showing Read &amp; Race, Magic Word Road, vocabulary flashcards, a reading word spinner, and sentence and comprehension spinners." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Customizable literacy practice</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Use built-in or custom words, sentences, vocabulary, and comprehension content in games, flashcards, spinners, and student-ready practice activities.</p>
+                <a class="cc-link" href="build-and-play.html">Explore Build &amp; Play →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/teacher-tools-larger.png" aria-label="Enlarge the Literacy Arcade Teacher Tools image">
+              <img src="images/state-program/teacher-tools-larger.png" alt="Literacy Arcade Teacher Tools showing the Phoneme Counter, an Interactive Phoneme Chart, a printable Letterbox Lesson plan, and an interactive Letterbox Lesson with sound boxes." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Explicit and systematic phonics lesson tools</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Use the Phoneme Counter, sound boxes, letter tiles, Interactive Letterbox Lessons, the Interactive Phoneme Chart, and printable lesson plans.</p>
+                <a class="cc-link" href="teacher-tools.html">Explore teacher tools →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <ul class="benefit-strip">
+          <li><strong>Assess and plan</strong> Review assessment results, printable reports, skill patterns, and instructional next steps.</li>
+          <li><strong>Teach with Letterbox Lessons</strong> Use sound boxes, letter tiles, supported word banks, and printable lesson plans.</li>
+          <li><strong>Build fluency</strong> Measure WCPM and accuracy, support repeated reading, and track growth.</li>
+          <li><strong>Customize practice</strong> Use built-in or custom words, sentences, vocabulary, and comprehension content.</li>
+          <li><strong>Organize and reuse activities</strong> Save activities, build teaching collections, and return to customized tools without rebuilding them.</li>
+          <li><strong>Share without student accounts</strong> Use student-ready links and Google Classroom without requiring student email addresses.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ══ 4 · PLUS FAMILY VALUE — visual spotlight, not another pricing card
+         [SHARED layout, STATE-SPECIFIC wording]. Focused on parent/
+         guardian guidance (monthly live Q&A, understanding assessment
+         results, instructional next steps, choosing tools) rather than
+         implying the ESTF purchase directly serves other, unfunded
+         children in the household. South Carolina is not framed as a
+         homeschool-specific program. -->
+    <section class="state-section white" id="plus-family-value">
+      <div class="container">
+        <div class="overview-grid">
+          <figure class="overview-figure overview-figure--platform">
+            <button type="button" class="img-zoom" data-full="images/state-program/literacy-arcade-thumbnail.png" aria-label="Enlarge Literacy Arcade platform overview">
+              <img src="images/state-program/literacy-arcade-thumbnail.png" alt="Literacy Arcade platform overview showing reading games, assessments, fluency practice, teacher tools, and the five essential components of reading." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+          </figure>
+
+          <div class="overview-side">
+            <div class="section-heading">
+              <span class="guidance-eyebrow">Popular with South Carolina ESTF families</span>
+              <h2>Plus Family adds support for what comes next</h2>
+              <p>Literacy Arcade Plus gives families the tools to assess, teach, and practice reading skills. Plus Family adds monthly guidance for parents and guardians supporting reading at home.</p>
+            </div>
+
+            <p class="pf-value-detail">Join a monthly live group literacy Q&amp;A with Chelsea Herndon Warner, Ph.D., to ask questions about assessment results, what skills to work on next, and how to use Literacy Arcade tools and activities.</p>
+
+            <ul class="pf-benefit-list">
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <div>
+                  <strong>Understand assessment results</strong>
+                  <span>Get help interpreting patterns and identifying what to focus on next.</span>
+                </div>
+              </li>
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <div>
+                  <strong>Know what to teach next</strong>
+                  <span>Ask questions about skills, instruction, and reading goals.</span>
+                </div>
+              </li>
+              <li>
+                <span class="pf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                <div>
+                  <strong>Use Literacy Arcade with confidence</strong>
+                  <span>Get guidance on choosing tools and activities to support your family's reading needs.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- South Carolina ESTF-account note — invoices are tied to the
+             student named on the ESTF account. -->
+        <div class="student-note-panel">
+          <span class="student-note-icon" aria-hidden="true">i</span>
+          <p><strong>South Carolina ESTF funds are tied to an individual student's ESTF account.</strong> Plus Family should be invoiced for the student named on that account. Plus Family adds monthly literacy guidance and live Q&amp;A support for the parent or guardian.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 5 · CHOOSE YOUR ANNUAL PLAN — the one place plans/pricing are
+         compared [SHARED plan data, STATE-SPECIFIC CTA]. ══ -->
+    <section class="state-section tint" id="plans-compare">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>Choose your annual Literacy Arcade plan</h2>
+          <p>Both annual plans include the same full Literacy Arcade Plus platform. Plus Family adds monthly literacy guidance and a live group Q&amp;A for parents and guardians.</p>
+        </div>
+
+        <div class="compare-grid">
+          <article class="compare-card featured">
+            <span class="compare-badge">Popular with South Carolina ESTF families</span>
+            <span class="compare-plan-badge compare-plan-badge--family">Plus Family Annual</span>
+            <h3>Family literacy support</h3>
+            <div class="compare-price">$99 <span>/ year</span></div>
+            <p class="compare-desc">Everything in Literacy Arcade Plus for the ESTF student, plus monthly literacy guidance and live Q&amp;A support for the parent or guardian.</p>
+            <ul class="compare-list">
+              <li>Everything included with Literacy Arcade Plus</li>
+              <li>Full digital access supporting the named ESTF student</li>
+              <li class="hl">Monthly live group literacy Q&amp;A with a reading specialist</li>
+              <li>Parent/guardian guidance for assessment results and next instructional steps</li>
+            </ul>
+            <button type="button" class="btn btn-primary" data-invoice-trigger data-plan="plus-family-annual">Request a South Carolina ESTF Invoice →</button>
+          </article>
+
+          <article class="compare-card">
+            <span class="compare-plan-badge">Plus Annual</span>
+            <h3>Full-year Literacy Arcade access</h3>
+            <div class="compare-price">$79 <span>/ year</span></div>
+            <p class="compare-desc">Full Literacy Arcade Plus access for one parent or educator account — one year of access.</p>
+            <ul class="compare-list">
+              <li>Everything included in the Literacy Arcade Plus platform</li>
+              <li>One parent or educator account</li>
+              <li>Students do not need accounts</li>
+              <li class="no">Does not include the monthly family guidance/Q&amp;A</li>
+            </ul>
+            <button type="button" class="btn btn-primary" data-invoice-trigger data-plan="plus-annual">Request a South Carolina ESTF Invoice →</button>
+          </article>
+        </div>
+
+        <p class="invoice-assist-note">Generate your PDF invoice instantly — no account or waiting required.</p>
+      </div>
+    </section>
+
+    <!-- ══ 6 · PHYSICAL LITERACY PRODUCTS [STATE-SPECIFIC framing, SHARED
+         card pattern + config-driven rendering] ══
+         Cards are rendered entirely from window.SouthCarolinaInvoiceConfig
+         (south-carolina-invoice-config.js) by renderProductCards() in
+         south-carolina-invoice-generator.js — this markup only provides
+         the empty #scProductGrid container. Heart Word Flash Cards has 0
+         available inventory right now, so its card links to shop.html for
+         details instead of offering an invoice CTA (invoiceEnabled:false)
+         — see the config file. -->
+    <section class="state-section white" id="physical-products">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>Physical literacy products</h2>
+          <p>Add hands-on Literacy Arcade materials for phonics instruction, word mapping, and reading practice.</p>
+          <p class="section-subnote">South Carolina ESTF purchases are submitted for the student associated with the ESTF account.</p>
+        </div>
+
+        <div class="sc-product-grid" id="scProductGrid"></div>
+      </div>
+    </section>
+
+    <!-- ══ 7 · FAQ ══ -->
+    <section class="state-section" id="faq">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>South Carolina ESTF questions</h2>
+        </div>
+        <div class="faq-grid">
+          <article class="faq-card">
+            <h3>Can I use South Carolina ESTF funds for Literacy Arcade?</h3>
+            <p>Yes. Literacy Arcade is an approved South Carolina ESTF provider, and eligible families can use ESTF funds for approved Literacy Arcade offerings.</p>
+          </article>
+          <article class="faq-card">
+            <h3>How do I pay Literacy Arcade through ClassWallet?</h3>
+            <p>Generate your South Carolina ESTF invoice on Literacy Arcade, then upload it through Pay Vendor in the student's ClassWallet account.</p>
+          </article>
+          <article class="faq-card">
+            <h3>How do I get an invoice?</h3>
+            <p>Literacy Arcade generates it for you instantly. <a href="#plans-compare">Request your invoice</a> to get a PDF with the information needed for your ClassWallet upload.</p>
+          </article>
+          <article class="faq-card">
+            <h3>When will I receive access or my physical product?</h3>
+            <p>Fulfillment occurs after Literacy Arcade receives approved payment — digital access is activated, or physical products are prepared for shipment, once payment is confirmed.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Can I purchase physical literacy products?</h3>
+            <p>Currently-available approved physical products, like The Letter Box, can be included on a South Carolina ESTF invoice. Heart Word Flash Cards are temporarily out of stock and not currently available to invoice.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Why does Plus Family still name one ESTF student?</h3>
+            <p>South Carolina ESTF funds are tied to an individual student's ESTF account. Plus Family is invoiced for the student named on that account, while the added Family benefits — monthly live group Q&amp;A, help understanding assessment results, and guidance choosing tools and instructional next steps — support the parent or guardian.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What is the difference between Plus and Plus Family?</h3>
+            <p>Both include the same full Literacy Arcade Plus platform. Plus Family adds monthly literacy guidance and a live group Q&amp;A for the parent or guardian.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Are Heart Word Flash Cards available to purchase?</h3>
+            <p>Not right now — Heart Word Flash Cards are temporarily out of stock while more inventory arrives. You can view product details on the <a href="shop.html">Shop</a> page and join the waitlist to be notified when they're back.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox for promotional images (built once; controlled by JS below) -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image" hidden>
+    <button type="button" class="lb-close" id="lbClose" aria-label="Close enlarged image">&times;</button>
+    <img class="lb-img" id="lbImg" src="" alt="" />
+  </div>
+
+  <!-- ══ South Carolina ESTF invoice request modal [STATE-SPECIFIC] ══
+       Opened by any [data-invoice-trigger] button. Behavior lives in
+       south-carolina-invoice-generator.js; selectable items are rendered
+       from the `offerings` list in south-carolina-invoice-config.js,
+       grouped into "Annual digital plans" and "Physical literacy
+       products". Only offerings with invoiceEnabled:true appear here —
+       Heart Word Flash Cards is excluded while its inventory is 0.
+       Version 1 supports one offering per invoice. The invoice always
+       names exactly one student and one parent/guardian, required for
+       every offering type including physical products, per South Carolina
+       Pay Vendor invoice requirements. -->
+  <div class="ia-modal-overlay" id="invoiceModal" role="dialog" aria-modal="true" aria-labelledby="invoiceModalTitle" hidden>
+    <div class="ia-modal" role="document">
+      <button type="button" class="ia-modal-close" id="invoiceModalClose" aria-label="Close invoice request form">&times;</button>
+
+      <div id="invoiceFormView">
+        <h2 id="invoiceModalTitle">Request your South Carolina ESTF invoice</h2>
+        <p class="ia-modal-sub">A few quick details, then download a Literacy Arcade invoice to upload through ClassWallet Pay Vendor for the named ESTF student.</p>
+
+        <form id="invoiceForm" novalidate>
+          <div class="ia-field">
+            <label for="invParentName">Parent / Guardian Name</label>
+            <input type="text" id="invParentName" name="parentName" autocomplete="name" maxlength="80" required />
+            <p class="ia-error" id="invParentNameError" role="alert" hidden></p>
+          </div>
+
+          <div class="ia-field">
+            <label for="invStudentName">Student name on the South Carolina ESTF account</label>
+            <input type="text" id="invStudentName" name="studentName" autocomplete="off" maxlength="80" required />
+            <p class="ia-error" id="invStudentNameError" role="alert" hidden></p>
+          </div>
+
+          <div class="ia-field">
+            <fieldset>
+              <legend>What are you purchasing?</legend>
+              <div class="ia-plan-options" id="invPlanOptions"></div>
+              <p class="ia-error" id="invPlanError" role="alert" hidden></p>
+            </fieldset>
+          </div>
+
+          <p class="ia-error ia-error-general" id="invGeneralError" role="alert" hidden></p>
+
+          <button type="submit" class="btn btn-primary ia-submit">Generate My Invoice PDF →</button>
+          <p class="ia-modal-note">Prices are set by Literacy Arcade and can't be edited. Only currently-eligible plans and products are listed here. This invoice names one ESTF student and covers one item.</p>
+        </form>
+      </div>
+
+      <div id="invoiceSuccessView" hidden>
+        <h2>Your South Carolina ESTF invoice is ready.</h2>
+        <p class="ia-success-summary" id="invoiceSuccessSummary"></p>
+
+        <button type="button" class="btn btn-primary" id="invoiceDownloadBtn">Download Invoice PDF →</button>
+
+        <p class="ia-next-steps-label">Next steps:</p>
+        <ol class="ia-next-steps">
+          <li>Download your invoice.</li>
+          <li>Log in to the student's South Carolina ESTF ClassWallet account.</li>
+          <li>Select Pay Vendor and choose Literacy Arcade.</li>
+          <li>Upload the invoice.</li>
+          <li>Submit it for review.</li>
+        </ol>
+
+        <p class="ia-activation-note">After the approved payment is received by Literacy Arcade, you'll receive an email from <a href="mailto:hello@literacyarcade.com">hello@literacyarcade.com</a> within 24 hours — with activation directions for a digital subscription, or shipping confirmation for a physical product.</p>
+
+        <button type="button" class="btn btn-quiet" id="invoiceStartOverBtn">Request another invoice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
+  <footer class="footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+            Literacy Arcade
+          </a>
+          <p class="footer-desc">Science of Reading–aligned tools for teachers, tutors, interventionists, and homeschool families.</p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Explore</div>
+          <ul class="footer-links">
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="plus-subscriptions.html">Plus Plans</a></li>
+            <li><a href="assessments.html">Assessments</a></li>
+            <li><a href="fluency.html">Fluency</a></li>
+            <li><a href="build-and-play.html">Build &amp; Play</a></li>
+            <li><a href="teacher-tools.html">Teacher Tools</a></li>
+            <li><a href="teacher-dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Support</div>
+          <ul class="footer-links">
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="student-privacy.html">Student Privacy</a></li>
+            <li><a href="terms-of-use.html">Terms of Use</a></li>
+            <li><a href="refund-policy.html">Billing &amp; Refunds</a></li>
+            <li><a href="mailto:hello@literacyarcade.com">Contact</a></li>
+            <li><a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Literacy Arcade.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    const toggleMenu = () => {
+      navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+    };
+    toggle.addEventListener('click', toggleMenu);
+    toggle.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleMenu();
+      }
+    });
+
+    /* ── Image lightbox: click a promotional image to view it larger.
+          Accessible: opens on click/Enter/Space (native <button>), closes on
+          the close button, backdrop click, or Escape, and restores focus. ── */
+    (function () {
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbClose = document.getElementById('lbClose');
+      let lastTrigger = null;
+
+      const open = (src, alt) => {
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lb.hidden = false;
+        document.body.style.overflow = 'hidden';
+        lbClose.focus();
+      };
+      const close = () => {
+        lb.hidden = true;
+        lbImg.src = '';
+        document.body.style.overflow = '';
+        if (lastTrigger) lastTrigger.focus();
+      };
+
+      // Exposed so markup inserted after page load (the config-driven
+      // physical-product cards in south-carolina-invoice-generator.js) can
+      // wire its own .img-zoom buttons into this same lightbox instead of
+      // duplicating the open/close logic.
+      window.__scBindImgZoom = (root) => {
+        (root || document).querySelectorAll('.img-zoom').forEach(btn => {
+          if (btn.dataset.zoomBound) return;
+          btn.dataset.zoomBound = 'true';
+          btn.addEventListener('click', () => {
+            lastTrigger = btn;
+            const img = btn.querySelector('img');
+            open(btn.dataset.full || (img && img.src), img && img.alt);
+          });
+        });
+      };
+      window.__scBindImgZoom();
+
+      lbClose.addEventListener('click', close);
+      lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !lb.hidden) close();
+        // keep focus on the close button while the dialog is open
+        if (e.key === 'Tab' && !lb.hidden) { e.preventDefault(); lbClose.focus(); }
+      });
+    })();
+  </script>
+  <!-- ══ Shop announcement — dismissible promo card (shop-announcement.js) ══ -->
+  <div class="shop-announce" id="shopAnnounce" aria-label="New Literacy Arcade Shop announcement" hidden>
+    <button type="button" class="shop-announce-close" id="shopAnnounceClose" aria-label="Close Shop announcement">&times;</button>
+    <p class="shop-announce-heading"><span class="shop-announce-spark" aria-hidden="true">✦</span>New at Literacy Arcade</p>
+    <p class="shop-announce-body">Explore hands-on literacy products in the new Literacy Arcade Shop.</p>
+    <a class="shop-announce-cta" id="shopAnnounceCta" href="shop.html">Visit the Shop <span aria-hidden="true">→</span></a>
+  </div>
+  <script defer src="shop-announcement.js"></script>
+
+  <!-- ══ South Carolina ESTF invoice generator [STATE-SPECIFIC] ══
+       jsPDF (MIT-licensed, widely used, pinned version) is the only new
+       dependency this feature adds — loaded from a CDN, no build step or
+       npm install required. Config must load before the generator; both
+       are plain scripts (not modules) so they can freely use the jsPDF UMD
+       global. Separate from Arkansas's and New Hampshire's invoice files —
+       see the STATE CONFIG note at the top of this file. -->
+  <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script src="south-carolina-invoice-config.js"></script>
+  <script src="south-carolina-invoice-generator.js"></script>
+</body>
+</html>
