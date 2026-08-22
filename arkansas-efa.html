@@ -17,27 +17,31 @@
           Available" banner, approval statement, 3-step "Choose → Generate →
           Submit" process indicator, primary "Request an Arkansas EFA
           Invoice" CTA
-       2. How to purchase [STATE-SPECIFIC] — Arkansas's ClassWallet purchase
+       2. Tutorial video [STATE-SPECIFIC video, SHARED frame styling] —
+          short walkthrough of purchasing Literacy Arcade with Arkansas EFA
+          funds through ClassWallet. Supplementary, not a replacement for
+          the written steps in section 3 (id="tutorial-video")
+       3. How to purchase [STATE-SPECIFIC] — Arkansas's ClassWallet purchase
           process (covers both digital plans and physical products) +
           note panel (id="efa-purchase")
-       3. What's included with Literacy Arcade Plus [SHARED] — the one
+       4. What's included with Literacy Arcade Plus [SHARED] — the one
           feature-explanation section on the page. Describes the core Plus
           platform, identical for BOTH annual plans (id="whats-included")
-       4. Plus Family value [SHARED layout, STATE-SPECIFIC wording] — a
+       5. Plus Family value [SHARED layout, STATE-SPECIFIC wording] — a
           visual spotlight, not a pricing section. Focused on parent/
           guardian guidance (monthly live Q&A, understanding assessment
           results, instructional next steps) rather than implying the EFA
           purchase directly serves other children in the household — see
           the STATE CONFIG note below (id="plus-family-value")
-       5. Choose your annual plan [SHARED plan data, STATE-SPECIFIC CTA] —
+       6. Choose your annual plan [SHARED plan data, STATE-SPECIFIC CTA] —
           the one place the two annual plans ($79 Plus / $99 Plus Family)
           are compared and priced (id="plans-compare")
-       6. Physical literacy products [SHARED card pattern + CONFIG-DRIVEN
+       7. Physical literacy products [SHARED card pattern + CONFIG-DRIVEN
           rendering, STATE-SPECIFIC framing] — a separate purchase from the
           subscription tiers above. Cards are rendered from the `offerings`
           list in arkansas-invoice-config.js by renderProductCards() in
           arkansas-invoice-generator.js (id="physical-products")
-       7. FAQ [STATE-SPECIFIC wording] — short, direct answers only
+       8. FAQ [STATE-SPECIFIC wording] — short, direct answers only
 
      Every "Request an Arkansas EFA Invoice" button is a
      <button data-invoice-trigger> (optionally data-plan="<offering id>" to
@@ -216,6 +220,27 @@
     }
     @media (max-width: 640px) {
       .arkansas-efa-page .purchase-steps--4 { grid-template-columns: 1fr; }
+    }
+
+    /* ── Tutorial video — reuses the .video-demo-wrap/.video-demo-frame
+         visual treatment established on build-and-play.html / fluency.html
+         / teacher-tools.html (responsive 16:9 frame, rounded corners,
+         border, shadow), same as alabama-choose-act.html / texas-efa.html's
+         tutorial-video section. Redefined here scoped to this page rather
+         than touching shared CSS. */
+    .arkansas-efa-page .video-demo-wrap {
+      max-width: 700px;
+      margin: 28px auto 0;
+    }
+    .arkansas-efa-page .video-demo-frame {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: var(--ink);
     }
 
     /* Small "Plus Annual" / "Plus Family Annual" plan-type pill — mirrors
@@ -708,9 +733,30 @@
       </div>
     </section>
 
-    <!-- ══ 2 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
-    <!-- `lift` overlaps the hero slightly — the visual bridge between
-         sections. VERIFIED against the 2026–27 Arkansas EFA Family
+    <!-- ══ 2 · TUTORIAL VIDEO [STATE-SPECIFIC video, SHARED frame styling] ══ -->
+    <!-- Short screen-recorded walkthrough. Supplementary only — the written
+         4-step process in the How to purchase section below must stay
+         complete and understandable on its own for a parent who never
+         presses play. Mirrors alabama-choose-act.html / texas-efa.html's
+         tutorial-video section (id="tutorial-video"). -->
+    <section class="state-section white" id="tutorial-video" aria-label="Arkansas EFA tutorial video">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>How to use your Arkansas EFA funds</h2>
+          <p>Watch how Arkansas families purchase Literacy Arcade with EFA funds through ClassWallet.</p>
+        </div>
+        <div class="video-demo-wrap">
+          <video class="video-demo-frame" controls playsinline preload="metadata" aria-label="Arkansas EFA Literacy Arcade tutorial">
+            <source src="videos/Arkansas-EFA-Tutorial.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3 · HOW TO PURCHASE [STATE-SPECIFIC] ══ -->
+    <!-- `lift` overlaps the tutorial-video section slightly — the visual
+         bridge between sections. VERIFIED against the 2026–27 Arkansas EFA Family
          Training: ClassWallet's vendor-initiated payment-request option is
          described as being available "in lieu of an invoice," but the
          parent-uploaded invoice process still exists and is what the
