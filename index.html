@@ -1164,11 +1164,13 @@
   .program-approval-item:nth-child(3) { grid-column: 5 / 7; }
   .program-approval-item:nth-child(4) { grid-column: 7 / 9; }
   .program-approval-item:nth-child(5) { grid-column: 9 / 11; }
-  /* Row 2 (4 cards, offset by half a card width on each side) */
-  .program-approval-item:nth-child(6) { grid-column: 2 / 4; }
-  .program-approval-item:nth-child(7) { grid-column: 4 / 6; }
-  .program-approval-item:nth-child(8) { grid-column: 6 / 8; }
-  .program-approval-item:nth-child(9) { grid-column: 8 / 10; }
+  /* Row 2 (5 cards, cols 1-10 — now a full row to fit South Carolina as
+     the 10th item, so it's no longer offset like the previous 4-card row) */
+  .program-approval-item:nth-child(6) { grid-column: 1 / 3; }
+  .program-approval-item:nth-child(7) { grid-column: 3 / 5; }
+  .program-approval-item:nth-child(8) { grid-column: 5 / 7; }
+  .program-approval-item:nth-child(9) { grid-column: 7 / 9; }
+  .program-approval-item:nth-child(10) { grid-column: 9 / 11; }
   .program-approval-item:hover {
     border-color: rgba(14,154,145,.45);
     box-shadow: 0 5px 14px rgba(26,26,46,.09);
@@ -1766,6 +1768,7 @@
             <a class="program-approval-item" href="arkansas-efa.html" aria-label="Arkansas Education Freedom Account — Approved service provider"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon arkansas" src="images/arkansas-efa.svg" alt="" /></span><span class="program-approval-name">Arkansas Education Freedom Account</span></a>
             <a class="program-approval-item" href="https://support.withodyssey.com/hc/en-us/articles/36455820320667-Wyoming-Marketplace-Categories-for-Offerings" target="_blank" rel="noopener noreferrer" aria-label="Learn about Wyoming ESA"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon wyoming" src="images/wyoming-esa.png" alt="Wyoming ESA" /></span><span class="program-approval-name">Wyoming ESA</span></a>
             <a class="program-approval-item" href="https://support.withodyssey.com/hc/en-us/articles/51637346206619-Welcome-to-the-MOScholars-Program" target="_blank" rel="noopener noreferrer" aria-label="Learn about Missouri MOScholars"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon missouri" src="images/missouri-moscholars.svg" alt="Missouri MOScholars" /></span><span class="program-approval-name">Missouri MOScholars</span></a>
+            <a class="program-approval-item" href="south-carolina-estf.html" aria-label="Learn about Literacy Arcade for South Carolina ESTF families"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon south-carolina" src="images/south-carolina-estf.svg" alt="" /></span><span class="program-approval-name">South Carolina ESTF</span></a>
           </div>
         </div>
       </div>
