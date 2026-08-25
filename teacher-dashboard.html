@@ -117,6 +117,7 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .plan-status{
   margin-top:9px;padding-top:9px;border-top:1px solid var(--border);
   font-size:12px;line-height:1.5;color:var(--navy-soft);
+  text-align:center;
 }
 .plan-status strong{
   display:block;color:var(--navy);font-family:var(--font-head);
@@ -393,7 +394,6 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
   .controls-right{margin-left:0}
   .stats-strip{gap:7px}
   .card-grid{grid-template-columns:1fr}
-  #newCollectionBtn{margin-left:0!important;width:100%;}
   .collection-detail-actions .subtle-action{flex:0 1 auto;}
 }
 
@@ -428,7 +428,7 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 }
 .collection-primary-btn{background:var(--teal-dark);color:#fff}.collection-primary-btn:hover{background:var(--teal);transform:translateY(-1px)}
 .collection-secondary-btn{background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal)}.collection-secondary-btn:hover{background:var(--teal-light);transform:translateY(-1px)}
-.collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:14px;margin-top:14px}
+.collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-top:14px}
 .collection-card{
   background:#fff;border:1.5px solid var(--border);border-left:7px solid var(--collection-color,var(--teal));border-radius:var(--r);padding:16px;box-shadow:var(--shadow-sm);
   transition:box-shadow .15s,border-color .15s,transform .15s;display:flex;flex-direction:column;gap:10px;
@@ -795,7 +795,6 @@ main{max-width:1280px;padding:28px 18px 56px;}
       <svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="7" rx="1"/><rect x="3" y="15" width="7" height="5" rx="1"/><rect x="14" y="15" width="7" height="5" rx="1"/></svg>
       My Activities
     </button>
-    <button class="collection-primary-btn" type="button" id="newCollectionBtn" style="margin-left:auto">+ New Collection</button>
   </div>
 
   <!-- Controls bar (My Activities only) -->
@@ -1980,8 +1979,6 @@ function updateViewTabs() {
   document.querySelectorAll('.view-tab').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.view === currentView);
   });
-  const newBtn = document.getElementById('newCollectionBtn');
-  if (newBtn) newBtn.style.display = currentView === 'collections' && !activeCollectionId ? 'inline-flex' : 'none';
   updateDashboardControls();
 }
 
@@ -2034,14 +2031,13 @@ function getSortedCollections() {
 function renderCollectionsHome() {
   const container = document.getElementById('activitiesContainer');
   const totalInCollections = teachingCollections.reduce((sum, col) => sum + getCollectionActivityCount(col), 0);
-  const showIntroButton = teachingCollections.length === 0;
   container.innerHTML = `
     <section class="collections-intro ${teachingCollections.length ? 'compact' : ''}">
       <div>
         <div class="collections-intro-title">Teaching Collections</div>
         <div class="collections-intro-text">Organize activities for small groups, classes, skills, weeks, or lessons.</div>
       </div>
-      ${showIntroButton ? '<button class="collection-primary-btn" type="button" id="collectionsIntroNew">+ New Collection</button>' : ''}
+      <button class="collection-primary-btn" type="button" id="collectionsIntroNew">+ New Collection</button>
     </section>
     <div class="stats-strip" style="display:flex;margin-bottom:10px">
       <div class="stat-pill"><strong>${teachingCollections.length}</strong> collection${teachingCollections.length===1?'':'s'}</div>
@@ -2813,8 +2809,6 @@ document.getElementById('viewSwitch').addEventListener('click', e => {
   activeCollectionId = null;
   renderAll();
 });
-
-document.getElementById('newCollectionBtn').addEventListener('click', createCollection);
 
 document.getElementById('colorPickerClose').addEventListener('click', () => closeColorPicker(null));
 document.getElementById('colorPickerCancel').addEventListener('click', () => closeColorPicker(null));
