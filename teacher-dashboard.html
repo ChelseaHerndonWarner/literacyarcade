@@ -90,8 +90,8 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .hero h1{font-family:var(--font-head);font-size:clamp(28px,5vw,38px);line-height:1.05;margin-bottom:6px}
 .hero-sub{color:var(--navy-soft);line-height:1.5;font-size:14px}
 .user-card{
-  background:#fff;border:1px solid var(--border);border-radius:999px;
-  box-shadow:var(--shadow-sm);padding:6px 14px 6px 6px;flex-shrink:0;
+  background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);
+  box-shadow:var(--shadow-sm);padding:10px 16px;flex-shrink:0;max-width:340px;
 }
 .user-card-inner{display:flex;align-items:center;gap:8px}
 .user-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--teal);flex-shrink:0}
@@ -100,8 +100,33 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
   border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;
   font-family:var(--font-head);font-weight:900;color:var(--teal-dark);font-size:13px;flex-shrink:0;
 }
+.user-name-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .user-name{font-family:var(--font-head);font-weight:900;font-size:13px}
 .user-email{color:var(--navy-soft);font-size:11px;margin-top:0;word-break:break-word}
+
+/* ── PLAN BADGE / STATUS ─────────────────────────────────────────────────── */
+.plan-pill{
+  display:inline-flex;align-items:center;border-radius:999px;
+  padding:2px 9px;font-family:var(--font-head);font-weight:900;font-size:9.5px;
+  letter-spacing:.7px;text-transform:uppercase;border:1.5px solid var(--border);
+  color:var(--navy-soft);background:#F6F8FB;line-height:1.6;
+}
+.plan-pill.plan-pill-plus,.plan-pill.plan-pill-family{
+  border-color:var(--teal-dark);background:var(--teal-light);color:var(--teal-dark);
+}
+.plan-status{
+  margin-top:9px;padding-top:9px;border-top:1px solid var(--border);
+  font-size:12px;line-height:1.5;color:var(--navy-soft);
+}
+.plan-status strong{
+  display:block;color:var(--navy);font-family:var(--font-head);
+  font-weight:900;font-size:13px;margin-bottom:2px;
+}
+.plan-upgrade-link{
+  display:inline-block;margin-top:5px;color:var(--teal-dark);
+  font-weight:800;font-family:var(--font-head);font-size:12px;text-decoration:none;
+}
+.plan-upgrade-link:hover{text-decoration:underline}
 
 /* ── CONTROLS BAR ────────────────────────────────────────────────────────── */
 .controls-bar{
@@ -374,17 +399,21 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 
 /* ── TEACHING COLLECTIONS / PLAYLISTS ───────────────────────────────────── */
 .view-switch{
-  display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 14px;
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 20px;
 }
 .view-tab{
-  border:1.5px solid var(--border);background:#fff;border-radius:999px;
-  padding:8px 14px;font-family:var(--font-head);font-weight:900;font-size:13px;
-  color:var(--navy-soft);cursor:pointer;display:inline-flex;align-items:center;gap:8px;
-  transition:all .13s;
+  border:1.75px solid var(--border);background:#fff;border-radius:14px;
+  padding:14px 26px;font-family:var(--font-head);font-weight:900;font-size:16px;
+  color:var(--navy);cursor:pointer;display:inline-flex;align-items:center;gap:10px;
+  transition:all .13s;box-shadow:var(--shadow-sm);
 }
 .view-tab:hover{border-color:var(--teal);color:var(--teal-dark);background:#F8FFFE}
-.view-tab.active{background:var(--teal-dark);border-color:var(--teal-dark);color:#fff}
-.view-tab svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.view-tab:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.view-tab.active{background:var(--teal-dark);border-color:var(--teal-dark);color:#fff;box-shadow:var(--shadow)}
+.view-tab svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:520px){
+  .view-tab{padding:12px 16px;font-size:14px;flex:1 1 auto;justify-content:center}
+}
 .collections-intro{
   background:linear-gradient(135deg,#FFFFFF 0%,#F1FFFD 100%);
   border:1.5px solid rgba(46,196,182,.28);border-radius:var(--r-lg);
@@ -745,29 +774,37 @@ main{max-width:1280px;padding:28px 18px 56px;}
       <div class="user-card-inner">
         <div class="user-avatar-placeholder" id="userAvatarPlaceholder">?</div>
         <div>
-          <div class="user-name" id="userName">Checking account…</div>
+          <div class="user-name-row">
+            <span class="user-name" id="userName">Checking account…</span>
+            <span class="plan-pill" id="planPill" style="display:none">FREE</span>
+          </div>
           <div class="user-email" id="userEmail"></div>
         </div>
       </div>
+      <div class="plan-status" id="planStatus" style="display:none"></div>
     </div>
   </section>
 
-  <!-- Controls bar -->
+  <!-- Dashboard tabs -->
+  <div class="view-switch" id="viewSwitch">
+    <button class="view-tab active" type="button" data-view="collections">
+      <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Teaching Collections
+    </button>
+    <button class="view-tab" type="button" data-view="all">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="7" rx="1"/><rect x="3" y="15" width="7" height="5" rx="1"/><rect x="14" y="15" width="7" height="5" rx="1"/></svg>
+      My Activities
+    </button>
+    <button class="collection-primary-btn" type="button" id="newCollectionBtn" style="margin-left:auto">+ New Collection</button>
+  </div>
+
+  <!-- Controls bar (My Activities only) -->
   <div class="controls-bar">
     <div class="search-wrap">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input class="search-input" id="searchInput" type="search" placeholder="Search saved activities…" autocomplete="off"/>
     </div>
-    <div class="filter-tabs" id="filterTabs">
-      <button class="filter-tab active" data-filter="all">All</button>
-      <button class="filter-tab" data-filter="read-and-race">Read &amp; Race</button>
-      <button class="filter-tab" data-filter="magic-word-road">Magic Word Road</button>
-      <button class="filter-tab" data-filter="word-spinner">Word Spinner</button>
-      <button class="filter-tab" data-filter="sentence-spinner">Sentence Spinner</button>
-      <button class="filter-tab" data-filter="letterbox-lesson">Letterbox</button>
-      <button class="filter-tab" data-filter="digital-reading-flashcards">Flashcards</button>
-      <button class="filter-tab" data-filter="vocabulary-flashcards">Vocab Cards</button>
-    </div>
+    <select class="sort-select" id="activityTypeSelect" aria-label="Filter by activity type"></select>
     <div class="controls-right">
       <select class="sort-select" id="sortSelect">
         <option value="newest">Newest first</option>
@@ -782,20 +819,6 @@ main{max-width:1280px;padding:28px 18px 56px;}
     </div>
   </div>
 
-
-
-  <!-- View switch -->
-  <div class="view-switch" id="viewSwitch">
-    <button class="view-tab active" type="button" data-view="all">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="7" rx="1"/><rect x="3" y="15" width="7" height="5" rx="1"/><rect x="14" y="15" width="7" height="5" rx="1"/></svg>
-      All Activities
-    </button>
-    <button class="view-tab" type="button" data-view="collections">
-      <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-      Teaching Collections
-    </button>
-    <button class="collection-primary-btn" type="button" id="newCollectionBtn" style="margin-left:auto">+ New Collection</button>
-  </div>
   <!-- Stats strip -->
   <div class="stats-strip" id="statsStrip" style="display:none">
     <div class="stat-pill"><strong id="statTotal">0</strong> saved activities</div>
@@ -888,7 +911,7 @@ main{max-width:1280px;padding:28px 18px 56px;}
 <script type="module">
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, getDoc, query, orderBy, doc, updateDoc, deleteDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
@@ -1001,7 +1024,9 @@ function renderActivityIcon(type, size = 'card') {
 let currentUser  = null;
 let allActivities = []; // [{id, ...data}]
 let teachingCollections = []; // [{id, name, sections:[{id,name,activityIds:[]}]}]
-let currentView = 'all';
+let currentView = 'collections';
+let currentPlan = 'free';
+const FREE_ACTIVITY_LIMIT = 5;
 let activeCollectionId = null;
 let activityPickerContext = null;
 let draggedActivity = null;
@@ -1048,8 +1073,52 @@ onAuthStateChanged(auth, async user => {
     placeholder.textContent = (user.displayName || 'T')[0].toUpperCase();
   }
 
+  await loadUserPlan();
   await loadActivities();
 });
+
+/* ── Plan ────────────────────────────────────────────────────────────────── */
+async function loadUserPlan() {
+  try {
+    const snap = await getDoc(doc(db, 'users', currentUser.uid));
+    currentPlan = snap.exists() ? (snap.data().plan || 'free') : 'free';
+  } catch (err) {
+    console.warn('Could not load account plan:', err);
+    currentPlan = 'free';
+  }
+  renderPlanStatus();
+}
+
+function renderPlanStatus() {
+  const pill = document.getElementById('planPill');
+  const status = document.getElementById('planStatus');
+  if (!pill || !status) return;
+
+  const normalized = currentPlan === 'family' ? 'family' : currentPlan === 'plus' ? 'plus' : 'free';
+
+  pill.style.display = 'inline-flex';
+  pill.textContent = normalized === 'family' ? 'PLUS FAMILY' : normalized === 'plus' ? 'PLUS' : 'FREE';
+  pill.className = 'plan-pill plan-pill-' + normalized;
+
+  status.style.display = 'block';
+  if (normalized === 'free') {
+    const count = Math.min(allActivities.length, FREE_ACTIVITY_LIMIT);
+    status.innerHTML = `
+      <strong>Free Plan</strong>
+      <div>Save up to ${FREE_ACTIVITY_LIMIT} activities.</div>
+      <div>${count} of ${FREE_ACTIVITY_LIMIT} saved activities used</div>
+      <a class="plan-upgrade-link" href="plus-subscriptions.html">Upgrade to Plus for unlimited saved activities and access to assessments →</a>`;
+  } else if (normalized === 'plus') {
+    status.innerHTML = `
+      <strong>Plus Plan</strong>
+      <div>Unlimited saved activities + assessments</div>`;
+  } else {
+    status.innerHTML = `
+      <strong>Plus Family</strong>
+      <div>Unlimited saved activities + assessments</div>
+      <div>Includes monthly family literacy Q&amp;A</div>`;
+  }
+}
 
 /* ── Load ────────────────────────────────────────────────────────────────── */
 async function loadActivities() {
@@ -1064,6 +1133,7 @@ async function loadActivities() {
     allActivities = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     await loadCollections();
     renderFilterTabs();
+    renderPlanStatus();
     renderAll();
   } catch (err) {
     console.error(err);
@@ -1120,24 +1190,21 @@ function saveCollapsedCollectionSections() {
 }
 
 function renderFilterTabs() {
-  const filterTabs = document.getElementById('filterTabs');
+  const select = document.getElementById('activityTypeSelect');
   const presentTypes = [...new Set(allActivities.map(a => getActivityType(a)).filter(Boolean))];
   const keys = [
     ...TOOL_ORDER.filter(key => ACTIVITY_TYPES[key]?.saveable),
     ...presentTypes.filter(key => !TOOL_ORDER.includes(key))
   ];
 
-  filterTabs.innerHTML = `<button class="filter-tab ${activeFilter === 'all' ? 'active' : ''}" data-filter="all">All</button>`;
-  keys.forEach(key => {
-    const type = ACTIVITY_TYPES[key] || { label: formatToolKey(key), icon: '', colorClass: 'icon-teal' };
-    const btn = document.createElement('button');
-    btn.className = 'filter-tab' + (activeFilter === key ? ' active' : '');
-    btn.dataset.filter = key;
-    btn.textContent = type.label;
-    filterTabs.appendChild(btn);
-  });
-
   if (activeFilter !== 'all' && !keys.includes(activeFilter)) activeFilter = 'all';
+
+  select.innerHTML = `<option value="all">All activity types</option>` +
+    keys.map(key => {
+      const type = ACTIVITY_TYPES[key] || { label: formatToolKey(key) };
+      return `<option value="${key}">${escHtml(type.label)}</option>`;
+    }).join('');
+  select.value = activeFilter;
 }
 
 /* ── Render ──────────────────────────────────────────────────────────────── */
@@ -1920,26 +1987,11 @@ function updateViewTabs() {
 
 function updateDashboardControls() {
   const controlsBar = document.querySelector('.controls-bar');
-  const searchWrap = document.querySelector('.controls-bar > .search-wrap');
-  const filterTabs = document.getElementById('filterTabs');
-  const controlsRight = document.querySelector('.controls-bar > .controls-right');
-  const sortSelect = document.getElementById('sortSelect');
-  const refreshBtn = document.getElementById('refreshBtn');
-
   if (!controlsBar) return;
 
-  const isCollectionsHome = currentView === 'collections' && !activeCollectionId;
-  const isCollectionDetail = currentView === 'collections' && Boolean(activeCollectionId);
-
-  controlsBar.style.display = isCollectionDetail ? 'none' : 'flex';
-  if (searchWrap) searchWrap.style.display = currentView === 'all' ? '' : 'none';
-  if (filterTabs) filterTabs.style.display = currentView === 'all' ? 'flex' : 'none';
-  if (controlsRight) controlsRight.style.display = isCollectionDetail ? 'none' : 'flex';
-  if (sortSelect) {
-    sortSelect.style.display = isCollectionDetail ? 'none' : '';
-    sortSelect.setAttribute('aria-label', isCollectionsHome ? 'Sort collections' : 'Sort saved activities');
-  }
-  if (refreshBtn) refreshBtn.style.display = isCollectionDetail ? 'none' : 'inline-flex';
+  // Activity-management controls (search, activity type, sort, refresh) only
+  // apply to My Activities — Teaching Collections has its own controls.
+  controlsBar.style.display = currentView === 'all' ? 'flex' : 'none';
 }
 
 function renderCollectionsView() {
@@ -2592,7 +2644,7 @@ async function deleteSection(collectionId, sectionId) {
 async function removeActivityFromSection(collectionId, sectionId, activityId) {
   const confirmed = await showConfirmModal({
     title: 'Remove from this collection?',
-    message: 'Your saved activity will stay in All Activities.',
+    message: 'Your saved activity will stay in My Activities.',
     primaryText: 'Remove',
     cancelText: 'Cancel'
   });
@@ -2783,11 +2835,8 @@ document.getElementById('searchInput').addEventListener('input', e => {
   renderAll();
 });
 
-document.getElementById('filterTabs').addEventListener('click', e => {
-  const tab = e.target.closest('.filter-tab');
-  if (!tab) return;
-  activeFilter = tab.dataset.filter;
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t === tab));
+document.getElementById('activityTypeSelect').addEventListener('change', e => {
+  activeFilter = e.target.value;
   renderAll();
 });
 
