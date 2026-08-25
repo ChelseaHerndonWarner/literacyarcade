@@ -203,6 +203,8 @@
     .custom-card-word { font-family:'Nunito',sans-serif; font-weight:900; color:var(--navy); }
     .custom-card-def  { color:var(--navy-mid); font-weight:600; margin-top:2px; font-size:12px; line-height:1.4; }
     .custom-card-def.coming-soon { font-style:italic; color:var(--navy-lt); }
+    .custom-card-def .card-back-line + .card-back-line { margin-top:3px; }
+    .custom-card-def .card-back-label { font-weight:800; color:var(--navy); }
     .preview-toggle {
       display:none; margin-top:8px; padding:6px 11px; border:1.5px solid var(--teal-border);
       border-radius:999px; background:var(--white); color:var(--teal-dk);
@@ -283,12 +285,15 @@
       width:100%; min-height:280px;
       transform-style: preserve-3d;
       transition: transform .45s cubic-bezier(.4,0,.2,1);
+      display:grid;
     }
     .card-flip-inner.flipped {
       transform: rotateY(180deg);
     }
     .card-face {
-      position:absolute; inset:0;
+      grid-column:1; grid-row:1;
+      position:relative;
+      width:100%;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       border-radius:28px;
@@ -348,6 +353,11 @@
       max-width:500px;
     }
     .flash-definition.coming-soon { font-style:italic; color:var(--navy-lt); font-size:15px; }
+
+    /* Multi-line card-back content (definition / synonym / example lines) */
+    .card-back-line { display:block; word-break:break-word; overflow-wrap:break-word; }
+    .card-back-line + .card-back-line { margin-top:10px; }
+    .card-back-label { font-weight:700; }
 
     /* Flip button row */
     .card-btns {
@@ -421,6 +431,7 @@
     .fs-card-area {
       display:flex; flex-direction:column; align-items:center; justify-content:center;
       flex:1; width:100%; gap:0;
+      min-height:0; overflow-y:auto;
     }
     .fs-word {
       font-size: clamp(86px, 18vw, 206px);
@@ -456,6 +467,7 @@
       text-shadow: 0 2px 16px rgba(0,0,0,.3);
     }
     .fs-definition.coming-soon { font-style:italic; color:rgba(255,255,255,.45); font-size:clamp(14px,2.2vw,22px); }
+    .fs-definition .card-back-line + .card-back-line { margin-top:12px; }
     #fsMode.showing-def .fs-definition { display:block; }
 
     .fs-prog { position:absolute; left:24px; bottom:22px; font-size:12px; font-weight:700; color:rgba(255,255,255,.30); }
@@ -646,6 +658,7 @@
           <span><strong>Format:</strong> word | definition</span>
           <span><strong>Also accepts:</strong> word: definition or word - definition</span>
           <span><strong>Example:</strong> ecosystem | a community of living things</span>
+          <span><strong>Tip:</strong> Use \n to start a new line on the back of a card.</span>
         </div>
       </div>
       <div id="customPreview" style="display:none; margin-top:10px;">
@@ -958,6 +971,37 @@ function cleanText(value) {
   return /^(undefined|null|\[object Object\])$/i.test(text) ? '' : text;
 }
 
+// ═══════════════════════════════════════════════════
+// MULTI-LINE CARD BACK RENDERING
+// Teachers type literal "\n" inside a card's definition to force a
+// line break on the back of the card (e.g. Definition/Synonym/Example
+// on separate lines). Rendered via DOM text nodes only — never innerHTML
+// with user input — so arbitrary HTML from teacher input can't execute.
+// ═══════════════════════════════════════════════════
+const BACK_LINE_LABEL_RE = /^([A-Za-z][A-Za-z0-9 /'-]{0,24}:)\s*(.*)$/;
+
+function renderCardBack(container, rawText) {
+  const text = String(rawText == null ? '' : rawText).replace(/\\n/g, '\n');
+  const lines = text.split('\n');
+  container.textContent = '';
+  lines.forEach(rawLine => {
+    const line = rawLine.trim();
+    const row = document.createElement('div');
+    row.className = 'card-back-line';
+    const match = line.match(BACK_LINE_LABEL_RE);
+    if (match && match[2]) {
+      const label = document.createElement('span');
+      label.className = 'card-back-label';
+      label.textContent = match[1] + ' ';
+      row.appendChild(label);
+      row.appendChild(document.createTextNode(match[2]));
+    } else {
+      row.textContent = line;
+    }
+    container.appendChild(row);
+  });
+}
+
 function getEnteredDeckTitle() {
   return cleanText($('deckTitle')?.value);
 }
@@ -1078,7 +1122,7 @@ function updateCustomPreview() {
     word.textContent = cleanText(card.word);
     const definition = document.createElement('div');
     definition.className = `custom-card-def${card.definition==='Definition coming soon.'?' coming-soon':''}`;
-    definition.textContent = cleanText(card.definition) || 'Definition coming soon.';
+    renderCardBack(definition, cleanText(card.definition) || 'Definition coming soon.');
     row.append(word, definition);
     bank.appendChild(row);
   });
@@ -1166,8 +1210,8 @@ function renderCard() {
   backLbl.textContent = card.word;
 
   const isCS = card.definition==='Definition coming soon.';
-  defEl.textContent   = card.definition;
-  fsDefEl.textContent = card.definition;
+  renderCardBack(defEl, card.definition);
+  renderCardBack(fsDefEl, card.definition);
   defEl.classList.toggle('coming-soon', isCS);
   fsDefEl.classList.toggle('coming-soon', isCS);
 
