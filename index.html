@@ -1525,7 +1525,192 @@
       padding: 22px 20px calc(20px + env(safe-area-inset-bottom, 0px));
     }
   }
+
+  /* ══ TEMPORARY: Sept 2026 Plus Family Parent Q&A promo section ══
+     Remove this block (and the matching HTML section + popup) after the
+     event on September 30, 2026. Scoped to the homepage only. */
+  .event-promo {
+    background: var(--sand);
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+  .event-promo-inner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .event-promo-img {
+    width: 220px;
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+    display: block;
+  }
+  .event-promo-content { flex: 1 1 320px; min-width: 240px; }
+  .event-promo-badge {
+    display: inline-block;
+    font-family: var(--font-head);
+    font-size: .7rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--coral);
+    background: rgba(255,184,48,.16);
+    border: 1.5px solid rgba(255,184,48,.5);
+    border-radius: 999px;
+    padding: 3px 10px;
+    margin: 0 0 8px;
+  }
+  .event-promo-heading {
+    font-family: var(--font-head);
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    font-weight: 900;
+    color: var(--ink);
+    margin: 0 0 4px;
+    line-height: 1.25;
+  }
+  .event-promo-datetime {
+    font-family: var(--font-head);
+    font-size: .92rem;
+    font-weight: 800;
+    color: var(--teal-dk);
+    margin: 0 0 6px;
+  }
+  .event-promo-body {
+    font-size: .9rem;
+    color: var(--ink-soft);
+    margin: 0 0 14px;
+    max-width: 520px;
+  }
+  .event-promo-cta { padding: 11px 22px; font-size: .88rem; }
+  @media (max-width: 720px) {
+    .event-promo-inner { flex-direction: column; text-align: center; }
+    .event-promo-img { width: 100%; max-width: 320px; }
+    .event-promo-body { max-width: none; margin-left: auto; margin-right: auto; }
+  }
+
+  /* ══ TEMPORARY: Parent Q&A popup (separate from the Plus popup above,
+     scoped to this page; namespaced parent-qa- to avoid any collision) ══ */
+  .parent-qa-popup-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,46,.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .parent-qa-popup-backdrop.is-open { display: flex; opacity: 1; }
+  .parent-qa-popup-inert-fallback { pointer-events: none; }
+  .parent-qa-popup {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    background: var(--white);
+    color: var(--ink);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-hover);
+    padding: 30px 26px 26px;
+    font-family: var(--font-body);
+    transform: translateY(10px);
+    opacity: 0;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .parent-qa-popup-backdrop.is-open .parent-qa-popup { transform: translateY(0); opacity: 1; }
+  .parent-qa-popup-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--cream);
+    color: var(--ink-soft);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .parent-qa-popup-close:hover { background: var(--border); }
+  .parent-qa-popup-badge {
+    display: inline-block;
+    font-family: var(--font-head);
+    font-size: .68rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--coral);
+    background: rgba(255,184,48,.16);
+    border: 1.5px solid rgba(255,184,48,.5);
+    border-radius: 999px;
+    padding: 3px 10px;
+    margin: 0 0 10px;
+  }
+  .parent-qa-popup-heading {
+    font-family: var(--font-head);
+    font-size: 1.28rem;
+    font-weight: 900;
+    color: var(--ink);
+    margin: 0 22px 10px 0;
+    line-height: 1.25;
+  }
+  .parent-qa-popup-datetime {
+    font-family: var(--font-head);
+    font-size: .9rem;
+    font-weight: 800;
+    color: var(--teal-dk);
+    margin: 0 0 8px;
+  }
+  .parent-qa-popup-body {
+    font-size: .94rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0 0 20px;
+  }
+  .parent-qa-popup-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .parent-qa-popup-actions .btn { width: 100%; }
+  .parent-qa-popup-secondary {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-weight: 700;
+    font-size: .86rem;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 4px;
+    font-family: var(--font-body);
+  }
+  .parent-qa-popup-close:focus-visible,
+  .parent-qa-popup-secondary:focus-visible,
+  .parent-qa-popup .btn:focus-visible,
+  .parent-qa-popup:focus-visible {
+    outline: 3px solid var(--amber);
+    outline-offset: 2px;
+  }
+  @media (max-width: 640px) {
+    .parent-qa-popup-backdrop { align-items: flex-end; padding: 0; }
+    .parent-qa-popup {
+      max-width: 100%;
+      border-radius: 20px 20px 0 0;
+      padding: 22px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+    }
+  }
 </style>
+  <link rel="stylesheet" href="shop-announcement.css" />
 </head>
 <body>
 
@@ -1736,6 +1921,20 @@
             </div>
 
           </div><!-- /hero-stage -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ TEMPORARY: Sept 2026 Plus Family Parent Q&A promo — remove after the event ══ -->
+    <section class="event-promo" aria-label="Plus Family Parent Q&amp;A event">
+      <div class="container event-promo-inner">
+        <img class="event-promo-img" src="images/parent-qa-sept-2026.png" alt="Plus Family Parent Q&amp;A, Wednesday September 30 at 7:00 PM Central Time" width="1672" height="941" decoding="async">
+        <div class="event-promo-content">
+          <span class="event-promo-badge">Plus Family Benefit</span>
+          <h2 class="event-promo-heading">Join us for the Plus Family Parent Q&amp;A!</h2>
+          <p class="event-promo-datetime">Wednesday, September 30 at 7:00 PM Central Time</p>
+          <p class="event-promo-body">Bring your questions about your child’s reading and get guidance on what may help.</p>
+          <a class="btn btn-primary event-promo-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSfHDICBNgFMkOwqokpZzS0X3pCTKppl8g1JOTnoiAXmKXSiYA/viewform?usp=publish-editor" target="_blank" rel="noopener">RSVP &amp; Submit a Question</a>
         </div>
       </div>
     </section>
@@ -2197,5 +2396,206 @@
     })();
   </script>
 
+  <!-- ══ TEMPORARY: Parent Q&A popup — remove after Sept 30, 2026 event ══ -->
+  <div class="parent-qa-popup-backdrop" id="parentQAPopupBackdrop" hidden>
+    <div class="parent-qa-popup" id="parentQAPopup" role="dialog" aria-modal="true" aria-labelledby="parentQAPopupHeading" tabindex="-1">
+      <button type="button" class="parent-qa-popup-close" id="parentQAPopupClose" aria-label="Close popup">&times;</button>
+      <span class="parent-qa-popup-badge">Plus Family Benefit</span>
+      <h2 class="parent-qa-popup-heading" id="parentQAPopupHeading">Join us for the Plus Family Parent Q&amp;A!</h2>
+      <p class="parent-qa-popup-datetime">Wednesday, September 30 at 7:00 PM CT</p>
+      <p class="parent-qa-popup-body">Bring your questions about your child’s reading and get guidance on what may help.</p>
+      <div class="parent-qa-popup-actions">
+        <a class="btn btn-primary" id="parentQAPopupCta" href="https://docs.google.com/forms/d/e/1FAIpQLSfHDICBNgFMkOwqokpZzS0X3pCTKppl8g1JOTnoiAXmKXSiYA/viewform?usp=publish-editor" target="_blank" rel="noopener">RSVP &amp; Submit a Question</a>
+        <button type="button" class="parent-qa-popup-secondary" id="parentQAPopupSecondary">Maybe Later</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TEMPORARY: Parent Q&A popup logic — remove after Sept 30, 2026 event ══ -->
+  <script>
+    (function () {
+      // Auto-disable: after the event date, this IIFE returns immediately
+      // and the popup never shows again (markup stays inert/hidden).
+      var EVENT_CUTOFF_MS = new Date('2026-10-01T00:00:00-05:00').getTime();
+      if (Date.now() >= EVENT_CUTOFF_MS) return;
+
+      var STORAGE_KEY = 'laParentQAPopupSuppressUntil';
+      var THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+      var SHOW_DELAY_MS = 2500;
+
+      // Fails safely: any localStorage access is wrapped so a blocked or
+      // unavailable store never breaks the homepage.
+      function safeGet(key) {
+        try { return window.localStorage.getItem(key); } catch (e) { return null; }
+      }
+      function safeSet(key, value) {
+        try { window.localStorage.setItem(key, value); } catch (e) { /* ignore */ }
+      }
+
+      function isSuppressed() {
+        var raw = safeGet(STORAGE_KEY);
+        if (!raw) return false;
+        var until = parseInt(raw, 10);
+        if (isNaN(until)) return false;
+        return Date.now() < until;
+      }
+
+      function suppressForThreeDays() {
+        safeSet(STORAGE_KEY, String(Date.now() + THREE_DAYS_MS));
+      }
+
+      function sendEvent(name, params) {
+        if (typeof gtag === 'function') {
+          gtag('event', name, params || {});
+        }
+      }
+
+      var backdrop = document.getElementById('parentQAPopupBackdrop');
+      var popup = document.getElementById('parentQAPopup');
+      var closeBtn = document.getElementById('parentQAPopupClose');
+      var secondaryBtn = document.getElementById('parentQAPopupSecondary');
+      var ctaLink = document.getElementById('parentQAPopupCta');
+
+      if (!backdrop || !popup || !closeBtn || !secondaryBtn || !ctaLink) return;
+
+      var isOpen = false;
+      var viewSent = false;
+      var previousActiveElement = null;
+
+      var inertTargets = [
+        document.querySelector('header'),
+        document.querySelector('main'),
+        document.querySelector('footer')
+      ].filter(Boolean);
+      var supportsInert = 'inert' in HTMLElement.prototype;
+
+      function setBackgroundInert(on) {
+        inertTargets.forEach(function (el) {
+          if (on) {
+            if (supportsInert) el.inert = true;
+            el.setAttribute('aria-hidden', 'true');
+            el.classList.add('parent-qa-popup-inert-fallback');
+          } else {
+            if (supportsInert) el.inert = false;
+            el.removeAttribute('aria-hidden');
+            el.classList.remove('parent-qa-popup-inert-fallback');
+          }
+        });
+      }
+
+      function focusableElements() {
+        return [closeBtn, ctaLink, secondaryBtn];
+      }
+
+      function trapKeydown(e) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closePopup('escape');
+          return;
+        }
+        if (e.key === 'Tab') {
+          var items = focusableElements();
+          var first = items[0];
+          var last = items[items.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+
+      function onBackdropClick(e) {
+        if (e.target === backdrop) closePopup('backdrop');
+      }
+
+      function openPopup() {
+        if (isOpen || isSuppressed()) return;
+        // Don't stack on top of the "Unlock more with Plus" popup if it
+        // happens to already be open (it only opens after 25s, so this is
+        // a rare edge case, e.g. a slow page load).
+        var plusBackdrop = document.getElementById('plusPopupBackdrop');
+        if (plusBackdrop && plusBackdrop.classList.contains('is-open')) return;
+
+        isOpen = true;
+        previousActiveElement = document.activeElement;
+        backdrop.hidden = false;
+        void backdrop.offsetHeight;
+        backdrop.classList.add('is-open');
+        setBackgroundInert(true);
+        popup.focus();
+        document.addEventListener('keydown', trapKeydown, true);
+        backdrop.addEventListener('click', onBackdropClick);
+        if (!viewSent) {
+          viewSent = true;
+          sendEvent('parent_qa_popup_view');
+        }
+      }
+
+      function closePopup(reason) {
+        if (!isOpen) return;
+        isOpen = false;
+        backdrop.classList.remove('is-open');
+        setBackgroundInert(false);
+        document.removeEventListener('keydown', trapKeydown, true);
+        backdrop.removeEventListener('click', onBackdropClick);
+        suppressForThreeDays();
+        if (reason) sendEvent('parent_qa_popup_close', { close_method: reason });
+        window.setTimeout(function () {
+          backdrop.hidden = true;
+          if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+            previousActiveElement.focus();
+          }
+        }, 250);
+      }
+
+      closeBtn.addEventListener('click', function () { closePopup('close_button'); });
+      secondaryBtn.addEventListener('click', function () { closePopup('maybe_later'); });
+      ctaLink.addEventListener('click', function () {
+        sendEvent('parent_qa_popup_click');
+        suppressForThreeDays();
+        // No preventDefault: the link must still open the RSVP form
+        // normally even if analytics/suppression storage fails.
+      });
+
+      // If the Plus popup opens while this one is showing (rare timing
+      // overlap), yield to it rather than stacking two dialogs.
+      var plusBackdropEl = document.getElementById('plusPopupBackdrop');
+      if (plusBackdropEl) {
+        new MutationObserver(function () {
+          if (isOpen && plusBackdropEl.classList.contains('is-open')) {
+            closePopup(null);
+          }
+        }).observe(plusBackdropEl, { attributes: true, attributeFilter: ['class'] });
+      }
+
+      window.addEventListener('load', function () {
+        if (isSuppressed()) return;
+        window.setTimeout(openPopup, SHOW_DELAY_MS);
+      });
+
+      // Guard against the back-forward cache restoring the page with the
+      // popup mid-open.
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) {
+          setBackgroundInert(false);
+          isOpen = false;
+          backdrop.classList.remove('is-open');
+          backdrop.hidden = true;
+        }
+      });
+    })();
+  </script>
+
+  <!-- ══ Shop announcement — dismissible promo card (shop-announcement.js) ══ -->
+  <div class="shop-announce" id="shopAnnounce" aria-label="New Literacy Arcade Shop announcement" hidden>
+    <button type="button" class="shop-announce-close" id="shopAnnounceClose" aria-label="Close Shop announcement">&times;</button>
+    <p class="shop-announce-heading"><span class="shop-announce-spark" aria-hidden="true">✦</span>New at Literacy Arcade</p>
+    <p class="shop-announce-body">Explore hands-on literacy products in the new Literacy Arcade Shop.</p>
+    <a class="shop-announce-cta" id="shopAnnounceCta" href="shop.html">Visit the Shop <span aria-hidden="true">→</span></a>
+  </div>
+  <script defer src="shop-announcement.js"></script>
 </body>
 </html>
