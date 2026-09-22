@@ -599,6 +599,7 @@
     .play-controls .play-dashboard-btn{display:none;}
 
   </style>
+  <link rel="stylesheet" href="plus-popup.css" />
 </head>
 <body>
   <canvas id="confettiCanvas"></canvas>
@@ -724,5 +725,22 @@
     document.getElementById('saveActivityBtn').addEventListener('click',saveActivity);document.getElementById('shareActivityBtn').addEventListener('click',shareActivity);
     window.addEventListener('load',async()=>{const shareId=new URLSearchParams(location.search).get('activity');if(shareId){document.getElementById('app').dataset.sharedMode='true';try{const activity=await loadShared(shareId);if(activity){if(window.setSentenceSpinnerSharedEdit)window.setSentenceSpinnerSharedEdit(activity.settings?.studentCanEdit===true);restoreActivity(activity,{start:true})}}catch(err){console.error('Shared activity load failed:',err);alert('This shared activity could not be loaded.')}}else{const raw=sessionStorage.getItem('savedActivityData');if(raw){try{const activity=JSON.parse(raw);if(activity&&activity.toolType==='sentence-spinner'){sessionStorage.removeItem('savedActivityData');sessionStorage.removeItem('savedActivityId');restoreActivity(activity,{notice:true})}}catch(e){}}}});
   </script>
+  <!-- ══ Plus promo popup — shared across public pages (plus-popup.css/js) ══ -->
+  <div class="plus-popup-backdrop" id="plusPopupBackdrop" hidden>
+    <div class="plus-popup" id="plusPopup" role="dialog" aria-modal="true" aria-labelledby="plusPopupHeading" tabindex="-1">
+      <button type="button" class="plus-popup-close" id="plusPopupClose" aria-label="Close popup">&times;</button>
+      <h2 class="plus-popup-heading" id="plusPopupHeading">Unlock more with Literacy Arcade Plus</h2>
+      <p class="plus-popup-body">Save unlimited activities, organize your teaching materials, view complete assessment results, and print reports and lesson plans.</p>
+      <p class="plus-popup-support">No student accounts required.</p>
+      <p class="plus-popup-price">Plans start at $7.99 per month.</p>
+      <div class="plus-popup-actions">
+        <a class="btn btn-primary" id="plusPopupCta" href="plus-subscriptions.html">Explore Plus Plans</a>
+        <button type="button" class="plus-popup-secondary" id="plusPopupSecondary">Keep exploring</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Plus promo popup logic — shared across pages, see plus-popup.js ══ -->
+  <script defer src="plus-popup.js"></script>
 </body>
 </html>

@@ -703,6 +703,7 @@
       .topbar-btns .tbar-btn:not(.fs) { display:none; }
     }
   </style>
+  <link rel="stylesheet" href="plus-popup.css" />
 </head>
 <body>
 
@@ -2275,5 +2276,22 @@ if (window.LiteracyArcadeShare) {
   document.addEventListener('DOMContentLoaded', () => window.syncReadingFlashcardShareButton(), { once: true });
 }
 </script>
+  <!-- ══ Plus promo popup — shared across public pages (plus-popup.css/js) ══ -->
+  <div class="plus-popup-backdrop" id="plusPopupBackdrop" hidden>
+    <div class="plus-popup" id="plusPopup" role="dialog" aria-modal="true" aria-labelledby="plusPopupHeading" tabindex="-1">
+      <button type="button" class="plus-popup-close" id="plusPopupClose" aria-label="Close popup">&times;</button>
+      <h2 class="plus-popup-heading" id="plusPopupHeading">Unlock more with Literacy Arcade Plus</h2>
+      <p class="plus-popup-body">Save unlimited activities, organize your teaching materials, view complete assessment results, and print reports and lesson plans.</p>
+      <p class="plus-popup-support">No student accounts required.</p>
+      <p class="plus-popup-price">Plans start at $7.99 per month.</p>
+      <div class="plus-popup-actions">
+        <a class="btn btn-primary" id="plusPopupCta" href="plus-subscriptions.html">Explore Plus Plans</a>
+        <button type="button" class="plus-popup-secondary" id="plusPopupSecondary">Keep exploring</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Plus promo popup logic — shared across pages, see plus-popup.js ══ -->
+  <script defer src="plus-popup.js"></script>
 </body>
 </html>

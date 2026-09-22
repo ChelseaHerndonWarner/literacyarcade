@@ -94,6 +94,7 @@
     @media(max-width:900px){.setup-grid{grid-template-columns:1fr;gap:16px}.wheel-card{position:static}.play-wheel{width:min(680px,84vw,calc(100svh - 145px));height:min(680px,84vw,calc(100svh - 145px))}.saved-panel{position:static;width:min(760px,92vw);max-height:180px;margin-top:8px}.play-shell{overflow:auto}.play-stage{min-height:auto;padding-top:60px}}
     @media(max-width:640px){#app{padding:0 14px 24px}.la-header{height:62px;padding:0 12px;margin:0 -14px}.la-icon{width:36px;height:36px}.la-wordmark,.la-pipe{display:none}.la-tool-name{font-size:.98rem;font-weight:700}.hero h1{font-size:32px}.hero p{font-size:12px}.card{padding:16px}.option-grid,.field-grid,.checkbox-grid{grid-template-columns:1fr}.qbank-item .qtext{flex-basis:100%}.setup-actions .btn{flex:1 1 100%}.result-body{padding:20px}.result-question{font-size:clamp(25px,7vw,42px)}.edit-questions-btn span{display:none}.play-controls{top:10px;right:10px}}
   </style>
+  <link rel="stylesheet" href="plus-popup.css" />
 </head>
 <body>
   <div id="app">
@@ -636,5 +637,22 @@
     renderBloomOptions();updateBloomSummary();updateBankButtonStates();setType('fiction');requestAnimationFrame(()=>{initAndDraw();setSoundButtons()});
     window.comprehensionSpinner={QUESTION_BANK,getCurrentQuestions:buildQuestions,start:startFromSetup};
   </script>
+  <!-- ══ Plus promo popup — shared across public pages (plus-popup.css/js) ══ -->
+  <div class="plus-popup-backdrop" id="plusPopupBackdrop" hidden>
+    <div class="plus-popup" id="plusPopup" role="dialog" aria-modal="true" aria-labelledby="plusPopupHeading" tabindex="-1">
+      <button type="button" class="plus-popup-close" id="plusPopupClose" aria-label="Close popup">&times;</button>
+      <h2 class="plus-popup-heading" id="plusPopupHeading">Unlock more with Literacy Arcade Plus</h2>
+      <p class="plus-popup-body">Save unlimited activities, organize your teaching materials, view complete assessment results, and print reports and lesson plans.</p>
+      <p class="plus-popup-support">No student accounts required.</p>
+      <p class="plus-popup-price">Plans start at $7.99 per month.</p>
+      <div class="plus-popup-actions">
+        <a class="btn btn-primary" id="plusPopupCta" href="plus-subscriptions.html">Explore Plus Plans</a>
+        <button type="button" class="plus-popup-secondary" id="plusPopupSecondary">Keep exploring</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Plus promo popup logic — shared across pages, see plus-popup.js ══ -->
+  <script defer src="plus-popup.js"></script>
 </body>
 </html>

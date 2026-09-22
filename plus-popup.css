@@ -1,0 +1,139 @@
+/* ============================================================================
+   Plus promo popup — "Unlock more with Literacy Arcade Plus". Shared across
+   every public page that includes it (see plus-popup.js for the matching
+   behavior). Extracted verbatim from index.html's original inline <style>
+   block so existing appearance/behavior is unchanged; uses the same design
+   tokens (--white, --ink, --ink-soft, --cream, --border, --radius,
+   --shadow-hover, --font-head, --font-body, --coral, --amber) already
+   defined identically across the site's pages.
+   ============================================================================ */
+
+/* ══ Plus promo popup ══ */
+.plus-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,26,46,.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.plus-popup-backdrop.is-open { display: flex; opacity: 1; }
+/* Fallback for browsers without `inert` support: blocks pointer
+   interaction with the backgrounded content while the popup is open. */
+.plus-popup-inert-fallback { pointer-events: none; }
+.plus-popup {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  background: var(--white);
+  color: var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  padding: 30px 26px 26px;
+  font-family: var(--font-body);
+  transform: translateY(10px);
+  opacity: 0;
+  transition: transform .25s ease, opacity .25s ease;
+}
+.plus-popup-backdrop.is-open .plus-popup { transform: translateY(0); opacity: 1; }
+.plus-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--cream);
+  color: var(--ink-soft);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.plus-popup-close:hover { background: var(--border); }
+.plus-popup-heading {
+  font-family: var(--font-head);
+  font-size: 1.28rem;
+  font-weight: 900;
+  color: var(--ink);
+  margin: 0 22px 12px 0;
+  line-height: 1.25;
+}
+.plus-popup-body {
+  font-size: .94rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+.plus-popup-support {
+  font-size: .84rem;
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+.plus-popup-price {
+  font-size: .84rem;
+  color: var(--coral);
+  font-weight: 800;
+  margin: 0 0 20px;
+}
+.plus-popup-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+/* Scoped fallback for the CTA button's base look: index.html and shop.html
+   already define a site-wide .btn/.btn-primary (identical values to these),
+   but pages like build-and-play/fluency/assessments use their own CTA
+   classes and don't. Scoping to .plus-popup-actions means this only ever
+   styles the popup's own button and can't affect any other element. */
+.plus-popup-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 100px;
+  font-weight: 900;
+  font-size: .96rem;
+  padding: 14px 28px;
+  text-decoration: none;
+  transition: transform .2s, background .2s, border-color .2s, box-shadow .2s;
+  width: 100%;
+}
+.plus-popup-actions .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.plus-popup-actions .btn-primary { background: var(--teal); color: var(--white); }
+.plus-popup-actions .btn-primary:hover { background: var(--teal-dk); }
+.plus-popup-secondary {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-weight: 700;
+  font-size: .86rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px;
+  font-family: var(--font-body);
+}
+.plus-popup-close:focus-visible,
+.plus-popup-secondary:focus-visible,
+.plus-popup .btn:focus-visible,
+.plus-popup:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 2px;
+}
+@media (max-width: 640px) {
+  .plus-popup-backdrop { align-items: flex-end; padding: 0; }
+  .plus-popup {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    padding: 22px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+}
