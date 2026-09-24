@@ -356,6 +356,33 @@ body {
   margin-top:auto;
 }
 
+/* Syllable-boundary correction: a syllable divider is a tap-to-toggle gap
+   between two sound boxes, shown only for a multisyllabic word. Inactive
+   = fully invisible (no line drawn at all, just a slim tap target, so an
+   untouched word doesn't look like its breaks are already marked); a
+   faint line appears only on hover as a discoverability hint. Selected =
+   a clear, solid divider line, the same visual language a printed
+   Elkonin-boxes worksheet uses for a syllable break. */
+.syllable-gap {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  align-self:stretch;
+  width:10px;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+.syllable-gap .divider-line {
+  width:3px;
+  height:70%;
+  border-radius:3px;
+  background:transparent;
+}
+.syllable-gap:hover .divider-line { background:rgba(27,42,74,.18); }
+.syllable-gap.on .divider-line { background:var(--coral, #E0603E); }
+.syllable-gap.wrong .divider-line { background:#D64545; }
+.syllable-gap.correct .divider-line { background:var(--teal-dark); }
+
 /* ── Buttons ── */
 .btn {
   border:none;
@@ -444,15 +471,24 @@ body {
   display:flex;
   align-items:center;
   justify-content:center;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
+  overflow-x:auto;
   gap:18px;
   min-height:140px;
 }
+/* Box/tile sizing is set inline by renderBoxes() (see script below),
+   scaled to the current word's box count so 6-7 box words keep every box
+   the same outer size and stay on one row at normal desktop widths,
+   instead of wrapping unpredictably. */
 .sound-box-area {
   display:flex;
   gap:18px;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   justify-content:center;
+  --in-box-tile-w:44px;
+  --in-box-tile-h:48px;
+  --in-box-tile-font:26px;
+  --in-box-tile-pad:9px;
 }
 
 /* Sound boxes — the dominant elements */
@@ -538,33 +574,7 @@ body {
 /* ── Tile bank ── */
 .tile-bank-wrap {
   border-top:1px solid #F1E2BC;
-  padding-top:16px;
-}
-.tile-bank-title {
-  font-family:var(--font-head);
-  font-weight:900;
-  text-transform:uppercase;
-  color:rgba(27,42,74,.55);
-  font-size:11px;
-  letter-spacing:1.4px;
-  margin-bottom:4px;
-  text-align:center;
-}
-.tile-bank-hint {
-  margin:0 0 10px;
-  color:var(--teal-dark);
-  font-family:var(--font-head);
-  font-size:13px;
-  font-weight:900;
-  text-align:center;
-}
-.tile-bank-return-hint {
-  margin:-6px 0 10px;
-  color:var(--navy-soft);
-  font-family:var(--font-head);
-  font-size:11px;
-  font-weight:800;
-  text-align:center;
+  padding-top:10px;
 }
 .tile-bank {
   display:flex;
@@ -609,18 +619,22 @@ body {
   position:relative;
   z-index:3;
 }
+/* Sized from #soundBoxArea's --in-box-tile-* custom properties (set by
+   renderBoxes() based on the word's box count) so a box's outer size
+   never changes when it holds 2-3 letter tiles (ph/sh/wr/kn/mb/tch...) —
+   the tiles shrink to fit the fixed box instead. A tile placed in the
+   separate outside-letter spot isn't inside #soundBoxArea, so it keeps
+   this rule's own defaults unaffected by word length. */
 .tile.in-box {
   cursor:pointer;
   box-shadow:none;
   transform:none;
-  min-width:44px;
-  height:48px;
-  padding:0 9px;
-  font-size:26px;
+  min-width:var(--in-box-tile-w, 44px);
+  height:var(--in-box-tile-h, 48px);
+  padding:0 var(--in-box-tile-pad, 9px);
+  font-size:var(--in-box-tile-font, 26px);
   border-radius:11px;
 }
-.sound-box.tile-count-3 { width:182px; flex:0 0 182px; }
-.sound-box.tile-count-4 { width:236px; flex:0 0 236px; }
 
 /* ── Teacher controls under the board ── */
 .lesson-controls {
@@ -1143,21 +1157,6 @@ body {
     padding:6px;
     border-radius:16px;
   }
-  .sound-box.tile-count-2 {
-    width:128px;
-    min-width:128px;
-    flex:0 0 128px;
-  }
-  .sound-box.tile-count-3 {
-    width:182px;
-    min-width:182px;
-    flex:0 0 182px;
-  }
-  .sound-box.tile-count-4 {
-    width:236px;
-    min-width:236px;
-    flex:0 0 236px;
-  }
   .tile-bank-wrap { padding-top:14px; padding-bottom:8px; }
   .tile-bank { gap:8px; min-height:54px; }
   .tile {
@@ -1271,7 +1270,11 @@ body {
       <!-- THE BOARD — the dominant visual element -->
       <div class="board">
 
-        <!-- Sound boxes row. Outside-letter area is hidden by default. -->
+        <!-- Sound boxes row — the WHOLE word's boxes, all at once. For a
+             multisyllabic word, a tap-to-toggle divider sits between each
+             pair of boxes (see renderBoxes()); the student/teacher place
+             it themselves, the program never shows it automatically.
+             Outside-letter area is hidden by default. -->
         <div class="boxes-row" id="boxesRow">
           <div class="sound-box-area" id="soundBoxArea"></div>
           <div class="outside-area" id="outsideArea">
@@ -1282,9 +1285,6 @@ body {
 
         <!-- Tile bank -->
         <div class="tile-bank-wrap">
-          <div class="tile-bank-title">Letter Tiles</div>
-          <div class="tile-bank-hint">Tap a letter, then tap a sound box.</div>
-          <div class="tile-bank-return-hint">Tap a placed tile to return it.</div>
           <div class="tile-bank" id="tileBank"></div>
         </div>
       </div>
@@ -1384,6 +1384,15 @@ const completedWords = new Set();
    teacher's reveal persists if they navigate away and back. */
 const outsideRevealed = new Set();
 
+/* Step 6 correction: the whole word is one board — a multisyllabic word's
+   syllable structure is preserved in the data (word.syllables) but is
+   never shown automatically. Instead the student/teacher places syllable
+   dividers between sound boxes themselves; this is which gap indices
+   (0 = between box 0 and box 1, etc.) currently have one. Reset to empty
+   every time renderCurrentWord() switches words — divider placement
+   doesn't persist across navigation, same as tile placement never has. */
+let currentDividers = new Set();
+
 /* ============================================================
    Lesson loading & normalization
    ============================================================ */
@@ -1411,15 +1420,40 @@ function loadLessonData() {
 function normalizeLesson(data) {
   const words = (data.words || []).map(w => {
     const boxes = w.boxes || w.graphemes || [];
+
+    // Step 6: a multisyllabic word carries its own per-syllable
+    // boxes/phonemes/outside letters (see phoneme-counter.html's
+    // cwBuildMultisyllabicLessonMapObject / cwLessonItemsAsWords); the
+    // flattened boxes/phonemes/outsideLetters above still cover the whole
+    // word for the lesson-wide tile bank and any consumer that only knows
+    // the old shape. A one-syllable word (built-in or custom) has no
+    // `syllables`, so it's untouched below.
+    const rawSyllables = Array.isArray(w.syllables) ? w.syllables : null;
+    const syllables = rawSyllables && rawSyllables.length > 1
+      ? rawSyllables.map(s => {
+          const sBoxes = s.letterboxes || s.boxes || s.graphemes || [];
+          return {
+            phonemes: Array.isArray(s.phonemes) ? s.phonemes : sBoxes.map(() => ""),
+            letterboxes: sBoxes.map(b => String(b)),
+            silentOutsideBoxes: Array.isArray(s.silentOutsideBoxes)
+              ? s.silentOutsideBoxes.map(o => String(o))
+              : []
+          };
+        }).filter(s => s.letterboxes.length)
+      : null;
+    const multisyllabic = !!(syllables && syllables.length > 1);
+
     return {
       word: String(w.word || "").trim(),
       phonemes: Array.isArray(w.phonemes) ? w.phonemes : boxes.map(() => ""),
       boxes: boxes.map(b => String(b)),
       outsideLetters: Array.isArray(w.outsideLetters)
         ? w.outsideLetters.map(o => String(o))
-        : []
+        : [],
+      multisyllabic,
+      syllables: multisyllabic ? syllables : null
     };
-  }).filter(w => w.word && w.boxes.length);
+  }).filter(w => w.word && (w.boxes.length || (w.syllables && w.syllables.length)));
 
   const normalized = {
     title: data.title || "Letterbox Lesson",
@@ -1481,6 +1515,61 @@ function buildTilesForLesson(lessonData) {
    Helpers
    ============================================================ */
 function $(id) { return document.getElementById(id); }
+
+/* ============================================================
+   Step 6 correction: syllable-divider helpers.
+   The board always shows the WHOLE word's boxes at once — these only
+   compute/apply the correct divider positions, never navigate or hide
+   anything. A one-syllable word (or any word without real syllable data)
+   has no expected gaps, so isMultisyllabicWord() gates every caller.
+   ============================================================ */
+function isMultisyllabicWord(word) {
+  return !!(word && word.multisyllabic && Array.isArray(word.syllables) && word.syllables.length > 1);
+}
+
+/* The gap indices where a divider belongs: gap i sits between box i and
+   box i+1. Derived from each syllable's own box count — never from the
+   word/syllable text, so this can't leak the spelling. */
+function expectedDividerGaps(word) {
+  const gaps = new Set();
+  if (!isMultisyllabicWord(word)) return gaps;
+  let cumulative = 0;
+  word.syllables.slice(0, -1).forEach(syl => {
+    cumulative += syl.letterboxes.length;
+    gaps.add(cumulative - 1);
+  });
+  return gaps;
+}
+
+function createDividerGap(gapIndex) {
+  const gap = document.createElement("div");
+  gap.className = "syllable-gap";
+  gap.dataset.gap = gapIndex;
+  gap.setAttribute("role", "button");
+  gap.tabIndex = 0;
+  gap.setAttribute("aria-label", "Syllable divider. Tap to toggle.");
+  gap.innerHTML = '<span class="divider-line"></span>';
+  gap.addEventListener("click", () => toggleDivider(gapIndex));
+  gap.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleDivider(gapIndex); }
+  });
+  return gap;
+}
+
+function toggleDivider(gapIndex) {
+  if (currentDividers.has(gapIndex)) currentDividers.delete(gapIndex);
+  else currentDividers.add(gapIndex);
+  renderDividerState();
+}
+
+function renderDividerState() {
+  document.querySelectorAll(".syllable-gap").forEach(el => {
+    const idx = Number(el.dataset.gap);
+    el.classList.toggle("on", currentDividers.has(idx));
+    // A fresh toggle clears any correct/wrong marking from a previous Check.
+    el.classList.remove("correct", "wrong");
+  });
+}
 
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, s => ({
@@ -1568,6 +1657,7 @@ function renderWordList() {
 function renderCurrentWord() {
   const word = lesson.words[currentIndex];
   if (!word) return;
+  currentDividers = new Set();
 
   // STUDENT-FACING: the main board no longer shows word number/progress.
   // Keep this defensive in case a future layout adds those elements back.
@@ -1585,22 +1675,71 @@ function renderCurrentWord() {
   updateNavButtons();
 }
 
-/* Sound boxes — one box per phoneme. No phoneme labels are
-   rendered on the student-facing board. Students segment the
-   word with teacher support, not by reading sound labels. */
+/* Box (and in-box-tile) size tiers, keyed by the word's total box count.
+   Every box in a word is the same outer size regardless of how many
+   tiles end up inside it — a 2-3 letter grapheme's tiles shrink to fit
+   instead of the box growing — and the size tier shrinks as box count
+   climbs so a 6-7 box word still fits on one row at normal desktop
+   widths. Only applied above the existing 700px mobile breakpoint, where
+   the box/tile sizes are still fully controlled by CSS media queries
+   (unchanged from before this fix). */
+const SOUND_BOX_LAYOUT_TIERS = [
+  { max: 4, box: 140, boxH: 120, gap: 18, tileW: 44, tileH: 48, tileFont: 26, tilePad: 9 },
+  { max: 5, box: 118, boxH: 104, gap: 14, tileW: 38, tileH: 42, tileFont: 22, tilePad: 7 },
+  { max: 6, box: 100, boxH: 92,  gap: 11, tileW: 32, tileH: 38, tileFont: 19, tilePad: 5 },
+  { max: 7, box: 88,  boxH: 82,  gap: 9,  tileW: 27, tileH: 34, tileFont: 16, tilePad: 3 },
+  { max: Infinity, box: 76, boxH: 74, gap: 7, tileW: 23, tileH: 30, tileFont: 14, tilePad: 2 }
+];
+function soundBoxLayoutFor(count) {
+  return SOUND_BOX_LAYOUT_TIERS.find(t => count <= t.max);
+}
+
+/* Sound boxes — the WHOLE word, all at once (Step 6 correction: no more
+   one-syllable-at-a-time stepping). No phoneme labels are rendered on the
+   student-facing board. For a multisyllabic word, a tap-to-toggle
+   syllable-divider gap is inserted between each pair of boxes — never
+   pre-filled, the student/teacher places it themselves. */
 function renderBoxes(word) {
   const area = $("soundBoxArea");
   area.innerHTML = "";
+  const isMulti = isMultisyllabicWord(word);
+  const isNarrow = window.matchMedia("(max-width: 700px)").matches;
+  const layout = isNarrow ? null : soundBoxLayoutFor(word.boxes.length);
+
+  if (layout) {
+    area.style.gap = layout.gap + "px";
+    area.style.setProperty("--in-box-tile-w", layout.tileW + "px");
+    area.style.setProperty("--in-box-tile-h", layout.tileH + "px");
+    area.style.setProperty("--in-box-tile-font", layout.tileFont + "px");
+    area.style.setProperty("--in-box-tile-pad", layout.tilePad + "px");
+  } else {
+    // Narrow viewport: let the existing mobile media queries fully
+    // control sizing, same as before this fix.
+    area.style.removeProperty("gap");
+    area.style.removeProperty("--in-box-tile-w");
+    area.style.removeProperty("--in-box-tile-h");
+    area.style.removeProperty("--in-box-tile-font");
+    area.style.removeProperty("--in-box-tile-pad");
+  }
+
   word.boxes.forEach((expected, index) => {
     const box = document.createElement("div");
     box.className = "sound-box";
     box.dataset.index = index;
     box.dataset.expected = expected;
+    if (layout) {
+      box.style.width = layout.box + "px";
+      box.style.minHeight = layout.boxH + "px";
+    }
     box.addEventListener("dragover", onDragOver);
     box.addEventListener("dragleave", onDragLeave);
     box.addEventListener("drop", onDrop);
     box.addEventListener("click", () => placeSelectedTileInBox(box));
     area.appendChild(box);
+
+    if (isMulti && index < word.boxes.length - 1) {
+      area.appendChild(createDividerGap(index));
+    }
   });
 }
 
@@ -1761,7 +1900,9 @@ function resetWord() {
   // Also un-reveals outside area for this word so the teacher
   // can demonstrate the reveal step again if needed.
   outsideRevealed.delete(currentIndex);
+  completedWords.delete(currentIndex);
   renderCurrentWord();
+  renderWordList();
 }
 
 function addOutsideSpot() {
@@ -1816,13 +1957,26 @@ function showAnswer() {
     updateBoxTileState(spot);
     spot.classList.add("filled", "correct");
   }
+
+  // Showing the answer means showing the whole mapping — including where
+  // the syllable breaks go, for a multisyllabic word.
+  const expectedGaps = expectedDividerGaps(word);
+  if (expectedGaps.size) {
+    currentDividers = new Set(expectedGaps);
+    renderDividerState();
+    document.querySelectorAll(".syllable-gap").forEach(el => {
+      if (currentDividers.has(Number(el.dataset.gap))) el.classList.add("correct");
+    });
+  }
+
   $("feedback").textContent = "Answer shown. Talk through each sound and its spelling.";
   $("feedback").classList.remove("error");
 }
 
 /* Check: concatenate the values of all tiles inside each sound box
-   and compare to the expected grapheme. Outside letters are
-   compared as a single concatenated string. */
+   and compare to the expected grapheme. Outside letters are compared as
+   a single concatenated string. Validates the whole word at once,
+   including syllable-divider placement for a multisyllabic word. */
 function checkAnswer() {
   const word = lesson.words[currentIndex];
   const boxes = Array.from(document.querySelectorAll(".sound-box"));
@@ -1884,12 +2038,31 @@ function checkAnswer() {
     outsideCorrect = false;
   }
 
-  const correct = boxesCorrect && outsideCorrect;
+  // Syllable-divider placement, for a multisyllabic word only. Only a
+  // placed-but-wrong divider is marked — an expected divider the student
+  // never placed is left unmarked so its position is never leaked.
+  const expectedGaps = expectedDividerGaps(word);
+  let dividersCorrect = true;
+  if (expectedGaps.size) {
+    dividersCorrect = expectedGaps.size === currentDividers.size
+      && [...expectedGaps].every(g => currentDividers.has(g));
+    document.querySelectorAll(".syllable-gap").forEach(el => {
+      const idx = Number(el.dataset.gap);
+      const placed = currentDividers.has(idx);
+      el.classList.toggle("correct", placed && expectedGaps.has(idx));
+      el.classList.toggle("wrong", placed && !expectedGaps.has(idx));
+    });
+  }
+
+  const correct = boxesCorrect && outsideCorrect && dividersCorrect;
   if (correct) {
     completedWords.add(currentIndex);
     setFeedback("Correct! The graphemes match the sounds.", false);
     renderWordList();
     playSuccess();
+  } else if (boxesCorrect && outsideCorrect && !dividersCorrect) {
+    setFeedback("The sound boxes are right — check the syllable dividers.", true);
+    playTone(180, .12);
   } else {
     setFeedback("Take another look. One or more tiles needs to change.", true);
     playTone(180, .12);
