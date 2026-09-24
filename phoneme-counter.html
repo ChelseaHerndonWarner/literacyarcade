@@ -2690,6 +2690,11 @@ main {
   box-shadow: 0 0 0 4px var(--coral-light);
   margin: 0 auto 2px;
 }
+.gap.selected {
+  background: #FFF3E0;
+  box-shadow: 0 0 0 2px #B25E09;
+  border-radius: 6px;
+}
 .cwp-selection-bar {
   display: flex;
   align-items: center;
@@ -2702,10 +2707,80 @@ main {
   padding: 10px 14px;
   font-size: 13px;
 }
-.cwp-selection-actions { display: flex; gap: 8px; }
+.cwp-selection-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .cwp-selection-actions button {
   font-size: 12.5px !important;
   padding: 7px 12px !important;
+}
+.cwp-sound-editor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-weight: 800;
+}
+.cwp-sound-input {
+  width: 92px;
+  border: 1.5px solid #B25E09;
+  border-radius: 8px;
+  padding: 7px 9px;
+  font: 800 14px var(--font-head);
+  color: var(--navy);
+  background: #fff;
+}
+.cwp-sound-picker-panel {
+  align-items: stretch;
+}
+.cwp-sound-picker {
+  width: 100%;
+  display: grid;
+  gap: 8px;
+}
+.cwp-sound-picker-title {
+  font-weight: 900;
+  color: var(--navy);
+}
+.cwp-sound-group {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  align-items: start;
+  gap: 8px;
+}
+.cwp-sound-group-label {
+  padding-top: 6px;
+  font-weight: 800;
+  color: var(--navy-mid);
+}
+.cwp-sound-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.cwp-sound-choice {
+  min-width: 45px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--navy);
+  padding: 5px 7px;
+  font: 900 13px var(--font-head);
+  cursor: pointer;
+}
+.cwp-sound-choice small {
+  display: block;
+  margin-top: 1px;
+  color: var(--navy-mid);
+  font: 600 9px var(--font-body);
+}
+.cwp-sound-choice:hover,
+.cwp-sound-choice.current {
+  border-color: var(--teal-dark);
+  background: var(--teal-light);
+  box-shadow: 0 0 0 1px var(--teal-dark);
+}
+@media (max-width: 700px) {
+  .cwp-sound-group { grid-template-columns: 1fr; gap: 4px; }
+  .cwp-sound-group-label { padding-top: 0; }
 }
 .cwp-syllable-line {
   font-size: 13px;
@@ -3999,7 +4074,16 @@ function normalizeWordMapForPdf(item){
   const phonemeCount = item.phonemeCount || item.count || letterboxes.length || phonemes.filter(p => !String(p).toLowerCase().includes('silent')).length;
 
   const silentOutsideBoxes = item.silentOutsideBoxes || [];
-  return { word, graphemes, phonemes, letterboxes, tiles, note, vowelFocus, phonemeCount, silentOutsideBoxes };
+  const syllables = Array.isArray(item.syllables) && item.syllables.length > 1
+    ? item.syllables.map(syllable => ({
+        text: syllable.text || '',
+        letterboxes: syllable.letterboxes || syllable.boxes || syllable.graphemes || [],
+        phonemes: syllable.phonemes || [],
+        silentOutsideBoxes: syllable.silentOutsideBoxes || syllable.outsideLetters || []
+      }))
+    : [{ text: word, letterboxes, phonemes, silentOutsideBoxes }];
+  const syllableCount = syllables.length;
+  return { word, graphemes, phonemes, letterboxes, tiles, note, vowelFocus, phonemeCount, silentOutsideBoxes, syllables, syllableCount };
 }
 
 
@@ -4095,6 +4179,35 @@ function renderPdfBoxes(items, className){
   return `<div class="${className}">` + items.map(item => `<span>${escapePdfHtml(item)}</span>`).join('') + '</div>';
 }
 
+function renderPdfLetterTiles(letters){
+  return String(letters || '').split('').map(letter => `<span>${escapePdfHtml(letter)}</span>`).join('');
+}
+
+function renderPdfWholeWordMap(map){
+  const syllables = Array.isArray(map.syllables) && map.syllables.length
+    ? map.syllables
+    : [{ text: map.word, letterboxes: map.letterboxes || [], phonemes: map.phonemes || [], silentOutsideBoxes: map.silentOutsideBoxes || [] }];
+
+  const soundBoxes = [];
+  syllables.forEach((syllable, syllableIndex) => {
+    (syllable.letterboxes || []).forEach((grapheme, boxIndex) => {
+      soundBoxes.push(`
+        <span class="pdf-sound-box">
+          <span class="pdf-letter-tiles">${renderPdfLetterTiles(grapheme)}</span>
+          <span class="pdf-phoneme">${escapePdfHtml((syllable.phonemes || [])[boxIndex] || '')}</span>
+        </span>`);
+    });
+    if (syllableIndex < syllables.length - 1) {
+      soundBoxes.push('<span class="pdf-syllable-divider" aria-label="Syllable break"></span>');
+    }
+  });
+
+  const outside = syllables.flatMap(syllable => syllable.silentOutsideBoxes || []);
+  return `
+    <div class="pdf-whole-word-map">${soundBoxes.join('')}</div>
+    ${outside.length ? `<div class="pdf-outside-row"><span class="map-label">Outside</span>${outside.map(group => `<span class="pdf-outside-group">${renderPdfLetterTiles(group)}</span>`).join('')}</div>` : ''}`;
+}
+
 
 function getSequencedLessonWordStrings(words){
   const maps = words
@@ -4154,22 +4267,17 @@ function downloadLessonPdf(){
       <div class="word-card-header">
         <div class="word-title-line">
           <span class="word-number">Word ${index + 1}</span>
-          <h2>${escapePdfHtml(m.word)}</h2>
+          <h2 class="student-print">${escapePdfHtml(m.word)}</h2>
         </div>
-        <div class="count-pill">${escapePdfHtml(m.phonemeCount)} phonemes</div>
+        <div class="word-card-pills">
+          <div class="count-pill">${escapePdfHtml(m.phonemeCount)} phonemes</div>
+          ${m.syllableCount > 1 ? `<div class="count-pill syllable-count">${m.syllableCount} syllables</div>` : ''}
+        </div>
       </div>
 
-      <div class="map-grid compact">
-        <div class="map-label">Graphemes</div>
-        <div>${renderPdfBoxes(m.graphemes, 'mini-boxes')}</div>
-
-        <div class="map-label">Phonemes</div>
-        <div>${renderPdfBoxes(m.phonemes, 'mini-boxes phoneme-boxes')}</div>
-
-        <div class="map-label">Sound boxes</div>
-        <div>${renderPdfBoxes(m.letterboxes, 'sound-boxes')}${m.silentOutsideBoxes && m.silentOutsideBoxes.length ? `<span class="silent-e-print">${m.silentOutsideBoxes.map(escapePdfHtml).join(' ')}</span>` : ''}</div>
-
-      </div>
+      ${m.syllableCount > 1 ? `<div class="syllable-division"><span class="map-label">Syllables</span><span class="student-print">${m.syllables.map(s => escapePdfHtml(s.text)).join(' <b>|</b> ')}</span></div>` : ''}
+      <div class="map-label whole-word-label">Whole-word sound boxes</div>
+      ${renderPdfWholeWordMap(m)}
     </section>
   `).join('');
 
@@ -4183,6 +4291,9 @@ function downloadLessonPdf(){
     <html>
     <head>
       <title>Letterbox Lesson Plan</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&display=swap" rel="stylesheet">
       <style>
         @page { margin: 0.35in; }
         * { box-sizing: border-box; }
@@ -4285,6 +4396,7 @@ function downloadLessonPdf(){
           padding: 3px 7px;
           font-size: 12px;
           font-weight: 700;
+          font-family: 'Lexend', Arial, sans-serif;
         }
         .small-note {
           margin-top: 5px !important;
@@ -4334,6 +4446,107 @@ function downloadLessonPdf(){
           font-size: 12px;
           font-weight: 700;
           white-space: nowrap;
+        }
+        .word-card-pills {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 5px;
+          flex-wrap: wrap;
+        }
+        .syllable-count {
+          background: #FFF3E0;
+          border-color: #E7B96B;
+          color: #8A4B08;
+        }
+        .student-print,
+        .pdf-letter-tiles,
+        .pdf-phoneme,
+        .pdf-outside-group {
+          font-family: 'Lexend', Arial, sans-serif;
+        }
+        .syllable-division {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: -1px 0 6px;
+          color: #1A2340;
+          font-size: 13px;
+        }
+        .syllable-division b {
+          color: #D85A30;
+          padding: 0 3px;
+        }
+        .whole-word-label {
+          margin-bottom: 4px;
+        }
+        .pdf-whole-word-map {
+          display: flex;
+          align-items: stretch;
+          flex-wrap: nowrap;
+          gap: 5px;
+          width: 100%;
+        }
+        .pdf-sound-box {
+          flex: 1 1 0;
+          min-width: 38px;
+          min-height: 54px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          gap: 4px;
+          border: 2px solid #1A2340;
+          border-radius: 8px;
+          background: #fff;
+          padding: 5px 3px 4px;
+        }
+        .pdf-letter-tiles {
+          display: flex;
+          justify-content: center;
+          gap: 2px;
+        }
+        .pdf-letter-tiles > span,
+        .pdf-outside-group > span {
+          min-width: 18px;
+          height: 22px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid #D85A30;
+          border-radius: 5px;
+          background: #FFF0EE;
+          color: #1A2340;
+          font-size: 12px;
+          font-weight: 700;
+        }
+        .pdf-phoneme {
+          color: #0F6E56;
+          font-size: 10px;
+          font-weight: 600;
+          line-height: 1;
+        }
+        .pdf-syllable-divider {
+          flex: 0 0 4px;
+          align-self: center;
+          height: 46px;
+          border-radius: 999px;
+          background: #D85A30;
+          margin: 0 2px;
+        }
+        .pdf-outside-row {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-top: 5px;
+        }
+        .pdf-outside-group {
+          display: inline-flex;
+          gap: 2px;
+          padding: 3px 5px;
+          border: 1px dashed #6B7A99;
+          border-radius: 7px;
+          background: #FAF8F4;
         }
         .map-grid {
           display: grid;
@@ -6656,7 +6869,11 @@ window.addEventListener('load', () => {
 //   reviewed: bool,        // gates Add to Lesson; true for vetted and
 //                          // high-confidence words immediately, false for
 //                          // low-confidence until acknowledged.
-//   selectedLetter: idx|null, // mid-flight select-then-confirm state
+//   selectedRange: {start,end}|null, // contiguous letter selection used by
+//                          // explicit group/split and silent actions
+//   selectionAnchor: idx|null, // first letter selected; a second letter
+//                          // selects the entire contiguous range between
+//   selectedGap: idx|null, // gap selected for explicit syllable actions
 //   baseline: { syllableCount, soundBoxCount } // captured once at build
 //                          // time, compared against the live edited state
 //                          // for the non-blocking validation warning.
@@ -6702,7 +6919,16 @@ function cwParseInput(text) {
 // no-vowel-syllable validation check — matches every vowel-producing entry
 // phoneme-mapping-engine.js can actually emit (short/long vowels, schwa,
 // r-controlled vowels, diphthongs, /OO/).
-const CW_VOWEL_PHONEMES = new Set(['/ă/', '/ĕ/', '/ĭ/', '/ŏ/', '/ŭ/', '/ā/', '/ē/', '/ī/', '/ō/', '/ū/', '/ə/', '/ar/', '/or/', '/er/', '/oy/', '/aw/', '/OO/']);
+const CW_VOWEL_PHONEMES = new Set(['/ă/', '/ĕ/', '/ĭ/', '/ŏ/', '/ŭ/', '/ā/', '/ē/', '/ī/', '/ō/', '/ū/', '/ə/', '/ar/', '/or/', '/er/', '/oy/', '/aw/', '/ow/', '/OO/', '/oo/']);
+
+const CW_SOUND_PICKER_GROUPS = [
+  { label: 'Short vowels', sounds: [['/ă/', 'apple'], ['/ĕ/', 'egg'], ['/ĭ/', 'itch'], ['/ŏ/', 'octopus'], ['/ŭ/', 'up']] },
+  { label: 'Long vowels', sounds: [['/ā/', 'acorn'], ['/ē/', 'eat'], ['/ī/', 'ice'], ['/ō/', 'open'], ['/ū/', 'use']] },
+  { label: 'Other vowels', sounds: [['/oo/', 'book'], ['/OO/', 'moon'], ['/aw/', 'saw'], ['/ow/', 'cow'], ['/oy/', 'boy'], ['/ə/', 'about']] },
+  { label: 'R-controlled', sounds: [['/ar/'], ['/or/'], ['/er/']] },
+  { label: 'Consonants', sounds: '/b/ /d/ /f/ /g/ /h/ /j/ /k/ /l/ /m/ /n/ /p/ /r/ /s/ /t/ /v/ /w/ /y/ /z/'.split(' ').map(sound => [sound]) },
+  { label: 'Other consonants', sounds: [['/sh/'], ['/ch/'], ['/th/'], ['/ŋ/']] }
+];
 
 // Turns a { graphemes:[{letters,phoneme}], outside:[{letters}] }[] syllable
 // list — generateWordMapping()'s own shape, or the single-syllable version
@@ -6789,6 +7015,31 @@ function cwPhonemeFor(entry, group) {
   return typeof PhonemeMappingEngine !== 'undefined' ? PhonemeMappingEngine.phonemeForGrapheme(text) : `/${text}/`;
 }
 
+function cwEscapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+  }[ch]));
+}
+
+function cwNormalizePhonemeLabel(value) {
+  const inner = String(value || '').trim().replace(/^\/+|\/+$/g, '').trim();
+  return inner ? `/${inner}/` : '';
+}
+
+function cwSoundPickerHTML(currentSound) {
+  return CW_SOUND_PICKER_GROUPS.map(group => `
+    <div class="cwp-sound-group">
+      <div class="cwp-sound-group-label">${group.label}</div>
+      <div class="cwp-sound-choices">
+        ${group.sounds.map(([sound, example]) => `
+          <button type="button" class="cwp-sound-choice${sound === currentSound ? ' current' : ''}"
+            data-sound="${cwEscapeHtml(sound)}" aria-pressed="${sound === currentSound ? 'true' : 'false'}">
+            ${cwEscapeHtml(sound)}${example ? `<small>${example}</small>` : ''}
+          </button>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
 // Captured once at build time — the non-blocking validation banner compares
 // the CURRENT edited state against this, so "this removed several sound
 // boxes" stays meaningful after edits, not just at first load.
@@ -6813,7 +7064,7 @@ function cwBuildEntry(word) {
     const entry = {
       id: cwNextId(), word: vetted.word, source: 'vetted', confidence: 'vetted', note: vetted.note || '',
       gaps: flat.gaps, outsideStarts: flat.outsideStarts, knownPhonemes: flat.knownPhonemes,
-      reviewed: true, selectedLetter: null, includedInLesson: false
+      reviewed: true, selectedRange: null, selectionAnchor: null, selectedGap: null, editingSoundStart: null, typingCustomSound: false, includedInLesson: false
     };
     entry.baseline = cwSnapshotCounts(entry);
     return entry;
@@ -6828,7 +7079,7 @@ function cwBuildEntry(word) {
   const entry = {
     id: cwNextId(), word: wm.word, source: wm.source, confidence: wm.confidence, note: wm.note || '',
     gaps: flat.gaps, outsideStarts: flat.outsideStarts, knownPhonemes: flat.knownPhonemes,
-    reviewed: wm.confidence === 'high', selectedLetter: null, includedInLesson: false
+    reviewed: wm.confidence === 'high', selectedRange: null, selectionAnchor: null, selectedGap: null, editingSoundStart: null, typingCustomSound: false, includedInLesson: false
   };
   entry.baseline = cwSnapshotCounts(entry);
   return entry;
@@ -6839,7 +7090,10 @@ function cwBuildEntry(word) {
 // or retype a letter, so the word's actual spelling can't drift. ----
 function cwCycleGap(entry, i) {
   entry.gaps[i] = (entry.gaps[i] + 1) % 3;
-  entry.selectedLetter = null;
+  entry.selectedRange = null;
+  entry.selectionAnchor = null;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
   entry.reviewed = true; // an intentional edit counts as having reviewed it
   // Bulk-pasted (or otherwise already-included) low-confidence words are
   // marked includedInLesson before they're reviewed; the storage add was
@@ -6848,21 +7102,157 @@ function cwCycleGap(entry, i) {
   cwRenderActivePanel();
 }
 
-// Selecting a letter changes nothing by itself — it only opens the
-// deliberate secondary action below. This is what stops an accidental tap
-// from silencing e.g. the "a" in elephant.
-function cwSelectLetter(entry, idx) {
-  entry.selectedLetter = (entry.selectedLetter === idx) ? null : idx;
+function cwSelectGap(entry, i) {
+  cwClearLetterSelection(entry);
+  entry.selectedGap = i;
   cwRenderActivePanel();
 }
-function cwConfirmSilentToggle(entry) {
-  if (entry.selectedLetter === null) return;
+
+function cwSetSyllableBreak(entry, i) {
+  if (entry.gaps[i] === 0) return; // never split a grapheme as a side effect
+  if (entry.gaps[i] !== 2) {
+    const existingBreaks = entry.gaps
+      .map((state, index) => state === 2 && index !== i ? index : -1)
+      .filter(index => index !== -1);
+    const currentSyllableCount = entry.gaps.filter(state => state === 2).length + 1;
+    const baselineCount = entry.baseline && entry.baseline.syllableCount;
+
+    // If the mapping already has its expected number of syllables, this is
+    // a relocation: demote the nearest old break to an ordinary box boundary.
+    if (baselineCount > 1 && currentSyllableCount === baselineCount && existingBreaks.length) {
+      const nearest = existingBreaks.reduce((best, index) =>
+        Math.abs(index - i) < Math.abs(best - i) ? index : best
+      );
+      entry.gaps[nearest] = 1;
+    }
+    entry.gaps[i] = 2;
+  }
+  entry.selectedGap = i;
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+function cwRemoveSyllableBreak(entry, i) {
+  if (entry.gaps[i] !== 2) return;
+  entry.gaps[i] = 1; // preserve the sound-box boundary
+  entry.selectedGap = i;
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+// The first selected letter becomes an anchor. Selecting another letter
+// selects the whole contiguous run between them, making grouping discoverable
+// without removing the faster gap-tapping workflow.
+function cwSelectLetter(entry, idx) {
+  entry.selectedGap = null;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
+  if (!entry.selectedRange) {
+    entry.selectionAnchor = idx;
+    entry.selectedRange = { start: idx, end: idx };
+  } else if (entry.selectedRange.start === idx && entry.selectedRange.end === idx) {
+    entry.selectedRange = null;
+    entry.selectionAnchor = null;
+  } else {
+    const anchor = Number.isInteger(entry.selectionAnchor) ? entry.selectionAnchor : entry.selectedRange.start;
+    entry.selectedRange = { start: Math.min(anchor, idx), end: Math.max(anchor, idx) };
+  }
+  cwRenderActivePanel();
+}
+
+function cwClearLetterSelection(entry) {
+  entry.selectedRange = null;
+  entry.selectionAnchor = null;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
+}
+
+function cwStartSoundEdit(entry) {
+  if (!entry.selectedRange) return;
+  const g = cwGroupAt(cwGetGroups(entry.word, entry.gaps), entry.selectedRange.start);
+  if (!g || entry.selectedRange.end >= g.end || entry.outsideStarts.has(g.start)) return;
+  entry.selectedRange = { start: g.start, end: g.end - 1 };
+  entry.selectionAnchor = g.start;
+  entry.editingSoundStart = g.start;
+  entry.typingCustomSound = false;
+  cwRenderActivePanel();
+}
+
+function cwShowCustomSoundInput(entry) {
+  if (!Number.isInteger(entry.editingSoundStart)) return;
+  entry.typingCustomSound = true;
+  cwRenderActivePanel();
+}
+
+function cwApplySoundEdit(entry, value) {
+  const phoneme = cwNormalizePhonemeLabel(value);
+  if (!phoneme || !Number.isInteger(entry.editingSoundStart)) return;
+  const g = cwGroupAt(cwGetGroups(entry.word, entry.gaps), entry.editingSoundStart);
+  if (!g || g.start !== entry.editingSoundStart || entry.outsideStarts.has(g.start)) return;
+  entry.knownPhonemes[g.start] = phoneme;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+function cwGroupSelectedLetters(entry) {
+  const range = entry.selectedRange;
+  if (!range || range.end <= range.start) return;
+
+  const oldGroups = cwGetGroups(entry.word, entry.gaps);
+  oldGroups.filter(g => g.end > range.start && g.start <= range.end).forEach(g => {
+    delete entry.knownPhonemes[g.start];
+    entry.outsideStarts.delete(g.start);
+  });
+
+  // Preserve any existing syllable boundary outside the selection, but make
+  // the selection itself one exact group and remove every internal boundary.
+  if (range.start > 0 && entry.gaps[range.start - 1] === 0) entry.gaps[range.start - 1] = 1;
+  for (let i = range.start; i < range.end; i++) entry.gaps[i] = 0;
+  if (range.end < entry.word.length - 1 && entry.gaps[range.end] === 0) entry.gaps[range.end] = 1;
+
+  entry.reviewed = true;
+  entry.selectedGap = null;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
+  entry.selectionAnchor = range.start;
+  entry.selectedRange = { start: range.start, end: range.end };
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+function cwSplitSelectedGrapheme(entry) {
+  const range = entry.selectedRange;
+  if (!range) return;
   const groups = cwGetGroups(entry.word, entry.gaps);
-  const g = cwGroupAt(groups, entry.selectedLetter);
+  const g = cwGroupAt(groups, range.start);
+  if (!g || g.end - g.start < 2 || entry.outsideStarts.has(g.start)) return;
+
+  delete entry.knownPhonemes[g.start];
+  for (let i = g.start; i < g.end - 1; i++) entry.gaps[i] = 1;
+  cwClearLetterSelection(entry);
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+function cwConfirmSilentToggle(entry) {
+  if (!entry.selectedRange) return;
+  const groups = cwGetGroups(entry.word, entry.gaps);
+  const g = cwGroupAt(groups, entry.selectedRange.start);
   if (!g) return;
   if (entry.outsideStarts.has(g.start)) entry.outsideStarts.delete(g.start);
   else entry.outsideStarts.add(g.start);
-  entry.selectedLetter = null;
+  cwClearLetterSelection(entry);
   entry.reviewed = true;
   if (entry.includedInLesson) cwSyncInclusionStorage(entry);
   cwRenderActivePanel();
@@ -7034,7 +7424,7 @@ function cwRemoveEntryFromLesson(entry) {
 // Makes actual storage match entry.includedInLesson. Adding a custom word
 // still respects the existing review gate (cwAddCustomWordToLesson /
 // cwAddMultisyllabicToLesson silently no-op until entry.reviewed is true);
-// cwCycleGap/cwConfirmSilentToggle/cwMarkReviewed call this again once
+// Mapping-edit and review actions call this again once
 // reviewed flips true, so a bulk-pasted low-confidence word that starts
 // includedInLesson:true actually joins the lesson the moment it's reviewed.
 function cwSyncInclusionStorage(entry) {
@@ -7322,39 +7712,115 @@ function cwRenderActivePanel() {
 
   // Letter row: underline = same sound box, break in the underline = new
   // sound box, bold vertical bar = syllable break only. Tapping a letter
-  // selects it (changes nothing by itself); tapping a gap cycles it.
+  // selects it (changes nothing by itself); activating a gap opens explicit
+  // syllable-boundary actions without changing its sound-box grouping.
   let rowHtml = '';
   for (let i = 0; i < word.length; i++) {
     const g = cwGroupAt(groups, i);
     const isSilent = entry.outsideStarts.has(g.start);
-    const isSelected = entry.selectedLetter === i;
+    const isSelected = !!entry.selectedRange && i >= entry.selectedRange.start && i <= entry.selectedRange.end;
     rowHtml += `<span class="letter${isSilent ? ' silent' : ''}${isSelected ? ' selected' : ''}" data-letter="${i}" role="button" tabindex="0" aria-label="Letter ${word[i]}${isSilent ? ', silent' : ''}. Tap to select.">${word[i]}</span>`;
     if (i < word.length - 1) {
       const state = entry.gaps[i];
+      const selectedGapClass = entry.selectedGap === i ? ' selected' : '';
       if (state === 2) {
-        rowHtml += `<span class="gap syllable" data-gap="${i}" role="button" tabindex="0" aria-label="Syllable break here. Tap to change."><span class="divider"></span></span>`;
+        rowHtml += `<span class="gap syllable${selectedGapClass}" data-gap="${i}" role="button" tabindex="0" aria-label="Syllable break between ${word[i]} and ${word[i + 1]}. Activate for options."><span class="divider"></span></span>`;
       } else if (state === 1) {
-        rowHtml += `<span class="gap grapheme" data-gap="${i}" role="button" tabindex="0" aria-label="Separate sound boxes here. Tap to change."></span>`;
+        rowHtml += `<span class="gap grapheme${selectedGapClass}" data-gap="${i}" role="button" tabindex="0" aria-label="Sound-box boundary between ${word[i]} and ${word[i + 1]}. Activate for options."></span>`;
       } else {
-        rowHtml += `<span class="gap joined${isSilent ? ' silent' : ''}" data-gap="${i}" role="button" tabindex="0" aria-label="Joined into one sound box. Tap to change."></span>`;
+        rowHtml += `<span class="gap joined${isSilent ? ' silent' : ''}${selectedGapClass}" data-gap="${i}" role="button" tabindex="0" aria-label="Letters joined in one sound box. Activate for options."></span>`;
       }
     }
   }
 
-  // Select-then-confirm silent/outside toggle — never a single tap.
-  let selectionHtml = '';
-  if (entry.selectedLetter !== null) {
-    const g = cwGroupAt(groups, entry.selectedLetter);
-    const groupText = word.slice(g.start, g.end);
-    const isSilent = entry.outsideStarts.has(g.start);
-    selectionHtml = `
+  let gapSelectionHtml = '';
+  if (Number.isInteger(entry.selectedGap)) {
+    const gapIndex = entry.selectedGap;
+    const gapState = entry.gaps[gapIndex];
+    const gapLabel = `between "${word[gapIndex]}" and "${word[gapIndex + 1]}"`;
+    const gapAction = gapState === 2
+      ? '<button type="button" class="small-secondary cwp-remove-syllable">Remove syllable break</button>'
+      : gapState === 1
+        ? '<button type="button" class="small-secondary cwp-set-syllable">Syllable break here</button>'
+        : '';
+    const gapDescription = gapState === 0
+      ? `This gap is inside one grapheme ${gapLabel}. Split that grapheme first to place a syllable break here.`
+      : gapState === 2
+        ? `There is a syllable break ${gapLabel}.`
+        : `There is a sound-box boundary ${gapLabel}.`;
+    gapSelectionHtml = `
       <div class="cwp-selection-bar">
-        <span>${isSilent ? `Selected "${groupText}" — currently marked silent/outside.` : `Selected "${groupText}" — currently a sound box (${cwPhonemeFor(entry, g)}).`}</span>
+        <span>${gapDescription}</span>
         <span class="cwp-selection-actions">
-          <button type="button" class="small-secondary cwp-selection-cancel">Cancel</button>
-          <button type="button" class="small-secondary cwp-selection-confirm">${isSilent ? 'Make it a sound box again' : 'Mark as silent / outside'}</button>
+          <button type="button" class="small-secondary cwp-gap-cancel">Cancel</button>
+          ${gapAction}
         </span>
       </div>`;
+  }
+
+  // Explicit contiguous grouping/splitting plus the existing separate
+  // select-then-confirm silent/outside action.
+  let selectionHtml = '';
+  if (entry.selectedRange) {
+    const range = entry.selectedRange;
+    const selectedText = word.slice(range.start, range.end + 1);
+    const g = cwGroupAt(groups, range.start);
+    const selectionIsWithinOneGroup = !!g && range.end < g.end;
+    const groupText = g ? word.slice(g.start, g.end) : selectedText;
+    const isSilent = entry.outsideStarts.has(g.start);
+    const isEditingSound = selectionIsWithinOneGroup
+      && !isSilent
+      && entry.editingSoundStart === g.start;
+    const canGroup = range.end > range.start
+      && entry.gaps.slice(range.start, range.end).some(gap => gap !== 0);
+    const canSplit = selectionIsWithinOneGroup && g.end - g.start > 1 && !isSilent;
+    const groupingAction = canGroup
+      ? '<button type="button" class="small-secondary cwp-group-selection">Group as one sound box</button>'
+      : canSplit
+        ? '<button type="button" class="small-secondary cwp-split-selection">Split into separate sound boxes</button>'
+        : '';
+    const selectionDescription = range.end > range.start
+      ? `Selected "${selectedText}".`
+      : isSilent
+        ? `Selected "${groupText}" — currently marked silent/outside.`
+        : `Selected "${groupText}" — currently a sound box (${cwPhonemeFor(entry, g)}). Select another letter to choose a contiguous run.`;
+    const silentAction = selectionIsWithinOneGroup
+      ? `<button type="button" class="small-secondary cwp-selection-confirm">${isSilent ? 'Make it a sound box again' : 'Mark as silent / outside'}</button>`
+      : '';
+    const changeSoundAction = selectionIsWithinOneGroup && !isSilent
+      ? '<button type="button" class="small-secondary cwp-change-sound">Change sound</button>'
+      : '';
+    const currentSound = cwPhonemeFor(entry, g);
+    selectionHtml = isEditingSound && entry.typingCustomSound
+      ? `<div class="cwp-selection-bar">
+          <label class="cwp-sound-editor">Type another sound for "${groupText}"
+            <input class="cwp-sound-input" type="text" value="${cwEscapeHtml(currentSound)}" aria-label="Sound for ${groupText}" autocomplete="off" spellcheck="false">
+          </label>
+          <span class="cwp-selection-actions">
+            <button type="button" class="small-secondary cwp-sound-back">Back to sound choices</button>
+            <button type="button" class="small-secondary cwp-sound-save">Save sound</button>
+          </span>
+        </div>`
+      : isEditingSound
+        ? `<div class="cwp-selection-bar cwp-sound-picker-panel">
+            <div class="cwp-sound-picker">
+              <div class="cwp-sound-picker-title">Choose the sound for "${groupText}"</div>
+              ${cwSoundPickerHTML(currentSound)}
+              <span class="cwp-selection-actions">
+                <button type="button" class="small-secondary cwp-sound-cancel">Cancel</button>
+                <button type="button" class="small-secondary cwp-sound-custom">Type another sound</button>
+              </span>
+            </div>
+          </div>`
+      : `<div class="cwp-selection-bar">
+          <span>${selectionDescription}</span>
+          <span class="cwp-selection-actions">
+            <button type="button" class="small-secondary cwp-selection-cancel">Cancel</button>
+            ${groupingAction}
+            ${changeSoundAction}
+            ${silentAction}
+          </span>
+        </div>`;
   }
 
   const syllableLine = isMulti
@@ -7379,7 +7845,7 @@ function cwRenderActivePanel() {
       if (CW_VOWEL_PHONEMES.has(phon)) hasVowel = true;
       soundBoxCount++;
       const tiles = text.split('').map(ch => `<span class="cwp-tile">${ch}</span>`).join('');
-      boxHtml += `<span class="cwp-soundbox"><span class="cwp-tiles">${tiles}</span><span class="cwp-phoneme">${phon}</span></span>`;
+      boxHtml += `<span class="cwp-soundbox"><span class="cwp-tiles">${tiles}</span><span class="cwp-phoneme">${cwEscapeHtml(phon)}</span></span>`;
     });
     boxHtml += isMulti ? `</div></div>` : `</div>`;
     if (!hasVowel) syllablesMissingVowel.push(syl.text);
@@ -7427,6 +7893,7 @@ function cwRenderActivePanel() {
     <div class="cwp-panel">
       <div class="cwp-header"><div class="cwp-word">${word}</div></div>
       <div class="cwp-letterrow">${rowHtml}</div>
+      ${gapSelectionHtml}
       ${selectionHtml}
       ${syllableLine}
       ${boxHtml}
@@ -7443,15 +7910,50 @@ function cwRenderActivePanel() {
 
 function cwBindPanelEvents(root, entry) {
   root.querySelectorAll('.gap').forEach(el => {
-    el.addEventListener('click', () => cwCycleGap(entry, Number(el.dataset.gap)));
-    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cwCycleGap(entry, Number(el.dataset.gap)); } });
+    el.addEventListener('click', () => cwSelectGap(entry, Number(el.dataset.gap)));
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cwSelectGap(entry, Number(el.dataset.gap)); } });
   });
   root.querySelectorAll('.letter').forEach(el => {
     el.addEventListener('click', () => cwSelectLetter(entry, Number(el.dataset.letter)));
     el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cwSelectLetter(entry, Number(el.dataset.letter)); } });
   });
   const cancelBtn = root.querySelector('.cwp-selection-cancel');
-  if (cancelBtn) cancelBtn.addEventListener('click', () => { entry.selectedLetter = null; cwRenderActivePanel(); });
+  if (cancelBtn) cancelBtn.addEventListener('click', () => { cwClearLetterSelection(entry); cwRenderActivePanel(); });
+  const gapCancelBtn = root.querySelector('.cwp-gap-cancel');
+  if (gapCancelBtn) gapCancelBtn.addEventListener('click', () => { entry.selectedGap = null; cwRenderActivePanel(); });
+  const setSyllableBtn = root.querySelector('.cwp-set-syllable');
+  if (setSyllableBtn) setSyllableBtn.addEventListener('click', () => cwSetSyllableBreak(entry, entry.selectedGap));
+  const removeSyllableBtn = root.querySelector('.cwp-remove-syllable');
+  if (removeSyllableBtn) removeSyllableBtn.addEventListener('click', () => cwRemoveSyllableBreak(entry, entry.selectedGap));
+  const groupBtn = root.querySelector('.cwp-group-selection');
+  if (groupBtn) groupBtn.addEventListener('click', () => cwGroupSelectedLetters(entry));
+  const splitBtn = root.querySelector('.cwp-split-selection');
+  if (splitBtn) splitBtn.addEventListener('click', () => cwSplitSelectedGrapheme(entry));
+  const changeSoundBtn = root.querySelector('.cwp-change-sound');
+  if (changeSoundBtn) changeSoundBtn.addEventListener('click', () => cwStartSoundEdit(entry));
+  root.querySelectorAll('.cwp-sound-choice').forEach(btn => {
+    btn.addEventListener('click', () => cwApplySoundEdit(entry, btn.dataset.sound));
+  });
+  const customSoundBtn = root.querySelector('.cwp-sound-custom');
+  if (customSoundBtn) customSoundBtn.addEventListener('click', () => cwShowCustomSoundInput(entry));
+  const soundInput = root.querySelector('.cwp-sound-input');
+  const saveSound = () => { if (soundInput) cwApplySoundEdit(entry, soundInput.value); };
+  const cancelSound = () => { entry.editingSoundStart = null; entry.typingCustomSound = false; cwRenderActivePanel(); };
+  const backToSounds = () => { entry.typingCustomSound = false; cwRenderActivePanel(); };
+  const soundSaveBtn = root.querySelector('.cwp-sound-save');
+  if (soundSaveBtn) soundSaveBtn.addEventListener('click', saveSound);
+  const soundCancelBtn = root.querySelector('.cwp-sound-cancel');
+  if (soundCancelBtn) soundCancelBtn.addEventListener('click', cancelSound);
+  const soundBackBtn = root.querySelector('.cwp-sound-back');
+  if (soundBackBtn) soundBackBtn.addEventListener('click', backToSounds);
+  if (soundInput) {
+    soundInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); saveSound(); }
+      if (e.key === 'Escape') { e.preventDefault(); cancelSound(); }
+    });
+    soundInput.focus();
+    soundInput.select();
+  }
   const confirmBtn = root.querySelector('.cwp-selection-confirm');
   if (confirmBtn) confirmBtn.addEventListener('click', () => cwConfirmSilentToggle(entry));
   const reviewBtn = root.querySelector('.cwp-review-confirm');

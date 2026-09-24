@@ -595,7 +595,7 @@ body {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  font-family:var(--font-head);
+  font-family:var(--font-body);
   font-size:30px;
   font-weight:900;
   color:var(--navy);
@@ -634,6 +634,46 @@ body {
   padding:0 var(--in-box-tile-pad, 9px);
   font-size:var(--in-box-tile-font, 26px);
   border-radius:11px;
+}
+
+/* Placed tiles scale to the grapheme in their own sound box. The box keeps
+   its word-length layout tier; only the tiles inside that box change size. */
+.sound-box:not(.multi-tile) > .tile.in-box {
+  min-width:48px;
+  max-width:48px;
+  height:48px;
+  padding:0 8px;
+  font-size:28px;
+}
+.sound-box.tile-count-2 > .tile.in-box {
+  flex:1 1 0;
+  min-width:0;
+  max-width:42px;
+  height:42px;
+  padding:0 4px;
+  font-size:24px;
+}
+.sound-box.tile-count-3 {
+  gap:4px;
+}
+.sound-box.tile-count-3 > .tile.in-box {
+  flex:1 1 0;
+  min-width:0;
+  max-width:32px;
+  height:38px;
+  padding:0 2px;
+  font-size:19px;
+}
+.sound-box.multi-tile:not(.tile-count-2):not(.tile-count-3) {
+  gap:2px;
+}
+.sound-box.multi-tile:not(.tile-count-2):not(.tile-count-3) > .tile.in-box {
+  flex:1 1 0;
+  min-width:0;
+  max-width:26px;
+  height:32px;
+  padding:0 1px;
+  font-size:16px;
 }
 
 /* ── Teacher controls under the board ── */
@@ -1014,19 +1054,19 @@ body {
     var(--cream);
   z-index: 5000;
   display: none;
-  padding: 18px;
+  padding: 10px;
 }
 .presentation-overlay.show {
   display: flex;
   flex-direction: column;
 }
 .presentation-top {
-  height: 52px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 .presentation-title {
   font-family: var(--font-head);
@@ -1042,27 +1082,32 @@ body {
 .presentation-content {
   flex: 1;
   min-height: 0;
-  background: rgba(255,255,255,.92);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  box-shadow: var(--shadow);
-  padding: 20px;
+  padding: 0;
   display: flex;
   flex-direction: column;
 }
+.presentation-content > .lesson-panel {
+  flex: 1;
+  width: 100%;
+  padding: 12px 18px 8px;
+}
 .presentation-content .play-row {
   justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 .presentation-content .board {
   flex: 1;
   min-height: 0;
 }
 .presentation-content .lesson-controls {
-  margin-top: 12px;
+  margin-top: 6px;
 }
 .presentation-content .feedback {
-  min-height: 26px;
+  min-height: 22px;
+  margin-top: 3px;
+}
+.presentation-content .outside-control-hint {
+  display: none;
 }
 .presentation-mode .la-header,
 .presentation-mode .side-panel,
@@ -1324,7 +1369,6 @@ body {
   <div class="presentation-top">
     <div class="presentation-title">Letterbox Lesson</div>
     <div class="presentation-actions">
-      <button class="header-btn" id="presentationPlayBtn" type="button">Play Word</button>
       <button class="header-btn" id="closePresentationBtn" type="button">Exit Presentation</button>
     </div>
   </div>
@@ -2254,7 +2298,6 @@ function launchConfetti() {
    ============================================================ */
 $("fullscreenBtn").addEventListener("click", togglePresentationMode);
 $("playWordBtn").addEventListener("click", playCurrentWord);
-$("presentationPlayBtn")?.addEventListener("click", playCurrentWord);
 $("closePresentationBtn")?.addEventListener("click", closePresentationMode);
 $("showAnswerBtn").addEventListener("click", showAnswer);
 $("resetWordBtn").addEventListener("click", resetWord);
