@@ -3779,7 +3779,8 @@ function startLetterboxLesson() {
     return;
   }
 
-  sessionStorage.setItem(CW_LESSON_RETURN_STATE_KEY, JSON.stringify(cwSerializeEditorState()));
+  const editorSnapshot = cwSerializeEditorState();
+  sessionStorage.setItem(CW_LESSON_RETURN_STATE_KEY, JSON.stringify(editorSnapshot));
   sessionStorage.setItem('letterboxLessonData', JSON.stringify(lessonData));
   window.location.href = 'letterbox-lesson.html';
 }
@@ -8141,15 +8142,25 @@ function cwResumeSavedActivity() {
   const params = new URLSearchParams(window.location.search);
   if (params.get('returnFromLesson') === '1') {
     const snapshotRaw = sessionStorage.getItem(CW_LESSON_RETURN_STATE_KEY);
-    sessionStorage.removeItem(CW_LESSON_RETURN_STATE_KEY);
-    if (!snapshotRaw) return;
     try {
-      const snapshot = JSON.parse(snapshotRaw);
-      if (cwRestoreEditorState(snapshot, snapshot.resumingActivityId || null)) {
+      let snapshot = snapshotRaw ? JSON.parse(snapshotRaw) : null;
+
+      // The lesson payload crosses the same navigation and already contains
+      // editorState. Use it as a recovery copy if the dedicated return key is
+      // unavailable, while leaving letterboxLessonData itself untouched.
+      if (!snapshot) {
+        const lessonRaw = sessionStorage.getItem('letterboxLessonData');
+        const lessonData = lessonRaw ? JSON.parse(lessonRaw) : null;
+        snapshot = lessonData?.editorState || null;
+      }
+
+      if (cwRestoreEditorState(snapshot, snapshot?.resumingActivityId || null)) {
         renderLessonTray();
         cwRenderSidebarList();
         cwRenderActivePanel();
         setTimeout(() => { cwRenderSidebarList(); cwRenderActivePanel(); }, 0);
+        // Consume only after the editor model and UI have both been restored.
+        sessionStorage.removeItem(CW_LESSON_RETURN_STATE_KEY);
       }
     } catch (e) {
       console.warn('Could not restore the Phoneme Counter lesson workspace.', e);
