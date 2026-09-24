@@ -3732,6 +3732,7 @@ async function saveCurrentActivity() {
         {
           title: activityData.title,
           words: activityData.words,
+          editorState: activityData.editorState,
           updatedAt: firestore.serverTimestamp()
         }
       );
@@ -3778,6 +3779,7 @@ function startLetterboxLesson() {
     return;
   }
 
+  sessionStorage.setItem(CW_LESSON_RETURN_STATE_KEY, JSON.stringify(cwSerializeEditorState()));
   sessionStorage.setItem('letterboxLessonData', JSON.stringify(lessonData));
   window.location.href = 'letterbox-lesson.html';
 }
@@ -6900,6 +6902,9 @@ let customLessonMapByWord = {};    // word -> mapWord()-shaped mapping object
 // saving updates that same Firestore document instead of creating a new one.
 let resumingActivityId = null;
 
+const CW_EDITOR_STATE_VERSION = 1;
+const CW_LESSON_RETURN_STATE_KEY = 'phonemeCounterLessonReturnState';
+
 function cwNextId() {
   cwIdCounter += 1;
   return 'cw' + cwIdCounter;
@@ -7083,6 +7088,152 @@ function cwBuildEntry(word) {
   };
   entry.baseline = cwSnapshotCounts(entry);
   return entry;
+}
+
+// Firestore/sessionStorage-safe copy of the editor model. Transient UI
+// selections are intentionally omitted; every mapping decision is retained.
+function cwSerializeEditorState() {
+  return {
+    version: CW_EDITOR_STATE_VERSION,
+    activeEntryId,
+    resumingActivityId,
+    entries: customWordEntries.map(entry => ({
+      id: entry.id,
+      word: entry.word,
+      source: entry.source,
+      confidence: entry.confidence,
+      note: entry.note || '',
+      gaps: Array.isArray(entry.gaps) ? [...entry.gaps] : [],
+      outsideStarts: [...(entry.outsideStarts || [])],
+      knownPhonemes: { ...(entry.knownPhonemes || {}) },
+      reviewed: !!entry.reviewed,
+      includedInLesson: !!entry.includedInLesson,
+      baseline: entry.baseline ? { ...entry.baseline } : null
+    }))
+  };
+}
+
+function cwDeserializeEditorEntry(savedEntry) {
+  const word = String(savedEntry?.word || '').toLowerCase().replace(/[^a-z]/g, '');
+  if (!word) return null;
+  const gaps = Array.from({ length: Math.max(0, word.length - 1) }, (_, i) => {
+    const value = Number(savedEntry.gaps?.[i]);
+    return value === 0 || value === 2 ? value : 1;
+  });
+  const entry = {
+    id: String(savedEntry.id || cwNextId()),
+    word,
+    source: savedEntry.source || 'restored',
+    confidence: savedEntry.confidence || 'high',
+    note: savedEntry.note || '',
+    gaps,
+    outsideStarts: new Set((savedEntry.outsideStarts || []).map(Number).filter(i => i >= 0 && i < word.length)),
+    knownPhonemes: { ...(savedEntry.knownPhonemes || {}) },
+    reviewed: !!savedEntry.reviewed,
+    includedInLesson: !!savedEntry.includedInLesson,
+    selectedRange: null,
+    selectionAnchor: null,
+    selectedGap: null,
+    editingSoundStart: null,
+    typingCustomSound: false
+  };
+  entry.baseline = savedEntry.baseline ? { ...savedEntry.baseline } : cwSnapshotCounts(entry);
+  return entry;
+}
+
+function cwSyllableFromSavedLessonPart(text, boxes, phonemes, outsideLetters) {
+  const word = String(text || '').toLowerCase();
+  const inside = (boxes || []).map((letters, i) => ({ letters: String(letters), phoneme: phonemes?.[i] || '' }));
+  const outside = (outsideLetters || []).map(letters => ({ letters: String(letters) }));
+  const graphemes = [];
+  const silent = [];
+  let pos = 0;
+  while (pos < word.length) {
+    const insideIndex = inside.findIndex(item => word.startsWith(item.letters.toLowerCase(), pos));
+    const outsideIndex = outside.findIndex(item => word.startsWith(item.letters.toLowerCase(), pos));
+    if (insideIndex >= 0) {
+      graphemes.push(inside.splice(insideIndex, 1)[0]);
+      pos += graphemes[graphemes.length - 1].letters.length;
+    } else if (outsideIndex >= 0) {
+      silent.push(outside.splice(outsideIndex, 1)[0]);
+      pos += silent[silent.length - 1].letters.length;
+    } else {
+      graphemes.push({ letters: word[pos], phoneme: '' });
+      pos += 1;
+    }
+  }
+  return { text: word, graphemes, outside: silent };
+}
+
+// Older documents have only lesson-ready fields. Reconstruct the editor
+// directly from those saved boxes/phonemes (never from the mapping engine).
+function cwLegacyEditorStateFromWords(words) {
+  const entries = (words || []).map((savedWord, index) => {
+    const word = String(savedWord?.word || '').toLowerCase();
+    if (!word) return null;
+    const syllables = Array.isArray(savedWord.syllables) && savedWord.syllables.length
+      ? savedWord.syllables.map(part => cwSyllableFromSavedLessonPart(
+          part.text,
+          part.letterboxes || part.boxes || part.graphemes,
+          part.phonemes,
+          part.silentOutsideBoxes || part.outsideLetters
+        ))
+      : [cwSyllableFromSavedLessonPart(word, savedWord.boxes, savedWord.phonemes, savedWord.outsideLetters)];
+    const flat = cwFlattenSyllables(word, syllables);
+    const entry = {
+      id: `restored-${index + 1}`,
+      word,
+      source: 'restored',
+      confidence: 'high',
+      note: '',
+      gaps: flat.gaps,
+      outsideStarts: [...flat.outsideStarts],
+      knownPhonemes: flat.knownPhonemes,
+      reviewed: true,
+      includedInLesson: true
+    };
+    const liveEntry = cwDeserializeEditorEntry(entry);
+    entry.baseline = cwSnapshotCounts(liveEntry);
+    return entry;
+  }).filter(Boolean);
+  return entries.length ? { version: 0, activeEntryId: entries[0].id, entries } : null;
+}
+
+function cwRestoreEditorState(editorState, activityId) {
+  if (!editorState || !Array.isArray(editorState.entries)) return false;
+  const restored = editorState.entries.map(cwDeserializeEditorEntry).filter(Boolean);
+  if (!restored.length) return false;
+
+  customWordEntries = restored;
+  cwIdCounter = Math.max(cwIdCounter, ...restored.map(entry => {
+    const match = /^cw(\d+)$/.exec(entry.id);
+    return match ? Number(match[1]) : 0;
+  }));
+  const savedActiveId = String(editorState.activeEntryId || '');
+  activeEntryId = restored.some(entry => entry.id === savedActiveId) ? savedActiveId : restored[0].id;
+  const activeEntry = restored.find(entry => entry.id === activeEntryId);
+  const wordInput = document.getElementById('wordInput');
+  if (wordInput && activeEntry) wordInput.value = activeEntry.word;
+  resumingActivityId = activityId || editorState.resumingActivityId || null;
+  lessonWords = [];
+  customLessonItems = [];
+  customLessonMapByWord = {};
+
+  // Rebuild lesson storage from the editor decisions themselves. Restored
+  // entries are custom so no bank/heuristic lookup can replace an approved
+  // grouping or phoneme during subsequent edits.
+  restored.forEach(entry => {
+    if (!entry.includedInLesson || entry.source === 'unavailable') return;
+    const syllables = cwGetSyllableRanges(entry.word, entry.gaps);
+    customLessonMapByWord[entry.word] = syllables.length > 1
+      ? cwBuildMultisyllabicLessonMapObject(entry, syllables)
+      : cwBuildCustomLessonMapObject(entry.word, cwEntryToFlatMapping(entry));
+    customLessonItems.push(entry.word);
+  });
+  restored.forEach(entry => {
+    if (entry.source !== 'unavailable') entry.source = 'restored';
+  });
+  return true;
 }
 
 // ---- Live editing actions — every operation only regroups the word's own
@@ -7657,7 +7808,9 @@ const buildLetterboxActivityDataBeforeCustomWords = buildLetterboxActivityData;
 buildLetterboxActivityData = function (customTitle) {
   const originalResult = buildLetterboxActivityDataBeforeCustomWords(customTitle);
   const customWords = cwLessonItemsAsWords();
-  if (!customWords.length) return originalResult;
+  if (!customWords.length) {
+    return originalResult ? { ...originalResult, editorState: cwSerializeEditorState() } : originalResult;
+  }
 
   const base = originalResult || {
     title: customTitle || 'Letterbox Lesson',
@@ -7667,7 +7820,7 @@ buildLetterboxActivityData = function (customTitle) {
     generatedAt: new Date().toISOString(),
     words: []
   };
-  return { ...base, words: [...base.words, ...customWords] };
+  return { ...base, words: [...base.words, ...customWords], editorState: cwSerializeEditorState() };
 };
 
 // PDF export resolves each tray word through getCurrentWordMapForPdf();
@@ -7986,6 +8139,23 @@ mapAndRender = function (word) {
 // that document instead of creating a duplicate.
 function cwResumeSavedActivity() {
   const params = new URLSearchParams(window.location.search);
+  if (params.get('returnFromLesson') === '1') {
+    const snapshotRaw = sessionStorage.getItem(CW_LESSON_RETURN_STATE_KEY);
+    sessionStorage.removeItem(CW_LESSON_RETURN_STATE_KEY);
+    if (!snapshotRaw) return;
+    try {
+      const snapshot = JSON.parse(snapshotRaw);
+      if (cwRestoreEditorState(snapshot, snapshot.resumingActivityId || null)) {
+        renderLessonTray();
+        cwRenderSidebarList();
+        cwRenderActivePanel();
+        setTimeout(() => { cwRenderSidebarList(); cwRenderActivePanel(); }, 0);
+      }
+    } catch (e) {
+      console.warn('Could not restore the Phoneme Counter lesson workspace.', e);
+    }
+    return;
+  }
   if (params.get('resumeActivity') !== '1') return;
 
   const savedId = sessionStorage.getItem('savedActivityId');
@@ -7997,6 +8167,37 @@ function cwResumeSavedActivity() {
   const type = saved && (saved.toolType || saved.activityType);
   if (type !== 'letterbox-lesson' || !Array.isArray(saved.words) || !saved.words.length) return;
 
+  if (cwRestoreEditorState(saved.editorState, savedId)) {
+    renderLessonTray();
+    cwRenderSidebarList();
+    cwRenderActivePanel();
+    setTimeout(() => { cwRenderSidebarList(); cwRenderActivePanel(); }, 0);
+    const msg = document.getElementById('lessonMsg');
+    if (msg) {
+      msg.textContent = `Editing "${saved.title || 'this saved lesson'}" — saving will update it.`;
+      msg.style.display = 'block';
+    }
+    return;
+  }
+
+  // Backward compatibility for documents saved before editorState existed:
+  // hydrate the Working List from their existing flattened lesson fields.
+  const legacyEditorState = cwLegacyEditorStateFromWords(saved.words);
+  if (cwRestoreEditorState(legacyEditorState, savedId)) {
+    renderLessonTray();
+    cwRenderSidebarList();
+    cwRenderActivePanel();
+    setTimeout(() => { cwRenderSidebarList(); cwRenderActivePanel(); }, 0);
+    const msg = document.getElementById('lessonMsg');
+    if (msg) {
+      msg.textContent = `Editing "${saved.title || 'this saved lesson'}" — saving will update it.`;
+      msg.style.display = 'block';
+    }
+    return;
+  }
+
+  // Retain the original flattened-lesson restoration path for malformed
+  // legacy data that cannot populate the editor.
   saved.words.forEach(w => {
     if (!w || !w.word) return;
     if (w.custom) {
