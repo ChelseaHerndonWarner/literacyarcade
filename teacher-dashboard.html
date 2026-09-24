@@ -1568,6 +1568,7 @@ function buildCard(activity, tool) {
         </button>
         <div class="card-menu" role="menu">
           <button type="button" class="menu-collection" role="menuitem">Add to Collection</button>
+          ${type === 'letterbox-lesson' ? `<button type="button" class="menu-edit-words" role="menuitem">Edit Words</button>` : ''}
           <button type="button" class="menu-rename" role="menuitem">Rename</button>
           ${canDuplicate ? `<button type="button" class="menu-duplicate" role="menuitem">Duplicate</button>` : ''}
           <button type="button" class="menu-delete" role="menuitem">Delete</button>
@@ -1591,6 +1592,7 @@ function buildCard(activity, tool) {
     menuBtn.setAttribute('aria-expanded', String(willOpen));
   });
   card.querySelector('.menu-collection').addEventListener('click', () => { closeAllCardMenus(); openActivityPicker({ activityId: activity.id }); });
+  card.querySelector('.menu-edit-words')?.addEventListener('click', () => { closeAllCardMenus(); editLetterboxActivity(activity.id, activity); });
   card.querySelector('.menu-rename').addEventListener('click', () => { closeAllCardMenus(); renameActivity(activity.id, title); });
   card.querySelector('.menu-duplicate')?.addEventListener('click', () => { closeAllCardMenus(); duplicateActivity(activity.id); });
   card.querySelector('.menu-delete').addEventListener('click', () => { closeAllCardMenus(); deleteActivity(activity.id, title); });
@@ -1618,6 +1620,18 @@ function openActivity(id, activity) {
     title: 'Activity Not Connected Yet',
     message: 'This saved activity type is not connected yet.'
   });
+}
+
+// Sends a saved letterbox-lesson activity back to the Phoneme Counter
+// builder for editing, instead of straight to play mode. Uses the same
+// sessionStorage keys openActivity() already sets for every activity
+// type; ?resumeActivity=1 is what tells phoneme-counter.html this is an
+// edit request specifically (so an unrelated later visit to that page
+// doesn't accidentally resume a stale saved lesson).
+function editLetterboxActivity(id, activity) {
+  sessionStorage.setItem('savedActivityId', id);
+  sessionStorage.setItem('savedActivityData', JSON.stringify(activity));
+  window.location.href = 'phoneme-counter.html?resumeActivity=1';
 }
 
 async function shareActivity(id, activity) {

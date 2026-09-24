@@ -487,7 +487,7 @@ main {
   flex: 1 1 auto !important;
   min-height: 0 !important;
   display: grid !important;
-  grid-template-columns: 345px minmax(0, 1fr) !important;
+  grid-template-columns: 375px minmax(0, 1fr) !important;
   gap: 16px !important;
   align-items: stretch !important;
 }
@@ -607,6 +607,13 @@ select {
 .tray-words {
   min-height: 38px !important;
   padding: 7px !important;
+}
+/* Step 5: Your Words + Your Lesson List are now one working list (the
+   checkboxed #customWordsList above) -- the old word-chip tray this fed is
+   kept in the DOM (renderLessonTray()/the Stage 4 pipeline still write to
+   it) but no longer shown, so nothing duplicates the working list. */
+#lessonTray[hidden] {
+  display: none !important;
 }
 .tray-actions {
   gap: 6px !important;
@@ -1418,7 +1425,7 @@ main {
 .workspace {
   flex: 1 1 auto !important;
   min-height: 0 !important;
-  grid-template-columns: 330px minmax(0, 1fr) !important;
+  grid-template-columns: 460px minmax(0, 1fr) !important;
   gap: 18px !important;
 }
 
@@ -1443,7 +1450,10 @@ footer {
   opacity: 1 !important;
 }
 
-/* Student-facing word/letter displays use Lexend. */
+/* Student-facing word/letter displays use Lexend. Step 5 extends this to
+   the unified mapping workspace: the result word, editable letters,
+   syllable labels, tiles, phoneme labels, and working-list word text —
+   everything else (labels, hints, buttons) stays on Nunito. */
 .big-word,
 .result-word,
 .map-box,
@@ -1453,7 +1463,15 @@ footer {
 .tile,
 .bank-word,
 .chip,
-.tray-word {
+.tray-word,
+.cwp-word,
+.letter,
+.cwp-syllable-heading,
+.cwp-syllable-text,
+.cwp-tile,
+.cwp-phoneme,
+.cwp-outside-letters,
+.cw-sidebar-word-btn {
   font-family: Lexend, Nunito, Arial, sans-serif !important;
   font-weight: 800 !important;
   letter-spacing: .01em !important;
@@ -2140,6 +2158,740 @@ main {
 .lesson-msg a:hover {
   text-decoration: underline;
 }
+
+/* ─── Custom Words (arbitrary spelling-word entry) ───────────────────── */
+.custom-words-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 56px;
+  padding: 9px 10px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.custom-words-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.custom-words-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cw-row {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 9px 10px;
+  background: #fff;
+}
+.cw-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.cw-word {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 15px;
+  color: var(--navy);
+}
+.cw-badge {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.cw-badge.vetted { background: #E6F6EF; color: #0F6E56; }
+.cw-badge.generated-high { background: #EAF3FF; color: #08729a; }
+.cw-badge.generated-low,
+.cw-badge.multisyllabic { background: var(--coral-light); color: var(--coral); }
+.cw-row-actions {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.cw-icon-btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 7px;
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--navy-mid);
+}
+.cw-icon-btn:hover { background: #F8F7F3; }
+.cw-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+.cw-box {
+  min-width: 30px;
+  min-height: 30px;
+  padding: 3px 6px;
+  border: 2px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 14px;
+}
+.cw-box.outside {
+  border-style: dashed;
+  color: var(--navy-mid);
+}
+.cw-note {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--navy-mid);
+}
+.cw-syllable-editor {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin: 6px 0;
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 18px;
+}
+.cw-letter {
+  padding: 4px 1px;
+  color: var(--navy);
+}
+.cw-gap {
+  width: 9px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  margin: 0 1px;
+  border-radius: 3px;
+  color: var(--coral);
+  font-size: 16px;
+  line-height: 1;
+}
+.cw-gap:hover { background: rgba(216,90,48,.12); }
+.cw-gap.active { color: var(--coral); font-weight: 900; }
+.cw-syllable-hint {
+  font-size: 11px;
+  color: var(--navy-mid);
+  margin-bottom: 4px;
+}
+.cw-syllable-preview {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.cw-syllable-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.cw-syllable-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #EAF3FF;
+  color: #08729a;
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 13px;
+}
+.cw-confirm-btn,
+.cw-edit-split-btn {
+  font-size: 11px !important;
+  padding: 6px 10px !important;
+}
+.cw-empty {
+  font-size: 12px;
+  color: var(--navy-mid);
+  padding: 4px 2px;
+}
+.cw-mapping-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.cw-status-badge {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.cw-status-badge.confirmed { background: #E6F6EF; color: #0F6E56; }
+.cw-status-badge.pending { background: #FFF3E0; color: #B25E09; }
+
+.cw-editor-hint {
+  font-size: 11px;
+  color: var(--navy-mid);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+.cw-editor-row {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.cw-edit-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: 1.5px solid var(--line);
+  border-radius: 9px;
+  padding: 6px 6px;
+  background: #fff;
+  min-width: 46px;
+}
+.cw-edit-box.outside {
+  border-style: dashed;
+  background: #FBFAF6;
+}
+.cw-edit-box-main {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.cw-edit-box-text {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--navy);
+  min-width: 14px;
+  text-align: center;
+}
+.cw-edit-box-phoneme {
+  font-size: 10px;
+  color: var(--navy-mid);
+}
+.cw-edit-box-actions {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cw-nudge {
+  border: 1px solid var(--line);
+  background: #F8F7F3;
+  border-radius: 5px;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--navy-mid);
+  padding: 0;
+}
+.cw-nudge:hover { background: #eee; }
+.cw-mini-btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 9.5px;
+  font-weight: 800;
+  cursor: pointer;
+  color: var(--navy-mid);
+  white-space: nowrap;
+}
+.cw-mini-btn:hover { background: #F8F7F3; }
+.cw-merge-btn {
+  align-self: center;
+  border: 1px dashed var(--coral);
+  background: #fff;
+  color: var(--coral);
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 9.5px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 22px;
+  white-space: nowrap;
+}
+.cw-merge-btn:hover { background: var(--coral-light); }
+.cw-syllable-mapping {
+  border-top: 1px dashed var(--line);
+  padding-top: 8px;
+  margin-top: 8px;
+}
+.cw-syllable-mapping:first-child {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+.cw-syllable-heading {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 12px;
+  color: var(--navy-mid);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 4px;
+}
+.cw-generated-warning {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #B25E09;
+  background: #FFF3E0;
+  border-radius: 8px;
+  padding: 7px 9px;
+  margin-bottom: 8px;
+}
+.cw-lesson-controls {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.cw-add-hint {
+  font-size: 10.5px;
+  color: var(--navy-mid);
+  margin-top: 3px;
+}
+.custom-tray-word {
+  border-style: dashed !important;
+}
+
+/* ─── Step 5: left-panel text sizing — the v11 compaction pass above left
+   these too small to read comfortably; bump them without touching that
+   layer, scoped to the left workflow panel only. ─── */
+.workspace > aside.card.panel .label {
+  font-size: 12.5px !important;
+}
+.workspace > aside.card.panel .hint {
+  font-size: 13.5px !important;
+}
+.cw-sidebar-word-btn {
+  font-size: 15.5px !important;
+}
+
+/* ─── Stage 5: unified word entry — sidebar list + large Result panel ─── */
+.spelling-list-block {
+  padding: 10px 0 12px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 10px;
+}
+.your-words-block {
+  margin-bottom: 12px;
+}
+.your-words-block .bank-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.cw-include-toggle {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+.cw-include-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--teal, #0F6E56);
+}
+.cw-sidebar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 8px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: #fff;
+}
+.cw-sidebar-row.active {
+  border-color: var(--teal, #0F6E56);
+  background: #F2FFFD;
+}
+.cw-sidebar-word-btn {
+  border: none;
+  background: transparent;
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 14px;
+  color: var(--navy);
+  cursor: pointer;
+  padding: 2px 2px;
+  text-align: left;
+}
+.cw-sidebar-chip {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #EAF3FF;
+  color: #08729a;
+  white-space: nowrap;
+}
+
+/* Result panel — the big-canvas review/edit template rendered into the
+   existing #resultBody. Reuses the same .cw-box / .cw-edit-box / .cw-gap /
+   etc. elements and CSS as the (now-retired) sidebar cards, which is why
+   there's no duplicate box/editor styling here — only layout for the
+   panel shell itself. */
+.cwp-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cwp-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.cwp-word {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: clamp(32px, 4vw, 44px);
+  color: var(--navy);
+}
+.cwp-hint {
+  font-size: 13px;
+  color: var(--navy-mid);
+  margin-bottom: 8px;
+}
+.cwp-split-display {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: #FBFAF6;
+}
+.cwp-split-text {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--navy);
+  letter-spacing: 1px;
+}
+.cwp-syllable-card {
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.cwp-syllable-heading {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.cwp-notice {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #6b5a1f;
+  background: #FFF8E1;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.cwp-notice.strong {
+  color: #7a2e1a;
+  background: #FFE8E0;
+  font-weight: 700;
+}
+.cwp-general-notice {
+  font-size: 12.5px;
+  color: var(--navy-mid);
+  font-style: italic;
+}
+.cwp-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+}
+.cwp-actions .cw-add-hint {
+  margin-top: 0;
+}
+
+/* ─── Step 4: approved v6 editor — underline grouping, syllable dividers,
+   select-then-confirm silent marking, boxed tiles with phoneme labels ─── */
+.cwp-letterrow {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  user-select: none;
+}
+.letter {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: clamp(26px, 5vw, 38px);
+  color: var(--navy);
+  padding: 6px 3px 3px;
+  line-height: 1;
+  border-bottom: 4px solid #08729A;
+  border-radius: 4px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.letter.silent {
+  color: #9C96AE;
+  border-bottom-style: dashed;
+  border-bottom-color: #9C96AE;
+}
+.letter.selected {
+  background: #FFF3E0;
+  box-shadow: 0 0 0 2px #B25E09;
+}
+.letter:hover { filter: brightness(0.94); }
+.gap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 30px;
+  min-width: 30px;
+  padding: 6px 0 3px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.gap.joined { border-bottom: 4px solid #08729A; }
+.gap.joined.silent { border-bottom: 4px dashed #9C96AE; }
+.gap.grapheme { border-bottom: 4px solid transparent; }
+.gap.syllable { width: 42px; min-width: 42px; }
+.gap.syllable .divider {
+  width: 6px;
+  height: 30px;
+  background: var(--coral);
+  border-radius: 4px;
+  box-shadow: 0 0 0 4px var(--coral-light);
+  margin: 0 auto 2px;
+}
+.gap.selected {
+  background: #FFF3E0;
+  box-shadow: 0 0 0 2px #B25E09;
+  border-radius: 6px;
+}
+.cwp-selection-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #FFF3E0;
+  border: 1.5px solid #B25E09;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.cwp-selection-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.cwp-selection-actions button {
+  font-size: 12.5px !important;
+  padding: 7px 12px !important;
+}
+.cwp-sound-editor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-weight: 800;
+}
+.cwp-sound-input {
+  width: 92px;
+  border: 1.5px solid #B25E09;
+  border-radius: 8px;
+  padding: 7px 9px;
+  font: 800 14px var(--font-head);
+  color: var(--navy);
+  background: #fff;
+}
+.cwp-sound-picker-panel {
+  align-items: stretch;
+}
+.cwp-sound-picker {
+  width: 100%;
+  display: grid;
+  gap: 8px;
+}
+.cwp-sound-picker-title {
+  font-weight: 900;
+  color: var(--navy);
+}
+.cwp-sound-group {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  align-items: start;
+  gap: 8px;
+}
+.cwp-sound-group-label {
+  padding-top: 6px;
+  font-weight: 800;
+  color: var(--navy-mid);
+}
+.cwp-sound-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.cwp-sound-choice {
+  min-width: 45px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--navy);
+  padding: 5px 7px;
+  font: 900 13px var(--font-head);
+  cursor: pointer;
+}
+.cwp-sound-choice small {
+  display: block;
+  margin-top: 1px;
+  color: var(--navy-mid);
+  font: 600 9px var(--font-body);
+}
+.cwp-sound-choice:hover,
+.cwp-sound-choice.current {
+  border-color: var(--teal-dark);
+  background: var(--teal-light);
+  box-shadow: 0 0 0 1px var(--teal-dark);
+}
+@media (max-width: 700px) {
+  .cwp-sound-group { grid-template-columns: 1fr; gap: 4px; }
+  .cwp-sound-group-label { padding-top: 0; }
+}
+.cwp-syllable-line {
+  font-size: 13px;
+  color: var(--navy-mid);
+}
+.cwp-syllable-text {
+  font-family: var(--font-head);
+  font-weight: 900;
+  color: var(--navy);
+  letter-spacing: .5px;
+}
+.cwp-boxrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+}
+.cwp-soundbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.cwp-tiles {
+  display: flex;
+  gap: 3px;
+  border: 2px solid #08729A;
+  border-radius: 10px;
+  background: #EAF3FF;
+  padding: 5px;
+}
+.cwp-tile {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--navy);
+  background: #fff;
+  border: 1.5px solid #08729A;
+  border-radius: 6px;
+  padding: 4px 7px;
+  min-width: 14px;
+  text-align: center;
+}
+.cwp-phoneme {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 12.5px;
+  color: #08729A;
+}
+.cwp-outside-line {
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  font-size: 13px;
+}
+.cwp-outside-tag {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #9C96AE;
+  margin-right: 8px;
+}
+.cwp-outside-letters {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 18px;
+  color: #9C96AE;
+  border-bottom: 3px dashed #9C96AE;
+  padding-bottom: 2px;
+}
+.cwp-warning {
+  font-size: 12.5px;
+  line-height: 1.4;
+  background: #FFF3E0;
+  border: 1.5px solid #B25E09;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.cwp-warning strong { color: #B25E09; }
+.cwp-warning ul { margin: 6px 0 0; padding-left: 20px; }
+
+/* Give the syllable-divider editor a bigger, easier-to-tap footprint now
+   that it lives in the large Result panel instead of the narrow sidebar. */
+.cw-syllable-editor {
+  font-size: 28px !important;
+}
+.cw-letter {
+  padding: 6px 2px !important;
+}
+.cw-gap {
+  width: 16px !important;
+  font-size: 20px !important;
+  color: var(--navy-mid) !important;
+  opacity: .55;
+}
+.cw-gap:hover {
+  opacity: 1;
+}
+.cw-gap.active {
+  opacity: 1;
+  color: var(--coral) !important;
+}
+.cw-syllable-preview {
+  font-size: 16px !important;
+}
+
+@media (max-width: 900px) {
+  .cwp-word {
+    font-size: 30px;
+  }
+}
 </style>
 <link rel="stylesheet" href="./firebase-tool-gate.css">
 <script type="module" src="./firebase-tool-gate.js"></script>
@@ -2166,9 +2918,8 @@ main {
         <input id="wordInput" type="text" value="" placeholder="type a word..." autocomplete="off" />
         <button class="go" id="goBtn" title="Map word">→</button>
       </div>
-      <p class="hint">Choose a phonics category and pattern. The built-in bank avoids words with extra spelling complications when possible.</p>
 
-      
+      <p class="label">Browse by Phonics</p>
       <div class="spinner-style-selects">
         <div class="select-group">
           <p class="label">Phonics Category</p>
@@ -2202,35 +2953,50 @@ main {
         <div class="vowel-tabs" id="vowelTabs"></div>
       </div>
 
-      <div class="filters">
-        <select id="countFilter" aria-label="Filter by phoneme count">
-          <option value="all">All counts</option>
-          <option value="3">3 phonemes</option>
-          <option value="4">4 phonemes</option>
-          <option value="5">5 phonemes</option>
-          <option value="6">6+ phonemes</option>
-        </select>
-        <select id="patternFilter" aria-label="Filter by pattern">
-          <option value="all">All patterns</option>
-          <option value="digraph">Includes digraph</option>
-          <option value="blend">Includes blend</option>
-          <option value="flsz">FLSZ ending</option>
-          <option value="tchdge">-tch / -dge</option>
-        </select>
-      </div>
-
-      <p class="label">Quick examples</p>
-      <div class="examples" id="exampleChips"></div>
-
       <details class="bank">
         <summary class="bank-top"><p class="label" style="margin:0">Browse supported words</p><span class="bank-count" id="bankCount">0 words</span></summary>
+        <div class="filters">
+          <select id="countFilter" aria-label="Filter by phoneme count">
+            <option value="all">All counts</option>
+            <option value="3">3 phonemes</option>
+            <option value="4">4 phonemes</option>
+            <option value="5">5 phonemes</option>
+            <option value="6">6+ phonemes</option>
+          </select>
+          <select id="patternFilter" aria-label="Filter by pattern">
+            <option value="all">All patterns</option>
+            <option value="digraph">Includes digraph</option>
+            <option value="blend">Includes blend</option>
+            <option value="flsz">FLSZ ending</option>
+            <option value="tchdge">-tch / -dge</option>
+          </select>
+        </div>
         <div class="word-groups" id="wordGroups"></div>
       </details>
 
-      <div class="lesson-tray" aria-label="Words selected for Letterbox Lesson Builder">
-        <div class="tray-top"><span class="tray-title">Your lesson list</span><span class="tray-count" id="trayCount">0 words</span></div>
-        <p class="lesson-tray-guide">Add mapped words, then teach or download.</p>
-        <div class="tray-words" id="lessonTray"><span class="tray-empty">Add mapped words here. Words are auto-sequenced by phoneme count, spelling complexity, and rhyme spacing when possible.</span></div>
+      <div class="spelling-list-block" id="customWordsBlock">
+        <p class="label" style="margin:0 0 4px">Add a Spelling List</p>
+        <p class="hint">Paste multiple words at once.</p>
+        <textarea id="customWordsInput" class="custom-words-textarea" rows="2" placeholder="e.g. picnic, sunset, backpack"></textarea>
+        <div class="custom-words-actions">
+          <button class="small-secondary" id="mapCustomWordsBtn" type="button">Add Words</button>
+        </div>
+      </div>
+
+      <div class="your-words-block">
+        <div class="bank-top"><p class="label" style="margin:0">Working list</p><span class="bank-count" id="customWordsCount">0 words</span></div>
+        <div class="custom-words-list" id="customWordsList">
+          <p class="cw-empty">Words you type or paste will appear here — click one to review or edit its mapping. Check a word to include it in the lesson.</p>
+        </div>
+      </div>
+
+      <div class="lesson-tray" aria-label="Words included in the Letterbox Lesson">
+        <!-- Step 6: heading text removed as redundant with the Working List
+             checkboxes above; #trayCount stays in the DOM (hidden) so the
+             unchanged base renderLessonTray()/its Step 5 wrap can keep
+             writing to it without a pipeline change. -->
+        <div class="tray-top" style="display:none"><span class="tray-title">Included in lesson</span><span class="tray-count" id="trayCount">0 words</span></div>
+        <div class="tray-words" id="lessonTray" hidden></div>
         <div class="tray-actions">
           <button class="small-secondary launch-lesson-btn" id="buildLessonBtn" type="button">Start Letterbox Lesson</button>
           <button class="tray-action primary" id="downloadLessonPdfBtn" onclick="requestLessonPdfDownload()">Download Lesson PDF</button>
@@ -2253,6 +3019,7 @@ main {
   <footer>Literacy Arcade • Phoneme Counter</footer>
 </main>
 
+<script src="phoneme-mapping-engine.js"></script>
 <script>
 const SHORT_VOWEL_WORDS = {
   'short-a': ['cat','hat','mat','sat','bat','fat','nap','rat','fan','shack','chat','rack','sack','mash','cash','bath','map','tap','crab','drab','scab','slab','stab','black','crack','smack','snack','snag','flag','glad','track','stack','flap','clap','slap','snap','fact','raft','smash','thrash','trash','brat','flat','vast','brass','trap','brash','clash','crash','flash','slash','shaft','class','glass','grant','plant','slant','flask','blast','scratch','clasp','scalp','splat','strand','stand','bland'],
@@ -2765,16 +3532,15 @@ function getFilteredMaps(){
   }).sort((a,b)=>a.phonemeCount-b.phonemeCount || a.word.localeCompare(b.word));
 }
 function renderExamples(){
+  // Quick Examples was removed from the left panel in Step 5; this is kept
+  // as a no-op (rather than deleting every call site) so getFilteredMaps()
+  // consumers elsewhere don't need to change.
+  if (!document.getElementById('exampleChips')) return;
   const maps = getFilteredMaps();
-
-  // Important: examples should match the selected filters.
-  // If no words match, do not fall back to unrelated examples.
   const examples = maps.slice(0,8).map(m=>m.word);
-
   document.getElementById('exampleChips').innerHTML =
     examples.map(w=>`<button class="chip" data-word="${w}">${w}</button>`).join('') ||
     '<span class="tray-empty">No quick examples match those filters.</span>';
-
   document.querySelectorAll('#exampleChips .chip').forEach(c=>c.addEventListener('click',()=>mapAndRender(c.dataset.word)));
 }
 function renderBank(){
@@ -2825,7 +3591,7 @@ function renderUnsupported(word){
 function renderEmpty(){
   document.getElementById('countPill').textContent='— phonemes';
   document.getElementById('vowelPill').textContent='Choose a word';
-  document.getElementById('resultBody').innerHTML=`<div class="empty"><div><strong>Choose a supported word</strong><p>Search or select a word to map phonemes to graphemes and plan a letterbox lesson.</p></div></div>`;
+  document.getElementById('resultBody').innerHTML=`<div class="empty"><div><strong>Type or choose a word</strong><p>Enter any spelling word above, paste a list, or pick one from the word bank to see its mapping.</p></div></div>`;
 }
 function shuffle(arr){
   // Deterministic enough for repeated redraws but still scrambled for students.
@@ -2953,19 +3719,36 @@ async function saveCurrentActivity() {
       return;
     }
 
-    const gate = await saveGuard.canCreateActivity(user, db);
-    if (!gate.allowed) { saveGuard.showUpgradeModal(gate); return; }
-
     const activityData = buildLetterboxActivityData(title.trim());
-    activityData.createdAt = firestore.serverTimestamp();
-    activityData.updatedAt = firestore.serverTimestamp();
-    activityData.ownerUid = user.uid;
-    activityData.shareEnabled = false;
 
-    await firestore.addDoc(
-      firestore.collection(db, `users/${user.uid}/activities`),
-      activityData
-    );
+    if (resumingActivityId) {
+      // Editing an already-saved lesson: update only the mapping/lesson
+      // fields (title, words, updatedAt) on the existing document.
+      // Sharing state, collections, ownerUid, createdAt, and anything
+      // else already stored on it are left untouched. Not gated by
+      // canCreateActivity since this doesn't create a new saved activity.
+      await firestore.updateDoc(
+        firestore.doc(db, `users/${user.uid}/activities`, resumingActivityId),
+        {
+          title: activityData.title,
+          words: activityData.words,
+          updatedAt: firestore.serverTimestamp()
+        }
+      );
+    } else {
+      const gate = await saveGuard.canCreateActivity(user, db);
+      if (!gate.allowed) { saveGuard.showUpgradeModal(gate); return; }
+
+      activityData.createdAt = firestore.serverTimestamp();
+      activityData.updatedAt = firestore.serverTimestamp();
+      activityData.ownerUid = user.uid;
+      activityData.shareEnabled = false;
+
+      await firestore.addDoc(
+        firestore.collection(db, `users/${user.uid}/activities`),
+        activityData
+      );
+    }
 
     if (msg) {
       showSavedActivityMessage(msg);
@@ -3016,7 +3799,11 @@ document.getElementById('goBtn').addEventListener('click',()=>mapAndRender(docum
 document.getElementById('wordInput').addEventListener('keydown',e=>{if(e.key==='Enter') mapAndRender(e.target.value)});
 document.getElementById('countFilter').addEventListener('change',()=>{renderExamples();renderBank();showEmptyState();});
 document.getElementById('patternFilter').addEventListener('change',()=>{renderExamples();renderBank();showEmptyState();});
-document.getElementById('clearLessonBtn').addEventListener('click',clearLessonList);
+// Bound as a call-through, not a direct function reference: clearLessonList
+// is reassigned later (the Step 5 wrap below), and a direct reference here
+// would have captured that earlier value permanently, silently skipping
+// the reassigned version on every click.
+document.getElementById('clearLessonBtn').addEventListener('click',()=>clearLessonList());
 
 async function savePendingActivityAfterLogin() {
   const params = new URLSearchParams(window.location.search);
@@ -3287,7 +4074,16 @@ function normalizeWordMapForPdf(item){
   const phonemeCount = item.phonemeCount || item.count || letterboxes.length || phonemes.filter(p => !String(p).toLowerCase().includes('silent')).length;
 
   const silentOutsideBoxes = item.silentOutsideBoxes || [];
-  return { word, graphemes, phonemes, letterboxes, tiles, note, vowelFocus, phonemeCount, silentOutsideBoxes };
+  const syllables = Array.isArray(item.syllables) && item.syllables.length > 1
+    ? item.syllables.map(syllable => ({
+        text: syllable.text || '',
+        letterboxes: syllable.letterboxes || syllable.boxes || syllable.graphemes || [],
+        phonemes: syllable.phonemes || [],
+        silentOutsideBoxes: syllable.silentOutsideBoxes || syllable.outsideLetters || []
+      }))
+    : [{ text: word, letterboxes, phonemes, silentOutsideBoxes }];
+  const syllableCount = syllables.length;
+  return { word, graphemes, phonemes, letterboxes, tiles, note, vowelFocus, phonemeCount, silentOutsideBoxes, syllables, syllableCount };
 }
 
 
@@ -3329,7 +4125,10 @@ function getLessonWordsForPdf(){
     let textWord = el.textContent || '';
 
     // Remove x/× delete icon text
-    textWord = textWord.replace(/[×x✕]/g, '').trim();
+    // Only strip the actual × / ✕ close-icon characters used by the tray
+    // chip markup — a bare ASCII "x" here would wrongly truncate any real
+    // word containing the letter x (e.g. "fox", "box", "six").
+    textWord = textWord.replace(/[×✕]/g, '').trim();
 
     const finalWord = datasetWord || textWord;
 
@@ -3378,6 +4177,35 @@ function escapePdfHtml(value){
 function renderPdfBoxes(items, className){
   if (!items || !items.length) return '<span class="empty">—</span>';
   return `<div class="${className}">` + items.map(item => `<span>${escapePdfHtml(item)}</span>`).join('') + '</div>';
+}
+
+function renderPdfLetterTiles(letters){
+  return String(letters || '').split('').map(letter => `<span>${escapePdfHtml(letter)}</span>`).join('');
+}
+
+function renderPdfWholeWordMap(map){
+  const syllables = Array.isArray(map.syllables) && map.syllables.length
+    ? map.syllables
+    : [{ text: map.word, letterboxes: map.letterboxes || [], phonemes: map.phonemes || [], silentOutsideBoxes: map.silentOutsideBoxes || [] }];
+
+  const soundBoxes = [];
+  syllables.forEach((syllable, syllableIndex) => {
+    (syllable.letterboxes || []).forEach((grapheme, boxIndex) => {
+      soundBoxes.push(`
+        <span class="pdf-sound-box">
+          <span class="pdf-letter-tiles">${renderPdfLetterTiles(grapheme)}</span>
+          <span class="pdf-phoneme">${escapePdfHtml((syllable.phonemes || [])[boxIndex] || '')}</span>
+        </span>`);
+    });
+    if (syllableIndex < syllables.length - 1) {
+      soundBoxes.push('<span class="pdf-syllable-divider" aria-label="Syllable break"></span>');
+    }
+  });
+
+  const outside = syllables.flatMap(syllable => syllable.silentOutsideBoxes || []);
+  return `
+    <div class="pdf-whole-word-map">${soundBoxes.join('')}</div>
+    ${outside.length ? `<div class="pdf-outside-row"><span class="map-label">Outside</span>${outside.map(group => `<span class="pdf-outside-group">${renderPdfLetterTiles(group)}</span>`).join('')}</div>` : ''}`;
 }
 
 
@@ -3439,22 +4267,17 @@ function downloadLessonPdf(){
       <div class="word-card-header">
         <div class="word-title-line">
           <span class="word-number">Word ${index + 1}</span>
-          <h2>${escapePdfHtml(m.word)}</h2>
+          <h2 class="student-print">${escapePdfHtml(m.word)}</h2>
         </div>
-        <div class="count-pill">${escapePdfHtml(m.phonemeCount)} phonemes</div>
+        <div class="word-card-pills">
+          <div class="count-pill">${escapePdfHtml(m.phonemeCount)} phonemes</div>
+          ${m.syllableCount > 1 ? `<div class="count-pill syllable-count">${m.syllableCount} syllables</div>` : ''}
+        </div>
       </div>
 
-      <div class="map-grid compact">
-        <div class="map-label">Graphemes</div>
-        <div>${renderPdfBoxes(m.graphemes, 'mini-boxes')}</div>
-
-        <div class="map-label">Phonemes</div>
-        <div>${renderPdfBoxes(m.phonemes, 'mini-boxes phoneme-boxes')}</div>
-
-        <div class="map-label">Sound boxes</div>
-        <div>${renderPdfBoxes(m.letterboxes, 'sound-boxes')}${m.silentOutsideBoxes && m.silentOutsideBoxes.length ? `<span class="silent-e-print">${m.silentOutsideBoxes.map(escapePdfHtml).join(' ')}</span>` : ''}</div>
-
-      </div>
+      ${m.syllableCount > 1 ? `<div class="syllable-division"><span class="map-label">Syllables</span><span class="student-print">${m.syllables.map(s => escapePdfHtml(s.text)).join(' <b>|</b> ')}</span></div>` : ''}
+      <div class="map-label whole-word-label">Whole-word sound boxes</div>
+      ${renderPdfWholeWordMap(m)}
     </section>
   `).join('');
 
@@ -3468,6 +4291,9 @@ function downloadLessonPdf(){
     <html>
     <head>
       <title>Letterbox Lesson Plan</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&display=swap" rel="stylesheet">
       <style>
         @page { margin: 0.35in; }
         * { box-sizing: border-box; }
@@ -3570,6 +4396,7 @@ function downloadLessonPdf(){
           padding: 3px 7px;
           font-size: 12px;
           font-weight: 700;
+          font-family: 'Lexend', Arial, sans-serif;
         }
         .small-note {
           margin-top: 5px !important;
@@ -3619,6 +4446,107 @@ function downloadLessonPdf(){
           font-size: 12px;
           font-weight: 700;
           white-space: nowrap;
+        }
+        .word-card-pills {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 5px;
+          flex-wrap: wrap;
+        }
+        .syllable-count {
+          background: #FFF3E0;
+          border-color: #E7B96B;
+          color: #8A4B08;
+        }
+        .student-print,
+        .pdf-letter-tiles,
+        .pdf-phoneme,
+        .pdf-outside-group {
+          font-family: 'Lexend', Arial, sans-serif;
+        }
+        .syllable-division {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: -1px 0 6px;
+          color: #1A2340;
+          font-size: 13px;
+        }
+        .syllable-division b {
+          color: #D85A30;
+          padding: 0 3px;
+        }
+        .whole-word-label {
+          margin-bottom: 4px;
+        }
+        .pdf-whole-word-map {
+          display: flex;
+          align-items: stretch;
+          flex-wrap: nowrap;
+          gap: 5px;
+          width: 100%;
+        }
+        .pdf-sound-box {
+          flex: 1 1 0;
+          min-width: 38px;
+          min-height: 54px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          gap: 4px;
+          border: 2px solid #1A2340;
+          border-radius: 8px;
+          background: #fff;
+          padding: 5px 3px 4px;
+        }
+        .pdf-letter-tiles {
+          display: flex;
+          justify-content: center;
+          gap: 2px;
+        }
+        .pdf-letter-tiles > span,
+        .pdf-outside-group > span {
+          min-width: 18px;
+          height: 22px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid #D85A30;
+          border-radius: 5px;
+          background: #FFF0EE;
+          color: #1A2340;
+          font-size: 12px;
+          font-weight: 700;
+        }
+        .pdf-phoneme {
+          color: #0F6E56;
+          font-size: 10px;
+          font-weight: 600;
+          line-height: 1;
+        }
+        .pdf-syllable-divider {
+          flex: 0 0 4px;
+          align-self: center;
+          height: 46px;
+          border-radius: 999px;
+          background: #D85A30;
+          margin: 0 2px;
+        }
+        .pdf-outside-row {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-top: 5px;
+        }
+        .pdf-outside-group {
+          display: inline-flex;
+          gap: 2px;
+          padding: 3px 5px;
+          border: 1px dashed #6B7A99;
+          border-radius: 7px;
+          background: #FAF8F4;
         }
         .map-grid {
           display: grid;
@@ -4030,7 +4958,7 @@ main {
   flex: 1 1 auto !important;
   min-height: 0 !important;
   display: grid !important;
-  grid-template-columns: 345px minmax(0, 1fr) !important;
+  grid-template-columns: 375px minmax(0, 1fr) !important;
   gap: 16px !important;
   align-items: stretch !important;
 }
@@ -5906,6 +6834,1225 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('load', () => {
   forceInitialEmptyStateV47();
   setTimeout(forceInitialEmptyStateV47, 100);
+});
+
+
+// ── Unified word review: one word list, one big-panel editor ──────────────
+// Stage 6 Step 4: production port of the approved v6 prototype interaction,
+// backed by phoneme-mapping-engine.js's generateWordMapping() for custom
+// words and an adapter over the untouched vetted mapWord() for built-in
+// words, so both render through the SAME model and the SAME panel. The
+// lesson/save/PDF pipeline below (cwBuildCustomLessonMapObject and later)
+// is unchanged from Stage 4 — this step only changes how a word's mapping
+// is represented and edited, not how it flows into a saved lesson.
+//
+// entry = {
+//   id, word, source: 'vetted'|'exception'|'generated'|'unavailable',
+//   confidence: 'vetted'|'high'|'low', note,
+//   gaps: [...],           // flat per-letter boundary array, one entry per
+//                          // letter gap: 0 joined/same sound box, 1 new
+//                          // sound box (same syllable), 2 syllable break.
+//                          // This is the LIVE editing state — the same
+//                          // representation the v6 prototype used, kept
+//                          // per-word (not per-syllable) on purpose so a
+//                          // syllable break is just another gap value,
+//                          // never a separate data structure to keep in
+//                          // sync.
+//   outsideStarts: Set,    // letter-index group-starts marked silent/
+//                          // outside (rare — reached only through the
+//                          // select-a-letter-then-confirm action).
+//   knownPhonemes: {idx: phoneme}, // phoneme for each group's default
+//                          // start index, from the vetted bank or
+//                          // generateWordMapping. A box a teacher has
+//                          // regrouped falls back to
+//                          // PhonemeMappingEngine.phonemeForGrapheme().
+//   reviewed: bool,        // gates Add to Lesson; true for vetted and
+//                          // high-confidence words immediately, false for
+//                          // low-confidence until acknowledged.
+//   selectedRange: {start,end}|null, // contiguous letter selection used by
+//                          // explicit group/split and silent actions
+//   selectionAnchor: idx|null, // first letter selected; a second letter
+//                          // selects the entire contiguous range between
+//   selectedGap: idx|null, // gap selected for explicit syllable actions
+//   baseline: { syllableCount, soundBoxCount } // captured once at build
+//                          // time, compared against the live edited state
+//                          // for the non-blocking validation warning.
+// }
+//
+// Multisyllabic words are ONE entry — the syllable break lives in `gaps`,
+// not a separate list. Splitting into separate lesson words still happens
+// only at "Add to Lesson" time (cwAddMultisyllabicToLesson), unchanged
+// Stage 4/5 behavior — actually changing that is a later step.
+let customWordEntries = [];
+let cwIdCounter = 0;
+let activeEntryId = null;
+
+// Words added to the actual Letterbox Lesson. Kept separate from
+// lessonWords (the existing vetted-word array) so renderLessonTray()'s
+// original `lessonWords = mapped.map(m=>m.word)` reassignment — which
+// drops anything mapWord() can't resolve — never touches, and can never
+// silently discard, a custom mapping.
+let customLessonItems = [];        // ordered array of word strings
+let customLessonMapByWord = {};    // word -> mapWord()-shaped mapping object
+
+// Set when the page was opened via a dashboard "Edit Words" action for an
+// already-saved letterbox lesson (see cwResumeSavedActivity). When set,
+// saving updates that same Firestore document instead of creating a new one.
+let resumingActivityId = null;
+
+function cwNextId() {
+  cwIdCounter += 1;
+  return 'cw' + cwIdCounter;
+}
+
+function cwParseInput(text) {
+  const seen = new Set();
+  const words = [];
+  String(text || '').split(/[,;\n\r\t ]+/).forEach(raw => {
+    const w = raw.trim().toLowerCase().replace(/[^a-z]/g, '');
+    if (w && !seen.has(w)) { seen.add(w); words.push(w); }
+  });
+  return words;
+}
+
+// Phoneme symbols that count as "this syllable has a vowel sound" for the
+// no-vowel-syllable validation check — matches every vowel-producing entry
+// phoneme-mapping-engine.js can actually emit (short/long vowels, schwa,
+// r-controlled vowels, diphthongs, /OO/).
+const CW_VOWEL_PHONEMES = new Set(['/ă/', '/ĕ/', '/ĭ/', '/ŏ/', '/ŭ/', '/ā/', '/ē/', '/ī/', '/ō/', '/ū/', '/ə/', '/ar/', '/or/', '/er/', '/oy/', '/aw/', '/ow/', '/OO/', '/oo/']);
+
+const CW_SOUND_PICKER_GROUPS = [
+  { label: 'Short vowels', sounds: [['/ă/', 'apple'], ['/ĕ/', 'egg'], ['/ĭ/', 'itch'], ['/ŏ/', 'octopus'], ['/ŭ/', 'up']] },
+  { label: 'Long vowels', sounds: [['/ā/', 'acorn'], ['/ē/', 'eat'], ['/ī/', 'ice'], ['/ō/', 'open'], ['/ū/', 'use']] },
+  { label: 'Other vowels', sounds: [['/oo/', 'book'], ['/OO/', 'moon'], ['/aw/', 'saw'], ['/ow/', 'cow'], ['/oy/', 'boy'], ['/ə/', 'about']] },
+  { label: 'R-controlled', sounds: [['/ar/'], ['/or/'], ['/er/']] },
+  { label: 'Consonants', sounds: '/b/ /d/ /f/ /g/ /h/ /j/ /k/ /l/ /m/ /n/ /p/ /r/ /s/ /t/ /v/ /w/ /y/ /z/'.split(' ').map(sound => [sound]) },
+  { label: 'Other consonants', sounds: [['/sh/'], ['/ch/'], ['/th/'], ['/ŋ/']] }
+];
+
+// Turns a { graphemes:[{letters,phoneme}], outside:[{letters}] }[] syllable
+// list — generateWordMapping()'s own shape, or the single-syllable version
+// built from a vetted mapWord() result below — into the flat per-letter
+// gaps/outsideStarts/knownPhonemes the live v6 editor actually works with.
+// A syllable boundary becomes gap value 2 on the letter right before the
+// next syllable starts; everything else follows the same grapheme-group
+// logic the boundary-editor prototype used.
+function cwFlattenSyllables(word, syllables) {
+  const gaps = [];
+  const outsideStarts = new Set();
+  const knownPhonemes = {};
+  let pos = 0;
+  const total = word.length;
+  syllables.forEach((syl, sylIdx) => {
+    const groups = [
+      ...syl.graphemes.map(g => ({ letters: g.letters, phoneme: g.phoneme, outside: false })),
+      ...syl.outside.map(g => ({ letters: g.letters, outside: true }))
+    ];
+    groups.forEach((g, gi) => {
+      const start = pos;
+      if (g.outside) outsideStarts.add(start);
+      else knownPhonemes[start] = g.phoneme;
+      for (let li = 0; li < g.letters.length; li++) {
+        pos += 1;
+        if (pos < total) {
+          if (li !== g.letters.length - 1) {
+            gaps.push(0);
+          } else {
+            const isLastGroupInSyllable = gi === groups.length - 1;
+            const isLastSyllable = sylIdx === syllables.length - 1;
+            gaps.push(isLastGroupInSyllable && !isLastSyllable ? 2 : 1);
+          }
+        }
+      }
+    });
+  });
+  return { gaps, outsideStarts, knownPhonemes };
+}
+
+// The curated word bank is single-syllable by construction, so this always
+// returns a one-syllable array — cwFlattenSyllables() above handles both
+// shapes identically either way, which is what lets vetted and custom
+// words share the exact same rendering/editing code below.
+function cwSyllablesFromVetted(vetted) {
+  const boxes = vetted.letterboxes || vetted.graphemes || [];
+  const phonemes = vetted.phonemes || [];
+  const outsideBoxes = vetted.silentOutsideBoxes || [];
+  return [{
+    text: vetted.word,
+    graphemes: boxes.map((b, i) => ({
+      letters: String(b),
+      phoneme: phonemes[i] || (typeof PhonemeMappingEngine !== 'undefined' ? PhonemeMappingEngine.phonemeForGrapheme(String(b)) : '')
+    })),
+    outside: outsideBoxes.map(b => ({ letters: String(b) }))
+  }];
+}
+
+function cwGetGroups(word, gaps) {
+  const groups = [];
+  let start = 0;
+  for (let k = 0; k < word.length; k++) {
+    const isLast = k === word.length - 1;
+    if (isLast || gaps[k] >= 1) { groups.push({ start, end: k + 1 }); start = k + 1; }
+  }
+  return groups;
+}
+function cwGroupAt(groups, letterIdx) {
+  return groups.find(g => letterIdx >= g.start && letterIdx < g.end);
+}
+function cwGetSyllableRanges(word, gaps) {
+  const syls = [];
+  let start = 0;
+  for (let k = 0; k < word.length; k++) {
+    const isLast = k === word.length - 1;
+    if (isLast || gaps[k] === 2) { syls.push({ start, end: k + 1, text: word.slice(start, k + 1) }); start = k + 1; }
+  }
+  return syls;
+}
+function cwPhonemeFor(entry, group) {
+  const known = entry.knownPhonemes[group.start];
+  if (known) return known;
+  const text = entry.word.slice(group.start, group.end);
+  return typeof PhonemeMappingEngine !== 'undefined' ? PhonemeMappingEngine.phonemeForGrapheme(text) : `/${text}/`;
+}
+
+function cwEscapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+  }[ch]));
+}
+
+function cwNormalizePhonemeLabel(value) {
+  const inner = String(value || '').trim().replace(/^\/+|\/+$/g, '').trim();
+  return inner ? `/${inner}/` : '';
+}
+
+function cwSoundPickerHTML(currentSound) {
+  return CW_SOUND_PICKER_GROUPS.map(group => `
+    <div class="cwp-sound-group">
+      <div class="cwp-sound-group-label">${group.label}</div>
+      <div class="cwp-sound-choices">
+        ${group.sounds.map(([sound, example]) => `
+          <button type="button" class="cwp-sound-choice${sound === currentSound ? ' current' : ''}"
+            data-sound="${cwEscapeHtml(sound)}" aria-pressed="${sound === currentSound ? 'true' : 'false'}">
+            ${cwEscapeHtml(sound)}${example ? `<small>${example}</small>` : ''}
+          </button>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// Captured once at build time — the non-blocking validation banner compares
+// the CURRENT edited state against this, so "this removed several sound
+// boxes" stays meaningful after edits, not just at first load.
+function cwSnapshotCounts(entry) {
+  const syls = cwGetSyllableRanges(entry.word, entry.gaps);
+  const groups = cwGetGroups(entry.word, entry.gaps);
+  const soundBoxes = groups.filter(g => !entry.outsideStarts.has(g.start)).length;
+  return { syllableCount: syls.length, soundBoxCount: soundBoxes };
+}
+
+// Built-in bank words always win (mapWord() — untouched, still fully
+// patched by the v20-44 layers above) and route through the adapter into
+// this same model; only a word mapWord() can't resolve falls through to
+// generateWordMapping(). Vetted words start `reviewed: true` (already
+// trusted); generated/exception words start reviewed only when the engine
+// itself reports high confidence — low-confidence words need one
+// acknowledgment before they can join a lesson.
+function cwBuildEntry(word) {
+  const vetted = typeof mapWord === 'function' ? mapWord(word) : null;
+  if (vetted && Array.isArray(vetted.phonemes) && vetted.phonemes.length) {
+    const flat = cwFlattenSyllables(vetted.word, cwSyllablesFromVetted(vetted));
+    const entry = {
+      id: cwNextId(), word: vetted.word, source: 'vetted', confidence: 'vetted', note: vetted.note || '',
+      gaps: flat.gaps, outsideStarts: flat.outsideStarts, knownPhonemes: flat.knownPhonemes,
+      reviewed: true, selectedRange: null, selectionAnchor: null, selectedGap: null, editingSoundStart: null, typingCustomSound: false, includedInLesson: false
+    };
+    entry.baseline = cwSnapshotCounts(entry);
+    return entry;
+  }
+
+  if (typeof PhonemeMappingEngine === 'undefined' || typeof PhonemeMappingEngine.generateWordMapping !== 'function') {
+    return { id: cwNextId(), word, source: 'unavailable' };
+  }
+
+  const wm = PhonemeMappingEngine.generateWordMapping(word);
+  const flat = cwFlattenSyllables(wm.word, wm.syllables);
+  const entry = {
+    id: cwNextId(), word: wm.word, source: wm.source, confidence: wm.confidence, note: wm.note || '',
+    gaps: flat.gaps, outsideStarts: flat.outsideStarts, knownPhonemes: flat.knownPhonemes,
+    reviewed: wm.confidence === 'high', selectedRange: null, selectionAnchor: null, selectedGap: null, editingSoundStart: null, typingCustomSound: false, includedInLesson: false
+  };
+  entry.baseline = cwSnapshotCounts(entry);
+  return entry;
+}
+
+// ---- Live editing actions — every operation only regroups the word's own
+// letters or toggles whether a group is silent; none of them add, remove,
+// or retype a letter, so the word's actual spelling can't drift. ----
+function cwCycleGap(entry, i) {
+  entry.gaps[i] = (entry.gaps[i] + 1) % 3;
+  entry.selectedRange = null;
+  entry.selectionAnchor = null;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
+  entry.reviewed = true; // an intentional edit counts as having reviewed it
+  // Bulk-pasted (or otherwise already-included) low-confidence words are
+  // marked includedInLesson before they're reviewed; the storage add was
+  // deferred until now — see cwSyncInclusionStorage.
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+}
+
+function cwSelectGap(entry, i) {
+  cwClearLetterSelection(entry);
+  entry.selectedGap = i;
+  cwRenderActivePanel();
+}
+
+function cwSetSyllableBreak(entry, i) {
+  if (entry.gaps[i] === 0) return; // never split a grapheme as a side effect
+  if (entry.gaps[i] !== 2) {
+    const existingBreaks = entry.gaps
+      .map((state, index) => state === 2 && index !== i ? index : -1)
+      .filter(index => index !== -1);
+    const currentSyllableCount = entry.gaps.filter(state => state === 2).length + 1;
+    const baselineCount = entry.baseline && entry.baseline.syllableCount;
+
+    // If the mapping already has its expected number of syllables, this is
+    // a relocation: demote the nearest old break to an ordinary box boundary.
+    if (baselineCount > 1 && currentSyllableCount === baselineCount && existingBreaks.length) {
+      const nearest = existingBreaks.reduce((best, index) =>
+        Math.abs(index - i) < Math.abs(best - i) ? index : best
+      );
+      entry.gaps[nearest] = 1;
+    }
+    entry.gaps[i] = 2;
+  }
+  entry.selectedGap = i;
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+function cwRemoveSyllableBreak(entry, i) {
+  if (entry.gaps[i] !== 2) return;
+  entry.gaps[i] = 1; // preserve the sound-box boundary
+  entry.selectedGap = i;
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+// The first selected letter becomes an anchor. Selecting another letter
+// selects the whole contiguous run between them, making grouping discoverable
+// without removing the faster gap-tapping workflow.
+function cwSelectLetter(entry, idx) {
+  entry.selectedGap = null;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
+  if (!entry.selectedRange) {
+    entry.selectionAnchor = idx;
+    entry.selectedRange = { start: idx, end: idx };
+  } else if (entry.selectedRange.start === idx && entry.selectedRange.end === idx) {
+    entry.selectedRange = null;
+    entry.selectionAnchor = null;
+  } else {
+    const anchor = Number.isInteger(entry.selectionAnchor) ? entry.selectionAnchor : entry.selectedRange.start;
+    entry.selectedRange = { start: Math.min(anchor, idx), end: Math.max(anchor, idx) };
+  }
+  cwRenderActivePanel();
+}
+
+function cwClearLetterSelection(entry) {
+  entry.selectedRange = null;
+  entry.selectionAnchor = null;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
+}
+
+function cwStartSoundEdit(entry) {
+  if (!entry.selectedRange) return;
+  const g = cwGroupAt(cwGetGroups(entry.word, entry.gaps), entry.selectedRange.start);
+  if (!g || entry.selectedRange.end >= g.end || entry.outsideStarts.has(g.start)) return;
+  entry.selectedRange = { start: g.start, end: g.end - 1 };
+  entry.selectionAnchor = g.start;
+  entry.editingSoundStart = g.start;
+  entry.typingCustomSound = false;
+  cwRenderActivePanel();
+}
+
+function cwShowCustomSoundInput(entry) {
+  if (!Number.isInteger(entry.editingSoundStart)) return;
+  entry.typingCustomSound = true;
+  cwRenderActivePanel();
+}
+
+function cwApplySoundEdit(entry, value) {
+  const phoneme = cwNormalizePhonemeLabel(value);
+  if (!phoneme || !Number.isInteger(entry.editingSoundStart)) return;
+  const g = cwGroupAt(cwGetGroups(entry.word, entry.gaps), entry.editingSoundStart);
+  if (!g || g.start !== entry.editingSoundStart || entry.outsideStarts.has(g.start)) return;
+  entry.knownPhonemes[g.start] = phoneme;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+function cwGroupSelectedLetters(entry) {
+  const range = entry.selectedRange;
+  if (!range || range.end <= range.start) return;
+
+  const oldGroups = cwGetGroups(entry.word, entry.gaps);
+  oldGroups.filter(g => g.end > range.start && g.start <= range.end).forEach(g => {
+    delete entry.knownPhonemes[g.start];
+    entry.outsideStarts.delete(g.start);
+  });
+
+  // Preserve any existing syllable boundary outside the selection, but make
+  // the selection itself one exact group and remove every internal boundary.
+  if (range.start > 0 && entry.gaps[range.start - 1] === 0) entry.gaps[range.start - 1] = 1;
+  for (let i = range.start; i < range.end; i++) entry.gaps[i] = 0;
+  if (range.end < entry.word.length - 1 && entry.gaps[range.end] === 0) entry.gaps[range.end] = 1;
+
+  entry.reviewed = true;
+  entry.selectedGap = null;
+  entry.editingSoundStart = null;
+  entry.typingCustomSound = false;
+  entry.selectionAnchor = range.start;
+  entry.selectedRange = { start: range.start, end: range.end };
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+function cwSplitSelectedGrapheme(entry) {
+  const range = entry.selectedRange;
+  if (!range) return;
+  const groups = cwGetGroups(entry.word, entry.gaps);
+  const g = cwGroupAt(groups, range.start);
+  if (!g || g.end - g.start < 2 || entry.outsideStarts.has(g.start)) return;
+
+  delete entry.knownPhonemes[g.start];
+  for (let i = g.start; i < g.end - 1; i++) entry.gaps[i] = 1;
+  cwClearLetterSelection(entry);
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+function cwConfirmSilentToggle(entry) {
+  if (!entry.selectedRange) return;
+  const groups = cwGetGroups(entry.word, entry.gaps);
+  const g = cwGroupAt(groups, entry.selectedRange.start);
+  if (!g) return;
+  if (entry.outsideStarts.has(g.start)) entry.outsideStarts.delete(g.start);
+  else entry.outsideStarts.add(g.start);
+  cwClearLetterSelection(entry);
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+function cwMarkReviewed(entry) {
+  entry.reviewed = true;
+  if (entry.includedInLesson) cwSyncInclusionStorage(entry);
+  cwRenderActivePanel();
+  cwRenderSidebarList();
+}
+
+// ---- Wiring confirmed custom words into the actual Letterbox Lesson ----
+// Builds an object shaped exactly like mapWord()'s return value (graphemes,
+// phonemes, phonemeCount, letterboxes, tiles, silentOutsideBoxes, note) so
+// every existing consumer — buildLetterboxActivityData, the PDF export
+// pipeline, sequenceLessonMaps — can use it without any special-casing.
+function cwBuildCustomLessonMapObject(word, mapping) {
+  const insideBoxes = mapping.boxes.filter(b => !b.outside).map(b => b.text);
+  const outsideBoxes = mapping.boxes.filter(b => b.outside).map(b => b.text);
+  const insideMappingBoxes = mapping.boxes.filter(b => !b.outside);
+  const insidePhonemes = insideMappingBoxes.map(b => b.phoneme || PhonemeMappingEngine.phonemeForGrapheme(b.text));
+  return {
+    word,
+    graphemes: [...insideBoxes, ...outsideBoxes],
+    phonemes: [...insidePhonemes, ...outsideBoxes.map(() => 'silent')],
+    phonemeCount: insideBoxes.length,
+    letterboxes: insideBoxes,
+    tiles: word.split(''),
+    silentOutsideBoxes: outsideBoxes,
+    tags: [],
+    vowelLabel: '',
+    note: mapping.note || '',
+    custom: true
+  };
+}
+
+function cwIsWordInLesson(word) {
+  return lessonWords.includes(word) || customLessonItems.includes(word);
+}
+
+function cwAddCustomWordToLesson(word, mapping) {
+  if (!mapping || !mapping.confirmed) return; // enforced here too, not just in the UI
+  if (cwIsWordInLesson(word)) return;
+  customLessonMapByWord[word] = cwBuildCustomLessonMapObject(word, mapping);
+  customLessonItems.push(word);
+  renderLessonTray();
+  cwRenderSidebarList();
+  cwRenderActivePanel();
+}
+
+function cwAddVettedWordToLesson(word) {
+  if (cwIsWordInLesson(word)) return;
+  lessonWords.push(word);
+  renderLessonTray();
+  cwRenderSidebarList();
+  cwRenderActivePanel();
+}
+
+// Adds every confirmed syllable of a multisyllabic entry as its own
+// separate lesson word — Letterbox Lesson is a one-syllable-at-a-time
+// routine, so "picnic" becomes two lesson words, "pic" and "nic", each
+// with its own confirmed mapping, never one long whole-word row.
+// Builds the flat { boxes:[{text,outside}], note, confidence, confirmed }
+// shape cwAddCustomWordToLesson()/cwBuildCustomLessonMapObject() already
+// expect — that boundary is Stage 4's save/PDF-facing pipeline and stays
+// byte-identical; this is just an adapter from the new entry model into
+// its unchanged input shape. `range` restricts to one syllable's letters
+// when adding a multisyllabic word (each syllable becomes its own lesson
+// word, unchanged Stage 4/5 behavior — see cwAddMultisyllabicToLesson).
+function cwEntryToFlatMapping(entry, range) {
+  const groups = cwGetGroups(entry.word, entry.gaps)
+    .filter(g => !range || (g.start >= range.start && g.start < range.end));
+  const boxes = groups.map(g => {
+    const outside = entry.outsideStarts.has(g.start);
+    return {
+      text: entry.word.slice(g.start, g.end),
+      outside,
+      phoneme: outside ? undefined : cwPhonemeFor(entry, g)
+    };
+  });
+  return { boxes, note: entry.note, confidence: entry.confidence, confirmed: entry.reviewed };
+}
+
+// Step 6: a multisyllabic entry joins the lesson as ONE item keyed by the
+// whole word — Letterbox Lesson now steps through its syllables in place
+// of ever having split "picnic" into separate lesson words "pic"/"nic".
+// Each syllable's own grapheme/box/phoneme/tile data is still built by the
+// untouched, byte-identical cwBuildCustomLessonMapObject() (reused once
+// per syllable, same as Stage 4 did), just carried together under one
+// word instead of pushed as separate lessonItems.
+function cwBuildMultisyllabicLessonMapObject(entry, syllableRanges) {
+  const syllableMaps = syllableRanges.map(syl =>
+    cwBuildCustomLessonMapObject(syl.text, cwEntryToFlatMapping(entry, syl))
+  );
+  return {
+    word: entry.word,
+    multisyllabic: true,
+    syllables: syllableMaps.map(m => ({
+      text: m.word,
+      graphemes: m.graphemes,
+      phonemes: m.phonemes,
+      phonemeCount: m.phonemeCount,
+      letterboxes: m.letterboxes,
+      tiles: m.tiles,
+      silentOutsideBoxes: m.silentOutsideBoxes
+    })),
+    // Flattened across syllables — kept so any consumer that doesn't yet
+    // know about `syllables` (PDF export, the lesson-wide tile bank,
+    // sorting) still gets a complete, correct picture of the whole word.
+    graphemes: syllableMaps.flatMap(m => m.graphemes),
+    phonemes: syllableMaps.flatMap(m => m.phonemes),
+    phonemeCount: syllableMaps.reduce((n, m) => n + m.phonemeCount, 0),
+    letterboxes: syllableMaps.flatMap(m => m.letterboxes),
+    tiles: entry.word.split(''),
+    silentOutsideBoxes: syllableMaps.flatMap(m => m.silentOutsideBoxes),
+    tags: [],
+    vowelLabel: '',
+    note: entry.note || '',
+    custom: true
+  };
+}
+
+function cwAddMultisyllabicToLesson(entry) {
+  if (!entry.reviewed) return;
+  const syllables = cwGetSyllableRanges(entry.word, entry.gaps);
+  if (syllables.length <= 1) return;
+  if (cwIsWordInLesson(entry.word)) return;
+  customLessonMapByWord[entry.word] = cwBuildMultisyllabicLessonMapObject(entry, syllables);
+  customLessonItems.push(entry.word);
+  renderLessonTray();
+  cwRenderSidebarList();
+  cwRenderActivePanel();
+}
+
+// Single dispatch point for the panel's "Add to Lesson" button — routes to
+// whichever of the three unchanged Stage 4 functions applies.
+function cwAddEntryToLesson(entry) {
+  if (entry.source === 'vetted') { cwAddVettedWordToLesson(entry.word); return; }
+  const syllables = cwGetSyllableRanges(entry.word, entry.gaps);
+  if (syllables.length <= 1) { cwAddCustomWordToLesson(entry.word, cwEntryToFlatMapping(entry)); return; }
+  cwAddMultisyllabicToLesson(entry);
+}
+
+// ---- Step 5: single includedInLesson state shared by the working-list
+// checkbox and the Result panel's Add to Lesson / In lesson button. This is
+// the ONLY thing that reads/writes it — everything else asks it. Storage
+// (lessonWords / customLessonItems / customLessonMapByWord) is unchanged
+// Stage 4 state; since Step 6, a multisyllabic custom word is stored as one
+// customLessonItems entry keyed by the whole word (see
+// cwAddMultisyllabicToLesson), so this is now the same single-key lookup
+// for vetted and custom words alike.
+function cwEntryInLesson(entry) {
+  if (!entry || entry.source === 'unavailable') return false;
+  if (entry.source === 'vetted') return lessonWords.includes(entry.word);
+  return customLessonItems.includes(entry.word);
+}
+
+function cwRemoveEntryFromLesson(entry) {
+  if (entry.source === 'vetted') {
+    lessonWords = lessonWords.filter(w => w !== entry.word);
+  } else {
+    customLessonItems = customLessonItems.filter(item => item !== entry.word);
+    delete customLessonMapByWord[entry.word];
+  }
+  renderLessonTray();
+}
+
+// Makes actual storage match entry.includedInLesson. Adding a custom word
+// still respects the existing review gate (cwAddCustomWordToLesson /
+// cwAddMultisyllabicToLesson silently no-op until entry.reviewed is true);
+// Mapping-edit and review actions call this again once
+// reviewed flips true, so a bulk-pasted low-confidence word that starts
+// includedInLesson:true actually joins the lesson the moment it's reviewed.
+function cwSyncInclusionStorage(entry) {
+  if (!entry || entry.source === 'unavailable') return;
+  const wantIn = !!entry.includedInLesson;
+  const isIn = cwEntryInLesson(entry);
+  if (wantIn && !isIn) cwAddEntryToLesson(entry);
+  else if (!wantIn && isIn) cwRemoveEntryFromLesson(entry);
+}
+
+function cwSetIncluded(entry, included) {
+  if (!entry || entry.source === 'unavailable') return;
+  entry.includedInLesson = included;
+  cwSyncInclusionStorage(entry);
+  cwRenderSidebarList();
+  cwRenderActivePanel();
+}
+
+function cwAddToLessonControlsHTML(entry) {
+  if (entry.source === 'unavailable') return '';
+  const included = !!entry.includedInLesson;
+  const pendingReview = included && entry.source !== 'vetted' && !entry.reviewed;
+  const label = included ? '✓ In lesson' : 'Add to Lesson';
+  return `<button type="button" class="small-secondary cw-toggle-lesson-btn${included ? ' active' : ''}" data-id="${entry.id}">${label}</button>${pendingReview ? '<div class="cw-add-hint">Will join the lesson once reviewed.</div>' : ''}`;
+}
+
+// ---- Sidebar: a compact, clickable list of every word in this session ----
+function cwSidebarChip(entry) {
+  if (entry.source === 'unavailable') return 'Could not map';
+  const syllables = cwGetSyllableRanges(entry.word, entry.gaps || []);
+  if (syllables.length > 1) return `${syllables.length} syllables`;
+  if (entry.source === 'generated') return entry.confidence === 'low' ? 'Needs review' : 'Suggested';
+  return '';
+}
+
+function cwSidebarRowHTML(entry, index, total) {
+  const chip = cwSidebarChip(entry);
+  const active = entry.id === activeEntryId;
+  const included = !!entry.includedInLesson;
+  const canInclude = entry.source !== 'unavailable';
+  return `
+    <div class="cw-sidebar-row${active ? ' active' : ''}" data-id="${entry.id}">
+      <label class="cw-include-toggle" title="${included ? 'Included in lesson' : 'Not included in lesson'}">
+        <input type="checkbox" class="cw-include-checkbox" data-id="${entry.id}" ${included ? 'checked' : ''} ${canInclude ? '' : 'disabled'} aria-label="Include ${entry.word} in lesson" />
+      </label>
+      <button type="button" class="cw-sidebar-word-btn" data-id="${entry.id}">${entry.word}</button>
+      ${chip ? `<span class="cw-sidebar-chip">${chip}</span>` : ''}
+      <div class="cw-row-actions">
+        <button type="button" class="cw-icon-btn cw-move-up" data-id="${entry.id}" ${index === 0 ? 'disabled' : ''} aria-label="Move ${entry.word} up">↑</button>
+        <button type="button" class="cw-icon-btn cw-move-down" data-id="${entry.id}" ${index === total - 1 ? 'disabled' : ''} aria-label="Move ${entry.word} down">↓</button>
+        <button type="button" class="cw-icon-btn cw-remove" data-id="${entry.id}" aria-label="Remove ${entry.word}">×</button>
+      </div>
+    </div>`;
+}
+
+function cwRenderSidebarList() {
+  const listEl = document.getElementById('customWordsList');
+  const countEl = document.getElementById('customWordsCount');
+  if (!listEl || !countEl) return;
+
+  countEl.textContent = `${customWordEntries.length} ${customWordEntries.length === 1 ? 'word' : 'words'}`;
+
+  if (!customWordEntries.length) {
+    listEl.innerHTML = '<p class="cw-empty">Words you type or paste will appear here — click one to review or edit its mapping.</p>';
+    return;
+  }
+
+  listEl.innerHTML = customWordEntries
+    .map((entry, i) => cwSidebarRowHTML(entry, i, customWordEntries.length))
+    .join('');
+
+  listEl.querySelectorAll('.cw-sidebar-word-btn').forEach(btn => btn.addEventListener('click', () => {
+    cwFocusEntry(btn.dataset.id);
+  }));
+  listEl.querySelectorAll('.cw-include-checkbox').forEach(cb => cb.addEventListener('change', () => {
+    const entry = customWordEntries.find(e => e.id === cb.dataset.id);
+    if (entry) cwSetIncluded(entry, cb.checked);
+  }));
+  listEl.querySelectorAll('.cw-remove').forEach(btn => btn.addEventListener('click', () => {
+    const removedId = btn.dataset.id;
+    const removedEntry = customWordEntries.find(e => e.id === removedId);
+    if (removedEntry && removedEntry.includedInLesson) cwRemoveEntryFromLesson(removedEntry);
+    customWordEntries = customWordEntries.filter(e => e.id !== removedId);
+    if (activeEntryId === removedId) activeEntryId = customWordEntries.length ? customWordEntries[0].id : null;
+    cwRenderSidebarList();
+    cwRenderActivePanel();
+  }));
+  listEl.querySelectorAll('.cw-move-up').forEach(btn => btn.addEventListener('click', () => cwMove(btn.dataset.id, -1)));
+  listEl.querySelectorAll('.cw-move-down').forEach(btn => btn.addEventListener('click', () => cwMove(btn.dataset.id, 1)));
+}
+
+function cwMove(id, delta) {
+  const idx = customWordEntries.findIndex(e => e.id === id);
+  if (idx < 0) return;
+  const newIdx = idx + delta;
+  if (newIdx < 0 || newIdx >= customWordEntries.length) return;
+  const [item] = customWordEntries.splice(idx, 1);
+  customWordEntries.splice(newIdx, 0, item);
+  cwRenderSidebarList();
+}
+
+// ---- Large Result panel: review/edit whichever word is active ----
+
+// Finds an existing entry for `word`, or builds a new one, and makes it
+// the active word — used by the main search box, word-bank clicks, quick
+// examples, and bulk paste alike, so a word is never entered twice: if
+// it's already in the list, this just brings it back into focus.
+function cwSelectWord(rawWord) {
+  const word = (typeof PhonemeMappingEngine !== 'undefined')
+    ? PhonemeMappingEngine.cleanWord(rawWord)
+    : String(rawWord || '').toLowerCase().replace(/[^a-z]/g, '');
+  if (!word) return;
+
+  let entry = customWordEntries.find(e => e.word === word);
+  if (!entry) {
+    entry = cwBuildEntry(word);
+    customWordEntries.push(entry);
+  }
+  activeEntryId = entry.id;
+  cwRenderSidebarList();
+  cwRenderActivePanel();
+}
+
+function cwFocusEntry(id) {
+  const entry = customWordEntries.find(e => e.id === id);
+  if (!entry) return;
+  activeEntryId = id;
+  const wordInput = document.getElementById('wordInput');
+  if (wordInput) wordInput.value = entry.word;
+  cwRenderSidebarList();
+  cwRenderActivePanel();
+}
+
+// Bulk paste shares the exact same word list and dedup rule as single-word
+// entry: an already-known word is never duplicated, just brought into
+// focus. The first newly-added word (if any) opens in the Result panel.
+function cwMapWords() {
+  const input = document.getElementById('customWordsInput');
+  if (!input) return;
+  const words = cwParseInput(input.value);
+  let firstNew = null;
+  words.forEach(w => {
+    if (!w) return;
+    let entry = customWordEntries.find(e => e.word === w);
+    if (!entry) {
+      entry = cwBuildEntry(w);
+      entry.includedInLesson = true; // bulk-pasted words default to included
+      customWordEntries.push(entry);
+      cwSyncInclusionStorage(entry);
+      if (!firstNew) firstNew = entry;
+    }
+  });
+  input.value = '';
+  if (firstNew) {
+    cwFocusEntry(firstNew.id);
+  } else {
+    cwRenderSidebarList();
+  }
+}
+
+// ---- Wrap the existing lesson-tray / save / PDF pipeline so it also
+// picks up confirmed custom words, without changing built-in-word
+// behavior at all when no custom words are present. Each wrap calls the
+// prior (fully-patched) version first and only adds to its result, the
+// same layering convention already used above for mapWord/renderVowelTabs. ----
+
+const renderLessonTrayBeforeCustomWords = renderLessonTray;
+renderLessonTray = function () {
+  renderLessonTrayBeforeCustomWords();
+  const tray = document.getElementById('lessonTray');
+  const count = document.getElementById('trayCount');
+  if (!tray) return;
+
+  if (customLessonItems.length) {
+    if (!lessonWords.length) tray.innerHTML = '';
+    const customHTML = customLessonItems.map(word => `<span class="tray-word custom-tray-word" title="Custom mapping">${word}<button class="tray-remove" type="button" data-custom-word="${word}" aria-label="Remove ${word}">×</button></span>`).join('');
+    tray.insertAdjacentHTML('beforeend', customHTML);
+    tray.querySelectorAll('.tray-remove[data-custom-word]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const w = btn.dataset.customWord;
+        customLessonItems = customLessonItems.filter(item => item !== w);
+        delete customLessonMapByWord[w];
+        renderLessonTray();
+        cwRenderSidebarList();
+        cwRenderActivePanel();
+      });
+    });
+  }
+
+  const total = lessonWords.length + customLessonItems.length;
+  if (count) count.textContent = `${total} ${total === 1 ? 'word' : 'words'}`;
+};
+
+const clearLessonListBeforeCustomWords = clearLessonList;
+clearLessonList = function () {
+  clearLessonListBeforeCustomWords();
+  customLessonItems = [];
+  customLessonMapByWord = {};
+  customWordEntries.forEach(e => { e.includedInLesson = false; });
+  renderLessonTray();
+  cwRenderSidebarList();
+  cwRenderActivePanel();
+};
+
+function cwLessonItemsAsWords() {
+  return customLessonItems
+    .map(word => {
+      const m = customLessonMapByWord[word];
+      if (!m) return null;
+      const out = { word: m.word, phonemes: m.phonemes, boxes: m.letterboxes, outsideLetters: m.silentOutsideBoxes, custom: true };
+      // Step 6: carry the per-syllable structure through untouched so
+      // letterbox-lesson.html can step through it; every other consumer
+      // (PDF, sorting below) keeps working off the flattened fields above.
+      if (m.multisyllabic && Array.isArray(m.syllables)) {
+        out.multisyllabic = true;
+        out.syllables = m.syllables;
+      }
+      return out;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.boxes.length - b.boxes.length || a.word.localeCompare(b.word));
+}
+
+// When there are no custom lesson words, returns exactly what the
+// original function returned — including null when the vetted lesson
+// list is also empty — so built-in-word behavior is unchanged byte for
+// byte. Only appends when a confirmed custom word has actually been
+// added to the lesson.
+const buildLetterboxActivityDataBeforeCustomWords = buildLetterboxActivityData;
+buildLetterboxActivityData = function (customTitle) {
+  const originalResult = buildLetterboxActivityDataBeforeCustomWords(customTitle);
+  const customWords = cwLessonItemsAsWords();
+  if (!customWords.length) return originalResult;
+
+  const base = originalResult || {
+    title: customTitle || 'Letterbox Lesson',
+    toolType: 'letterbox-lesson',
+    activityType: 'letterbox-lesson',
+    source: 'phoneme-counter',
+    generatedAt: new Date().toISOString(),
+    words: []
+  };
+  return { ...base, words: [...base.words, ...customWords] };
+};
+
+// PDF export resolves each tray word through getCurrentWordMapForPdf();
+// teach it about confirmed custom words so printed sound boxes match
+// exactly what the teacher confirmed, not a fresh (and possibly
+// different) auto-generated guess.
+const getCurrentWordMapForPdfBeforeCustomWords = getCurrentWordMapForPdf;
+getCurrentWordMapForPdf = function (word) {
+  const key = String(word || '').toLowerCase().trim();
+  if (customLessonMapByWord[key]) return customLessonMapByWord[key];
+  return getCurrentWordMapForPdfBeforeCustomWords(word);
+};
+
+// ---- Large Result panel rendering (approved v6 interaction) ----
+// Renders whichever entry is active into the existing #resultBody. Built-in
+// and custom words render through this exact same function — both were
+// adapted into the same entry model in cwBuildEntry() above, so there's no
+// separate "flattened" path for either one.
+function cwRenderActivePanel() {
+  const resultBody = document.getElementById('resultBody');
+  if (!resultBody) return;
+  const vowelPill = document.getElementById('vowelPill');
+  const countPill = document.getElementById('countPill');
+
+  const entry = customWordEntries.find(e => e.id === activeEntryId);
+  if (!entry) {
+    if (typeof renderEmpty === 'function') renderEmpty();
+    return;
+  }
+
+  if (entry.source === 'unavailable') {
+    if (vowelPill) vowelPill.textContent = 'Not available';
+    if (countPill) countPill.textContent = '—';
+    resultBody.innerHTML = `<div class="cwp-panel"><div class="cwp-header"><div class="cwp-word">${entry.word}</div></div><div class="cw-note">The mapping engine did not load, so this word could not be mapped. Refresh the page and try again.</div></div>`;
+    return;
+  }
+
+  const word = entry.word;
+  const groups = cwGetGroups(word, entry.gaps);
+  const syllables = cwGetSyllableRanges(word, entry.gaps);
+  const isMulti = syllables.length > 1;
+
+  // Letter row: underline = same sound box, break in the underline = new
+  // sound box, bold vertical bar = syllable break only. Tapping a letter
+  // selects it (changes nothing by itself); activating a gap opens explicit
+  // syllable-boundary actions without changing its sound-box grouping.
+  let rowHtml = '';
+  for (let i = 0; i < word.length; i++) {
+    const g = cwGroupAt(groups, i);
+    const isSilent = entry.outsideStarts.has(g.start);
+    const isSelected = !!entry.selectedRange && i >= entry.selectedRange.start && i <= entry.selectedRange.end;
+    rowHtml += `<span class="letter${isSilent ? ' silent' : ''}${isSelected ? ' selected' : ''}" data-letter="${i}" role="button" tabindex="0" aria-label="Letter ${word[i]}${isSilent ? ', silent' : ''}. Tap to select.">${word[i]}</span>`;
+    if (i < word.length - 1) {
+      const state = entry.gaps[i];
+      const selectedGapClass = entry.selectedGap === i ? ' selected' : '';
+      if (state === 2) {
+        rowHtml += `<span class="gap syllable${selectedGapClass}" data-gap="${i}" role="button" tabindex="0" aria-label="Syllable break between ${word[i]} and ${word[i + 1]}. Activate for options."><span class="divider"></span></span>`;
+      } else if (state === 1) {
+        rowHtml += `<span class="gap grapheme${selectedGapClass}" data-gap="${i}" role="button" tabindex="0" aria-label="Sound-box boundary between ${word[i]} and ${word[i + 1]}. Activate for options."></span>`;
+      } else {
+        rowHtml += `<span class="gap joined${isSilent ? ' silent' : ''}${selectedGapClass}" data-gap="${i}" role="button" tabindex="0" aria-label="Letters joined in one sound box. Activate for options."></span>`;
+      }
+    }
+  }
+
+  let gapSelectionHtml = '';
+  if (Number.isInteger(entry.selectedGap)) {
+    const gapIndex = entry.selectedGap;
+    const gapState = entry.gaps[gapIndex];
+    const gapLabel = `between "${word[gapIndex]}" and "${word[gapIndex + 1]}"`;
+    const gapAction = gapState === 2
+      ? '<button type="button" class="small-secondary cwp-remove-syllable">Remove syllable break</button>'
+      : gapState === 1
+        ? '<button type="button" class="small-secondary cwp-set-syllable">Syllable break here</button>'
+        : '';
+    const gapDescription = gapState === 0
+      ? `This gap is inside one grapheme ${gapLabel}. Split that grapheme first to place a syllable break here.`
+      : gapState === 2
+        ? `There is a syllable break ${gapLabel}.`
+        : `There is a sound-box boundary ${gapLabel}.`;
+    gapSelectionHtml = `
+      <div class="cwp-selection-bar">
+        <span>${gapDescription}</span>
+        <span class="cwp-selection-actions">
+          <button type="button" class="small-secondary cwp-gap-cancel">Cancel</button>
+          ${gapAction}
+        </span>
+      </div>`;
+  }
+
+  // Explicit contiguous grouping/splitting plus the existing separate
+  // select-then-confirm silent/outside action.
+  let selectionHtml = '';
+  if (entry.selectedRange) {
+    const range = entry.selectedRange;
+    const selectedText = word.slice(range.start, range.end + 1);
+    const g = cwGroupAt(groups, range.start);
+    const selectionIsWithinOneGroup = !!g && range.end < g.end;
+    const groupText = g ? word.slice(g.start, g.end) : selectedText;
+    const isSilent = entry.outsideStarts.has(g.start);
+    const isEditingSound = selectionIsWithinOneGroup
+      && !isSilent
+      && entry.editingSoundStart === g.start;
+    const canGroup = range.end > range.start
+      && entry.gaps.slice(range.start, range.end).some(gap => gap !== 0);
+    const canSplit = selectionIsWithinOneGroup && g.end - g.start > 1 && !isSilent;
+    const groupingAction = canGroup
+      ? '<button type="button" class="small-secondary cwp-group-selection">Group as one sound box</button>'
+      : canSplit
+        ? '<button type="button" class="small-secondary cwp-split-selection">Split into separate sound boxes</button>'
+        : '';
+    const selectionDescription = range.end > range.start
+      ? `Selected "${selectedText}".`
+      : isSilent
+        ? `Selected "${groupText}" — currently marked silent/outside.`
+        : `Selected "${groupText}" — currently a sound box (${cwPhonemeFor(entry, g)}). Select another letter to choose a contiguous run.`;
+    const silentAction = selectionIsWithinOneGroup
+      ? `<button type="button" class="small-secondary cwp-selection-confirm">${isSilent ? 'Make it a sound box again' : 'Mark as silent / outside'}</button>`
+      : '';
+    const changeSoundAction = selectionIsWithinOneGroup && !isSilent
+      ? '<button type="button" class="small-secondary cwp-change-sound">Change sound</button>'
+      : '';
+    const currentSound = cwPhonemeFor(entry, g);
+    selectionHtml = isEditingSound && entry.typingCustomSound
+      ? `<div class="cwp-selection-bar">
+          <label class="cwp-sound-editor">Type another sound for "${groupText}"
+            <input class="cwp-sound-input" type="text" value="${cwEscapeHtml(currentSound)}" aria-label="Sound for ${groupText}" autocomplete="off" spellcheck="false">
+          </label>
+          <span class="cwp-selection-actions">
+            <button type="button" class="small-secondary cwp-sound-back">Back to sound choices</button>
+            <button type="button" class="small-secondary cwp-sound-save">Save sound</button>
+          </span>
+        </div>`
+      : isEditingSound
+        ? `<div class="cwp-selection-bar cwp-sound-picker-panel">
+            <div class="cwp-sound-picker">
+              <div class="cwp-sound-picker-title">Choose the sound for "${groupText}"</div>
+              ${cwSoundPickerHTML(currentSound)}
+              <span class="cwp-selection-actions">
+                <button type="button" class="small-secondary cwp-sound-cancel">Cancel</button>
+                <button type="button" class="small-secondary cwp-sound-custom">Type another sound</button>
+              </span>
+            </div>
+          </div>`
+      : `<div class="cwp-selection-bar">
+          <span>${selectionDescription}</span>
+          <span class="cwp-selection-actions">
+            <button type="button" class="small-secondary cwp-selection-cancel">Cancel</button>
+            ${groupingAction}
+            ${changeSoundAction}
+            ${silentAction}
+          </span>
+        </div>`;
+  }
+
+  const syllableLine = isMulti
+    ? `<div class="cwp-syllable-line">${syllables.length} syllables — <span class="cwp-syllable-text">${syllables.map(s => s.text).join(' | ')}</span></div>`
+    : '';
+
+  // Sound boxes grouped by syllable — each box shows its letters as
+  // separate tiles (never fused) with one phoneme label per box. Silent
+  // groups are excluded here and shown on their own line below.
+  let boxHtml = '';
+  let soundBoxCount = 0;
+  const syllablesMissingVowel = [];
+  const effectiveSyllables = isMulti ? syllables : [{ start: 0, end: word.length, text: word }];
+  effectiveSyllables.forEach(syl => {
+    const sylGroups = groups.filter(g => g.start >= syl.start && g.start < syl.end);
+    const soundGroups = sylGroups.filter(g => !entry.outsideStarts.has(g.start));
+    let hasVowel = false;
+    boxHtml += isMulti ? `<div class="cwp-syllable-card"><div class="cwp-syllable-heading">${syl.text}</div><div class="cwp-boxrow">` : `<div class="cwp-boxrow">`;
+    soundGroups.forEach(g => {
+      const text = word.slice(g.start, g.end);
+      const phon = cwPhonemeFor(entry, g);
+      if (CW_VOWEL_PHONEMES.has(phon)) hasVowel = true;
+      soundBoxCount++;
+      const tiles = text.split('').map(ch => `<span class="cwp-tile">${ch}</span>`).join('');
+      boxHtml += `<span class="cwp-soundbox"><span class="cwp-tiles">${tiles}</span><span class="cwp-phoneme">${cwEscapeHtml(phon)}</span></span>`;
+    });
+    boxHtml += isMulti ? `</div></div>` : `</div>`;
+    if (!hasVowel) syllablesMissingVowel.push(syl.text);
+  });
+
+  const outsideGroups = groups.filter(g => entry.outsideStarts.has(g.start));
+  const outsideHtml = outsideGroups.length
+    ? `<div class="cwp-outside-line"><span class="cwp-outside-tag">Outside — not a sound box</span>${outsideGroups.map(g => `<span class="cwp-outside-letters">${word.slice(g.start, g.end)}</span>`).join(' ')}</div>`
+    : '';
+
+  // Non-blocking validation — never prevents Add to Lesson, just flags.
+  const reasons = [];
+  if (entry.baseline) {
+    if (syllables.length !== entry.baseline.syllableCount) {
+      reasons.push(`This started as ${entry.baseline.syllableCount} syllable${entry.baseline.syllableCount === 1 ? '' : 's'} — it's now showing ${syllables.length}.`);
+    }
+    if (soundBoxCount <= entry.baseline.soundBoxCount - 2) {
+      reasons.push(`This has ${entry.baseline.soundBoxCount - soundBoxCount} fewer sound boxes than suggested — double-check nothing was marked silent by mistake.`);
+    }
+  }
+  if (syllablesMissingVowel.length) {
+    reasons.push(`${syllablesMissingVowel.length === 1 ? 'A syllable has' : 'Some syllables have'} no vowel sound (${syllablesMissingVowel.join(', ')}).`);
+  }
+  const warningHtml = reasons.length
+    ? `<div class="cwp-warning"><strong>⚠ This mapping may need another look.</strong><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul></div>`
+    : '';
+
+  // Review notice — only while unreviewed; vetted/high-confidence words
+  // never show this at all.
+  const reviewHtml = !entry.reviewed
+    ? `<div class="cwp-notice${entry.confidence === 'low' ? ' strong' : ''}">${entry.confidence === 'low' ? 'This one needs a closer look before you use it.' : 'Suggested mapping — review before teaching.'} <button type="button" class="small-secondary cwp-review-confirm">Looks good</button></div>`
+    : '';
+  const generalNotice = entry.source !== 'vetted'
+    ? `<div class="cwp-general-notice">Suggested mappings should be reviewed before teaching.</div>`
+    : '';
+  const noteHtml = entry.note ? `<div class="cw-note">${entry.note}</div>` : '';
+
+  const pillLabel = entry.source === 'vetted'
+    ? 'Ready'
+    : isMulti ? `${syllables.length} syllables` : (entry.confidence === 'low' ? 'Suggested — review closely' : 'Suggested mapping');
+  if (vowelPill) vowelPill.textContent = pillLabel;
+  if (countPill) countPill.textContent = `${soundBoxCount} sound${soundBoxCount === 1 ? '' : 's'}`;
+
+  resultBody.innerHTML = `
+    <div class="cwp-panel">
+      <div class="cwp-header"><div class="cwp-word">${word}</div></div>
+      <div class="cwp-letterrow">${rowHtml}</div>
+      ${gapSelectionHtml}
+      ${selectionHtml}
+      ${syllableLine}
+      ${boxHtml}
+      ${outsideHtml}
+      ${noteHtml}
+      ${reviewHtml}
+      ${warningHtml}
+      ${generalNotice}
+      <div class="cwp-actions">${cwAddToLessonControlsHTML(entry)}</div>
+    </div>`;
+
+  cwBindPanelEvents(resultBody, entry);
+}
+
+function cwBindPanelEvents(root, entry) {
+  root.querySelectorAll('.gap').forEach(el => {
+    el.addEventListener('click', () => cwSelectGap(entry, Number(el.dataset.gap)));
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cwSelectGap(entry, Number(el.dataset.gap)); } });
+  });
+  root.querySelectorAll('.letter').forEach(el => {
+    el.addEventListener('click', () => cwSelectLetter(entry, Number(el.dataset.letter)));
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cwSelectLetter(entry, Number(el.dataset.letter)); } });
+  });
+  const cancelBtn = root.querySelector('.cwp-selection-cancel');
+  if (cancelBtn) cancelBtn.addEventListener('click', () => { cwClearLetterSelection(entry); cwRenderActivePanel(); });
+  const gapCancelBtn = root.querySelector('.cwp-gap-cancel');
+  if (gapCancelBtn) gapCancelBtn.addEventListener('click', () => { entry.selectedGap = null; cwRenderActivePanel(); });
+  const setSyllableBtn = root.querySelector('.cwp-set-syllable');
+  if (setSyllableBtn) setSyllableBtn.addEventListener('click', () => cwSetSyllableBreak(entry, entry.selectedGap));
+  const removeSyllableBtn = root.querySelector('.cwp-remove-syllable');
+  if (removeSyllableBtn) removeSyllableBtn.addEventListener('click', () => cwRemoveSyllableBreak(entry, entry.selectedGap));
+  const groupBtn = root.querySelector('.cwp-group-selection');
+  if (groupBtn) groupBtn.addEventListener('click', () => cwGroupSelectedLetters(entry));
+  const splitBtn = root.querySelector('.cwp-split-selection');
+  if (splitBtn) splitBtn.addEventListener('click', () => cwSplitSelectedGrapheme(entry));
+  const changeSoundBtn = root.querySelector('.cwp-change-sound');
+  if (changeSoundBtn) changeSoundBtn.addEventListener('click', () => cwStartSoundEdit(entry));
+  root.querySelectorAll('.cwp-sound-choice').forEach(btn => {
+    btn.addEventListener('click', () => cwApplySoundEdit(entry, btn.dataset.sound));
+  });
+  const customSoundBtn = root.querySelector('.cwp-sound-custom');
+  if (customSoundBtn) customSoundBtn.addEventListener('click', () => cwShowCustomSoundInput(entry));
+  const soundInput = root.querySelector('.cwp-sound-input');
+  const saveSound = () => { if (soundInput) cwApplySoundEdit(entry, soundInput.value); };
+  const cancelSound = () => { entry.editingSoundStart = null; entry.typingCustomSound = false; cwRenderActivePanel(); };
+  const backToSounds = () => { entry.typingCustomSound = false; cwRenderActivePanel(); };
+  const soundSaveBtn = root.querySelector('.cwp-sound-save');
+  if (soundSaveBtn) soundSaveBtn.addEventListener('click', saveSound);
+  const soundCancelBtn = root.querySelector('.cwp-sound-cancel');
+  if (soundCancelBtn) soundCancelBtn.addEventListener('click', cancelSound);
+  const soundBackBtn = root.querySelector('.cwp-sound-back');
+  if (soundBackBtn) soundBackBtn.addEventListener('click', backToSounds);
+  if (soundInput) {
+    soundInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); saveSound(); }
+      if (e.key === 'Escape') { e.preventDefault(); cancelSound(); }
+    });
+    soundInput.focus();
+    soundInput.select();
+  }
+  const confirmBtn = root.querySelector('.cwp-selection-confirm');
+  if (confirmBtn) confirmBtn.addEventListener('click', () => cwConfirmSilentToggle(entry));
+  const reviewBtn = root.querySelector('.cwp-review-confirm');
+  if (reviewBtn) reviewBtn.addEventListener('click', () => cwMarkReviewed(entry));
+  root.querySelectorAll('.cw-toggle-lesson-btn').forEach(btn => btn.addEventListener('click', () => {
+    cwSetIncluded(entry, !entry.includedInLesson);
+  }));
+}
+
+// ---- Unify every existing entry point (search box, Enter key, quick
+// examples, word-bank chips) onto the new flow. mapAndRender is defined
+// once, far above, and every one of those call sites references it by
+// name — reassigning it here (the same override convention already used
+// throughout this file for mapWord/renderVowelTabs) redirects all of them
+// at once. The old vetted-only rendering it used to do, and the
+// now-unreachable renderUnsupported() dead-end message, are retired but
+// left defined above, unused, rather than deleted. ----
+mapAndRender = function (word) {
+  const input = document.getElementById('wordInput');
+  if (input) input.value = word;
+  cwSelectWord(word);
+};
+
+// ---- Resume editing a previously saved letterbox lesson ----
+// Reached only via the dashboard's "Edit Words" action, which sets these
+// same sessionStorage keys teacher-dashboard.html already sets for every
+// activity type, then sends the teacher back here with ?resumeActivity=1.
+// Restores the saved words exactly as they were confirmed (no
+// re-generation), and remembers the activity id so the next save updates
+// that document instead of creating a duplicate.
+function cwResumeSavedActivity() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('resumeActivity') !== '1') return;
+
+  const savedId = sessionStorage.getItem('savedActivityId');
+  const savedRaw = sessionStorage.getItem('savedActivityData');
+  if (!savedId || !savedRaw) return;
+
+  let saved;
+  try { saved = JSON.parse(savedRaw); } catch (e) { return; }
+  const type = saved && (saved.toolType || saved.activityType);
+  if (type !== 'letterbox-lesson' || !Array.isArray(saved.words) || !saved.words.length) return;
+
+  saved.words.forEach(w => {
+    if (!w || !w.word) return;
+    if (w.custom) {
+      // Step 6 minimal compat: a saved multisyllabic word now carries its
+      // own `syllables` (see buildMultisyllabicLessonMapObject/
+      // cwLessonItemsAsWords) — preserve that structure on resume instead
+      // of rebuilding a single flat box row, which would silently merge
+      // its syllables back into one. A pre-Step-6 saved activity has no
+      // `syllables` field and falls through to the unchanged rebuild path.
+      if (Array.isArray(w.syllables) && w.syllables.length > 1) {
+        customLessonMapByWord[w.word] = {
+          word: w.word,
+          multisyllabic: true,
+          syllables: w.syllables,
+          graphemes: w.boxes || [],
+          phonemes: w.phonemes || [],
+          phonemeCount: (w.boxes || []).length,
+          letterboxes: w.boxes || [],
+          tiles: w.word.split(''),
+          silentOutsideBoxes: w.outsideLetters || [],
+          tags: [],
+          vowelLabel: '',
+          note: '',
+          custom: true
+        };
+      } else {
+        customLessonMapByWord[w.word] = cwBuildCustomLessonMapObject(
+          w.word,
+          { boxes: [
+            ...(w.boxes || []).map(t => ({ text: String(t), outside: false })),
+            ...(w.outsideLetters || []).map(t => ({ text: String(t), outside: true }))
+          ], note: '' }
+        );
+      }
+      if (!customLessonItems.includes(w.word)) customLessonItems.push(w.word);
+    } else if (!lessonWords.includes(w.word)) {
+      lessonWords.push(w.word);
+    }
+  });
+
+  resumingActivityId = savedId;
+  renderLessonTray();
+
+  const msg = document.getElementById('lessonMsg');
+  if (msg) {
+    msg.textContent = `Editing "${saved.title || 'this saved lesson'}" — saving will update it.`;
+    msg.style.display = 'block';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const mapBtn = document.getElementById('mapCustomWordsBtn');
+  if (mapBtn) mapBtn.addEventListener('click', cwMapWords);
+  cwRenderSidebarList();
+  cwRenderActivePanel();
+  cwResumeSavedActivity();
 });
 
 </script>
