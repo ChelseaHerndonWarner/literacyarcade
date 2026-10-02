@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<!-- ============================================================================
+     STATE PROGRAM PAGE — West Virginia Hope Scholarship
+     ---------------------------------------------------------------------------
+     Cloned from the newest existing state page (the one with no
+     invoice-modal dependency). Shared styling lives in state-program.css; the
+     page-local <style> block in <head> is scoped to .wv-hope-page.
+
+     West Virginia purchases go through TheoPay (Chrome extension scans the
+     Literacy Arcade cart and submits a purchase request). Families do NOT
+     check out themselves and do NOT pay with their own card — the Hope
+     Scholarship purchasing/fulfillment process places the order.
+
+     Section order:
+       1. Hero [STATE-SPECIFIC]
+       2. Available with WV Hope Scholarship funds [WV-SPECIFIC] — Plus Annual
+          ($79, one-time, non-renewing, one full year) + The Letter Box
+          (id="wv-products")
+       3. How purchasing works with TheoPay [STATE-SPECIFIC] (id="how-to-purchase")
+       4. What's included with Literacy Arcade Plus [SHARED] (id="whats-included")
+       5. FAQ [STATE-SPECIFIC wording] (id="faq")
+       6. Footer
+
+     WV OFFERING RULES
+       - Plus Annual ONLY ($79). No monthly or family plan, nothing recurring.
+       - Scholarship funding arrives quarterly, but access is NOT quarterly:
+         the $79 purchase = one full year from activation, no auto-renewal.
+       - Plus access is set up by Literacy Arcade separately after the order
+         (the purchasing organization's payment email is not the login).
+
+     CHECKOUT LINKS: both buttons go to WV-specific Stripe Payment Links
+     (Plus Annual and The Letter Box). Do not swap in other states' or
+     public checkout links.
+
+     STATE CONFIG [STATE-SPECIFIC]
+       State label ....... West Virginia Hope Scholarship
+       Purchase process .. TheoPay
+       State art ......... images/west-virginia-hope-scholarship-outline.svg
+     ============================================================================ -->
+<html lang="en">
+<head>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CL8QW5CGB2');
+  </script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xc6rwdrkw5");
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- [STATE-SPECIFIC] -->
+  <title>Literacy Arcade for West Virginia Hope Scholarship Families | Reading Tools K–6</title>
+  <meta name="description" content="West Virginia Hope Scholarship families can use scholarship funds through TheoPay to purchase Literacy Arcade Plus Annual and The Letter Box — Science of Reading–aligned games, assessments, fluency tools, and supplemental reading support for grades K–6." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://literacyarcade.com/west-virginia-hope-scholarship.html" />
+  <meta property="og:title" content="Literacy Arcade for West Virginia Hope Scholarship Families" />
+  <meta property="og:description" content="Science of Reading–aligned games, assessments, fluency tools, and supplemental literacy support for West Virginia Hope Scholarship families." />
+  <meta property="og:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta name="twitter:image" content="https://literacyarcade.com/images/literacy-arcade-og.png" />
+  <meta name="theme-color" content="#2EC4B6" />
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebPage","name":"Literacy Arcade for West Virginia Hope Scholarship Families","url":"https://literacyarcade.com/west-virginia-hope-scholarship.html","description":"Information for West Virginia Hope Scholarship families purchasing Literacy Arcade Plus Annual and The Letter Box with scholarship funds through TheoPay.","isPartOf":{"@type":"WebSite","name":"Literacy Arcade","url":"https://literacyarcade.com/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://literacyarcade.com/"},{"@type":"ListItem","position":2,"name":"West Virginia Hope Scholarship","item":"https://literacyarcade.com/west-virginia-hope-scholarship.html"}]}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="state-program.css" />
+
+  <!-- [STATE-SPECIFIC] Page-local styles for the West Virginia Hope Scholarship
+       purchase flow. Reuses the shared hero / purchase-step / note-panel
+       components; the product pair is page-local. Scoped to .wv-hope-page throughout. -->
+  <style>
+    .wv-hope-page .img-zoom:focus .zoom-hint { opacity: 1; transform: none; }
+    .wv-hope-page .lb-img { object-fit: contain; }
+    @media (max-width: 640px) {
+      .wv-hope-page .zoom-hint { opacity: 0; transform: translateY(4px); }
+    }
+
+    /* ── Hero primary CTA — the one action this page most wants a family to
+         take. Coral, not teal, so it reads as distinct from the process
+         steps, the secondary "See how it works" link, and the rest of the
+         page's teal buttons. Applied here to a plain in-page link. ── */
+    .wv-hope-page .hero-actions .btn-hero-primary {
+      background: var(--coral);
+      box-shadow: 0 10px 28px rgba(255,107,107,.32);
+      font-size: 1.02rem;
+      padding: 15px 26px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .wv-hope-page .hero-actions .btn-hero-primary:hover,
+    .wv-hope-page .hero-actions .btn-hero-primary:active {
+      background: #F0524F;
+    }
+
+    .wv-hope-page .note-panel a { color: var(--teal-dk); font-weight: 800; text-decoration: underline; text-underline-offset: 2px; }
+
+    /* ── Product pair (Plus Annual + The Letter Box) ──────────────────
+       Two coordinated cards: same width, radius, shadow, padding, CTA.
+       Side by side on desktop/tablet, stacked on mobile. */
+    .wv-hope-page .wv-product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 28px auto 0;
+      align-items: stretch;
+    }
+    .wv-hope-page .wv-product {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .wv-hope-page .wv-product-media {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 190px;
+      background: #F4F1FB;
+      border-bottom: 1px solid var(--border);
+    }
+    .wv-hope-page .wv-product-media--plus {
+      flex-direction: column;
+      gap: 4px;
+      background: linear-gradient(180deg, #F3FCFB 0%, #EAF8F6 100%);
+    }
+    .wv-hope-page .wv-product-media--plus .wv-price {
+      font-family: var(--font-head);
+      font-size: 2.6rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .wv-hope-page .wv-product-media--plus .wv-price span {
+      font-size: .95rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      color: var(--ink-soft);
+    }
+    .wv-hope-page .wv-product-media .img-zoom { width: 100%; height: 100%; }
+    .wv-hope-page .wv-product-media .img-zoom img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .wv-hope-page .wv-pill {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: 5px 10px;
+      border-radius: 100px;
+      background: var(--mint);
+      color: var(--teal-dk);
+      font-family: var(--font-head);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .wv-hope-page .wv-product-media--plus .wv-pill { align-self: center; }
+    .wv-hope-page .wv-product-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+      padding: 20px 22px 22px;
+    }
+    .wv-hope-page .wv-product-body h3 { font-size: 1.18rem; font-weight: 900; color: var(--ink); }
+    .wv-hope-page .wv-product-desc { font-size: .9rem; font-weight: 650; color: var(--ink-soft); line-height: 1.5; }
+    .wv-hope-page .wv-product-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: .86rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+    }
+    .wv-hope-page .wv-product-list li { padding-left: 22px; position: relative; line-height: 1.4; }
+    .wv-hope-page .wv-product-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--mint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231FA99C' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 9px no-repeat;
+    }
+    .wv-hope-page .wv-product-note {
+      font-size: .82rem;
+      font-weight: 650;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .wv-hope-page .wv-product-body .btn { margin-top: auto; align-self: flex-start; }
+
+    @media (max-width: 760px) {
+      .wv-hope-page .wv-product-grid { grid-template-columns: 1fr; max-width: 480px; }
+      .wv-hope-page .wv-product-media { height: 170px; }
+    }
+
+    /* Four-step purchase grid — same treatment as the other state pages. */
+    .wv-hope-page .purchase-steps--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    @media (max-width: 1100px) {
+      .wv-hope-page .purchase-steps--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .wv-hope-page .purchase-steps--4 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="wv-hope-page">
+
+  <!-- ══ SITE HEADER — standard Literacy Arcade nav (do not customise) ══ -->
+  <header>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Literacy Arcade home">
+          <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+          Literacy Arcade
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="plus-subscriptions.html">Plus Plans</a></li>
+          <li><a href="assessments.html">Assessments</a></li>
+          <li><a href="fluency.html">Fluency</a></li>
+          <li><a href="build-and-play.html">Build &amp; Play</a></li>
+          <li><a href="teacher-tools.html">Teacher Tools</a></li>
+          <li><a href="teacher-login.html" class="nav-account">Dashboard / Log in</a></li>
+        </ul>
+
+        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ══ 1 · HERO [STATE-SPECIFIC] ══ -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">West Virginia Hope Scholarship</span>
+          <h1>Literacy Arcade for West Virginia Hope Scholarship Families</h1>
+          <p class="hero-sub">Science of Reading–aligned games, assessments, fluency tools, and guided instructional support for West Virginia Hope Scholarship families using TheoPay.</p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-hero-primary" href="#wv-products">View available products →</a>
+            <a class="btn btn-quiet" href="#how-to-purchase">See how TheoPay works ↓</a>
+          </div>
+          <p class="hero-note">Grades K–6 · Supplemental reading support · No student accounts required</p>
+        </div>
+
+        <!-- state art card — swap the <img> + label per state.
+             The outline is the focus; the label sits BELOW it in flow. -->
+        <div class="state-art">
+          <div class="state-art-frame">
+            <img src="images/west-virginia-hope-scholarship-outline.svg" alt="" aria-hidden="true" />
+          </div>
+          <span class="state-art-label state-art-label--fixed">West Virginia Hope Scholarship</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 2 · AVAILABLE WITH WEST VIRGINIA HOPE SCHOLARSHIP FUNDS [WV-SPECIFIC] ══
+         Plus Annual is the ONLY Plus option offered for West Virginia.
+         Both buttons open WV-specific Stripe Payment Links. ══ -->
+    <section class="state-section white lift" id="wv-products">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>Available with West Virginia Hope Scholarship funds</h2>
+          <p>Choose an eligible Literacy Arcade product to purchase with Hope Scholarship funds.</p>
+        </div>
+
+        <div class="wv-product-grid">
+          <article class="wv-product">
+            <div class="wv-product-media wv-product-media--plus">
+              <span class="wv-pill">Plus Annual</span>
+              <div class="wv-price">$79 <span>/ one full year</span></div>
+            </div>
+            <div class="wv-product-body">
+              <h3>Literacy Arcade Plus Annual</h3>
+              <p class="wv-product-desc">Full access to the Literacy Arcade Plus platform for one parent or educator account. One-time annual purchase — it does not renew automatically.</p>
+              <ul class="wv-product-list">
+                <li>One full year of Plus access</li>
+                <li>One parent or educator account</li>
+                <li>Students do not need accounts</li>
+              </ul>
+              <p class="wv-product-note">Hope Scholarship funds arrive quarterly, but your $79 purchase covers one full year of access from activation.</p>
+              <a class="btn btn-primary" href="https://buy.stripe.com/5kQ8wI4Ex7M1eFsgCm8EM02" target="_blank" rel="noopener noreferrer">Open Plus Annual checkout →</a>
+            </div>
+          </article>
+
+          <article class="wv-product">
+            <div class="wv-product-media">
+              <button type="button" class="img-zoom" data-full="images/letter-box-product-infographic.png" aria-label="Enlarge The Letter Box product image">
+                <img src="images/letter-box-product-infographic.png" alt="The Letter Box: a divided letter tile case showing lowercase letter tiles, heart markers for irregular word parts, a dedicated lesson-preparation space, and divided storage to keep materials organized." width="1254" height="1254" loading="lazy" />
+                <span class="zoom-hint" aria-hidden="true">Click or tap to enlarge</span>
+              </button>
+            </div>
+            <div class="wv-product-body">
+              <h3>The Letter Box</h3>
+              <p class="wv-product-desc">A ready-to-use set of lowercase letter tiles and heart markers for hands-on Letter Box lessons. Includes a divided carrying case with dedicated lesson-preparation space.</p>
+              <ul class="wv-product-list">
+                <li>Lowercase letter tiles</li>
+                <li>Heart markers</li>
+                <li>Divided carrying and storage case</li>
+                <li>Dedicated lesson-preparation space</li>
+              </ul>
+              <p class="wv-product-note"><strong>$42.00</strong> · Free U.S. shipping</p>
+              <a class="btn btn-primary" href="https://buy.stripe.com/28EeV6gnfgixgNAcm68EM01" target="_blank" rel="noopener noreferrer">Open The Letter Box checkout →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3 · HOW PURCHASING WORKS WITH THEOPAY [STATE-SPECIFIC] ══ -->
+    <section class="state-section tint" id="how-to-purchase">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>How purchasing works with TheoPay</h2>
+          <p>West Virginia Hope Scholarship families use TheoPay to submit their purchase. Here's how it works, in four steps.</p>
+        </div>
+
+        <div class="purchase-steps purchase-steps--4">
+          <article class="purchase-step">
+            <h3>Choose your product</h3>
+            <p>Choose Plus Annual or The Letter Box from the West Virginia page.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Open the West Virginia checkout</h3>
+            <p>Open the product's WV-specific checkout page in Google Chrome while signed in to TheoPay.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Submit with TheoPay</h3>
+            <p>Use TheoPay to capture/scan the checkout information and submit the purchase request.</p>
+          </article>
+          <article class="purchase-step">
+            <h3>Hope Scholarship completes the order</h3>
+            <p>The Hope Scholarship purchasing team reviews your request and completes the purchase with Literacy Arcade.</p>
+          </article>
+        </div>
+
+        <div class="note-panel">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <div>
+            <h2>How payment works</h2>
+            <p>You do not complete the purchase with your own credit card. After you submit the checkout through TheoPay, the Hope Scholarship purchasing team completes the transaction with Literacy Arcade.</p>
+            <p>For Plus Annual, Literacy Arcade will then set up your account for one full year of access. It does not automatically renew.</p>
+          </div>
+        </div>
+
+        <div class="purchase-cta">
+          <a class="btn btn-primary" href="#wv-products">View available products →</a>
+          <a class="btn btn-quiet" href="plus-subscriptions.html">Not using Hope Scholarship funds? View Plus plans →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 4 · WHAT'S INCLUDED — polished product-category cards (2×2) [SHARED]
+         Same four cards, copy, assets and benefit strip as the other
+         state pages. Universal platform wording only — no state/program
+         language and no family-plan language. ══ -->
+    <section class="state-section white" id="whats-included">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>What's included with Literacy Arcade Plus</h2>
+        </div>
+
+        <!-- Cards are <article> (not links) so the image can open a lightbox and
+             the CTA can be a normal link without nesting interactive elements. -->
+        <div class="category-grid">
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/assessment-results-larger.png" aria-label="Enlarge the Literacy Arcade assessment results and printable reports image">
+              <img src="images/state-program/assessment-results-larger.png" alt="Literacy Arcade assessment results and printable reports showing letter knowledge, letter sounds, phonics, and oral reading fluency results." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Assessments and printable reports</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Quick checks for letter knowledge, letter sounds, phonics, decoding, and oral reading fluency, with results analysis, instructional focus areas, and printable reports.</p>
+                <a class="cc-link" href="assessments.html">Explore assessments →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/fluency-larger.png" aria-label="Enlarge the Literacy Arcade fluency tools image">
+              <img src="images/state-program/fluency-larger.png" alt="Literacy Arcade fluency tools showing the ORF Calculator with WCPM and accuracy, Repeated Reading Rockets, and a Repeated Reading Raceway progress tracker." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Fluency measurement and practice</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Use the ORF Calculator, built-in timers, WCPM and accuracy tracking, repeated-reading tools, benchmark ranges, and prosody support.</p>
+                <a class="cc-link" href="fluency.html">Explore fluency tools →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/build-and-play-larger.png" aria-label="Enlarge the Literacy Arcade Build and Play image">
+              <img src="images/state-program/build-and-play-larger.png" alt="Literacy Arcade Build &amp; Play showing Read &amp; Race, Magic Word Road, vocabulary flashcards, a reading word spinner, and sentence and comprehension spinners." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Customizable literacy practice</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Use built-in or custom words, sentences, vocabulary, and comprehension content in games, flashcards, spinners, and student-ready practice activities.</p>
+                <a class="cc-link" href="build-and-play.html">Explore Build &amp; Play →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <button type="button" class="cc-media img-zoom" data-full="images/state-program/teacher-tools-larger.png" aria-label="Enlarge the Literacy Arcade Teacher Tools image">
+              <img src="images/state-program/teacher-tools-larger.png" alt="Literacy Arcade Teacher Tools showing the Phoneme Counter, an Interactive Phoneme Chart, a printable Letterbox Lesson plan, and an interactive Letterbox Lesson with sound boxes." loading="lazy" decoding="async" width="1536" height="1024" />
+              <span class="zoom-hint" aria-hidden="true">Click to enlarge</span>
+            </button>
+            <div class="cc-body">
+              <h3>Explicit and systematic phonics lesson tools</h3>
+              <span class="cc-peek" aria-hidden="true">View details ↑</span>
+              <div class="cc-details">
+                <p>Use the Phoneme Counter, sound boxes, letter tiles, Interactive Letterbox Lessons, the Interactive Phoneme Chart, and printable lesson plans.</p>
+                <a class="cc-link" href="teacher-tools.html">Explore teacher tools →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Compact benefit strip — secondary to the image cards above.
+             Six items. -->
+        <ul class="benefit-strip">
+          <li><strong>Assess and plan</strong> Review assessment results, printable reports, skill patterns, and instructional next steps.</li>
+          <li><strong>Teach with Letterbox Lessons</strong> Use sound boxes, letter tiles, supported word banks, and printable lesson plans.</li>
+          <li><strong>Build fluency</strong> Measure WCPM and accuracy, support repeated reading, and track growth.</li>
+          <li><strong>Customize practice</strong> Use built-in or custom words, sentences, vocabulary, and comprehension content.</li>
+          <li><strong>Organize and reuse activities</strong> Save activities, build teaching collections, and return to customized tools without rebuilding them.</li>
+          <li><strong>Share without student accounts</strong> Use student-ready links and Google Classroom without requiring student email addresses.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ══ 5 · FAQ ══ -->
+    <section class="state-section" id="faq">
+      <div class="container">
+        <div class="section-heading center">
+          <h2>West Virginia Hope Scholarship questions</h2>
+        </div>
+        <div class="faq-grid">
+          <article class="faq-card">
+            <h3>How do I purchase with Hope Scholarship funds?</h3>
+            <p>Choose a product on this page, open its West Virginia checkout in Google Chrome while signed in to TheoPay, and use TheoPay to submit the purchase request.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Do I pay with my own credit card?</h3>
+            <p>No. The West Virginia Hope Scholarship purchasing process completes the transaction with Literacy Arcade after you submit through TheoPay.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Which Literacy Arcade Plus plan is available?</h3>
+            <p>Literacy Arcade Plus Annual, $79 for one full year of access.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Does the $79 plan renew automatically?</h3>
+            <p>No. It's a one-time annual purchase. Funding may arrive quarterly, but Plus access is for one full year from activation, not quarterly.</p>
+          </article>
+          <article class="faq-card">
+            <h3>What happens after the purchase is completed?</h3>
+            <p>Literacy Arcade will set up your Plus access for one full year. Questions? Email <a href="mailto:hello@literacyarcade.com">hello@literacyarcade.com</a>.</p>
+          </article>
+          <article class="faq-card">
+            <h3>Can I purchase directly without using Hope Scholarship funds?</h3>
+            <p>Yes. Families not using Hope Scholarship funds may purchase through the <a href="plus-subscriptions.html">Plus pricing page</a>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox for promotional images (built once; controlled by JS below) -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image" hidden>
+    <button type="button" class="lb-close" id="lbClose" aria-label="Close enlarged image">&times;</button>
+    <img class="lb-img" id="lbImg" src="" alt="" />
+  </div>
+
+  <!-- ══ SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
+  <footer class="footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+            Literacy Arcade
+          </a>
+          <p class="footer-desc">Science of Reading–aligned tools for teachers, tutors, interventionists, and homeschool families.</p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Explore</div>
+          <ul class="footer-links">
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="plus-subscriptions.html">Plus Plans</a></li>
+            <li><a href="assessments.html">Assessments</a></li>
+            <li><a href="fluency.html">Fluency</a></li>
+            <li><a href="build-and-play.html">Build &amp; Play</a></li>
+            <li><a href="teacher-tools.html">Teacher Tools</a></li>
+            <li><a href="teacher-dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Support</div>
+          <ul class="footer-links">
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="student-privacy.html">Student Privacy</a></li>
+            <li><a href="terms-of-use.html">Terms of Use</a></li>
+            <li><a href="refund-policy.html">Billing &amp; Refunds</a></li>
+            <li><a href="mailto:hello@literacyarcade.com">Contact</a></li>
+            <li><a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Literacy Arcade.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    const toggleMenu = () => {
+      navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+    };
+    toggle.addEventListener('click', toggleMenu);
+    toggle.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleMenu();
+      }
+    });
+
+    /* ── Image lightbox: click a promotional image to view it larger.
+          Accessible: opens on click/Enter/Space (native <button>), closes on
+          the close button, backdrop click, or Escape, and restores focus. ── */
+    (function () {
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbClose = document.getElementById('lbClose');
+      let lastTrigger = null;
+
+      const open = (src, alt) => {
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lb.hidden = false;
+        document.body.style.overflow = 'hidden';
+        lbClose.focus();
+      };
+      const close = () => {
+        lb.hidden = true;
+        lbImg.src = '';
+        document.body.style.overflow = '';
+        if (lastTrigger) lastTrigger.focus();
+      };
+
+      document.querySelectorAll('.img-zoom').forEach(btn => {
+        btn.addEventListener('click', () => {
+          lastTrigger = btn;
+          const img = btn.querySelector('img');
+          open(btn.dataset.full || (img && img.src), img && img.alt);
+        });
+      });
+
+      lbClose.addEventListener('click', close);
+      lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !lb.hidden) close();
+        // keep focus on the close button while the dialog is open
+        if (e.key === 'Tab' && !lb.hidden) { e.preventDefault(); lbClose.focus(); }
+      });
+    })();
+  </script>
+</body>
+</html>
