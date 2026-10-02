@@ -1120,21 +1120,22 @@
   .trust-strip-top-badge-img { height: 42px; width: auto; display: block; }
 
   .program-approvals {
-    margin-top: 8px;
-    padding-top: 11px;
+    margin-top: 6px;
+    margin-bottom: -4px;
+    padding-top: 8px;
     border-top: 1px solid var(--border);
   }
   .program-approvals-title {
-    margin: 0 0 4px;
+    margin: 0 0 6px;
     color: var(--ink-soft);
     font-size: .82rem;
     font-weight: 800;
   }
   .program-approvals-list {
-    --gap: 12px;
-    --row-gap: 11px;
+    --gap: 8px;
+    --row-gap: 8px;
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(12, 1fr);
     column-gap: var(--gap);
     row-gap: var(--row-gap);
     justify-content: center;
@@ -1143,34 +1144,39 @@
     grid-column: span 2;
     min-width: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    gap: 4px;
-    padding: 4px 10px;
+    text-align: left;
+    gap: 8px;
+    min-height: 64px;
+    padding: 8px 6px 8px 9px;
     border: 1px solid var(--border);
     border-radius: 14px;
     background: var(--cream);
     color: var(--ink);
     text-decoration: none;
-    box-shadow: 0 2px 8px rgba(26,26,46,.05);
+    box-shadow: 0 1px 3px rgba(26,26,46,.035);
     transform-origin: center;
     transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
   }
-  /* Row 1 (5 cards, cols 1-10) */
+  /* Desktop: compact 6 + 5 on a 12-column grid, each card spanning 2
+     columns. Row 1 fills cols 1-12; row 2's five cards span cols 2-11,
+     which centers them as a group. Below 1200px this is replaced by the
+     centered flex-wrap reflow in the media query further down. */
+  /* Row 1 (6 cards) */
   .program-approval-item:nth-child(1) { grid-column: 1 / 3; }
   .program-approval-item:nth-child(2) { grid-column: 3 / 5; }
   .program-approval-item:nth-child(3) { grid-column: 5 / 7; }
   .program-approval-item:nth-child(4) { grid-column: 7 / 9; }
   .program-approval-item:nth-child(5) { grid-column: 9 / 11; }
-  /* Row 2 (5 cards, cols 1-10 — now a full row to fit South Carolina as
-     the 10th item, so it's no longer offset like the previous 4-card row) */
-  .program-approval-item:nth-child(6) { grid-column: 1 / 3; }
-  .program-approval-item:nth-child(7) { grid-column: 3 / 5; }
-  .program-approval-item:nth-child(8) { grid-column: 5 / 7; }
-  .program-approval-item:nth-child(9) { grid-column: 7 / 9; }
-  .program-approval-item:nth-child(10) { grid-column: 9 / 11; }
+  .program-approval-item:nth-child(6) { grid-column: 11 / 13; }
+  /* Row 2 (5 cards, centered) */
+  .program-approval-item:nth-child(7) { grid-column: 2 / 4; }
+  .program-approval-item:nth-child(8) { grid-column: 4 / 6; }
+  .program-approval-item:nth-child(9) { grid-column: 6 / 8; }
+  .program-approval-item:nth-child(10) { grid-column: 8 / 10; }
+  .program-approval-item:nth-child(11) { grid-column: 10 / 12; }
   .program-approval-item:hover {
     border-color: rgba(14,154,145,.45);
     box-shadow: 0 5px 14px rgba(26,26,46,.09);
@@ -1181,12 +1187,12 @@
     outline-offset: 3px;
   }
   .program-approval-icon-wrap {
-    width: 80px;
-    height: 80px;
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 0 0 80px;
+    flex: 0 0 34px;
   }
   .program-approval-icon {
     display: block;
@@ -1195,6 +1201,9 @@
     object-fit: contain;
   }
   .program-approval-icon.utah { transform: scale(1.15); }
+  /* WV outline is a thinner/lighter stroke than its neighbors; nudge it so its
+     visible footprint matches the other state outlines. */
+  .program-approval-icon.west-virginia { transform: scale(1.1); }
   .program-approval-icon.new-hampshire,
   .program-approval-icon.georgia,
   .program-approval-icon.alabama { transform: scale(1.18); }
@@ -1202,10 +1211,9 @@
     display: block;
     min-width: 0;
     color: var(--ink);
-    font-size: .86rem;
+    font-size: .76rem;
     font-weight: 900;
-    line-height: 1.15;
-    min-height: calc(1.15em * 2);
+    line-height: 1.2;
   }
 
   .trust-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
@@ -1286,7 +1294,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      --cols: 3;
+      --cols: 4;
     }
     .program-approval-item {
       grid-column: auto;
@@ -1295,14 +1303,14 @@
   }
 
   @media (max-width: 860px) {
-    .program-approvals-list { --cols: 2; }
+    .program-approvals-list { --cols: 3; }
   }
 
   @media (max-width: 640px) {
-    .program-approvals-list { --gap: 10px; --row-gap: 10px; }
-    .program-approval-item { padding: 22px 10px; gap: 8px; }
-    .program-approval-icon-wrap { width: 70px; height: 70px; flex: 0 0 70px; }
-    .program-approval-name { font-size: .78rem; }
+    .program-approvals-list { --cols: 2; --gap: 8px; --row-gap: 8px; }
+    .program-approval-item { flex-direction: column; text-align: center; min-height: 0; padding: 10px 8px 8px; gap: 4px; }
+    .program-approval-icon-wrap { width: 46px; height: 46px; flex: 0 0 46px; }
+    .program-approval-name { font-size: .78rem; min-height: calc(1.15em * 2); display: flex; align-items: center; justify-content: center; }
   }
 
   /* site-standard mobile nav breakpoint — raised to 1100px so the 7-item
@@ -1662,6 +1670,7 @@
             <a class="program-approval-item" href="https://support.withodyssey.com/hc/en-us/articles/36455820320667-Wyoming-Marketplace-Categories-for-Offerings" target="_blank" rel="noopener noreferrer" aria-label="Learn about Wyoming ESA"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon wyoming" src="images/wyoming-esa.png" alt="Wyoming ESA" /></span><span class="program-approval-name">Wyoming ESA</span></a>
             <a class="program-approval-item" href="https://support.withodyssey.com/hc/en-us/articles/51637346206619-Welcome-to-the-MOScholars-Program" target="_blank" rel="noopener noreferrer" aria-label="Learn about Missouri MOScholars"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon missouri" src="images/missouri-moscholars.svg" alt="Missouri MOScholars" /></span><span class="program-approval-name">Missouri MOScholars</span></a>
             <a class="program-approval-item" href="south-carolina-estf.html" aria-label="Learn about Literacy Arcade for South Carolina ESTF families"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon south-carolina" src="images/south-carolina-estf.svg" alt="" /></span><span class="program-approval-name">South Carolina ESTF</span></a>
+            <a class="program-approval-item" href="west-virginia-hope-scholarship.html" aria-label="Learn about Literacy Arcade for West Virginia Hope Scholarship families"><span class="program-approval-icon-wrap" aria-hidden="true"><img class="program-approval-icon west-virginia" src="images/west-virginia-hope-scholarship-outline.svg" alt="" /></span><span class="program-approval-name">West Virginia Hope Scholarship</span></a>
           </div>
         </div>
       </div>
