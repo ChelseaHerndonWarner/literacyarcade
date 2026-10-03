@@ -4,6 +4,12 @@
   const PUBLIC_ORIGIN = 'https://literacyarcade.com';
   const REGISTRY = new Map();
 
+  function trackClarityEvent(name, toolType) {
+    if (window.LiteracyArcadeAnalytics) {
+      window.LiteracyArcadeAnalytics.track(name, { share_tool: toolType || 'unknown' });
+    }
+  }
+
   function encode(data) {
     const json = JSON.stringify(data);
     const bytes = new TextEncoder().encode(json);
@@ -193,16 +199,21 @@
 
   function openModal(activity, config) {
     const overlay = ensureShareModal();
+    overlay._laShareToolType = config.toolType;
     const link = sharedUrl(activity, config);
     const embed = `<iframe src="${link.replace(/"/g, '&quot;')}" width="100%" height="720" loading="lazy" title="${String(activity.title || 'Literacy Arcade activity').replace(/"/g, '&quot;')}"></iframe>`;
     overlay.querySelector('#laShareLink').value = link;
-    overlay.querySelector('#laCopyLink').onclick = () => copyText(link, overlay.querySelector('#laShareStatus'));
+    overlay.querySelector('#laCopyLink').onclick = () => {
+      trackClarityEvent('share_copy_link', config.toolType);
+      return copyText(link, overlay.querySelector('#laShareStatus'));
+    };
     overlay.querySelector('#laCopyEmbed').onclick = () => copyText(embed, overlay.querySelector('#laShareStatus'));
     setupClassroomShare(overlay, link);
     overlay.classList.add('open');
   }
 
-  function openClassroomShare(link) {
+  function openClassroomShare(link, toolType) {
+    trackClarityEvent('share_google_classroom', toolType);
     window.open(`https://classroom.google.com/share?url=${encodeURIComponent(link)}`, '_blank', 'noopener,noreferrer');
   }
 
@@ -220,7 +231,7 @@
   function setupClassroomShare(overlay, link) {
     const official = overlay.querySelector('#laClassroomOfficial');
     const fallback = overlay.querySelector('#laClassroomFallback');
-    fallback.onclick = () => openClassroomShare(link);
+    fallback.onclick = () => openClassroomShare(link, overlay._laShareToolType);
     fallback.style.display = '';
     official.style.display = 'none';
     official.innerHTML = '';
@@ -233,7 +244,11 @@
       if (!window.gapi || !window.gapi.sharetoclassroom || !window.gapi.sharetoclassroom.render) return false;
       official.style.display = 'flex';
       fallback.style.display = 'none';
-      window.gapi.sharetoclassroom.render(official, { url: link, size: 32 });
+      window.gapi.sharetoclassroom.render(official, {
+        url: link,
+        size: 32,
+        onsharestart: function () { trackClarityEvent('share_google_classroom', overlay._laShareToolType); }
+      });
       return true;
     };
 
