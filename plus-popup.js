@@ -39,6 +39,10 @@
     }
   }
 
+  function sendClarityEvent(name) {
+    if (window.LiteracyArcadeAnalytics) window.LiteracyArcadeAnalytics.track(name);
+  }
+
   // Best-effort Plus/Plus Family entitlement check, used to skip showing
   // this popup to users who already have a paid plan. Loaded lazily (only
   // once the popup is about to open, not on every page load) via a
@@ -171,6 +175,7 @@
     if (!viewSent) {
       viewSent = true;
       sendEvent('plus_popup_view');
+      sendClarityEvent('plus_popup_shown');
     }
   }
 
@@ -182,7 +187,10 @@
     document.removeEventListener('keydown', trapKeydown, true);
     backdrop.removeEventListener('click', onBackdropClick);
     suppressForSevenDays();
-    if (reason) sendEvent('plus_popup_close', { close_method: reason });
+    if (reason) {
+      sendEvent('plus_popup_close', { close_method: reason });
+      sendClarityEvent('plus_popup_dismiss');
+    }
     window.setTimeout(function () {
       backdrop.hidden = true;
       if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
@@ -195,6 +203,7 @@
   secondaryBtn.addEventListener('click', function () { closePopup('keep_exploring'); });
   ctaLink.addEventListener('click', function () {
     sendEvent('plus_popup_click');
+    sendClarityEvent('plus_popup_click');
     suppressForSevenDays();
     // No preventDefault: the link must still navigate to
     // plus-subscriptions.html normally even if analytics is blocked.

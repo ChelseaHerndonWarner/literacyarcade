@@ -14,3 +14,7 @@ robot-word-builder/word-audio/
 
 # macOS
 .DS_Store
+
+# Local business reporting data (contains customer identifiers).
+local-config/
+business-dashboard/exports/*.csv

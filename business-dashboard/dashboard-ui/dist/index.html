@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Literacy Arcade Business Dashboard</title>
+<style>:root{--ink:#202738;--muted:#667085;--teal:#137f75;--teal-bg:#e5f5f2;--amber:#95620e;--amber-bg:#fff3d8;--red:#a84444;--red-bg:#fdeaea;--green:#28724f;--green-bg:#e6f4eb;--bg:#f7f5ef;--card:#fff;--line:#e4e0d7}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:15px;font-weight:400;line-height:1.62}.wrap{max-width:1220px;margin:auto;padding:32px 26px 70px}header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:30px}h1{font-size:28px;line-height:1.2;margin:0 0 7px;font-weight:720}h2{font-size:17px;line-height:1.3;margin:42px 0 16px;color:#536074;text-transform:uppercase;letter-spacing:.07em;font-weight:680}h3{font-size:16px;line-height:1.35;margin:0 0 13px;font-weight:680}p{margin:8px 0 12px}.muted,.foot{color:var(--muted)}.foot{font-size:13px;line-height:1.5}.pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}.pill,.status{display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;line-height:1.3;font-weight:620;background:var(--teal-bg);color:var(--teal)}.pill.limit,.status.pending{background:var(--amber-bg);color:var(--amber)}.status.blocked{background:var(--red-bg);color:var(--red)}.status.ready{background:var(--green-bg);color:var(--green)}.status.limited{background:#edf0f5;color:#59657a}.grid{display:grid;gap:16px}.kpis{grid-template-columns:repeat(4,1fr)}.two{grid-template-columns:1.15fr 1fr}.three{grid-template-columns:repeat(3,1fr)}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:20px}.kpi{min-height:126px}.value{font-size:29px;line-height:1.15;font-weight:760;margin-bottom:6px}.label{font-size:14px;font-weight:620}.delta{font-size:13px;color:var(--muted);margin-top:5px}.callout{border:1px solid #ebd59f;background:var(--amber-bg);border-radius:14px;padding:16px 18px}.accent{border-left:4px solid var(--teal)}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.5}th,td{text-align:left;vertical-align:top;padding:10px 8px;border-bottom:1px solid var(--line);font-weight:400}th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.035em;font-weight:650}tr:last-child td{border-bottom:0}.table-scroll{overflow-x:auto}.state-table{min-width:980px}.state-table td:first-child{font-weight:630}.plain{margin:8px 0;padding-left:20px}.plain li{margin:8px 0}.actions{list-style:none;padding:0;margin:0;counter-reset:action}.actions li{counter-increment:action;display:grid;grid-template-columns:30px 1fr auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}.actions li:last-child{border:0}.actions li:before{content:counter(action);display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:var(--teal);color:#fff;font-size:12px;font-weight:700}.actions b{font-weight:660}.metric-note{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}code{font-size:.93em}@media(max-width:900px){.kpis,.three,.two{grid-template-columns:1fr 1fr}}@media(max-width:620px){.wrap{padding:22px 16px 50px}header{display:block}.pills{justify-content:flex-start;margin-top:14px}.kpis,.three,.two{grid-template-columns:1fr}.actions li{grid-template-columns:30px 1fr}.actions .status{grid-column:2;justify-self:start}table{font-size:13px}}</style>
+</head>
+<body><main class="wrap"><header><div>
+<h1>Literacy Arcade Business Dashboard</h1>
+<div class="muted">Updated October 2, 2026 &middot; Primary windows: Last 14 Days and Last 30 Days</div>
+</div>
+<div class="pills">
+<span class="pill">Firebase/Auth current</span><span class="pill">Stripe mirror current</span><span class="pill limit">Clarity 14d/30d needs manual export</span>
+</div></header>
+<div class="callout">
+<strong>Clarity guardrail.</strong> Historical tutoring-device ID <code>1t2n1al</code> produced heavy internal activity. It is excluded from all conclusions about customer tool use, engagement, page popularity, and conversion. Browser-level opt-out began October 2, 2026. The API cannot filter this ID or provide 14/30-day windows, so raw three-day data is supplemental only.</div>
+<h2>Business snapshot</h2>
+<div class="grid kpis">
+<div class="card kpi">
+<div class="value">157</div>
+<div class="label">Real customer/prospect accounts</div>
+<div class="delta">Six internal accounts excluded</div>
+</div>
+<div class="card kpi">
+<div class="value">24</div>
+<div class="label">New accounts &middot; 14 days</div>
+<div class="delta">64 in the last 30 days</div>
+</div>
+<div class="card kpi">
+<div class="value">6</div>
+<div class="label">Paid customers</div>
+<div class="delta">3 Stripe + 3 state-funded</div>
+</div>
+<div class="card kpi">
+<div class="value">99</div>
+<div class="label">Verified saved activities</div>
+<div class="delta">19 users saved &ge;1; 9 saved &ge;3</div>
+</div>
+</div>
+<h2>New-user analysis</h2>
+<div class="grid two">
+<div class="card">
+<h3>Measurable cohort signals</h3>
+<table>
+<tr>
+<th>Signal</th>
+<th>Last 14 Days</th>
+<th>Last 30 Days</th>
+</tr>
+<tr>
+<td>New accounts</td>
+<td>24</td>
+<td>64</td>
+</tr>
+<tr>
+<td>Free / paid at refresh</td>
+<td>21 / 3</td>
+<td>61 / 3</td>
+</tr>
+<tr>
+<td>Verified/measurable engagement</td>
+<td>6 (25.0%)</td>
+<td>15 (23.4%)</td>
+</tr>
+<tr>
+<td>Measurable repeat sign-in</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Saved &ge;1 activity</td>
+<td>3</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Saved &ge;3 activities</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Created &ge;1 collection</td>
+<td>4</td>
+<td>10</td>
+</tr>
+</table>
+<div class="metric-note">A measurable repeat sign-in requires Firebase Auth&rsquo;s last-sign-in timestamp to be more than five minutes after the account-creation timestamp. Zero does not mean nobody returned: users may stay signed in, return through an existing session, use tools or games without a fresh authentication event, or use shared student links. Firebase Auth cannot reliably measure all repeat visits. Verified engagement means a measurable save, collection, or qualifying sign-in and is not total engagement.</div>
+</div>
+<div class="card">
+<h3>New-account email-domain indicators</h3>
+<table>
+<tr>
+<th>Domain category</th>
+<th>14 Days</th>
+<th>30 Days</th>
+</tr>
+<tr>
+<td>Common personal email</td>
+<td>6</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Likely school/education domain</td>
+<td>10</td>
+<td>28</td>
+</tr>
+<tr>
+<td>Unknown / other</td>
+<td>8</td>
+<td>18</td>
+</tr>
+</table>
+<p class="metric-note">&ldquo;Likely school/education&rdquo; is based only on clear domain patterns such as K&ndash;12, school, district, or .edu. It is an indicator, not proof that the account holder is a teacher.</p>
+<h3 style="margin-top:20px">Geography</h3>
+<p><strong>Observed Clarity geography &mdash; not verified user residence.</strong> Once <code>1t2n1al</code> is excluded, Clarity geography can directionally indicate Texas traffic, visits from approved ESA/EFA states, international traffic, and possible campaign response. It must not be treated as Firebase account location or verified residence.</p>
+<p class="metric-note">Austin/Texas traffic is mixed. Exclude the known tutoring device, not the entire city or state: students may use Literacy Arcade independently on their own devices. Austin traffic during typical tutoring hours (Monday&ndash;Thursday, approximately 4:00&ndash;7:45 PM Central, with occasional Fridays) should be interpreted cautiously rather than removed wholesale.</p>
+</div>
+</div>
+<h2>Paid customers and conversion</h2>
+<div class="grid two">
+<div class="card">
+<h3>Current paid-customer source of truth</h3>
+<table>
+<tr>
+<th>Customer source</th>
+<th>Plan</th>
+<th>Users</th>
+</tr>
+<tr>
+<td>Stripe</td>
+<td>Plus Monthly</td>
+<td>3</td>
+</tr>
+<tr>
+<td>State funding &mdash; Alabama</td>
+<td>Plus Annual</td>
+<td>1</td>
+</tr>
+<tr>
+<td>State funding &mdash; Texas</td>
+<td>Plus Family</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>6</strong></td>
+</tr>
+</table>
+<p class="metric-note">Stripe customers take precedence in deduplication. State-funded purchases were manually provisioned because they did not originate in Stripe. Firebase currently stores the three manual access flags as two generic Plus and one Family; the Alabama/Texas plan and funding-source classification above follows the supplied business source of truth.</p>
+</div>
+<div class="card accent">
+<h3>Conversion interpretation</h3>
+<ul class="plain">
+<li>Paid penetration is 3.8% of real accounts.</li>
+<li>Annual plans are already selling through state-funded channels, so the absence of annual Stripe purchases alone is not evidence that annual-plan conversion should be a top priority.</li>
+<li>Recent signup volume is substantial, but account-level instrumentation verifies only part of downstream use.</li>
+<li>Focus on delivering and measuring first value without assuming &ldquo;no save&rdquo; means &ldquo;no engagement.&rdquo;</li>
+</ul>
+</div>
+</div>
+<div class="card" style="margin-top:16px">
+<h3>Paid User Engagement</h3>
+<div class="table-scroll"><table>
+<tr><th>Measured signal</th><th>All paid</th><th>Stripe</th><th>State-funded</th></tr>
+<tr><td>Total paid users</td><td>6</td><td>3</td><td>3</td></tr>
+<tr><td>Users with measurable engagement</td><td>4</td><td>2</td><td>2</td></tr>
+<tr><td>Saved &ge;1 activity</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>Saved &ge;3 activities</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>Total saved activities</td><td>53</td><td>0</td><td>53</td></tr>
+<tr><td>Created &ge;1 collection</td><td>3</td><td>2</td><td>1</td></tr>
+<tr><td>Activity signal in last 14 days</td><td>3</td><td>3</td><td>0</td></tr>
+<tr><td>Activity signal in last 30 days</td><td>4</td><td>3</td><td>1</td></tr>
+</table></div>
+<p class="metric-note">Most recent measurable paid-user signal: September 28, 2026 at 9:56 AM Central. Recent activity uses the latest available Firebase Auth sign-in, Firestore <code>lastSeenAt</code>, or saved activity/collection timestamp occurring more than five minutes after account creation. It is a measurable retention signal, not a complete record of product use.</p>
+</div>
+<h2>Verified product-use signals</h2>
+<div class="grid two">
+<div class="card">
+<h3>Saved activities &middot; all real accounts</h3>
+<table>
+<tr>
+<th>Activity</th>
+<th>Saves</th>
+</tr>
+<tr>
+<td>Read &amp; Race</td>
+<td>49</td>
+</tr>
+<tr>
+<td>Robot Word Builder</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Magic Word Road</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Word Spinner</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>9</td>
+</tr>
+</table>
+<p class="metric-note">Verified saves are not a complete popularity ranking. Most recent saved/collection activity: September 30, 2026.</p>
+</div>
+<div class="card">
+<h3>Product and conversion opportunities</h3>
+<ul class="plain">
+<li>
+<strong>Morphology assessment:</strong> high priority; replace &ldquo;Coming Soon,&rdquo; then promote it as a new Plus feature.</li>
+<li>
+<strong>Comprehension Spinner:</strong> flaws are known; use clean post-opt-out evidence before heavily prioritizing it.</li>
+<li>
+<strong>State- and teacher-specific messaging:</strong> future conversion experiments.</li>
+<li><strong>Meta/Facebook ads:</strong> potential future paid-acquisition test, particularly for state-funded homeschool audiences. Test only after signup behavior and conversion are better understood and a specific audience, landing page, and offer are selected.</li>
+<li>
+<strong>LinkedIn and Instagram:</strong> overdue for newer state/product updates.</li>
+<li>
+<strong>Multiplayer:</strong> later roadmap.</li>
+</ul>
+</div>
+</div>
+<h2>Traffic quality / cluster context</h2>
+<div class="callout" style="margin-bottom:16px"><strong>Traffic quality matters more than raw volume alone.</strong> Market signals should be interpreted using <strong>volume + concentration + return behavior + signal type</strong>: how much traffic occurred, whether it clustered around one event, whether the same users/devices returned later, and whether activity represents student reach, mixed instructional use, or teacher/commercial intent.</div>
+<div class="card table-scroll">
+<table class="state-table">
+<tr><th>Observed cluster</th><th>Concentration and return</th><th>Decision-useful interpretation</th></tr>
+<tr><td>Theresa, NY</td><td>Sept. 15 spike; 13 of 16 IDs returned later (81%)</td><td><strong>Strong sustained classroom adoption.</strong> Activity is overwhelmingly free, student-facing Word Wizard, Word Forge, and Spellbound use, with some Google Classroom referrals. This is student reach, not direct buyer intent; no teacher account is confirmed yet.</td></tr>
+<tr><td>Wisconsin</td><td>Sept. 15 cluster; 4 of 20 IDs returned (20%)</td><td><strong>Probable literacy-specialist, PD, or professional-network exposure.</strong> Multiple literacy educators from six school systems created accounts within roughly one hour. Low save counts are not failure; monitor downstream district signups and student traffic.</td></tr>
+<tr><td>Illinois</td><td>40 of 78 sessions on Sept. 30; 31 IDs; no observed returns through Oct. 2</td><td><strong>Too recent to judge retention.</strong> Could be classroom use, PD, or another shared-resource event.</td></tr>
+<tr><td>Leinster, Ireland</td><td>46 of 76 sessions on Sept. 23; 46 IDs; no later same-ID returns</td><td><strong>Likely coordinated one-time event</strong> such as a class, training, presentation, or shared resource; not sustained adoption yet.</td></tr>
+<tr><td>Virginia</td><td>38 of 68 sessions on Sept. 18; 38 IDs; no later same-ID returns</td><td><strong>Likely one-off campaign/shared-link event.</strong> Existing behavior was shallow and does not establish sustained school demand.</td></tr>
+</table>
+</div>
+<div class="grid three" style="margin-top:16px">
+<div class="card"><h3>Student reach / adoption</h3><p>Word Wizard, Word Forge, and Spellbound are free, student-facing homepage games. High use is valuable for classroom adoption and school-cluster detection, but is not a direct purchase signal.</p></div>
+<div class="card"><h3>Mixed instructional use</h3><p>Robot Word Builder, Reading Word Spinner, Digital Reading Flashcards, and Comprehension Spinner may be student-facing but are often teacher-directed. Use depth, repeat behavior, and context before inferring commercial intent.</p></div>
+<div class="card"><h3>Teacher / commercial and need signals</h3><p>Teacher Tools, Teacher Dashboard, Phoneme Counter, Letterbox Lesson, Plus Subscriptions, and state pages are stronger commercial-intent signals. Assessments and fluency indicate high need or potential intent, not automatic purchase intent; some visitors may expect a free tool before encountering the Plus gate.</p></div>
+</div>
+<h2>State revenue readiness</h2>
+<div class="callout" style="margin-bottom:16px">
+<strong>ClassWallet operational blocker.</strong> Following the South Carolina ESTF security incident/review, Literacy Arcade&rsquo;s shared ClassWallet vendor account is archived and inaccessible. Alabama, Arkansas, New Hampshire, and South Carolina purchasing is temporarily on hold until access is restored. Approvals remain intact.</div>
+<div class="card table-scroll"><table class="state-table">
+<tr>
+<th>State</th>
+<th>Provider</th>
+<th>Products</th>
+<th>Platform</th>
+<th>Revenue status</th>
+<th>Business read</th>
+</tr>
+<tr>
+<td>Alabama</td>
+<td>Approved</td>
+<td>Plus Annual + Plus Family approved</td>
+<td>ClassWallet</td>
+<td><span class="status blocked">Temporarily blocked</span></td>
+<td>Restore vendor access</td>
+</tr>
+<tr>
+<td>Arkansas</td>
+<td>Approved</td>
+<td>Plus Annual, Plus Family, Heart Word Cards, Letter Box approved</td>
+<td>ClassWallet</td>
+<td><span class="status blocked">Temporarily blocked</span></td>
+<td>Restore vendor access</td>
+</tr>
+<tr>
+<td>New Hampshire</td>
+<td>Approved</td>
+<td>Plus Annual, Plus Family, Heart Word Cards, Letter Box approved</td>
+<td>ClassWallet</td>
+<td><span class="status blocked">Temporarily blocked</span></td>
+<td>Low marketing priority after restoration</td>
+</tr>
+<tr>
+<td>South Carolina</td>
+<td>Approved</td>
+<td>Plus Annual, Plus Family, Heart Word Cards, Letter Box approved</td>
+<td>ClassWallet</td>
+<td><span class="status blocked">Temporarily blocked</span></td>
+<td>Archived following SC review</td>
+</tr>
+<tr>
+<td>Texas</td>
+<td>Approved</td>
+<td>Plus Annual + Plus Family approved; Letter Box pending</td>
+<td>Odyssey</td>
+<td><span class="status ready">Operational</span></td>
+<td>Strongest immediate state opportunity</td>
+</tr>
+<tr>
+<td>Utah</td>
+<td>Approved</td>
+<td>Letter Box approved; Plus Annual pending; Plus Family not resubmitted</td>
+<td>&mdash;</td>
+<td><span class="status limited">Limited</span></td>
+<td>Low marketing priority</td>
+</tr>
+<tr>
+<td>West Virginia</td>
+<td>Approved</td>
+<td>Plus Annual + physical products approved</td>
+<td>&mdash;</td>
+<td><span class="status ready">Upcoming Oct 15</span></td>
+<td>Quarterly funding begins Oct 15</td>
+</tr>
+<tr>
+<td>Louisiana</td>
+<td>Approved</td>
+<td>Plus Annual, Plus Family, Heart Word Cards, Letter Box pending; none rejected</td>
+<td>&mdash;</td>
+<td><span class="status pending">Pending</span></td>
+<td>Follow up</td>
+</tr>
+<tr>
+<td>Georgia</td>
+<td>Approved</td>
+<td>Plus Annual, Plus Family, Letter Box pending</td>
+<td>&mdash;</td>
+<td><span class="status pending">Pending</span></td>
+<td>Follow up</td>
+</tr>
+<tr>
+<td>Wyoming</td>
+<td>Approved</td>
+<td>Plus Annual, Plus Family, Letter Box pending</td>
+<td>&mdash;</td>
+<td><span class="status pending">Pending</span></td>
+<td>Follow up</td>
+</tr>
+<tr>
+<td>Missouri</td>
+<td>Approved</td>
+<td>Plus Annual, Plus Family, Letter Box pending</td>
+<td>&mdash;</td>
+<td><span class="status pending">Pending</span></td>
+<td>Follow up</td>
+</tr>
+</table></div>
+<h2>Acquisition, partnerships, and retention</h2>
+<div class="grid three">
+<div class="card">
+<h3>Outschool</h3>
+<p>Approved organization with a completed plan. Proposed ISEE tutoring: family pays $90; Outschool receives $27; Literacy Arcade receives $63; teacher receives $50; Literacy Arcade retains $13.</p>
+<p>Plan sent to a prospective teacher; waiting for her response.</p>
+<span class="status limited">Back burner / waiting</span>
+</div>
+<div class="card">
+<h3>Curious Mind Marketplace</h3>
+<p>Regina Gower invited Literacy Arcade to a Marketplace Group Exploration Call after receiving a response.</p>
+<p>Potential fit: physical-product sales. Keep digital subscriptions on Literacy Arcade&rsquo;s Stripe/Firebase system.</p>
+<span class="status limited">Back burner / waiting</span>
+</div>
+<div class="card">
+<h3>Retention and paid-member engagement</h3>
+<p><strong>Cancellation/refund case:</strong> changes and two emails produced no response. This remains unresolved support/retention, not a confirmed cancellation outcome.</p>
+<p><strong>September Plus Family Q&amp;A:</strong> invitations and RSVP form sent; nobody attended. With only two customers, this does not establish that the benefit lacks value.</p>
+</div>
+</div>
+<h2>Clarity measurement status</h2>
+<div class="grid two">
+<div class="card">
+<h3>Supplemental raw API context &middot; 3 days</h3>
+<table>
+<tr>
+<td>Estimated human sessions</td>
+<td>126</td>
+</tr>
+<tr>
+<td>Distinct users</td>
+<td>110</td>
+</tr>
+<tr>
+<td>Pages/session</td>
+<td>1.98</td>
+</tr>
+<tr>
+<td>Dead-click sessions</td>
+<td>25.19%</td>
+</tr>
+<tr>
+<td>Quick-back sessions</td>
+<td>14.50%</td>
+</tr>
+<tr>
+<td>Rage-click sessions</td>
+<td>1.53%</td>
+</tr>
+</table>
+<p class="metric-note">Not used for behavioral conclusions because <code>1t2n1al</code> cannot be removed through the API.</p>
+</div>
+<div class="card">
+<h3>Manual Clarity data still required</h3>
+<p>Provide Last 14 Days and Last 30 Days exports/screenshots with <code>1t2n1al</code> excluded:</p>
+<ul class="plain">
+<li>Users, sessions, and pages/session</li>
+<li>Top pages</li>
+<li>Referral/source traffic</li>
+<li>Country and U.S. state/region as directional observed traffic, not verified residence</li>
+<li>Device mix</li>
+<li>Pricing-page traffic</li>
+<li>Assessment traffic</li>
+<li>Teacher Dashboard / Teacher Tools traffic</li>
+<li>State-page traffic</li>
+<li>Dead clicks, rage clicks, and quick backs</li>
+<li>Any useful high-intent events</li>
+</ul>
+</div>
+</div>
+<h2>Prioritized actions</h2>
+<div class="card"><ol class="actions">
+<li>
+<div>
+<b>Understand and activate recent signups.</b><div class="foot">24 accounts in 14 days and 64 in 30 days; improve first-value measurement without treating non-savers as inactive.</div>
+</div>
+<span class="status ready">Now</span>
+</li>
+<li>
+<div>
+<b>Restore ClassWallet access.</b><div class="foot">One blocker pauses purchasing across four approved state programs.</div>
+</div>
+<span class="status blocked">Now</span>
+</li>
+<li>
+<div>
+<b>Complete and launch the morphology assessment.</b><div class="foot">Replace &ldquo;Coming Soon&rdquo; and promote a concrete new Plus feature.</div>
+</div>
+<span class="status ready">High</span>
+</li>
+<li>
+<div>
+<b>Market Texas and prepare West Virginia.</b><div class="foot">Texas is operational now; West Virginia funding begins October 15.</div>
+</div>
+<span class="status ready">High</span>
+</li>
+<li>
+<div>
+<b>Follow up on pending state product approvals.</b><div class="foot">Prioritize Louisiana, Georgia, Wyoming, Missouri, and Utah Plus Annual status.</div>
+</div>
+<span class="status pending">High</span>
+</li>
+<li>
+<div>
+<b>Refresh LinkedIn and Instagram.</b><div class="foot">Publish current state and product approvals.</div>
+</div>
+<span class="status limited">Next</span>
+</li>
+<li>
+<div>
+<b>Establish a clean post-opt-out Clarity baseline.</b><div class="foot">Use filtered 14- and 30-day windows before prioritizing page/tool work from behavioral analytics.</div>
+</div>
+<span class="status limited">Measure</span>
+</li>
+</ol></div>
+<p class="foot" style="margin-top:26px">Sources: live Firebase Auth and Firestore; Stripe subscription mirror; supplied paid-customer, state, partnership, and retention source-of-truth details; Clarity API for supplemental raw three-day context. All aggregate customer, signup, verified-engagement, saved-activity, and paid metrics exclude the six specified internal accounts.</p></main></body>
+</html>

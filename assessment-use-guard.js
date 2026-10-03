@@ -25,6 +25,10 @@ const PLUS_PLANS_URL = 'plus-subscriptions.html';
 const LOGIN_URL = 'teacher-login.html';
 const DASHBOARD_URL = 'teacher-dashboard.html';
 
+function trackClarityEvent(name) {
+  window.LiteracyArcadeAnalytics?.track(name);
+}
+
 function isPaidPlan(plan) {
   const normalizedPlan = String(plan || '').trim().toLowerCase();
   return normalizedPlan === 'plus' || normalizedPlan === 'family';
@@ -145,7 +149,7 @@ function removeOverlay() {
 
 function actionHtml(action, className) {
   if (!action) return '';
-  if (action.href) return `<a class="${className}" href="${action.href}">${action.label}</a>`;
+  if (action.href) return `<a class="${className}" href="${action.href}" data-aug-action="${action.key}">${action.label}</a>`;
   return `<button type="button" class="${className}" data-aug-action="${action.key}">${action.label}</button>`;
 }
 
@@ -192,18 +196,20 @@ function renderSignedOutOverlay(toolName, onRetry) {
   renderOverlay({
     heading: `${toolName} requires Literacy Arcade Plus`,
     body: 'This assessment is available with an active Literacy Arcade Plus or Plus Family plan. Sign in with your Plus account to continue.',
-    primary: { key: 'signin', label: 'Sign in', href: `${LOGIN_URL}?returnTo=${returnToParam()}` },
-    secondary: { key: 'plans', label: 'View Plus plans', href: PLUS_PLANS_URL },
+    primary: { key: 'signin', label: 'Sign in', href: `${LOGIN_URL}?returnTo=${returnToParam()}`, onClick: () => trackClarityEvent('assessment_gate_signin_click') },
+    secondary: { key: 'plans', label: 'View Plus plans', href: PLUS_PLANS_URL, onClick: () => trackClarityEvent('assessment_gate_plus_click') },
   });
+  trackClarityEvent('assessment_gate_shown');
 }
 
 function renderFreeAccountOverlay(toolName) {
   renderOverlay({
     heading: `Upgrade to Plus to use ${toolName}`,
     body: 'Administering assessments is a Literacy Arcade Plus feature. Your free account can still use Literacy Arcade’s other tools — upgrade to Plus or Plus Family for unlimited assessments, complete printable reports, and more.',
-    primary: { key: 'plans', label: 'View Plus plans', href: PLUS_PLANS_URL },
+    primary: { key: 'plans', label: 'View Plus plans', href: PLUS_PLANS_URL, onClick: () => trackClarityEvent('assessment_gate_plus_click') },
     secondary: { key: 'dashboard', label: 'Go to dashboard', href: DASHBOARD_URL },
   });
+  trackClarityEvent('assessment_gate_shown');
 }
 
 function renderUnknownStatusOverlay(onRetry) {
