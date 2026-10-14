@@ -245,6 +245,8 @@
     .wv-hope-page .wv-cartbar[hidden] { display: none; }
     .wv-hope-page .wv-cartbar-text { font-weight: 800; color: var(--ink); font-size: .95rem; }
     @media (max-width: 480px) { .wv-hope-page .wv-cartbar .btn { width: 100%; justify-content: center; } }
+    /* Payment box leads the TheoPay section as an intro; extra gap before the step cards. */
+    .wv-hope-page .note-panel + .purchase-steps { margin-top: 40px; }
   </style>
 </head>
 <body class="wv-hope-page">
@@ -370,6 +372,15 @@
           <p>West Virginia Hope Scholarship families use TheoPay to submit their purchase. Here's how it works, in four steps.</p>
         </div>
 
+        <div class="note-panel">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <div>
+            <h2>How payment works</h2>
+            <p>You do not complete the purchase with your own credit card. After you submit the cart through TheoPay, the Hope Scholarship purchasing team completes the transaction with Literacy Arcade.</p>
+            <p>For Plus Annual, Literacy Arcade will then set up your account for one full year of access. It does not automatically renew.</p>
+          </div>
+        </div>
+
         <div class="purchase-steps purchase-steps--4">
           <article class="purchase-step">
             <h3>Add items to your cart</h3>
@@ -381,21 +392,12 @@
           </article>
           <article class="purchase-step">
             <h3>Submit with TheoPay</h3>
-            <p>Use TheoPay to scan the cart and submit the purchase request, then continue to checkout.</p>
+            <p>Use TheoPay to scan your cart and submit the purchase request.</p>
           </article>
           <article class="purchase-step">
             <h3>Hope Scholarship completes the order</h3>
             <p>The Hope Scholarship purchasing team reviews your request and completes the purchase with Literacy Arcade.</p>
           </article>
-        </div>
-
-        <div class="note-panel">
-          <span class="note-icon" aria-hidden="true">i</span>
-          <div>
-            <h2>How payment works</h2>
-            <p>You do not complete the purchase with your own credit card. After you submit the cart through TheoPay, the Hope Scholarship purchasing team completes the transaction with Literacy Arcade.</p>
-            <p>For Plus Annual, Literacy Arcade will then set up your account for one full year of access. It does not automatically renew.</p>
-          </div>
         </div>
 
         <div class="purchase-cta">
@@ -501,7 +503,7 @@
         <div class="faq-grid">
           <article class="faq-card">
             <h3>How do I purchase with Hope Scholarship funds?</h3>
-            <p>Add items to your cart on this page, open the cart in Google Chrome while signed in to TheoPay, and use TheoPay to scan the cart and submit the purchase request. Then continue to checkout.</p>
+            <p>Add the eligible items to your cart on this page, open the cart in Google Chrome while signed in to TheoPay, and use TheoPay to scan your cart and submit the purchase request. The Hope Scholarship purchasing team then completes the transaction with Literacy Arcade.</p>
           </article>
           <article class="faq-card">
             <h3>Do I pay with my own credit card?</h3>
