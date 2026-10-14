@@ -44,8 +44,10 @@
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://literacyarcade.com/"},{"@type":"ListItem","position":2,"name":"Assessments","item":"https://literacyarcade.com/assessments.html"},{"@type":"ListItem","position":3,"name":"Phonics Knowledge Check","item":"https://literacyarcade.com/phonics-knowledge-check.html"}]}
   </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
     :root{
       --ink:#17162e;--text:#2d2b4c;--muted:#76748c;--teal:#24b8b2;--teal-dark:#159894;
       --coral:#ff646b;--coral-dark:#e85258;--coral-pale:#fff0f0;--orange:#d97635;--orange-pale:#fff7e7;
@@ -58,7 +60,7 @@
     .right-title{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.right-title h2{font-size:1.28rem;margin:0;font-weight:900}.right-title p{margin:2px 0 0;color:#69657f;font-weight:800;font-size:.82rem}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:5px}.field.full{grid-column:1/-1}label,legend{font-weight:900;color:#8f8a9f;letter-spacing:.08em;text-transform:uppercase;font-size:.72rem}input,select,textarea{width:100%;border:1px solid #dfdbe9;border-radius:12px;background:#fff;padding:10px 11px;color:var(--ink);font-weight:800}select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#5f5a7b 50%),linear-gradient(135deg,#5f5a7b 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat;padding-right:34px}textarea{min-height:76px;resize:vertical}.choice-group{border:0;padding:0;margin:0}.radio-row{display:flex;flex-wrap:wrap;gap:7px}.radio-option{position:relative}.radio-option input{position:absolute;opacity:0;width:1px;height:1px}.radio-option span{display:block;border:1px solid #d9d5e7;border-radius:11px;padding:9px 11px;background:#fff;color:#4b4868;font-weight:900;font-size:.88rem}.radio-option input:checked+span{border-color:var(--teal);background:#e9fbf8;color:#087b78;box-shadow:inset 0 0 0 2px rgba(36,184,178,.16)}.button-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.btn{border:0;border-radius:12px;padding:10px 14px;font-weight:900;transition:transform .15s,box-shadow .15s,background .15s;min-height:40px}.btn:hover{transform:translateY(-1px);box-shadow:0 9px 18px rgba(52,47,93,.13)}.btn.primary{background:var(--teal);color:#fff;box-shadow:0 4px 0 var(--teal-dark)}.btn.primary:hover{background:var(--teal-dark)}.btn.secondary{background:#edf6fa;color:#3d3a5f}.btn.lavender{background:var(--lavender);color:#4e4970}.btn.danger{background:var(--coral);color:#fff;box-shadow:0 4px 0 var(--coral-dark)}.btn.green{background:#4aae68;color:#fff;box-shadow:0 4px 0 #34834d}.btn.gray{background:#97aaa7;color:#fff;box-shadow:0 4px 0 #768986}.btn.gold{background:#f6c54a;color:#4a3300;box-shadow:0 4px 0 #d4a52d}.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.wide{width:100%}
     .student-details-grid{display:grid;gap:10px}.setup-mode-card{border:1px solid var(--line);border-radius:15px;background:linear-gradient(120deg,#fffefa,#f6fffd);padding:12px 13px}.setup-mode-card h3{font-size:1rem;margin:0 0 4px;font-weight:900}.setup-mode-card p{margin:0;color:#4d4a6d;font-weight:800;font-size:.9rem;line-height:1.28}.setup-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.setup-actions .btn{width:100%;padding-left:10px;padding-right:10px}.right-card #setupControls{display:grid;gap:10px}
     .summary-box{display:grid;grid-template-columns:1fr 1fr;gap:9px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fffefa}.workflow-banner{border:1px solid #f1d084;background:#fff7e0;border-radius:14px;padding:9px 11px;color:#4d3a13;font-weight:900;display:grid;gap:3px}.workflow-banner strong{color:#9b5d21;text-transform:uppercase;letter-spacing:.1em;font-size:.72rem}.workflow-banner span{font-size:.86rem;line-height:1.28}.session-line{border:1px solid var(--line);border-radius:14px;background:#fffefa;padding:8px 10px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;color:#4d4a6d;font-size:.8rem}.active-session{display:none}.session-line b{font-size:.82rem}.session-line span{color:#aaa4bb}.summary-item span{display:block;color:#8f8a9f;font-size:.7rem;text-transform:uppercase;font-weight:900;letter-spacing:.08em}.summary-item b{font-size:.96rem}.timer-card{background:var(--orange-pale);border:1px solid #ffd9a7;border-radius:16px;padding:10px;box-shadow:var(--shadow-soft)}.timer-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.timer-label{margin:0 0 3px;color:#9b5d21;letter-spacing:.14em;text-transform:uppercase;font-weight:900;font-size:.75rem}.timer-mode{margin:0;color:#6b5b3e;font-weight:900;font-size:.88rem}.timer-display{font-variant-numeric:tabular-nums;font-size:clamp(2.1rem,3.4vw,2.85rem);line-height:1;font-weight:900;color:var(--orange);letter-spacing:-.05em;margin:2px 0 5px;text-align:center}.timer-hint{margin:0 0 7px;color:#4d4a6d;font-weight:800;font-size:.8rem}.timer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.timer-actions .btn{padding:8px 8px;min-height:38px}.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.score-chip{background:#fff;border:1px solid var(--line);border-radius:13px;padding:7px 9px;min-height:48px;display:grid;align-content:center;gap:1px}.score-chip span{color:#89849c;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}.score-chip b{font-size:1.02rem;color:var(--ink)}.score-chip.errors b{color:var(--coral-dark)}.score-chip.score b{color:var(--teal-dark)}.time-up-banner{display:none;padding:12px 14px;border-radius:14px;background:#fff7e0;border:1px solid #f4cf77;color:#674406;font-weight:900}.time-up-banner.show{display:block;animation:pulseBanner 1.2s ease-in-out infinite alternate}@keyframes pulseBanner{from{box-shadow:0 0 0 rgba(246,197,74,0)}to{box-shadow:0 0 0 5px rgba(246,197,74,.18)}}.completed-note{border:1px solid #b7e7e1;background:#ecfbf8;border-radius:15px;padding:13px 14px;color:#176b68;font-weight:900}
-    .grid-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}.grid-head h2{font-size:1.22rem;margin:0 0 2px;font-weight:900}.grid-head p{margin:0;color:#69657f;font-weight:800;font-size:.9rem}.form-tag{white-space:nowrap;background:#e7f8ff;color:#266079;border-radius:999px;padding:6px 10px;font-weight:900;font-size:.8rem}.letter-grid{display:grid;grid-template-columns:repeat(13,minmax(34px,1fr));gap:5px;flex:1}.letter-tile{position:relative;min-height:38px;border:1.5px solid var(--line-blue);background:#fff;border-radius:8px;color:#19324a;font-family:Lexend,Arial,sans-serif;font-size:1.17rem;line-height:1;font-weight:700;padding:0}.letter-tile:hover{border-color:#86b5ce;background:#f8fdff}.letter-tile.incorrect{color:#8e2525;border-color:var(--coral);background:var(--coral-pale)}.letter-tile.incorrect::after{content:"×";position:absolute;right:3px;top:1px;font-family:Nunito,sans-serif;font-size:.82rem;font-weight:900;line-height:1;color:var(--coral-dark)}.letter-tile.last-attempted{border:2.5px solid #e0a330;box-shadow:0 0 0 2px #fff2ca;background:#fffefa}.letter-tile.last-attempted::before{content:"last";position:absolute;left:50%;bottom:-10px;transform:translateX(-50%);z-index:1;border-radius:5px;padding:1px 4px;background:#f6c54a;color:#493000;font-family:Nunito,sans-serif;font-size:8px;font-weight:900}.counter{margin-top:10px;font-weight:900;color:#5e5a76;font-size:.9rem}
+    .grid-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}.grid-head h2{font-size:1.22rem;margin:0 0 2px;font-weight:900}.grid-head p{margin:0;color:#69657f;font-weight:600;font-size:.9rem}.form-tag{white-space:nowrap;background:#e7f8ff;color:#266079;border-radius:999px;padding:6px 10px;font-weight:900;font-size:.8rem}.letter-grid{display:grid;grid-template-columns:repeat(13,minmax(34px,1fr));gap:5px;flex:1}.letter-tile{position:relative;min-height:38px;border:1.5px solid var(--line-blue);background:#fff;border-radius:8px;color:#19324a;font-family:Lexend,Arial,sans-serif;font-size:1.17rem;line-height:1;font-weight:700;padding:0}.letter-tile:hover{border-color:#86b5ce;background:#f8fdff}.letter-tile.incorrect{color:#8e2525;border-color:var(--coral);background:var(--coral-pale)}.letter-tile.incorrect::after{content:"×";position:absolute;right:3px;top:1px;font-family:Nunito,sans-serif;font-size:.82rem;font-weight:900;line-height:1;color:var(--coral-dark)}.letter-tile.last-attempted{border:2.5px solid #e0a330;box-shadow:0 0 0 2px #fff2ca;background:#fffefa}.letter-tile.last-attempted::before{content:"last";position:absolute;left:50%;bottom:-10px;transform:translateX(-50%);z-index:1;border-radius:5px;padding:1px 4px;background:#f6c54a;color:#493000;font-family:Nunito,sans-serif;font-size:8px;font-weight:900}.counter{margin-top:10px;font-weight:900;color:#5e5a76;font-size:.9rem}
 
     .live-under-grid{margin-top:12px;border:1px solid var(--line);border-radius:15px;background:#fffefa;padding:10px 12px;display:grid;grid-template-columns:1.25fr .9fr;gap:10px;align-items:start}
     .live-under-grid h3{font-size:.95rem;margin:0 0 7px;font-weight:900;color:var(--ink)}
@@ -95,11 +97,14 @@
     .one-page{flex:1}
     .footer{margin-top:auto;padding-top:12px;padding-bottom:10px}
     .home-link svg{display:block}.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-    .overview-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-top:16px}
-    .overview-card{border:1px solid var(--line);border-radius:16px;background:#fffefa;padding:16px 18px;box-shadow:var(--shadow-soft)}
+    #overviewPanel.active{display:flex;flex:1;flex-direction:column}
+    .overview-grid{display:grid;grid-template-columns:1fr;align-items:stretch;gap:14px;margin-top:18px}
+    .overview-card{border:1px solid var(--line);border-radius:16px;background:#fffefa;padding:16px 18px;box-shadow:var(--shadow-soft);box-sizing:border-box;display:flex;flex-direction:column}
     .overview-card h3{margin:0 0 10px;font-size:1.05rem;font-weight:900;color:var(--ink)}
-    .overview-card ol{margin:0;padding-left:1.25rem;color:#4d4a6d;font-weight:800;display:grid;gap:6px;font-size:.94rem}
-    .check-points{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    .overview-card ol{margin:0;padding:0;list-style:none;counter-reset:overview-step;color:#4d4a6d;font-weight:800;display:grid;grid-template-columns:1fr;gap:8px;font-size:.94rem}
+    .overview-card ol li{counter-increment:overview-step;display:grid;grid-template-columns:28px minmax(0,1fr);align-items:center;gap:10px;min-height:30px}
+    .overview-card ol li::before{content:counter(overview-step);width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#f0fbf9;border:1px solid #d4ece8;color:#27615e;font-size:.78rem;font-weight:900;line-height:1}
+    .check-points{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:1fr;gap:9px}
     .check-points span{border:1px solid #d8ecea;background:#f4fffd;color:#27615e;border-radius:12px;padding:10px 11px;font-weight:900;font-size:.88rem}
     .score-banner.compact-results{background:#fff;border:1px solid var(--line);border-left:8px solid var(--teal);color:var(--ink);box-shadow:var(--shadow-soft);border-radius:16px;padding:15px 18px;grid-template-columns:auto 1fr;gap:16px}
     .score-banner.compact-results .main-score-line{font-size:2.65rem;line-height:1;font-weight:900;color:var(--teal-dark);letter-spacing:-.04em;white-space:nowrap}
@@ -111,7 +116,7 @@
     .complete-score-card small{font-weight:900;color:#6d6883}
     .complete-detail-line{border:1px solid var(--line);background:#fffefa;border-radius:13px;padding:9px 10px;color:#5f5a7b;font-weight:900;font-size:.84rem}
     #completeControls .summary-box,#completeControls .completed-note{display:none}
-    @media(max-width:650px){.overview-grid{grid-template-columns:1fr}.check-points{grid-template-columns:1fr}.score-banner.compact-results{grid-template-columns:1fr}.score-banner.compact-results .main-score-line{font-size:2.25rem}}
+    @media(max-width:650px){.overview-grid{grid-template-columns:1fr}.check-points{grid-template-columns:repeat(2,minmax(0,1fr))}.score-banner.compact-results{grid-template-columns:1fr}.score-banner.compact-results .main-score-line{font-size:2.25rem}}
 
     @media(max-width:1050px){.one-page{grid-template-columns:1fr}.right-card{position:static;max-height:none}.left-card{min-height:auto}.letter-grid{grid-template-columns:repeat(10,1fr)}}@media(max-width:650px){main{padding:14px 10px 34px}.live-under-grid{grid-template-columns:1fr}.live-summary-row{grid-template-columns:1fr 1fr}.topbar{padding:0 12px}.brand-name,.divider{display:none}.tool-title{font-size:.95rem}.card{padding:16px}.field-grid,.mini-metrics,.result-grid{grid-template-columns:1fr}.letter-grid{grid-template-columns:repeat(5,1fr)}.letter-tile{min-height:42px}.timer-actions,.status-grid{grid-template-columns:1fr}.score-banner{grid-template-columns:1fr}.score-number{font-size:3.5rem}}
     @media print{@page{margin:.45in;size:auto}body{background:#fff;color:#13233a}.topbar,main{display:none!important}body.printing .print-page{font-family:Nunito,Arial,sans-serif}.print-report{font-size:10.5pt;color:#16213b}.print-brand{display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid #24b8b2;padding-bottom:10px;margin-bottom:18px}.print-brand-left{display:flex;align-items:center;gap:10px}.print-logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#2fc7bd,#7464b7);color:#fff;display:grid;place-items:center;font-weight:900;font-style:italic;font-size:15pt}.print-brand-name{font-weight:900;font-size:16pt;color:#17162e}.print-tool-name{font-weight:800;color:#159894;font-size:10pt}.print-report h1{margin:0 0 8px;font-size:20pt;color:#17162e}.print-subtitle{margin:0 0 14px;color:#514d72;font-weight:800}.report-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 14px;background:#f7fbfb;border:1px solid #d8ecea;border-radius:10px;padding:10px;margin-bottom:14px}.report-meta div{font-size:10pt}.report-meta b{display:block;color:#77738f;text-transform:uppercase;font-size:7.8pt;letter-spacing:.08em}.print-score{background:#24b8b2;color:#fff;border-radius:14px;padding:14px 16px;margin:12px 0 14px;display:flex;align-items:center;gap:16px}.print-score strong{font-size:26pt;line-height:1;color:#fff6bd}.print-score span{display:block;font-weight:900;font-size:13pt}.print-score small{font-weight:800;color:#e8fffc}.print-section{margin-top:14px;break-inside:avoid}.print-section h2{margin:0 0 8px;font-size:13pt;color:#17162e}.print-table{width:100%;border-collapse:collapse}.print-table td{border-bottom:1px solid #ddd8e8;padding:6px 5px}.print-table td:first-child{width:58%;font-weight:800;color:#5c5875}.print-two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}.print-chips{display:flex;flex-wrap:wrap;gap:5px}.print-chip{display:inline-block;background:#fff0f0;color:#922e2e;border-radius:8px;padding:4px 7px;font-weight:800;margin:0 4px 4px 0}.print-pattern{border:1px solid #d8ecea;background:#f7fffd;border-radius:10px;padding:9px 10px;margin:8px 0;break-inside:avoid}.print-pattern h3{margin:0 0 5px;font-size:11pt}.print-pattern p{margin:4px 0 0;color:#4d4a6d;font-size:9.5pt}.print-note{margin-top:12px;padding:10px;border-radius:10px;background:#f0faf9;color:#36566c;font-size:9.5pt;font-weight:700}.print-footer{position:fixed;bottom:.18in;left:.45in;right:.45in;border-top:1px solid #d8ecea;padding-top:6px;font-size:8.5pt;color:#6f6b86;display:flex;justify-content:space-between}.student-directions{margin:0 0 20px;color:#333}.print-letter-grid{display:grid;grid-template-columns:repeat(13,1fr);gap:10px 14px;padding:8px}.print-letter{text-align:center;font-family:Lexend,Arial,sans-serif;font-size:25pt;line-height:1.25}.report-header{border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:17px}.print-page h1{margin:0;font-size:22pt;color:#000}.print-page .print-subtitle{margin:4px 0 22px;color:#333;font-size:12pt}}
@@ -132,7 +137,7 @@
       body.printing .print-page{display:none!important}
       body.printing.printing-student #studentPrint{display:block!important}
       body.printing.printing-report #reportPrint{display:block!important}
-      .print-student,.print-report{font-family:Nunito,Arial,sans-serif;color:#16213b;min-height:10in;padding-bottom:.65in;position:relative}
+      .print-student,.print-report{font-family:Nunito,Arial,sans-serif;color:#16213b;position:relative}
       .print-brand{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #24b8b2;padding-bottom:9px;margin-bottom:18px}
       .print-brand-left{display:flex;align-items:center;gap:10px}
       .print-logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#4ec4c7 0%,#4fa9c9 45%,#6f62b7 100%);color:#fff;display:grid;place-items:center;font-family:Georgia,"Times New Roman",serif;font-weight:800;font-style:italic;font-size:13pt;letter-spacing:-.14em;text-shadow:0 1px 1px rgba(16,34,58,.25)}
@@ -143,9 +148,9 @@
       .student-directions{margin:0 0 18px;color:#3d3a50;font-size:12.5pt;line-height:1.4}
       .print-letter-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:18px 26px;padding:12px 22px 0;margin-top:10px}
       .print-letter{text-align:center;font-family:Lexend,Arial,sans-serif;font-size:34pt;line-height:1.05;color:#152a40;font-weight:400}
-      .print-student .print-brand{padding-bottom:10px;margin-bottom:18px}
-      .print-student .print-logo{display:none}
-      .print-student .print-brand-left{gap:0}
+      .print-student .print-brand{padding-bottom:9px;margin-bottom:14px}
+      .print-student .print-logo{display:block!important;width:34px;height:34px;flex:0 0 auto}
+      .print-student .print-brand-left{gap:10px}
       .print-student .print-brand-name{font-size:17pt;letter-spacing:0;color:#17162e}
       .print-student .print-tool-name{font-size:10pt;color:#159894}
       .print-student .print-letter-grid{grid-template-columns:repeat(8,1fr);gap:18px 34px;width:82%;max-width:7.2in;margin:38px auto 0;padding:0}
@@ -350,6 +355,7 @@
     }
     .setup-mode-card h3{font-size:15px;font-weight:800;}
     .setup-mode-card p{font-size:13px;font-weight:600;line-height:1.45;}
+    .section-helper{margin:0 0 9px;color:#625d79;font-size:13px;font-weight:700;line-height:1.4}
     .ready-box{
       padding:11px 13px;
       background:#fffefa;
@@ -360,17 +366,21 @@
     .overview-grid{gap:10px;margin-top:12px;}
     .overview-card{padding:12px 14px;box-shadow:none;}
     .overview-card h3{font-size:15px;font-weight:800;margin-bottom:7px;}
-    .overview-card ol{font-size:13.5px;font-weight:600;line-height:1.5;gap:4px;}
+    .overview-card ol{font-size:13.5px;font-weight:600;line-height:1.5;gap:7px;}
     .check-points span{
       border-color:#D4ECE8;
       background:#F0FBF9;
       color:#27615e;
-      min-height:46px;
+      min-height:58px;
       display:flex;
       align-items:center;
+      justify-content:center;
+      text-align:center;
       padding:9px 10px;
       font-size:13px;
       font-weight:700;
+      line-height:1.3;
+      white-space:nowrap;
     }
 
     .btn{
@@ -394,7 +404,8 @@
       background:var(--lavender);
       color:var(--text);
     }
-    .setup-actions{gap:8px;margin-top:9px;}
+    .setup-actions{gap:8px;margin-top:7px;}
+    .setup-actions .start-hint{grid-column:1/-1;margin-top:1px;}
     .radio-row{gap:7px;}
     .radio-option span{
       min-height:38px;
@@ -468,6 +479,7 @@
     .phonics-section{margin:16px 0 0}
     .phonics-section .sec-h{font-size:1rem;font-weight:900;margin:0 0 2px;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
     .phonics-section .sec-h .sec-score{font-weight:900;font-size:.82rem;color:var(--teal-dark)}
+    .phonics-section .sec-h .sec-score.sec-count{color:#8f8a9f;font-weight:800}
     .phonics-section .sec-sub{color:#8f8a9f;font-weight:800;font-size:.74rem;margin:0 0 8px}
     .word-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
     .word-tile{position:relative;border:1.5px solid #cfe0ec;background:#fff;border-radius:12px;padding:13px 8px 16px;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:.12s;box-shadow:var(--shadow-soft)}
@@ -481,12 +493,13 @@
     .word-tile .wt-resp{position:absolute;left:5px;right:5px;bottom:3px;font-size:.6rem;font-weight:800;color:#9b2c2c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
     @media(max-width:760px){.word-grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:430px){.word-grid{grid-template-columns:repeat(2,1fr)}}
-    .section-toggle-host{display:grid;gap:7px}
-    .sec-toggle{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:11px;padding:9px 11px;background:#fff;cursor:pointer;text-transform:none;letter-spacing:normal;font-weight:400}
+    .section-toggle-host{display:grid;gap:5px}
+    .sec-toggle{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:11px;padding:7px 11px;background:#fff;cursor:pointer;text-transform:none;letter-spacing:normal;font-weight:400;min-width:0}
     .sec-toggle input{position:absolute;opacity:0;width:1px;height:1px}
     .sec-toggle .st-textwrap{display:grid;gap:1px}
     .sec-toggle .st-text{font-weight:800;font-size:.86rem;color:#3d3a5f}
     .sec-toggle .st-sub{font-weight:700;font-size:.72rem;color:#9a96ad}
+    .sec-toggle .st-textwrap,.sec-toggle .st-text,.sec-toggle .st-sub{min-width:0;overflow-wrap:anywhere}
     .sec-toggle.disabled{opacity:.55;cursor:not-allowed}
     /* Sec-toggle: clear on/off visual state */
     .sec-toggle input:checked + .opt-track{background:var(--teal)}
@@ -497,17 +510,19 @@
     .admin-how-box{border:1px solid var(--line);border-radius:14px;background:#fffefa;padding:12px 14px;margin-bottom:12px}
     .admin-how-box h3{font-size:.9rem;font-weight:900;margin:0 0 8px;color:var(--ink)}
     .admin-script{background:#f0f8f7;border:1px solid #cde9e5;border-radius:10px;padding:9px 12px;margin-bottom:9px}
-    .admin-script-intro{margin:0 0 6px;font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
-    .admin-quote{margin:0;font-style:italic;font-weight:700;color:var(--ink);font-size:.88rem;line-height:1.5;border-left:3px solid var(--teal);padding-left:10px}
-    .admin-reminder{font-size:.83rem;font-weight:800;color:#4d4a6d;display:grid;gap:6px;margin-top:0}
+    .admin-script-intro{margin:0 0 6px;font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+    .admin-quote{margin:0;font-style:italic;font-weight:500;color:var(--ink);font-size:.88rem;line-height:1.5;border-left:3px solid var(--teal);padding-left:10px}
+    .admin-reminder{font-size:.83rem;font-weight:500;color:#4d4a6d;display:grid;gap:6px;margin-top:0}
     .admin-reminder p{margin:0;line-height:1.42}
+    .admin-reminder b{font-weight:900}
     /* Not-administered section */
     .phonics-section.not-admin .sec-h{color:var(--muted)}
     .phonics-section.not-admin .word-grid{opacity:.25;pointer-events:none;user-select:none}
     .phonics-section.not-admin .sec-sub{display:none}
-    .not-admin-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:3px 0 7px;padding:5px 9px;background:#f5f3f9;border:1px solid var(--line);border-radius:9px;min-height:30px}
+    .not-admin-bar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:4px 0 9px;padding:0;background:transparent;border:0;min-height:28px}
+    .phonics-section.not-admin .not-admin-bar{justify-content:space-between;padding:5px 9px;background:#f5f3f9;border:1px solid var(--line);border-radius:9px}
     .not-admin-tag{font-size:.74rem;font-weight:900;color:#8b87a2}
-    .sec-not-admin-btn{border:none;background:none;color:var(--teal-dark);font-size:.75rem;font-weight:900;cursor:pointer;padding:0;text-decoration:underline;white-space:nowrap}
+    .sec-not-admin-btn{border:1px solid #9dddd6;background:#f0fbf9;color:var(--teal-dark);border-radius:999px;font-size:.75rem;font-weight:900;cursor:pointer;padding:5px 9px;text-decoration:none;white-space:nowrap}
     .band-pill.band-na{background:#ece9f5;color:#7b77a2}
     .sec-result-row.not-admin-row .srr-name{color:var(--muted)}
     .sec-result-row.not-admin-row .srr-score{color:var(--muted)}
@@ -524,14 +539,15 @@
     .overall-banner .ob-meta p{margin:0;font-weight:900;font-size:1rem;color:var(--ink)}
     .overall-banner .ob-meta small{color:#67706f;font-weight:800;font-size:.82rem}
     @media(max-width:650px){.overall-banner{grid-template-columns:1fr}}
+    .ps-word{font-family:'Lexend',Arial,sans-serif;font-weight:500}
     @media print{
-      .ps-section{margin:0 0 22px;break-inside:avoid;page-break-inside:avoid}
-      .ps-section h2{font-size:12.5pt;margin:0 0 10px;color:#17162e}
-      .ps-words{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 22px;margin-top:4px}
-      .ps-word{display:block;text-align:center;font-family:'Lexend', Lexend, Arial, sans-serif!important;font-size:15pt;font-weight:700;color:#19324a}
+      .print-student .print-subtitle{margin-bottom:24px}
+      .ps-section{margin:0 0 24px;break-inside:avoid;page-break-inside:avoid}
+      .ps-section h2{font-size:12.5pt;margin:0 0 18px;color:#17162e}
+      .ps-words{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px 20px;margin-top:0}
+      .ps-word{display:block;text-align:center;font-size:19pt!important;line-height:1.16;color:#19324a}
       .print-page-break{break-before:page;page-break-before:always}
-      .student-section-break{break-before:page;page-break-before:always}
-      .print-student{display:block!important;min-height:10in!important;padding-bottom:.75in!important}.print-student .print-footer{position:fixed!important;bottom:.2in!important;left:.45in!important;right:.45in!important;margin-top:0!important;border-top:1px solid #d8ecea;padding-top:7px;text-align:center!important;display:block!important;color:#817d94;font-size:8.4pt;line-height:1.35}
+      .print-student{display:block!important}
       .print-focus-group{border:1px solid #d8ecea;background:#f7fffd;border-radius:10px;padding:9px 10px;margin:8px 0;break-inside:avoid}
       .print-focus-group h3{margin:0 0 3px;font-size:10.6pt;color:#17162e}
       .print-focus-group p{margin:2px 0 6px;color:#4d4a6d;font-size:8.8pt;line-height:1.28}
@@ -553,6 +569,8 @@
     .band-pill.band-need,.pband.need{background:#fff0f0;color:#8e2525}
     /* Opt-toggle (timer) */
     .opt-toggle{position:relative;display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:11px;padding:9px 11px;background:#fff;cursor:pointer;text-transform:none;letter-spacing:normal;font-weight:400}
+    .options-field{margin-top:5px;padding-top:8px;border-top:1px solid var(--line)}
+    .options-label{display:block;margin:0 0 6px;color:var(--muted);font-size:.7rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
     .opt-toggle input{position:absolute;opacity:0;width:1px;height:1px}
     .opt-track{flex:0 0 36px;height:20px;background:#e2ddf0;border-radius:999px;position:relative;transition:.15s}
     .opt-toggle input:checked + .opt-track{background:var(--teal)}
@@ -567,6 +585,7 @@
     .pattern-chip.chip-ok{background:#f0fbf9;border-color:#9dddd6;color:var(--ink)}
     .pattern-chip.chip-ok small{color:#3b8a7a}
     .start-hint{margin:6px 0 0;font-size:.8rem;font-weight:800;color:#b05c2a;text-align:center}
+    @media(max-width:430px){.sec-toggle,.opt-toggle{gap:8px;padding-left:9px;padding-right:9px}.sec-toggle .st-text{font-size:.82rem}.sec-toggle .st-sub{font-size:.69rem}}
   </style>
   <link rel="stylesheet" href="./firebase-tool-gate.css">
   <script type="module" src="./firebase-tool-gate.js"></script>
@@ -587,26 +606,25 @@
         <div id="overviewPanel" class="panel-state active">
           <p class="eyebrow">Phonics Knowledge Check</p>
           <p class="headline">Check phonics and decoding knowledge.</p>
-          <p class="subhead">Students read real and nonsense words organized by phonics pattern. The teacher records miscues so the report can highlight possible instructional needs in phoneme-grapheme correspondences, including short vowels, blends, digraphs, vowel teams, r-controlled vowels, and other spelling-sound patterns.</p>
-          <div class="ready-box overview-ready"><h3>Ready to assess</h3><p>Enter student details, choose which sections to administer, and print the student word sheet before you begin.</p></div>
+          <p class="subhead">Students read real and nonsense words organized by phonics and syllable pattern. Record miscues to identify possible instructional needs in decoding.</p>
           <div class="overview-grid" aria-label="How the check works">
             <section class="overview-card">
               <h3>How it works</h3>
               <ol>
+                <li>Choose the sections you want to administer.</li>
                 <li>Print the student word sheet.</li>
                 <li>Have the student read each word aloud.</li>
-                <li>Tap a word only if the student makes a miscue.</li>
-                <li>Type what the student said, or mark "Skipped / did not know."</li>
-                <li>Review accuracy and instructional focus notes.</li>
+                <li>Tap a word only when there is a miscue, then record the response or select “Skipped / did not know.”</li>
+                <li>Review accuracy and automatic analysis of miscues.</li>
               </ol>
             </section>
             <section class="overview-card">
               <h3>What this check shows</h3>
               <div class="check-points">
-                <span>Decoding by phonics pattern</span>
-                <span>Real vs. nonsense word reading</span>
-                <span>Accuracy by section</span>
-                <span>Possible instructional focus</span>
+                <span>Decoding by<br>phonics pattern</span>
+                <span>Real vs. nonsense<br>word reading</span>
+                <span>Accuracy by<br>section</span>
+                <span>Automatic analysis<br>of miscues</span>
               </div>
             </section>
           </div>
@@ -625,11 +643,11 @@
             <h3>How to administer</h3>
             <div class="admin-script">
               <p class="admin-script-intro">Point to the student word sheet and say:</p>
-              <p class="admin-quote">"Today you are going to read some words aloud. Some are real words and some are nonsense words. For nonsense words, look at the letters and sounds, then read the word exactly as it is written."</p>
+              <p class="admin-quote">“Today you are going to read some words aloud. Some are real words and some are nonsense words.”</p>
             </div>
             <div class="admin-reminder">
-              <p><b>Scoring:</b> Tap a word only if the student makes a miscue. Type what the student said as closely as you can, or choose "Skipped / did not know" if there was no attempt.</p>
-              <p><b>Important:</b> Do not correct the student during the check. Move to the next word and use the results to plan instruction after the check.</p>
+              <p><b>Scoring:</b> Tap a word only if the student makes a miscue. Record what the student said as closely as you can. If the response is not a real word, spell it the best you can based on what you heard, or choose “Skipped / did not know” if there was no attempt.</p>
+              <p><b>Important:</b> Do not correct the student during the check. Move to the next word and use the results to plan instruction afterward.</p>
             </div>
           </div>
           <div id="sectionsHost"></div>
@@ -675,6 +693,7 @@
             <section class="results-card">
               <h3>Real vs Nonsense Words</h3>
               <div class="metric-list" id="realNonsenseMetrics"></div>
+              <p class="pattern-note">Nonsense words provide supplemental evidence of phonics transfer. Interpret differences cautiously because familiarity and comfort with made-up-word tasks can affect performance.</p>
             </section>
 
             <!-- Missed words -->
@@ -718,16 +737,12 @@
             <div class="field"><label for="gradeLevel">Grade</label><select id="gradeLevel"><option value="">Select grade</option><option>Pre-K</option><option>Kindergarten</option><option>1st Grade</option><option>2nd Grade</option><option>3rd Grade</option><option>4th Grade+</option><option>Other</option></select></div>
             <div class="field"><label for="timeOfYear">Time of year</label><select id="timeOfYear"><option value="">Select time</option><option>Beginning of Year</option><option>Middle of Year</option><option>End of Year</option><option>Other</option></select></div>
             <div class="field full">
-              <div class="setup-mode-card">
-                <h3>Phonics Knowledge Check</h3>
-                <p>Real and nonsense words · 7 sections · 15 words per section<br>Sections are listed from easier to harder. Toggle sections on or off to customize the check.</p>
-              </div>
-            </div>
-            <div class="field full">
               <label style="display:block;margin-bottom:7px">Sections to administer</label>
+              <p class="section-helper">Toggle sections on or off to customize the check. Print the student word sheet before you begin.</p>
               <div id="sectionToggleHost" class="section-toggle-host"></div>
             </div>
-            <div class="field full">
+            <div class="field full options-field">
+              <span class="options-label">Options</span>
               <label class="opt-toggle">
                 <input type="checkbox" id="optTimer">
                 <span class="opt-track"></span>
@@ -738,6 +753,7 @@
           <div class="setup-actions">
             <button class="btn secondary" id="printSheetBtn" type="button">Print Student Sheet</button>
             <button class="btn primary" id="startAssessmentBtn" type="button">Start Assessment</button>
+            <p id="printSheetHint" class="start-hint" hidden>Choose at least one section to print the student sheet.</p>
             <p id="startHint" class="start-hint" hidden>Choose at least one section to begin.</p>
           </div>
         </div>
@@ -828,7 +844,7 @@
     /* Easy to edit: add/remove words or sections. Each word supports:
        word · type ('real'|'nonsense') · targetPattern · targetVowel plus
        grapheme/phoneme focus fields for the instructional report.
-       Current sections use 15 words each (10 real + 5 nonsense). */
+       Section word counts vary and are calculated from this data. */
     const PHONICS_WORDS = [
       {
         sectionId:"short-vowels-cvc",
@@ -837,7 +853,7 @@
           { word:"cat", type:"real", targetPattern:"CVC short vowel", targetVowel:"short a /ă/", primaryGrapheme:"a", primaryPhoneme:"/ă/", primaryFocus:"a spelling for short a /ă/ in a CVC word", instructionalFocus:"a spelling for short a /ă/ in a CVC word", whyChosen:"Checks whether the student reads a as short a /ă/ in a simple closed-syllable CVC word.", notes:"Flag short a only if the vowel is changed or omitted. Regular consonant changes count as miscues but should not be treated as a short-a problem." },
           { word:"map", type:"real", targetPattern:"CVC short vowel", targetVowel:"short a /ă/", primaryGrapheme:"a", primaryPhoneme:"/ă/", primaryFocus:"a spelling for short a /ă/ in a CVC word", instructionalFocus:"a spelling for short a /ă/ in a CVC word", whyChosen:"Adds a second real-word check for short a /ă/ in a CVC word.", notes:"Use with cat to see whether short a is a repeated pattern or a one-time miscue." },
           { word:"bed", type:"real", targetPattern:"CVC short vowel", targetVowel:"short e /ĕ/", primaryGrapheme:"e", primaryPhoneme:"/ĕ/", primaryFocus:"e spelling for short e /ĕ/ in a CVC word", instructionalFocus:"e spelling for short e /ĕ/ in a CVC word", whyChosen:"Checks whether the student reads e as short e /ĕ/ in a simple CVC word.", notes:"Flag short e if the vowel changes, such as bed → bid." },
-          { word:"hen", type:"real", targetPattern:"CVC short vowel", targetVowel:"short e /ĕ/", primaryGrapheme:"e", primaryPhoneme:"/ĕ/", primaryFocus:"e spelling for short e /ĕ/ in a CVC word", instructionalFocus:"e spelling for short e /ĕ/ in a CVC word", whyChosen:"Adds a second real-word check for short e /ĕ/ in a CVC word.", notes:"Do not flag short e if only a regular consonant changes." },
+          { word:"net", type:"real", targetPattern:"CVC short vowel", targetVowel:"short e /ĕ/", primaryGrapheme:"e", primaryPhoneme:"/ĕ/", primaryFocus:"e spelling for short e /ĕ/ in a CVC word", instructionalFocus:"e spelling for short e /ĕ/ in a CVC word", whyChosen:"Adds a second real-word check for short e /ĕ/ without a dialect-sensitive pre-nasal vowel.", notes:"Do not flag short e if only a regular consonant changes." },
           { word:"pig", type:"real", targetPattern:"CVC short vowel", targetVowel:"short i /ĭ/", primaryGrapheme:"i", primaryPhoneme:"/ĭ/", primaryFocus:"i spelling for short i /ĭ/ in a CVC word", instructionalFocus:"i spelling for short i /ĭ/ in a CVC word", whyChosen:"Checks whether the student reads i as short i /ĭ/ in a simple CVC word.", notes:"Flag short i if the vowel changes, such as pig → peg." },
           { word:"sit", type:"real", targetPattern:"CVC short vowel", targetVowel:"short i /ĭ/", primaryGrapheme:"i", primaryPhoneme:"/ĭ/", primaryFocus:"i spelling for short i /ĭ/ in a CVC word", instructionalFocus:"i spelling for short i /ĭ/ in a CVC word", whyChosen:"Adds a second real-word check for short i /ĭ/ in a CVC word.", notes:"Use with pig to determine whether short i is a repeated pattern." },
           { word:"dog", type:"real", targetPattern:"CVC short vowel", targetVowel:"short o /ŏ/", primaryGrapheme:"o", primaryPhoneme:"/ŏ/", primaryFocus:"o spelling for short o /ŏ/ in a CVC word", instructionalFocus:"o spelling for short o /ŏ/ in a CVC word", whyChosen:"Checks whether the student reads o as short o /ŏ/ in a simple CVC word.", notes:"Flag short o if the vowel changes, such as dog → dig." },
@@ -865,11 +881,14 @@
           { word:"help", type:"real", targetPattern:"final lp blend with short vowel", targetVowel:"short e /ĕ/", primaryGrapheme:"lp", primaryPhoneme:"/lp/", primaryFocus:"final lp blend", secondaryGrapheme:"e", secondaryPhoneme:"/ĕ/", secondaryFocus:"e spelling for short e /ĕ/", instructionalFocus:"final lp blend and short e /ĕ/", whyChosen:"Checks a final l-blend with short e /ĕ/.", notes:"If help → hep, flag final blend reduction." },
           { word:"jump", type:"real", targetPattern:"final mp blend with short vowel", targetVowel:"short u /ŭ/", primaryGrapheme:"mp", primaryPhoneme:"/mp/", primaryFocus:"final mp blend", secondaryGrapheme:"u", secondaryPhoneme:"/ŭ/", secondaryFocus:"u spelling for short u /ŭ/", instructionalFocus:"final mp blend and short u /ŭ/", whyChosen:"Checks a final nasal blend with short u /ŭ/.", notes:"If jump → jum, flag final mp blend/final sound omission." },
           { word:"pond", type:"real", targetPattern:"final nd blend with short vowel", targetVowel:"short o /ŏ/", primaryGrapheme:"nd", primaryPhoneme:"/nd/", primaryFocus:"final nd blend", secondaryGrapheme:"o", secondaryPhoneme:"/ŏ/", secondaryFocus:"o spelling for short o /ŏ/", instructionalFocus:"final nd blend and short o /ŏ/", whyChosen:"Checks a final nasal blend with short o /ŏ/.", notes:"If pond → pod or pon, flag the final nd blend." },
-          { word:"glap", type:"nonsense", targetPattern:"initial gl blend with short vowel", targetVowel:"short a /ă/", primaryGrapheme:"gl", primaryPhoneme:"/gl/", primaryFocus:"initial gl blend", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"initial gl blend and short a /ă/ in a nonsense word", whyChosen:"Checks whether the student applies an initial gl blend in an unfamiliar word.", notes:"Nonsense words are assessment probes only." },
+          { word:"strap", type:"real", targetPattern:"initial str three-consonant blend", targetVowel:"short a /ă/", primaryGrapheme:"str", primaryPhoneme:"/str/", primaryFocus:"initial str three-consonant blend", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"initial str three-consonant blend and short a /ă/", whyChosen:"Checks a major three-consonant initial blend.", notes:"Flag blend reduction only when part of str is changed or omitted." },
+          { word:"split", type:"real", targetPattern:"initial spl three-consonant blend", targetVowel:"short i /ĭ/", primaryGrapheme:"spl", primaryPhoneme:"/spl/", primaryFocus:"initial spl three-consonant blend", secondaryGrapheme:"i", secondaryPhoneme:"/ĭ/", secondaryFocus:"i spelling for short i /ĭ/", instructionalFocus:"initial spl three-consonant blend and short i /ĭ/", whyChosen:"Checks a major three-consonant initial blend.", notes:"Flag blend reduction only when part of spl is changed or omitted." },
+          { word:"sprig", type:"real", targetPattern:"initial spr three-consonant blend", targetVowel:"short i /ĭ/", primaryGrapheme:"spr", primaryPhoneme:"/spr/", primaryFocus:"initial spr three-consonant blend", secondaryGrapheme:"i", secondaryPhoneme:"/ĭ/", secondaryFocus:"i spelling for short i /ĭ/", instructionalFocus:"initial spr three-consonant blend and short i /ĭ/", whyChosen:"Checks a major three-consonant initial blend.", notes:"Flag blend reduction only when part of spr is changed or omitted." },
+          { word:"glep", type:"nonsense", targetPattern:"initial gl blend with short vowel", targetVowel:"short e /ĕ/", primaryGrapheme:"gl", primaryPhoneme:"/gl/", primaryFocus:"initial gl blend", secondaryGrapheme:"e", secondaryPhoneme:"/ĕ/", secondaryFocus:"e spelling for short e /ĕ/", instructionalFocus:"initial l-blend / consonant-blend transfer", reportFocus:"initial l-blend / consonant-blend transfer", whyChosen:"Provides an l-blend transfer probe without ambiguous lexicalization.", notes:"Nonsense-word evidence is supplemental; describe one miss cautiously." },
           { word:"stog", type:"nonsense", targetPattern:"initial st blend with short vowel", targetVowel:"short o /ŏ/", primaryGrapheme:"st", primaryPhoneme:"/st/", primaryFocus:"initial st blend", secondaryGrapheme:"o", secondaryPhoneme:"/ŏ/", secondaryFocus:"o spelling for short o /ŏ/", instructionalFocus:"initial st blend and short o /ŏ/ in a nonsense word", whyChosen:"Checks initial st and short o /ŏ/ in an unfamiliar word.", notes:"If stog → tog, flag blend reduction; if stog → steg, flag short o." },
-          { word:"quet", type:"nonsense", targetPattern:"qu spelling /kw/ with short vowel", targetVowel:"short e /ĕ/", primaryGrapheme:"qu", primaryPhoneme:"/kw/", primaryFocus:"qu spelling for /kw/", secondaryGrapheme:"e", secondaryPhoneme:"/ĕ/", secondaryFocus:"e spelling for short e /ĕ/", instructionalFocus:"qu spelling for /kw/ and short e /ĕ/ in a nonsense word", whyChosen:"Checks qu = /kw/ in an unfamiliar word.", notes:"Flag qu only if the qu pattern is missed." },
-          { word:"nulp", type:"nonsense", targetPattern:"final lp blend with short vowel", targetVowel:"short u /ŭ/", primaryGrapheme:"lp", primaryPhoneme:"/lp/", primaryFocus:"final lp blend", secondaryGrapheme:"u", secondaryPhoneme:"/ŭ/", secondaryFocus:"u spelling for short u /ŭ/", instructionalFocus:"final lp blend and short u /ŭ/ in a nonsense word", whyChosen:"Checks a final blend in an unfamiliar word.", notes:"If nulp → nup, flag final blend reduction." },
-          { word:"drit", type:"nonsense", targetPattern:"initial dr blend with short vowel", targetVowel:"short i /ĭ/", primaryGrapheme:"dr", primaryPhoneme:"/dr/", primaryFocus:"initial dr blend", secondaryGrapheme:"i", secondaryPhoneme:"/ĭ/", secondaryFocus:"i spelling for short i /ĭ/", instructionalFocus:"initial dr blend and short i /ĭ/ in a nonsense word", whyChosen:"Checks an initial r-blend in an unfamiliar word.", notes:"Flag the blend or vowel only when that target part changes." }
+          { word:"trid", type:"nonsense", targetPattern:"initial tr blend with short vowel", targetVowel:"short i /ĭ/", primaryGrapheme:"tr", primaryPhoneme:"/tr/", primaryFocus:"initial tr r-blend", secondaryGrapheme:"i", secondaryPhoneme:"/ĭ/", secondaryFocus:"i spelling for short i /ĭ/", instructionalFocus:"initial r-blend / consonant-blend transfer", reportFocus:"initial r-blend / consonant-blend transfer", whyChosen:"Provides an r-blend transfer probe without sharing glep's rime.", notes:"Nonsense-word evidence is supplemental; describe one miss cautiously." },
+          { word:"scrob", type:"nonsense", targetPattern:"initial scr three-consonant blend", targetVowel:"short o /ŏ/", primaryGrapheme:"scr", primaryPhoneme:"/skr/", primaryFocus:"initial scr three-consonant blend", secondaryGrapheme:"o", secondaryPhoneme:"/ŏ/", secondaryFocus:"o spelling for short o /ŏ/", instructionalFocus:"three-consonant blend decoding", reportFocus:"three-consonant blend decoding", whyChosen:"Provides transfer evidence for a three-consonant blend without sharing strap's rime.", notes:"Keep the summary category-level; one miss does not establish a specific scr deficit." },
+          { word:"vust", type:"nonsense", targetPattern:"final st blend with short vowel", targetVowel:"short u /ŭ/", primaryGrapheme:"st", primaryPhoneme:"/st/", primaryFocus:"final st blend", secondaryGrapheme:"u", secondaryPhoneme:"/ŭ/", secondaryFocus:"u spelling for short u /ŭ/", instructionalFocus:"final consonant-blend decoding", reportFocus:"final consonant-blend decoding", whyChosen:"Provides unfamiliar-word transfer evidence for a final blend.", notes:"Nonsense-word evidence is supplemental; describe one miss cautiously." }
         ]
       },
       {
@@ -886,11 +905,14 @@
           { word:"song", type:"real", targetPattern:"final ng with short vowel", targetVowel:"short o /ŏ/", primaryGrapheme:"ng", primaryPhoneme:"/ŋ/", primaryFocus:"ng spelling for /ŋ/", secondaryGrapheme:"o", secondaryPhoneme:"/ŏ/", secondaryFocus:"o spelling for short o /ŏ/", instructionalFocus:"ng spelling for /ŋ/ and short o /ŏ/", whyChosen:"Checks final ng /ŋ/ with short o /ŏ/.", notes:"If song → sog or son, flag ng." },
           { word:"bath", type:"real", targetPattern:"final th digraph with short vowel", targetVowel:"short a /ă/", primaryGrapheme:"th", primaryPhoneme:"/th/", primaryFocus:"final th spelling for /th/", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"final th spelling for /th/ and short a /ă/", whyChosen:"Checks final th /th/.", notes:"If bath → bat, flag final th." },
           { word:"notch", type:"real", targetPattern:"final -tch after short vowel", targetVowel:"short o /ŏ/", primaryGrapheme:"tch", primaryPhoneme:"/ch/", primaryFocus:"final -tch spelling for /ch/ after a short vowel", secondaryGrapheme:"o", secondaryPhoneme:"/ŏ/", secondaryFocus:"o spelling for short o /ŏ/", instructionalFocus:"final -tch spelling for /ch/ and short o /ŏ/", whyChosen:"Checks final -tch /ch/ after a short vowel.", notes:"If notch → not, flag final -tch." },
+          { word:"such", type:"real", targetPattern:"final ch digraph with short vowel", targetVowel:"short u /ŭ/", primaryGrapheme:"ch", primaryPhoneme:"/ch/", primaryFocus:"final ch spelling for /ch/", secondaryGrapheme:"u", secondaryPhoneme:"/ŭ/", secondaryFocus:"u spelling for short u /ŭ/", instructionalFocus:"final ch spelling for /ch/ and short u /ŭ/", whyChosen:"Gives ch both initial and final positional coverage.", notes:"Flag final ch only if the /ch/ pattern is missed or omitted." },
+          { word:"this", type:"real", targetPattern:"initial voiced th in a familiar word", targetVowel:"short i /ĭ/", primaryGrapheme:"i", primaryPhoneme:"/ĭ/", primaryFocus:"i spelling for short i /ĭ/", instructionalFocus:"voiced th pronunciation represented in a familiar real word", whyChosen:"Represents voiced th in a familiar word; it is not a transfer probe for inferring voicing.", notes:"A voiceless th may count as a whole-word miscue, but do not automatically identify th decoding as the problem." },
+          { word:"nudge", type:"real", targetPattern:"final dge after short vowel", targetVowel:"short u /ŭ/", primaryGrapheme:"dge", primaryPhoneme:"/j/", primaryFocus:"final dge spelling for /j/ after a short vowel", secondaryGrapheme:"u", secondaryPhoneme:"/ŭ/", secondaryFocus:"u spelling for short u /ŭ/", instructionalFocus:"final dge spelling for /j/ and short u /ŭ/", whyChosen:"Adds a second final dge probe after a short vowel.", notes:"Flag dge only if the final /j/ pattern is missed or omitted." },
           { word:"chib", type:"nonsense", targetPattern:"initial ch digraph with short vowel", targetVowel:"short i /ĭ/", primaryGrapheme:"ch", primaryPhoneme:"/ch/", primaryFocus:"ch spelling for /ch/", secondaryGrapheme:"i", secondaryPhoneme:"/ĭ/", secondaryFocus:"i spelling for short i /ĭ/", instructionalFocus:"ch spelling for /ch/ and short i /ĭ/ in a nonsense word", whyChosen:"Checks ch /ch/ in an unfamiliar word.", notes:"Nonsense words are assessment probes only." },
-          { word:"shog", type:"nonsense", targetPattern:"initial sh digraph with short vowel", targetVowel:"short o /ŏ/", primaryGrapheme:"sh", primaryPhoneme:"/sh/", primaryFocus:"sh spelling for /sh/", secondaryGrapheme:"o", secondaryPhoneme:"/ŏ/", secondaryFocus:"o spelling for short o /ŏ/", instructionalFocus:"sh spelling for /sh/ and short o /ŏ/ in a nonsense word", whyChosen:"Checks sh /sh/ and short o /ŏ/ in an unfamiliar word.", notes:"Flag sh only if the digraph is missed." },
-          { word:"gath", type:"nonsense", targetPattern:"final th digraph with short vowel", targetVowel:"short a /ă/", primaryGrapheme:"th", primaryPhoneme:"/th/", primaryFocus:"final th spelling for /th/", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"final th spelling for /th/ and short a /ă/ in a nonsense word", whyChosen:"Checks final th in an unfamiliar word.", notes:"Flag final th if omitted or changed." },
           { word:"phip", type:"nonsense", targetPattern:"ph digraph with short vowel", targetVowel:"short i /ĭ/", primaryGrapheme:"ph", primaryPhoneme:"/f/", primaryFocus:"ph spelling for /f/", secondaryGrapheme:"i", secondaryPhoneme:"/ĭ/", secondaryFocus:"i spelling for short i /ĭ/", instructionalFocus:"ph spelling for /f/ and short i /ĭ/ in a nonsense word", whyChosen:"Checks ph as a digraph in an unfamiliar word.", notes:"Ph is also checked in the low-frequency section with a real word." },
-          { word:"datch", type:"nonsense", targetPattern:"final -tch after short vowel", targetVowel:"short a /ă/", primaryGrapheme:"tch", primaryPhoneme:"/ch/", primaryFocus:"final -tch spelling for /ch/ after a short vowel", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"final -tch spelling for /ch/ and short a /ă/ in a nonsense word", whyChosen:"Checks final -tch after a short vowel in an unfamiliar word.", notes:"Flag -tch if the final /ch/ is omitted or changed." }
+          { word:"datch", type:"nonsense", targetPattern:"final -tch after short vowel", targetVowel:"short a /ă/", primaryGrapheme:"tch", primaryPhoneme:"/ch/", primaryFocus:"final -tch spelling for /ch/ after a short vowel", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"final -tch spelling for /ch/ and short a /ă/ in a nonsense word", whyChosen:"Checks final -tch after a short vowel in an unfamiliar word.", notes:"Flag -tch if the final /ch/ is omitted or changed." },
+          { word:"vack", type:"nonsense", targetPattern:"final ck after short vowel", targetVowel:"short a /ă/", primaryGrapheme:"ck", primaryPhoneme:"/k/", primaryFocus:"final ck spelling for /k/ after a short vowel", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"final ck spelling for /k/ and short a /ă/ in a nonsense word", whyChosen:"Checks final ck in an unfamiliar word.", notes:"Flag ck only if the final /k/ pattern is missed." },
+          { word:"pung", type:"nonsense", targetPattern:"final ng with short vowel", targetVowel:"short u /ŭ/", primaryGrapheme:"ng", primaryPhoneme:"/ŋ/", primaryFocus:"ng spelling for /ŋ/", secondaryGrapheme:"u", secondaryPhoneme:"/ŭ/", secondaryFocus:"u spelling for short u /ŭ/", instructionalFocus:"ng spelling for /ŋ/ and short u /ŭ/ in a nonsense word", whyChosen:"Checks final ng in an unfamiliar word.", notes:"Flag ng only if the pattern is missed." }
         ]
       },
       {
@@ -904,7 +926,7 @@
           { word:"curl", type:"real", targetPattern:"r-controlled ur", targetVowel:"ur /er/", primaryGrapheme:"ur", primaryPhoneme:"/er/", primaryFocus:"ur spelling for /er/", instructionalFocus:"ur spelling for /er/", whyChosen:"Checks ur as an r-controlled vowel.", notes:"Flag ur if the r-controlled pattern is missed." },
           { word:"bark", type:"real", targetPattern:"r-controlled ar", targetVowel:"ar /ar/", primaryGrapheme:"ar", primaryPhoneme:"/ar/", primaryFocus:"ar spelling for /ar/", instructionalFocus:"ar spelling for /ar/", whyChosen:"Adds a second real-word ar check.", notes:"Use with card to see whether ar is a repeated pattern." },
           { word:"fern", type:"real", targetPattern:"r-controlled er", targetVowel:"er /er/", primaryGrapheme:"er", primaryPhoneme:"/er/", primaryFocus:"er spelling for /er/", instructionalFocus:"er spelling for /er/", whyChosen:"Adds a second real-word er check.", notes:"Use with term to see whether er is a repeated pattern." },
-          { word:"girl", type:"real", targetPattern:"r-controlled ir", targetVowel:"ir /er/", primaryGrapheme:"ir", primaryPhoneme:"/er/", primaryFocus:"ir spelling for /er/", instructionalFocus:"ir spelling for /er/", whyChosen:"Adds a second real-word ir check.", notes:"Use with bird to see whether ir is a repeated pattern." },
+          { word:"dirt", type:"real", targetPattern:"r-controlled ir", targetVowel:"ir /er/", primaryGrapheme:"ir", primaryPhoneme:"/er/", primaryFocus:"ir spelling for /er/", instructionalFocus:"ir spelling for /er/", whyChosen:"Adds a second real-word ir check in a simple consonantal environment.", notes:"Use with bird to see whether ir is a repeated pattern." },
           { word:"born", type:"real", targetPattern:"r-controlled or", targetVowel:"or /or/", primaryGrapheme:"or", primaryPhoneme:"/or/", primaryFocus:"or spelling for /or/", instructionalFocus:"or spelling for /or/", whyChosen:"Adds a second real-word or check.", notes:"Use with fork to see whether or is a repeated pattern." },
           { word:"surf", type:"real", targetPattern:"r-controlled ur", targetVowel:"ur /er/", primaryGrapheme:"ur", primaryPhoneme:"/er/", primaryFocus:"ur spelling for /er/", instructionalFocus:"ur spelling for /er/", whyChosen:"Adds a second real-word ur check without using a rhyming pair like burn/turn.", notes:"Use with curl to see whether ur is a repeated pattern." },
           { word:"varm", type:"nonsense", targetPattern:"r-controlled ar", targetVowel:"ar /ar/", primaryGrapheme:"ar", primaryPhoneme:"/ar/", primaryFocus:"ar spelling for /ar/ in a nonsense word", instructionalFocus:"ar spelling for /ar/ in a nonsense word", whyChosen:"Checks ar in an unfamiliar word.", notes:"Nonsense words are assessment probes only." },
@@ -923,16 +945,21 @@
           { word:"play", type:"real", targetPattern:"ay vowel team for long a", targetVowel:"long a /ā/", primaryGrapheme:"ay", primaryPhoneme:"/ā/", primaryFocus:"ay spelling for long a /ā/", secondaryGrapheme:"pl", secondaryPhoneme:"/pl/", secondaryFocus:"initial pl blend", instructionalFocus:"ay spelling for long a /ā/", whyChosen:"Checks final ay as a long a spelling. The word also gives another opportunity to observe an l-blend.", notes:"If play → pay, the pl blend is the issue. If play → plah, flag ay." },
           { word:"feet", type:"real", targetPattern:"ee vowel team for long e", targetVowel:"long e /ē/", primaryGrapheme:"ee", primaryPhoneme:"/ē/", primaryFocus:"ee spelling for long e /ē/", instructionalFocus:"ee spelling for long e /ē/", whyChosen:"Checks ee as a vowel team for long e /ē/.", notes:"Flag ee if the vowel team is missed, such as feet → fet." },
           { word:"leaf", type:"real", targetPattern:"ea vowel team for long e", targetVowel:"long e /ē/", primaryGrapheme:"ea", primaryPhoneme:"/ē/", primaryFocus:"ea spelling for long e /ē/", instructionalFocus:"ea spelling for long e /ē/", whyChosen:"Checks ea as a long e spelling.", notes:"Flag ea if the vowel team is missed." },
-          { word:"key", type:"real", targetPattern:"ey spelling for long e", targetVowel:"long e /ē/", primaryGrapheme:"ey", primaryPhoneme:"/ē/", primaryFocus:"ey spelling for long e /ē/", instructionalFocus:"ey spelling for long e /ē/", whyChosen:"Checks final ey as a long e spelling.", notes:"Flag ey if the long e spelling is missed." },
           { word:"bike", type:"real", targetPattern:"CVCe pattern for long i", targetVowel:"long i /ī/", primaryGrapheme:"i_e", primaryPhoneme:"/ī/", primaryFocus:"i-consonant-e spelling for long i /ī/", instructionalFocus:"i-consonant-e spelling for long i /ī/", whyChosen:"Checks silent-e long i in a familiar word.", notes:"Flag i_e if the student reads it with a short vowel." },
           { word:"pie", type:"real", targetPattern:"ie spelling for long i", targetVowel:"long i /ī/", primaryGrapheme:"ie", primaryPhoneme:"/ī/", primaryFocus:"ie spelling for long i /ī/", instructionalFocus:"ie spelling for long i /ī/", whyChosen:"Checks ie as a long i spelling.", notes:"Flag ie if the long i pattern is missed." },
           { word:"toe", type:"real", targetPattern:"oe spelling for long o", targetVowel:"long o /ō/", primaryGrapheme:"oe", primaryPhoneme:"/ō/", primaryFocus:"oe spelling for long o /ō/", instructionalFocus:"oe spelling for long o /ō/", whyChosen:"Checks oe as a long o spelling.", notes:"Flag oe if the long o spelling is missed." },
           { word:"cute", type:"real", targetPattern:"CVCe pattern for long u", targetVowel:"long u /ū/", primaryGrapheme:"u_e", primaryPhoneme:"/ū/", primaryFocus:"u-consonant-e spelling for long u /ū/", instructionalFocus:"u-consonant-e spelling for long u /ū/", whyChosen:"Checks silent-e long u. The report should use long u /ū/ without adding a separate /ū/ label.", notes:"Flag u_e if the student reads it with short u." },
+          { word:"rope", type:"real", targetPattern:"CVCe pattern for long o", targetVowel:"long o /ō/", primaryGrapheme:"o_e", primaryPhoneme:"/ō/", primaryFocus:"o-consonant-e spelling for long o /ō/", instructionalFocus:"o-consonant-e spelling for long o /ō/", whyChosen:"Checks o-consonant-e for long o.", notes:"Flag o_e if read with short o." },
+          { word:"cube", type:"real", targetPattern:"CVCe pattern for long u", targetVowel:"long u /ū/", primaryGrapheme:"u_e", primaryPhoneme:"/ū/", primaryFocus:"u-consonant-e spelling for long u /ū/", instructionalFocus:"u-consonant-e spelling for long u /ū/", whyChosen:"Adds a second long-u CVCe probe.", notes:"Use long u /ū/ notation." },
+          { word:"low", type:"real", targetPattern:"ow spelling for long o", targetVowel:"long o /ō/", primaryGrapheme:"ow", primaryPhoneme:"/ō/", primaryFocus:"ow spelling for long o /ō/", instructionalFocus:"ow spelling for long o /ō/", whyChosen:"Checks final ow as long o.", notes:"Distinguish from ow /ow/." },
+          { word:"night", type:"real", targetPattern:"igh spelling long i", targetVowel:"long i /ī/", primaryGrapheme:"igh", primaryPhoneme:"/ī/", primaryFocus:"igh spelling for long i /ī/", instructionalFocus:"igh spelling for long i /ī/", whyChosen:"Checks a high-utility long-i spelling.", notes:"Flag igh if missed." },
+          { word:"cry", type:"real", targetPattern:"final y spelling long i", targetVowel:"long i /ī/", primaryGrapheme:"y", primaryPhoneme:"/ī/", primaryFocus:"final y spelling for long i /ī/", instructionalFocus:"final y spelling for long i /ī/", whyChosen:"Checks final y as long i.", notes:"Flag final y if the pattern is missed." },
+          { word:"road", type:"real", targetPattern:"oa vowel team for long o", targetVowel:"long o /ō/", primaryGrapheme:"oa", primaryPhoneme:"/ō/", primaryFocus:"oa spelling for long o /ō/", instructionalFocus:"oa spelling for long o /ō/", whyChosen:"Provides real-word evidence for oa without sharing soat's rime.", notes:"Flag oa only if the pattern is missed." },
           { word:"pabe", type:"nonsense", targetPattern:"CVCe pattern for long a", targetVowel:"long a /ā/", primaryGrapheme:"a_e", primaryPhoneme:"/ā/", primaryFocus:"a-consonant-e spelling for long a /ā/ in a nonsense word", instructionalFocus:"a-consonant-e spelling for long a /ā/ in a nonsense word", whyChosen:"Checks CVCe long a in an unfamiliar word.", notes:"Nonsense words are assessment probes only." },
-          { word:"hain", type:"nonsense", targetPattern:"ai vowel team for long a", targetVowel:"long a /ā/", primaryGrapheme:"ai", primaryPhoneme:"/ā/", primaryFocus:"ai spelling for long a /ā/ in a nonsense word", instructionalFocus:"ai spelling for long a /ā/ in a nonsense word", whyChosen:"Checks ai long a in an unfamiliar word.", notes:"Flag ai if the vowel team is missed." },
           { word:"jeet", type:"nonsense", targetPattern:"ee vowel team for long e", targetVowel:"long e /ē/", primaryGrapheme:"ee", primaryPhoneme:"/ē/", primaryFocus:"ee spelling for long e /ē/ in a nonsense word", instructionalFocus:"ee spelling for long e /ē/ in a nonsense word", whyChosen:"Checks ee long e in an unfamiliar word.", notes:"Flag ee only if the vowel team is missed." },
           { word:"zide", type:"nonsense", targetPattern:"CVCe pattern for long i", targetVowel:"long i /ī/", primaryGrapheme:"i_e", primaryPhoneme:"/ī/", primaryFocus:"i-consonant-e spelling for long i /ī/ in a nonsense word", instructionalFocus:"i-consonant-e spelling for long i /ī/ in a nonsense word", whyChosen:"Checks CVCe long i in an unfamiliar word.", notes:"Flag i_e if the student reads it with short i." },
-          { word:"soat", type:"nonsense", targetPattern:"oa vowel team for long o", targetVowel:"long o /ō/", primaryGrapheme:"oa", primaryPhoneme:"/ō/", primaryFocus:"oa spelling for long o /ō/ in a nonsense word", instructionalFocus:"oa spelling for long o /ō/ in a nonsense word", whyChosen:"Checks oa long o in an unfamiliar word.", notes:"Flag oa if the vowel team is missed." }
+          { word:"soat", type:"nonsense", targetPattern:"oa vowel team for long o", targetVowel:"long o /ō/", primaryGrapheme:"oa", primaryPhoneme:"/ō/", primaryFocus:"oa spelling for long o /ō/ in a nonsense word", instructionalFocus:"oa spelling for long o /ō/ in a nonsense word", whyChosen:"Checks oa transfer.", notes:"Supplemental to road's real-word evidence." },
+          { word:"zigh", type:"nonsense", targetPattern:"igh spelling long i", targetVowel:"long i /ī/", primaryGrapheme:"igh", primaryPhoneme:"/ī/", primaryFocus:"igh spelling for long i /ī/ in a nonsense word", instructionalFocus:"igh spelling for long i /ī/ in a nonsense word", whyChosen:"Checks igh transfer.", notes:"Interpret one nonsense-word miss cautiously." }
         ]
       },
       {
@@ -943,17 +970,18 @@
           { word:"cue", type:"real", targetPattern:"ue spelling /ū/", targetVowel:"ue /ū/", primaryGrapheme:"ue", primaryPhoneme:"/ū/", primaryFocus:"ue spelling for /ū/", instructionalFocus:"ue spelling for /ū/", whyChosen:"Checks ue as a variant long-u spelling.", notes:"Flag ue if the vowel spelling is missed." },
           { word:"down", type:"real", targetPattern:"ow spelling /ow/", targetVowel:"ow /ow/", primaryGrapheme:"ow", primaryPhoneme:"/ow/", primaryFocus:"ow spelling for /ow/", instructionalFocus:"ow spelling for /ow/", whyChosen:"Checks ow as the /ow/ diphthong.", notes:"Do not confuse this with ow as long o in snow." },
           { word:"loud", type:"real", targetPattern:"ou spelling /ow/", targetVowel:"ou /ow/", primaryGrapheme:"ou", primaryPhoneme:"/ow/", primaryFocus:"ou spelling for /ow/", instructionalFocus:"ou spelling for /ow/", whyChosen:"Checks ou as the /ow/ diphthong.", notes:"Flag ou if the /ow/ vowel pattern is missed." },
-          { word:"moon", type:"real", targetPattern:"oo spelling /ōō/ as in moon", targetVowel:"oo /ōō/", primaryGrapheme:"oo", primaryPhoneme:"/ū/", primaryFocus:"oo spelling for /ōō/ as in moon", instructionalFocus:"oo spelling for /ōō/ as in moon", whyChosen:"Checks long oo.", notes:"This is intentionally different from short oo as in cook." },
+          { word:"moon", type:"real", targetPattern:"oo spelling /ōō/ as in moon", targetVowel:"oo /ōō/", primaryGrapheme:"oo", primaryPhoneme:"/ōō/", primaryFocus:"oo spelling for /ōō/ as in moon", instructionalFocus:"oo spelling for /ōō/ as in moon", whyChosen:"Checks long oo.", notes:"This is intentionally different from short oo as in cook." },
           { word:"cook", type:"real", targetPattern:"oo spelling /oo/ as in cook", targetVowel:"oo /oo/", primaryGrapheme:"oo", primaryPhoneme:"/oo/", primaryFocus:"oo spelling for /oo/ as in cook", instructionalFocus:"oo spelling for /oo/ as in cook", whyChosen:"Checks short oo.", notes:"This is intentionally different from long oo as in moon." },
           { word:"hawk", type:"real", targetPattern:"aw spelling /aw/", targetVowel:"aw /aw/", primaryGrapheme:"aw", primaryPhoneme:"/aw/", primaryFocus:"aw spelling for /aw/", instructionalFocus:"aw spelling for /aw/", whyChosen:"Checks aw as a variant vowel spelling.", notes:"Flag aw if the vowel pattern is missed." },
           { word:"fault", type:"real", targetPattern:"au spelling /aw/", targetVowel:"au /aw/", primaryGrapheme:"au", primaryPhoneme:"/aw/", primaryFocus:"au spelling for /aw/", instructionalFocus:"au spelling for /aw/", whyChosen:"Checks au as a variant vowel spelling.", notes:"Flag au if the vowel pattern is missed." },
           { word:"coin", type:"real", targetPattern:"oi spelling /oi/", targetVowel:"oi /oi/", primaryGrapheme:"oi", primaryPhoneme:"/oi/", primaryFocus:"oi spelling for /oi/", instructionalFocus:"oi spelling for /oi/", whyChosen:"Checks oi as a diphthong spelling.", notes:"Flag oi if the vowel pattern is missed." },
           { word:"toy", type:"real", targetPattern:"oy spelling /oi/", targetVowel:"oy /oi/", primaryGrapheme:"oy", primaryPhoneme:"/oi/", primaryFocus:"oy spelling for /oi/", instructionalFocus:"oy spelling for /oi/", whyChosen:"Checks final oy as a diphthong spelling.", notes:"Flag oy if the vowel pattern is missed." },
-          { word:"zue", type:"nonsense", targetPattern:"ue spelling /ū/", targetVowel:"ue /ū/", primaryGrapheme:"ue", primaryPhoneme:"/ū/", primaryFocus:"ue spelling for /ū/ in a nonsense word", instructionalFocus:"ue spelling for /ū/ in a nonsense word", whyChosen:"Checks ue in an unfamiliar word.", notes:"Nonsense words are assessment probes only." },
+          { word:"prune", type:"real", targetPattern:"u_e spelling /ōō/", targetVowel:"u_e /ōō/", primaryGrapheme:"u_e", primaryPhoneme:"/ōō/", primaryFocus:"u-consonant-e spelling for /ōō/", instructionalFocus:"u-consonant-e spelling for /ōō/", whyChosen:"Checks u_e representing /ōō/.", notes:"Distinct from cute and cube." },
+          { word:"grew", type:"real", targetPattern:"ew spelling /ōō/", targetVowel:"ew /ōō/", primaryGrapheme:"ew", primaryPhoneme:"/ōō/", primaryFocus:"ew spelling for /ōō/", instructionalFocus:"ew spelling for /ōō/", whyChosen:"Contrasts ew /ōō/ with ew /ū/ in few.", notes:"Flag ew only if missed." },
           { word:"vout", type:"nonsense", targetPattern:"ou spelling /ow/", targetVowel:"ou /ow/", primaryGrapheme:"ou", primaryPhoneme:"/ow/", primaryFocus:"ou spelling for /ow/ in a nonsense word", instructionalFocus:"ou spelling for /ow/ in a nonsense word", whyChosen:"Checks ou /ow/ in an unfamiliar word.", notes:"Flag ou only if the pattern is missed." },
-          { word:"voop", type:"nonsense", targetPattern:"oo spelling /ōō/ as in moon", targetVowel:"oo /ōō/", primaryGrapheme:"oo", primaryPhoneme:"/ū/", primaryFocus:"oo spelling for /ōō/ in a nonsense word", instructionalFocus:"oo spelling for /ōō/ in a nonsense word", whyChosen:"Checks long oo in an unfamiliar word.", notes:"Short oo is checked with real words because nonsense short-oo items can be pronounced inconsistently." },
-          { word:"zoy", type:"nonsense", targetPattern:"oy spelling /oi/", targetVowel:"oy /oi/", primaryGrapheme:"oy", primaryPhoneme:"/oi/", primaryFocus:"oy spelling for /oi/ in a nonsense word", instructionalFocus:"oy spelling for /oi/ in a nonsense word", whyChosen:"Checks oy in an unfamiliar word.", notes:"Flag oy only if the vowel pattern is missed." },
-          { word:"sawk", type:"nonsense", targetPattern:"aw spelling /aw/", targetVowel:"aw /aw/", primaryGrapheme:"aw", primaryPhoneme:"/aw/", primaryFocus:"aw spelling for /aw/ in a nonsense word", instructionalFocus:"aw spelling for /aw/ in a nonsense word", whyChosen:"Checks aw in an unfamiliar word.", notes:"Flag aw only if the vowel pattern is missed." }
+          { word:"voop", type:"nonsense", targetPattern:"oo spelling /ōō/ as in moon", targetVowel:"oo /ōō/", primaryGrapheme:"oo", primaryPhoneme:"/ōō/", primaryFocus:"oo spelling for /ōō/ in a nonsense word", instructionalFocus:"oo spelling for /ōō/ in a nonsense word", whyChosen:"Checks long oo transfer.", notes:"Short oo remains real-only." },
+          { word:"noit", type:"nonsense", targetPattern:"oi spelling /oi/", targetVowel:"oi /oi/", primaryGrapheme:"oi", primaryPhoneme:"/oi/", primaryFocus:"oi spelling for /oi/ in a nonsense word", instructionalFocus:"oi spelling for /oi/ in a nonsense word", whyChosen:"Checks oi transfer.", notes:"Interpret cautiously." },
+          { word:"daup", type:"nonsense", targetPattern:"au spelling /aw/", targetVowel:"au /aw/", primaryGrapheme:"au", primaryPhoneme:"/aw/", primaryFocus:"au spelling for /aw/ in a nonsense word", instructionalFocus:"au spelling for /aw/ in a nonsense word", whyChosen:"Checks au transfer.", notes:"Interpret cautiously." }
         ]
       },
       {
@@ -962,24 +990,46 @@
         words:[
           { word:"phone", type:"real", targetPattern:"ph spelling for /f/", targetVowel:"long o /ō/", primaryGrapheme:"ph", primaryPhoneme:"/f/", primaryFocus:"ph spelling for /f/", secondaryGrapheme:"o_e", secondaryPhoneme:"/ō/", secondaryFocus:"o-consonant-e spelling for long o /ō/", instructionalFocus:"ph spelling for /f/ and CVCe long o /ō/", whyChosen:"Checks ph as /f/ in a real word. Ph is also sampled as a digraph in a nonsense word in the previous section.", notes:"If phone → pone, flag ph. If phone → phon with short o, flag o_e." },
           { word:"knee", type:"real", targetPattern:"kn spelling with silent k", targetVowel:"long e /ē/", primaryGrapheme:"kn", primaryPhoneme:"/n/", primaryFocus:"kn spelling for /n/ with silent k", secondaryGrapheme:"ee", secondaryPhoneme:"/ē/", secondaryFocus:"ee spelling for long e /ē/", instructionalFocus:"kn spelling for /n/ and ee long e /ē/", whyChosen:"Checks silent k in kn.", notes:"If the student pronounces /k/, flag kn." },
-          { word:"type", type:"real", targetPattern:"y spelling long i", targetVowel:"long i /ī/", primaryGrapheme:"y", primaryPhoneme:"/ī/", primaryFocus:"y spelling for long i /ī/", instructionalFocus:"y spelling for long i /ī/", whyChosen:"Checks y as a long i spelling in a one-syllable word.", notes:"Flag y if the long i pattern is missed." },
           { word:"ghost", type:"real", targetPattern:"gh spelling /g/", targetVowel:"long o /ō/", primaryGrapheme:"gh", primaryPhoneme:"/g/", primaryFocus:"gh spelling for /g/", secondaryGrapheme:"o", secondaryPhoneme:"/ō/", secondaryFocus:"o spelling for long o /ō/", instructionalFocus:"gh spelling for /g/ and long o /ō/", whyChosen:"Checks a low-frequency gh spelling in a real word.", notes:"If ghost → host, flag gh." },
           { word:"wrist", type:"real", targetPattern:"wr spelling with silent w", targetVowel:"short i /ĭ/", primaryGrapheme:"wr", primaryPhoneme:"/r/", primaryFocus:"wr spelling for /r/ with silent w", secondaryGrapheme:"i", secondaryPhoneme:"/ĭ/", secondaryFocus:"i spelling for short i /ĭ/", instructionalFocus:"wr spelling for /r/ and short i /ĭ/", whyChosen:"Checks silent w in wr.", notes:"If the student pronounces /w/, flag wr." },
-          { word:"giant", type:"real", targetPattern:"soft g spelling for /j/", targetVowel:"long i /ī/", primaryGrapheme:"g", primaryPhoneme:"/j/", primaryFocus:"soft g spelling for /j/ before i", secondaryGrapheme:"i", secondaryPhoneme:"/ī/", secondaryFocus:"i spelling for long i /ī/", instructionalFocus:"soft g spelling for /j/ before i", whyChosen:"Checks soft g before i.", notes:"If giant starts with /g/ as in goat, flag soft g." },
+          { word:"gem", type:"real", targetPattern:"soft g spelling for /j/", targetVowel:"short e /ĕ/", primaryGrapheme:"g", primaryPhoneme:"/j/", primaryFocus:"soft g spelling for /j/ before e", secondaryGrapheme:"e", secondaryPhoneme:"/ĕ/", secondaryFocus:"e spelling for short e /ĕ/", instructionalFocus:"soft g spelling for /j/ before e", whyChosen:"Checks soft g in a simple word.", notes:"If gem starts with /g/, flag soft g." },
           { word:"bread", type:"real", targetPattern:"ea spelling short e", targetVowel:"short e /ĕ/", primaryGrapheme:"ea", primaryPhoneme:"/ĕ/", primaryFocus:"ea spelling for short e /ĕ/", instructionalFocus:"ea spelling for short e /ĕ/", whyChosen:"Checks the less predictable ea spelling for short e.", notes:"Flag ea if the student reads it as long e." },
           { word:"gnome", type:"real", targetPattern:"gn spelling with silent g", targetVowel:"long o /ō/", primaryGrapheme:"gn", primaryPhoneme:"/n/", primaryFocus:"gn spelling for /n/ with silent g", secondaryGrapheme:"o_e", secondaryPhoneme:"/ō/", secondaryFocus:"o-consonant-e spelling for long o /ō/", instructionalFocus:"gn spelling for /n/ and CVCe long o /ō/", whyChosen:"Checks silent g in gn with a real word.", notes:"If the student pronounces /g/, flag gn." },
           { word:"lamb", type:"real", targetPattern:"final mb with silent b", targetVowel:"short a /ă/", primaryGrapheme:"mb", primaryPhoneme:"/m/", primaryFocus:"final mb spelling for /m/ with silent b", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"final mb spelling for /m/ with silent b", whyChosen:"Checks silent b in final mb.", notes:"If the student pronounces the final /b/, flag mb." },
-          { word:"night", type:"real", targetPattern:"igh spelling long i", targetVowel:"long i /ī/", primaryGrapheme:"igh", primaryPhoneme:"/ī/", primaryFocus:"igh spelling for long i /ī/", instructionalFocus:"igh spelling for long i /ī/", whyChosen:"Checks igh as a long i spelling.", notes:"Flag igh if the long i spelling is missed." },
+          { word:"key", type:"real", targetPattern:"ey spelling for long e", targetVowel:"long e /ē/", primaryGrapheme:"ey", primaryPhoneme:"/ē/", primaryFocus:"ey spelling for long e /ē/", instructionalFocus:"ey spelling for long e /ē/", whyChosen:"Checks the limited one-syllable ey spelling.", notes:"Flag ey if missed." },
+          { word:"cell", type:"real", targetPattern:"soft c spelling for /s/", targetVowel:"short e /ĕ/", primaryGrapheme:"c", primaryPhoneme:"/s/", primaryFocus:"soft c spelling for /s/ before e", secondaryGrapheme:"e", secondaryPhoneme:"/ĕ/", secondaryFocus:"e spelling for short e /ĕ/", instructionalFocus:"soft c spelling for /s/ before e", whyChosen:"Provides real-word soft-c evidence without a pre-nasal vowel.", notes:"If cell begins with /k/, flag soft c." },
           { word:"cemp", type:"nonsense", targetPattern:"soft c spelling for /s/", targetVowel:"short e /ĕ/", primaryGrapheme:"c", primaryPhoneme:"/s/", primaryFocus:"soft c spelling for /s/ before e", secondaryGrapheme:"e", secondaryPhoneme:"/ĕ/", secondaryFocus:"e spelling for short e /ĕ/", instructionalFocus:"soft c spelling for /s/ before e in a nonsense word", whyChosen:"Checks soft c before e in an unfamiliar word.", notes:"If the student reads c as /k/, flag soft c." },
           { word:"knep", type:"nonsense", targetPattern:"kn spelling with silent k", targetVowel:"short e /ĕ/", primaryGrapheme:"kn", primaryPhoneme:"/n/", primaryFocus:"kn spelling for /n/ with silent k", secondaryGrapheme:"e", secondaryPhoneme:"/ĕ/", secondaryFocus:"e spelling for short e /ĕ/", instructionalFocus:"kn spelling for /n/ in a nonsense word", whyChosen:"Checks kn in an unfamiliar word.", notes:"Nonsense words are assessment probes only." },
           { word:"gnib", type:"nonsense", targetPattern:"gn spelling with silent g", targetVowel:"short i /ĭ/", primaryGrapheme:"gn", primaryPhoneme:"/n/", primaryFocus:"gn spelling for /n/ with silent g", secondaryGrapheme:"i", secondaryPhoneme:"/ĭ/", secondaryFocus:"i spelling for short i /ĭ/", instructionalFocus:"gn spelling for /n/ in a nonsense word", whyChosen:"Checks gn in an unfamiliar word.", notes:"Flag gn if the silent-letter pattern is missed." },
-          { word:"wrab", type:"nonsense", targetPattern:"wr spelling with silent w", targetVowel:"short a /ă/", primaryGrapheme:"wr", primaryPhoneme:"/r/", primaryFocus:"wr spelling for /r/ with silent w", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"wr spelling for /r/ in a nonsense word", whyChosen:"Checks wr in an unfamiliar word.", notes:"Flag wr if the silent-letter pattern is missed." },
-          { word:"zigh", type:"nonsense", targetPattern:"igh spelling long i", targetVowel:"long i /ī/", primaryGrapheme:"igh", primaryPhoneme:"/ī/", primaryFocus:"igh spelling for long i /ī/ in a nonsense word", instructionalFocus:"igh spelling for long i /ī/ in a nonsense word", whyChosen:"Checks igh in an unfamiliar word.", notes:"Flag igh if the long i spelling is missed." }
+          { word:"wrab", type:"nonsense", targetPattern:"wr spelling with silent w", targetVowel:"short a /ă/", primaryGrapheme:"wr", primaryPhoneme:"/r/", primaryFocus:"wr spelling for /r/ with silent w", secondaryGrapheme:"a", secondaryPhoneme:"/ă/", secondaryFocus:"a spelling for short a /ă/", instructionalFocus:"wr spelling for /r/ in a nonsense word", whyChosen:"Checks wr in an unfamiliar word.", notes:"Flag wr if the silent-letter pattern is missed." }
+        ]
+      },
+      {
+        sectionId:"multisyllabic-words",
+        sectionTitle:"Multisyllabic Words",
+        words:[
+          { word:"silo", type:"real", syllables:["si","lo"], syllableTypes:["open","open"], syllablePattern:"Open + Open", primaryFocus:"Open + Open multisyllabic decoding", instructionalFocus:"Apply open-syllable knowledge across a multisyllabic word", whyChosen:"Checks transfer across two open syllables.", notes:"Do not overinterpret stress, schwa, or dialect variation." },
+          { word:"table", type:"real", syllables:["ta","ble"], syllableTypes:["open","consonant-le"], syllablePattern:"Open + Consonant-le", primaryFocus:"Open + Consonant-le multisyllabic decoding", instructionalFocus:"Apply open- and consonant-le-syllable knowledge", whyChosen:"Checks open plus consonant-le.", notes:"Use the combined pattern unless localization is clear." },
+          { word:"beaver", type:"real", syllables:["bea","ver"], syllableTypes:["vowel team","r-controlled"], syllablePattern:"Vowel Team + R-Controlled", primaryFocus:"Vowel Team + R-Controlled multisyllabic decoding", instructionalFocus:"Apply vowel-team and r-controlled knowledge", whyChosen:"Checks transfer across two syllable types.", notes:"Do not infer both types failed from one error." },
+          { word:"inhale", type:"real", syllables:["in","hale"], syllableTypes:["closed","VCe"], syllablePattern:"Closed + VCe", primaryFocus:"Closed + VCe multisyllabic decoding", instructionalFocus:"Apply closed- and VCe-syllable knowledge", whyChosen:"Checks Closed + VCe transfer.", notes:"Report the combined pattern when localization is uncertain." },
+          { word:"barber", type:"real", syllables:["bar","ber"], syllableTypes:["r-controlled","r-controlled"], syllablePattern:"R-Controlled + R-Controlled", primaryFocus:"R-Controlled + R-Controlled multisyllabic decoding", instructionalFocus:"Apply r-controlled knowledge across a longer word", whyChosen:"Checks two r-controlled syllables.", notes:"Do not overinterpret reduction." },
+          { word:"reptile", type:"real", syllables:["rep","tile"], syllableTypes:["closed","VCe"], syllablePattern:"Closed + VCe", primaryFocus:"Closed + VCe multisyllabic decoding", instructionalFocus:"Apply closed- and VCe-syllable knowledge", whyChosen:"Adds Closed + VCe evidence.", notes:"Use the combined pattern unless localization is clear." },
+          { word:"report", type:"real", syllables:["re","port"], syllableTypes:["open","r-controlled"], syllablePattern:"Open + R-Controlled", primaryFocus:"Open + R-Controlled multisyllabic decoding", instructionalFocus:"Apply open- and r-controlled knowledge", whyChosen:"Checks Open + R-Controlled transfer.", notes:"Normal first-syllable reduction is not automatically a failure." },
+          { word:"bubble", type:"real", syllables:["bub","ble"], syllableTypes:["closed","consonant-le"], syllablePattern:"Closed + Consonant-le", primaryFocus:"Closed + Consonant-le multisyllabic decoding", instructionalFocus:"Apply closed- and consonant-le knowledge", whyChosen:"Checks Closed + Consonant-le.", notes:"Use the combined pattern unless localization is clear." },
+          { word:"robot", type:"real", syllables:["ro","bot"], syllableTypes:["open","closed"], syllablePattern:"Open + Closed", primaryFocus:"Open + Closed multisyllabic decoding", instructionalFocus:"Apply open- and closed-syllable knowledge", whyChosen:"Checks Open + Closed.", notes:"Allow normal spoken variation." },
+          { word:"velvet", type:"real", syllables:["vel","vet"], syllableTypes:["closed","closed"], syllablePattern:"Closed + Closed", primaryFocus:"Closed + Closed multisyllabic decoding", instructionalFocus:"Apply closed-syllable knowledge across a longer word", whyChosen:"Checks two closed syllables.", notes:"One error does not establish both syllables failed." },
+          { word:"catfish", type:"real", syllables:["cat","fish"], syllableTypes:["closed","closed"], syllablePattern:"Closed + Closed", primaryFocus:"Closed + Closed multisyllabic decoding", instructionalFocus:"Apply closed-syllable knowledge in a compound", whyChosen:"Checks a compound word.", notes:"Use combined reporting unless localization is clear." },
+          { word:"candle", type:"real", syllables:["can","dle"], syllableTypes:["closed","consonant-le"], syllablePattern:"Closed + Consonant-le", primaryFocus:"Closed + Consonant-le multisyllabic decoding", instructionalFocus:"Apply closed- and consonant-le knowledge", whyChosen:"Adds Closed + Consonant-le evidence.", notes:"Use combined reporting unless localization is clear." },
+          { word:"rainbow", type:"real", syllables:["rain","bow"], syllableTypes:["vowel team","vowel team"], syllablePattern:"Vowel Team + Vowel Team", primaryFocus:"Vowel Team + Vowel Team multisyllabic decoding", instructionalFocus:"Apply vowel-team knowledge across a longer word", whyChosen:"Checks two vowel-team syllables.", notes:"Do not attribute one error to both automatically." },
+          { word:"tornado", type:"real", syllables:["tor","na","do"], syllableTypes:["r-controlled","open","open"], syllablePattern:"R-Controlled + Open + Open", primaryFocus:"R-Controlled + Open + Open multisyllabic decoding", instructionalFocus:"Apply r-controlled and open knowledge in three syllables", whyChosen:"Provides a three-syllable item.", notes:"Allow normal stress and schwa variation." },
+          { word:"zabble", type:"nonsense", syllables:["zab","ble"], syllableTypes:["closed","consonant-le"], syllablePattern:"Closed + Consonant-le", primaryFocus:"Closed + Consonant-le multisyllabic decoding", instructionalFocus:"Apply closed- and consonant-le knowledge in a pseudoword", whyChosen:"Checks transfer without familiarity.", notes:"Use combined reporting." },
+          { word:"repnate", type:"nonsense", syllables:["rep","nate"], syllableTypes:["closed","VCe"], syllablePattern:"Closed + VCe", primaryFocus:"Closed + VCe multisyllabic decoding", instructionalFocus:"Apply closed- and VCe knowledge in a pseudoword", whyChosen:"Checks transfer without familiarity.", notes:"Use combined reporting." },
+          { word:"feemop", type:"nonsense", syllables:["fee","mop"], syllableTypes:["vowel team","closed"], syllablePattern:"Vowel Team + Closed", primaryFocus:"Vowel Team + Closed multisyllabic decoding", instructionalFocus:"Apply vowel-team and closed knowledge in a pseudoword", whyChosen:"Checks transfer without familiarity.", notes:"Use combined reporting." },
+          { word:"rimpo", type:"nonsense", syllables:["rim","po"], syllableTypes:["closed","open"], syllablePattern:"Closed + Open", primaryFocus:"Closed + Open multisyllabic decoding", instructionalFocus:"Apply closed- and open knowledge in a pseudoword", reportFocus:"applying open- and closed-syllable knowledge in a multisyllabic nonsense word", whyChosen:"Checks Closed + Open transfer.", notes:"One miss does not establish a specific combination deficit." }
         ]
       }
-      // Multisyllabic words — planned for a later version.
     ];
-    const ADVANCED = new Set(["r-controlled-vowels","long-vowel-spellings","variant-vowels","low-frequency-spellings"]);
+    const ADVANCED = new Set(["r-controlled-vowels","long-vowel-spellings","variant-vowels","low-frequency-spellings","multisyllabic-words"]);
 
     // Flatten with stable ids.
     PHONICS_WORDS.forEach(sec => sec.words.forEach((w,i) => { w.id = `${sec.sectionId}:${i}`; w.sectionId = sec.sectionId; w.sectionTitle = sec.sectionTitle; }));
@@ -1093,6 +1143,15 @@
       const r = cleanLetters(response);
       if(!r || r===target) return {tag:'other', focus:null, patternPreserved:true, patternNote:null};
 
+      if(item.sectionId === 'multisyllabic-words'){
+        return {
+          tag:'multisyllabic',
+          focus:item.reportFocus || `${item.syllablePattern} multisyllabic decoding`,
+          patternPreserved:false,
+          patternNote:'Combined syllable pattern reported conservatively; the response does not establish a deficit in every syllable type'
+        };
+      }
+
       const targetChecks = [
         { which:'primary', grapheme:item.primaryGrapheme, focus:item.primaryFocus, phoneme:item.primaryPhoneme },
         { which:'secondary', grapheme:item.secondaryGrapheme, focus:item.secondaryFocus, phoneme:item.secondaryPhoneme },
@@ -1112,9 +1171,10 @@
             .filter(x => x.which !== t.which)
             .filter(x => preserved[x.which])
             .map(x => `${graphemeLabel(x.grapheme)} pattern was preserved`);
+          if(item.type === 'nonsense') otherPreserved.push('Supplemental transfer evidence; one unfamiliar-word response may also reflect lexicalization or task familiarity');
           return {
             tag: vowelTarget ? 'phonics_vowel' : 'phonics_consonant',
-            focus: focusFor(item, t.which),
+            focus: (t.which === 'primary' && item.reportFocus) || focusFor(item, t.which),
             patternPreserved:false,
             patternNote: otherPreserved.length ? otherPreserved.join(' · ') : null
           };
@@ -1134,11 +1194,13 @@
         guide:'These cards show the specific vowel or vowel spelling pattern that was not preserved. Grouping by spelling pattern helps connect miscues directly to instruction.' },
       phonics_consonant:{ label:'Consonant spelling patterns to review', order:2,
         guide:'These cards show target blends, digraphs, trigraphs, silent-letter spellings, or other consonant spellings that were not read as expected.' },
-      skipped:{ label:'Skipped / no attempt', order:3,
+      multisyllabic:{ label:'Multisyllabic decoding patterns to review', order:3,
+        guide:'These items show syllable types or combinations that were difficult in longer words. One occurrence is an observation; repeated patterns provide stronger instructional evidence.' },
+      skipped:{ label:'Skipped / no attempt', order:4,
         guide:'No spoken response was recorded. The student saw the word but did not attempt it.' },
-      ending_miscue:{ label:'Ending or word-level miscues with target pattern preserved', order:4,
+      ending_miscue:{ label:'Ending or word-level miscues with target pattern preserved', order:5,
         guide:'The assessed phonics pattern appears to have been preserved, but another part of the word changed or the ending was omitted. Counted as a miscue; do not treat this as evidence that the target pattern was missed.' },
-      other:{ label:'Other miscues not tied to the target pattern', order:5,
+      other:{ label:'Other miscues not tied to the target pattern', order:6,
         guide:'The assessed phonics pattern appears to have been preserved, but the word was still read differently. Counted as a miscue; do not treat this as evidence that the target vowel or spelling pattern was missed.' }
     };
 
@@ -1179,10 +1241,6 @@
         lab.innerHTML = `<input type="checkbox" class="sec-check" value="${sec.sectionId}"><span class="opt-track"></span><span class="st-textwrap"><span class="st-text">${esc(sec.sectionTitle)}</span><span class="st-sub">${sec.words.length} words · ${real} real, ${non} nonsense</span></span>`;
         host.appendChild(lab);
       });
-      const ph = document.createElement('label');
-      ph.className='sec-toggle disabled';
-      ph.innerHTML = `<input type="checkbox" disabled><span class="opt-track"></span><span class="st-textwrap"><span class="st-text">Multisyllabic words</span><span class="st-sub">Coming in a later version</span></span>`;
-      host.appendChild(ph);
     }
 
     function collectSetup(){
@@ -1261,11 +1319,13 @@
         const notAdmin = !!sc.notAdmin;
         const block = document.createElement('div');
         block.className='phonics-section' + (notAdmin ? ' not-admin' : '');
+        const hasMiscue = sc.wrongIds.length > 0;
         const scoreSpan = notAdmin
           ? '<span class="sec-score" style="color:var(--muted);font-weight:800">not administered</span>'
-          : `<span class="sec-score">${sc.correct}/${sc.total}</span>`;
+          : hasMiscue
+            ? `<span class="sec-score">${sc.correct}/${sc.total}</span>`
+            : `<span class="sec-score sec-count">${sc.total} words</span>`;
         block.innerHTML = `<h3 class="sec-h">${esc(sec.sectionTitle)}${scoreSpan}</h3>
-          <p class="sec-sub">Tap a word only if the student makes a miscue.</p>
           <div class="not-admin-bar">
             <span class="not-admin-tag">${notAdmin ? 'Excluded from results' : ''}</span>
             <button type="button" class="sec-not-admin-btn" data-secid="${esc(sec.sectionId)}">${notAdmin ? 'Restore section' : 'Mark section not administered'}</button>
@@ -1338,6 +1398,7 @@
       if(/long vowel/i.test(t)) return 'Long V';
       if(/variant/i.test(t)) return 'Variant';
       if(/low.freq/i.test(t)) return 'Low Freq';
+      if(/multisyllabic/i.test(t)) return 'Multi';
       return t.slice(0,9);
     };
 
@@ -1502,10 +1563,12 @@
         const byFocus = buckets[tag];
         const patDef = PAT[tag] || {label:tag, guide:''};
         const total = Object.values(byFocus).reduce((s,arr)=>s+arr.length,0);
-        if(tag === 'phonics_vowel' || tag === 'phonics_consonant'){
+        if(tag === 'phonics_vowel' || tag === 'phonics_consonant' || tag === 'multisyllabic'){
           const rows = Object.entries(byFocus).sort((a,b)=> a[0].localeCompare(b[0])).map(([fk, items]) => {
             const words = items.map(e=>`${e.word}${e.response&&e.response!=='(skipped)'?` → ${e.response}`:(e.skipped?' (skipped)':'')}`).join(', ');
-            return `<div class="print-focus-item"><strong>${esc(fk)}</strong><span>${esc(words)}</span></div>`;
+            const strength = items.length >= 2 ? 'Repeated possible focus' : 'Observed once';
+            const note = items[0]?.patternNote ? ` · ${items[0].patternNote}` : '';
+            return `<div class="print-focus-item"><strong>${esc(strength)}: ${esc(fk)}</strong><span>${esc(words)}${esc(note)}</span></div>`;
           }).join('');
           return `<div class="print-focus-group"><h3>${patDef.label} · ${total}</h3><p>${esc(patDef.guide)}</p>${rows}</div>`;
         }
@@ -1527,8 +1590,8 @@
       collectSetup();
       const logo = document.querySelector('.brand-mark')?.src || '';
       const printableSecs = state.adminSecs.filter(sec=>!state.notAdministered.has(sec.sectionId));
-      const secs = printableSecs.map((sec, i) => `
-        <div class="ps-section ${i === 4 ? 'student-section-break' : ''}">
+      const secs = printableSecs.map(sec => `
+        <div class="ps-section">
           <h2>${esc(sec.sectionTitle)}</h2>
           <div class="ps-words">${sec.words.map(w=>`<span class="ps-word">${esc(w.word)}</span>`).join('')}</div>
         </div>`).join('');
@@ -1536,9 +1599,7 @@
         <div class="print-brand"><div class="print-brand-left"><img class="print-logo" src="${logo}" alt=""><div><div class="print-brand-name">Literacy Arcade</div><div class="print-tool-name">Phonics Knowledge Check</div></div></div><div class="print-tool-name">literacyarcade.com</div></div>
         <h1>Phonics Knowledge Check Student Sheet</h1>
         <p class="print-subtitle">${printableSecs.length} section${printableSecs.length===1?'':'s'} · read each word aloud</p>
-        <p class="student-directions">Read each word out loud, going across each row. Some are nonsense words — look at the letters and sounds, then read the word exactly as it is written.</p>
         ${secs}
-        <div class="print-footer"><span>Literacy Arcade • literacyarcade.com</span></div>
       </div>`;
     }
     function reportPrintHTML(){
@@ -1560,7 +1621,7 @@
         <p class="print-subtitle">Decoding by phonics pattern · real and nonsense words · instructional screening, not a diagnosis</p>
         <div class="report-meta"><div><b>Student</b>${esc(name)}</div><div><b>Date</b>${esc(formatDate($('assessmentDate').value))}</div><div><b>Grade</b>${esc(gradeText())}</div><div><b>Time of Year</b>${esc(yearText())}</div><div><b>Overall</b>${r.correct} / ${r.total} (${r.accuracy})</div><div><b>Level</b>${oLab}</div></div>
         <div class="print-two-col">
-          <div class="print-card"><h2>Summary</h2><table class="print-table"><tr><td>Total words correct</td><td>${r.correct} / ${r.total}</td></tr><tr><td>Overall accuracy</td><td>${r.accuracy}</td></tr><tr><td>Real words</td><td>${r.realCorrect} / ${r.realTotal}</td></tr><tr><td>Nonsense words</td><td>${r.nonCorrect} / ${r.nonTotal}</td></tr><tr><td>Skipped / no attempt</td><td>${r.skipped}</td></tr>${timeRow}</table></div>
+          <div class="print-card"><h2>Summary</h2><table class="print-table"><tr><td>Total words correct</td><td>${r.correct} / ${r.total}</td></tr><tr><td>Overall accuracy</td><td>${r.accuracy}</td></tr><tr><td>Real words</td><td>${r.realCorrect} / ${r.realTotal}</td></tr><tr><td>Nonsense words</td><td>${r.nonCorrect} / ${r.nonTotal}</td></tr><tr><td>Skipped / no attempt</td><td>${r.skipped}</td></tr>${timeRow}</table><p class="print-note">Nonsense words provide supplemental transfer evidence; interpret differences cautiously because task familiarity can affect performance.</p></div>
           <div class="print-card"><h2>Words with Miscues</h2><p class="print-missed-line">${missed}</p></div>
         </div>
         <div class="print-section print-card"><h2>Accuracy by Section</h2><table class="print-table print-section-table"><thead><tr><th>Section</th><th>Score</th><th>Accuracy</th><th>Level</th></tr></thead><tbody>${sectionRows}</tbody></table><p class="print-note">Strong control = 85%+ · Developing = 60–84% · Needs support = below 60%. Instructional guidance, not a normed benchmark.</p>${notAdminNote}</div>
@@ -1578,9 +1639,21 @@
       document.body.classList.add('printing', kind==='student'?'printing-student':'printing-report');
       const finishPrint=()=>{ window.print(); setTimeout(()=>document.body.classList.remove('printing','printing-student','printing-report'),400); };
       const logoImg = target.querySelector('img.print-logo');
-      if(logoImg && typeof logoImg.decode==='function'){ logoImg.decode().then(finishPrint).catch(finishPrint); }
-      else if(logoImg && !logoImg.complete){ logoImg.addEventListener('load',finishPrint,{once:true}); logoImg.addEventListener('error',finishPrint,{once:true}); }
-      else { finishPrint(); }
+      const logoReady = logoImg && typeof logoImg.decode==='function'
+        ? logoImg.decode().catch(()=>{})
+        : new Promise(resolve=>{
+            if(!logoImg || logoImg.complete) return resolve();
+            logoImg.addEventListener('load',resolve,{once:true});
+            logoImg.addEventListener('error',resolve,{once:true});
+          });
+      const fontsReady = document.fonts
+        ? Promise.all([document.fonts.load('500 19pt Lexend'),document.fonts.ready]).then(()=>{
+            const sample = target.querySelector('.ps-word');
+            target.dataset.resolvedStudentFont = sample ? getComputedStyle(sample).fontFamily : '';
+            target.dataset.lexendLoaded = String(document.fonts.check('500 19pt Lexend'));
+          })
+        : Promise.resolve();
+      Promise.all([logoReady,fontsReady]).then(finishPrint).catch(finishPrint);
     }
 
     /* ============================ WIRING ============================ */
@@ -1592,9 +1665,18 @@
       $('startAssessmentBtn').disabled = !anyOn;
       const hint = document.getElementById('startHint');
       if(hint) hint.hidden = anyOn;
+      const printHint = document.getElementById('printSheetHint');
+      if(printHint) printHint.hidden = anyOn;
     }
     $('sectionToggleHost').addEventListener('change', updateStartBtn);
-    $('printSheetBtn').addEventListener('click', ()=>printContent('student'));
+    $('printSheetBtn').addEventListener('click', ()=>{
+      if(!document.querySelector('.sec-check:checked')){
+        const printHint = document.getElementById('printSheetHint');
+        if(printHint) printHint.hidden = false;
+        return;
+      }
+      printContent('student');
+    });
     $('startAssessmentBtn').addEventListener('click', beginAssessment);
     $('startTimerBtn').addEventListener('click', startTimer);
     $('stopTimerBtn').addEventListener('click', stopTimer);
