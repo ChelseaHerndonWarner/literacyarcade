@@ -1112,7 +1112,7 @@
         const f = focusFor(item, which);
         if(f && !parts.includes(f)) parts.push(f);
       });
-      return parts.join(' · ') || item.instructionalFocus || item.targetPattern || null;
+      return parts.join(' · ') || (item.syllablePattern ? `${item.syllablePattern} multisyllabic decoding` : null) || item.instructionalFocus || item.targetPattern || null;
     }
     // The response is a transcription of what the student said, so "preserved" is judged by
     // sound where the data gives us enough to do so, and by literal letters otherwise.
@@ -1146,6 +1146,34 @@
       if(!silentE && rr.length > target.length && rr.startsWith(target) && /^(uh|ah|eh|ih|uhh)$/.test(rr.slice(target.length))) rr = target;
       return vowelNucleus(target, true) === vowelNucleus(rr, silentE);
     }
+    // Graphemes that stand for more than one assessed sound (oo, ew, ow, ea, u_e ...). Derived from the
+    // word list, so the typed letters alone cannot show which sound the student produced.
+    const AMBIGUOUS_GRAPHEMES = (() => {
+      const sounds = {};
+      ALL_WORDS.forEach(w => ['primary','secondary','tertiary'].forEach(role => {
+        const g = normPG(w[`${role}Grapheme`]), ph = w[`${role}Phoneme`];
+        if(!g || !ph || !(g.length > 1 || g.endsWith('_e'))) return;
+        (sounds[g] = sounds[g] || new Set()).add(ph);
+      }));
+      return new Set(Object.keys(sounds).filter(g => sounds[g].size > 1));
+    })();
+    // Letters of the target grapheme appear in the response as typed (no other-spelling equivalence).
+    function graphemeLettersPresent(item, r, g){
+      const target = cleanLetters(item.word);
+      return g.endsWith('_e') ? (r.endsWith('e') && nucleusMatch(target, r)) : r.includes(g);
+    }
+    // cot–caught merger: a bare o (or "ah") for aw/au is a common pronunciation, not clearly a miss.
+    function dialectCompatible(g, r){
+      if(g === 'aw' || g === 'au') return r.replace(/[^aeiou]/g, '') === 'o' || r.includes('ah');
+      return false;
+    }
+    function graphemeStatus(item, r, grapheme, phoneme){
+      const g = normPG(grapheme);
+      if(graphemePreserved(item, r, grapheme, phoneme)){
+        return AMBIGUOUS_GRAPHEMES.has(g) && graphemeLettersPresent(item, r, g) ? 'unverifiable' : 'kept';
+      }
+      return dialectCompatible(g, r) ? 'variation' : 'missed';
+    }
     function graphemePreserved(item, response, grapheme, phoneme){
       const g = normPG(grapheme);
       const r = cleanLetters(response);
@@ -1155,6 +1183,7 @@
         // CVCe is preserved when the response still has final e and the target vowel, or the sound is spelled another way.
         return (r.endsWith('e') && nucleusMatch(target, r)) || soundEquivalent(phoneme, r);
       }
+      if(g === 'wh') return r.includes('wh') || r.startsWith('w') || r.startsWith('hw');
       if(g === 'ph') return r.includes('ph') || r.includes('f');
       if(g === 'gn') return r.includes('gn') || r.startsWith('n');
       if(g === 'wr') return r.includes('wr') || r.startsWith('r');
@@ -1190,9 +1219,67 @@
           grapheme,
           kind: vowelLike ? 'vowel' : 'consonant',
           focus: focusFor(item, role),
-          preserved: graphemePreserved(item, r, grapheme, phoneme)
+          status: graphemeStatus(item, r, grapheme, phoneme)
         };
-      });
+      }).map(t => ({ ...t, preserved: t.status === 'kept' }));
+    }
+
+    // ---- Multisyllabic: localize the change to a syllable and keep different error kinds apart ----
+    // Stressed syllable (0-based); everything else defaults to the first syllable.
+    const STRESSED_SYLLABLE = { report:1, inhale:1, tornado:1 };
+    const SYLLABLE_TYPE_LABEL = t => t === 'VCe' ? 'VCe' : t.charAt(0).toUpperCase() + t.slice(1);
+    // Consonant skeleton of a letter string; a typed schwa (uh, ah, eh) counts as a vowel.
+    const stripVowels = x => x.replace(/([aeiou])h/g, '$1').replace(/[aeiou]/g, '');
+    function alignChange(target, r){
+      let p = 0;
+      while(p < target.length && p < r.length && target[p] === r[p]) p++;
+      let s = 0;
+      while(s < target.length - p && s < r.length - p && target[target.length-1-s] === r[r.length-1-s]) s++;
+      return { p, tEnd: target.length - s, tReg: target.slice(p, target.length - s), rReg: r.slice(p, r.length - s) };
+    }
+    function analyzeMultisyllabic(item, r){
+      const target = cleanLetters(item.word);
+      const generic = {
+        tag:'multisyllabic',
+        focus:item.reportFocus || `${item.syllablePattern} multisyllabic decoding`,
+        patternPreserved:false,
+        patternNote:'Combined syllable pattern reported conservatively; the response does not establish a deficit in every syllable type',
+        targets:[]
+      };
+      const syl = (item.syllables || []).map(cleanLetters);
+      if(syl.length < 2 || syl.join('') !== target) return generic;
+      const { p, tEnd, tReg, rReg } = alignChange(target, r);
+      // Syllable spans in target coordinates.
+      let at = 0;
+      const spans = syl.map(x => { const sp = { start:at, end:at + x.length }; at += x.length; return sp; });
+      let hit;
+      if(tReg){
+        hit = spans.map((sp, i) => (sp.start < tEnd && sp.end > p) ? i : -1).filter(i => i >= 0);
+      } else {
+        hit = spans.map((sp, i) => ((sp.start < p && p < sp.end) || (p === 0 && i === 0) || (p === target.length && i === spans.length-1)) ? i : -1).filter(i => i >= 0);
+      }
+      if(hit.length !== 1) return generic;
+      const i = hit[0], type = (item.syllableTypes || [])[i];
+      if(!type) return generic;
+      const stressed = STRESSED_SYLLABLE[item.word] ?? 0;
+      const vowelOnly = tReg && rReg && tReg !== rReg && stripVowels(tReg) === stripVowels(rReg);
+      if(i !== stressed && vowelOnly){
+        return {
+          tag:'teacher_check',
+          focus:'Unstressed-syllable vowel reduction',
+          patternPreserved:true,
+          patternNote:`Vowel change in the unstressed "${syl[i]}" syllable (typical reduction)`,
+          targets:[]
+        };
+      }
+      const kind = !rReg ? 'letters omitted' : (!tReg ? 'letters added' : (vowelOnly ? 'vowel changed' : 'letters changed'));
+      return {
+        tag:'multisyllabic',
+        focus:`${SYLLABLE_TYPE_LABEL(type)} syllable decoding · ${kind}`,
+        patternPreserved:false,
+        patternNote:`Change in "${syl[i]}" (${type} syllable)`,
+        targets:[]
+      };
     }
 
     // Returns { tag, focus, patternPreserved, patternNote, targets, findings }; `findings` lists every missed target.
@@ -1202,6 +1289,11 @@
     // The report is target-pattern first. It checks the assessed phonics patterns
     // before any broad miscue type such as an omitted ending, so words like
     // badge → bad are reported under final dge spelling, not a generic final deletion.
+    function checkNote(t){
+      return t.status === 'variation'
+        ? 'Possible dialect variation; check against the student\'s home speech'
+        : `${graphemeLabel(t.grapheme)} letters present; the vowel sound can't be verified from the typed response`;
+    }
     function analyzeError(item, response, skipped){
       if(skipped) return {tag:'skipped', focus:targetFocusSummary(item), patternPreserved:false, patternNote:null, targets:[]};
       const target = cleanLetters(item.word);
@@ -1209,25 +1301,22 @@
       if(!r || r===target) return {tag:'other', focus:null, patternPreserved:true, patternNote:null, targets:[]};
 
       if(item.sectionId === 'multisyllabic-words'){
-        return {
-          tag:'multisyllabic',
-          focus:item.reportFocus || `${item.syllablePattern} multisyllabic decoding`,
-          patternPreserved:false,
-          patternNote:'Combined syllable pattern reported conservatively; the response does not establish a deficit in every syllable type',
-          targets:[]
-        };
+        return analyzeMultisyllabic(item, r);
       }
 
       const targets = analyzeTargets(item, r);
 
       // Report every missed target as its own finding; the first stays the miscue's headline tag/focus.
-      const missedAll = targets.filter(t => !t.preserved);
+      const missedAll = targets.filter(t => t.status === 'missed');
+      const checkAll = targets.filter(t => t.status === 'unverifiable' || t.status === 'variation');
+      const otherNotes = (self) => [
+        ...targets.filter(x => x !== self && x.status === 'kept').map(x => `${graphemeLabel(x.grapheme)} pattern was preserved`),
+        ...targets.filter(x => x !== self && x.status === 'missed').map(x => `${graphemeLabel(x.grapheme)} also differed in this word`),
+        ...targets.filter(x => x !== self && x.status !== 'kept' && x.status !== 'missed').map(checkNote)
+      ];
       if(missedAll.length){
         const findings = missedAll.map(m => {
-          const notes = [
-            ...targets.filter(x => x !== m && x.preserved).map(x => `${graphemeLabel(x.grapheme)} pattern was preserved`),
-            ...targets.filter(x => x !== m && !x.preserved).map(x => `${graphemeLabel(x.grapheme)} also differed in this word`)
-          ];
+          const notes = otherNotes(m);
           return {
             tag: m.kind === 'vowel' ? 'phonics_vowel' : 'phonics_consonant',
             focus: (m.role === 'primary' && item.reportFocus) || m.focus,
@@ -1235,6 +1324,15 @@
           };
         });
         return { ...findings[0], patternPreserved:false, targets, findings };
+      }
+
+      // Nothing clearly missed, but the typed response cannot confirm the target sound: teacher check.
+      if(checkAll.length){
+        const findings = checkAll.map(c => {
+          const notes = [checkNote(c), ...otherNotes(c)];
+          return { tag:'teacher_check', focus:c.focus, patternNote:notes.join(' · ') };
+        });
+        return { ...findings[0], patternPreserved:true, targets, findings };
       }
 
       // Only after target patterns are preserved should we describe a broad ending/word-level miscue.
@@ -1252,6 +1350,8 @@
         guide:'These focus areas show target blends, digraphs, trigraphs, silent-letter spellings, or other consonant spellings that were not read as expected.' },
       multisyllabic:{ label:'Multisyllabic decoding patterns to review', order:3,
         guide:'These items show syllable types or combinations that were difficult in longer words. One occurrence is an observation; repeated patterns provide stronger instructional evidence.' },
+      teacher_check:{ label:'Teacher check: target sound can\'t be confirmed', order:3.5,
+        guide:'The typed response keeps the target letters or matches a common pronunciation, so a missed pattern cannot be confirmed. Counted as a miscue because it was marked, but not treated as evidence of a missed pattern. Check against what the student actually said and their home speech.' },
       skipped:{ label:'Skipped / no attempt', order:4,
         guide:'No spoken response was recorded. The student saw the word but did not attempt it.' },
       ending_miscue:{ label:'Ending or word-level miscues with target pattern preserved', order:5,
@@ -1615,6 +1715,7 @@
     // Strength comes from real-word evidence only; nonsense words can support but never raise it.
     function areaLabel(tag, area){
       if(tag === 'skipped') return 'Target pattern';
+      if(tag === 'teacher_check') return 'Teacher check';
       if(area.real.length >= 2) return 'Repeated possible focus';
       if(area.real.length === 1) return 'Observed once';
       return area.nonsense.length === 1 ? 'Observed once' : 'Observed in nonsense words only';
