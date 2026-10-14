@@ -7,7 +7,7 @@
      page-local <style> block in <head> is scoped to .wv-hope-page.
 
      West Virginia purchases go through TheoPay (Chrome extension scans the
-     Literacy Arcade cart and submits a purchase request). Families do NOT
+     Literacy Arcade cart and submits a purchase request; cart = west-virginia-cart.html, state in wv-cart.js). Families do NOT
      check out themselves and do NOT pay with their own card — the Hope
      Scholarship purchasing/fulfillment process places the order.
 
@@ -28,7 +28,7 @@
        - Plus access is set up by Literacy Arcade separately after the order
          (the purchasing organization's payment email is not the login).
 
-     CHECKOUT LINKS: both buttons go to WV-specific Stripe Payment Links
+     CHECKOUT LINKS: buttons add to the WV cart; the cart page routes to WV-specific Stripe Payment Links
      (Plus Annual and The Letter Box). Do not swap in other states' or
      public checkout links.
 
@@ -235,6 +235,16 @@
     @media (max-width: 640px) {
       .wv-hope-page .purchase-steps--4 { grid-template-columns: 1fr; }
     }
+    .wv-hope-page .wv-add.is-added { background: var(--mint); color: var(--teal-dk); border: 1.5px solid var(--teal); box-shadow: none; }
+    .wv-hope-page .wv-add.is-added:hover { background: var(--mint); }
+    .wv-hope-page .wv-cartbar {
+      max-width: 900px; margin: 22px auto 0; padding: 14px 18px;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+      background: var(--mint); border: 1.5px solid var(--teal); border-radius: var(--radius);
+    }
+    .wv-hope-page .wv-cartbar[hidden] { display: none; }
+    .wv-hope-page .wv-cartbar-text { font-weight: 800; color: var(--ink); font-size: .95rem; }
+    @media (max-width: 480px) { .wv-hope-page .wv-cartbar .btn { width: 100%; justify-content: center; } }
   </style>
 </head>
 <body class="wv-hope-page">
@@ -295,7 +305,7 @@
 
     <!-- ══ 2 · AVAILABLE WITH WEST VIRGINIA HOPE SCHOLARSHIP FUNDS [WV-SPECIFIC] ══
          Plus Annual is the ONLY Plus option offered for West Virginia.
-         Both buttons open WV-specific Stripe Payment Links. ══ -->
+         Both buttons add to the WV cart (west-virginia-cart.html). ══ -->
     <section class="state-section white lift" id="wv-products">
       <div class="container">
         <div class="section-heading center">
@@ -318,7 +328,7 @@
                 <li>Students do not need accounts</li>
               </ul>
               <p class="wv-product-note">Hope Scholarship funds arrive quarterly, but your $79 purchase covers one full year of access from activation.</p>
-              <a class="btn btn-primary" href="https://buy.stripe.com/5kQ8wI4Ex7M1eFsgCm8EM02" target="_blank" rel="noopener noreferrer">Open Plus Annual checkout →</a>
+              <button type="button" class="btn btn-primary wv-add" data-product="plus" data-label="Add Plus Annual to cart">Add Plus Annual to cart</button>
             </div>
           </article>
 
@@ -339,9 +349,15 @@
                 <li>Dedicated lesson-preparation space</li>
               </ul>
               <p class="wv-product-note"><strong>$42.00</strong> · Free U.S. shipping</p>
-              <a class="btn btn-primary" href="https://buy.stripe.com/28EeV6gnfgixgNAcm68EM01" target="_blank" rel="noopener noreferrer">Open The Letter Box checkout →</a>
+              <button type="button" class="btn btn-primary wv-add" data-product="letterbox" data-label="Add The Letter Box to cart">Add The Letter Box to cart</button>
             </div>
           </article>
+        </div>
+
+        <!-- Cart bar: shown once at least one item is in the cart -->
+        <div class="wv-cartbar" id="wvCartBar" hidden>
+          <p class="wv-cartbar-text" id="wvCartBarText" role="status" aria-live="polite"></p>
+          <a class="btn btn-secondary" href="west-virginia-cart.html">View cart →</a>
         </div>
       </div>
     </section>
@@ -356,16 +372,16 @@
 
         <div class="purchase-steps purchase-steps--4">
           <article class="purchase-step">
-            <h3>Choose your product</h3>
-            <p>Choose Plus Annual or The Letter Box from the West Virginia page.</p>
+            <h3>Add items to your cart</h3>
+            <p>Add Plus Annual, The Letter Box, or both to your cart on this page.</p>
           </article>
           <article class="purchase-step">
-            <h3>Open the West Virginia checkout</h3>
-            <p>Open the product's WV-specific checkout page in Google Chrome while signed in to TheoPay.</p>
+            <h3>Open your cart</h3>
+            <p>Select View cart to open the West Virginia cart in Google Chrome while signed in to TheoPay.</p>
           </article>
           <article class="purchase-step">
             <h3>Submit with TheoPay</h3>
-            <p>Use TheoPay to capture/scan the checkout information and submit the purchase request.</p>
+            <p>Use TheoPay to scan the cart and submit the purchase request, then continue to checkout.</p>
           </article>
           <article class="purchase-step">
             <h3>Hope Scholarship completes the order</h3>
@@ -377,7 +393,7 @@
           <span class="note-icon" aria-hidden="true">i</span>
           <div>
             <h2>How payment works</h2>
-            <p>You do not complete the purchase with your own credit card. After you submit the checkout through TheoPay, the Hope Scholarship purchasing team completes the transaction with Literacy Arcade.</p>
+            <p>You do not complete the purchase with your own credit card. After you submit the cart through TheoPay, the Hope Scholarship purchasing team completes the transaction with Literacy Arcade.</p>
             <p>For Plus Annual, Literacy Arcade will then set up your account for one full year of access. It does not automatically renew.</p>
           </div>
         </div>
@@ -485,7 +501,7 @@
         <div class="faq-grid">
           <article class="faq-card">
             <h3>How do I purchase with Hope Scholarship funds?</h3>
-            <p>Choose a product on this page, open its West Virginia checkout in Google Chrome while signed in to TheoPay, and use TheoPay to submit the purchase request.</p>
+            <p>Add items to your cart on this page, open the cart in Google Chrome while signed in to TheoPay, and use TheoPay to scan the cart and submit the purchase request. Then continue to checkout.</p>
           </article>
           <article class="faq-card">
             <h3>Do I pay with my own credit card?</h3>
@@ -563,6 +579,7 @@
     </div>
   </footer>
 
+  <script src="wv-cart.js"></script>
   <script>
     const toggle = document.getElementById('mobileToggle');
     const navLinks = document.getElementById('navLinks');
@@ -616,6 +633,34 @@
         // keep focus on the close button while the dialog is open
         if (e.key === 'Tab' && !lb.hidden) { e.preventDefault(); lbClose.focus(); }
       });
+    })();
+
+    /* ── WV cart: add-to-cart buttons + cart bar (state lives in wv-cart.js) ── */
+    (function () {
+      const cart = window.WVCart;
+      if (!cart) return;
+      const bar = document.getElementById('wvCartBar');
+      const barText = document.getElementById('wvCartBarText');
+      const buttons = document.querySelectorAll('.wv-add');
+
+      const render = () => {
+        buttons.forEach(btn => {
+          const added = cart.has(btn.dataset.product);
+          btn.classList.toggle('is-added', added);
+          btn.textContent = added ? '✓ Added to cart' : btn.dataset.label;
+          btn.setAttribute('aria-pressed', added ? 'true' : 'false');
+        });
+        const n = cart.count();
+        bar.hidden = n === 0;
+        barText.textContent = n === 0 ? '' :
+          n + (n === 1 ? ' item' : ' items') + ' in your cart · $' + cart.total();
+      };
+
+      buttons.forEach(btn => btn.addEventListener('click', () => {
+        if (!cart.has(btn.dataset.product)) cart.add(btn.dataset.product);
+      }));
+      document.addEventListener('wvcart:change', render);
+      render();
     })();
   </script>
 </body>

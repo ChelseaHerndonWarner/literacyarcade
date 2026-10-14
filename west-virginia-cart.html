@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<!-- ============================================================================
+     WEST VIRGINIA HOPE SCHOLARSHIP — CART
+     WV-only cart page. State lives in wv-cart.js (sessionStorage key
+     la_wv_cart_v1). Flow: west-virginia-hope-scholarship.html → Add to cart →
+     View cart → this page → Proceed to checkout (WV Stripe Payment Links).
+     Combined (Plus + Letter Box) checkout is waiting on a WV Payment Link;
+     set COMBINED_URL in wv-cart.js when it exists. Required Stripe setup
+     (items, shipping, custom fields, no promo codes) is documented there.
+     ============================================================================ -->
+<html lang="en">
+<head>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL8QW5CGB2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CL8QW5CGB2');
+  </script>
+  <script src="clarity-optout.js"></script>
+  <script type="text/javascript">
+    if (!window.__laNoClarity) (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xc6rwdrkw5");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart | West Virginia Hope Scholarship | Literacy Arcade</title>
+  <meta name="description" content="Review your Literacy Arcade cart for West Virginia Hope Scholarship purchases through TheoPay." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://literacyarcade.com/west-virginia-cart.html" />
+  <meta name="theme-color" content="#2EC4B6" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="state-program.css" />
+
+  <style>
+    .wv-cart-page { overflow-x: hidden; }
+    .wv-cart-page .cart-wrap { padding: 44px 0 64px; background: linear-gradient(180deg, #FBF7FF 0%, #F7F3FD 100%); border-bottom: 1px solid var(--border); }
+    .wv-cart-page .cart-head { margin-bottom: 22px; }
+    .wv-cart-page .cart-head h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); font-weight: 900; color: var(--ink); }
+    .wv-cart-page .cart-head p { margin-top: 6px; color: var(--ink-soft); font-weight: 650; }
+    .wv-cart-page .cart-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+    .wv-cart-page .cart-panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .wv-cart-page .cart-cols, .wv-cart-page .cart-row {
+      display: grid; grid-template-columns: minmax(0, 1fr) 50px 90px 80px; gap: 14px; align-items: center; padding: 16px 20px;
+    }
+    .wv-cart-page .cart-cols { font-size: .75rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 1px solid var(--border); }
+    .wv-cart-page .cart-row + .cart-row { border-top: 1px solid var(--border); }
+    .wv-cart-page .cart-item h2 { font-size: 1.05rem; font-weight: 900; color: var(--ink); }
+    .wv-cart-page .cart-item p { font-size: .85rem; font-weight: 650; color: var(--ink-soft); margin-top: 4px; line-height: 1.45; }
+    .wv-cart-page .cart-ship { display: inline-block; margin-top: 8px; font-size: .8rem; font-weight: 800; color: var(--teal-dk); background: var(--mint); padding: 3px 10px; border-radius: 999px; }
+    .wv-cart-page .cart-qty { font-weight: 800; color: var(--ink); }
+    .wv-cart-page .cart-price { font-weight: 900; color: var(--ink); text-align: right; }
+    .wv-cart-page .cart-remove { justify-self: end; background: none; border: 0; padding: 6px 4px; font: inherit; font-size: .85rem; font-weight: 800; color: #C0392B; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+    .wv-cart-page .cart-remove:hover { color: #962d22; }
+    .wv-cart-page .cart-foot { padding: 14px 20px; border-top: 1px solid var(--border); }
+    .wv-cart-page .cart-foot a { font-weight: 800; color: var(--teal-dk); text-decoration: underline; text-underline-offset: 2px; }
+    .wv-cart-page .summary { padding: 22px; position: sticky; top: 90px; }
+    .wv-cart-page .summary h2 { font-size: 1.15rem; font-weight: 900; color: var(--ink); margin-bottom: 14px; }
+    .wv-cart-page .sum-line { display: flex; justify-content: space-between; gap: 12px; font-weight: 700; color: var(--ink-soft); padding: 6px 0; }
+    .wv-cart-page .sum-total { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px; font-size: 1.2rem; font-weight: 900; color: var(--ink); }
+    .wv-cart-page .summary .btn { width: 100%; justify-content: center; margin-top: 16px; }
+    .wv-cart-page .summary .btn[aria-disabled="true"] { opacity: .56; cursor: not-allowed; pointer-events: none; box-shadow: none; }
+    .wv-cart-page .cart-waiting { margin-top: 14px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--sand); border: 1px solid var(--amber); font-size: .85rem; font-weight: 700; color: var(--ink); line-height: 1.45; }
+    .wv-cart-page .cart-note { margin-top: 14px; font-size: .8rem; font-weight: 650; color: var(--ink-soft); line-height: 1.45; }
+    .wv-cart-page .cart-empty { padding: 44px 20px; text-align: center; }
+    .wv-cart-page .cart-empty h2 { font-size: 1.3rem; font-weight: 900; color: var(--ink); }
+    .wv-cart-page .cart-empty p { margin: 8px 0 18px; color: var(--ink-soft); font-weight: 650; }
+    .wv-cart-page [hidden] { display: none !important; }
+    @media (max-width: 860px) {
+      .wv-cart-page .cart-grid { grid-template-columns: minmax(0, 1fr); }
+      .wv-cart-page .summary { position: static; }
+    }
+    @media (max-width: 560px) {
+      .wv-cart-page .cart-cols { display: none; }
+      .wv-cart-page .cart-row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "item item" "qty price" "remove remove"; gap: 8px 12px; }
+      .wv-cart-page .cart-item { grid-area: item; }
+      .wv-cart-page .cart-qty { grid-area: qty; }
+      .wv-cart-page .cart-qty::before { content: "Qty "; color: var(--ink-soft); font-weight: 700; }
+      .wv-cart-page .cart-price { grid-area: price; }
+      .wv-cart-page .cart-remove { grid-area: remove; justify-self: start; padding-left: 0; }
+    }
+  </style>
+</head>
+<body class="wv-cart-page">
+
+  <!-- ══ SITE HEADER — standard Literacy Arcade nav (do not customise) ══ -->
+  <header>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Literacy Arcade home">
+          <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+          Literacy Arcade
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="plus-subscriptions.html">Plus Plans</a></li>
+          <li><a href="assessments.html">Assessments</a></li>
+          <li><a href="fluency.html">Fluency</a></li>
+          <li><a href="build-and-play.html">Build &amp; Play</a></li>
+          <li><a href="teacher-tools.html">Teacher Tools</a></li>
+          <li><a href="teacher-login.html" class="nav-account">Dashboard / Log in</a></li>
+        </ul>
+
+        <div class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu" role="button" tabindex="0" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="cart-wrap" aria-labelledby="cartTitle">
+      <div class="container">
+        <div class="cart-head">
+          <h1 id="cartTitle">Your cart</h1>
+          <p>West Virginia Hope Scholarship · purchase through TheoPay</p>
+        </div>
+
+        <div class="cart-grid">
+          <div class="cart-panel">
+            <div id="cartFilled">
+              <div class="cart-cols" aria-hidden="true">
+                <span>Product</span><span>Qty</span><span style="text-align:right">Price</span><span></span>
+              </div>
+              <div id="cartRows"></div>
+              <div class="cart-foot"><a href="west-virginia-hope-scholarship.html#wv-products">← Continue shopping</a></div>
+            </div>
+            <div class="cart-empty" id="cartEmpty" hidden>
+              <h2>Your cart is empty</h2>
+              <p>Add Literacy Arcade Plus Annual or The Letter Box to get started.</p>
+              <a class="btn btn-primary" href="west-virginia-hope-scholarship.html#wv-products">Browse West Virginia products →</a>
+            </div>
+          </div>
+
+          <aside class="cart-panel summary" id="cartSummary" aria-label="Order summary">
+            <h2>Order summary</h2>
+            <div id="sumLines"></div>
+            <div class="sum-line sum-total"><span>Total</span><span id="sumTotal">$0.00</span></div>
+            <a class="btn btn-primary" id="checkoutBtn" rel="noopener noreferrer">Proceed to checkout</a>
+            <p class="cart-waiting" id="cartWaiting" role="status" hidden>Combined checkout for Plus Annual + The Letter Box isn't available yet. Remove one item to check out with a single product.</p>
+            <p class="cart-note">Hope Scholarship families do not pay with their own card. Use TheoPay to scan this cart and submit your purchase request.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══ SITE FOOTER — standard Literacy Arcade footer (do not customise) ══ -->
+  <footer class="footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon" role="img" aria-label="Literacy Arcade logo"></div>
+            Literacy Arcade
+          </a>
+          <p class="footer-desc">Science of Reading–aligned tools for teachers, tutors, interventionists, and homeschool families.</p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Explore</div>
+          <ul class="footer-links">
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="plus-subscriptions.html">Plus Plans</a></li>
+            <li><a href="assessments.html">Assessments</a></li>
+            <li><a href="fluency.html">Fluency</a></li>
+            <li><a href="build-and-play.html">Build &amp; Play</a></li>
+            <li><a href="teacher-tools.html">Teacher Tools</a></li>
+            <li><a href="teacher-dashboard.html">My Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Support</div>
+          <ul class="footer-links">
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="student-privacy.html">Student Privacy</a></li>
+            <li><a href="terms-of-use.html">Terms of Use</a></li>
+            <li><a href="refund-policy.html">Billing &amp; Refunds</a></li>
+            <li><a href="mailto:hello@literacyarcade.com">Contact</a></li>
+            <li><a href="https://www.linkedin.com/company/literacy-arcade" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Literacy Arcade.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="wv-cart.js"></script>
+  <script>
+    const toggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    const toggleMenu = () => {
+      navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', navLinks.classList.contains('open') ? 'true' : 'false');
+    };
+    toggle.addEventListener('click', toggleMenu);
+    toggle.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleMenu(); }
+    });
+  </script>
+  <script>
+    (function () {
+      const cart = window.WVCart;
+      const rows = document.getElementById('cartRows');
+      const filled = document.getElementById('cartFilled');
+      const empty = document.getElementById('cartEmpty');
+      const summary = document.getElementById('cartSummary');
+      const lines = document.getElementById('sumLines');
+      const total = document.getElementById('sumTotal');
+      const btn = document.getElementById('checkoutBtn');
+      const waiting = document.getElementById('cartWaiting');
+
+      const el = (tag, cls, text) => {
+        const n = document.createElement(tag);
+        if (cls) n.className = cls;
+        if (text != null) n.textContent = text;
+        return n;
+      };
+
+      const render = () => {
+        const ids = cart.ids();
+        rows.replaceChildren();
+        lines.replaceChildren();
+        filled.hidden = ids.length === 0;
+        empty.hidden = ids.length !== 0;
+        summary.hidden = ids.length === 0;
+
+        ids.forEach(id => {
+          const p = cart.products[id];
+          const row = el('div', 'cart-row');
+          row.dataset.product = id;
+
+          const item = el('div', 'cart-item');
+          item.appendChild(el('h2', '', p.name));
+          item.appendChild(el('p', '', p.detail));
+          if (id === 'letterbox') item.appendChild(el('span', 'cart-ship', 'Free U.S. shipping'));
+
+          const qty = el('div', 'cart-qty', '1');
+          qty.setAttribute('aria-label', 'Quantity: 1');
+          const price = el('div', 'cart-price', '$' + p.price.toFixed(2));
+          const rm = el('button', 'cart-remove', 'Remove');
+          rm.type = 'button';
+          rm.setAttribute('aria-label', 'Remove ' + p.name + ' from cart');
+          rm.addEventListener('click', () => cart.remove(id));
+
+          row.append(item, qty, price, rm);
+          rows.appendChild(row);
+
+          const line = el('div', 'sum-line');
+          line.append(el('span', '', p.name), el('span', '', '$' + p.price.toFixed(2)));
+          lines.appendChild(line);
+        });
+
+        total.textContent = '$' + cart.total().toFixed(2);
+
+        const c = cart.checkout();
+        waiting.hidden = c.state !== 'waiting';
+        if (c.state === 'ready') {
+          btn.href = c.url;
+          btn.removeAttribute('aria-disabled');
+          btn.removeAttribute('tabindex');
+        } else {
+          btn.removeAttribute('href');
+          btn.setAttribute('aria-disabled', 'true');
+          btn.setAttribute('tabindex', '-1');
+        }
+      };
+
+      document.addEventListener('wvcart:change', render);
+      render();
+    })();
+  </script>
+</body>
+</html>
