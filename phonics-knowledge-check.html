@@ -1133,67 +1133,76 @@
       return r.includes(g);
     }
 
-    // Returns { tag, focus, patternPreserved, patternNote }.
+    // Per-target results for one response: one entry for every assessed target
+    // (primary / secondary / tertiary), each marked preserved or not. `r` is the
+    // already-cleaned response (letters only).
+    function analyzeTargets(item, r){
+      return [
+        ['primary', item.primaryGrapheme],
+        ['secondary', item.secondaryGrapheme],
+        ['tertiary', item.tertiaryGrapheme]
+      ].filter(([, grapheme]) => grapheme).map(([role, grapheme]) => ({
+        role,
+        grapheme,
+        kind: isVowelGrapheme(grapheme) ? 'vowel' : 'consonant',
+        focus: focusFor(item, role),
+        preserved: graphemePreserved(item, r, grapheme)
+      }));
+    }
+
+    // Returns { tag, focus, patternPreserved, patternNote, targets }.
+    // `targets` holds the per-target results for this miscue; `patternNote` describes
+    // only this item (never a group) and no longer carries the nonsense-word caution,
+    // which is added structurally from the item's word type when findings are grouped.
     // The report is target-pattern first. It checks the assessed phonics patterns
     // before any broad miscue type such as an omitted ending, so words like
     // badge → bad are reported under final dge spelling, not a generic final deletion.
     function analyzeError(item, response, skipped){
-      if(skipped) return {tag:'skipped', focus:targetFocusSummary(item), patternPreserved:false, patternNote:null};
+      if(skipped) return {tag:'skipped', focus:targetFocusSummary(item), patternPreserved:false, patternNote:null, targets:[]};
       const target = cleanLetters(item.word);
       const r = cleanLetters(response);
-      if(!r || r===target) return {tag:'other', focus:null, patternPreserved:true, patternNote:null};
+      if(!r || r===target) return {tag:'other', focus:null, patternPreserved:true, patternNote:null, targets:[]};
 
       if(item.sectionId === 'multisyllabic-words'){
         return {
           tag:'multisyllabic',
           focus:item.reportFocus || `${item.syllablePattern} multisyllabic decoding`,
           patternPreserved:false,
-          patternNote:'Combined syllable pattern reported conservatively; the response does not establish a deficit in every syllable type'
+          patternNote:'Combined syllable pattern reported conservatively; the response does not establish a deficit in every syllable type',
+          targets:[]
         };
       }
 
-      const targetChecks = [
-        { which:'primary', grapheme:item.primaryGrapheme, focus:item.primaryFocus, phoneme:item.primaryPhoneme },
-        { which:'secondary', grapheme:item.secondaryGrapheme, focus:item.secondaryFocus, phoneme:item.secondaryPhoneme },
-        { which:'tertiary', grapheme:item.tertiaryGrapheme, focus:item.tertiaryFocus, phoneme:item.tertiaryPhoneme }
-      ].filter(t => t.grapheme);
-
-      const preserved = {};
-      for(const t of targetChecks){
-        preserved[t.which] = graphemePreserved(item, r, t.grapheme);
-      }
+      const targets = analyzeTargets(item, r);
 
       // Report the specific missed target pattern first.
-      for(const t of targetChecks){
-        if(!preserved[t.which]){
-          const vowelTarget = isVowelGrapheme(t.grapheme);
-          const otherPreserved = targetChecks
-            .filter(x => x.which !== t.which)
-            .filter(x => preserved[x.which])
-            .map(x => `${graphemeLabel(x.grapheme)} pattern was preserved`);
-          if(item.type === 'nonsense') otherPreserved.push('Supplemental transfer evidence; one unfamiliar-word response may also reflect lexicalization or task familiarity');
-          return {
-            tag: vowelTarget ? 'phonics_vowel' : 'phonics_consonant',
-            focus: (t.which === 'primary' && item.reportFocus) || focusFor(item, t.which),
-            patternPreserved:false,
-            patternNote: otherPreserved.length ? otherPreserved.join(' · ') : null
-          };
-        }
+      const missed = targets.find(t => !t.preserved);
+      if(missed){
+        const otherPreserved = targets
+          .filter(x => x !== missed && x.preserved)
+          .map(x => `${graphemeLabel(x.grapheme)} pattern was preserved`);
+        return {
+          tag: missed.kind === 'vowel' ? 'phonics_vowel' : 'phonics_consonant',
+          focus: (missed.role === 'primary' && item.reportFocus) || missed.focus,
+          patternPreserved:false,
+          patternNote: otherPreserved.length ? otherPreserved.join(' · ') : null,
+          targets
+        };
       }
 
       // Only after target patterns are preserved should we describe a broad ending/word-level miscue.
       if(r.length < target.length && target.startsWith(r) && r.length >= 2){
-        return {tag:'ending_miscue', focus:null, patternPreserved:true, patternNote:'Assessed phonics pattern was preserved; ending was omitted or shortened'};
+        return {tag:'ending_miscue', focus:null, patternPreserved:true, patternNote:'Assessed phonics pattern was preserved; ending was omitted or shortened', targets};
       }
 
-      return {tag:'other', focus:null, patternPreserved:true, patternNote:'Target phonics pattern was preserved'};
+      return {tag:'other', focus:null, patternPreserved:true, patternNote:'Target phonics pattern was preserved', targets};
     }
 
     const PAT = {
       phonics_vowel:{ label:'Vowel/spelling patterns to review', order:1,
-        guide:'These cards show the specific vowel or vowel spelling pattern that was not preserved. Grouping by spelling pattern helps connect miscues directly to instruction.' },
+        guide:'These focus areas show the specific vowel or vowel spelling pattern that was not preserved. Grouping by spelling pattern helps connect miscues directly to instruction.' },
       phonics_consonant:{ label:'Consonant spelling patterns to review', order:2,
-        guide:'These cards show target blends, digraphs, trigraphs, silent-letter spellings, or other consonant spellings that were not read as expected.' },
+        guide:'These focus areas show target blends, digraphs, trigraphs, silent-letter spellings, or other consonant spellings that were not read as expected.' },
       multisyllabic:{ label:'Multisyllabic decoding patterns to review', order:3,
         guide:'These items show syllable types or combinations that were difficult in longer words. One occurrence is an observation; repeated patterns provide stronger instructional evidence.' },
       skipped:{ label:'Skipped / no attempt', order:4,
@@ -1293,7 +1302,8 @@
               tag:analysis.tag,
               focus:analysis.focus,
               patternPreserved:analysis.patternPreserved,
-              patternNote:analysis.patternNote
+              patternNote:analysis.patternNote,
+              targets:analysis.targets
             });
           }
         });
@@ -1517,69 +1527,99 @@
       $('patternNotes').innerHTML = renderPatternNotes(r.details);
       showLeft('resultsPanel'); showControls('completeControls'); $('rightHeading').textContent='Check Complete'; $('rightSubhead').textContent='';
     }
-    function bucketPatterns(details){
-      // buckets[tag][focusText] = [ ...detail objects ]
-      const buckets = {};
+    /* ---- Focus areas: one shared model for the on-screen and print reports ---- */
+    const NONSENSE_CAUTION = 'Supplemental transfer evidence; one unfamiliar-word response may also reflect lexicalization or task familiarity';
+    const PATTERN_TAGS = new Set(['phonics_vowel','phonics_consonant','multisyllabic']);
+    // Group key for a finding. Word type is tracked structurally (real vs nonsense lists),
+    // so any "nonsense word" wording in the focus text is dropped from the key.
+    function focusGroupKey(focus){
+      if(!focus) return '__NO_FOCUS__';
+      return focus.replace(/ in a nonsense word$/i,'').replace(/ nonsense word$/i,' word');
+    }
+    const plural = (n, one, many) => `${n} ${n===1 ? one : (many || one+'s')}`;
+    function detailWordText(d){
+      return `${d.word}${d.response && d.response!=='(skipped)' ? ` → ${d.response}` : (d.skipped ? ' (skipped)' : '')}`;
+    }
+    // Groups miscues into focus areas per finding type. Real and nonsense words are kept in
+    // separate lists on each focus area; only real words decide the strength of the finding.
+    function buildFocusAreas(details){
+      const byTag = {};
       details.forEach(d => {
         const tag = d.tag || 'other';
-        if(!buckets[tag]) buckets[tag] = {};
-        const fk = d.focus || '__NO_FOCUS__';
-        if(!buckets[tag][fk]) buckets[tag][fk] = [];
-        buckets[tag][fk].push(d);
+        const key = focusGroupKey(d.focus);
+        const bucket = byTag[tag] || (byTag[tag] = { tag, def:PAT[tag] || {label:tag, guide:''}, areas:{}, words:0 });
+        const area = bucket.areas[key] || (bucket.areas[key] = { key, focus: d.focus || null, real:[], nonsense:[] });
+        // Display the real-word focus text when there is one; nonsense wording only if no real word is in the area.
+        if(d.type !== 'nonsense' && !area.real.length) area.focus = d.focus || null;
+        (d.type === 'nonsense' ? area.nonsense : area.real).push(d);
+        bucket.words++;
       });
-      return buckets;
+      return Object.values(byTag)
+        .sort((a,b) => (a.def.order||99) - (b.def.order||99))
+        .map(b => ({ ...b, areas:Object.values(b.areas) }));
+    }
+    // Strength comes from real-word evidence only; nonsense words can support but never raise it.
+    function areaLabel(tag, area){
+      if(tag === 'skipped') return 'Target pattern';
+      if(area.real.length >= 2) return 'Repeated possible focus';
+      if(area.real.length === 1) return 'Observed once';
+      return area.nonsense.length === 1 ? 'Observed once' : 'Observed in nonsense words only';
+    }
+    // Item-specific notes: shown once when every word shares the same note, otherwise next to each word.
+    function areaPieces(bucket, area){
+      const all = [...area.real, ...area.nonsense];
+      const noteOf = d => d.patternNote || (bucket.tag === 'other' ? 'Target phonics pattern was preserved' : '');
+      const notes = all.map(noteOf);
+      const shared = notes.length && notes.every(n => n && n === notes[0]) ? notes[0] : '';
+      const text = d => detailWordText(d) + (!shared && noteOf(d) ? ` (${noteOf(d)})` : '');
+      return {
+        label: areaLabel(bucket.tag, area),
+        focus: area.focus,
+        realWords: area.real.map(text).join(', '),
+        nonsenseWords: area.nonsense.map(text).join(', '),
+        sharedNote: shared,
+        nonsenseOnly: area.real.length === 0 && area.nonsense.length > 0,
+        caution: area.nonsense.length > 0 && bucket.tag !== 'other' && bucket.tag !== 'ending_miscue'
+      };
+    }
+    function bucketHeading(bucket){
+      return PATTERN_TAGS.has(bucket.tag)
+        ? `${bucket.def.label} · ${plural(bucket.areas.length,'focus area')} · ${plural(bucket.words,'word')} missed`
+        : `${bucket.def.label} · ${plural(bucket.words,'word')}`;
     }
     function renderPatternNotes(details){
       if(!details.length) return '<p class="empty-small">No miscues to analyze.</p>';
-      const buckets = bucketPatterns(details);
-      const keys = Object.keys(buckets).sort((a,b)=>(PAT[a]?.order||99)-(PAT[b]?.order||99));
-      return keys.map(tag => {
-        const byFocus = buckets[tag];
-        const patDef = PAT[tag] || {label:tag, guide:''};
-        const total = Object.values(byFocus).reduce((s,arr)=>s+arr.length,0);
-        const chips = Object.entries(byFocus).map(([fk, items]) => {
-          const count = items.length;
-          const words = items.map(e => `${esc(e.word)}${e.response && e.response!=='(skipped)'?` → ${esc(e.response)}`:(e.skipped?' (skipped)':'')}`).join(', ');
-          const patNote = items[0]?.patternNote || null;
-          if(tag === 'other'){
-            const note = patNote || 'Target phonics pattern was preserved';
-            return `<span class="pattern-chip chip-ok">${words}<br><small>${esc(note)}</small></span>`;
-          }
-          if(fk === '__NO_FOCUS__'){
-            return `<span class="pattern-chip">${words}</span>`;
-          }
-          const prefix = tag === 'skipped' ? 'Target pattern' : (count >= 2 ? 'Repeated possible focus' : 'Observed once');
-          const noteStr = patNote ? ` · ${patNote}` : '';
-          return `<span class="pattern-chip">${words}<br><small>${prefix}: ${esc(fk)}${esc(noteStr)}</small></span>`;
+      return buildFocusAreas(details).map(bucket => {
+        const chips = bucket.areas.map(area => {
+          const p = areaPieces(bucket, area);
+          const head = p.focus ? `${p.label}: ${p.focus}` : '';
+          const lines = [];
+          if(head || p.sharedNote) lines.push(head + (p.sharedNote ? `${head ? ' · ' : ''}${p.sharedNote}` : ''));
+          if(p.realWords && p.nonsenseWords) lines.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
+          if(p.nonsenseOnly) lines.push('Nonsense-word evidence only');
+          if(p.caution) lines.push(NONSENSE_CAUTION);
+          const small = lines.map(l => `<small>${esc(l)}</small>`).join('<br>');
+          const cls = (bucket.tag === 'other' || bucket.tag === 'ending_miscue') ? 'pattern-chip chip-ok' : 'pattern-chip';
+          return `<span class="${cls}">${esc(p.realWords || p.nonsenseWords)}${small ? '<br>' + small : ''}</span>`;
         }).join('');
-        return `<div class="pattern-card"><h4>${patDef.label} · ${total}</h4><div class="pattern-examples">${chips}</div><p>${patDef.guide}</p></div>`;
+        return `<div class="pattern-card"><h4>${esc(bucketHeading(bucket))}</h4><div class="pattern-examples">${chips}</div><p>${bucket.def.guide}</p></div>`;
       }).join('');
     }
     function patternPrintRows(details){
       if(!details.length) return '<p>No miscues to analyze.</p>';
-      const buckets = bucketPatterns(details);
-      const keys = Object.keys(buckets).sort((a,b)=>(PAT[a]?.order||99)-(PAT[b]?.order||99));
-      return keys.map(tag => {
-        const byFocus = buckets[tag];
-        const patDef = PAT[tag] || {label:tag, guide:''};
-        const total = Object.values(byFocus).reduce((s,arr)=>s+arr.length,0);
-        if(tag === 'phonics_vowel' || tag === 'phonics_consonant' || tag === 'multisyllabic'){
-          const rows = Object.entries(byFocus).sort((a,b)=> a[0].localeCompare(b[0])).map(([fk, items]) => {
-            const words = items.map(e=>`${e.word}${e.response&&e.response!=='(skipped)'?` → ${e.response}`:(e.skipped?' (skipped)':'')}`).join(', ');
-            const strength = items.length >= 2 ? 'Repeated possible focus' : 'Observed once';
-            const note = items[0]?.patternNote ? ` · ${items[0].patternNote}` : '';
-            return `<div class="print-focus-item"><strong>${esc(strength)}: ${esc(fk)}</strong><span>${esc(words)}${esc(note)}</span></div>`;
-          }).join('');
-          return `<div class="print-focus-group"><h3>${patDef.label} · ${total}</h3><p>${esc(patDef.guide)}</p>${rows}</div>`;
-        }
-        const rows = Object.entries(byFocus).map(([fk, items]) => {
-          const words = items.map(e=>`${e.word}${e.response&&e.response!=='(skipped)'?` → ${e.response}`:(e.skipped?' (skipped)':'')}`).join(', ');
-          const extra = tag === 'skipped' && fk !== '__NO_FOCUS__'
-            ? `Target pattern: ${fk}`
-            : ((tag==='other' || tag==='ending_miscue') ? `${items[0]?.patternNote||'Target phonics pattern was preserved'}` : '');
-          return `<div class="print-focus-item"><strong>${esc(words)}</strong>${extra ? `<span>${esc(extra)}</span>` : ''}</div>`;
+      return buildFocusAreas(details).map(bucket => {
+        const rows = bucket.areas.map(area => {
+          const p = areaPieces(bucket, area);
+          const title = p.focus ? `${p.label}: ${p.focus}` : (p.realWords || p.nonsenseWords);
+          const parts = [];
+          if(p.focus) parts.push(p.realWords || p.nonsenseWords);
+          if(p.sharedNote) parts.push(p.sharedNote);
+          if(p.realWords && p.nonsenseWords) parts.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
+          if(p.nonsenseOnly) parts.push('Nonsense-word evidence only');
+          if(p.caution) parts.push(NONSENSE_CAUTION);
+          return `<div class="print-focus-item"><strong>${esc(title)}</strong>${parts.length ? `<span>${esc(parts.join(' · '))}</span>` : ''}</div>`;
         }).join('');
-        return `<div class="print-focus-group"><h3>${patDef.label} · ${total}</h3><p>${esc(patDef.guide)}</p>${rows}</div>`;
+        return `<div class="print-focus-group"><h3>${esc(bucketHeading(bucket))}</h3><p>${esc(bucket.def.guide)}</p>${rows}</div>`;
       }).join('');
     }
         function editScoring(){ showLeft('gridPanel'); showControls('activeControls'); $('rightHeading').textContent='Edit Scoring'; $('rightSubhead').textContent=''; }
