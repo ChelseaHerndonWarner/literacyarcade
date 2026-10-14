@@ -1042,7 +1042,6 @@
     // Normalise primaryGrapheme for comparison: strip CVCe marker, lowercase.
     function normPG(pg){ return (pg||'').toLowerCase().replace(/[^a-z_]/g,''); }
     // Extract all vowel letters from a string.
-    const vowelStr = s => String(s||'').toLowerCase().replace(/[^aeiou]/g,'');
     const cleanLetters = s => String(s||'').toLowerCase().replace(/[^a-z]/g,'');
 
     function isVowelGrapheme(g){
@@ -1056,6 +1055,8 @@
       if(g === 'o_e') return 'o-consonant-e';
       if(g === 'u_e') return 'u-consonant-e';
       if(g === 'tch') return 'final -tch';
+      if(g === 'g') return 'soft g';
+      if(g === 'c') return 'soft c';
       return g;
     }
     function shortFocusFromVowel(item, g, phoneme){
@@ -1113,23 +1114,62 @@
       });
       return parts.join(' · ') || item.instructionalFocus || item.targetPattern || null;
     }
-    function graphemePreserved(item, response, grapheme){
+    // The response is a transcription of what the student said, so "preserved" is judged by
+    // sound where the data gives us enough to do so, and by literal letters otherwise.
+    const CONS = 'bcdfghjklmnpqrstvwxyz';
+    const cvce = v => new RegExp(`${v}[${CONS}]+e$`);
+    // Alternate spellings that produce the same sound as the assessed target (spelled the way a
+    // teacher would transcribe it). A response containing any of them keeps the target sound.
+    const SOUND_EQUIV = {
+      '/er/': [/er|ir|ur/],
+      '/oi/': [/oi|oy/],
+      '/aw/': [/aw|au/],
+      '/ow/': [/ou|ow/],
+      '/ā/': [/ai|ay/, cvce('a')],
+      '/ē/': [/ee|ea|ey/],
+      '/ī/': [/igh|ie/, cvce('i')],
+      '/ō/': [/oa|oe|ow/, cvce('o')],
+      '/ū/': [/ew|ue/, cvce('u')],
+      '/ōō/': [/oo/, cvce('u')]
+    };
+    const soundEquivalent = (phoneme, r) => (SOUND_EQUIV[phoneme] || []).some(re => re.test(r));
+    // Vowel letters of the stressed vowel only: ignores the u in qu and a silent final e.
+    function vowelNucleus(word, stripSilentE){
+      let w = cleanLetters(word).replace(/qu/g, 'q');
+      if(stripSilentE && new RegExp(`[${CONS}]e$`).test(w)) w = w.slice(0, -1);
+      return w.replace(/[^aeiou]/g, '');
+    }
+    function nucleusMatch(target, r){
+      const silentE = new RegExp(`[${CONS}]e$`).test(target);
+      let rr = r;
+      // A typed schwa after a final consonant (lamb → lambuh) is not a change of vowel.
+      if(!silentE && rr.length > target.length && rr.startsWith(target) && /^(uh|ah|eh|ih|uhh)$/.test(rr.slice(target.length))) rr = target;
+      return vowelNucleus(target, true) === vowelNucleus(rr, silentE);
+    }
+    function graphemePreserved(item, response, grapheme, phoneme){
       const g = normPG(grapheme);
       const r = cleanLetters(response);
       const target = cleanLetters(item.word);
       if(!g || !r) return false;
       if(g.endsWith('_e')){
-        const base = g[0];
-        // CVCe is preserved only when the response still has final e and the target vowel letter.
-        return r.endsWith('e') && vowelStr(r) === vowelStr(target);
+        // CVCe is preserved when the response still has final e and the target vowel, or the sound is spelled another way.
+        return (r.endsWith('e') && nucleusMatch(target, r)) || soundEquivalent(phoneme, r);
       }
       if(g === 'ph') return r.includes('ph') || r.includes('f');
       if(g === 'gn') return r.includes('gn') || r.startsWith('n');
       if(g === 'wr') return r.includes('wr') || r.startsWith('r');
-      if(g === 'mb') return r.includes('mb') || r.endsWith('m');
+      if(g === 'mb'){
+        // Letters after a final mb mean the silent b was voiced (lamb → lambuh).
+        const at = r.lastIndexOf('mb');
+        if(target.endsWith('mb') && at >= 0 && at + 2 < r.length) return false;
+        return r.includes('mb') || r.endsWith('m');
+      }
       if(g === 'c' && /soft c/i.test(item.targetPattern||'')) return r.includes('c') || r.includes('s');
-      if(g.length > 1) return r.includes(g);
-      if(VOWELS.has(g[0])) return vowelStr(r) === vowelStr(target);
+      if(g === 'g' && /soft g/i.test(item.targetPattern||'')) return r.includes('g') || r.includes('j');
+      // Final y for long i: a consonant + y ending, or the long i sound spelled another way.
+      if(g === 'y') return new RegExp(`[${CONS}]y$`).test(r) || soundEquivalent('/ī/', r);
+      if(g.length > 1) return r.includes(g) || soundEquivalent(phoneme, r);
+      if(VOWELS.has(g[0])) return nucleusMatch(target, r);
       return r.includes(g);
     }
 
@@ -1141,16 +1181,21 @@
         ['primary', item.primaryGrapheme],
         ['secondary', item.secondaryGrapheme],
         ['tertiary', item.tertiaryGrapheme]
-      ].filter(([, grapheme]) => grapheme).map(([role, grapheme]) => ({
-        role,
-        grapheme,
-        kind: isVowelGrapheme(grapheme) ? 'vowel' : 'consonant',
-        focus: focusFor(item, role),
-        preserved: graphemePreserved(item, r, grapheme)
-      }));
+      ].filter(([, grapheme]) => grapheme).map(([role, grapheme]) => {
+        const phoneme = item[`${role}Phoneme`];
+        // Final y spelling a long vowel is a vowel pattern even though y is not a vowel letter.
+        const vowelLike = isVowelGrapheme(grapheme) || (normPG(grapheme) === 'y' && /\/[āēīōū]\//.test(phoneme || ''));
+        return {
+          role,
+          grapheme,
+          kind: vowelLike ? 'vowel' : 'consonant',
+          focus: focusFor(item, role),
+          preserved: graphemePreserved(item, r, grapheme, phoneme)
+        };
+      });
     }
 
-    // Returns { tag, focus, patternPreserved, patternNote, targets }.
+    // Returns { tag, focus, patternPreserved, patternNote, targets, findings }; `findings` lists every missed target.
     // `targets` holds the per-target results for this miscue; `patternNote` describes
     // only this item (never a group) and no longer carries the nonsense-word caution,
     // which is added structurally from the item's word type when findings are grouped.
@@ -1175,19 +1220,21 @@
 
       const targets = analyzeTargets(item, r);
 
-      // Report the specific missed target pattern first.
-      const missed = targets.find(t => !t.preserved);
-      if(missed){
-        const otherPreserved = targets
-          .filter(x => x !== missed && x.preserved)
-          .map(x => `${graphemeLabel(x.grapheme)} pattern was preserved`);
-        return {
-          tag: missed.kind === 'vowel' ? 'phonics_vowel' : 'phonics_consonant',
-          focus: (missed.role === 'primary' && item.reportFocus) || missed.focus,
-          patternPreserved:false,
-          patternNote: otherPreserved.length ? otherPreserved.join(' · ') : null,
-          targets
-        };
+      // Report every missed target as its own finding; the first stays the miscue's headline tag/focus.
+      const missedAll = targets.filter(t => !t.preserved);
+      if(missedAll.length){
+        const findings = missedAll.map(m => {
+          const notes = [
+            ...targets.filter(x => x !== m && x.preserved).map(x => `${graphemeLabel(x.grapheme)} pattern was preserved`),
+            ...targets.filter(x => x !== m && !x.preserved).map(x => `${graphemeLabel(x.grapheme)} also differed in this word`)
+          ];
+          return {
+            tag: m.kind === 'vowel' ? 'phonics_vowel' : 'phonics_consonant',
+            focus: (m.role === 'primary' && item.reportFocus) || m.focus,
+            patternNote: notes.length ? notes.join(' · ') : null
+          };
+        });
+        return { ...findings[0], patternPreserved:false, targets, findings };
       }
 
       // Only after target patterns are preserved should we describe a broad ending/word-level miscue.
@@ -1303,7 +1350,8 @@
               focus:analysis.focus,
               patternPreserved:analysis.patternPreserved,
               patternNote:analysis.patternNote,
-              targets:analysis.targets
+              targets:analysis.targets,
+              findings:analysis.findings
             });
           }
         });
@@ -1545,18 +1593,24 @@
     function buildFocusAreas(details){
       const byTag = {};
       details.forEach(d => {
-        const tag = d.tag || 'other';
-        const key = focusGroupKey(d.focus);
-        const bucket = byTag[tag] || (byTag[tag] = { tag, def:PAT[tag] || {label:tag, guide:''}, areas:{}, words:0 });
-        const area = bucket.areas[key] || (bucket.areas[key] = { key, focus: d.focus || null, real:[], nonsense:[] });
-        // Display the real-word focus text when there is one; nonsense wording only if no real word is in the area.
-        if(d.type !== 'nonsense' && !area.real.length) area.focus = d.focus || null;
-        (d.type === 'nonsense' ? area.nonsense : area.real).push(d);
-        bucket.words++;
+        // A miscue can carry several findings (one per missed target); otherwise it is a single finding.
+        const findings = d.findings && d.findings.length ? d.findings : [{ tag:d.tag, focus:d.focus, patternNote:d.patternNote }];
+        findings.forEach(f => {
+          const tag = f.tag || 'other';
+          const key = focusGroupKey(f.focus);
+          const bucket = byTag[tag] || (byTag[tag] = { tag, def:PAT[tag] || {label:tag, guide:''}, areas:{}, wordIds:new Set(), findings:0 });
+          const area = bucket.areas[key] || (bucket.areas[key] = { key, focus: f.focus || null, real:[], nonsense:[] });
+          const entry = { ...d, tag, focus:f.focus, patternNote:f.patternNote };
+          // Display the real-word focus text when there is one; nonsense wording only if no real word is in the area.
+          if(d.type !== 'nonsense' && !area.real.length) area.focus = f.focus || null;
+          (d.type === 'nonsense' ? area.nonsense : area.real).push(entry);
+          bucket.wordIds.add(d.item ? d.item.id : d.word);
+          bucket.findings++;
+        });
       });
       return Object.values(byTag)
         .sort((a,b) => (a.def.order||99) - (b.def.order||99))
-        .map(b => ({ ...b, areas:Object.values(b.areas) }));
+        .map(b => ({ tag:b.tag, def:b.def, areas:Object.values(b.areas), words:b.wordIds.size, findings:b.findings }));
     }
     // Strength comes from real-word evidence only; nonsense words can support but never raise it.
     function areaLabel(tag, area){
@@ -1584,7 +1638,7 @@
     }
     function bucketHeading(bucket){
       return PATTERN_TAGS.has(bucket.tag)
-        ? `${bucket.def.label} · ${plural(bucket.areas.length,'focus area')} · ${plural(bucket.words,'word')} missed`
+        ? `${bucket.def.label} · ${plural(bucket.areas.length,'focus area')} · ${plural(bucket.findings,'finding')}`
         : `${bucket.def.label} · ${plural(bucket.words,'word')}`;
     }
     function renderPatternNotes(details){
