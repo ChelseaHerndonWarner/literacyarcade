@@ -46,6 +46,8 @@ const { state, ALL_WORDS, PHONICS_WORDS } = api;
 
 /* ------------------------------ helpers ------------------------------ */
 const SKIP = '__SKIP__';
+const FAMILY_CAUTION = 'Pattern family: related spellings in the same family were missed; this does not mean every spelling in the family is unknown.';
+const NONSENSE_NOTE = 'Nonsense words are supplemental transfer evidence: one unfamiliar-word response may also reflect lexicalization or task familiarity.';
 function find(sec, word){ const w = ALL_WORDS.find(x => x.sectionId === sec && x.word === word); assert(w, `unknown word ${sec}:${word}`); return w; }
 // marks: { 'section:word': response | SKIP }
 function run(marks){
@@ -104,7 +106,7 @@ for(const [sec, sc] of Object.entries(SCRIPTS)){
     const seen = new Set(); r.buckets.forEach(b => b.areas.forEach(a => [...a.real, ...a.nonsense].forEach(e => seen.add(e.word))));
     assert.strictEqual(seen.size, r.score.errors);
     r.score.details.forEach(d => { assert(text(r.screen).includes(d.word), 'screen ' + d.word); assert(text(r.print).includes(d.word), 'print ' + d.word); });
-    const heads = h => [...text(h).matchAll(/(\d+) focus areas? · (\d+) findings?/g)].map(m => m[0]);
+    const heads = h => [...text(h).matchAll(/(\d+) focus areas?(?: \((\d+) findings?\))?/g)].map(m => m[0]);
     assert.deepStrictEqual(heads(r.screen), heads(r.print));
   });
 }
@@ -126,28 +128,32 @@ test('P1: two real words repeat; cat/map/zab shows the specific focus and no fam
 test('P1: nonsense-only evidence is never Repeated, even with two words', () => {
   const mk = w => ({ word:w, response:'x', type:'nonsense', focus:'F in a nonsense word', tag:'phonics_vowel', skipped:false, patternNote:null });
   const h = text(api.renderPatternNotes([mk('a'), mk('b')]));
-  assert(!/Repeated/.test(h)); assert(/Observed in nonsense words only/.test(h)); assert(/Nonsense-word evidence only/.test(h));
+  assert(!/Repeated/.test(h)); assert(/Supplemental nonsense-word evidence: F in a nonsense word/.test(h)); assert(!/Observed once/.test(h));
 });
 test('P1: grouped findings carry per-word notes, not the first word\'s note', () => {
-  const t = text(run(keyed(S3, { notch:'not', datch:'dat' })).screen);
-  assert(/notch → not \(o pattern was preserved\)/.test(t)); assert(/datch → dat \(a pattern was preserved\)/.test(t));
-  const t2 = text(run(keyed(S2, { spin:'span', split:'splat' })).screen);
-  assert(/spin → span \(sp pattern was preserved\), split → splat \(spl pattern was preserved\)/.test(t2));
+  const mk = (word, note) => ({ word, response:'x', type:'real', focus:'F', tag:'phonics_vowel', skipped:false, patternNote:note });
+  const t = text(api.renderPatternNotes([mk('aaa', 'first note'), mk('bbb', 'second note')]));
+  assert(/aaa → x \(first note\), bbb → x \(second note\)/.test(t));
+  const same = text(api.renderPatternNotes([mk('aaa', 'shared'), mk('bbb', 'shared')]));
+  assert(same.split('shared').length === 2, 'identical notes appear once');
+  // double misses keep each word\'s own "also differed" note
+  const d = analyze(S2, 'spin', 'pan'); assert(d.findings.every(f => /also differed in this word/.test(f.patternNote)));
 });
-test('P1: heading format is "N focus areas · M findings" for pattern buckets and "N words" otherwise', () => {
+
+test('P1: heading shows focus areas first, with findings secondary, and "N words" otherwise', () => {
   const t = text(run(keyed(S1, SCRIPTS[S1].marks)).screen);
-  assert(/Vowel\/spelling patterns to review · 2 focus areas · 4 findings/.test(t));
+  assert(/Vowel\/spelling patterns to review · 2 focus areas \(4 findings\)/.test(t));
   assert(/Skipped \/ no attempt · 1 word/.test(t)); assert(/Other miscues not tied to the target pattern · 2 words/.test(t));
 });
-test('P1: nonsense caution appears once per area with nonsense words, including a skipped nonsense word', () => {
+test('P1: a skipped nonsense word is marked and listed under "Pattern tested"', () => {
   const t = text(run(keyed(S3, { phip:SKIP })).screen);
-  assert(/Nonsense-word evidence only/.test(t)); assert(/Supplemental transfer evidence/.test(t));
+  assert(/Pattern tested: ph spelling for \/f\/ · i spelling for short i \/ĭ\//.test(t)); assert(/phip \(skipped\) \(nonsense word\)/.test(t));
+  assert(t.includes(NONSENSE_NOTE)); assert(!/Target pattern/.test(t));
 });
 
 /* ------------------------------ Phase 2 ------------------------------ */
 test('P2: vowel nucleus ignores silent e, qu, and a typed schwa', () => {
-  assert.strictEqual(analyze(S3, 'badge', 'bad').findings[0].patternNote, 'a pattern was preserved');
-  assert.strictEqual(analyze(S3, 'nudge', 'nud').findings[0].patternNote, 'u pattern was preserved');
+  for(const [w, r] of [['badge', 'bad'], ['nudge', 'nud']]){ const f = analyze(S3, w, r).findings; assert.strictEqual(f.length, 1, w); assert(/final dge/.test(f[0].focus)); assert.strictEqual(f[0].patternNote, null); }
   assert(analyze(S2, 'quill', 'kwil').findings.every(f => !/short i/.test(f.focus)));
   const lamb = analyze(S7, 'lamb', 'lambuh'); assert.strictEqual(lamb.findings.length, 1); assert(/final mb/.test(lamb.findings[0].focus));
   assert.notStrictEqual(analyze(S1, 'cat', 'catuh').tag, 'phonics_vowel');
@@ -166,7 +172,7 @@ test('P2: genuine misses are still flagged', () => {
 });
 test('P2: soft g, final y, and a voiced silent b', () => {
   assert.strictEqual(analyze(S7, 'gem', 'jam').findings[0].tag, 'phonics_vowel');
-  assert(/soft g pattern was preserved/.test(analyze(S7, 'gem', 'jam').findings[0].patternNote));
+  assert.strictEqual(analyze(S7, 'gem', 'jam').findings[0].patternNote, null);
   assert.strictEqual(analyze(S5, 'cry', 'cray').tag, 'phonics_vowel');
   assert.strictEqual(analyze(S5, 'cry', 'kry').tag, 'other');
   assert.notStrictEqual(analyze(S7, 'lamb', 'lam').tag, 'phonics_consonant');
@@ -217,7 +223,6 @@ test('P3: skipped multisyllabic word names its pattern', () => {
 });
 
 /* ------------------------------ Phase 4: families ------------------------------ */
-const FAMILY_CAUTION = 'Related spellings in this family were missed; this does not mean every spelling in the family is unknown';
 function familyCase(name, marks, tag, familyLabel, words, specifics){
   test(`P4 family: ${name}`, () => {
     const r = run(marks); const b = bucket(r, tag);
@@ -225,7 +230,7 @@ function familyCase(name, marks, tag, familyLabel, words, specifics){
     assert.strictEqual(a.focus, familyLabel); assert(a.spansFamily);
     assert.deepStrictEqual(areaWords(a).sort(), words.slice().sort());
     const t = text(r.screen);
-    assert(t.includes(`Repeated possible focus: ${familyLabel}`), 'repeated label');
+    assert(t.includes(`Repeated possible focus (pattern family): ${familyLabel}`), 'repeated label');
     for(const [word, spelling, kind] of specifics) assert(t.includes(`${word} → ${marks[Object.keys(marks).find(k => k.endsWith(':' + word))]} (${spelling} · ${kind}`), `specifics for ${word}`);
     assert(t.includes(FAMILY_CAUTION)); assert(text(r.print).includes(FAMILY_CAUTION));
     assert.strictEqual(b.findings, words.length);
@@ -284,19 +289,19 @@ test('P4 family: same-spelling repeats keep their specific focus (no family rela
 });
 test('P4 family: heading counts follow focus areas and findings', () => {
   const t = text(run(keyed(S4, { fern:'farn', curl:'carl' })).screen);
-  assert(/Vowel\/spelling patterns to review · 1 focus area · 2 findings/.test(t));
+  assert(/Vowel\/spelling patterns to review · 1 focus area \(2 findings\)/.test(t));
 });
 test('P4 family: print report carries the same family content as the screen', () => {
   const r = run(keyed(S6, { coin:'con', toy:'tie', noit:'nit' }));
   const p = text(r.print);
-  assert(p.includes('Repeated possible focus: /oi/ diphthong (oi, oy)'));
+  assert(p.includes('Repeated possible focus (pattern family): /oi/ diphthong (oi, oy)'));
   assert(p.includes('coin → con (oi spelling for /oi/ · letters omitted)')); assert(p.includes('toy → tie (oy spelling for /oy/'.replace('/oy/', '/oi/') + ' · letters changed)'));
   assert(p.includes('Supporting nonsense-word evidence: noit → nit'));
 });
 
 
 /* -------- Phase 4 corrections: same correspondence vs different correspondences in a family -------- */
-const MULTI_CORR_LABEL_RE = /Related spellings in this family/;
+const MULTI_CORR_LABEL_RE = /related spellings in the same family/i;
 function sameCorrCase(name, marks, tag, corrLabel, words, specifics){
   test(`P4 same correspondence: ${name}`, () => {
     const r = run(marks); const b = bucket(r, tag);
@@ -351,7 +356,7 @@ test('P4 family: different correspondences within a family use family framing an
   assert(a[0].spansFamily); assert.strictEqual(a[0].focus, 'r-controlled /er/ (er, ir, ur)');
   assert.strictEqual(new Set(a[0].real.map(e => e.corr)).size, 2);
   const t = text(r.screen);
-  assert(/Repeated possible focus: r-controlled \/er\/ \(er, ir, ur\)/.test(t)); assert(t.includes(FAMILY_CAUTION));
+  assert(/Repeated possible focus \(pattern family\): r-controlled \/er\/ \(er, ir, ur\)/.test(t)); assert(t.includes(FAMILY_CAUTION));
   for(const w of ['fern → farn (er spelling for /er/', 'term → tarm (er spelling for /er/', 'curl → carl (ur spelling for /er/']) assert(t.includes(w), w);
 });
 test('P4 family: one real word per correspondence is still a family repeat only with two correspondences and two words', () => {
@@ -372,16 +377,92 @@ test('P4 layout (screen): the label precedes the words in every focus area', () 
     assert(labelAt >= 0 && labelAt < wordAt, 'label first: ' + text(c).slice(0, 80));
   }
 });
-test('P4 layout (print): the family caution is its own line, not appended to the word list', () => {
+test('P4 layout (print): the family explanation is its own paragraph, not appended to a word list', () => {
   const r = run(keyed(S6, { coin:'con', toy:'tie', noit:'nit' }));
-  assert(r.print.includes(`</span><span>${FAMILY_CAUTION}</span>`), 'caution in its own span');
-  assert(!text(r.print).includes(` · ${FAMILY_CAUTION}`), 'no separator before the caution');
-  const rs = run(keyed(S3, { shed:'sed', dish:'did' })); assert(!rs.print.includes('Related spellings'));
+  assert(r.print.includes(`<p>${FAMILY_CAUTION}</p>`), 'family note in its own paragraph');
+  assert(!text(r.print).includes(` · ${FAMILY_CAUTION}`), 'no separator before the note');
+  const rs = run(keyed(S3, { shed:'sed', dish:'did' })); assert(!MULTI_CORR_LABEL_RE.test(rs.print));
 });
-test('P4 layout: screen and print carry the same labels, words and cautions in the same order', () => {
+test('P4 layout: screen and print carry the same labels, words and notes in the same order', () => {
   const r = run(keyed(S6, { coin:'con', toy:'tie', noit:'nit' }));
-  const order = h => ['Repeated possible focus: /oi/ diphthong (oi, oy)', 'coin → con', 'toy → tie', 'Supporting nonsense-word evidence: noit → nit', 'Supplemental transfer evidence', FAMILY_CAUTION].map(k => text(h).indexOf(k));
+  const order = h => ['Repeated possible focus (pattern family): /oi/ diphthong (oi, oy)', 'coin → con', 'toy → tie', 'Supporting nonsense-word evidence: noit → nit', NONSENSE_NOTE, FAMILY_CAUTION].map(k => text(h).indexOf(k));
   for(const h of [r.screen, r.print]){ const o = order(h); assert(o.every(i => i >= 0), 'all present'); assert.deepStrictEqual(o.slice().sort((a, b) => a - b), o, 'same order'); }
+});
+
+/* ------------------------------ Stage A: wording and clarity ------------------------------ */
+const ALL_SCRIPT_MARKS = Object.entries(SCRIPTS).map(([sec, sc]) => keyed(sec, sc.marks));
+test('A: nonsense-only evidence is labelled "Supplemental nonsense-word evidence"; real words keep Observed once / Repeated', () => {
+  const t = text(run(keyed(S4, { varm:'vorm' })).screen);
+  assert(/Supplemental nonsense-word evidence: ar spelling for \/ar\/ in a nonsense word/.test(t)); assert(!/Observed once/.test(t));
+  assert(/Observed once: ar spelling for \/ar\//.test(text(run(keyed(S4, { card:'cord' })).screen)));
+  assert(/Repeated possible focus: ar spelling for \/ar\//.test(text(run(keyed(S4, { card:'cord', bark:'bork' })).screen)));
+});
+test('A: nonsense and family explanations appear once per category, never per focus area', () => {
+  const r = run(keyed(S5, { cake:'cack', bike:'bik', zide:'zid', soat:'sot', pabe:'pab', rain:'ran', feet:'fet' }));
+  const t = text(r.screen), p = text(r.print), count = (h, k) => h.split(k).length - 1;
+  const b = bucket(r, 'phonics_vowel'); assert(b.areas.length >= 4);
+  assert.strictEqual(count(t, NONSENSE_NOTE), 1); assert.strictEqual(count(p, NONSENSE_NOTE), 1);
+  const rf = run({ ...keyed(S6, { coin:'con', toy:'tie' }), ...keyed(S4, { fern:'farn', curl:'carl' }) });
+  assert.strictEqual(count(text(rf.screen), FAMILY_CAUTION), 1); assert.strictEqual(count(text(rf.print), FAMILY_CAUTION), 1);
+  assert(!/Supplemental transfer evidence/.test(t));
+});
+test('A: no explanations appear when they do not apply', () => {
+  const t = text(run(keyed(S1, { cat:'cot', map:'mop' })).screen);
+  assert(!t.includes(NONSENSE_NOTE)); assert(!MULTI_CORR_LABEL_RE.test(t));
+  const t2 = text(run(keyed(S3, { shed:'sed', dish:'did' })).screen); assert(!MULTI_CORR_LABEL_RE.test(t2));
+});
+test('A: family areas carry a concise marker; correspondence-level repeats do not', () => {
+  assert(/Repeated possible focus \(pattern family\): Final consonant blends/.test(text(run(keyed(S2, { milk:'mil', jump:'jum' })).screen)));
+  const t = text(run(keyed(S3, { shed:'sed', dish:'did' })).screen);
+  assert(/Repeated possible focus: sh spelling for \/sh\/ \(across positions or contexts\)/.test(t)); assert(!/pattern family/i.test(t));
+});
+test('A: skipped words use "Pattern tested"; Teacher check and Skipped stay separate categories', () => {
+  const r = run({ [`${S6}:cook`]: 'kook', [`${S6}:fault`]: SKIP }); const t = text(r.screen);
+  assert(/Skipped \/ no attempt · 1 word/.test(t)); assert(/Pattern tested: au spelling for \/aw\//.test(t));
+  assert(/Teacher check: target sound can't be confirmed · 1 word/.test(t)); assert(/Pattern to check: oo spelling for \/oo\/ as in cook/.test(t));
+  assert(!/Target pattern/.test(t));
+});
+test('A: heading counts: focus areas are primary, findings appear only when they differ', () => {
+  const same = text(run(keyed(S1, { bed:'bid' })).screen); assert(/Vowel\/spelling patterns to review · 1 focus area(?! \()/.test(same));
+  const diff = text(run(keyed(S4, { fern:'farn', curl:'carl' })).screen); assert(/Vowel\/spelling patterns to review · 1 focus area \(2 findings\)/.test(diff));
+  assert(!/focus areas? · \d+ finding/.test(same + diff));
+});
+test('A: no statement claims a pattern was retained, preserved or produced correctly', () => {
+  for(const marks of ALL_SCRIPT_MARKS){
+    const r = run(marks);
+    for(const h of [text(r.screen), text(r.print)]){
+      assert(!/preserved/i.test(h), 'mentions preserved'); assert(!/as expected in (the typed )?response/i.test(h), 'as expected in response');
+      assert(!/was read as expected|read correctly|produced correctly|pronounced correctly/i.test(h));
+    }
+  }
+  // retained letters generate no per-word note at all
+  for(const [s, w, r] of [[S2, 'spin', 'span'], [S7, 'gem', 'gam'], [S3, 'chat', 'chit'], [S3, 'badge', 'bad'], [S2, 'milk', 'mil']])
+    assert.strictEqual(analyze(s, w, r).findings[0].patternNote, null, `${w} → ${r}`);
+});
+test('A: gem → gam reports only the actual error (the vowel) and makes no claim about the soft g', () => {
+  const a = analyze(S7, 'gem', 'gam');
+  assert.strictEqual(a.findings.length, 1); assert.strictEqual(a.findings[0].tag, 'phonics_vowel');
+  assert.strictEqual(a.findings[0].focus, 'e spelling for short e /ĕ/'); assert.strictEqual(a.findings[0].errorKind, 'vowel changed');
+  const r = run({ [`${S7}:gem`]: 'gam' });
+  for(const h of [text(r.screen), text(r.print)]){
+    assert(h.includes('gem → gam (e spelling for short e /ĕ/ in a CVC word'.replace(' in a CVC word', '')) || h.includes('gem → gam'), 'word evidence');
+    assert(/e spelling for short e \/ĕ\//.test(h)); assert(!/soft g/i.test(h), 'no soft g claim');
+  }
+  // the assessed soft g target is still reported as a skipped target and when it is actually missed
+  assert(/soft g spelling for \/j\/ before e/.test(text(run({ [`${S7}:gem`]: SKIP }).screen)));
+  assert.strictEqual(analyze(S7, 'gem', 'em').findings[0].focus, 'soft g spelling for /j/ before e');
+});
+test('A: the Other and Ending categories describe the difference without vouching for the pattern', () => {
+  const r = run({ [`${S5}:rope`]: 'robe', [`${S1}:cup`]: 'cu' }); const t = text(r.screen);
+  assert(/Other miscues not tied to the target pattern · 1 word/.test(t)); assert(/rope → robe/.test(t));
+  assert(/Ending or word-level miscues \(target pattern not the apparent source\) · 1 word/.test(t)); assert(/cup → cu \| The ending was omitted or shortened/.test(t));
+  assert(/The typed response cannot confirm how the student pronounced the pattern/.test(t));
+});
+test('A: all miscue evidence is still listed (nothing dropped by the wording changes)', () => {
+  for(const marks of ALL_SCRIPT_MARKS){
+    const r = run(marks); const t = text(r.screen), p = text(r.print);
+    r.score.details.forEach(d => { assert(t.includes(d.word), 'screen ' + d.word); assert(p.includes(d.word), 'print ' + d.word); });
+  }
 });
 
 /* ------------------------------ Phase 4: short vowels across Sections 1-3 ------------------------------ */

@@ -1367,7 +1367,6 @@
       const missedAll = targets.filter(t => t.status === 'missed');
       const checkAll = targets.filter(t => t.status === 'unverifiable' || t.status === 'variation');
       const otherNotes = (self) => [
-        ...targets.filter(x => x !== self && x.status === 'kept').map(x => `${graphemeLabel(x.grapheme)} pattern was preserved`),
         ...targets.filter(x => x !== self && x.status === 'missed').map(x => `${graphemeLabel(x.grapheme)} also differed in this word`),
         ...targets.filter(x => x !== self && x.status !== 'kept' && x.status !== 'missed').map(checkNote)
       ];
@@ -1398,27 +1397,27 @@
 
       // Only after target patterns are preserved should we describe a broad ending/word-level miscue.
       if(r.length < target.length && target.startsWith(r) && r.length >= 2){
-        return {tag:'ending_miscue', focus:null, patternPreserved:true, patternNote:'Assessed phonics pattern was preserved; ending was omitted or shortened', targets};
+        return {tag:'ending_miscue', focus:null, patternPreserved:true, patternNote:'The ending was omitted or shortened', targets};
       }
 
-      return {tag:'other', focus:null, patternPreserved:true, patternNote:'Target phonics pattern was preserved', targets};
+      return {tag:'other', focus:null, patternPreserved:true, patternNote:null, targets};
     }
 
     const PAT = {
       phonics_vowel:{ label:'Vowel/spelling patterns to review', order:1,
-        guide:'These focus areas show the specific vowel or vowel spelling pattern that was not preserved. Grouping by spelling pattern helps connect miscues directly to instruction.' },
+        guide:'These focus areas show the specific vowel or vowel spelling pattern that differed from the expected pattern in the typed response. Grouping by spelling pattern helps connect miscues directly to instruction.' },
       phonics_consonant:{ label:'Consonant spelling patterns to review', order:2,
-        guide:'These focus areas show target blends, digraphs, trigraphs, silent-letter spellings, or other consonant spellings that were not read as expected.' },
+        guide:'These focus areas show target blends, digraphs, trigraphs, silent-letter spellings, or other consonant spellings that differed from the expected pattern in the typed response.' },
       multisyllabic:{ label:'Multisyllabic decoding patterns to review', order:3,
         guide:'These items show syllable types or combinations that were difficult in longer words. One occurrence is an observation; repeated patterns provide stronger instructional evidence.' },
       teacher_check:{ label:'Teacher check: target sound can\'t be confirmed', order:3.5,
         guide:'The typed response keeps the target letters or matches a common pronunciation, so a missed pattern cannot be confirmed. Counted as a miscue because it was marked, but not treated as evidence of a missed pattern. Check against what the student actually said and their home speech.' },
       skipped:{ label:'Skipped / no attempt', order:4,
         guide:'No spoken response was recorded. The student saw the word but did not attempt it.' },
-      ending_miscue:{ label:'Ending or word-level miscues with target pattern preserved', order:5,
-        guide:'The assessed phonics pattern appears to have been preserved, but another part of the word changed or the ending was omitted. Counted as a miscue; do not treat this as evidence that the target pattern was missed.' },
+      ending_miscue:{ label:'Ending or word-level miscues (target pattern not the apparent source)', order:5,
+        guide:'The typed response does not point to the assessed pattern as the source of the difference; another part of the word changed or the ending was omitted. Counted as a miscue; this is not evidence that the target pattern was missed. The typed response cannot confirm how the student pronounced the pattern.' },
       other:{ label:'Other miscues not tied to the target pattern', order:6,
-        guide:'The assessed phonics pattern appears to have been preserved, but the word was still read differently. Counted as a miscue; do not treat this as evidence that the target vowel or spelling pattern was missed.' }
+        guide:'The typed response does not point to the assessed pattern as the source of the difference, but the word was still read differently. Counted as a miscue; this is not evidence that the target vowel or spelling pattern was missed. The typed response cannot confirm how the student pronounced the pattern.' }
     };
 
         /* ============================ HELPERS ============================ */
@@ -1737,7 +1736,7 @@
       showLeft('resultsPanel'); showControls('completeControls'); $('rightHeading').textContent='Check Complete'; $('rightSubhead').textContent='';
     }
     /* ---- Focus areas: one shared model for the on-screen and print reports ---- */
-    const NONSENSE_CAUTION = 'Supplemental transfer evidence; one unfamiliar-word response may also reflect lexicalization or task familiarity';
+    const NONSENSE_NOTE = 'Nonsense words are supplemental transfer evidence: one unfamiliar-word response may also reflect lexicalization or task familiarity.';
     const PATTERN_TAGS = new Set(['phonics_vowel','phonics_consonant','multisyllabic']);
     // Group key for a finding. Word type is tracked structurally (real vs nonsense lists),
     // so any "nonsense word" wording in the focus text is dropped from the key.
@@ -1751,7 +1750,8 @@
     }
     // Groups miscues into focus areas per finding type. Real and nonsense words are kept in
     // separate lists on each focus area; only real words decide the strength of the finding.
-    const FAMILY_CAUTION = 'Related spellings in this family were missed; this does not mean every spelling in the family is unknown';
+    // Shared explanations, shown once per category instead of once per focus area.
+    const FAMILY_NOTE = 'Pattern family: related spellings in the same family were missed; this does not mean every spelling in the family is unknown.';
     function buildFocusAreas(details){
       const byTag = {};
       details.forEach(d => {
@@ -1787,25 +1787,30 @@
           const focus = spansFamily ? area.family.label
             : (sameCorrSpan && area.corrLabel ? `${area.corrLabel} (across positions or contexts)` : area.focus);
           return { ...area, focus, spansFamily, detailed };
-        }), words:b.wordIds.size, findings:b.findings }));
+        }), words:b.wordIds.size, findings:b.findings }))
+        .map(b => ({ ...b,
+          hasFamily: b.areas.some(a => a.spansFamily),
+          hasNonsense: b.tag !== 'other' && b.tag !== 'ending_miscue' && b.areas.some(a => a.nonsense.length > 0) }));
     }
     // Strength comes from real-word evidence only; nonsense words can support but never raise it.
     function areaLabel(tag, area){
-      if(tag === 'skipped') return 'Target pattern';
-      if(tag === 'teacher_check') return 'Teacher check';
+      if(tag === 'skipped') return 'Pattern tested';
+      if(tag === 'teacher_check') return 'Pattern to check';
       const realWords = new Set(area.real.map(e => e.word)).size;
-      if(realWords >= 2) return 'Repeated possible focus';
+      if(realWords >= 2) return area.spansFamily ? 'Repeated possible focus (pattern family)' : 'Repeated possible focus';
       if(realWords === 1) return 'Observed once';
-      return area.nonsense.length === 1 ? 'Observed once' : 'Observed in nonsense words only';
+      return 'Supplemental nonsense-word evidence';
     }
     // Item-specific notes: shown once when every word shares the same note, otherwise next to each word.
     function areaPieces(bucket, area){
       const all = [...area.real, ...area.nonsense];
-      const noteOf = d => d.patternNote || (bucket.tag === 'other' ? 'Target phonics pattern was preserved' : '');
+      const noteOf = d => d.patternNote || '';
       const notes = all.map(noteOf);
       const shared = !area.detailed && notes.length && notes.every(n => n && n === notes[0]) ? notes[0] : '';
       // In a family area each word keeps its own spelling, error type and note.
-      const text = d => detailWordText(d) + (area.detailed
+      // A nonsense word is marked when nothing else on its line already says so.
+      const marked = d => d.type === 'nonsense' && (bucket.tag === 'skipped' || bucket.tag === 'teacher_check' || (!area.focus && !area.real.length));
+      const text = d => detailWordText(d) + (marked(d) ? ' (nonsense word)' : '') + (area.detailed
         ? ` (${[d.focus, d.errorKind, noteOf(d)].filter(Boolean).join(' · ')})`
         : (!shared && noteOf(d) ? ` (${noteOf(d)})` : ''));
       return {
@@ -1814,15 +1819,16 @@
         realWords: area.real.map(text).join(', '),
         nonsenseWords: area.nonsense.map(text).join(', '),
         sharedNote: shared,
-        nonsenseOnly: area.real.length === 0 && area.nonsense.length > 0,
-        familyCaution: !!area.spansFamily,
-        caution: area.nonsense.length > 0 && bucket.tag !== 'other' && bucket.tag !== 'ending_miscue'
+        nonsenseOnly: area.real.length === 0 && area.nonsense.length > 0
       };
     }
     function bucketHeading(bucket){
       return PATTERN_TAGS.has(bucket.tag)
-        ? `${bucket.def.label} · ${plural(bucket.areas.length,'focus area')} · ${plural(bucket.findings,'finding')}`
+        ? `${bucket.def.label} · ${plural(bucket.areas.length,'focus area')}${bucket.findings !== bucket.areas.length ? ` (${plural(bucket.findings,'finding')})` : ''}`
         : `${bucket.def.label} · ${plural(bucket.words,'word')}`;
+    }
+    function bucketNotes(bucket){
+      return [bucket.hasNonsense ? NONSENSE_NOTE : '', bucket.hasFamily ? FAMILY_NOTE : ''].filter(Boolean);
     }
     function renderPatternNotes(details){
       if(!details.length) return '<p class="empty-small">No miscues to analyze.</p>';
@@ -1835,13 +1841,10 @@
           const after = [];
           if(!p.focus && p.sharedNote) after.push(p.sharedNote);
           if(p.realWords && p.nonsenseWords) after.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
-          if(p.nonsenseOnly) after.push('Nonsense-word evidence only');
-          if(p.caution) after.push(NONSENSE_CAUTION);
-          if(p.familyCaution) after.push(FAMILY_CAUTION);
           const cls = (bucket.tag === 'other' || bucket.tag === 'ending_miscue') ? 'pattern-chip chip-ok' : 'pattern-chip';
           return `<span class="${cls}">${labelLine ? small(labelLine) + '<br>' : ''}${esc(p.realWords || p.nonsenseWords)}${after.length ? '<br>' + after.map(small).join('<br>') : ''}</span>`;
         }).join('');
-        return `<div class="pattern-card"><h4>${esc(bucketHeading(bucket))}</h4><div class="pattern-examples">${chips}</div><p>${bucket.def.guide}</p></div>`;
+        return `<div class="pattern-card"><h4>${esc(bucketHeading(bucket))}</h4><div class="pattern-examples">${chips}</div>${bucketNotes(bucket).map(n => `<p>${esc(n)}</p>`).join('')}<p>${bucket.def.guide}</p></div>`;
       }).join('');
     }
     function patternPrintRows(details){
@@ -1854,11 +1857,9 @@
           if(p.focus) parts.push(p.realWords || p.nonsenseWords);
           if(p.sharedNote) parts.push(p.sharedNote);
           if(p.realWords && p.nonsenseWords) parts.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
-          if(p.nonsenseOnly) parts.push('Nonsense-word evidence only');
-          if(p.caution) parts.push(NONSENSE_CAUTION);
-          return `<div class="print-focus-item"><strong>${esc(title)}</strong>${parts.length ? `<span>${esc(parts.join(' · '))}</span>` : ''}${p.familyCaution ? `<span>${esc(FAMILY_CAUTION)}</span>` : ''}</div>`;
+          return `<div class="print-focus-item"><strong>${esc(title)}</strong>${parts.length ? `<span>${esc(parts.join(' · '))}</span>` : ''}</div>`;
         }).join('');
-        return `<div class="print-focus-group"><h3>${esc(bucketHeading(bucket))}</h3><p>${esc(bucket.def.guide)}</p>${rows}</div>`;
+        return `<div class="print-focus-group"><h3>${esc(bucketHeading(bucket))}</h3><p>${esc(bucket.def.guide)}</p>${rows}${bucketNotes(bucket).map(n => `<p>${esc(n)}</p>`).join('')}</div>`;
       }).join('');
     }
         function editScoring(){ showLeft('gridPanel'); showControls('activeControls'); $('rightHeading').textContent='Edit Scoring'; $('rightSubhead').textContent=''; }
