@@ -695,7 +695,7 @@
   </style>
   <style>
     /* Assessment access gate: the page is covered (and inert) from the first paint until Plus access is confirmed. */
-    .access-gate{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;background:#f7f5fb;font-family:Nunito,Arial,sans-serif;color:#1a1a2e}
+    .access-gate{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;background:rgba(27,42,74,.45);font-family:Nunito,Arial,sans-serif;color:#1a1a2e}
     .access-gate[hidden]{display:none}
     .access-gate-card{width:min(460px,100%);background:#fff;border:1px solid #e4def2;border-radius:18px;box-shadow:0 18px 60px rgba(27,42,74,.18);padding:26px 24px;text-align:center;display:grid;gap:12px}
     .access-gate-card h1{margin:0;font-size:1.25rem;line-height:1.25;font-weight:900}
@@ -708,13 +708,15 @@
     .access-gate-primary{background:#2ec4b6;color:#fff;border:0}
     .access-gate-secondary{background:#fff;color:#087a70;border:1.5px solid #2ec4b6}
     .access-gate-actions a.access-gate-link{min-height:40px;background:none;border:0;color:#6a4f92;font-weight:800;font-size:.88rem;text-decoration:underline}
+    .access-note{margin:0 0 10px;font-size:.82rem;font-weight:800;line-height:1.4;color:#5a5573;border-left:3px solid #2ec4b6;padding:2px 0 2px 9px}
+    .access-note[hidden]{display:none}
     @media print{.access-gate{display:none!important}}
   </style>
   <link rel="stylesheet" href="./firebase-tool-gate.css">
   <script type="module" src="./firebase-tool-gate.js"></script>
 </head>
 <body data-tool-id="phonics-knowledge-check" data-tool-name="Phonics Knowledge Check">
-  <div id="assessmentAccessGate" class="access-gate" role="status" aria-live="polite">
+  <div id="assessmentAccessGate" class="access-gate" role="status" aria-live="polite" hidden>
     <div class="access-gate-card">
       <div class="access-gate-spinner" id="accessGateSpinner" aria-hidden="true"></div>
       <h1 id="accessGateTitle">Checking your account…</h1>
@@ -728,7 +730,7 @@
     <a class="home-link" href="index.html" aria-label="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></a>
   </header>
 
-  <main id="assessmentMain" inert>
+  <main id="assessmentMain">
     
     <div class="one-page">
       <!-- ===== LEFT CARD ===== -->
@@ -763,7 +765,7 @@
         </div>
 
         <!-- GRID / SCORING PANEL -->
-        <div id="gridPanel" class="panel-state">
+        <div id="gridPanel" class="panel-state" inert>
           <div class="grid-head">
             <div>
               <h2>Teacher Scoring Grid</h2>
@@ -794,7 +796,7 @@
         </div>
 
         <!-- RESULTS PANEL -->
-        <div id="resultsPanel" class="panel-state">
+        <div id="resultsPanel" class="panel-state" inert>
           <div class="results-head">
             <div>
               <p class="eyebrow">Phonics Knowledge Check</p>
@@ -863,7 +865,8 @@
 
         <!-- SETUP CONTROLS -->
         <div id="setupControls">
-          <div class="student-details-grid">
+          <p class="access-note" id="accessNote">Administering this assessment requires Literacy Arcade Plus or Plus Family.</p>
+          <div class="student-details-grid" id="setupFields" inert>
             <div class="field"><label for="studentName">Student name (optional)</label><input id="studentName" type="text" placeholder="Student name" autocomplete="name"></div>
             <div class="field"><label for="assessmentDate">Date</label><input id="assessmentDate" type="date"></div>
             <div class="field"><label for="gradeLevel">Grade</label><select id="gradeLevel"><option value="">Select grade</option><option>Pre-K</option><option>Kindergarten</option><option>1st Grade</option><option>2nd Grade</option><option>3rd Grade</option><option>4th Grade+</option><option>Other</option></select></div>
@@ -891,7 +894,7 @@
         </div>
 
         <!-- ACTIVE CONTROLS -->
-        <div id="activeControls" class="panel-state">
+        <div id="activeControls" class="panel-state" inert>
           <div class="workflow-banner" id="workflowBanner"><strong>Ready</strong><span>Begin the check, then tap any words with miscues.</span></div>
 
           <div class="timer-card" id="timerCard">
@@ -920,7 +923,7 @@
         </div>
 
         <!-- COMPLETE CONTROLS -->
-        <div id="completeControls" class="panel-state">
+        <div id="completeControls" class="panel-state" inert>
           <div class="complete-score-card" aria-label="Completed check summary">
             <b id="cWords">— / —</b>
             <span>words read correctly</span>
@@ -958,11 +961,16 @@
 
   <script>
   (() => {
-    // Assessment access gate. The page starts covered and inert (see #assessmentAccessGate and <main inert>) and is
-    // unlocked only when assessment-use-guard.js reports a confirmed Plus or Plus Family plan for THIS attempt. Every
-    // other outcome (signed out, free plan, load failure, Firebase failure, timeout, anything unrecognised) keeps it
-    // locked and offers a retry. The shared module is used as-is (getAssessmentEntitlement); its own overlay and
-    // retry button are not used, so nothing outside this controller can unlock the page.
+    // Assessment access gate. The introduction is public. The administration areas (setup fields, scoring grid, timer,
+    // results; marked `inert` in the markup) and Print Student Sheet stay locked until assessment-use-guard.js reports a
+    // confirmed Plus or Plus Family plan for THIS attempt. Every other outcome (signed out, free plan, load failure,
+    // Firebase failure, timeout, anything unrecognised) keeps them locked. Start Assessment stays clickable: while
+    // locked it opens the access screen (checking / sign in / upgrade / retry) instead of starting, and
+    // beginAssessment() re-checks on its own. The shared module is used as-is (getAssessmentEntitlement); its own overlay
+    // and retry button are not used, so nothing outside this controller can unlock the page.
+    let assessmentAccess = 'checking';           // 'paid' is the only unlocked value
+    const assessmentUnlocked = () => assessmentAccess === 'paid';
+    const ACCESS_LOCKED_IDS = ['setupFields', 'gridPanel', 'resultsPanel', 'activeControls', 'completeControls'];
     class AccessGateError extends Error {
       constructor(kind, cause){ super(kind); this.kind = kind; this.cause = cause; }
     }
@@ -1012,16 +1020,21 @@
     }
     const accessGateUi = {
       el:id => document.getElementById(id),
+      state:'checking', retry:null, promptOpen:false,
       returnTo(){ return encodeURIComponent((location.pathname.split('/').pop() + location.search) || 'teacher-dashboard.html'); },
       track(name){ try { window.LiteracyArcadeAnalytics?.track(name); } catch(e){ /* analytics must never block the gate */ } },
+      setPageInert(on){
+        [this.el('assessmentMain'), document.querySelector('.topbar')].forEach(n => { if(n){ if(on) n.setAttribute('inert', ''); else n.removeAttribute('inert'); } });
+      },
       show(heading, text, actions, spinner){
         const gate = this.el('assessmentAccessGate'); if(!gate) return;
-        gate.hidden = false;
+        gate.hidden = false; this.promptOpen = true; this.setPageInert(true);
+        gate.setAttribute('role', spinner ? 'status' : 'dialog');
         this.el('accessGateSpinner').hidden = !spinner;
         this.el('accessGateTitle').textContent = heading;
         this.el('accessGateText').textContent = text;
         const box = this.el('accessGateActions'); box.textContent = '';
-        actions.forEach(a => {
+        actions.concat([{ label:'Close', link:true, onClick:() => this.close() }]).forEach(a => {
           const node = document.createElement(a.href ? 'a' : 'button');
           if(a.href) node.href = a.href; else node.type = 'button';
           node.className = a.link ? 'access-gate-link' : (a.primary ? 'access-gate-primary' : 'access-gate-secondary');
@@ -1029,22 +1042,33 @@
           if(a.onClick) node.addEventListener('click', a.onClick);
           box.appendChild(node);
         });
-        const first = box.firstElementChild; if(first && !spinner) first.focus();
+        const first = box.firstElementChild; if(first) first.focus();
       },
-      checking(){
-        this.show('Checking your account…', 'One moment while we confirm your Literacy Arcade Plus access.', [], true);
-        const main = this.el('assessmentMain'); if(main) main.setAttribute('inert', '');
+      close(){
+        const gate = this.el('assessmentAccessGate'); if(gate) gate.hidden = true;
+        this.promptOpen = false; this.setPageInert(false);
+        const start = this.el('startAssessmentBtn'); if(start && start.focus) start.focus();
       },
+      // Called when the teacher tries to start (or print the word sheet) before access is confirmed.
+      prompt(){
+        if(this.state === 'checking') this.showChecking(); else this.screen(this.state, this.retry);
+      },
+      showChecking(){ this.show('Checking your account…', 'One moment while we confirm your Literacy Arcade Plus access.', [], true); },
+      checking(){ this.state = 'checking'; this.retry = null; assessmentAccess = 'checking'; if(this.promptOpen) this.showChecking(); },
       unlock(){
-        const gate = this.el('assessmentAccessGate'); if(gate){ gate.hidden = true; }
-        const main = this.el('assessmentMain'); if(main) main.removeAttribute('inert');
+        assessmentAccess = 'paid'; this.state = 'paid'; this.retry = null;
+        ACCESS_LOCKED_IDS.forEach(id => { const n = this.el(id); if(n) n.removeAttribute('inert'); });
+        const note = this.el('accessNote'); if(note) note.hidden = true;
+        const gate = this.el('assessmentAccessGate'); if(gate) gate.hidden = true;
+        this.promptOpen = false; this.setPageInert(false);
+        updateStartBtn();                 // normal rule again: Start needs a chosen section. Nothing starts automatically.
       },
-      blocked(kind, retry){
+      blocked(kind, retry){ this.state = kind; this.retry = retry; assessmentAccess = kind; if(this.promptOpen) this.screen(kind, retry); },
+      screen(kind, retry){
         const plans = { href:'plus-subscriptions.html', label:'View Plus plans', onClick:() => this.track('assessment_gate_plus_click') };
         const again = { label:'Try again', primary:true, onClick:retry };
-        // Plain navigation to the dashboard: it leaves the page and never dismisses the overlay or unlocks anything.
+        // Plain navigation to the dashboard: it leaves the page and never dismisses the gate or unlocks anything.
         const dashboard = { href:'teacher-dashboard.html', label:'Back to Dashboard', link:true };
-        const main = this.el('assessmentMain'); if(main) main.setAttribute('inert', '');
         if(kind === 'signed-out'){
           this.show(ASSESSMENT_TOOL_NAME + ' requires Literacy Arcade Plus', 'This assessment is available with an active Literacy Arcade Plus or Plus Family plan. Sign in with your Plus account to continue.',
             [{ href:'teacher-login.html?returnTo=' + this.returnTo(), label:'Sign in', primary:true, onClick:() => this.track('assessment_gate_signin_click') }, { ...plans }]);
@@ -1062,6 +1086,7 @@
         }
       }
     };
+    document.addEventListener('keydown', e => { if(e.key === 'Escape' && accessGateUi.promptOpen) accessGateUi.close(); });
     function loadAssessmentGate(attempt){
       return attempt ? import(`./assessment-use-guard.js?retry=${attempt}`) : import('./assessment-use-guard.js');
     }
@@ -2030,6 +2055,8 @@
 
     /* ============================ FLOW ============================ */
     function beginAssessment(){
+      // Independent of the page-level lock: nothing starts unless access has been confirmed as paid.
+      if(!assessmentUnlocked()){ accessGateUi.prompt(); return; }
       collectSetup();
       // Coming back from setup resumes: responses already recorded are kept. Discarding them is only possible
       // through New Assessment, which asks first.
@@ -2354,6 +2381,8 @@
       </div>`;
     }
     function printContent(kind){
+      // The student sheet holds the full word list, so it is Plus-only. (The report has its own independent check.)
+      if(kind==='student' && !assessmentUnlocked()){ accessGateUi.prompt(); return; }
       const student=$('studentPrint'), report=$('reportPrint'); student.innerHTML=''; report.innerHTML='';
       const target = kind==='student' ? student : report;
       target.innerHTML = kind==='student' ? studentPrintHTML() : reportPrintHTML();
@@ -2387,10 +2416,10 @@
     /* ============================ WIRING ============================ */
     renderSectionToggles();
     // Disable Start until at least one section toggled on
-    $('startAssessmentBtn').disabled = true;
+    $('startAssessmentBtn').disabled = false;   // stays clickable while locked: it opens the access screen
     function updateStartBtn(){
       const anyOn = !!document.querySelector('.sec-check:checked');
-      $('startAssessmentBtn').disabled = !anyOn;
+      $('startAssessmentBtn').disabled = assessmentUnlocked() ? !anyOn : false;
       const hint = document.getElementById('startHint');
       if(hint) hint.hidden = anyOn;
       const printHint = document.getElementById('printSheetHint');
@@ -2398,6 +2427,7 @@
     }
     $('sectionToggleHost').addEventListener('change', updateStartBtn);
     $('printSheetBtn').addEventListener('click', ()=>{
+      if(!assessmentUnlocked()){ accessGateUi.prompt(); return; }
       if(!document.querySelector('.sec-check:checked')){
         const printHint = document.getElementById('printSheetHint');
         if(printHint) printHint.hidden = false;

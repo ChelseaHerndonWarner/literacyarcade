@@ -43,7 +43,7 @@ ctx.window = ctx;
 vm.createContext(ctx);
 let code = pageScript.replace(/import\(\s*['"][^'"]+['"]\s*\)/g, 'Promise.resolve(new Proxy({}, { get: () => () => {} }))');
 const end = code.lastIndexOf('})();');
-code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces,bucketHeading,bucketNotes,createReportPrintController,createAssessmentAccessController,resetTimer,beginAssessment,newAssessment,collectSetup,hasRecordedWork,studentPrintHTML,editScoring,showResults};\n' + code.slice(end);
+code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces,bucketHeading,bucketNotes,createReportPrintController,createAssessmentAccessController,resetTimer,beginAssessment,newAssessment,collectSetup,hasRecordedWork,studentPrintHTML,editScoring,showResults,printContent,accessGateUi,setAccess:v=>{assessmentAccess=v;}};\n' + code.slice(end);
 vm.runInContext(code, ctx);
 const api = ctx.__api;
 const { state, ALL_WORDS, PHONICS_WORDS } = api;
@@ -1152,25 +1152,35 @@ atest('G1: repeated retry clicks during a check run one check', async () => {
   assert.deepStrictEqual([...extra], ['ignored', 'ignored', 'ignored']); assert.strictEqual(c.loadCalls.length, 1);
   mg.gates[0].resolve({ status:'paid' }); assert.strictEqual(await first, 'allowed'); assert.strictEqual(unlocks(c), 1);
 });
-test('G1: the page is covered and inert from the first paint; the old fire-and-forget gate call is gone', () => {
+test('G1: the introduction is public; the administration areas are locked in the markup until access is paid', () => {
   const body = html.slice(html.indexOf('<body'));
-  assert(/<body[^>]*>\s*<div id="assessmentAccessGate" class="access-gate" role="status"[^>]*>/.test(body), 'overlay is the first element in the body and visible by default (no hidden attribute)');
-  assert(!/id="assessmentAccessGate"[^>]*hidden/.test(body));
-  assert(/<main id="assessmentMain" inert>/.test(body), 'assessment content is inert until unlocked');
-  assert(/\.access-gate\{position:fixed;inset:0;z-index:100000/.test(html), 'overlay CSS is in the document head, so it applies before any script runs');
+  assert(/<div id="assessmentAccessGate" class="access-gate" role="status"[^>]*\bhidden\b/.test(body), 'the access screen is hidden until Start (or Print Student Sheet) is used');
+  assert(/<main id="assessmentMain">/.test(body), 'the page itself is not covered or inert');
+  for(const id of ['setupFields', 'gridPanel', 'resultsPanel', 'activeControls', 'completeControls']) assert(new RegExp(`id="${id}"[^>]*\\binert\\b`).test(body), id + ' starts inert');
+  assert(/id="startAssessmentBtn"/.test(body) && !/id="startAssessmentBtn"[^>]*(inert|disabled)/.test(body), 'Start stays visible and clickable');
+  assert(/id="printSheetBtn"[^>]*>/.test(body) && !/id="printSheetBtn"[^>]*inert/.test(body));
+  assert(body.includes('Administering this assessment requires Literacy Arcade Plus or Plus Family.'), 'the setup note');
   assert(!/import\('\.\/assessment-use-guard\.js'\)\.then/.test(pageScript), 'no fire-and-forget gate import');
   assert(!/guardAssessmentAccess/.test(pageScript), 'the shared module\'s own overlay/retry is not used');
   assert.strictEqual((pageScript.match(/ui\.unlock\(\)/g) || []).length, 1, 'one unlock call');
   assert(/else if\(status === 'paid'\)\{ outcome = 'allowed'; ui\.unlock\(\); \}/.test(pageScript), 'unlock only on status paid');
   assert(/if\(aborted \|\| mine !== generation\)/.test(pageScript.slice(pageScript.indexOf('function createAssessmentAccessController'))), 'attempt check before unlocking');
+  assert(/const assessmentUnlocked = \(\) => assessmentAccess === 'paid';/.test(pageScript), 'only the exact value paid counts');
+  assert(/\$\('startAssessmentBtn'\)\.disabled = false;/.test(pageScript), 'Start is enabled at load so unauthorized visitors can click it');
+  assert(/disabled = assessmentUnlocked\(\) \? !anyOn : false;/.test(pageScript), 'after access is paid the normal "choose a section first" rule applies');
 });
-test('G1: error, load-failure and timeout screens offer Try again, then a Back to Dashboard link, then Plus plans', () => {
+test('G1: unlocking never starts an assessment, and Close is on every access screen', () => {
   const ui = pageScript.slice(pageScript.indexOf('const accessGateUi'), pageScript.indexOf('function loadAssessmentGate'));
-  assert(/const dashboard = \{ href:'teacher-dashboard\.html', label:'Back to Dashboard', link:true \};/.test(ui));
-  assert.strictEqual((ui.match(/\[again, dashboard, \{ \.\.\.plans \}\]/g) || []).length, 3, 'load, timeout and unknown screens');
-  assert(!/\[again, \{ \.\.\.plans \}\]/.test(ui), 'no error screen is left without the dashboard link');
-  assert(!/dashboard[^;\n]*onClick/.test(ui.slice(ui.indexOf('const dashboard'), ui.indexOf('const dashboard') + 160)), 'the link is plain navigation: no handler that could unlock or dismiss the gate');
-  assert(/a\.href\) node\.href = a\.href/.test(ui) && /a\.link \? 'access-gate-link'/.test(ui));
+  const unlock = ui.slice(ui.indexOf('unlock(){'), ui.indexOf('blocked(kind, retry){'));
+  assert(!/beginAssessment|showLeft|showControls|\.click\(\)/.test(unlock), 'unlock only removes locks and re-applies the normal Start rule');
+  assert(/updateStartBtn\(\)/.test(unlock));
+  assert(/actions\.concat\(\[\{ label:'Close', link:true, onClick:\(\) => this\.close\(\) \}\]\)/.test(ui), 'Close is appended to every screen (checking, sign in, upgrade, error, timeout)');
+  assert(/e\.key === 'Escape' && accessGateUi\.promptOpen/.test(pageScript));
+});
+test('G1: the Print Report check stays independent (it is not gated by, and does not unlock, the assessment lock)', () => {
+  const unlockBlock = pageScript.slice(pageScript.indexOf('unlock(){'), pageScript.indexOf('blocked(kind, retry){'));
+  assert(!/report|guardReportPrint/i.test(unlockBlock));
+  assert(/function handlePrintReportClick\(event\)\{\s*reportPrintController\.run\(event\.currentTarget\);\s*\}/.test(pageScript));
 });
 test('G1: the gate messages and links match the shared module\'s existing rules', () => {
   for(const m of ['requires Literacy Arcade Plus', 'Upgrade to Plus to use', 'We couldn’t confirm your account status', 'teacher-login.html', 'returnTo=', 'plus-subscriptions.html', 'teacher-dashboard.html', 'assessment_gate_shown', 'assessment_gate_signin_click', 'assessment_gate_plus_click']){
@@ -1188,7 +1198,7 @@ test('G1: the independent Print Report check is untouched by the access gate wor
 const nameEl = () => docEls.studentName || (docEls.studentName = stub());
 function freshState(){
   state.marks = {}; state.notAdministered = new Set(); state.started = false; state.completed = false; state.running = false; state.elapsed = 0; state.startAt = null; state.activeId = null;
-  state.adminSecs = PHONICS_WORDS.slice(0, 2); confirms.length = 0; confirmAnswer = true; nameEl().value = 'Previous Student';
+  state.adminSecs = PHONICS_WORDS.slice(0, 2); confirms.length = 0; confirmAnswer = true; nameEl().value = 'Previous Student'; api.setAccess('paid');
 }
 const mark = (id, extra = {}) => { state.marks[id] = { wrong:true, response:'x', skipped:false, pending:false, ...extra }; };
 const firstIds = () => PHONICS_WORDS[0].words.slice(0, 3).map(w => w.id);
@@ -1245,6 +1255,20 @@ test('S2: scoring from the same recorded responses is unchanged by the Stage 2 f
   const r1 = api.scoreData(); api.resetTimer(); api.collectSetup(); state.adminSecs = PHONICS_WORDS;   // (collectSetup re-reads the checkboxes, which this stubbed page does not have)
   const r2 = api.scoreData();
   assert.strictEqual(r1.errors, 2); assert.strictEqual(r2.errors, 2); assert.strictEqual(r1.correct, r2.correct); assert.strictEqual(r1.skipped, 1);
+});
+
+test('G1: while locked, Start, Print Student Sheet and the student-sheet builder all refuse and open the access screen', () => {
+  for(const access of ['checking', 'signed-out', 'free', 'unknown', 'load', 'timeout', 'PAID', 'plus', undefined, true, null]){
+    freshState(); api.setAccess(access); let prompts = 0; const orig = api.accessGateUi.prompt; api.accessGateUi.prompt = () => { prompts++; };
+    state.adminSecs = ['sentinel']; docEls.studentPrint = docEls.studentPrint || stub(); docEls.studentPrint.innerHTML = 'untouched';
+    api.beginAssessment(); assert.deepStrictEqual([...state.adminSecs], ['sentinel'], 'beginAssessment did nothing for ' + access); assert.strictEqual(prompts, 1);
+    api.printContent('student'); assert.strictEqual(docEls.studentPrint.innerHTML, 'untouched', 'student sheet not built for ' + access); assert.strictEqual(prompts, 2);
+    api.accessGateUi.prompt = orig;
+  }
+});
+test('G1: once access is paid, Start and the student sheet work normally', () => {
+  freshState(); api.setAccess('paid'); state.adminSecs = ['sentinel']; api.beginAssessment(); assert.notDeepStrictEqual([...state.adminSecs], ['sentinel'], 'beginAssessment ran');
+  docEls.studentPrint = stub(); docEls.studentPrint.innerHTML = 'old'; api.printContent('student'); assert.notStrictEqual(docEls.studentPrint.innerHTML, 'old');
 });
 
 (async () => {
