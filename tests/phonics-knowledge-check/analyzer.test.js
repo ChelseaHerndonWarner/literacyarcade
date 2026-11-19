@@ -31,7 +31,11 @@ function stub(){
     apply(){ return stub(); }
   });
 }
-const ctx = { document: stub(), window: {}, localStorage: { getItem(){ return null; }, setItem(){} }, sessionStorage: { getItem(){ return null; }, setItem(){} },
+const docStub = stub(), docEls = {};
+// Elements are persistent per id (so a test can read back what the page wrote); everything else stays a stub.
+const docProxy = new Proxy({}, { get: (t, k) => (k === 'getElementById' ? (id => docEls[id] || (docEls[id] = stub())) : docStub[k]), set: (t, k, v) => { docStub[k] = v; return true; } });
+const confirms = []; let confirmAnswer = true;
+const ctx = { document: docProxy, confirm: m => { confirms.push(m); return confirmAnswer; }, window: {}, localStorage: { getItem(){ return null; }, setItem(){} }, sessionStorage: { getItem(){ return null; }, setItem(){} },
   console, setTimeout: () => 0, clearTimeout(){}, requestAnimationFrame: () => 0, cancelAnimationFrame(){}, navigator: {}, location: { search: '', href: '' },
   Intl, Date, Math, Object, Array, JSON, Set, Map, String, Number, Promise, performance: { now: () => 0 }, addEventListener(){},
   matchMedia: () => ({ matches: false, addEventListener(){} }), URLSearchParams, Image: function(){}, history: {} };
@@ -39,7 +43,7 @@ ctx.window = ctx;
 vm.createContext(ctx);
 let code = pageScript.replace(/import\(\s*['"][^'"]+['"]\s*\)/g, 'Promise.resolve(new Proxy({}, { get: () => () => {} }))');
 const end = code.lastIndexOf('})();');
-code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces,bucketHeading,bucketNotes,createReportPrintController,createAssessmentAccessController};\n' + code.slice(end);
+code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces,bucketHeading,bucketNotes,createReportPrintController,createAssessmentAccessController,resetTimer,beginAssessment,newAssessment,collectSetup,hasRecordedWork,studentPrintHTML,editScoring,showResults};\n' + code.slice(end);
 vm.runInContext(code, ctx);
 const api = ctx.__api;
 const { state, ALL_WORDS, PHONICS_WORDS } = api;
@@ -1178,6 +1182,69 @@ test('G1: the independent Print Report check is untouched by the access gate wor
   assert(/createReportPrintController\(\{\s*loadGate: loadReportGate/.test(pageScript));
   const gateBlock = pageScript.slice(pageScript.indexOf('class AccessGateError'), pageScript.indexOf('// Print Report: the Plus / Plus Family entitlement check'));
   assert(!/guardReportPrint|report-print-gate|printContent/.test(gateBlock), 'the two controllers share no code or state');
+});
+
+/* ------------------------------ Stage 2: protect recorded work (no silent data loss) ------------------------------ */
+const nameEl = () => docEls.studentName || (docEls.studentName = stub());
+function freshState(){
+  state.marks = {}; state.notAdministered = new Set(); state.started = false; state.completed = false; state.running = false; state.elapsed = 0; state.startAt = null; state.activeId = null;
+  state.adminSecs = PHONICS_WORDS.slice(0, 2); confirms.length = 0; confirmAnswer = true; nameEl().value = 'Previous Student';
+}
+const mark = (id, extra = {}) => { state.marks[id] = { wrong:true, response:'x', skipped:false, pending:false, ...extra }; };
+const firstIds = () => PHONICS_WORDS[0].words.slice(0, 3).map(w => w.id);
+test('S2: Reset Timer resets only the timer; responses and not-administered markings are kept', () => {
+  freshState(); const [a, b] = firstIds(); mark(a); mark(b, { response:'', skipped:true }); state.notAdministered.add(PHONICS_WORDS[1].sectionId);
+  state.started = true; state.elapsed = 95; state.running = true; state.startAt = 1;
+  const marksBefore = JSON.stringify(state.marks);
+  api.resetTimer();
+  assert.strictEqual(state.elapsed, 0); assert.strictEqual(state.running, false); assert.strictEqual(state.startAt, null);
+  assert.strictEqual(JSON.stringify(state.marks), marksBefore, 'responses untouched'); assert([...state.notAdministered].join() === PHONICS_WORDS[1].sectionId, 'not-administered kept');
+  assert.strictEqual(state.started, true, 'the live results view is not switched off');
+});
+test('S2: collectSetup (also used when printing the Student Sheet) no longer wipes recorded responses', () => {
+  freshState(); const [a] = firstIds(); mark(a); api.collectSetup(); assert.deepStrictEqual(Object.keys(state.marks), [a]);
+  const before = JSON.stringify(state.marks); api.studentPrintHTML(); assert.strictEqual(JSON.stringify(state.marks), before, 'printing the Student Sheet keeps responses');
+});
+test('S2: returning to setup and pressing Start resumes: responses, markings and elapsed time are kept, no prompt', () => {
+  freshState(); const [a, b] = firstIds(); mark(a); mark(b, { response:'', skipped:true }); state.notAdministered.add(PHONICS_WORDS[1].sectionId); state.started = true; state.elapsed = 42; state.completed = true;
+  const marksBefore = JSON.stringify(state.marks);
+  api.beginAssessment();
+  assert.strictEqual(JSON.stringify(state.marks), marksBefore); assert.strictEqual(state.notAdministered.size, 1); assert.strictEqual(state.elapsed, 42); assert.strictEqual(state.started, true);
+  assert.strictEqual(state.completed, false, 'the timer can run again'); assert.strictEqual(confirms.length, 0, 'resuming never needs a prompt');
+});
+test('S2: a first Start (nothing recorded) still begins fresh', () => {
+  freshState(); state.elapsed = 9; state.started = true; api.beginAssessment();
+  assert.deepStrictEqual(Object.keys(state.marks), []); assert.strictEqual(state.notAdministered.size, 0); assert.strictEqual(state.elapsed, 0); assert.strictEqual(state.started, false);
+});
+test('S2: New Assessment asks first when work is recorded; Cancel changes nothing', () => {
+  freshState(); const [a] = firstIds(); mark(a); confirmAnswer = false; const before = JSON.stringify(state.marks);
+  api.newAssessment();
+  assert.strictEqual(confirms.length, 1); assert(/discard/i.test(confirms[0]));
+  assert.strictEqual(JSON.stringify(state.marks), before); assert.strictEqual(nameEl().value, 'Previous Student', 'name kept on Cancel');
+});
+test('S2: a confirmed New Assessment clears the responses and the previous student\'s name', () => {
+  freshState(); const [a] = firstIds(); mark(a); state.notAdministered.add(PHONICS_WORDS[1].sectionId); state.started = true; state.elapsed = 30;
+  api.newAssessment();
+  assert.strictEqual(confirms.length, 1); assert.deepStrictEqual(Object.keys(state.marks), []); assert.strictEqual(state.notAdministered.size, 0);
+  assert.strictEqual(nameEl().value, ''); assert.strictEqual(state.elapsed, 0); assert.strictEqual(state.started, false);
+});
+test('S2: New Assessment with nothing recorded does not prompt, and still clears the name', () => {
+  freshState(); api.newAssessment(); assert.strictEqual(confirms.length, 0); assert.strictEqual(nameEl().value, '');
+});
+test('S2: a finished check with no miscues still counts as recorded work', () => {
+  freshState(); state.completed = true; assert.strictEqual(api.hasRecordedWork(), true); api.newAssessment(); assert.strictEqual(confirms.length, 1);
+});
+test('S2: an unexplained (pending) tap and an empty check are not recorded work', () => {
+  freshState(); assert.strictEqual(api.hasRecordedWork(), false); mark(firstIds()[0], { pending:true }); assert.strictEqual(api.hasRecordedWork(), false);
+});
+test('S2: Edit Scoring leaves every response in place', () => {
+  freshState(); const [a, b] = firstIds(); mark(a); mark(b, { response:'', skipped:true }); const before = JSON.stringify(state.marks); api.editScoring(); assert.strictEqual(JSON.stringify(state.marks), before);
+});
+test('S2: scoring from the same recorded responses is unchanged by the Stage 2 flow changes', () => {
+  freshState(); state.adminSecs = PHONICS_WORDS; const [a, b] = firstIds(); mark(a, { response:'cot' }); mark(b, { response:'', skipped:true });
+  const r1 = api.scoreData(); api.resetTimer(); api.collectSetup(); state.adminSecs = PHONICS_WORDS;   // (collectSetup re-reads the checkboxes, which this stubbed page does not have)
+  const r2 = api.scoreData();
+  assert.strictEqual(r1.errors, 2); assert.strictEqual(r2.errors, 2); assert.strictEqual(r1.correct, r2.correct); assert.strictEqual(r1.skipped, 1);
 });
 
 (async () => {

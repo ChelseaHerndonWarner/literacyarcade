@@ -1812,8 +1812,9 @@
       state.sections = checked;
       state.adminSecs = PHONICS_WORDS.filter(s => state.sections.includes(s.sectionId));
       state.timer = $('optTimer').checked;
-      state.marks = {};
     }
+    // True when the teacher has recorded anything that would be lost by starting over.
+    const hasRecordedWork = () => state.completed || state.notAdministered.size > 0 || Object.values(state.marks).some(m => m && m.wrong && !m.pending);
 
     /* ============================ SCORING ============================ */
     function scoreData(){
@@ -2018,8 +2019,9 @@
     function stopTimer(){ if(!state.running) return; cancelAnimationFrame(state.raf); state.running=false; $('startTimerBtn').disabled=state.completed; $('stopTimerBtn').disabled=true; $('timerHint').textContent=state.completed?'Check complete.':'Timer paused.'; }
     function resetTimer(){
       cancelAnimationFrame(state.raf);
+      // Timer only: recorded responses and section markings are left alone.
       Object.assign(state,{elapsed:0,running:false,completed:false,startAt:null});
-      state.marks={}; state.notAdministered=new Set(); state.started=false; closeWordPopover(false);
+      closeWordPopover(false);
       $('startTimerBtn').disabled=false; $('stopTimerBtn').disabled=true; $('timeUpBanner').classList.remove('show'); $('timerHint').textContent='Ready.';
       setWorkflowBanner('Ready', bannerText());
       updateTimerUI(); renderSections();
@@ -2029,8 +2031,11 @@
     /* ============================ FLOW ============================ */
     function beginAssessment(){
       collectSetup();
-      Object.assign(state,{elapsed:0,running:false,completed:false,started:false,startAt:null});
-      state.notAdministered=new Set();
+      // Coming back from setup resumes: responses already recorded are kept. Discarding them is only possible
+      // through New Assessment, which asks first.
+      const resume = hasRecordedWork();
+      Object.assign(state,{running:false,completed:false,startAt:null});
+      if(!resume){ Object.assign(state,{elapsed:0,started:false}); state.marks={}; state.notAdministered=new Set(); }
       closeWordPopover(false);
       $('timerCard').hidden = !state.timer;
       showLeft('gridPanel'); showControls('activeControls');
@@ -2297,7 +2302,10 @@
       }).join('');
     }
         function editScoring(){ showLeft('gridPanel'); showControls('activeControls'); $('rightHeading').textContent='Edit Scoring'; $('rightSubhead').textContent=''; }
-    function newAssessment(){ if(state.running) stopTimer(); if($('teacherNotes')) $('teacherNotes').value=''; state.marks={}; state.notAdministered=new Set(); Object.assign(state,{elapsed:0,running:false,completed:false,started:false,startAt:null}); updateTimerUI(); showLeft('overviewPanel'); showControls(null); $('setupControls').style.display=''; $('rightHeading').textContent='Assessment Details'; $('rightSubhead').textContent='Set up the assessment, then start when the student begins.'; }
+    function newAssessment(){
+      if(hasRecordedWork() && !confirm('Start a new assessment? The responses recorded for this student will be discarded.')) return;
+      $('studentName').value='';
+      if(state.running) stopTimer(); if($('teacherNotes')) $('teacherNotes').value=''; state.marks={}; state.notAdministered=new Set(); Object.assign(state,{elapsed:0,running:false,completed:false,started:false,startAt:null}); updateTimerUI(); showLeft('overviewPanel'); showControls(null); $('setupControls').style.display=''; $('rightHeading').textContent='Assessment Details'; $('rightSubhead').textContent='Set up the assessment, then start when the student begins.'; }
 
     /* ============================ PRINT ============================ */
     function studentPrintHTML(){
