@@ -39,7 +39,7 @@ ctx.window = ctx;
 vm.createContext(ctx);
 let code = pageScript.replace(/import\(\s*['"][^'"]+['"]\s*\)/g, 'Promise.resolve(new Proxy({}, { get: () => () => {} }))');
 const end = code.lastIndexOf('})();');
-code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError};\n' + code.slice(end);
+code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces};\n' + code.slice(end);
 vm.runInContext(code, ctx);
 const api = ctx.__api;
 const { state, ALL_WORDS, PHONICS_WORDS } = api;
@@ -47,6 +47,7 @@ const { state, ALL_WORDS, PHONICS_WORDS } = api;
 /* ------------------------------ helpers ------------------------------ */
 const SKIP = '__SKIP__';
 const FAMILY_CAUTION = 'Pattern family: related spellings in the same family were missed; this does not mean every spelling in the family is unknown.';
+const BROAD_CAUTION = 'Broader skill family: the misses involve different vowel sounds or consonant clusters that share one spelling convention or decoding skill. This points to possible difficulty with that shared convention; it does not show repeated difficulty with any single vowel or cluster.';
 const NONSENSE_NOTE = 'Nonsense words are supplemental transfer evidence: one unfamiliar-word response may also reflect lexicalization or task familiarity.';
 function find(sec, word){ const w = ALL_WORDS.find(x => x.sectionId === sec && x.word === word); assert(w, `unknown word ${sec}:${word}`); return w; }
 // marks: { 'section:word': response | SKIP }
@@ -223,16 +224,16 @@ test('P3: skipped multisyllabic word names its pattern', () => {
 });
 
 /* ------------------------------ Phase 4: families ------------------------------ */
-function familyCase(name, marks, tag, familyLabel, words, specifics){
+function familyCase(name, marks, tag, familyLabel, words, specifics, broad){
   test(`P4 family: ${name}`, () => {
     const r = run(marks); const b = bucket(r, tag);
     assert.strictEqual(b.areas.length, 1, 'one focus area'); const a = b.areas[0];
     assert.strictEqual(a.focus, familyLabel); assert(a.spansFamily);
     assert.deepStrictEqual(areaWords(a).sort(), words.slice().sort());
     const t = text(r.print);
-    assert(t.includes(`Repeated possible focus (pattern family): ${familyLabel}`), 'repeated label');
+    assert(t.includes(`${broad ? 'Possible broader pattern' : 'Repeated possible focus'} (pattern family): ${familyLabel}`), 'family status label');
     for(const [word, spelling, kind] of specifics) assert(t.includes(`${word} → ${marks[Object.keys(marks).find(k => k.endsWith(':' + word))]} (${spelling} · ${kind}`), `specifics for ${word}`);
-    assert(t.includes(FAMILY_CAUTION)); assert(text(r.print).includes(FAMILY_CAUTION));
+    assert(t.includes(broad ? BROAD_CAUTION : FAMILY_CAUTION)); assert(broad ? !t.includes(FAMILY_CAUTION) : !t.includes(BROAD_CAUTION));
     assert.strictEqual(b.findings, words.length);
   });
 }
@@ -240,10 +241,10 @@ familyCase('/er/ (fern, curl)', keyed(S4, { fern:'farn', curl:'carl' }), 'phonic
   [['fern', 'er spelling for /er/', 'vowel changed'], ['curl', 'ur spelling for /er/', 'vowel changed']]);
 familyCase('/oi/ (coin, toy)', keyed(S6, { coin:'con', toy:'tie' }), 'phonics_vowel', '/oi/ diphthong (oi, oy)', ['coin', 'toy'],
   [['coin', 'oi spelling for /oi/', 'letters omitted'], ['toy', 'oy spelling for /oi/', 'letters changed']]);
-familyCase('final blends (milk, jump)', keyed(S2, { milk:'mil', jump:'jum' }), 'phonics_consonant', 'Final consonant blends', ['milk', 'jump'],
-  [['milk', 'final lk blend', 'letters omitted'], ['jump', 'final mp blend', 'letters omitted']]);
-familyCase('silent e (cake, bike)', keyed(S5, { cake:'cack', bike:'bik' }), 'phonics_vowel', 'Silent-e (VCe) vowel pattern', ['cake', 'bike'],
-  [['cake', 'a-consonant-e spelling for long a /ā/', 'letters changed'], ['bike', 'i-consonant-e spelling for long i /ī/', 'letters omitted']]);
+familyCase('final blends (milk, jump)', keyed(S2, { milk:'mil', jump:'jum' }), 'phonics_consonant', 'Final consonant blends (different clusters)', ['milk', 'jump'],
+  [['milk', 'final lk blend', 'letters omitted'], ['jump', 'final mp blend', 'letters omitted']], true);
+familyCase('silent e (cake, bike)', keyed(S5, { cake:'cack', bike:'bik' }), 'phonics_vowel', 'Silent-e (VCe) spelling convention across vowel sounds', ['cake', 'bike'],
+  [['cake', 'a-consonant-e spelling for long a /ā/', 'letters changed'], ['bike', 'i-consonant-e spelling for long i /ī/', 'letters omitted']], true);
 
 test('P4 family: nonsense words support a family finding but never raise it', () => {
   const one = run(keyed(S4, { fern:'farn', lerp:'larp', jirn:'jarn' }));
@@ -395,7 +396,8 @@ test('A: no explanations appear when they do not apply', () => {
   const t2 = text(run(keyed(S3, { shed:'sed', dish:'did' })).print); assert(!MULTI_CORR_LABEL_RE.test(t2));
 });
 test('A: family areas carry a concise marker; correspondence-level repeats do not', () => {
-  assert(/Repeated possible focus \(pattern family\): Final consonant blends/.test(text(run(keyed(S2, { milk:'mil', jump:'jum' })).print)));
+  assert(/Possible broader pattern \(pattern family\): Final consonant blends \(different clusters\)/.test(text(run(keyed(S2, { milk:'mil', jump:'jum' })).print)));
+  assert(/Repeated possible focus \(pattern family\): r-controlled \/er\/ \(er, ir, ur\)/.test(text(run(keyed(S4, { fern:'farn', curl:'carl' })).print)));
   const t = text(run(keyed(S3, { shed:'sed', dish:'did' })).print);
   assert(/Repeated possible focus: sh spelling for \/sh\/ \(across positions or contexts\)/.test(t)); assert(!/pattern family/i.test(t));
 });
@@ -479,12 +481,14 @@ test('B: each focus area follows the hierarchy status → correspondence/family 
     assert(pos('class="fa-head"') >= 0 && pos('class="fa-head"') < pos('class="fa-title"'), 'status before title');
     assert(pos('class="fa-title"') < pos('class="fa-list"'), 'title before words');
     if(b.includes('class="fa-support"')) assert(pos('class="fa-list"') < pos('class="fa-support"'), 'words before supporting evidence');
-    assert(/class="fa-status">(Repeated possible focus|Observed once|Supplemental nonsense-word evidence|Pattern to check|Pattern tested)</.test(b), 'status text: ' + b.slice(0, 120));
+    assert(/class="fa-status">(Repeated possible focus|Possible broader pattern|Observed once|Supplemental nonsense-word evidence|Pattern to check|Pattern tested)</.test(b), 'status text: ' + b.slice(0, 120));
   }
 });
 test('B: pattern-family, same-correspondence and single findings are visually distinct', () => {
   const fam = blocks(run(keyed(S2, { milk:'mil', jump:'jum' })).screen)[0];
-  assert(/^fa-repeated fa-family"/.test(fam)); assert(fam.includes('<span class="fa-tag">Pattern family</span>')); assert(fam.includes('class="fa-title">Final consonant blends<'));
+  assert(/^fa-broad fa-family"/.test(fam)); assert(fam.includes('<span class="fa-tag">Pattern family</span>')); assert(fam.includes('class="fa-title">Final consonant blends (different clusters)<'));
+  const er = blocks(run(keyed(S4, { fern:'farn', curl:'carl' })).screen)[0];
+  assert(/^fa-repeated fa-family"/.test(er));
   const same = blocks(run(keyed(S3, { shed:'sed', dish:'did' })).screen)[0];
   assert(/^fa-repeated fa-single"/.test(same)); assert(same.includes('<span class="fa-tag">Same correspondence</span>')); assert(!same.includes('Pattern family'));
   const once = blocks(run(keyed(S4, { card:'cord' })).screen)[0];
@@ -535,13 +539,163 @@ test('B: section score rows can shrink and stack the band on very narrow screens
   assert(/\.sec-result-row\{grid-template-columns:minmax\(0,1fr\) auto auto\}/.test(html));
   assert(/@media\(max-width:360px\)\{\s*\.sec-result-row\{grid-template-columns:minmax\(0,1fr\) auto\}\s*\.sec-result-row \.band-pill\{grid-column:1\/-1/.test(html));
 });
-const PRINT_GOLDEN = {   // sha1 prefixes of the printed focus areas for the eight scripted students (as of Stage A/B)
-  [S1]: '14ddde703ca3', [S2]: 'bc9cd5574246', [S3]: '19c9252edd16', [S4]: '7880b6ad3077',
-  [S5]: '78e81add687f', [S6]: '033228b8fc92', [S7]: 'cb9151b604c6', [S8]: '1e2d8ffb6b3e'
+const PRINT_GOLDEN = {   // sha1 prefixes of the printed focus areas for the eight scripted students (S2 and S5 re-baselined for the accuracy correction's broad-family wording; the rest unchanged since Stage A)
+  [S1]: '14ddde703ca3', [S2]: '9848b9144e9f', [S3]: '19c9252edd16', [S4]: '7880b6ad3077',
+  [S5]: '9421e86ab559', [S6]: '033228b8fc92', [S7]: 'cb9151b604c6', [S8]: '1e2d8ffb6b3e'
 };
-test('B: the printed focus areas are unchanged by the on-screen redesign', () => {
+test('B: printed focus areas stay stable (golden hashes; change only for intentional wording changes)', () => {
   const sig = sec => crypto.createHash('sha1').update(run(keyed(sec, SCRIPTS[sec].marks)).print).digest('hex').slice(0, 12);
   for(const sec of Object.keys(PRINT_GOLDEN)) assert.strictEqual(sig(sec), PRINT_GOLDEN[sec], `printed focus areas changed for ${sec} (update PRINT_GOLDEN only for an intentional print change)`);
+});
+
+/* ------------------------------ Analyzer accuracy correction (A: multisyllabic r-controlled, B: broad families, E: r + final e) ------------------------------ */
+const S9 = 'multisyllabic-words';
+const rcAreas = r => bucket(r, 'multisyllabic').areas.map(a => ({ focus: a.focus, words: areaWords(a).sort(), label: api.areaLabel('multisyllabic', a) }));
+test('AC-A: stressed r-controlled syllables keep /ar/ and /or/ apart (barber bar vs report port)', () => {
+  const r = run(keyed(S9, { barber:'borber', report:'repurt' }));
+  const areas = rcAreas(r);
+  assert.strictEqual(areas.length, 2, 'two separate areas');
+  assert(areas.some(a => a.focus === 'R-controlled syllable decoding (/ar/) · vowel changed' && a.words.join() === 'barber'));
+  assert(areas.some(a => a.focus === 'R-controlled syllable decoding (/or/) · vowel changed' && a.words.join() === 'report'));
+  assert(areas.every(a => a.label === 'Observed once'), 'no repeated focus from two different sounds');
+  const t = text(r.print); assert(!/Repeated possible focus/.test(t));
+});
+test('AC-A: the broader r-controlled syllable category is preserved in each area', () => {
+  const t = text(run(keyed(S9, { barber:'borber', report:'repurt' })).print);
+  assert(/Observed once: R-controlled syllable decoding \(\/ar\/\) · vowel changed/.test(t)); assert(/Observed once: R-controlled syllable decoding \(\/or\/\) · vowel changed/.test(t));
+  assert(/Multisyllabic/i.test(t));
+});
+test('AC-A: unstressed r-controlled syllables (beaver ver, tornado tor, barber ber) stay Teacher check, never evidence', () => {
+  const r = run(keyed(S9, { beaver:'beavur', tornado:'tarnado', barber:'barbar' }));
+  assert.strictEqual(bucket(r, 'multisyllabic'), undefined);
+  const tc = bucket(r, 'teacher_check'); assert(tc); assert.strictEqual(tc.areas.length, 1);
+  assert(!/Repeated possible focus/.test(text(r.print)));
+});
+test('AC-A: an unlocalized multisyllabic response gets no vowel-sound label', () => {
+  const r = run(keyed(S9, { barber:'zzzz', report:'repurt' }));
+  const areas = rcAreas(r);
+  assert(areas.some(a => a.focus === 'R-Controlled + R-Controlled multisyllabic decoding' && !/\(\//.test(a.focus)));
+  assert(areas.some(a => a.focus === 'R-controlled syllable decoding (/or/) · vowel changed'));
+  assert.strictEqual(areas.length, 2);
+});
+test('AC-A: a stressed r-controlled syllable with a different error kind stays a separate area', () => {
+  const r = run(keyed(S9, { barber:'bber', report:'repurt' }));
+  assert(!/Repeated/.test(text(r.print)));
+});
+test('AC-A: single-word r-controlled evidence is not merged with the multisyllabic r-controlled syllable evidence', () => {
+  const r = run({ ...keyed(S4, { card:'cord' }), ...keyed(S9, { barber:'borber' }) });
+  assert.strictEqual(bucket(r, 'phonics_vowel').areas.length, 1); assert.strictEqual(bucket(r, 'multisyllabic').areas.length, 1);
+  assert(!/Repeated/.test(text(r.print)));
+});
+test('AC-A: /ar/, /or/ and /er/ single-word evidence still never combine (mixed-phoneme regression)', () => {
+  const r = run(keyed(S4, { card:'cord', fork:'fark', term:'tarm', bark:'burk', born:'barn' }));
+  const areas = bucket(r, 'phonics_vowel').areas;
+  assert.strictEqual(areas.length, 3);
+  const byFocus = f => areas.find(a => a.focus === f);
+  assert.deepStrictEqual(areaWords(byFocus('ar spelling for /ar/')).sort(), ['bark', 'card']);
+  assert.deepStrictEqual(areaWords(byFocus('or spelling for /or/')).sort(), ['born', 'fork']);
+  assert.deepStrictEqual(areaWords(byFocus('er spelling for /er/')), ['term']);
+  assert.strictEqual(api.areaLabel('phonics_vowel', byFocus('er spelling for /er/')), 'Observed once');
+});
+
+const bpieces = (r, tag, i = 0) => { const b = bucket(r, tag); return api.areaPieces(b, b.areas[i]); };
+test('AC-B: a silent-e family spanning vowel sounds is a broader pattern, not a repeated single correspondence', () => {
+  const r = run(keyed(S5, { cake:'cak', bike:'bik' })); const p = bpieces(r, 'phonics_vowel');
+  assert.strictEqual(p.label, 'Possible broader pattern (pattern family)');
+  assert.strictEqual(p.focus, 'Silent-e (VCe) spelling convention across vowel sounds');
+  const t = text(r.print); assert(!/Repeated possible focus/.test(t)); assert(t.includes(BROAD_CAUTION));
+});
+test('AC-B: vowel-specific evidence is preserved, including the two sounds of u_e', () => {
+  const r = run({ ...keyed(S5, { cute:'cut', cake:'cak' }), ...keyed(S6, { prune:'prun' }) }); const a = bucket(r, 'phonics_vowel').areas[0];
+  assert.deepStrictEqual([...a.byCorr.map(c => c.corr)].sort(), ['a_e|/ā/', 'u_e|/ōō/', 'u_e|/ū/']);
+  assert(a.byCorr.every(c => c.words.length === 1));
+  const p = bpieces(r, 'phonics_vowel');
+  assert(/u-consonant-e spelling for \/ū\/: cute \(1 word\)/.test(p.breakdown)); assert(/u-consonant-e spelling for \/ōō\/: prune \(1 word\)/.test(p.breakdown));
+  assert(!/repeated/.test(p.breakdown));
+});
+test('AC-B: the broader-pattern status needs two distinct real words with different correspondences', () => {
+  const lab = marks => { const r = run(marks); const b = bucket(r, 'phonics_vowel'); return b ? api.areaLabel('phonics_vowel', b.areas[0]) : null; };
+  assert.strictEqual(lab(keyed(S5, { cake:'cak' })), 'Observed once');                                   // one real word
+  assert.strictEqual(lab(keyed(S5, { cake:'cak', zide:'zid', pabe:'pab' })), 'Observed once');           // nonsense words only support
+  assert.strictEqual(lab({ ...keyed(S5, { cake:'cak' }), [`${S5}:bike`]: SKIP }), 'Observed once');      // skipped words never count
+  assert.strictEqual(lab(keyed(S5, { cake:'cak', bike:'bik' })), 'Possible broader pattern (pattern family)');
+  assert.strictEqual(lab(keyed(S5, { cute:'cut', cube:'cub' })), 'Repeated possible focus');            // one correspondence twice, not a broad pattern
+  const blends = marks => { const b = bucket(run(keyed(S2, marks)), 'phonics_consonant'); return api.areaLabel('phonics_consonant', b.areas[0]); };
+  assert.strictEqual(blends({ milk:'mik' }), 'Observed once'); assert.strictEqual(blends({ milk:'mik', vust:'vus' }), 'Observed once');
+  assert.strictEqual(blends({ milk:'mik', jump:'jup' }), 'Possible broader pattern (pattern family)');
+});
+test('AC-B: u_e /ū/ and u_e /ōō/ keep separate identities and separate distinct-word counts', () => {
+  const r = run({ ...keyed(S5, { cute:'cut', cube:'cub' }), ...keyed(S6, { prune:'prun' }) }); const a = bucket(r, 'phonics_vowel').areas[0];
+  const byC = Object.fromEntries(a.byCorr.map(c => [c.corr, [...c.words].sort().join()]));
+  assert.deepStrictEqual(byC, { 'u_e|/ū/': 'cube,cute', 'u_e|/ōō/': 'prune' });
+  const bd = api.areaPieces(bucket(r, 'phonics_vowel'), a).breakdown;
+  assert(/u-consonant-e spelling for \/ū\/: cute, cube \(2 words, repeated\)/.test(bd)); assert(/u-consonant-e spelling for \/ōō\/: prune \(1 word\)/.test(bd));
+  assert(!/\(3 words/.test(bd), 'no combined u_e count');
+});
+test('AC-B: one vowel correspondence repeated inside a broad family is identified as repeated', () => {
+  const r = run(keyed(S5, { cute:'cut', cube:'cub', cake:'cak' })); const p = bpieces(r, 'phonics_vowel');
+  assert.strictEqual(p.label, 'Possible broader pattern (pattern family)');
+  assert(/u-consonant-e spelling for \/ū\/: cute, cube \(2 words, repeated\)/.test(p.breakdown));
+  assert(/a-consonant-e spelling for \/ā\/: cake \(1 word\)/.test(p.breakdown));
+});
+test('AC-B: the same silent-e correspondence missed in two words is still a correspondence-level repeat (no family framing)', () => {
+  const r = run({ ...keyed(S5, { rope:'rop' }), ...keyed(S7, { phone:'fon' }) }); const p = bpieces(r, 'phonics_vowel');
+  assert.strictEqual(p.label, 'Repeated possible focus'); assert(!p.breakdown);
+  assert(!text(r.print).includes(BROAD_CAUTION));
+});
+test('AC-B: one silent-e word is Observed once and carries no broad-family caution', () => {
+  const r = run(keyed(S5, { cake:'cak' })); assert.strictEqual(bpieces(r, 'phonics_vowel').label, 'Observed once'); assert(!text(r.print).includes(BROAD_CAUTION));
+});
+test('AC-B: consonant-blend families get the same broader-skill distinction', () => {
+  for(const [marks, label] of [[{ milk:'mik', jump:'jup' }, 'Final consonant blends (different clusters)'], [{ spin:'sin', sled:'sed' }, 'Initial s-blends (different clusters)']]){
+    const r = run(keyed(S2, marks)); const p = bpieces(r, 'phonics_consonant');
+    assert.strictEqual(p.label, 'Possible broader pattern (pattern family)'); assert.strictEqual(p.focus, label);
+    assert(/By specific correspondence/.test(p.breakdown)); assert(text(r.print).includes(BROAD_CAUTION));
+  }
+});
+test('AC-B: same-sound families (er/ir/ur, oi/oy) keep "Repeated possible focus (pattern family)" and the original caution', () => {
+  const r = run(keyed(S4, { fern:'farn', curl:'carl' })); const p = bpieces(r, 'phonics_vowel');
+  assert.strictEqual(p.label, 'Repeated possible focus (pattern family)'); assert(!p.breakdown);
+  const t = text(r.print); assert(t.includes(FAMILY_CAUTION)); assert(!t.includes(BROAD_CAUTION));
+});
+test('AC-B: broad-family screen block shows the specific-correspondence line and its own chip', () => {
+  const b = blocks(run({ ...keyed(S5, { cute:'cut' }), ...keyed(S6, { prune:'prun' }) }).screen)[0];
+  assert(/^fa-broad fa-family"/.test(b)); assert(b.includes('class="fa-breakdown"')); assert(b.includes('Possible broader pattern'));
+});
+
+const eOf = (word, resp) => { const w = ALL_WORDS.find(x => x.sectionId === S4 && x.word === word); return api.analyzeError(w, resp, false); };
+for(const [word, resp] of [['card', 'care'], ['bark', 'bare'], ['fork', 'fore'], ['surf', 'sure'], ['dirt', 'dire'], ['curl', 'cure']]){
+  test(`AC-E: ${word} → ${resp} is a Teacher check, not a confirmed sound error or a kept correspondence`, () => {
+    const a = eOf(word, resp);
+    assert.strictEqual(a.tag, 'teacher_check'); assert.notStrictEqual(a.tag, 'phonics_vowel');
+    assert.strictEqual(a.targets[0].status, 'unverifiable');
+    const expected = { fork:/may stay the same/, card:/commonly changes the vowel sound/, bark:/commonly changes/, surf:/commonly changes/, dirt:/commonly changes/, curl:/commonly changes/ }[word];
+    assert(expected.test(a.patternNote), a.patternNote);
+    if(word !== 'fork') assert(!/may stay the same/.test(a.patternNote)); else assert(!/commonly changes/.test(a.patternNote), 'or + e is not claimed to change the vowel');
+    const r = run(keyed(S4, { [word]: resp })); const t = text(r.print);
+    assert(/Teacher check: target sound can't be confirmed · 1 word/.test(t)); assert(!/Vowel\/spelling patterns to review/.test(t));
+  });
+}
+test('AC-E: er + e is described as varying, not as a confirmed change', () => {
+  const a = eOf('term', 'tere'); assert.strictEqual(a.tag, 'teacher_check');
+  assert(/may or may not change the vowel sound/.test(a.patternNote)); assert(!/commonly changes/.test(a.patternNote));
+});
+test('AC-E: letters kept without an added final e are unchanged (card → cart, fork → for, bird → birth)', () => {
+  for(const [w, r] of [['card', 'cart'], ['bird', 'birth']]) assert.strictEqual(eOf(w, r).tag, 'other');
+  assert.strictEqual(eOf('fork', 'for').tag, 'ending_miscue');
+});
+test('AC-E: a real vowel change is still a confirmed finding (card → cord, term → tarm, fork → fark)', () => {
+  for(const [w, r] of [['card', 'cord'], ['term', 'tarm'], ['fork', 'fark']]) assert.strictEqual(eOf(w, r).tag, 'phonics_vowel');
+});
+test('AC-E: r + e plurals and past forms (cares, cared) are also a Teacher check; a nonsense word is handled the same way', () => {
+  assert.strictEqual(eOf('card', 'cares').tag, 'teacher_check'); assert.strictEqual(eOf('card', 'cared').tag, 'teacher_check');
+  const r = run(keyed(S4, { varm:'varme' })); assert(!bucket(r, 'phonics_vowel'));   // varme: ar not directly before a final e → unchanged behavior
+});
+test('AC-E: Teacher check responses never count toward a repeated focus', () => {
+  const r = run(keyed(S4, { card:'care', bark:'bare' }));
+  assert(!bucket(r, 'phonics_vowel')); assert(!/Repeated possible focus/.test(text(r.print)));
+  const mixed = run(keyed(S4, { card:'care', bark:'burk' }));
+  assert.strictEqual(api.areaLabel('phonics_vowel', bucket(mixed, 'phonics_vowel').areas[0]), 'Observed once');
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

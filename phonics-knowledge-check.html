@@ -623,6 +623,7 @@
       .fa-support{border-top:1px dashed var(--line-blue);padding-top:6px;display:grid;gap:3px}
       .fa-support-label{font-weight:800;font-size:.78rem;color:#6d6883}
       .fa-support .fa-word{font-weight:600;color:#3d3a5c}
+      .fa-breakdown{font-size:.85rem;font-weight:700;color:#4d4a6d;margin:0 0 8px}
       .fa-notes{border-left:3px solid #d8d2ee;padding-left:10px;display:grid;gap:4px}
       .fa-notes p{margin:0}
       #realNonsenseMetrics{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
@@ -1215,9 +1216,18 @@
       if(g === 'aw' || g === 'au') return r.replace(/[^aeiou]/g, '') === 'o' || r.includes('ah');
       return false;
     }
+    // r-controlled letters kept, but the response ends r + e (care, bare, fore, sure, dire, cure): the typed letters
+    // are present while the vowel sound usually changes (or may not), so the sound cannot be confirmed from them.
+    function rControlledEShift(item, r, grapheme){
+      const g = normPG(grapheme);
+      if(!['ar','er','ir','or','ur'].includes(g) || !/r-controlled/i.test(item.targetPattern || '')) return false;
+      const target = cleanLetters(item.word);
+      return !new RegExp(`${g}e[sd]?$`).test(target) && new RegExp(`${g}e[sd]?$`).test(r);
+    }
     function graphemeStatus(item, r, grapheme, phoneme){
       const g = normPG(grapheme);
       if(graphemePreserved(item, r, grapheme, phoneme)){
+        if(rControlledEShift(item, r, grapheme)) return 'unverifiable';
         return AMBIGUOUS_GRAPHEMES.has(g) && graphemeLettersPresent(item, r, g) ? 'unverifiable' : 'kept';
       }
       return dialectCompatible(g, r) ? 'variation' : 'missed';
@@ -1256,6 +1266,8 @@
     // ---- Pattern families -------------------------------------------------------------
     // Related correspondences that share one instructional idea. Used only to group missed real-word
     // evidence; the specific spelling, word and error type stay attached to every finding.
+    // A family is "broad" when its members stand for different sounds or clusters (silent-e, blends): it
+    // names a shared spelling convention or decoding skill, never one specific correspondence.
     const FINAL_BLENDS = new Set(['lk','lp','mp','nd','sk','st']);
     const S_BLENDS = new Set(['sp','sl','st']);
     const L_BLENDS = new Set(['pl','gl']);
@@ -1268,13 +1280,13 @@
       if(['oi','oy'].includes(g)) return { key:'oi', label:'/oi/ diphthong (oi, oy)' };
       if(['aw','au'].includes(g)) return { key:'aw', label:'/aw/ vowel (aw, au)' };
       if(['ou','ow'].includes(g) && ph === '/ow/') return { key:'ow', label:'/ow/ diphthong (ou, ow)' };
-      if(g.endsWith('_e')) return { key:'silent-e', label:'Silent-e (VCe) vowel pattern' };
+      if(g.endsWith('_e')) return { key:'silent-e', broad:true, label:'Silent-e (VCe) spelling convention across vowel sounds' };
       if(['sh','ch','th'].includes(g)) return { key:`digraph-${g}`, label:`${g} digraph (initial and final)` };
-      if(FINAL_BLENDS.has(g) && w.endsWith(g)) return { key:'final-blends', label:'Final consonant blends' };
-      if(S_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-s-blends', label:'Initial s-blends' };
-      if(L_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-l-blends', label:'Initial l-blends' };
-      if(R_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-r-blends', label:'Initial r-blends' };
-      if(THREE_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-three-blends', label:'Initial three-consonant blends' };
+      if(FINAL_BLENDS.has(g) && w.endsWith(g)) return { key:'final-blends', broad:true, label:'Final consonant blends (different clusters)' };
+      if(S_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-s-blends', broad:true, label:'Initial s-blends (different clusters)' };
+      if(L_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-l-blends', broad:true, label:'Initial l-blends (different clusters)' };
+      if(R_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-r-blends', broad:true, label:'Initial r-blends (different clusters)' };
+      if(THREE_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-three-blends', broad:true, label:'Initial three-consonant blends (different clusters)' };
       if(g.length === 1 && VOWELS.has(g) && SHORT_VOWEL_PHONEMES.has(ph)) return { key:`short-${g}`, label:`Short ${g} ${ph}` };
       return null;
     }
@@ -1309,7 +1321,8 @@
           kind: vowelLike ? 'vowel' : 'consonant',
           phoneme,
           focus: focusFor(item, role),
-          status: graphemeStatus(item, r, grapheme, phoneme)
+          status: graphemeStatus(item, r, grapheme, phoneme),
+          reason: rControlledEShift(item, r, grapheme) ? `r-final-e:${{ or:'may-keep', er:'varies' }[normPG(grapheme)] || 'changes'}` : ''
         };
       }).map(t => ({ ...t, preserved: t.status === 'kept' }));
     }
@@ -1318,6 +1331,17 @@
     // Stressed syllable (0-based); everything else defaults to the first syllable.
     const STRESSED_SYLLABLE = { report:1, inhale:1, tornado:1 };
     const SYLLABLE_TYPE_LABEL = t => t === 'VCe' ? 'VCe' : t.charAt(0).toUpperCase() + t.slice(1);
+    // Vowel sound of an r-controlled syllable, taken from the r-controlled single-word items (ar /ar/, or /or/,
+    // er/ir/ur /er/). Only an unambiguous syllable (exactly one r-controlled spelling) gets a sound.
+    const RC_SOUND = (() => {
+      const m = {};
+      ALL_WORDS.forEach(w => { if(/r-controlled/i.test(w.targetPattern || '') && w.primaryGrapheme) m[normPG(w.primaryGrapheme)] = w.primaryPhoneme; });
+      return m;
+    })();
+    function syllableSound(syllable){
+      const found = [...new Set((syllable.match(/[aeiou]r/g) || []))];
+      return found.length === 1 ? (RC_SOUND[found[0]] || null) : null;
+    }
     // Consonant skeleton of a letter string; a typed schwa (uh, ah, eh) counts as a vowel.
     const stripVowels = x => x.replace(/([aeiou])h/g, '$1').replace(/[aeiou]/g, '');
     function alignChange(target, r){
@@ -1363,9 +1387,11 @@
         };
       }
       const kind = !rReg ? 'letters omitted' : (!tReg ? 'letters added' : (vowelOnly ? 'vowel changed' : 'letters changed'));
+      // The r-controlled category stays the heading; the specific vowel sound keeps /ar/, /or/ and /er/ evidence apart.
+      const sound = type === 'r-controlled' ? syllableSound(syl[i]) : null;
       return {
         tag:'multisyllabic',
-        focus:`${SYLLABLE_TYPE_LABEL(type)} syllable decoding · ${kind}`,
+        focus:`${SYLLABLE_TYPE_LABEL(type)} syllable decoding${sound ? ` (${sound})` : ''} · ${kind}`,
         patternPreserved:false,
         patternNote:`Change in "${syl[i]}" (${type} syllable)`,
         targets:[]
@@ -1380,6 +1406,11 @@
     // before any broad miscue type such as an omitted ending, so words like
     // badge → bad are reported under final dge spelling, not a generic final deletion.
     function checkNote(t){
+      // An added final e after r commonly changes the vowel (care, dire, sure, cure) for ar, ir and ur; ore usually keeps
+      // /or/ (fore); ere varies (here, were). Either way the typed letters cannot show which sound was said.
+      if(t.reason === 'r-final-e:changes') return `${graphemeLabel(t.grapheme)} letters present, but the added final e commonly changes the vowel sound (as in care); the sound can't be verified from the typed response`;
+      if(t.reason === 'r-final-e:may-keep') return `${graphemeLabel(t.grapheme)} letters present with a final e added (as in fore); the vowel sound may stay the same, so it can't be verified from the typed response`;
+      if(t.reason === 'r-final-e:varies') return `${graphemeLabel(t.grapheme)} letters present with a final e added; this may or may not change the vowel sound (here vs. were), so it can't be verified from the typed response`;
       return t.status === 'variation'
         ? 'Possible dialect variation; check against the student\'s home speech'
         : `${graphemeLabel(t.grapheme)} letters present; the vowel sound can't be verified from the typed response`;
@@ -1785,6 +1816,7 @@
     // separate lists on each focus area; only real words decide the strength of the finding.
     // Shared explanations, shown once per category instead of once per focus area.
     const FAMILY_NOTE = 'Pattern family: related spellings in the same family were missed; this does not mean every spelling in the family is unknown.';
+    const BROAD_NOTE = 'Broader skill family: the misses involve different vowel sounds or consonant clusters that share one spelling convention or decoding skill. This points to possible difficulty with that shared convention; it does not show repeated difficulty with any single vowel or cluster.';
     function buildFocusAreas(details){
       const byTag = {};
       details.forEach(d => {
@@ -1795,12 +1827,12 @@
           // Findings in a pattern family share one focus area; everything else groups by specific focus.
           const key = f.family ? `family:${f.family.key}` : (f.corr ? `corr:${f.corr}` : focusGroupKey(f.focus));
           const bucket = byTag[tag] || (byTag[tag] = { tag, def:PAT[tag] || {label:tag, guide:''}, areas:{}, wordIds:new Set(), findings:0 });
-          const area = bucket.areas[key] || (bucket.areas[key] = { key, family:f.family || null, focus: f.focus || null, real:[], nonsense:[], specifics:new Set(), realSpecifics:new Set(), realCorr:new Set(), corrLabel:f.corrLabel || null });
+          const area = bucket.areas[key] || (bucket.areas[key] = { key, family:f.family || null, focus: f.focus || null, real:[], nonsense:[], specifics:new Set(), realSpecifics:new Set(), realCorr:new Set(), corrLabel:f.corrLabel || null, corrLabels:{} });
           const entry = { ...d, tag, focus:f.focus, patternNote:f.patternNote, errorKind:f.errorKind || '', corr:f.corr || '' };
           // Display the real-word focus text when there is one; nonsense wording only if no real word is in the area.
           if(d.type !== 'nonsense' && !area.real.length) area.focus = f.focus || null;
           area.specifics.add(focusGroupKey(f.focus));
-          if(d.type !== 'nonsense'){ area.realSpecifics.add(focusGroupKey(f.focus)); if(f.corr) area.realCorr.add(f.corr); }
+          if(d.type !== 'nonsense'){ area.realSpecifics.add(focusGroupKey(f.focus)); if(f.corr){ area.realCorr.add(f.corr); area.corrLabels[f.corr] = f.corrLabel || f.corr; } }
           (d.type === 'nonsense' ? area.nonsense : area.real).push(entry);
           bucket.wordIds.add(d.item ? d.item.id : d.word);
           bucket.findings++;
@@ -1819,10 +1851,18 @@
           const detailed = area.specifics.size > 1;
           const focus = spansFamily ? area.family.label
             : (sameCorrSpan && area.corrLabel ? `${area.corrLabel} (across positions or contexts)` : area.focus);
-          return { ...area, focus, spansFamily, detailed };
+          // A broad family (different vowel sounds or clusters) is a shared-convention finding; the evidence for each
+          // specific correspondence is kept so one repeated vowel or cluster stays distinguishable.
+          const broad = spansFamily && !!area.family.broad;
+          const byCorr = broad ? [...area.realCorr].map(c => {
+            const words = [...new Set(area.real.filter(e => e.corr === c).map(e => e.word))];
+            return { corr:c, label:area.corrLabels[c], words };
+          }) : [];
+          return { ...area, focus, spansFamily, detailed, broad, byCorr };
         }), words:b.wordIds.size, findings:b.findings }))
         .map(b => ({ ...b,
-          hasFamily: b.areas.some(a => a.spansFamily),
+          hasFamily: b.areas.some(a => a.spansFamily && !a.broad),
+          hasBroad: b.areas.some(a => a.broad),
           hasNonsense: b.tag !== 'other' && b.tag !== 'ending_miscue' && b.areas.some(a => a.nonsense.length > 0) }));
     }
     // Strength comes from real-word evidence only; nonsense words can support but never raise it.
@@ -1830,7 +1870,8 @@
       if(tag === 'skipped') return 'Pattern tested';
       if(tag === 'teacher_check') return 'Pattern to check';
       const realWords = new Set(area.real.map(e => e.word)).size;
-      if(realWords >= 2) return area.spansFamily ? 'Repeated possible focus (pattern family)' : 'Repeated possible focus';
+      // A broad family (different vowel sounds or clusters) is a possible shared-convention difficulty, not a repeated single correspondence.
+      if(realWords >= 2) return area.spansFamily ? (area.broad ? 'Possible broader pattern (pattern family)' : 'Repeated possible focus (pattern family)') : 'Repeated possible focus';
       if(realWords === 1) return 'Observed once';
       return 'Supplemental nonsense-word evidence';
     }
@@ -1852,6 +1893,7 @@
         realWords: area.real.map(text).join(', '),
         nonsenseWords: area.nonsense.map(text).join(', '),
         sharedNote: shared,
+        breakdown: area.broad ? 'By specific correspondence (real words): ' + area.byCorr.map(c => `${c.label}: ${c.words.join(', ')} (${plural(c.words.length, 'word')}${c.words.length > 1 ? ', repeated' : ''})`).join(' · ') : '',
         nonsenseOnly: area.real.length === 0 && area.nonsense.length > 0
       };
     }
@@ -1861,7 +1903,7 @@
         : `${bucket.def.label} · ${plural(bucket.words,'word')}`;
     }
     function bucketNotes(bucket){
-      return [bucket.hasNonsense ? NONSENSE_NOTE : '', bucket.hasFamily ? FAMILY_NOTE : ''].filter(Boolean);
+      return [bucket.hasNonsense ? NONSENSE_NOTE : '', bucket.hasFamily ? FAMILY_NOTE : '', bucket.hasBroad ? BROAD_NOTE : ''].filter(Boolean);
     }
     // On-screen focus areas: status, correspondence or family, then one row per word, then supporting evidence.
     function bucketHeadingParts(bucket){
@@ -1886,12 +1928,12 @@
       const note = p.sharedNote ? `<div class="fa-note">${esc(p.sharedNote)}</div>` : '';
       if(!p.focus) return `<div class="fa fa-plain">${list(main)}${note}${supportBlock}</div>`;
       const status = p.label.replace(' (pattern family)', '');
-      const key = { 'Repeated possible focus':'repeated', 'Observed once':'once', 'Supplemental nonsense-word evidence':'supplemental' }[status] || 'other';
+      const key = { 'Repeated possible focus':'repeated', 'Possible broader pattern':'broad', 'Observed once':'once', 'Supplemental nonsense-word evidence':'supplemental' }[status] || 'other';
       const repeated = key === 'repeated';
       const sameCorr = repeated && !area.spansFamily;
       const tag = area.spansFamily ? '<span class="fa-tag">Pattern family</span>' : (sameCorr ? '<span class="fa-tag">Same correspondence</span>' : '');
       return `<div class="fa fa-${key}${area.spansFamily ? ' fa-family' : ' fa-single'}"><div class="fa-head"><span class="fa-status">${esc(status)}</span>${tag}</div>`
-        + `<div class="fa-title">${esc(p.focus)}</div>${note}${list(main)}${supportBlock}</div>`;
+        + `<div class="fa-title">${esc(p.focus)}</div>${p.breakdown ? `<div class="fa-breakdown">${esc(p.breakdown)}</div>` : ''}${note}${list(main)}${supportBlock}</div>`;
     }
     function renderPatternNotes(details){
       if(!details.length) return '<p class="empty-small">No miscues to analyze.</p>';
@@ -1911,6 +1953,7 @@
           const title = p.focus ? `${p.label}: ${p.focus}` : (p.realWords || p.nonsenseWords);
           const parts = [];
           if(p.focus) parts.push(p.realWords || p.nonsenseWords);
+          if(p.breakdown) parts.push(p.breakdown);
           if(p.sharedNote) parts.push(p.sharedNote);
           if(p.realWords && p.nonsenseWords) parts.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
           return `<div class="print-focus-item"><strong>${esc(title)}</strong>${parts.length ? `<span>${esc(parts.join(' · '))}</span>` : ''}</div>`;
