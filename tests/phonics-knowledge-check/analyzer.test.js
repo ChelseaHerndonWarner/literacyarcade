@@ -39,7 +39,7 @@ ctx.window = ctx;
 vm.createContext(ctx);
 let code = pageScript.replace(/import\(\s*['"][^'"]+['"]\s*\)/g, 'Promise.resolve(new Proxy({}, { get: () => () => {} }))');
 const end = code.lastIndexOf('})();');
-code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces};\n' + code.slice(end);
+code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces,bucketHeading,bucketNotes};\n' + code.slice(end);
 vm.runInContext(code, ctx);
 const api = ctx.__api;
 const { state, ALL_WORDS, PHONICS_WORDS } = api;
@@ -60,7 +60,26 @@ function run(marks){
     state.marks[find(sec, word).id] = r === SKIP ? { wrong:true, response:'', skipped:true } : { wrong:true, response:r, skipped:false };
   }
   const score = api.scoreData();
-  return { score, buckets: api.buildFocusAreas(score.details), screen: api.renderPatternNotes(score.details), print: api.patternPrintRows(score.details) };
+  // `print` is the sentence-form text of the focus data (the format used through Stage B), kept so the wording and
+  // grouping tests keep exercising the shared data; `printC` is the actual Stage C printed layout.
+  return { score, buckets: api.buildFocusAreas(score.details), screen: api.renderPatternNotes(score.details), print: legacyPrint(score.details), printC: api.patternPrintRows(score.details) };
+}
+const escH = x => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+function legacyPrint(details){
+  if(!details.length) return '<p>No miscues to analyze.</p>';
+  return api.buildFocusAreas(details).map(bucket => {
+    const rows = bucket.areas.map(area => {
+      const p = api.areaPieces(bucket, area);
+      const title = p.focus ? `${p.label}: ${p.focus}` : (p.realWords || p.nonsenseWords);
+      const parts = [];
+      if(p.focus) parts.push(p.realWords || p.nonsenseWords);
+      if(p.breakdown) parts.push(p.breakdown);
+      if(p.sharedNote) parts.push(p.sharedNote);
+      if(p.realWords && p.nonsenseWords) parts.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
+      return `<div><strong>${escH(title)}</strong>${parts.length ? `<span>${escH(parts.join(' · '))}</span>` : ''}</div>`;
+    }).join('');
+    return `<div><h3>${escH(api.bucketHeading(bucket))}</h3><p>${escH(bucket.def.guide)}</p>${rows}${api.bucketNotes(bucket).map(n => `<p>${escH(n)}</p>`).join('')}</div>`;
+  }).join('');
 }
 const text = h => h.replace(/<br>/g, ' | ').replace(/<[^>]+>/g, '').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
 const bucket = (r, tag) => r.buckets.find(b => b.tag === tag);
@@ -128,14 +147,14 @@ test('P1: two real words repeat; cat/map/zab shows the specific focus and no fam
 });
 test('P1: nonsense-only evidence is never Repeated, even with two words', () => {
   const mk = w => ({ word:w, response:'x', type:'nonsense', focus:'F in a nonsense word', tag:'phonics_vowel', skipped:false, patternNote:null });
-  const h = text(api.patternPrintRows([mk('a'), mk('b')]));
+  const h = text(legacyPrint([mk('a'), mk('b')]));
   assert(!/Repeated/.test(h)); assert(/Supplemental nonsense-word evidence: F in a nonsense word/.test(h)); assert(!/Observed once/.test(h));
 });
 test('P1: grouped findings carry per-word notes, not the first word\'s note', () => {
   const mk = (word, note) => ({ word, response:'x', type:'real', focus:'F', tag:'phonics_vowel', skipped:false, patternNote:note });
-  const t = text(api.patternPrintRows([mk('aaa', 'first note'), mk('bbb', 'second note')]));
+  const t = text(legacyPrint([mk('aaa', 'first note'), mk('bbb', 'second note')]));
   assert(/aaa → x \(first note\), bbb → x \(second note\)/.test(t));
-  const same = text(api.patternPrintRows([mk('aaa', 'shared'), mk('bbb', 'shared')]));
+  const same = text(legacyPrint([mk('aaa', 'shared'), mk('bbb', 'shared')]));
   assert(same.split('shared').length === 2, 'identical notes appear once');
   // double misses keep each word\'s own "also differed" note
   const d = analyze(S2, 'spin', 'pan'); assert(d.findings.every(f => /also differed in this word/.test(f.patternNote)));
@@ -490,7 +509,7 @@ test('B: pattern-family, same-correspondence and single findings are visually di
   const er = blocks(run(keyed(S4, { fern:'farn', curl:'carl' })).screen)[0];
   assert(/^fa-repeated fa-family"/.test(er));
   const same = blocks(run(keyed(S3, { shed:'sed', dish:'did' })).screen)[0];
-  assert(/^fa-repeated fa-single"/.test(same)); assert(same.includes('<span class="fa-tag">Same correspondence</span>')); assert(!same.includes('Pattern family'));
+  assert(/^fa-repeated fa-single"/.test(same)); assert(same.includes('<span class="fa-tag">Across words</span>')); assert(!same.includes('Pattern family'));
   const once = blocks(run(keyed(S4, { card:'cord' })).screen)[0];
   assert(/^fa-once fa-single"/.test(once)); assert(!once.includes('class="fa-tag"'));
   const css = html.slice(html.indexOf('/* Stage B:'));
@@ -539,13 +558,17 @@ test('B: section score rows can shrink and stack the band on very narrow screens
   assert(/\.sec-result-row\{grid-template-columns:minmax\(0,1fr\) auto auto\}/.test(html));
   assert(/@media\(max-width:360px\)\{\s*\.sec-result-row\{grid-template-columns:minmax\(0,1fr\) auto\}\s*\.sec-result-row \.band-pill\{grid-column:1\/-1/.test(html));
 });
-const PRINT_GOLDEN = {   // sha1 prefixes of the printed focus areas for the eight scripted students (S2 and S5 re-baselined for the accuracy correction's broad-family wording; the rest unchanged since Stage A)
-  [S1]: '14ddde703ca3', [S2]: '9848b9144e9f', [S3]: '19c9252edd16', [S4]: '7880b6ad3077',
-  [S5]: '9421e86ab559', [S6]: '033228b8fc92', [S7]: 'cb9151b604c6', [S8]: '1e2d8ffb6b3e'
+const PRINT_GOLDEN = {   // sha1 prefixes of the sentence-form focus data for the eight scripted students (unchanged since the accuracy correction)
+  [S1]: '34dcc0f26634', [S2]: '3742f980a14c', [S3]: 'a04e1ae8c08d', [S4]: 'd938468774d9',
+  [S5]: '4ce9d7ca4a9d', [S6]: 'fedfdef38b86', [S7]: '58c94c46e8a4', [S8]: 'c31dfd9ff136'
 };
-test('B: printed focus areas stay stable (golden hashes; change only for intentional wording changes)', () => {
-  const sig = sec => crypto.createHash('sha1').update(run(keyed(sec, SCRIPTS[sec].marks)).print).digest('hex').slice(0, 12);
-  for(const sec of Object.keys(PRINT_GOLDEN)) assert.strictEqual(sig(sec), PRINT_GOLDEN[sec], `printed focus areas changed for ${sec} (update PRINT_GOLDEN only for an intentional print change)`);
+const SCREEN_GOLDEN = {  // sha1 prefixes of the on-screen focus-area HTML (as at the accuracy correction, with the "Across words" tag wording): print work must not change it
+  [S1]: '3beee2e3fae9', [S2]: '5959697c9b93', [S3]: 'e2d19ad44a55', [S4]: 'c8bfae590602',
+  [S5]: 'aa6be655eb56', [S6]: '89f4dfb832da', [S7]: 'da6b7087ceca', [S8]: '8006c9650470'
+};
+test('B: focus-area data (sentence form) stays stable (golden hashes; change only for intentional wording changes)', () => {
+  const sig = (sec, k) => crypto.createHash('sha1').update(run(keyed(sec, SCRIPTS[sec].marks))[k]).digest('hex').slice(0, 12);
+  for(const sec of Object.keys(PRINT_GOLDEN)) assert.strictEqual(sig(sec, 'print'), PRINT_GOLDEN[sec], `focus-area data changed for ${sec} (update PRINT_GOLDEN only for an intentional change)`);
 });
 
 /* ------------------------------ Analyzer accuracy correction (A: multisyllabic r-controlled, B: broad families, E: r + final e) ------------------------------ */
@@ -696,6 +719,87 @@ test('AC-E: Teacher check responses never count toward a repeated focus', () => 
   assert(!bucket(r, 'phonics_vowel')); assert(!/Repeated possible focus/.test(text(r.print)));
   const mixed = run(keyed(S4, { card:'care', bark:'burk' }));
   assert.strictEqual(api.areaLabel('phonics_vowel', bucket(mixed, 'phonics_vowel').areas[0]), 'Observed once');
+});
+
+/* ------------------------------ Stage C: printed report layout ------------------------------ */
+test('C: the on-screen results are unchanged by the print work', () => {
+  const sig = sec => crypto.createHash('sha1').update(run(keyed(sec, SCRIPTS[sec].marks)).screen).digest('hex').slice(0, 12);
+  for(const sec of Object.keys(SCREEN_GOLDEN)) assert.strictEqual(sig(sec), SCREEN_GOLDEN[sec], `on-screen results changed for ${sec}`);
+});
+test('C: no forced page break before the focus section, and the section may continue across pages', () => {
+  assert(!/print-page-break/.test(html.slice(html.indexOf('function reportPrintHTML'), html.indexOf('function printContent'))));
+  assert(/\.print-report \.pf-section\{break-inside:auto/.test(html));
+  assert(/\.pf-area\{[^}]*break-inside:avoid/.test(html), 'each focus area stays together');
+  assert(/\.pf-keep\{break-inside:avoid/.test(html), 'heading and cautions travel with an area');
+  assert(/\.pf-group h3\{[^}]*break-after:avoid/.test(html));
+  assert(/html,body\{background:#fff!important\}/.test(html), 'printed page background is plain white');
+});
+test('C: printed focus areas follow status → title → one row per word → supporting evidence → cautions', () => {
+  const r = run(keyed(S4, { fern:'farn', curl:'carl', lerp:'larp' })); const h = r.printC;
+  const pos = k => h.indexOf(k);
+  assert(pos('class="pf-status"') < pos('class="pf-title"') && pos('class="pf-title"') < pos('class="pf-words') && pos('class="pf-words') < pos('class="pf-support"') && pos('class="pf-support"') < pos('class="pf-cautions"'));
+  assert.strictEqual((h.match(/<li class="pf-row">/g) || []).length, 3, 'one row per word');
+  assert(h.includes('<span class="pf-target">fern</span><span class="pf-arrow">→</span><span class="pf-resp">farn</span>'), 'target and response are separate styled pieces');
+  assert(!/farn[^<]*, [a-z]+ →/.test(text(h)), 'no comma-separated runs of responses');
+  assert(h.includes('class="pf-tag">Pattern family</span>')); assert(h.includes('r-controlled /er/ (er, ir, ur)'));
+});
+test('C: the printed report keeps every Stage A wording, status and caution', () => {
+  const t = text(run(keyed(S2, { milk:'mik', jump:'jup', vust:'vus' })).printC);
+  for(const w of ['Possible broader pattern', 'Final consonant blends (different clusters)', 'Supporting nonsense-word evidence', 'Cautions', NONSENSE_NOTE, BROAD_CAUTION]) assert(t.includes(w), w);
+  assert(text(run(keyed(S4, { fern:'farn', curl:'carl' })).printC).includes(FAMILY_CAUTION));
+  assert(!text(run(keyed(S3, { shed:'sed', dish:'did' })).printC).includes('Pattern family'));
+});
+test('C: broad families print a correspondence-level breakdown with u_e /ū/ and u_e /ōō/ kept separate', () => {
+  const h = run({ ...keyed(S5, { cute:'cut', cube:'cub', cake:'cak' }), ...keyed(S6, { prune:'prun' }) }).printC;
+  const items = [...h.matchAll(/<li><span class="pf-bd-corr">([^<]*)<\/span><span class="pf-bd-words">([^<]*)<\/span><span class="pf-bd-n">([^<]*)<\/span><\/li>/g)].map(m => [m[1], m[2], m[3]]);
+  assert.deepStrictEqual(items.map(x => x.join(' | ')).sort(), [
+    'a-consonant-e spelling for /ā/ | cake | 1 word',
+    'u-consonant-e spelling for /ōō/ | prune | 1 word',
+    'u-consonant-e spelling for /ū/ | cute, cube | 2 words · repeated'].sort());
+  assert(h.includes('class="pf-status">Possible broader pattern<'));
+  const same = run({ ...keyed(S5, { rope:'rop' }), ...keyed(S7, { phone:'fon' }) }).printC;
+  assert(same.includes('class="pf-status">Repeated possible focus<') && !same.includes('pf-breakdown'), 'a repeated single correspondence is not shown as a broader pattern');
+});
+test('C: repeated Teacher-check cautions print once per category and name the patterns they cover', () => {
+  const r = run(keyed(S4, { card:'care', dirt:'dire', surf:'sure', fork:'fore' })); const t = text(r.printC);
+  const line = 'ar, ir, ur letters present, but the added final e commonly changes the vowel sound (as in care); the sound can\'t be verified from the typed response';
+  assert.strictEqual(t.split(line).length - 1, 1, 'shared caution appears once');
+  // it sits inside the first affected area (card → care), before the later areas that rely on it
+  const raw = r.printC; assert(raw.indexOf('ar, ir, ur letters present') > raw.indexOf('>card<') && raw.indexOf('ar, ir, ur letters present') < raw.indexOf('>dirt<'), 'caution is next to the first applicable finding');
+  assert(raw.indexOf('ar, ir, ur letters present') < raw.indexOf('class="pf-cautions"') || raw.indexOf('class="pf-cautions"') < 0, 'not in the category cautions block');
+  assert.strictEqual(t.split('commonly changes the vowel sound').length - 1, 1);
+  assert(t.includes('or letters present with a final e added (as in fore); the vowel sound may stay the same'), 'fore keeps its own distinct caution');
+  assert(!/(^|, )or letters present[^;]*commonly changes/.test(t), 'or + e is never described as a vowel change');
+  for(const w of ['card', 'dirt', 'surf', 'fork']) assert(t.includes(w));
+});
+test('C: Teacher-check notes that differ per word stay with their word', () => {
+  const t = text(run(keyed(S8, { report:'ruhport', table:'tabul' })).printC);
+  assert(/report → ruhport/.test(t) || /report→ruhport/.test(t.replace(/\s/g, '')));
+  assert(t.includes('Vowel change in the unstressed "re" syllable (typical reduction)')); assert(t.includes('Vowel change in the unstressed "ble" syllable (typical reduction)'));
+});
+test('C: skipped words are marked not attempted; skipped nonsense words are identified', () => {
+  const h = run({ [`${S6}:fault`]: SKIP, [`${S1}:zab`]: SKIP, [`${S1}:cat`]: SKIP }).printC; const t = text(h);
+  assert(/Skipped, not attempted/.test(t)); assert((t.match(/Skipped, not attempted/g) || []).length === 3);
+  assert(h.includes('<span class="pf-ns">nonsense word</span>')); assert(!/→/.test(text(h.slice(h.indexOf('Skipped / no attempt')))), 'no response arrow on a skipped word');
+  assert(/Pattern tested/.test(t));
+});
+test('C: Teacher check and Skipped sections still print with their guidance', () => {
+  const t = text(run({ [`${S6}:cook`]: 'kook', [`${S6}:fault`]: SKIP }).printC);
+  assert(/Teacher check: target sound can't be confirmed/.test(t)); assert(/Skipped \/ no attempt/.test(t));
+  assert(/No spoken response was recorded/.test(t)); assert(/oo letters present; the vowel sound can't be verified/.test(t));
+});
+test('C: the printed content is the same data as the screen (words, statuses, counts)', () => {
+  const r = run(MIXED); const t = text(r.printC), sc = text(r.screen);
+  for(const b of r.buckets){ for(const a of b.areas) for(const e of [...a.real, ...a.nonsense]) assert(t.includes(e.word), 'missing ' + e.word); }
+  assert.strictEqual((t.match(/Possible broader pattern/g) || []).length, (sc.match(/Possible broader pattern/g) || []).length);
+  assert.strictEqual((t.match(/Observed once/g) || []).length, (sc.match(/Observed once/g) || []).length);
+  assert.strictEqual((t.match(/Repeated possible focus/g) || []).length, (sc.match(/Repeated possible focus/g) || []).length);
+});
+test('C: no focus-area content is dropped from the printed output (every finding word appears once per area)', () => {
+  const r = run(MIXED); const h = r.printC;
+  const rows = (h.match(/<li class="pf-row">/g) || []).length;
+  const expected = r.buckets.reduce((n, b) => n + b.areas.reduce((m, a) => m + a.real.length + a.nonsense.length, 0), 0);
+  assert.strictEqual(rows, expected);
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

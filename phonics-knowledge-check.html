@@ -635,6 +635,50 @@
         .sec-result-row .band-pill{grid-column:1/-1;justify-self:start}
       }
     }
+
+    /* Stage C: printed focus areas follow the on-screen hierarchy and flow across pages. Print only. */
+    @media print{
+      html,body{background:#fff!important}
+      .print-report{min-height:0}
+      .print-report .pf-section{break-inside:auto;page-break-inside:auto;margin-top:12px}
+      .print-report .pf-section h2{break-after:avoid;page-break-after:avoid;margin:0 0 4px}
+      .print-report .pf-section .print-intro{break-after:avoid;page-break-after:avoid;margin:0 0 6px;font-size:9.6pt;color:#37344f;line-height:1.35}
+      .pf-group{margin:9px 0 0}
+      .pf-keep{break-inside:avoid;page-break-inside:avoid}
+      .pf-group h3{margin:0 0 3px;font-size:11.2pt;line-height:1.25;color:#17162e;font-weight:900;break-after:avoid;page-break-after:avoid}
+      .pf-count{font-weight:600;font-size:9pt;color:#5a5572}
+      .pf-guide{margin:0 0 6px;color:#37344f;font-size:9.6pt;line-height:1.32;break-after:avoid;page-break-after:avoid}
+      .pf-area{border:1px solid #d8d4e6;border-left:4px solid #b9c7d6;border-radius:8px;padding:5px 10px 6px;margin:0 0 6px;background:#fff;break-inside:avoid;page-break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .pf-family{border-left-color:#1fa99c;background:#f4fffd}
+      .pf-head{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:2px}
+      .pf-status{font-weight:900;font-size:8.2pt;line-height:1.3;border:1px solid #cfc7ea;background:#ece8f8;color:#3f3a66;border-radius:5px;padding:0 6px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .pf-repeated .pf-status{background:#fff3d4;border-color:#e3c070;color:#6b4700}
+      .pf-supplemental .pf-status{background:#eef3f6;border-color:#b5c0c8;color:#3f3b57}
+      .pf-tag{font-weight:800;font-size:8pt;line-height:1.3;color:#0d6b64;border:1px solid #9dddd6;border-radius:5px;padding:0 6px}
+      .pf-title{font-weight:900;font-size:10.4pt;line-height:1.25;color:#17162e;margin:0 0 2px}
+      .pf-breakdown{margin:0 0 4px}
+      .pf-breakdown-label,.pf-support-label,.pf-cautions-label{font-weight:900;font-size:8.8pt;letter-spacing:.03em;color:#37344f;margin-bottom:2px}
+      .pf-breakdown ul{list-style:none;margin:0;padding:0}
+      .pf-breakdown li{display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline;padding:1px 0;font-size:9.6pt;line-height:1.3}
+      .pf-bd-corr{font-weight:800;color:#19324a}
+      .pf-bd-words{font-family:Lexend,Nunito,Arial,sans-serif;font-weight:600;color:#17162e}
+      .pf-bd-n{font-size:9pt;font-weight:800;color:#3f3b57}
+      .pf-words{list-style:none;margin:0;padding:0}
+      .pf-two{column-count:2;column-gap:20px}
+      .pf-row{padding:1px 0;line-height:1.28;break-inside:avoid;page-break-inside:avoid}
+      .pf-main{display:inline-flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+      .pf-target{font-family:Lexend,Nunito,Arial,sans-serif;font-weight:700;font-size:9.8pt;color:#17162e}
+      .pf-arrow{color:#605c78;font-weight:700}
+      .pf-resp{font-family:Lexend,Nunito,Arial,sans-serif;font-weight:700;font-style:italic;font-size:9.8pt;color:#7a2a2a}
+      .pf-ns{font-size:8.2pt;font-weight:800;color:#3f3b57;border:1px solid #b5c0c8;border-radius:4px;padding:0 4px}
+      .pf-detail{margin-left:8px;color:#3f3b57;font-size:9.6pt}
+      .pf-support{border-top:1px dashed #cfc7ea;margin-top:4px;padding-top:3px}
+      .pf-note,.pf-cautions{border-left:3px solid #c9c1e6;padding-left:8px;color:#37344f;font-size:9.6pt;line-height:1.32}
+      .pf-note{margin-top:4px}
+      .pf-cautions{margin:2px 0 4px;break-before:avoid;page-break-before:avoid}
+      .pf-cautions p{margin:2px 0}
+      .print-report .pf-closing{break-before:avoid;page-break-before:avoid}
+    }
   </style>
   <link rel="stylesheet" href="./firebase-tool-gate.css">
   <script type="module" src="./firebase-tool-gate.js"></script>
@@ -1931,7 +1975,7 @@
       const key = { 'Repeated possible focus':'repeated', 'Possible broader pattern':'broad', 'Observed once':'once', 'Supplemental nonsense-word evidence':'supplemental' }[status] || 'other';
       const repeated = key === 'repeated';
       const sameCorr = repeated && !area.spansFamily;
-      const tag = area.spansFamily ? '<span class="fa-tag">Pattern family</span>' : (sameCorr ? '<span class="fa-tag">Same correspondence</span>' : '');
+      const tag = area.spansFamily ? '<span class="fa-tag">Pattern family</span>' : (sameCorr ? '<span class="fa-tag">Across words</span>' : '');
       return `<div class="fa fa-${key}${area.spansFamily ? ' fa-family' : ' fa-single'}"><div class="fa-head"><span class="fa-status">${esc(status)}</span>${tag}</div>`
         + `<div class="fa-title">${esc(p.focus)}</div>${p.breakdown ? `<div class="fa-breakdown">${esc(p.breakdown)}</div>` : ''}${note}${list(main)}${supportBlock}</div>`;
     }
@@ -1945,20 +1989,72 @@
           + `${notes.length ? `<div class="fa-notes">${notes.map(n => `<p>${esc(n)}</p>`).join('')}</div>` : ''}<p>${bucket.def.guide}</p></div>`;
       }).join('');
     }
-    function patternPrintRows(details){
-      if(!details.length) return '<p>No miscues to analyze.</p>';
-      return buildFocusAreas(details).map(bucket => {
-        const rows = bucket.areas.map(area => {
-          const p = areaPieces(bucket, area);
-          const title = p.focus ? `${p.label}: ${p.focus}` : (p.realWords || p.nonsenseWords);
-          const parts = [];
-          if(p.focus) parts.push(p.realWords || p.nonsenseWords);
-          if(p.breakdown) parts.push(p.breakdown);
-          if(p.sharedNote) parts.push(p.sharedNote);
-          if(p.realWords && p.nonsenseWords) parts.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
-          return `<div class="print-focus-item"><strong>${esc(title)}</strong>${parts.length ? `<span>${esc(parts.join(' · '))}</span>` : ''}</div>`;
-        }).join('');
-        return `<div class="print-focus-group"><h3>${esc(bucketHeading(bucket))}</h3><p>${esc(bucket.def.guide)}</p>${rows}${bucketNotes(bucket).map(n => `<p>${esc(n)}</p>`).join('')}</div>`;
+    // Printed focus areas follow the on-screen hierarchy: status, correspondence or family, one row per word,
+    // supporting nonsense-word evidence, then cautions. Student responses never run together in one sentence.
+    // Teacher-check cautions that repeat across areas are printed once per category, naming the patterns they cover.
+    function printHoistedNotes(bucket){
+      if(bucket.tag !== 'teacher_check') return { has: () => false, forArea: () => [] };
+      const seen = {};
+      bucket.areas.forEach((area, ai) => [...area.real, ...area.nonsense].forEach(d => {
+        const n = d.patternNote; if(!n) return;
+        const m = n.match(/^(\S+) letters present(.*)$/);
+        const tpl = m ? 'letters present' + m[2] : n;
+        const e = seen[tpl] || (seen[tpl] = { areas:new Set(), graphemes:[], tpl, hasG:!!m });
+        e.areas.add(ai); if(m && !e.graphemes.includes(m[1])) e.graphemes.push(m[1]);
+      }));
+      const hoisted = Object.values(seen).filter(e => e.areas.size > 1);
+      const keyOf = n => { const m = n.match(/^(\S+) letters present(.*)$/); return m ? 'letters present' + m[2] : n; };
+      // The shared caution is printed inside the first area that needs it (naming every pattern it covers), so it is
+      // never on a different page from all of the findings it explains.
+      return {
+        has: n => hoisted.some(e => e.tpl === keyOf(n)),
+        forArea: ai => hoisted.filter(e => Math.min(...e.areas) === ai).map(e => e.hasG ? `${e.graphemes.join(', ')} ${e.tpl}` : e.tpl)
+      };
+    }
+    function printWordRow(bucket, area, d, note, shared){
+      const parts = [];
+      if(d.skipped) parts.push('Skipped, not attempted');
+      if(area.detailed && d.focus) parts.push(d.focus);
+      if(d.errorKind) parts.push(d.errorKind);
+      if(note && !shared) parts.push(note);
+      const nonsenseMark = d.type === 'nonsense' && (bucket.tag === 'skipped' || bucket.tag === 'teacher_check' || (!area.focus && !area.real.length))
+        ? '<span class="pf-ns">nonsense word</span>' : '';
+      const resp = !d.skipped && d.response ? `<span class="pf-arrow">→</span><span class="pf-resp">${esc(d.response)}</span>` : '';
+      return `<li class="pf-row"><span class="pf-main"><span class="pf-target">${esc(d.word)}</span>${resp}${nonsenseMark}</span>${parts.length ? `<span class="pf-detail">${esc(parts.join(' · '))}</span>` : ''}</li>`;
+    }
+    function printAreaBlock(bucket, area, hoist, ai){
+      const p = areaPieces(bucket, area);
+      const noteOf = d => (d.patternNote && !hoist.has(d.patternNote)) ? d.patternNote : '';
+      const all = [...area.real, ...area.nonsense];
+      const notes = all.map(noteOf);
+      const shared = !area.detailed && notes.length && notes.every(n => n && n === notes[0]) ? notes[0] : '';
+      const list = rows => `<ul class="pf-words${rows.length >= 4 && !area.detailed ? ' pf-two' : ''}">${rows.map(d => printWordRow(bucket, area, d, noteOf(d), !!shared)).join('')}</ul>`;
+      const main = area.real.length ? area.real : area.nonsense;
+      const support = area.real.length && area.nonsense.length ? area.nonsense : [];
+      const supportBlock = support.length
+        ? `<div class="pf-support"><div class="pf-support-label">${p.focus ? 'Supporting nonsense-word evidence' : 'Nonsense words'}</div>${list(support)}</div>` : '';
+      const note = [shared, ...hoist.forArea(ai)].filter(Boolean).map(n => `<div class="pf-note">${esc(n)}</div>`).join('');
+      if(!p.focus) return `<div class="pf-area pf-plain">${list(main)}${supportBlock}${note}</div>`;
+      const status = p.label.replace(' (pattern family)', '');
+      const sKey = { 'Repeated possible focus':'repeated', 'Possible broader pattern':'broad', 'Observed once':'once', 'Supplemental nonsense-word evidence':'supplemental' }[status] || 'other';
+      const tag = area.spansFamily ? '<span class="pf-tag">Pattern family</span>' : (sKey === 'repeated' ? '<span class="pf-tag">Across words</span>' : '');
+      const breakdown = area.broad && area.byCorr.length
+        ? `<div class="pf-breakdown"><div class="pf-breakdown-label">By specific correspondence (real words)</div><ul>${area.byCorr.map(c => `<li><span class="pf-bd-corr">${esc(c.label)}</span><span class="pf-bd-words">${esc(c.words.join(', '))}</span><span class="pf-bd-n">${esc(plural(c.words.length, 'word'))}${c.words.length > 1 ? ' · repeated' : ''}</span></li>`).join('')}</ul></div>` : '';
+      return `<div class="pf-area pf-${sKey}${area.spansFamily ? ' pf-family' : ' pf-single'}"><div class="pf-head"><span class="pf-status">${esc(status)}</span>${tag}</div>`
+        + `<div class="pf-title">${esc(p.focus)}</div>${breakdown}${list(main)}${supportBlock}${note}</div>`;
+    }
+    function patternPrintRows(details, sectionHead = ''){
+      if(!details.length) return `${sectionHead}<p>No miscues to analyze.</p>`;
+      return buildFocusAreas(details).map((bucket, bi) => {
+        const h = bucketHeadingParts(bucket), hoist = printHoistedNotes(bucket);
+        const blocks = bucket.areas.map((area, ai) => printAreaBlock(bucket, area, hoist, ai));
+        const notes = bucketNotes(bucket);
+        const cautions = notes.length ? `<div class="pf-cautions"><div class="pf-cautions-label">Cautions</div>${notes.map(n => `<p>${esc(n)}</p>`).join('')}</div>` : '';
+        // The heading and guide travel with the first focus area, and the category cautions travel with the last one, so
+        // neither is left alone at the foot or head of a page.
+        const lead = `${bi === 0 ? sectionHead : ''}<h3>${esc(h.label)}<span class="pf-count">${esc(h.count)}</span></h3><p class="pf-guide">${esc(bucket.def.guide)}</p>`;
+        if(blocks.length === 1) return `<div class="pf-group"><div class="pf-keep">${lead}${blocks[0]}${cautions}</div></div>`;
+        return `<div class="pf-group"><div class="pf-keep">${lead}${blocks[0]}</div>${blocks.slice(1, -1).join('')}<div class="pf-keep">${blocks[blocks.length - 1]}${cautions}</div></div>`;
       }).join('');
     }
         function editScoring(){ showLeft('gridPanel'); showControls('activeControls'); $('rightHeading').textContent='Edit Scoring'; $('rightSubhead').textContent=''; }
@@ -2004,7 +2100,7 @@
           <div class="print-card"><h2>Words with Miscues</h2><p class="print-missed-line">${missed}</p></div>
         </div>
         <div class="print-section print-card"><h2>Accuracy by Section</h2><table class="print-table print-section-table"><thead><tr><th>Section</th><th>Score</th><th>Accuracy</th><th>Level</th></tr></thead><tbody>${sectionRows}</tbody></table><p class="print-note">Strong control = 85%+ · Developing = 60–84% · Needs support = below 60%. Instructional guidance, not a normed benchmark.</p>${notAdminNote}</div>
-        <div class="print-section print-card print-page-break"><h2>Instructional Focus by Phonics Pattern</h2><p class="print-intro">These notes group miscues by the target phonics pattern so you can quickly see which spelling-sound correspondences may need more attention.</p>${patternPrintRows(r.details)}<p class="print-note">Use repeated patterns to guide instruction. A single word may appear in more than one note when more than one target pattern was assessed.</p></div>
+        <div class="print-section pf-section">${patternPrintRows(r.details, '<h2>Instructional Focus by Phonics Pattern</h2><p class="print-intro">These notes group miscues by the target phonics pattern so you can quickly see which spelling-sound correspondences may need more attention.</p>')}<p class="print-note pf-closing">Use repeated patterns to guide instruction. A single word may appear in more than one note when more than one target pattern was assessed.</p></div>
         <div class="print-section print-card"><h2>Teacher Notes</h2><p class="teacher-note-print">${notes}</p></div>
         <div class="print-note">This check screens decoding by phonics pattern using real and nonsense words. It is meant to guide instruction. Nonsense words are assessment items only; they are not words to teach.</div>
         <div class="print-footer"><span>Literacy Arcade • literacyarcade.com</span><span>Generated by the Phonics Knowledge Check</span></div>
