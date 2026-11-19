@@ -601,6 +601,39 @@
       .pattern-card .pattern-examples{gap:10px 6px}
       .pattern-card+.pattern-card{margin-top:12px}
     }
+
+    /* Stage B: on-screen focus areas as readable blocks; real/nonsense and miscue cards use the full width. */
+    @media screen{
+      .pattern-card h4 .fa-count{font-weight:600;font-size:.84rem;color:#6d6883;margin-left:2px}
+      .pattern-card .pattern-examples{display:grid;gap:10px;margin:2px 0 0}
+      .fa{border:1px solid var(--line);border-left:4px solid var(--line-blue);border-radius:10px;background:#fff;padding:10px 12px;display:grid;gap:5px}
+      .fa-family{border-left-color:var(--teal-dark);background:#f4fffd}
+      .fa-head{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+      .fa-status{font-weight:800;font-size:.78rem;line-height:1.2;border-radius:6px;padding:2px 8px;background:var(--lavender);color:#4d4a6d}
+      .fa-repeated .fa-status{background:var(--orange-pale);color:#7a5100}
+      .fa-supplemental .fa-status{background:var(--gray);color:#5c5875}
+      .fa-tag{font-weight:800;font-size:.72rem;line-height:1.2;border-radius:6px;padding:2px 7px;border:1px solid #b6e3df;background:#e8f8f6;color:#0f6f6a}
+      .fa-single .fa-tag{border-color:var(--line-blue);background:#f4f7fa;color:#4d4a6d}
+      .fa-title{font-weight:800;font-size:.95rem;line-height:1.3;color:var(--ink)}
+      .fa-note{font-weight:600;font-size:.82rem;color:#5c5875}
+      .fa-list{list-style:none;margin:2px 0 0;padding:0;display:grid;gap:4px}
+      .fa-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:1px 12px}
+      .fa-word{font-family:Lexend,Arial,sans-serif;font-weight:700;font-size:.9rem;color:var(--ink)}
+      .fa-detail{font-weight:600;font-size:.82rem;color:#5c5875}
+      .fa-support{border-top:1px dashed var(--line-blue);padding-top:6px;display:grid;gap:3px}
+      .fa-support-label{font-weight:800;font-size:.78rem;color:#6d6883}
+      .fa-support .fa-word{font-weight:600;color:#3d3a5c}
+      .fa-notes{border-left:3px solid #d8d2ee;padding-left:10px;display:grid;gap:4px}
+      .fa-notes p{margin:0}
+      #realNonsenseMetrics{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+      #realNonsenseMetrics .metric:nth-last-child(-n+2){border:0;padding-bottom:0}
+      /* Section score rows: the name column may shrink and the band moves under it on very narrow screens. */
+      .sec-result-row{grid-template-columns:minmax(0,1fr) auto auto}
+      @media(max-width:360px){
+        .sec-result-row{grid-template-columns:minmax(0,1fr) auto}
+        .sec-result-row .band-pill{grid-column:1/-1;justify-self:start}
+      }
+    }
   </style>
   <link rel="stylesheet" href="./firebase-tool-gate.css">
   <script type="module" src="./firebase-tool-gate.js"></script>
@@ -705,14 +738,14 @@
             </section>
 
             <!-- Real vs nonsense -->
-            <section class="results-card">
+            <section class="results-card full-span">
               <h3>Real vs Nonsense Words</h3>
               <div class="metric-list" id="realNonsenseMetrics"></div>
               <p class="pattern-note">Nonsense words provide supplemental evidence of phonics transfer. Interpret differences cautiously because familiarity and comfort with made-up-word tasks can affect performance.</p>
             </section>
 
             <!-- Missed words -->
-            <section class="results-card">
+            <section class="results-card full-span">
               <h3>Words with Miscues</h3>
               <ul class="miss-list" id="missedWords"></ul>
             </section>
@@ -1830,21 +1863,44 @@
     function bucketNotes(bucket){
       return [bucket.hasNonsense ? NONSENSE_NOTE : '', bucket.hasFamily ? FAMILY_NOTE : ''].filter(Boolean);
     }
+    // On-screen focus areas: status, correspondence or family, then one row per word, then supporting evidence.
+    function bucketHeadingParts(bucket){
+      const full = bucketHeading(bucket);
+      return { label: bucket.def.label, count: full.slice(bucket.def.label.length) };
+    }
+    function screenRow(bucket, area, d, shared){
+      const parts = [];
+      if(area.detailed && d.focus) parts.push(d.focus);
+      if(d.errorKind) parts.push(d.errorKind);
+      if(d.patternNote && !shared) parts.push(d.patternNote);
+      const mark = d.type === 'nonsense' && (bucket.tag === 'skipped' || bucket.tag === 'teacher_check' || (!area.focus && !area.real.length)) ? ' (nonsense word)' : '';
+      return `<li class="fa-row"><span class="fa-word">${esc(detailWordText(d) + mark)}</span>${parts.length ? `<span class="fa-detail">${esc(parts.join(' · '))}</span>` : ''}</li>`;
+    }
+    function renderAreaBlock(bucket, area){
+      const p = areaPieces(bucket, area);
+      const list = rows => `<ul class="fa-list">${rows.map(d => screenRow(bucket, area, d, !!p.sharedNote)).join('')}</ul>`;
+      const main = area.real.length ? area.real : area.nonsense;
+      const support = area.real.length && area.nonsense.length ? area.nonsense : [];
+      const supportBlock = support.length
+        ? `<div class="fa-support"><div class="fa-support-label">${p.focus ? 'Supporting nonsense-word evidence:' : 'Nonsense words:'}</div>${list(support)}</div>` : '';
+      const note = p.sharedNote ? `<div class="fa-note">${esc(p.sharedNote)}</div>` : '';
+      if(!p.focus) return `<div class="fa fa-plain">${list(main)}${note}${supportBlock}</div>`;
+      const status = p.label.replace(' (pattern family)', '');
+      const key = { 'Repeated possible focus':'repeated', 'Observed once':'once', 'Supplemental nonsense-word evidence':'supplemental' }[status] || 'other';
+      const repeated = key === 'repeated';
+      const sameCorr = repeated && !area.spansFamily;
+      const tag = area.spansFamily ? '<span class="fa-tag">Pattern family</span>' : (sameCorr ? '<span class="fa-tag">Same correspondence</span>' : '');
+      return `<div class="fa fa-${key}${area.spansFamily ? ' fa-family' : ' fa-single'}"><div class="fa-head"><span class="fa-status">${esc(status)}</span>${tag}</div>`
+        + `<div class="fa-title">${esc(p.focus)}</div>${note}${list(main)}${supportBlock}</div>`;
+    }
     function renderPatternNotes(details){
       if(!details.length) return '<p class="empty-small">No miscues to analyze.</p>';
       return buildFocusAreas(details).map(bucket => {
-        const chips = bucket.areas.map(area => {
-          const p = areaPieces(bucket, area);
-          const small = l => `<small>${esc(l)}</small>`;
-          // Label line first (when the area has a focus), then the words, then supporting evidence and cautions.
-          const labelLine = p.focus ? `${p.label}: ${p.focus}${p.sharedNote ? ` · ${p.sharedNote}` : ''}` : '';
-          const after = [];
-          if(!p.focus && p.sharedNote) after.push(p.sharedNote);
-          if(p.realWords && p.nonsenseWords) after.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
-          const cls = (bucket.tag === 'other' || bucket.tag === 'ending_miscue') ? 'pattern-chip chip-ok' : 'pattern-chip';
-          return `<span class="${cls}">${labelLine ? small(labelLine) + '<br>' : ''}${esc(p.realWords || p.nonsenseWords)}${after.length ? '<br>' + after.map(small).join('<br>') : ''}</span>`;
-        }).join('');
-        return `<div class="pattern-card"><h4>${esc(bucketHeading(bucket))}</h4><div class="pattern-examples">${chips}</div>${bucketNotes(bucket).map(n => `<p>${esc(n)}</p>`).join('')}<p>${bucket.def.guide}</p></div>`;
+        const h = bucketHeadingParts(bucket);
+        const blocks = bucket.areas.map(area => renderAreaBlock(bucket, area)).join('');
+        const notes = bucketNotes(bucket);
+        return `<div class="pattern-card"><h4>${esc(h.label)}<span class="fa-count">${esc(h.count)}</span></h4><div class="pattern-examples">${blocks}</div>`
+          + `${notes.length ? `<div class="fa-notes">${notes.map(n => `<p>${esc(n)}</p>`).join('')}</div>` : ''}<p>${bucket.def.guide}</p></div>`;
       }).join('');
     }
     function patternPrintRows(details){
