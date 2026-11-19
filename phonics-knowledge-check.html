@@ -628,6 +628,10 @@
       .fa-notes p{margin:0}
       #realNonsenseMetrics{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
       #realNonsenseMetrics .metric:nth-last-child(-n+2){border:0;padding-bottom:0}
+      /* Print Report check failures: a short message with a retry, shown only when the check cannot be completed. */
+      .print-status{margin-top:10px;border:1px solid #f0c9c9;border-left:4px solid var(--coral);border-radius:10px;background:var(--coral-pale);color:#8e2525;font-weight:800;font-size:.88rem;line-height:1.4;padding:10px 12px;display:grid;gap:8px}
+      .print-status[hidden]{display:none}
+      .print-status-retry{justify-self:start;min-height:36px;padding:7px 12px}
       /* Section score rows: the name column may shrink and the band moves under it on very narrow screens. */
       .sec-result-row{grid-template-columns:minmax(0,1fr) auto auto}
       @media(max-width:360px){
@@ -906,6 +910,7 @@
             <button class="btn lavender" id="editScoringCompleteBtn" type="button">Edit Scoring</button>
             <button class="btn secondary" id="newAssessmentBtn" type="button">New Assessment</button>
           </div>
+          <div id="printReportStatus" class="print-status" role="alert" hidden></div>
         </div>
       </aside>
     </div>
@@ -934,10 +939,107 @@
       guardAssessmentAccess('Phonics Knowledge Check');
     });
 
+    // Print Report: the Plus / Plus Family entitlement check lives in report-print-gate.js (shared with other
+    // assessments) and stays the only thing that decides who may print. This controller only makes the check
+    // reliable: it handles a failed module load, shows progress, blocks duplicate clicks, bounds the wait, and
+    // offers a retry. Every failure path ends without printing (fail closed).
+    class ReportGateError extends Error {
+      constructor(kind, cause){ super(kind); this.kind = kind; this.cause = cause; }
+    }
+    const REPORT_GATE_TIMEOUT_MS = 10000;
+    const REPORT_PRINT_ASSET_WAIT_MS = 4000;
+    const REPORT_GATE_MESSAGES = {
+      load: "We couldn't load the report-printing check. Check your connection, then try again.",
+      timeout: "We couldn't confirm your Plus access in time. Check your connection, then try again.",
+      print: "Your access was confirmed, but the report couldn't be prepared for printing. Please try again.",
+      unknown: "Something went wrong while checking your access. Please try again."
+    };
+    function createReportPrintController({ loadGate, printReport, ui, timeoutMs = REPORT_GATE_TIMEOUT_MS, timers }){
+      const t = timers || { set:(fn, ms) => setTimeout(fn, ms), clear:id => clearTimeout(id) };
+      let busy = false, generation = 0;
+      async function run(trigger){
+        if(busy) return 'ignored';          // rapid clicks while a check is running
+        busy = true;
+        // Each attempt owns its callback. It may print only while it is still the newest attempt and has not timed out or
+        // failed, so a callback from an abandoned attempt can never print or touch a newer one.
+        const mine = ++generation;
+        let aborted = false, timedOut = false, stage = 'load', timer;
+        ui.checking();
+        const timeout = new Promise((_, reject) => {
+          timer = t.set(() => { timedOut = true; aborted = true; reject(new ReportGateError(stage === 'load' ? 'load' : 'timeout')); }, timeoutMs);
+        });
+        let outcome = 'done';
+        try {
+          const work = (async () => {
+            let gate;
+            try { gate = await loadGate(); } catch(e){ throw new ReportGateError('load', e); }
+            if(!gate || typeof gate.guardReportPrint !== 'function') throw new ReportGateError('load');
+            stage = 'check';
+            let printError = null;
+            // The report is only built and printed from inside the gate's own paid-plan branch. After a timeout a late
+            // result can never print: the user has been told the check failed and must retry.
+            await gate.guardReportPrint(() => {
+              if(aborted || mine !== generation) return;
+              try { printReport(); } catch(e){ printError = e; }
+            }, trigger);
+            if(printError) throw new ReportGateError('print', printError);
+          })();
+          work.catch(() => {});             // a result that arrives after the timeout is ignored, not unhandled
+          await Promise.race([work, timeout]);
+          ui.ready();
+        } catch(e){
+          aborted = true;                   // a failed attempt's callback is dead from here on
+          outcome = e instanceof ReportGateError ? e.kind : 'unknown';
+          if(typeof console !== 'undefined') console.warn('Phonics Knowledge Check: Print Report did not complete (' + outcome + ').', e && e.cause ? e.cause : e);
+          ui.error(outcome, REPORT_GATE_MESSAGES[outcome] || REPORT_GATE_MESSAGES.unknown, () => run(trigger));
+        } finally {
+          t.clear(timer);
+          busy = false;
+        }
+        return outcome;
+      }
+      return { run, isBusy: () => busy };
+    }
+    // Used only after a failed load, so a retry fetches the module again instead of reusing a failed attempt.
+    let reportGateLoadFailures = 0;
+    function loadReportGate(){
+      const loading = reportGateLoadFailures
+        ? import(`./report-print-gate.js?retry=${reportGateLoadFailures}`)
+        : import('./report-print-gate.js');
+      return loading.catch(e => { reportGateLoadFailures++; throw e; });
+    }
+    const reportPrintUi = {
+      btn(){ return document.getElementById('printReportBtn'); },
+      note(){ return document.getElementById('printReportStatus'); },
+      label: 'Print Report',
+      restore(){
+        const b = this.btn(); if(!b) return;
+        b.disabled = false; b.removeAttribute('aria-busy'); b.textContent = this.label;
+      },
+      clearNote(){ const n = this.note(); if(n){ n.hidden = true; n.textContent = ''; } },
+      checking(){
+        const b = this.btn(); this.clearNote();
+        if(b){ b.disabled = true; b.setAttribute('aria-busy', 'true'); b.textContent = 'Checking access…'; }
+      },
+      ready(){ this.restore(); },
+      error(kind, message, retry){
+        this.restore();
+        const n = this.note(); if(!n) return;
+        n.hidden = false; n.textContent = '';
+        const text = document.createElement('span'); text.textContent = message + ' Your results are still on this page.';
+        const again = document.createElement('button'); again.type = 'button'; again.className = 'btn lavender print-status-retry'; again.textContent = 'Try again';
+        again.addEventListener('click', retry);
+        n.appendChild(text); n.appendChild(again);
+        again.focus();
+      }
+    };
+    const reportPrintController = createReportPrintController({
+      loadGate: loadReportGate,
+      printReport: () => printContent('report'),
+      ui: reportPrintUi
+    });
     function handlePrintReportClick(event){
-      import('./report-print-gate.js').then(({ guardReportPrint }) => {
-        guardReportPrint(() => printContent('report'), event.currentTarget);
-      });
+      reportPrintController.run(event.currentTarget);
     }
 
     const $ = id => document.getElementById(id);
@@ -2136,7 +2238,13 @@
             target.dataset.lexendLoaded = String(document.fonts.check('500 19pt Lexend'));
           })
         : Promise.resolve();
-      Promise.all([logoReady,fontsReady]).then(finishPrint).catch(finishPrint);
+      const assetsReady = Promise.all([logoReady,fontsReady]);
+      // The report is only printed once its logo and fonts are ready. If either stalls, print after a short bound rather
+      // than never opening the print dialog. (The student sheet keeps its original, unbounded wait.)
+      const waited = kind==='report'
+        ? Promise.race([assetsReady, new Promise(resolve=>setTimeout(resolve, REPORT_PRINT_ASSET_WAIT_MS))])
+        : assetsReady;
+      waited.then(finishPrint).catch(finishPrint);
     }
 
     /* ============================ WIRING ============================ */

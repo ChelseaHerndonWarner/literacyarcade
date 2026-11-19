@@ -1,4 +1,4 @@
-// Regression tests for the Phonics Knowledge Check analyzer and report data (Phases 1-4).
+// Regression tests for the Phonics Knowledge Check analyzer, report layout and Print Report reliability (Phases 1-5).
 // No dependencies. Run from the repo root:
 //   node tests/phonics-knowledge-check/analyzer.test.js
 // The page script is executed in a vm with a stubbed DOM, so the real analyzer code is tested.
@@ -39,7 +39,7 @@ ctx.window = ctx;
 vm.createContext(ctx);
 let code = pageScript.replace(/import\(\s*['"][^'"]+['"]\s*\)/g, 'Promise.resolve(new Proxy({}, { get: () => () => {} }))');
 const end = code.lastIndexOf('})();');
-code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces,bucketHeading,bucketNotes};\n' + code.slice(end);
+code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces,bucketHeading,bucketNotes,createReportPrintController};\n' + code.slice(end);
 vm.runInContext(code, ctx);
 const api = ctx.__api;
 const { state, ALL_WORDS, PHONICS_WORDS } = api;
@@ -91,6 +91,8 @@ const S1 = 'short-vowels-cvc', S2 = 'blends-short-vowels', S3 = 'digraphs-trigra
 const analyze = (sec, word, resp) => api.analyzeError(find(sec, word), resp, false);
 
 let passed = 0, failed = 0;
+const asyncTests = [];
+function atest(name, fn){ asyncTests.push([name, fn]); }   // run one after another before the summary
 function test(name, fn){
   try { fn(); passed++; console.log('ok    ' + name); }
   catch(e){ failed++; console.log('FAIL  ' + name + '\n      ' + (e.message || e).split('\n')[0]); }
@@ -808,5 +810,246 @@ test('C: no focus-area content is dropped from the printed output (every finding
   assert.strictEqual(rows, expected);
 });
 
-console.log(`\n${passed} passed, ${failed} failed`);
-process.exit(failed ? 1 : 0);
+/* ------------------------------ Stage D: Print Report reliability and authorization ------------------------------ */
+// The real report-print-gate.js is executed here with mocked Firebase modules and a minimal fake DOM, so the
+// entitlement decisions under test are the shipped ones. No live Firebase call is made by any of these tests.
+const GATE_SRC = fs.readFileSync(path.join(__dirname, '..', '..', 'report-print-gate.js'), 'utf8');
+const tick = async (n = 8) => { for(let i = 0; i < n; i++) await new Promise(r => setImmediate(r)); };
+function fakeTimers(){
+  const q = []; let id = 0;
+  return { set(fn, ms){ q.push({ id: ++id, fn, ms }); return id; }, clear(i){ const k = q.findIndex(x => x.id === i); if(k >= 0) q.splice(k, 1); },
+    fire(){ const t = q.shift(); if(t) t.fn(); return !!t; }, pending: () => q.length };
+}
+// mode: plus | family | free | free-nodoc | signed-out | auth-error | auth-hang (a Plus account whose sign-in resolves late) | fs-error | fs-hang
+function loadMockGate(mode){
+  const modals = [], track = [];
+  const mkEl = () => ({ _html:'', set innerHTML(v){ this._html = v; }, get innerHTML(){ return this._html; }, style:{}, textContent:'',
+    appendChild(){}, addEventListener(){}, removeEventListener(){}, remove(){}, focus(){}, querySelector(){ return mkEl(); }, setAttribute(){} });
+  const document = { head:{ appendChild(){} }, body:{ appendChild(el){ if(/role="dialog"/.test(el.innerHTML)) modals.push((el.innerHTML.match(/<h2 id="[^"]*-title">([^<]*)</) || [])[1]); } },
+    createElement: mkEl, getElementById: () => mkEl(), addEventListener(){}, removeEventListener(){}, activeElement:null };
+  const win = { location:{ pathname:'/phonics-knowledge-check.html', search:'' }, gtag:(a, name) => track.push(name) };
+  let authCb; const user = { uid:'teacher-1' };
+  const onAuthStateChanged = (auth, next, err) => {
+    authCb = next;
+    if(mode === 'auth-hang') return;
+    if(mode === 'auth-error') return void Promise.resolve().then(() => err(new Error('auth init failed')));
+    Promise.resolve().then(() => next(mode === 'signed-out' ? null : user));
+  };
+  const getDoc = () => {
+    if(mode === 'fs-error') return Promise.reject(new Error('permission-denied'));
+    if(mode === 'fs-hang') return new Promise(() => {});
+    if(mode === 'free-nodoc') return Promise.resolve({ exists: () => false, data: () => ({}) });
+    return Promise.resolve({ exists: () => true, data: () => ({ plan: { plus:'plus', family:'family', 'auth-hang':'plus' }[mode] || 'free' }) });
+  };
+  const body = GATE_SRC.replace(/^import .*$/gm, '').replace('export { guardReportPrint, getEntitlement };', 'return { guardReportPrint, getEntitlement };');
+  const gate = new Function('auth', 'db', 'onAuthStateChanged', 'doc', 'getDoc', 'document', 'window', 'setTimeout', 'console', body)(
+    {}, {}, onAuthStateChanged, () => ({}), getDoc, document, win, () => 0, { warn(){} });
+  return { gate, modals, track, signInLate(){ authCb(user); } };
+}
+function pageController(opts){
+  const events = [], printed = []; const timers = fakeTimers(); let loads = 0;
+  const ui = { checking(){ events.push('checking'); }, ready(){ events.push('ready'); }, error(kind, msg, retry){ events.push('error:' + kind); ui.last = { kind, msg, retry }; } };
+  const controller = api.createReportPrintController({
+    loadGate: opts.loadGate || (() => { loads++; return Promise.resolve(opts.gate); }),
+    printReport: opts.printReport || (() => printed.push('report')), ui, timers, timeoutMs: 10000 });
+  return { controller, events, printed, timers, ui, loads: () => loads };
+}
+const GATE_PAID = 'print', MODAL_SIGNED_OUT = 'Print complete reports with Literacy Arcade Plus', MODAL_FREE = 'Upgrade to Plus to print complete reports', MODAL_UNKNOWN = 'We could not confirm your Plus access';
+async function click(c){ const p = c.controller.run({}); await tick(); return p; }
+
+for(const plan of ['plus', 'family']){
+  atest(`D: signed-in ${plan === 'plus' ? 'Plus' : 'Plus Family'} account prints the report once`, async () => {
+    const m = loadMockGate(plan), c = pageController({ gate: m.gate });
+    assert.strictEqual(await click(c), 'done'); assert.deepStrictEqual([...c.printed], ['report']);
+    assert.deepStrictEqual([...c.events], ['checking', 'ready']); assert.strictEqual(m.modals.length, 0);
+  });
+}
+atest('D: signed-in Free account gets the upgrade message and cannot print', async () => {
+  for(const mode of ['free', 'free-nodoc']){
+    const m = loadMockGate(mode), c = pageController({ gate: m.gate });
+    assert.strictEqual(await click(c), 'done'); assert.strictEqual(c.printed.length, 0);
+    assert.deepStrictEqual([...m.modals], [MODAL_FREE]); assert.deepStrictEqual([...c.events], ['checking', 'ready']);
+  }
+});
+atest('D: signed-out user gets the sign-in message and cannot print', async () => {
+  const m = loadMockGate('signed-out'), c = pageController({ gate: m.gate });
+  assert.strictEqual(await click(c), 'done'); assert.strictEqual(c.printed.length, 0);
+  assert.deepStrictEqual([...m.modals], [MODAL_SIGNED_OUT]); assert.deepStrictEqual([...c.events], ['checking', 'ready']);
+});
+atest('D: Firebase authentication failure fails closed with the existing "could not confirm" message', async () => {
+  const m = loadMockGate('auth-error'), c = pageController({ gate: m.gate });
+  assert.strictEqual(await click(c), 'done'); assert.strictEqual(c.printed.length, 0); assert.deepStrictEqual([...m.modals], [MODAL_UNKNOWN]);
+  assert.strictEqual(c.events[c.events.length - 1], 'ready', 'button restored');
+});
+atest('D: Firestore entitlement lookup failure fails closed with the existing "could not confirm" message', async () => {
+  const m = loadMockGate('fs-error'), c = pageController({ gate: m.gate });
+  assert.strictEqual(await click(c), 'done'); assert.strictEqual(c.printed.length, 0); assert.deepStrictEqual([...m.modals], [MODAL_UNKNOWN]);
+});
+atest('D: an authentication timeout stops waiting, shows a retryable error and never prints', async () => {
+  const m = loadMockGate('auth-hang'), c = pageController({ gate: m.gate });
+  const p = c.controller.run({}); await tick();
+  assert.strictEqual(c.timers.pending(), 1, 'a timeout is armed'); assert.deepStrictEqual([...c.events], ['checking']); assert(c.controller.isBusy());
+  c.timers.fire(); assert.strictEqual(await p, 'timeout');
+  assert.deepStrictEqual([...c.events], ['checking', 'error:timeout']); assert.strictEqual(c.ui.last.kind, 'timeout'); assert(/couldn't confirm your Plus access in time/.test(c.ui.last.msg));
+  assert(!c.controller.isBusy(), 'button can be used again'); assert.strictEqual(c.printed.length, 0);
+  // a late sign-in result must not print: the user was told the check failed
+  m.signInLate(); await tick(12); assert.strictEqual(c.printed.length, 0, 'a late paid result does not print');
+});
+atest('D: a Firestore lookup that never resolves times out the same way', async () => {
+  const m = loadMockGate('fs-hang'), c = pageController({ gate: m.gate });
+  const p = c.controller.run({}); await tick(); c.timers.fire();
+  assert.strictEqual(await p, 'timeout'); assert.strictEqual(c.printed.length, 0); assert.strictEqual(c.ui.last.kind, 'timeout');
+});
+atest('D: a timed-out check can be retried and then succeeds for a paid account', async () => {
+  const hang = loadMockGate('auth-hang'), ok = loadMockGate('plus'); let first = true;
+  const c = pageController({ loadGate: () => Promise.resolve(first ? hang.gate : ok.gate) });
+  const p = c.controller.run({}); await tick(); c.timers.fire(); await p;
+  first = false; const retry = c.ui.last.retry; const r = retry(); await tick(); assert.strictEqual(await r, 'done');
+  assert.deepStrictEqual([...c.printed], ['report']); assert.deepStrictEqual([...c.events], ['checking', 'error:timeout', 'checking', 'ready']);
+});
+atest('D: a dynamic import failure is handled: message, retry, nothing printed, button restored', async () => {
+  let n = 0; const ok = loadMockGate('plus');
+  const c = pageController({ loadGate: () => (++n === 1 ? Promise.reject(new Error('Failed to fetch dynamically imported module')) : Promise.resolve(ok.gate)) });
+  assert.strictEqual(await click(c), 'load'); assert.strictEqual(c.printed.length, 0);
+  assert.deepStrictEqual([...c.events], ['checking', 'error:load']); assert(/couldn't load the report-printing check/.test(c.ui.last.msg)); assert(!c.controller.isBusy());
+  const r = c.ui.last.retry(); await tick(); assert.strictEqual(await r, 'done'); assert.deepStrictEqual([...c.printed], ['report']);
+});
+atest('D: a module that loads but lacks the gate function is treated as a load failure (fail closed)', async () => {
+  for(const bad of [{}, null, { guardReportPrint: 'nope' }]){
+    const c = pageController({ gate: bad }); assert.strictEqual(await click(c), 'load'); assert.strictEqual(c.printed.length, 0);
+  }
+});
+atest('D: a stalled module load is reported as a load problem after the timeout', async () => {
+  const c = pageController({ loadGate: () => new Promise(() => {}) });
+  const p = c.controller.run({}); await tick(); c.timers.fire(); assert.strictEqual(await p, 'load'); assert.strictEqual(c.printed.length, 0);
+});
+atest('D: a gate that throws fails closed with a generic retryable error', async () => {
+  const c = pageController({ gate: { guardReportPrint: () => Promise.reject(new Error('boom')) } });
+  assert.strictEqual(await click(c), 'unknown'); assert.strictEqual(c.printed.length, 0); assert.strictEqual(c.ui.last.kind, 'unknown');
+});
+atest('D: authorized but the report cannot be prepared: clear message, no success claimed', async () => {
+  const m = loadMockGate('plus'), c = pageController({ gate: m.gate, printReport: () => { throw new Error('render failed'); } });
+  assert.strictEqual(await click(c), 'print'); assert.deepStrictEqual([...c.events], ['checking', 'error:print']); assert(/access was confirmed, but the report couldn't be prepared/.test(c.ui.last.msg));
+});
+atest('D: rapid clicks run one check and one print; extra clicks are ignored', async () => {
+  const m = loadMockGate('plus'), c = pageController({ gate: m.gate });
+  const results = await Promise.all([1, 2, 3, 4, 5].map(() => c.controller.run({}))); await tick();
+  assert.deepStrictEqual([...results].sort(), ['done', 'ignored', 'ignored', 'ignored', 'ignored']);
+  assert.strictEqual(c.loads(), 1); assert.deepStrictEqual([...c.printed], ['report']); assert.deepStrictEqual([...c.events], ['checking', 'ready']);
+  assert.strictEqual(await click(c), 'done'); assert.strictEqual(c.printed.length, 2, 'a later click works normally');
+});
+atest('D: clicks during a hung check are ignored until it times out', async () => {
+  const m = loadMockGate('auth-hang'), c = pageController({ gate: m.gate });
+  const first = c.controller.run({}); await tick();
+  assert.strictEqual(await c.controller.run({}), 'ignored'); assert.strictEqual(c.loads(), 1);
+  c.timers.fire(); await first; assert.strictEqual(c.timers.pending(), 0, 'timer cleaned up');
+});
+atest('D: every non-paid outcome across all scenarios leaves the report unprinted', async () => {
+  for(const mode of ['free', 'free-nodoc', 'signed-out', 'auth-error', 'fs-error']){
+    const m = loadMockGate(mode), c = pageController({ gate: m.gate }); await click(c); assert.strictEqual(c.printed.length, 0, mode);
+  }
+  for(const mode of ['auth-hang', 'fs-hang']){
+    const m = loadMockGate(mode), c = pageController({ gate: m.gate }); const p = c.controller.run({}); await tick(); c.timers.fire(); await p; assert.strictEqual(c.printed.length, 0, mode);
+  }
+});
+// A gate whose callback is captured, so a test can invoke the authorized-print callback itself at any moment.
+function capturingGate(){
+  const calls = [];
+  return { calls, gate: { guardReportPrint(cb){ return new Promise((resolve, reject) => calls.push({ cb, resolve, reject })); } } };
+}
+atest('D: the authorized-print callback invoked AFTER the timeout does not print', async () => {
+  const g = capturingGate(), c = pageController({ gate: g.gate });
+  const p = c.controller.run({}); await tick(); assert.strictEqual(g.calls.length, 1);
+  c.timers.fire(); assert.strictEqual(await p, 'timeout');
+  g.calls[0].cb(); await tick();                       // the shared gate decides "paid" 11 seconds in
+  assert.strictEqual(c.printed.length, 0, 'stale callback must not print');
+  g.calls[0].resolve(); await tick();
+  assert.deepStrictEqual([...c.events], ['checking', 'error:timeout'], 'and it does not touch the UI');
+});
+atest('D: a retry after a timeout owns the next attempt; the original callback cannot print or affect it', async () => {
+  const g = capturingGate(), c = pageController({ gate: g.gate });
+  const p1 = c.controller.run({}); await tick(); c.timers.fire(); await p1;
+  const p2 = c.ui.last.retry(); await tick(); assert.strictEqual(g.calls.length, 2); assert(c.controller.isBusy());
+  const eventsBefore = [...c.events];
+  g.calls[0].cb(); g.calls[0].resolve(); await tick();
+  assert.strictEqual(c.printed.length, 0, 'stale callback does not print'); assert(c.controller.isBusy(), 'new attempt still running');
+  assert.deepStrictEqual([...c.events], eventsBefore, 'stale callback leaves the UI alone');
+  g.calls[1].cb(); g.calls[1].resolve(); assert.strictEqual(await p2, 'done');
+  assert.deepStrictEqual([...c.printed], ['report'], 'only the current attempt printed, once');
+  g.calls[0].cb(); await tick(); assert.strictEqual(c.printed.length, 1, 'the stale callback still cannot print afterwards');
+});
+atest('D: a callback from an attempt that failed with an error cannot print later', async () => {
+  const g = capturingGate(), c = pageController({ gate: g.gate });
+  const p = c.controller.run({}); await tick(); g.calls[0].reject(new Error('gate blew up')); assert.strictEqual(await p, 'unknown');
+  g.calls[0].cb(); await tick(); assert.strictEqual(c.printed.length, 0);
+});
+atest('D: a callback from an attempt superseded by a newer one cannot print', async () => {
+  const g = capturingGate(), c = pageController({ gate: g.gate });
+  const p1 = c.controller.run({}); await tick(); g.calls[0].resolve(); await p1;   // attempt 1 ended without printing (e.g. a modal)
+  const p2 = c.controller.run({}); await tick();
+  g.calls[0].cb(); await tick(); assert.strictEqual(c.printed.length, 0);
+  g.calls[1].cb(); g.calls[1].resolve(); await p2; assert.deepStrictEqual([...c.printed], ['report']);
+});
+atest('D: the shared gate\'s own "Try again" (same attempt, still current) can still print after its modal', async () => {
+  const g = capturingGate(), c = pageController({ gate: g.gate });
+  const p = c.controller.run({}); await tick(); g.calls[0].resolve(); assert.strictEqual(await p, 'done');   // gate showed its "could not confirm" modal
+  g.calls[0].cb(); await tick(); assert.deepStrictEqual([...c.printed], ['report'], 'the modal retry path is preserved');
+});
+atest('D: no report is built or printed unless the gate invokes the callback (the 4s asset wait lives only behind it)', async () => {
+  for(const mode of ['free', 'free-nodoc', 'signed-out', 'auth-error', 'fs-error']){
+    const m = loadMockGate(mode); let built = 0; const c = pageController({ gate: m.gate, printReport: () => { built++; } });
+    await click(c); assert.strictEqual(built, 0, mode + ': printContent (and its 4s logo wait) is never reached');
+  }
+  for(const mode of ['auth-hang', 'fs-hang']){
+    const m = loadMockGate(mode); let built = 0; const c = pageController({ gate: m.gate, printReport: () => { built++; } });
+    const p = c.controller.run({}); await tick(); c.timers.fire(); await p; assert.strictEqual(built, 0, mode);
+  }
+});
+test('D: the 4-second logo/font bound exists only inside printContent, which is reached only from the gate callback', () => {
+  const printBody = pageScript.slice(pageScript.indexOf('function printContent(kind)'), pageScript.indexOf('/* ============================ WIRING'));
+  const uses = pageScript.split('REPORT_PRINT_ASSET_WAIT_MS').length - 1;
+  assert.strictEqual(uses, 2, 'declared once and used once');
+  assert.strictEqual(printBody.split('REPORT_PRINT_ASSET_WAIT_MS').length - 1, 1, 'the only use is inside printContent');
+  assert.strictEqual((pageScript.match(/printContent\('report'\)/g) || []).length, 1);
+  assert(/gate\.guardReportPrint\(\(\) => \{\s*if\(aborted \|\| mine !== generation\) return;\s*try \{ printReport\(\); \}/.test(pageScript), 'printReport is called only inside the gate callback, behind the attempt check');
+  assert(!/printContent\('report'\)/.test(printBody), 'printContent never starts a report print by itself');
+});
+test('D: the page wires Print Report through the controller and Print Student Sheet stays ungated', () => {
+  const script = pageScript;
+  assert(/function handlePrintReportClick\(event\)\{\s*reportPrintController\.run\(event\.currentTarget\);\s*\}/.test(script));
+  assert.strictEqual((script.match(/printContent\('report'\)/g) || []).length, 1, 'the report is only printed from the gate callback');
+  assert(/printReport: \(\) => printContent\('report'\)/.test(script));
+  const sheet = script.slice(script.indexOf("$('printSheetBtn').addEventListener"), script.indexOf("$('startAssessmentBtn').addEventListener"));
+  assert(/printContent\('student'\)/.test(sheet)); assert(!/guardReportPrint|reportPrintController|report-print-gate/.test(sheet));
+  assert(/\$\('printReportBtn'\)\.addEventListener\('click', handlePrintReportClick\)/.test(script));
+});
+test('D: the button shows "Checking access…", is disabled during the check and is restored afterwards', () => {
+  const script = pageScript;
+  assert(/b\.disabled = true; b\.setAttribute\('aria-busy', 'true'\); b\.textContent = 'Checking access…'/.test(script));
+  assert(/b\.disabled = false; b\.removeAttribute\('aria-busy'\); b\.textContent = this\.label/.test(script));
+  assert(/id="printReportStatus" class="print-status" role="alert" hidden/.test(html), 'status region is hidden until a check fails');
+  assert(/REPORT_GATE_TIMEOUT_MS = 10000/.test(script));
+});
+test('D: the report waits only a bounded time for its logo and fonts; the student sheet path keeps its original wait', () => {
+  const body = pageScript.slice(pageScript.indexOf('function printContent(kind)'), pageScript.indexOf('/* ============================ WIRING'));
+  assert(/REPORT_PRINT_ASSET_WAIT_MS = 4000/.test(pageScript));
+  assert(/kind==='report'\s*\?\s*Promise\.race\(\[assetsReady, new Promise\(resolve=>setTimeout\(resolve, REPORT_PRINT_ASSET_WAIT_MS\)\)\]\)\s*:\s*assetsReady/.test(body));
+  assert(/waited\.then\(finishPrint\)\.catch\(finishPrint\)/.test(body));
+  assert(/Promise\.all\(\[logoReady,fontsReady\]\)/.test(body));
+});
+test('D: the shared authentication modules are unchanged (the report check is still independent of the assessment gate)', () => {
+  const sha = f => crypto.createHash('sha1').update(fs.readFileSync(path.join(__dirname, '..', '..', f))).digest('hex');
+  assert.strictEqual(sha('report-print-gate.js'), 'f097e19e0456b49dd6bf32f62396629bd2c7457d');
+  assert.strictEqual(sha('assessment-use-guard.js'), '460a77430bee9ecade1ebbbb746be73eaf376449');
+  assert.strictEqual(sha('firebase-config.js'), '53c071717ed6cf8678f1427e684e428f3b34d7e5');
+  assert(/isPaidPlan[\s\S]{0,200}'plus'[\s\S]{0,40}'family'/.test(GATE_SRC), 'only plus and family are paid plans');
+});
+
+(async () => {
+  for(const [name, fn] of asyncTests){
+    try { await fn(); passed++; console.log('ok    ' + name); }
+    catch(e){ failed++; console.log('FAIL  ' + name + '\n      ' + (e.message || e).split('\n')[0]); }
+  }
+  console.log(`\n${passed} passed, ${failed} failed`);
+  process.exit(failed ? 1 : 0);
+})();
