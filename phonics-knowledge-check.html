@@ -1220,6 +1220,47 @@
     // Per-target results for one response: one entry for every assessed target
     // (primary / secondary / tertiary), each marked preserved or not. `r` is the
     // already-cleaned response (letters only).
+    // ---- Pattern families -------------------------------------------------------------
+    // Related correspondences that share one instructional idea. Used only to group missed real-word
+    // evidence; the specific spelling, word and error type stay attached to every finding.
+    const FINAL_BLENDS = new Set(['lk','lp','mp','nd','sk','st']);
+    const S_BLENDS = new Set(['sp','sl','st']);
+    const L_BLENDS = new Set(['pl','gl']);
+    const R_BLENDS = new Set(['gr','tr']);
+    const THREE_BLENDS = new Set(['str','spl','spr','scr']);
+    const SHORT_VOWEL_PHONEMES = new Set(['/ă/','/ĕ/','/ĭ/','/ŏ/','/ŭ/']);
+    function familyFor(item, t){
+      const g = normPG(t.grapheme), ph = t.phoneme || '', w = cleanLetters(item.word);
+      if(['er','ir','ur'].includes(g) && ph === '/er/') return { key:'er', label:'r-controlled /er/ (er, ir, ur)' };
+      if(['oi','oy'].includes(g)) return { key:'oi', label:'/oi/ diphthong (oi, oy)' };
+      if(['aw','au'].includes(g)) return { key:'aw', label:'/aw/ vowel (aw, au)' };
+      if(['ou','ow'].includes(g) && ph === '/ow/') return { key:'ow', label:'/ow/ diphthong (ou, ow)' };
+      if(g.endsWith('_e')) return { key:'silent-e', label:'Silent-e (VCe) vowel pattern' };
+      if(['sh','ch','th'].includes(g)) return { key:`digraph-${g}`, label:`${g} digraph (initial and final)` };
+      if(FINAL_BLENDS.has(g) && w.endsWith(g)) return { key:'final-blends', label:'Final consonant blends' };
+      if(S_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-s-blends', label:'Initial s-blends' };
+      if(L_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-l-blends', label:'Initial l-blends' };
+      if(R_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-r-blends', label:'Initial r-blends' };
+      if(THREE_BLENDS.has(g) && w.startsWith(g)) return { key:'initial-three-blends', label:'Initial three-consonant blends' };
+      if(g.length === 1 && VOWELS.has(g) && SHORT_VOWEL_PHONEMES.has(ph)) return { key:`short-${g}`, label:`Short ${g} ${ph}` };
+      return null;
+    }
+    // A correspondence is a grapheme plus the sound it represents. The same letters with a different
+    // sound (ew /ū/ vs ew /ōō/, ow /ō/ vs ow /ow/) are different correspondences.
+    const corrKey = t => `${normPG(t.grapheme)}|${t.phoneme || ''}`;
+    function corrLabelOf(t){
+      const g = normPG(t.grapheme), ph = t.phoneme || '';
+      if(g.length === 1 && VOWELS.has(g) && SHORT_VOWEL_PHONEMES.has(ph)) return `${g} spelling for short ${g} ${ph}`;
+      return `${graphemeLabel(g)} spelling for ${ph}`.trim();
+    }
+    function errorKindOf(item, r){
+      const { tReg, rReg } = alignChange(cleanLetters(item.word), r);
+      if(!tReg && !rReg) return '';
+      if(!rReg) return 'letters omitted';
+      if(!tReg) return 'letters added';
+      return tReg !== rReg && stripVowels(tReg) === stripVowels(rReg) ? 'vowel changed' : 'letters changed';
+    }
+
     function analyzeTargets(item, r){
       return [
         ['primary', item.primaryGrapheme],
@@ -1233,6 +1274,7 @@
           role,
           grapheme,
           kind: vowelLike ? 'vowel' : 'consonant',
+          phoneme,
           focus: focusFor(item, role),
           status: graphemeStatus(item, r, grapheme, phoneme)
         };
@@ -1335,7 +1377,11 @@
           return {
             tag: m.kind === 'vowel' ? 'phonics_vowel' : 'phonics_consonant',
             focus: (m.role === 'primary' && item.reportFocus) || m.focus,
-            patternNote: notes.length ? notes.join(' · ') : null
+            patternNote: notes.length ? notes.join(' · ') : null,
+            family: familyFor(item, m),
+            corr: corrKey(m),
+            corrLabel: corrLabelOf(m),
+            errorKind: errorKindOf(item, r)
           };
         });
         return { ...findings[0], patternPreserved:false, targets, findings };
@@ -1705,6 +1751,7 @@
     }
     // Groups miscues into focus areas per finding type. Real and nonsense words are kept in
     // separate lists on each focus area; only real words decide the strength of the finding.
+    const FAMILY_CAUTION = 'Related spellings in this family were missed; this does not mean every spelling in the family is unknown';
     function buildFocusAreas(details){
       const byTag = {};
       details.forEach(d => {
@@ -1712,12 +1759,15 @@
         const findings = d.findings && d.findings.length ? d.findings : [{ tag:d.tag, focus:d.focus, patternNote:d.patternNote }];
         findings.forEach(f => {
           const tag = f.tag || 'other';
-          const key = focusGroupKey(f.focus);
+          // Findings in a pattern family share one focus area; everything else groups by specific focus.
+          const key = f.family ? `family:${f.family.key}` : (f.corr ? `corr:${f.corr}` : focusGroupKey(f.focus));
           const bucket = byTag[tag] || (byTag[tag] = { tag, def:PAT[tag] || {label:tag, guide:''}, areas:{}, wordIds:new Set(), findings:0 });
-          const area = bucket.areas[key] || (bucket.areas[key] = { key, focus: f.focus || null, real:[], nonsense:[] });
-          const entry = { ...d, tag, focus:f.focus, patternNote:f.patternNote };
+          const area = bucket.areas[key] || (bucket.areas[key] = { key, family:f.family || null, focus: f.focus || null, real:[], nonsense:[], specifics:new Set(), realSpecifics:new Set(), realCorr:new Set(), corrLabel:f.corrLabel || null });
+          const entry = { ...d, tag, focus:f.focus, patternNote:f.patternNote, errorKind:f.errorKind || '', corr:f.corr || '' };
           // Display the real-word focus text when there is one; nonsense wording only if no real word is in the area.
           if(d.type !== 'nonsense' && !area.real.length) area.focus = f.focus || null;
+          area.specifics.add(focusGroupKey(f.focus));
+          if(d.type !== 'nonsense'){ area.realSpecifics.add(focusGroupKey(f.focus)); if(f.corr) area.realCorr.add(f.corr); }
           (d.type === 'nonsense' ? area.nonsense : area.real).push(entry);
           bucket.wordIds.add(d.item ? d.item.id : d.word);
           bucket.findings++;
@@ -1725,14 +1775,27 @@
       });
       return Object.values(byTag)
         .sort((a,b) => (a.def.order||99) - (b.def.order||99))
-        .map(b => ({ tag:b.tag, def:b.def, areas:Object.values(b.areas), words:b.wordIds.size, findings:b.findings }));
+        .map(b => ({ tag:b.tag, def:b.def, areas:Object.values(b.areas).map(area => {
+          // Real-word evidence decides how an area is framed. Family framing (and its caution) is used only when
+          // two or more different correspondences in the family were missed; the same correspondence missed in
+          // several positions, sections or contexts is one correspondence-level finding.
+          const realWords = new Set(area.real.map(e => e.word)).size;
+          const spansFamily = !!area.family && realWords >= 2 && area.realCorr.size > 1;
+          const sameCorrSpan = realWords >= 2 && area.realCorr.size === 1 && area.realSpecifics.size > 1;
+          // Any area holding more than one specific correspondence or context keeps each word's own spelling and error type.
+          const detailed = area.specifics.size > 1;
+          const focus = spansFamily ? area.family.label
+            : (sameCorrSpan && area.corrLabel ? `${area.corrLabel} (across positions or contexts)` : area.focus);
+          return { ...area, focus, spansFamily, detailed };
+        }), words:b.wordIds.size, findings:b.findings }));
     }
     // Strength comes from real-word evidence only; nonsense words can support but never raise it.
     function areaLabel(tag, area){
       if(tag === 'skipped') return 'Target pattern';
       if(tag === 'teacher_check') return 'Teacher check';
-      if(area.real.length >= 2) return 'Repeated possible focus';
-      if(area.real.length === 1) return 'Observed once';
+      const realWords = new Set(area.real.map(e => e.word)).size;
+      if(realWords >= 2) return 'Repeated possible focus';
+      if(realWords === 1) return 'Observed once';
       return area.nonsense.length === 1 ? 'Observed once' : 'Observed in nonsense words only';
     }
     // Item-specific notes: shown once when every word shares the same note, otherwise next to each word.
@@ -1740,8 +1803,11 @@
       const all = [...area.real, ...area.nonsense];
       const noteOf = d => d.patternNote || (bucket.tag === 'other' ? 'Target phonics pattern was preserved' : '');
       const notes = all.map(noteOf);
-      const shared = notes.length && notes.every(n => n && n === notes[0]) ? notes[0] : '';
-      const text = d => detailWordText(d) + (!shared && noteOf(d) ? ` (${noteOf(d)})` : '');
+      const shared = !area.detailed && notes.length && notes.every(n => n && n === notes[0]) ? notes[0] : '';
+      // In a family area each word keeps its own spelling, error type and note.
+      const text = d => detailWordText(d) + (area.detailed
+        ? ` (${[d.focus, d.errorKind, noteOf(d)].filter(Boolean).join(' · ')})`
+        : (!shared && noteOf(d) ? ` (${noteOf(d)})` : ''));
       return {
         label: areaLabel(bucket.tag, area),
         focus: area.focus,
@@ -1749,6 +1815,7 @@
         nonsenseWords: area.nonsense.map(text).join(', '),
         sharedNote: shared,
         nonsenseOnly: area.real.length === 0 && area.nonsense.length > 0,
+        familyCaution: !!area.spansFamily,
         caution: area.nonsense.length > 0 && bucket.tag !== 'other' && bucket.tag !== 'ending_miscue'
       };
     }
@@ -1762,15 +1829,17 @@
       return buildFocusAreas(details).map(bucket => {
         const chips = bucket.areas.map(area => {
           const p = areaPieces(bucket, area);
-          const head = p.focus ? `${p.label}: ${p.focus}` : '';
-          const lines = [];
-          if(head || p.sharedNote) lines.push(head + (p.sharedNote ? `${head ? ' · ' : ''}${p.sharedNote}` : ''));
-          if(p.realWords && p.nonsenseWords) lines.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
-          if(p.nonsenseOnly) lines.push('Nonsense-word evidence only');
-          if(p.caution) lines.push(NONSENSE_CAUTION);
-          const small = lines.map(l => `<small>${esc(l)}</small>`).join('<br>');
+          const small = l => `<small>${esc(l)}</small>`;
+          // Label line first (when the area has a focus), then the words, then supporting evidence and cautions.
+          const labelLine = p.focus ? `${p.label}: ${p.focus}${p.sharedNote ? ` · ${p.sharedNote}` : ''}` : '';
+          const after = [];
+          if(!p.focus && p.sharedNote) after.push(p.sharedNote);
+          if(p.realWords && p.nonsenseWords) after.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
+          if(p.nonsenseOnly) after.push('Nonsense-word evidence only');
+          if(p.caution) after.push(NONSENSE_CAUTION);
+          if(p.familyCaution) after.push(FAMILY_CAUTION);
           const cls = (bucket.tag === 'other' || bucket.tag === 'ending_miscue') ? 'pattern-chip chip-ok' : 'pattern-chip';
-          return `<span class="${cls}">${esc(p.realWords || p.nonsenseWords)}${small ? '<br>' + small : ''}</span>`;
+          return `<span class="${cls}">${labelLine ? small(labelLine) + '<br>' : ''}${esc(p.realWords || p.nonsenseWords)}${after.length ? '<br>' + after.map(small).join('<br>') : ''}</span>`;
         }).join('');
         return `<div class="pattern-card"><h4>${esc(bucketHeading(bucket))}</h4><div class="pattern-examples">${chips}</div><p>${bucket.def.guide}</p></div>`;
       }).join('');
@@ -1787,7 +1856,7 @@
           if(p.realWords && p.nonsenseWords) parts.push(p.focus ? `Supporting nonsense-word evidence: ${p.nonsenseWords}` : `Nonsense words: ${p.nonsenseWords}`);
           if(p.nonsenseOnly) parts.push('Nonsense-word evidence only');
           if(p.caution) parts.push(NONSENSE_CAUTION);
-          return `<div class="print-focus-item"><strong>${esc(title)}</strong>${parts.length ? `<span>${esc(parts.join(' · '))}</span>` : ''}</div>`;
+          return `<div class="print-focus-item"><strong>${esc(title)}</strong>${parts.length ? `<span>${esc(parts.join(' · '))}</span>` : ''}${p.familyCaution ? `<span>${esc(FAMILY_CAUTION)}</span>` : ''}</div>`;
         }).join('');
         return `<div class="print-focus-group"><h3>${esc(bucketHeading(bucket))}</h3><p>${esc(bucket.def.guide)}</p>${rows}</div>`;
       }).join('');
