@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const DISMISS_KEY = 'literacyArcadeWhatsNewCustomListsDismissedV1';
+  const DISMISS_KEY = 'literacyArcadeWhatsNewPhonicsCheckDismissedV1';
 
   function isDismissed() {
     try { return localStorage.getItem(DISMISS_KEY) === '1'; }
@@ -23,9 +23,8 @@
     banner.setAttribute('aria-label', "What's new at Literacy Arcade");
     banner.innerHTML = `
       <div class="la-whats-new__inner">
-        <p><strong>New:</strong> Add your own spelling lists to
-          <a href="robot-word-builder.html">Robot Word Builder</a> and
-          <a href="phoneme-counter.html">Letterbox Lesson</a> — with editable word mapping and syllable division.
+        <p><strong>Updated Phonics Knowledge Check!</strong> Assess phonics skills from basic sound–spelling correspondences to multisyllabic words, with improved instructional insights.
+          <a href="phonics-knowledge-check.html">Explore the assessment</a>.
         </p>
         <button class="la-whats-new__dismiss" type="button" aria-label="Dismiss what's new banner">&times;</button>
       </div>`;
