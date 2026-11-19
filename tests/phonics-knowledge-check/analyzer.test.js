@@ -39,7 +39,7 @@ ctx.window = ctx;
 vm.createContext(ctx);
 let code = pageScript.replace(/import\(\s*['"][^'"]+['"]\s*\)/g, 'Promise.resolve(new Proxy({}, { get: () => () => {} }))');
 const end = code.lastIndexOf('})();');
-code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces,bucketHeading,bucketNotes,createReportPrintController};\n' + code.slice(end);
+code = code.slice(0, end) + ';globalThis.__api={state,PHONICS_WORDS,ALL_WORDS,scoreData,renderPatternNotes,patternPrintRows,buildFocusAreas,analyzeError,areaLabel,areaPieces,bucketHeading,bucketNotes,createReportPrintController,createAssessmentAccessController};\n' + code.slice(end);
 vm.runInContext(code, ctx);
 const api = ctx.__api;
 const { state, ALL_WORDS, PHONICS_WORDS } = api;
@@ -1043,6 +1043,141 @@ test('D: the shared authentication modules are unchanged (the report check is st
   assert.strictEqual(sha('assessment-use-guard.js'), '460a77430bee9ecade1ebbbb746be73eaf376449');
   assert.strictEqual(sha('firebase-config.js'), '53c071717ed6cf8678f1427e684e428f3b34d7e5');
   assert(/isPaidPlan[\s\S]{0,200}'plus'[\s\S]{0,40}'family'/.test(GATE_SRC), 'only plus and family are paid plans');
+});
+
+/* ------------------------------ Stage 1: assessment access gate (fail-closed) ------------------------------ */
+// The real assessment-use-guard.js (getAssessmentEntitlement) runs here with mocked Firebase; no live call is made.
+const GUARD_SRC = fs.readFileSync(path.join(__dirname, '..', '..', 'assessment-use-guard.js'), 'utf8');
+function loadMockGuard(mode){
+  const mkEl = () => ({ _h:'', set innerHTML(v){ this._h = v; }, get innerHTML(){ return this._h; }, style:{}, setAttribute(){}, appendChild(){}, addEventListener(){}, remove(){}, querySelector(){ return mkEl(); } });
+  const document = { head:{ appendChild(){} }, body:{ appendChild(){} }, createElement: mkEl, getElementById: () => mkEl(), documentElement:{ style:{} } };
+  const win = { location:{ pathname:'/phonics-knowledge-check.html', search:'' }, LiteracyArcadeAnalytics:{ track(){} } };
+  let authCb; const user = { uid:'teacher-1' };
+  const onAuthStateChanged = (auth, next, err) => {
+    authCb = next;
+    if(mode === 'auth-hang') return;
+    if(mode === 'auth-error') return void Promise.resolve().then(() => err(new Error('auth init failed')));
+    Promise.resolve().then(() => next(mode === 'signed-out' ? null : user));
+  };
+  const getDoc = () => {
+    if(mode === 'fs-error') return Promise.reject(new Error('permission-denied'));
+    if(mode === 'fs-hang') return new Promise(() => {});
+    if(mode === 'free-nodoc') return Promise.resolve({ exists: () => false, data: () => ({}) });
+    return Promise.resolve({ exists: () => true, data: () => ({ plan: { plus:'plus', family:'family', cased:' Plus ', 'auth-hang':'plus' }[mode] || 'free' }) });
+  };
+  const body = GUARD_SRC.replace(/^import .*$/gm, '').replace(/export async function/g, 'async function').replace('export { auth, db };', 'return { getAssessmentEntitlement, guardAssessmentAccess };');
+  const gate = new Function('auth', 'db', 'onAuthStateChanged', 'doc', 'getDoc', 'document', 'window', 'console', body)({}, {}, onAuthStateChanged, () => ({}), getDoc, document, win, { warn(){} });
+  return { gate, signInLate(){ authCb(user); } };
+}
+function accessController(opts){
+  const events = []; const timers = fakeTimers(); const loadCalls = [];
+  const ui = { checking(){ events.push('checking'); }, unlock(){ events.push('unlock'); }, blocked(kind, retry){ events.push('blocked:' + kind); ui.last = { kind, retry }; } };
+  const controller = api.createAssessmentAccessController({ loadGate: n => { loadCalls.push(n); return opts.loadGate(n); }, ui, timers, timeoutMs: 10000 });
+  return { controller, events, timers, ui, loadCalls };
+}
+const settle = async (c) => { const p = c.controller.run(); await tick(); return p; };
+const unlocks = c => c.events.filter(e => e === 'unlock').length;
+
+for(const plan of ['plus', 'family', 'cased']){
+  atest(`G1: ${plan === 'cased' ? 'a plan value with different casing/spacing' : plan === 'plus' ? 'Plus' : 'Plus Family'} account unlocks the assessment`, async () => {
+    const c = accessController({ loadGate: () => Promise.resolve(loadMockGuard(plan).gate) });
+    assert.strictEqual(await settle(c), 'allowed'); assert.deepStrictEqual([...c.events], ['checking', 'unlock']);
+  });
+}
+atest('G1: Free accounts (with or without a user record) stay locked with the upgrade state', async () => {
+  for(const mode of ['free', 'free-nodoc']){ const c = accessController({ loadGate: () => Promise.resolve(loadMockGuard(mode).gate) }); assert.strictEqual(await settle(c), 'free'); assert.deepStrictEqual([...c.events], ['checking', 'blocked:free']); }
+});
+atest('G1: signed-out users stay locked with the sign-in state', async () => {
+  const c = accessController({ loadGate: () => Promise.resolve(loadMockGuard('signed-out').gate) }); assert.strictEqual(await settle(c), 'signed-out'); assert.strictEqual(unlocks(c), 0);
+});
+atest('G1: Firebase authentication failure and Firestore failure fail closed with a retryable state', async () => {
+  for(const mode of ['auth-error', 'fs-error']){ const c = accessController({ loadGate: () => Promise.resolve(loadMockGuard(mode).gate) }); assert.strictEqual(await settle(c), 'unknown', mode); assert.strictEqual(unlocks(c), 0); assert(typeof c.ui.last.retry === 'function'); }
+});
+atest('G1: an unresolved authentication or Firestore check times out, stays locked and offers a retry', async () => {
+  for(const mode of ['auth-hang', 'fs-hang']){
+    const m = loadMockGuard(mode), c = accessController({ loadGate: () => Promise.resolve(m.gate) });
+    const p = c.controller.run(); await tick(); assert.deepStrictEqual([...c.events], ['checking']); assert.strictEqual(c.timers.pending(), 1);
+    c.timers.fire(); assert.strictEqual(await p, 'timeout'); assert.deepStrictEqual([...c.events], ['checking', 'blocked:timeout']); assert.strictEqual(unlocks(c), 0);
+    if(mode === 'auth-hang'){ m.signInLate(); await tick(12); assert.strictEqual(unlocks(c), 0, 'a late Plus result cannot unlock after the timeout'); assert.deepStrictEqual([...c.events], ['checking', 'blocked:timeout'], 'and cannot touch the UI'); }
+  }
+});
+atest('G1: the loading state is shown immediately, before the gate module has loaded', async () => {
+  const c = accessController({ loadGate: () => new Promise(() => {}) });
+  c.controller.run(); assert.deepStrictEqual([...c.events], ['checking'], 'synchronously');
+});
+atest('G1: a gate module that fails to import blocks the assessment; retry loads a fresh copy and then unlocks', async () => {
+  const ok = loadMockGuard('plus'); const c = accessController({ loadGate: n => (n === 0 ? Promise.reject(new Error('Failed to fetch dynamically imported module')) : Promise.resolve(ok.gate)) });
+  assert.strictEqual(await settle(c), 'load'); assert.deepStrictEqual([...c.events], ['checking', 'blocked:load']);
+  const r = c.ui.last.retry(); await tick(); assert.strictEqual(await r, 'allowed'); assert.deepStrictEqual([...c.loadCalls], [0, 1], 'retry uses a new module instance');
+});
+atest('G1: a module without the entitlement function, or a stalled import, is a load failure (fail closed)', async () => {
+  for(const bad of [{}, null, { getAssessmentEntitlement: 'nope' }]){ const c = accessController({ loadGate: () => Promise.resolve(bad) }); assert.strictEqual(await settle(c), 'load'); assert.strictEqual(unlocks(c), 0); }
+  const c = accessController({ loadGate: () => new Promise(() => {}) }); const p = c.controller.run(); await tick(); c.timers.fire(); assert.strictEqual(await p, 'load'); assert.strictEqual(unlocks(c), 0);
+});
+atest('G1: only the exact status "paid" unlocks; anything else stays locked', async () => {
+  for(const ent of [{ status:'PAID' }, { status:'plus' }, { status:'paid ' }, { status:undefined }, { status:true }, {}, null, undefined, 'paid', { plan:'plus' }]){
+    const c = accessController({ loadGate: () => Promise.resolve({ getAssessmentEntitlement: () => Promise.resolve(ent) }) });
+    assert.strictEqual(await settle(c), 'unknown', JSON.stringify(ent)); assert.strictEqual(unlocks(c), 0, JSON.stringify(ent));
+  }
+  const c = accessController({ loadGate: () => Promise.resolve({ getAssessmentEntitlement: () => Promise.reject(new Error('boom')) }) }); assert.strictEqual(await settle(c), 'unknown'); assert.strictEqual(unlocks(c), 0);
+});
+// A gate whose entitlement promise the test resolves by hand, so stale results can be delivered at any moment.
+function manualGates(){ const gates = []; return { gates, loadGate: () => { const g = { resolve:null, reject:null }; g.promise = new Promise((res, rej) => { g.resolve = res; g.reject = rej; }); gates.push(g); return Promise.resolve({ getAssessmentEntitlement: () => g.promise }); } }; }
+atest('G1: a stale Plus result delivered after a timeout cannot unlock the assessment', async () => {
+  const mg = manualGates(), c = accessController({ loadGate: mg.loadGate });
+  const p = c.controller.run(); await tick(); c.timers.fire(); await p;
+  mg.gates[0].resolve({ status:'paid' }); await tick(12);
+  assert.strictEqual(unlocks(c), 0); assert.deepStrictEqual([...c.events], ['checking', 'blocked:timeout']);
+});
+atest('G1: after a retry begins, the original attempt can neither unlock nor change the retry\'s UI; only the current attempt unlocks, once', async () => {
+  const mg = manualGates(), c = accessController({ loadGate: mg.loadGate });
+  const p1 = c.controller.run(); await tick(); c.timers.fire(); await p1;
+  const p2 = c.ui.last.retry(); await tick(); assert.strictEqual(mg.gates.length, 2); const before = [...c.events];
+  mg.gates[0].resolve({ status:'paid' }); await tick(12); assert.strictEqual(unlocks(c), 0); assert.deepStrictEqual([...c.events], before);
+  mg.gates[1].resolve({ status:'paid' }); assert.strictEqual(await p2, 'allowed'); assert.strictEqual(unlocks(c), 1);
+});
+atest('G1: a stale Plus result cannot unlock after the superseding attempt was blocked', async () => {
+  const mg = manualGates(), c = accessController({ loadGate: mg.loadGate });
+  const p1 = c.controller.run(); await tick(); c.timers.fire(); await p1;
+  const p2 = c.ui.last.retry(); await tick(); mg.gates[1].resolve({ status:'free' }); await p2;
+  mg.gates[0].resolve({ status:'paid' }); await tick(12); assert.strictEqual(unlocks(c), 0); assert.strictEqual(c.events[c.events.length - 1], 'blocked:free');
+});
+atest('G1: repeated retry clicks during a check run one check', async () => {
+  const mg = manualGates(), c = accessController({ loadGate: mg.loadGate });
+  const first = c.controller.run(); const extra = await Promise.all([c.controller.run(), c.controller.run(), c.controller.run()]); await tick();
+  assert.deepStrictEqual([...extra], ['ignored', 'ignored', 'ignored']); assert.strictEqual(c.loadCalls.length, 1);
+  mg.gates[0].resolve({ status:'paid' }); assert.strictEqual(await first, 'allowed'); assert.strictEqual(unlocks(c), 1);
+});
+test('G1: the page is covered and inert from the first paint; the old fire-and-forget gate call is gone', () => {
+  const body = html.slice(html.indexOf('<body'));
+  assert(/<body[^>]*>\s*<div id="assessmentAccessGate" class="access-gate" role="status"[^>]*>/.test(body), 'overlay is the first element in the body and visible by default (no hidden attribute)');
+  assert(!/id="assessmentAccessGate"[^>]*hidden/.test(body));
+  assert(/<main id="assessmentMain" inert>/.test(body), 'assessment content is inert until unlocked');
+  assert(/\.access-gate\{position:fixed;inset:0;z-index:100000/.test(html), 'overlay CSS is in the document head, so it applies before any script runs');
+  assert(!/import\('\.\/assessment-use-guard\.js'\)\.then/.test(pageScript), 'no fire-and-forget gate import');
+  assert(!/guardAssessmentAccess/.test(pageScript), 'the shared module\'s own overlay/retry is not used');
+  assert.strictEqual((pageScript.match(/ui\.unlock\(\)/g) || []).length, 1, 'one unlock call');
+  assert(/else if\(status === 'paid'\)\{ outcome = 'allowed'; ui\.unlock\(\); \}/.test(pageScript), 'unlock only on status paid');
+  assert(/if\(aborted \|\| mine !== generation\)/.test(pageScript.slice(pageScript.indexOf('function createAssessmentAccessController'))), 'attempt check before unlocking');
+});
+test('G1: error, load-failure and timeout screens offer Try again, then a Back to Dashboard link, then Plus plans', () => {
+  const ui = pageScript.slice(pageScript.indexOf('const accessGateUi'), pageScript.indexOf('function loadAssessmentGate'));
+  assert(/const dashboard = \{ href:'teacher-dashboard\.html', label:'Back to Dashboard', link:true \};/.test(ui));
+  assert.strictEqual((ui.match(/\[again, dashboard, \{ \.\.\.plans \}\]/g) || []).length, 3, 'load, timeout and unknown screens');
+  assert(!/\[again, \{ \.\.\.plans \}\]/.test(ui), 'no error screen is left without the dashboard link');
+  assert(!/dashboard[^;\n]*onClick/.test(ui.slice(ui.indexOf('const dashboard'), ui.indexOf('const dashboard') + 160)), 'the link is plain navigation: no handler that could unlock or dismiss the gate');
+  assert(/a\.href\) node\.href = a\.href/.test(ui) && /a\.link \? 'access-gate-link'/.test(ui));
+});
+test('G1: the gate messages and links match the shared module\'s existing rules', () => {
+  for(const m of ['requires Literacy Arcade Plus', 'Upgrade to Plus to use', 'We couldn’t confirm your account status', 'teacher-login.html', 'returnTo=', 'plus-subscriptions.html', 'teacher-dashboard.html', 'assessment_gate_shown', 'assessment_gate_signin_click', 'assessment_gate_plus_click']){
+    assert(pageScript.includes(m), m); assert(GUARD_SRC.includes(m.replace('Upgrade to Plus to use', 'Upgrade to Plus to use')), 'shared module has: ' + m);
+  }
+});
+test('G1: the independent Print Report check is untouched by the access gate work', () => {
+  assert(/import\('\.\/report-print-gate\.js'\)/.test(pageScript)); assert(/guardReportPrint/.test(pageScript));
+  assert(/createReportPrintController\(\{\s*loadGate: loadReportGate/.test(pageScript));
+  const gateBlock = pageScript.slice(pageScript.indexOf('class AccessGateError'), pageScript.indexOf('// Print Report: the Plus / Plus Family entitlement check'));
+  assert(!/guardReportPrint|report-print-gate|printContent/.test(gateBlock), 'the two controllers share no code or state');
 });
 
 (async () => {
