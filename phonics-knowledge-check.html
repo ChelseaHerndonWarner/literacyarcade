@@ -648,12 +648,12 @@
       .pf-group h3{margin:0 0 3px;font-size:11.2pt;line-height:1.25;color:#17162e;font-weight:900;break-after:avoid;page-break-after:avoid}
       .pf-count{font-weight:600;font-size:9pt;color:#5a5572}
       .pf-guide{margin:0 0 6px;color:#37344f;font-size:9.6pt;line-height:1.32;break-after:avoid;page-break-after:avoid}
-      .pf-area{border:1px solid #d8d4e6;border-left:4px solid #b9c7d6;border-radius:8px;padding:5px 10px 6px;margin:0 0 6px;background:#fff;break-inside:avoid;page-break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-      .pf-family{border-left-color:#1fa99c;background:#f4fffd}
+      .pf-area{border:1px solid #d8d4e6;border-left:4px solid #b9c7d6;border-radius:8px;padding:5px 10px 6px;margin:0 0 6px;background:#fff;break-inside:avoid;page-break-inside:avoid}
+      .pf-family{border-left-color:#1fa99c}
       .pf-head{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:2px}
-      .pf-status{font-weight:900;font-size:8.2pt;line-height:1.3;border:1px solid #cfc7ea;background:#ece8f8;color:#3f3a66;border-radius:5px;padding:0 6px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-      .pf-repeated .pf-status{background:#fff3d4;border-color:#e3c070;color:#6b4700}
-      .pf-supplemental .pf-status{background:#eef3f6;border-color:#b5c0c8;color:#3f3b57}
+      .pf-status{font-weight:900;font-size:8.2pt;line-height:1.3;border:1px solid #8f86c4;background:#fff;color:#3f3a66;border-radius:5px;padding:0 6px}
+      .pf-repeated .pf-status{border-color:#c28a1e;color:#5c3d00}
+      .pf-supplemental .pf-status{border-color:#8a98a3;color:#3f3b57}
       .pf-tag{font-weight:800;font-size:8pt;line-height:1.3;color:#0d6b64;border:1px solid #9dddd6;border-radius:5px;padding:0 6px}
       .pf-title{font-weight:900;font-size:10.4pt;line-height:1.25;color:#17162e;margin:0 0 2px}
       .pf-breakdown{margin:0 0 4px}
@@ -675,9 +675,18 @@
       .pf-support{border-top:1px dashed #cfc7ea;margin-top:4px;padding-top:3px}
       .pf-note,.pf-cautions{border-left:3px solid #c9c1e6;padding-left:8px;color:#37344f;font-size:9.6pt;line-height:1.32}
       .pf-note{margin-top:4px}
-      .pf-cautions{margin:2px 0 4px;break-before:avoid;page-break-before:avoid}
+      .pf-cautions{margin:0 0 7px}
       .pf-cautions p{margin:2px 0}
       .print-report .pf-closing{break-before:avoid;page-break-before:avoid}
+      /* Ink-friendly print: no tinted fills anywhere in the report body (logo and small brand accents stay in colour).
+         Structure comes from borders, left accent lines and type, so it reads the same with Background graphics off. */
+      .print-report .report-meta,.print-report .print-chip,.print-report .print-pattern,.print-report .print-note{background:#fff!important}
+      .print-report .print-note{border:1px solid #d8d4e6;border-left:3px solid #1fa99c;border-radius:6px;padding:7px 10px}
+      .print-report .print-chip{border:1px solid #d9b5b5;padding:3px 6px}
+      .print-report{padding-bottom:0}
+      .print-report .print-footer{margin-top:8px;padding-top:5px}
+      .print-report .print-footer span{display:inline!important;margin:0}
+      .print-report .print-footer span + span::before{content:' \00B7  '}
     }
   </style>
   <link rel="stylesheet" href="./firebase-tool-gate.css">
@@ -2050,11 +2059,10 @@
         const blocks = bucket.areas.map((area, ai) => printAreaBlock(bucket, area, hoist, ai));
         const notes = bucketNotes(bucket);
         const cautions = notes.length ? `<div class="pf-cautions"><div class="pf-cautions-label">Cautions</div>${notes.map(n => `<p>${esc(n)}</p>`).join('')}</div>` : '';
-        // The heading and guide travel with the first focus area, and the category cautions travel with the last one, so
-        // neither is left alone at the foot or head of a page.
-        const lead = `${bi === 0 ? sectionHead : ''}<h3>${esc(h.label)}<span class="pf-count">${esc(h.count)}</span></h3><p class="pf-guide">${esc(bucket.def.guide)}</p>`;
-        if(blocks.length === 1) return `<div class="pf-group"><div class="pf-keep">${lead}${blocks[0]}${cautions}</div></div>`;
-        return `<div class="pf-group"><div class="pf-keep">${lead}${blocks[0]}</div>${blocks.slice(1, -1).join('')}<div class="pf-keep">${blocks[blocks.length - 1]}${cautions}</div></div>`;
+        // The heading, guide and category cautions travel with the first focus area, so none is left alone at the foot or
+        // head of a page and the last area is free to fill the page.
+        const lead = `${bi === 0 ? sectionHead : ''}<h3>${esc(h.label)}<span class="pf-count">${esc(h.count)}</span></h3><p class="pf-guide">${esc(bucket.def.guide)}</p>${cautions}`;
+        return `<div class="pf-group"><div class="pf-keep">${lead}${blocks[0]}</div>${blocks.slice(1).join('')}</div>`;
       }).join('');
     }
         function editScoring(){ showLeft('gridPanel'); showControls('activeControls'); $('rightHeading').textContent='Edit Scoring'; $('rightSubhead').textContent=''; }

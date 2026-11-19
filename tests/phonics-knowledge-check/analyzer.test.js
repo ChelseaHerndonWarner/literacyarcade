@@ -733,11 +733,17 @@ test('C: no forced page break before the focus section, and the section may cont
   assert(/\.pf-keep\{break-inside:avoid/.test(html), 'heading and cautions travel with an area');
   assert(/\.pf-group h3\{[^}]*break-after:avoid/.test(html));
   assert(/html,body\{background:#fff!important\}/.test(html), 'printed page background is plain white');
+  const printCss = html.slice(html.indexOf('/* Stage C:'), html.indexOf('</style>', html.indexOf('/* Stage C:')));
+  assert(!/background:#(f4fffd|ece8f8|fff3d4|eef3f6)/i.test(printCss), 'no tinted fills in the printed focus areas');
+  assert(/\.print-report \.print-note\{background:#fff!important\}|\.print-report \.print-note\{[^}]*background:#fff!important/.test(printCss) || /\.print-note\{background:#fff!important\}/.test(printCss), 'printed notes, chips and meta are white');
+  assert(/\.pf-family\{border-left-color:#1fa99c\}/.test(printCss), 'family blocks keep their accent line');
 });
 test('C: printed focus areas follow status → title → one row per word → supporting evidence → cautions', () => {
   const r = run(keyed(S4, { fern:'farn', curl:'carl', lerp:'larp' })); const h = r.printC;
   const pos = k => h.indexOf(k);
-  assert(pos('class="pf-status"') < pos('class="pf-title"') && pos('class="pf-title"') < pos('class="pf-words') && pos('class="pf-words') < pos('class="pf-support"') && pos('class="pf-support"') < pos('class="pf-cautions"'));
+  assert(pos('class="pf-status"') < pos('class="pf-title"') && pos('class="pf-title"') < pos('class="pf-words') && pos('class="pf-words') < pos('class="pf-support"'));
+  // category cautions follow the guide and come before the findings, so the last area is free to fill the page
+  assert(pos('class="pf-guide"') < pos('class="pf-cautions"') && pos('class="pf-cautions"') < pos('class="pf-area'));
   assert.strictEqual((h.match(/<li class="pf-row">/g) || []).length, 3, 'one row per word');
   assert(h.includes('<span class="pf-target">fern</span><span class="pf-arrow">→</span><span class="pf-resp">farn</span>'), 'target and response are separate styled pieces');
   assert(!/farn[^<]*, [a-z]+ →/.test(text(h)), 'no comma-separated runs of responses');
@@ -766,7 +772,7 @@ test('C: repeated Teacher-check cautions print once per category and name the pa
   assert.strictEqual(t.split(line).length - 1, 1, 'shared caution appears once');
   // it sits inside the first affected area (card → care), before the later areas that rely on it
   const raw = r.printC; assert(raw.indexOf('ar, ir, ur letters present') > raw.indexOf('>card<') && raw.indexOf('ar, ir, ur letters present') < raw.indexOf('>dirt<'), 'caution is next to the first applicable finding');
-  assert(raw.indexOf('ar, ir, ur letters present') < raw.indexOf('class="pf-cautions"') || raw.indexOf('class="pf-cautions"') < 0, 'not in the category cautions block');
+  assert(raw.indexOf('class="pf-cautions"') < 0 || raw.indexOf('ar, ir, ur letters present') > raw.indexOf('class="pf-cautions"') + 400, 'the shared Teacher-check caution is in its area, not the category cautions block');
   assert.strictEqual(t.split('commonly changes the vowel sound').length - 1, 1);
   assert(t.includes('or letters present with a final e added (as in fore); the vowel sound may stay the same'), 'fore keeps its own distinct caution');
   assert(!/(^|, )or letters present[^;]*commonly changes/.test(t), 'or + e is never described as a vowel change');
