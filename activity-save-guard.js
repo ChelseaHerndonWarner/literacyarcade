@@ -1,4 +1,6 @@
-// Free save/share limit guard (5 activities). See save-limit-BUILD-BRIEF.md.
+// Free creation limit guard: 5 lifetime activity creations. Deleting an activity never gives
+// one back — the count comes from users/{uid}.activitiesCreated, which only the
+// recordActivityCreated Cloud Function writes (functions/index.js).
 // Exports canCreateActivity() and showUpgradeModal(). Self-contained styling
 // (hardcoded brand tokens) so it renders consistently across every guarded
 // tool page regardless of that page's own CSS variable names.
@@ -9,6 +11,8 @@ import {
   collection,
   getCountFromServer
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
 const UNLIMITED_PLANS = new Set(['plus', 'family']);
 const FREE_LIMIT = 5;
@@ -24,26 +28,100 @@ export async function canCreateActivity(user, db) {
     guardError.code = 'plan-read-failed';
     throw guardError;
   }
-  const plan = profileSnap.exists() ? profileSnap.data().plan : undefined;
+  const profile = profileSnap.exists() ? profileSnap.data() : {};
+  const plan = profile.plan;
 
   if (UNLIMITED_PLANS.has(plan)) {
     return { allowed: true, reason: null, count: null, plan };
   }
 
-  let countSnap;
-  try {
-    countSnap = await getCountFromServer(collection(db, `users/${user.uid}/activities`));
-  } catch (error) {
-    const guardError = new Error('Literacy Arcade could not count saved activities.', { cause: error });
-    guardError.code = 'save-count-read-failed';
-    throw guardError;
+  // Lifetime creations. Accounts the server has not counted yet (no counter) fall
+  // back to the activities they currently have, as before.
+  let count = profile.activitiesCreated;
+  if (typeof count !== 'number' || !Number.isFinite(count) || count < 0) {
+    let countSnap;
+    try {
+      countSnap = await getCountFromServer(collection(db, `users/${user.uid}/activities`));
+    } catch (error) {
+      const guardError = new Error('Literacy Arcade could not count saved activities.', { cause: error });
+      guardError.code = 'save-count-read-failed';
+      throw guardError;
+    }
+    count = countSnap.data().count;
   }
-  const count = countSnap.data().count;
 
   if (count < FREE_LIMIT) {
     return { allowed: true, reason: null, count, plan: 'free' };
   }
   return { allowed: false, reason: 'limit', count, plan: 'free' };
+}
+
+// Creates a NEW saved activity. Direct client creates are blocked by firestore.rules; the
+// createActivity Cloud Function checks the plan and lifetime counter and creates the document
+// (and the public share link, when data.shareEnabled === true) in one transaction. Returns an
+// object shaped like a DocumentReference ({ id }) plus { shareId } when a share was requested.
+// On "limit reached" it shows the upgrade modal and throws an error with saveGuardHandled = true.
+// Editing an existing activity is a normal updateDoc and never goes through here.
+export async function createActivityDoc(user, db, data, opts = {}) {
+  if (!user) throw new Error('Sign in to save an activity.');
+  // Server timestamps are set by the function, so drop the client sentinels before serialising.
+  const { createdAt: _createdAt, updatedAt: _updatedAt, ...plain } = data || {};
+  const activity = JSON.parse(JSON.stringify(plain));
+  const wantsShare = activity.shareEnabled === true;
+  const requestId = (globalThis.crypto && crypto.randomUUID)
+    ? crypto.randomUUID().replace(/-/g, '')
+    : Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+
+  const call = httpsCallable(getFunctions(getApp(), 'us-central1'), 'createActivity');
+  try {
+    const res = await call({ requestId, activity, share: wantsShare });
+    return { id: res.data.id, shareId: res.data.shareId || null };
+  } catch (error) {
+    if (error && error.code === 'functions/resource-exhausted') {
+      const count = Number(error.details && error.details.count);
+      showUpgradeModal({ allowed: false, reason: 'limit', count: Number.isFinite(count) ? count : FREE_LIMIT, plan: 'free' },
+        wantsShare || opts.shared ? { leadIn: 'Sharing saves a copy to your dashboard — and you’ve used your 5 free activities.' } : {});
+      const handled = new Error('Free activity creation limit reached.', { cause: error });
+      handled.saveGuardHandled = true;
+      handled.code = 'limit-reached';
+      throw handled;
+    }
+    throw error;
+  }
+}
+
+// True when this account's saved activities are read-only: a Free account that has used all 5
+// lifetime creation credits. Mirrors isEditLocked() in firestore.rules, which is what actually
+// enforces it; this check only lets the page explain it instead of failing with a permissions error.
+export async function isEditLocked(user, db) {
+  if (!user) return false;
+  let snap;
+  try {
+    snap = await getDoc(doc(db, 'users', user.uid));
+  } catch (error) {
+    return false; // the rules still decide
+  }
+  const profile = snap.exists() ? snap.data() : {};
+  if (UNLIMITED_PLANS.has(profile.plan)) return false;
+  return typeof profile.activitiesCreated === 'number' && profile.activitiesCreated >= FREE_LIMIT;
+}
+
+export function showReadOnlyModal() {
+  return showUpgradeModal({ allowed: false, reason: 'read-only', count: FREE_LIMIT, plan: 'free' }, {
+    title: 'Your saved activities are read-only',
+    body: [
+      'You’ve used your 5 free activities, so your saved activities can’t be changed on the Free plan. You can still open, play and share them, and students keep access to shared links.',
+      'Upgrade to Literacy Arcade Plus to edit your activities and create new ones.'
+    ]
+  });
+}
+
+// Shares an activity that is already saved (no credit used; allowed even when read-only). The
+// server builds the public copy from the saved activity. Returns { shareId }.
+export async function shareExistingActivity(activityId, opts = {}) {
+  const call = httpsCallable(getFunctions(getApp(), 'us-central1'), 'shareActivity');
+  const res = await call({ activityId, forceNew: opts.forceNew === true });
+  return { shareId: res.data.shareId };
 }
 
 const STYLE_ID = 'activity-save-guard-styles';
@@ -99,12 +177,12 @@ function ensureStyles() {
 }
 
 const STANDARD_BODY = [
-  'Free accounts can save or share up to 5 classroom activities. Everything you’ve already saved or shared stays available.',
-  'Upgrade to Literacy Arcade Plus to save and share unlimited games and tools.'
+  'Free accounts can create up to 5 classroom activities in total, and deleting an activity does not give one back. Everything you’ve already created stays available to open, edit and share.',
+  'Upgrade to Literacy Arcade Plus to create and share unlimited games and tools.'
 ];
 
 const GRANDFATHERED_BODY = [
-  'You’ve already saved more than 5 activities from before this change. They’re all still yours and are not going anywhere. Upgrade to save or share new activities.'
+  'You’ve already created more than 5 activities from before this change. They’re all still yours and are not going anywhere. Upgrade to create or share new activities.'
 ];
 
 export function showUpgradeModal(gate, opts = {}) {
@@ -113,7 +191,7 @@ export function showUpgradeModal(gate, opts = {}) {
   if (existing) existing.remove();
 
   const grandfathered = Boolean(opts.grandfathered || (gate && gate.count > 5));
-  const bodyParagraphs = grandfathered ? GRANDFATHERED_BODY : STANDARD_BODY;
+  const bodyParagraphs = Array.isArray(opts.body) ? opts.body : (grandfathered ? GRANDFATHERED_BODY : STANDARD_BODY);
 
   const backdrop = document.createElement('div');
   backdrop.id = `${MODAL_ID}-backdrop`;
@@ -125,7 +203,7 @@ export function showUpgradeModal(gate, opts = {}) {
   backdrop.innerHTML = `
     <div id="${MODAL_ID}" role="dialog" aria-modal="true" aria-labelledby="${MODAL_ID}-title">
       <div id="${MODAL_ID}-head">
-        <h2 id="${MODAL_ID}-title">Your free toolbox is full</h2>
+        <h2 id="${MODAL_ID}-title">${opts.title || 'You’ve used your 5 free activities'}</h2>
       </div>
       <div id="${MODAL_ID}-body">
         ${leadInHtml}
@@ -133,7 +211,7 @@ export function showUpgradeModal(gate, opts = {}) {
           ${bodyParagraphs.map(p => `<p>${p}</p>`).join('')}
         </div>
         <div id="${MODAL_ID}-actions">
-          <button type="button" class="asg-btn-primary" id="${MODAL_ID}-upgrade">Get unlimited saves and shares</button>
+          <button type="button" class="asg-btn-primary" id="${MODAL_ID}-upgrade">Get unlimited activities</button>
           <button type="button" class="asg-btn-secondary" id="${MODAL_ID}-close">Keep using free tools</button>
         </div>
       </div>

@@ -14,22 +14,42 @@ service cloud.firestore {
       ].hasAny([priceId]);
     }
 
+    // A Free account that has used all 5 lifetime creation credits (activitiesCreated >= 5) has
+    // read-only saved activities: it can still open, play, share and delete them, but cannot
+    // change their content. Plus/Family accounts, and accounts with no counter yet, are never locked.
+    function isEditLocked(uid) {
+      let userPath = /databases/$(database)/documents/users/$(uid);
+      return exists(userPath)
+        && !(get(userPath).data.get('plan', 'free') in ['plus', 'family'])
+        && get(userPath).data.get('activitiesCreated', 0) >= 5;
+    }
+
     match /users/{userId} {
       allow get: if request.auth != null && request.auth.uid == userId;
 
       allow create: if request.auth != null
         && request.auth.uid == userId
         && !('plan' in request.resource.data)
-        && !('assessmentUses' in request.resource.data);
+        && !('assessmentUses' in request.resource.data)
+        && !('activitiesCreated' in request.resource.data);
 
       allow update: if request.auth != null
         && request.auth.uid == userId
-        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['plan', 'assessmentUses']);
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['plan', 'assessmentUses', 'activitiesCreated']);
     }
 
+    // Saved activities. Clients may read and delete their own, and edit them unless the account is
+    // read-only (see isEditLocked). They can never create: new activities are created only by the
+    // createActivity Cloud Function (Admin SDK, which bypasses these rules) so the Free-plan
+    // lifetime creation limit is enforced atomically. Share fields are also written server-side
+    // (shareActivity / createActivity), so locking edits does not block sharing.
     match /users/{userId}/activities/{activityId} {
-      allow read, write: if request.auth != null
+      allow get, list, delete: if request.auth != null
         && request.auth.uid == userId;
+      allow update: if request.auth != null
+        && request.auth.uid == userId
+        && !isEditLocked(userId);
+      allow create: if false;
     }
 
     // Assessment-completion history (assessment type + timestamp only, no
@@ -37,6 +57,13 @@ service cloud.firestore {
     // Function via the Admin SDK, which bypasses these rules entirely, so
     // clients get no read or write access here.
     match /users/{userId}/assessmentHistory/{historyId} {
+      allow read, write: if false;
+    }
+
+    // Free-plan lifetime activity-creation log (one doc per created activity).
+    // Written only by the createActivity Cloud Function via the Admin SDK;
+    // users/{uid}.activitiesCreated is protected above for the same reason.
+    match /users/{userId}/creationHistory/{activityId} {
       allow read, write: if false;
     }
 
@@ -51,9 +78,12 @@ service cloud.firestore {
     }
 
     match /sharedActivities/{shareId} {
+      // Share links are created only by the createActivity and shareActivity Cloud Functions, so a
+      // direct client write cannot publish a new shared game (e.g. past the Free creation limit).
+      // Students keep reading existing links; owners can still delete (revoke) their own.
       allow get: if resource.data.public == true;
       allow list: if false;
-      allow create: if request.auth != null;
+      allow create: if false;
       allow delete: if request.auth != null
         && request.auth.uid == resource.data.ownerUid;
     }

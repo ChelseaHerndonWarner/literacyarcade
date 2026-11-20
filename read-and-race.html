@@ -1931,7 +1931,7 @@ if (saveActivityBtn) {
   };
 
   try {
-    await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
+    await (await import('./activity-save-guard.js')).createActivityDoc(currentUser, db, activityData);
     // Brief success state on the button
     const btn = document.getElementById('saveActivityBtn');
     const orig = btn.innerHTML;
@@ -1941,7 +1941,7 @@ if (saveActivityBtn) {
     setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2500);
   } catch (err) {
     console.error('Save error:', err);
-    alert('Save failed. Please check your connection and try again.');
+    if (!err || !err.saveGuardHandled) alert('Save failed. Please check your connection and try again.');
   }
   });
 }
@@ -2137,18 +2137,15 @@ window.saveReadRaceSharedActivity = async function(activity) {
     public:       true,
     ownerUid:     currentUser.uid
   };
-  const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
-
   const activityData = {
     ...sharedData,
     url:          'read-and-race.html',
     shareEnabled: true,
     sharedSetup:  true,
-    shareId:      sharedRef.id,
     userId:       currentUser.uid
   };
-  const privateRef = await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
-  return { shareId: sharedRef.id, savedActivityId: privateRef.id };
+  const privateRef = await (await import('./activity-save-guard.js')).createActivityDoc(currentUser, db, activityData);
+  return { shareId: privateRef.shareId, savedActivityId: privateRef.id };
 };
 
 window.loadReadRaceSharedActivity = async function(shareId) {

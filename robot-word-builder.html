@@ -2512,6 +2512,9 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
     const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
     const gate = await canCreateActivity(currentUser, db);
     if (!gate.allowed) { showUpgradeModal(gate); return; }
+  } else {
+    const { isEditLocked, showReadOnlyModal } = await import('./activity-save-guard.js');
+    if (await isEditLocked(currentUser, db)) { showReadOnlyModal(); return; }
   }
 
   const defaultTitle = resumingActivityTitle || buildDefaultTitle(entries);
@@ -2558,7 +2561,7 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
         }
       );
     } else {
-      const created = await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
+      const created = await (await import('./activity-save-guard.js')).createActivityDoc(currentUser, db, activityData);
       resumingActivityId = created.id;
       sessionStorage.setItem('savedActivityId', created.id);
     }
@@ -2571,7 +2574,7 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
     setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2500);
   } catch (err) {
     console.error('Save error:', err);
-    alert('Save failed. Please check your connection and try again.');
+    if (!err || !err.saveGuardHandled) alert('Save failed. Please check your connection and try again.');
   }
 });
 
@@ -2768,6 +2771,22 @@ window.addEventListener('load', () => setTimeout(tryLoadSavedActivity, 150));
 window.saveRobotWordBuilderSharedActivity = async function(activity) {
   if (!currentUser) throw new Error('Teacher must be signed in to share.');
 
+  // Sharing an activity that is already saved reuses it (no new activity, no new credit). Edits are
+  // saved first unless the account is read-only; the server then publishes the saved content.
+  if (resumingActivityId) {
+    const { isEditLocked, shareExistingActivity } = await import('./activity-save-guard.js');
+    const locked = await isEditLocked(currentUser, db);
+    if (!locked) {
+      await updateDoc(doc(db, `users/${currentUser.uid}/activities`, resumingActivityId), {
+        words:     activity.words || [],
+        settings:  activity.settings || {},
+        updatedAt: serverTimestamp()
+      });
+    }
+    const { shareId } = await shareExistingActivity(resumingActivityId, { forceNew: !locked });
+    return { shareId, savedActivityId: resumingActivityId };
+  }
+
   const { canCreateActivity, showUpgradeModal } = await import('./activity-save-guard.js');
   const gate = await canCreateActivity(currentUser, db);
   if (!gate.allowed) {
@@ -2788,18 +2807,15 @@ window.saveRobotWordBuilderSharedActivity = async function(activity) {
     public:       true,
     ownerUid:     currentUser.uid
   };
-  const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
-
   const activityData = {
     ...sharedData,
     url:          'robot-word-builder.html',
     shareEnabled: true,
     sharedSetup:  true,
-    shareId:      sharedRef.id,
     userId:       currentUser.uid
   };
-  const privateRef = await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
-  return { shareId: sharedRef.id, savedActivityId: privateRef.id };
+  const privateRef = await (await import('./activity-save-guard.js')).createActivityDoc(currentUser, db, activityData);
+  return { shareId: privateRef.shareId, savedActivityId: privateRef.id };
 };
 
 window.loadRobotWordBuilderSharedActivity = async function(shareId) {

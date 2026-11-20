@@ -1007,6 +1007,14 @@ const ACTIVITY_TYPES = {
     saveable: true,
     shareable: true,
     url: 'robot-word-builder.html'
+  },
+  'word-wizard-custom': {
+    label: 'Word Wizard Quest (Custom)',
+    icon: '',
+    colorClass: 'icon-violet',
+    saveable: true,
+    shareable: true,
+    url: 'word-wizard-custom.html'
   }
 };
 
@@ -1797,7 +1805,7 @@ async function shareActivity(id, activity) {
       });
       return;
     }
-  } else if (!words.length) {
+  } else if (!words.length && type !== 'word-wizard-custom') {
     await showInfoModal({
       title: 'Nothing to Share Yet',
       message: 'This activity does not have saved words to share.'
@@ -1808,15 +1816,9 @@ async function shareActivity(id, activity) {
   try {
     let shareId = activity.shareId || '';
     if (!shareId) {
-      const sharedData = buildSharedActivityData(activity);
-      const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
-      shareId = sharedRef.id;
-      await updateDoc(doc(db, `users/${currentUser.uid}/activities`, id), {
-        shareId,
-        shareEnabled: true,
-        sharedSetup: true,
-        updatedAt: serverTimestamp()
-      });
+      // The server builds the public copy from the saved activity (no credit; allowed when read-only).
+      const { shareExistingActivity } = await import('./activity-save-guard.js');
+      shareId = (await shareExistingActivity(id)).shareId;
       const idx = allActivities.findIndex(a => a.id === id);
       if (idx !== -1) {
         allActivities[idx].shareId = shareId;
@@ -1868,6 +1870,16 @@ function cleanShareSettings(type, settings, words) {
   }
   if (type === 'sentence-spinner') {
     return cleanSentenceSpinnerSettings(settings, words);
+  }
+  if (type === 'word-wizard-custom') {
+    const len = Number(settings.wordLength);
+    return {
+      wordMode:    settings.wordMode === 'custom' ? 'custom' : 'category',
+      wordLength:  [4, 5, 6].includes(len) ? len : 5,
+      rounds:      Math.min(20, Math.max(1, parseInt(settings.rounds, 10) || 5)),
+      magicHints:  settings.magicHints !== false,
+      customWords: Array.isArray(settings.customWords) ? settings.customWords.map(w => String(w)).slice(0, 100) : []
+    };
   }
   if (type === 'vocabulary-flashcards') {
     return cleanVocabularyFlashcardSettings(settings, words);
@@ -2001,6 +2013,8 @@ function buildStudentLink(type, shareId) {
 }
 
 async function renameActivity(id, currentTitle) {
+  const { isEditLocked, showReadOnlyModal } = await import('./activity-save-guard.js');
+  if (await isEditLocked(currentUser, db)) { showReadOnlyModal(); return; }
   const newTitle = await showTextInputModal({
     title: 'Rename Saved Activity',
     message: 'Use a skill, group, or lesson name — not a student name.',
@@ -2046,11 +2060,13 @@ async function duplicateActivity(id) {
   const baseTitle = source.title || makeDefaultTitle(source);
   try {
     const data = { ...rest, title: `${baseTitle} (Copy)`, createdAt: serverTimestamp(), updatedAt: serverTimestamp() };
-    const ref = await addDoc(collection(db, `users/${currentUser.uid}/activities`), data);
+    const { createActivityDoc } = await import('./activity-save-guard.js');
+    const ref = await createActivityDoc(currentUser, db, data);
     allActivities.unshift({ id: ref.id, ...data, createdAt: new Date(), updatedAt: new Date() });
     renderAll();
   } catch (err) {
     console.error(err);
+    if (err && err.saveGuardHandled) return;
     await showInfoModal({
       title: 'Duplicate Failed',
       message: 'Something went wrong duplicating this activity. Please try again.'
@@ -2064,9 +2080,12 @@ async function deleteActivity(id, title) {
   const shareWarning = isShared
     ? ' The shared student link will also be revoked and will stop working.'
     : '';
+  const creditNote = (currentPlan === 'plus' || currentPlan === 'family')
+    ? ''
+    : ' Deleting an activity does not give back one of your 5 free activity creations.';
   const confirmed = await showConfirmModal({
     title: 'Delete Saved Activity?',
-    message: `This removes the saved activity from your dashboard.${shareWarning}`,
+    message: `This removes the saved activity from your dashboard.${shareWarning}${creditNote}`,
     primaryText: 'Delete Activity',
     cancelText: 'Cancel',
     danger: true

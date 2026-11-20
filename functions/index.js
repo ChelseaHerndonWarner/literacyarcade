@@ -1,6 +1,7 @@
-const { onDocumentWritten } = require('firebase-functions/v2/firestore');
+const { onDocumentWritten, onDocumentDeleted } = require('firebase-functions/v2/firestore');
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { logger } = require('firebase-functions');
+const { computeCreateDecision, computeDeleteSeed, isEditLocked } = require('./activity-credits');
 const admin = require('firebase-admin');
 
 admin.initializeApp();
@@ -252,3 +253,194 @@ exports.recordAssessmentCompletion = onCall(async (request) => {
 
   return { uses: result.uses, plan: result.plan, unlimited: Boolean(result.unlimited) };
 });
+
+// ── Free-plan lifetime activity creations ───────────────────────────────────
+// Free users get 5 total activity creations; deleting an activity never gives one back.
+// Activities are created ONLY here: firestore.rules denies client creates under
+// users/{uid}/activities, and this callable checks the plan and counter and creates the
+// activity (plus its share link, when requested) in one transaction, so simultaneous saves or a
+// modified browser cannot exceed the limit. users/{uid}.activitiesCreated is written only by
+// server code (rules block client writes, like plan and assessmentUses). Plus/Family creations
+// are logged but not counted. users/{uid}/creationHistory/{activityId} is the audit trail.
+// Rules for counting live in activity-credits.js.
+const MAX_ACTIVITY_BYTES = 900 * 1024;
+// Fields the server controls on the private activity or never copies to the public share doc.
+const PRIVATE_ONLY_KEYS = [
+  'id', 'url', 'userId', 'ownerUid', 'savedActivityId',
+  'createdAt', 'updatedAt', 'shareId', 'shareEnabled', 'sharedSetup', 'public',
+];
+
+function isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+exports.createActivity = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (!uid) {
+    throw new HttpsError('unauthenticated', 'Sign in to save an activity.');
+  }
+
+  const { requestId, activity, share } = request.data || {};
+  if (typeof requestId !== 'string' || !/^[A-Za-z0-9_-]{16,64}$/.test(requestId)) {
+    throw new HttpsError('invalid-argument', 'Missing or invalid request id.');
+  }
+  if (!isPlainObject(activity)) {
+    throw new HttpsError('invalid-argument', 'Missing activity.');
+  }
+  const toolType = activity.toolType || activity.activityType;
+  if (typeof toolType !== 'string' || !toolType || toolType.length > 80) {
+    throw new HttpsError('invalid-argument', 'Activity needs a toolType.');
+  }
+  if (Buffer.byteLength(JSON.stringify(activity), 'utf8') > MAX_ACTIVITY_BYTES) {
+    throw new HttpsError('invalid-argument', 'Activity is too large.');
+  }
+  const url = typeof activity.url === 'string' && activity.url.length <= 200 ? activity.url : null;
+
+  const userRef = db.collection('users').doc(uid);
+  const activityRef = userRef.collection('activities').doc(requestId);
+  const historyRef = userRef.collection('creationHistory').doc(requestId);
+  // Only used to seed accounts that have no counter yet.
+  const liveCount = (await userRef.collection('activities').count().get()).data().count;
+  const FieldValue = admin.firestore.FieldValue;
+
+  const result = await db.runTransaction(async (tx) => {
+    const [userSnap, activitySnap] = await Promise.all([tx.get(userRef), tx.get(activityRef)]);
+
+    // Same request id again (double click, retry): return what was already created.
+    if (activitySnap.exists) {
+      return { id: requestId, shareId: activitySnap.data().shareId || null, alreadyCreated: true };
+    }
+
+    const data = userSnap.exists ? userSnap.data() : {};
+    const decision = computeCreateDecision({
+      plan: data.plan,
+      activitiesCreated: data.activitiesCreated,
+      liveCount,
+    });
+
+    if (!decision.allowed) {
+      if (decision.seedCounter !== null && decision.seedCounter !== undefined) {
+        tx.set(userRef, { activitiesCreated: decision.seedCounter }, { merge: true });
+      }
+      return { limitReached: true, count: decision.count };
+    }
+
+    const now = FieldValue.serverTimestamp();
+    const publicFields = { ...activity };
+    PRIVATE_ONLY_KEYS.forEach((key) => delete publicFields[key]);
+    const privateDoc = { ...activity, userId: uid, createdAt: now, updatedAt: now };
+    if ('ownerUid' in privateDoc) privateDoc.ownerUid = uid;
+    if (url) privateDoc.url = url;
+    ['shareId', 'public'].forEach((key) => delete privateDoc[key]);
+
+    let shareId = null;
+    if (share === true) {
+      const sharedRef = db.collection('sharedActivities').doc();
+      shareId = sharedRef.id;
+      tx.create(sharedRef, { ...publicFields, public: true, ownerUid: uid, createdAt: now, updatedAt: now });
+      privateDoc.shareEnabled = true;
+      privateDoc.sharedSetup = true;
+      privateDoc.shareId = shareId;
+    }
+
+    tx.create(activityRef, privateDoc);
+    if (decision.nextCounter !== null) {
+      tx.set(userRef, { activitiesCreated: decision.nextCounter }, { merge: true });
+    }
+    tx.set(historyRef, { toolType: toolType.slice(0, 80), counted: decision.counted, shared: share === true, createdAt: now });
+    return { id: requestId, shareId, counted: decision.counted };
+  });
+
+  logger.info('createActivity', { uid, requestId, toolType, ...result });
+
+  if (result.limitReached) {
+    throw new HttpsError('resource-exhausted', 'Free activity creation limit reached.', { count: result.count });
+  }
+  return { id: result.id, shareId: result.shareId || null, alreadyCreated: Boolean(result.alreadyCreated) };
+});
+
+// Shares an activity the user ALREADY saved. Uses no credit and is allowed even after the
+// Free credits are used up (saved activities are read-only then, but can still be shared).
+// The public copy is built here from the saved activity, never from client-supplied content,
+// so a read-only account cannot publish changed words/settings through this path.
+// firestore.rules denies client creates on sharedActivities, so this and createActivity are
+// the only ways a share link is made.
+const UNSHAREABLE_TOOLS = new Set(['letterbox-lesson']);
+
+exports.shareActivity = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (!uid) {
+    throw new HttpsError('unauthenticated', 'Sign in to share an activity.');
+  }
+  const activityId = request.data?.activityId;
+  if (typeof activityId !== 'string' || !activityId || activityId.length > 200 || activityId.includes('/')) {
+    throw new HttpsError('invalid-argument', 'Missing or invalid activity id.');
+  }
+
+  // forceNew: publish a fresh link of the (just edited) saved content. Honored only while the
+  // account can still edit; a read-only account always gets its existing link.
+  const forceNew = request.data?.forceNew === true;
+  const userRef = db.collection('users').doc(uid);
+  const activityRef = userRef.collection('activities').doc(activityId);
+  const FieldValue = admin.firestore.FieldValue;
+
+  const result = await db.runTransaction(async (tx) => {
+    const [snap, userSnap] = await Promise.all([tx.get(activityRef), tx.get(userRef)]);
+    if (!snap.exists) return { notFound: true };
+    const wantNew = forceNew && !isEditLocked(userSnap.exists ? userSnap.data() : {});
+    const activity = snap.data();
+    const toolType = activity.toolType || activity.activityType;
+    if (typeof toolType !== 'string' || UNSHAREABLE_TOOLS.has(toolType)) return { unshareable: true };
+
+    // Already shared and the link still exists: return it unchanged.
+    if (!wantNew && typeof activity.shareId === 'string' && activity.shareId) {
+      const existingRef = db.collection('sharedActivities').doc(activity.shareId);
+      const existing = await tx.get(existingRef);
+      if (existing.exists && existing.data().ownerUid === uid) {
+        return { shareId: activity.shareId, alreadyShared: true };
+      }
+    }
+
+    const publicFields = { ...activity };
+    PRIVATE_ONLY_KEYS.forEach((key) => delete publicFields[key]);
+    const sharedRef = db.collection('sharedActivities').doc();
+    const now = FieldValue.serverTimestamp();
+    tx.create(sharedRef, { ...publicFields, public: true, ownerUid: uid, createdAt: now, updatedAt: now });
+    tx.update(activityRef, { shareEnabled: true, sharedSetup: true, shareId: sharedRef.id });
+    return { shareId: sharedRef.id };
+  });
+
+  if (result.notFound) throw new HttpsError('not-found', 'Activity not found.');
+  if (result.unshareable) throw new HttpsError('failed-precondition', 'This activity type cannot be shared.');
+  logger.info('shareActivity', { uid, activityId, ...result });
+  return { shareId: result.shareId, alreadyShared: Boolean(result.alreadyShared) };
+});
+
+// Safety net for accounts that have no counter yet: if one deletes an activity
+// before ever creating another, seed the counter now so the deleted activity
+// still counts. Accounts that already have a counter are left alone.
+exports.seedActivityCounterOnDelete = onDocumentDeleted(
+  'users/{uid}/activities/{activityId}',
+  async (event) => {
+    const { uid, activityId } = event.params;
+    const userRef = db.collection('users').doc(uid);
+    const liveCountAfter = (await userRef.collection('activities').count().get()).data().count;
+
+    const seeded = await db.runTransaction(async (tx) => {
+      const userSnap = await tx.get(userRef);
+      const data = userSnap.exists ? userSnap.data() : {};
+      const seed = computeDeleteSeed({
+        plan: data.plan,
+        activitiesCreated: data.activitiesCreated,
+        liveCountAfter,
+      });
+      if (seed === null) return null;
+      tx.set(userRef, { activitiesCreated: seed }, { merge: true });
+      return seed;
+    });
+
+    if (seeded !== null) {
+      logger.info('Seeded activity-creation counter on delete.', { uid, activityId, seeded });
+    }
+  }
+);

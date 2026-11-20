@@ -3658,6 +3658,7 @@ function showSavedActivityMessage(msg) {
 }
 
 function showLessonStatus(message, duration = 4500) {
+  if (!message) return;
   const msg = document.getElementById('lessonMsg');
   if (!msg) return;
   msg.textContent = message;
@@ -3675,6 +3676,7 @@ function getSaveAccessErrorMessage(error) {
   if (error?.code === 'save-count-read-failed') {
     return 'We could not check your saved activity count. Please try again.';
   }
+  if (error?.saveGuardHandled) return '';
   return 'Something went wrong saving. Please try again.';
 }
 
@@ -3728,6 +3730,7 @@ async function saveCurrentActivity() {
       // Sharing state, collections, ownerUid, createdAt, and anything
       // else already stored on it are left untouched. Not gated by
       // canCreateActivity since this doesn't create a new saved activity.
+      if (await saveGuard.isEditLocked(user, db)) { saveGuard.showReadOnlyModal(); return; }
       await firestore.updateDoc(
         firestore.doc(db, `users/${user.uid}/activities`, resumingActivityId),
         {
@@ -3746,10 +3749,7 @@ async function saveCurrentActivity() {
       activityData.ownerUid = user.uid;
       activityData.shareEnabled = false;
 
-      await firestore.addDoc(
-        firestore.collection(db, `users/${user.uid}/activities`),
-        activityData
-      );
+      await saveGuard.createActivityDoc(user, db, activityData);
     }
 
     if (msg) {
@@ -3873,10 +3873,7 @@ async function savePendingActivityAfterLogin() {
       activityData.ownerUid = user.uid;
       activityData.shareEnabled = false;
 
-      await firestore.addDoc(
-        firestore.collection(db, `users/${user.uid}/activities`),
-        activityData
-      );
+      await saveGuard.createActivityDoc(user, db, activityData);
 
       localStorage.removeItem('pendingActivityData');
 

@@ -1858,7 +1858,7 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
   };
 
   try {
-    await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
+    await (await import('./activity-save-guard.js')).createActivityDoc(currentUser, db, activityData);
     const btn = document.getElementById('saveActivityBtn');
     const orig = btn.innerHTML;
     btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Saved!`;
@@ -1867,7 +1867,7 @@ document.getElementById('saveActivityBtn').addEventListener('click', async () =>
     setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2500);
   } catch (err) {
     console.error('Save error:', err);
-    alert('Save failed. Please check your connection and try again.');
+    if (!err || !err.saveGuardHandled) alert('Save failed. Please check your connection and try again.');
   }
 });
 
@@ -2122,16 +2122,14 @@ window.saveDigitalReadingFlashcardsSharedActivity = async function(activity) {
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp()
   };
-  const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
-  const privateRef = await addDoc(collection(db, `users/${currentUser.uid}/activities`), {
+  const privateRef = await (await import('./activity-save-guard.js')).createActivityDoc(currentUser, db, {
     ...sharedData,
     url: 'digital-reading-flashcards.html',
     shareEnabled: true,
     sharedSetup: true,
-    shareId: sharedRef.id,
     userId: currentUser.uid
   });
-  return { shareId: sharedRef.id, savedActivityId: privateRef.id };
+  return { shareId: privateRef.shareId, savedActivityId: privateRef.id };
 };
 
 window.captureDigitalReadingFlashcardsBeforeLogin = function(action = 'save') {

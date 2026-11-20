@@ -2253,7 +2253,7 @@ if (saveActivityBtn) {
     };
 
     try {
-      await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
+      await (await import('./activity-save-guard.js')).createActivityDoc(currentUser, db, activityData);
       const btn = document.getElementById('saveActivityBtn');
       const orig = btn.innerHTML;
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg> Saved!`;
@@ -2262,7 +2262,7 @@ if (saveActivityBtn) {
       setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2500);
     } catch (err) {
       console.error('Save error:', err);
-      alert('Save failed. Please check your connection and try again.');
+      if (!err || !err.saveGuardHandled) alert('Save failed. Please check your connection and try again.');
     }
   });
 }
@@ -2453,18 +2453,15 @@ window.saveMagicWordRoadSharedActivity = async function(activity) {
     public:       true,
     ownerUid:     currentUser.uid
   };
-  const sharedRef = await addDoc(collection(db, 'sharedActivities'), sharedData);
-
   const activityData = {
     ...sharedData,
     url:          'magic-word-road.html',
     shareEnabled: true,
     sharedSetup:  true,
-    shareId:      sharedRef.id,
     userId:       currentUser.uid
   };
-  const privateRef = await addDoc(collection(db, `users/${currentUser.uid}/activities`), activityData);
-  return { shareId: sharedRef.id, savedActivityId: privateRef.id };
+  const privateRef = await (await import('./activity-save-guard.js')).createActivityDoc(currentUser, db, activityData);
+  return { shareId: privateRef.shareId, savedActivityId: privateRef.id };
 };
 
 window.loadMagicWordRoadSharedActivity = async function(shareId) {
