@@ -1,0 +1,85 @@
+/* Announcement for "Build Your Own Word Wizard Quest" (see wwq-promo.js).
+   - Signed-in banner: homepage + Teacher Dashboard (shares one dismissal key).
+   - The signed-out homepage popup reuses plus-popup.css (.plus-popup-*), so it has no styles here.
+   Self-contained brand colors so it renders the same on every page, like the other announcement banners. */
+
+.la-wwq-banner {
+  width: 100%;
+  background: linear-gradient(90deg, #effaf8 0%, #f5f0fc 100%);
+  border-bottom: 1px solid rgba(15, 110, 86, .18);
+  color: #34435f;
+  font-family: 'Nunito', sans-serif;
+}
+
+.la-wwq-banner__inner {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 9px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.la-wwq-banner__text { margin: 0; font-size: 13.5px; font-weight: 650; line-height: 1.4; }
+.la-wwq-banner__text strong { color: #0f6e56; font-weight: 900; margin-right: 4px; }
+
+.la-wwq-banner__cta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 16px;
+  border-radius: 100px;
+  background: #087a70;
+  color: #fff;
+  font-weight: 900;
+  font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .2s, transform .2s;
+}
+.la-wwq-banner__cta:hover { background: #0b5745; transform: translateY(-1px); }
+.la-wwq-banner__cta:focus-visible { outline: 3px solid #ffb830; outline-offset: 2px; }
+
+.la-wwq-banner__dismiss {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #64718a;
+  font: 800 20px/1 'Nunito', sans-serif;
+  cursor: pointer;
+}
+.la-wwq-banner__dismiss:hover,
+.la-wwq-banner__dismiss:focus-visible { background: rgba(15, 110, 86, .1); color: #0f6e56; outline: none; }
+
+/* Dashboard: sits inside <main> as a rounded card instead of a full-width bar. */
+.la-wwq-banner--card {
+  border: 1px solid rgba(15, 110, 86, .18);
+  border-radius: 14px;
+  margin: 0 0 16px;
+  overflow: hidden;
+}
+.la-wwq-banner--card .la-wwq-banner__inner { width: calc(100% - 28px); justify-content: space-between; }
+.la-wwq-banner--card .la-wwq-banner__text { flex: 1; }
+
+@media (max-width: 640px) {
+  .la-wwq-banner__inner {
+    width: min(100% - 20px, 560px);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 6px 8px;
+    padding: 9px 0 10px;
+  }
+  .la-wwq-banner__text { grid-column: 1; font-size: 12.5px; }
+  .la-wwq-banner__dismiss { grid-column: 2; grid-row: 1; margin-top: -2px; }
+  .la-wwq-banner__cta { grid-column: 1 / -1; justify-self: start; }
+  .la-wwq-banner--card .la-wwq-banner__inner { width: calc(100% - 20px); }
+}

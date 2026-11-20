@@ -162,6 +162,8 @@
 
   function openPopup() {
     if (isOpen || isSuppressed()) return;
+    // Another promo popup (wwq-promo.js) was already shown this page view: never stack two popups.
+    if (window.laPromoPopupShownThisView) return;
     isOpen = true;
     previousActiveElement = document.activeElement;
     backdrop.hidden = false;
