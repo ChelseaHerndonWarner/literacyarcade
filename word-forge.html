@@ -3304,6 +3304,7 @@ html, body{
   <footer class="la-footer">Literacy Arcade • Word Forge</footer>
 </div>
 
+<script src="word-forge-bank.js"></script>
 <script>
 /* ── AUDIO ──────────────────────────────────────────────────── */
 let actx=null,son=true;
@@ -3327,46 +3328,60 @@ const sfx={
 };
 document.getElementById('soundBtn').addEventListener('click',()=>{son=!son;sfx.click();document.getElementById('si').innerHTML=son?'<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>':'<path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';});
 
-/* ── DICTIONARY ─────────────────────────────────────────────── */
-const LOC=new Set(`act acts acted build builds builder built building call calls care careful careless check checks clean cleans connect connects connection cook cooks cooked cooking count counts counted counting discount discounted discounting cloud clouds clouded clouding cloudy delight delights delighted delighting delightful delightfulness discover discovered discovery display do does did done draw draws form forms formed forming formation give gives grow grows heat heats heated heating help helps helpful helpfulness helpless hold holds join joins keep keeps know knows lead leads learn learns link links load loads look looks make makes mark marks match matches matched matching mismatch mismatched mismatching mark marks move moves name names open opens order orders pass passes pay pays pick picks plan plans play plays played playing player playful rain rains rained raining rainy read reads reading reader rebuild rebuilds rebuilt rebuilding reform reforms reformed replace replaces replaced replay replays replayed replaying review reviews reviewed reviewing reviewer rewrite run runs running save saves school schools send sends set sets show shows sign signs sleep sleeps slept sleeping sleepy sort sorts spell spells spelled spelling speller stand stands start starts stay stops take takes teach teaches test tests thank thanks thanked thankful thankfulness thanking think thinks tie ties time times touch touches train trains trust trusts trusted trusting turn turns type types use uses useful usefulness useless user view views viewed viewing viewer walk walks want wants watch watches work works worked working worker workload workplace write writes wrote written replay reread rerun reform replace rework reworked reorder retake rewrite relearn rebuild recheck reformat relist resend relink redirect repass remix reload reopen rejoin rematch regrow rethink replan repay reprint redraw retrain preview preform prework preset pretest preorder prefill preread preheat preheated preheating precook precooked precooking preschool miscount miscounted miscounting misplay misform misread misplace misplaced misplacing mismatch misuse mislead misspell misspelled misspelling mistrust mistrusted mistrusting misrun misbehave misbehaved misbehaving unread unform unlink unlock unfold undo unpack untie uncover unfit unroll outrun outplay outwork outform outreach outmatch outread outlast outplace overrun overplay overwork overread overuse overwrite overdo overturn overpass overlook overload override overset overplan overmatch transport transform transmit transfer transit transact transfix transplant displace disorder disconnect dislike disuse distrust distrusted distrusting discard display behave behaves behaved behaving viewing spelling playing forming reading running placing working replaying rereading misreading misspelling misplaying previewing replacing overrunning overplaying overworking outrunning outplaying rewriting relearning rebuilding disconnecting uncovering displacing transforming transporting preforming reworking reloading retraining reformatting viewed spelled played formed placed worked reformed reviewed replayed misread misspelled misplayed previewed overplayed overworked outplayed rewritten relearned rebuilt disconnected uncovered displaced transformed views spells plays forms reads works reviews reforms replays playful helpful useful hopeful powerful restful harmful careful watchful mindful peaceful graceful thankful cheerful faithful fearful formless helpless useless hopeless powerless restless harmless careless mindless formation transformation transportation connection direction action transaction attraction selection detection protection rejection collection reflection reception perception workplace workload workout wordplay gameplay`.trim().split(/\s+/).filter(Boolean));
-`under undercook undercooked undercooking underload underloaded underloading underwork underworked underworking fill fills filled filling overfill overfilled overfilling underfill underfilled underfilling unhelpful unhelpfulness unthankful unthankfulness cover covers covered covering recover recovered recovering pack packs packed packing repack repacked repacking reconnect reconnects reconnected reconnecting connect connected connecting disconnect disconnected disconnecting transport transported transporting transportation reformation`.trim().split(/\s+/).forEach(w=>LOC.add(w));
-const CAC=new Map();let apiOk=null;
-async function pApi(){try{const r=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/word',{signal:AbortSignal.timeout(3000)});apiOk=r.ok;}catch{apiOk=false;}}
-async function isW(w){w=w.toLowerCase();if(LOC.has(w))return true;if(w.length<3)return false;if(CAC.has(w))return CAC.get(w);if(apiOk===false)return false;try{const r=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(w)}`,{signal:AbortSignal.timeout(2500)});const ok=r.ok;CAC.set(w,ok);if(apiOk===null)apiOk=true;return ok;}catch{apiOk=false;return false;}}
+/* ── WORD BANK ──────────────────────────────────────────────────
+   Offline, curated word-part sequences (word-forge-bank.js). A forged chain counts only when its exact
+   part sequence is in the bank for the round's rune set — no dictionary lookups, no network. */
+const BANK=window.WORD_FORGE_BANK;
+const PART_TYPE=new Map(BANK.parts.map(p=>[p.id,p.type]));
 
-/* ── ROUNDS ─────────────────────────────────────────────────── */
-function partRunes(prefixes,bases,suffixes){
-  return [
-    ...prefixes.map(t=>({t,c:'rp'})),
-    ...bases.map(t=>({t,c:'rr'})),
-    ...suffixes.map(t=>({t,c:'rs'}))
-  ];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ── ROUNDS (planned from the bank's recipes) ───────────────── */
+const RDS=[
+  {name:'Word Builders',sub:'Build real words from familiar word parts',key:'builders',roundCount:3},
+  {name:'Word Changers',sub:'Change word meanings with prefixes and suffixes',key:'changers',roundCount:3},
+  {name:'Word Chains',sub:'Build longer word-part chains',key:'chains',roundCount:3},
+  {name:'Word Masters',sub:'Chain 3+ parts for rare words',key:'masters',roundCount:1},
+];
+
+// recently played recipes are avoided: each draw prefers the least recently played recipe
+const RECENT_KEY='wfRecentRecipes',RECENT_MAX=10;
+function loadRecent(){try{const a=JSON.parse(localStorage.getItem(RECENT_KEY)||'[]');return Array.isArray(a)?a:[];}catch(e){return[];}}
+function noteRecipePlayed(id){try{const a=loadRecent().filter(x=>x!==id);a.push(id);localStorage.setItem(RECENT_KEY,JSON.stringify(a.slice(-RECENT_MAX)));}catch(e){}}
+// avoid recently played recipes: draw at random from the older half of the pool (never-played counts as oldest)
+function pickRecipe(pool,recent){
+  const age=r=>recent.lastIndexOf(r.id); // -1 = not played recently; larger = played more recently
+  const ranked=shuffle([...pool]).sort((a,b)=>age(a)-age(b));
+  const older=ranked.slice(0,Math.max(1,Math.ceil(ranked.length/2)));
+  return older[Math.floor(Math.random()*older.length)];
 }
 
-const WORD_BUILDER_ROUNDS=[
-  {id:'WB1',title:'re- builders',focus:'Build familiar words with re- and common endings',runes:partRunes(['re'],['play','read','work','build'],['ed','ing','er'])},
-  {id:'WB2',title:'pre- builders',focus:'Build words with pre- plus suffix options',runes:partRunes(['pre'],['heat','view','cook','school'],['ed','ing'])},
-  {id:'WB3',title:'play/work family',focus:'Build word families with more than one prefix',runes:partRunes(['re','over'],['play','work'],['ed','ing','er','s'])}
-];
+// one round = one recipe: its runes (grouped prefix / root / suffix, shuffled within each group) and the
+// exact set of bank words that can be built from them
+function buildRound(recipe){
+  const set=new Set(recipe.parts);
+  const valid=new Map();
+  BANK.words.forEach(w=>{if(w.parts.every(id=>set.has(id)))valid.set(w.parts.join('|'),w.w);});
+  const group=(type,c)=>shuffle(recipe.parts.filter(id=>PART_TYPE.get(id)===type)).map(t=>({t,c}));
+  return{id:recipe.id,title:recipe.title,focus:recipe.focus,runes:[...group('prefix','rp'),...group('root','rr'),...group('suffix','rs')],valid,total:valid.size};
+}
 
-const WORD_CHANGER_ROUNDS=[
-  {id:'WC1',title:'dis-/mis- meaning shifts',focus:'Notice how prefixes change meaning',runes:partRunes(['dis','mis'],['trust','spell','count','match'],['ed','ing'])},
-  {id:'WC2',title:'-ful / -less contrasts',focus:'Compare suffixes that change meaning',runes:partRunes(['un'],['help','care','hope','use'],['ful','less'])},
-  {id:'WC3',title:'over-/under- degree changes',focus:'Change meaning by amount or degree',runes:partRunes(['over','under'],['cook','load','work','fill'],['ed','ing'])}
-];
-
-const WORD_CHAIN_ROUNDS=[
-  {id:'WCH1',title:'-ful to -fulness chains',focus:'Extend bases into adjectives and nouns',runes:partRunes(['un'],['help','use','thank','delight'],['ful','ness'])},
-  {id:'WCH2',title:'connect-and-disconnect chains',focus:'Extend words through prefix and suffix chains',runes:partRunes(['re','dis','un'],['connect','cover','pack'],['ed','ing'])},
-  {id:'WCH3',title:'longer academic chains',focus:'Build longer transparent 3-part words',runes:partRunes(['trans','re','dis'],['form','port','connect'],['ed','ing','ation'])}
-];
-
-const RDS=[
-  {name:'Word Builders',sub:'Build real words from familiar word parts',rounds:WORD_BUILDER_ROUNDS},
-  {name:'Word Changers',sub:'Change word meanings with prefixes and suffixes',rounds:WORD_CHANGER_ROUNDS},
-  {name:'Word Chains',sub:'Build longer word-part chains',rounds:WORD_CHAIN_ROUNDS},
-  {name:'Word Masters',sub:'Chain 3+ parts for rare words',runes:[{t:'over',c:'rp'},{t:'out',c:'rp'},{t:'re',c:'rp'},{t:'run',c:'rr'},{t:'play',c:'rr'},{t:'work',c:'rr'},{t:'write',c:'rr'},{t:'load',c:'rr'},{t:'ing',c:'rs'},{t:'er',c:'rs'},{t:'s',c:'rs'}]},
-];
+const vaultPlans=new Map();
+function planVault(v){
+  const pool=BANK.recipes.filter(r=>r.vault===v.key);
+  const recent=loadRecent();
+  const picked=[];
+  if(v.roundCount>1){
+    // difficulty still rises across the vault, but each round draws from a window of tiers
+    // (round 1: tier 1; round 2: tiers 1-2; round 3: tiers 2-3) so sessions differ even when a tier is small
+    [[1],[1,2],[2,3]].forEach(tiers=>{
+      let tp=pool.filter(r=>tiers.includes(r.tier)&&!picked.some(p=>p.id===r.id));
+      if(!tp.length)tp=pool.filter(r=>!picked.some(p=>p.id===r.id));
+      if(tp.length)picked.push(pickRecipe(tp,recent));
+    });
+  }else picked.push(pickRecipe(pool,recent));
+  vaultPlans.set(v.name,picked.map(buildRound));
+}
 
 /* ── STATE ─────────────────────────────────────────────────── */
 let cur=RDS[0],tl=120,left=0,tid=null;
@@ -3383,7 +3398,8 @@ function cl(c){return{rp:{bg:'var(--pp-bg)',bd:'var(--pp-bd)',tx:'var(--pp-tx)'}
 function sh(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
 
 function vaultRounds(v=cur){
-  return v.rounds&&v.rounds.length?v.rounds:[{id:'',title:v.name,focus:v.sub,runes:v.runes}];
+  if(!vaultPlans.has(v.name))planVault(v);
+  return vaultPlans.get(v.name);
 }
 
 function roundIndex(v=cur){
@@ -3407,7 +3423,7 @@ function roundDisplayName(v=cur){
 
 function advanceRound(v=cur){
   const rounds=vaultRounds(v);
-  if(rounds.length<2)return;
+  if(rounds.length<2){planVault(v);return;} // single-round vault: draw a fresh recipe each time
   roundProgress.set(v.name,(roundIndex(v)+1)%rounds.length);
 }
 
@@ -3448,6 +3464,7 @@ function recordRoundTotal(words,longest){
 function resetVaultSequence(v=cur){
   roundProgress.set(v.name,0);
   resetVaultTotal(v);
+  planVault(v);
 }
 
 function showTeachModal(onStart=null){
@@ -3593,14 +3610,14 @@ function startGame(){
   document.getElementById('cbln').textContent='';document.getElementById('cbln').className='combo-lbl';
   document.getElementById('wcnum').textContent='0';
   document.getElementById('dw').innerHTML='<span class="disc-empty">Your forged words will appear here…</span>';
-  document.getElementById('dct').textContent='—';
-  document.getElementById('rlbl').textContent=roundDisplayName();
+    document.getElementById('rlbl').textContent=roundDisplayName();
   document.getElementById('fw').textContent='—';document.getElementById('fw').className='forge-word';
   document.getElementById('fbl').className='fb-line';document.getElementById('btnF').disabled=true;
   document.getElementById('bwEmpty').style.display='';document.getElementById('bwWord').style.display='none';
   renderVault(true);renderChain();updateTimer(false);sh('sG');
   console.log('[WordForge] sG shown — game is running');
-  run=true;if(tid)clearInterval(tid);tid=setInterval(tick,1000);pApi();
+  noteRecipePlayed(activeRound().id);updateProgress();
+  run=true;if(tid)clearInterval(tid);tid=setInterval(tick,1000);
 }
 
 /* ── VAULT ─────────────────────────────────────────────────── */
@@ -3623,13 +3640,33 @@ function renderChain(){
 }
 
 /* ── FORGE ─────────────────────────────────────────────────── */
-async function forge(){
+function updateProgress(){
+  document.getElementById('dct').textContent=`${wc} of ${activeRound().total} words forged`;
+}
+
+// every valid word found: stop the clock, celebrate briefly, then the normal results screen
+function finishAllFound(){
+  run=false;if(tid){clearInterval(tid);tid=null;}
+  const total=activeRound().total;
+  document.getElementById('btnF').disabled=true;
+  setTimeout(()=>{
+    const gs=document.getElementById('gs');if(!gs||!document.getElementById('sG').classList.contains('on'))return;
+    const old=gs.querySelector('.rare-banner');if(old)old.remove();
+    const banner=document.createElement('div');
+    banner.className='rare-banner';
+    banner.innerHTML=`<div class="rb-label">✦ Every Word Forged ✦</div><div class="rb-word">ALL ${total} WORDS</div><div class="rb-pts">Round complete!</div>`;
+    gs.appendChild(banner);setTimeout(()=>banner.remove(),2100);
+    vaultCompleteBurst();sfx.rank();setTimeout(()=>sfx.epic(),300);
+  },650);
+  setTimeout(()=>{if(document.getElementById('sG').classList.contains('on'))showResults();},3000);
+}
+
+function forge(){
   if(forg||!run)return;
   const word=chain.map(c=>c.t).join('');
   const st=document.getElementById('fs'),fw=document.getElementById('fw'),btn=document.getElementById('btnF');
   if(found.has(word)){showFb('Already discovered · '+word,'dup');return;}
-  forg=true;btn.disabled=true;showFb('Consulting the lexicon…','dup');
-  const v=await isW(word);forg=false;if(!run)return;
+  const v=activeRound().valid.has(chain.map(c=>c.t).join('|'));
   if(v){
     const isEpic=word.length>=8;
     const pts=10+(isEpic?word.length*3:word.length>=6?word.length*2:word.length)+streak*4;
@@ -3641,7 +3678,7 @@ async function forge(){
       const bwEl=document.getElementById('bwWord');bwEl.style.display='';bwEl.textContent=word.toUpperCase();
     }
     // score
-    document.getElementById('dct').textContent=wc+(wc===1?' word':' words');
+    updateProgress();
     const sb=document.getElementById('scbig');sb.textContent=score;sb.classList.remove('bump');void sb.offsetWidth;sb.classList.add('bump');setTimeout(()=>sb.classList.remove('bump'),155);
     document.getElementById('wcnum').textContent=wc;
     const ct=streak>=2?streak+'× combo 🔥':'',hot=streak>=3;
@@ -3669,10 +3706,11 @@ async function forge(){
     // rare spotlight
     if(isEpic)setTimeout(()=>showRareSpotlight(word,pts),120);
     setTimeout(()=>{clearChain();btn.disabled=false;},215);
+    if(found.size>=activeRound().total)finishAllFound();
   } else {
     streak=0;document.getElementById('cbln').textContent='';document.getElementById('cbln').className='combo-lbl';document.getElementById('strkbdg').textContent='';
     const st2=document.getElementById('fs');st2.classList.remove('ok','epic','no');void st2.offsetWidth;st2.classList.add('no');setTimeout(()=>st2.classList.remove('no'),370);
-    sfx.fizzle();showFb('Not a real word — try another combination','no');btn.disabled=false;
+    sfx.fizzle();showFb("That combination doesn't build a valid word. Try different word parts!",'no');btn.disabled=false;
   }
 }
 
@@ -3867,7 +3905,7 @@ document.getElementById('helpBtn').addEventListener('click',()=>{
   showTeachModal(null);
 });
 
-spawnAmbient();buildLobby();pApi();
+spawnAmbient();buildLobby();
 
 </script>
   <!-- ══ Plus promo popup — shared across public pages (plus-popup.css/js) ══ -->
