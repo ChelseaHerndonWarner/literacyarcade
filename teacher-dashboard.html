@@ -1050,6 +1050,7 @@ let allActivities = []; // [{id, ...data}]
 let teachingCollections = []; // [{id, name, sections:[{id,name,activityIds:[]}]}]
 let currentView = 'collections';
 let currentPlan = 'free';
+let activitiesCreated = null; // lifetime creation counter (server-written); null until loaded
 const FREE_ACTIVITY_LIMIT = 5;
 let activeCollectionId = null;
 let activityPickerContext = null;
@@ -1107,9 +1108,12 @@ async function loadUserPlan() {
   try {
     const snap = await getDoc(doc(db, 'users', currentUser.uid));
     currentPlan = snap.exists() ? (snap.data().plan || 'free') : 'free';
+    const created = snap.exists() ? snap.data().activitiesCreated : null;
+    activitiesCreated = typeof created === 'number' ? created : null;
   } catch (err) {
     console.warn('Could not load account plan:', err);
     currentPlan = 'free';
+    activitiesCreated = null;
   }
   renderPlanStatus();
 }
@@ -1133,11 +1137,12 @@ function renderPlanStatus() {
 
 function renderPlanStatusBody(normalized, status) {
   if (normalized === 'free') {
-    const count = Math.min(allActivities.length, FREE_ACTIVITY_LIMIT);
+    // Lifetime creations from the server counter; accounts it has not counted yet fall back to their activities.
+    const count = Math.min(activitiesCreated === null ? allActivities.length : activitiesCreated, FREE_ACTIVITY_LIMIT);
     status.innerHTML = `
       <strong>Free Plan</strong>
-      <div>Save up to ${FREE_ACTIVITY_LIMIT} activities.</div>
-      <div>${count} of ${FREE_ACTIVITY_LIMIT} saved activities used</div>
+      <div>${count} of ${FREE_ACTIVITY_LIMIT} free activity creations used.</div>
+      <div>You can still create and play games live for free. Upgrade to Plus for unlimited saving, sharing, and editing.</div>
       <a class="plan-upgrade-link" href="plus-subscriptions.html">Upgrade to Plus for unlimited saved activities and access to assessments →</a>`;
   } else if (normalized === 'plus') {
     status.innerHTML = `
@@ -2063,6 +2068,7 @@ async function duplicateActivity(id) {
     const { createActivityDoc } = await import('./activity-save-guard.js');
     const ref = await createActivityDoc(currentUser, db, data);
     allActivities.unshift({ id: ref.id, ...data, createdAt: new Date(), updatedAt: new Date() });
+    await loadUserPlan(); // refresh the creation counter shown on the plan card
     renderAll();
   } catch (err) {
     console.error(err);

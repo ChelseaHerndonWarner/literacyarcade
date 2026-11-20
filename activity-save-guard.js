@@ -177,7 +177,7 @@ function ensureStyles() {
 }
 
 const STANDARD_BODY = [
-  'Free accounts can create up to 5 classroom activities in total, and deleting an activity does not give one back. Everything you’ve already created stays available to open, edit and share.',
+  "Free accounts can create up to 5 classroom activities in total, and deleting an activity does not give one back. Everything you've already saved remains available to open, play, and share. Upgrade to Plus to create new saved activities or edit existing ones.",
   'Upgrade to Literacy Arcade Plus to create and share unlimited games and tools.'
 ];
 
