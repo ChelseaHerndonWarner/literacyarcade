@@ -2,6 +2,7 @@ const { onDocumentWritten, onDocumentDeleted } = require('firebase-functions/v2/
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { logger } = require('firebase-functions');
 const { computeCreateDecision, computeDeleteSeed, isEditLocked } = require('./activity-credits');
+const { buildPublicFields } = require('./public-share');
 const admin = require('firebase-admin');
 
 admin.initializeApp();
@@ -264,11 +265,6 @@ exports.recordAssessmentCompletion = onCall(async (request) => {
 // are logged but not counted. users/{uid}/creationHistory/{activityId} is the audit trail.
 // Rules for counting live in activity-credits.js.
 const MAX_ACTIVITY_BYTES = 900 * 1024;
-// Fields the server controls on the private activity or never copies to the public share doc.
-const PRIVATE_ONLY_KEYS = [
-  'id', 'url', 'userId', 'ownerUid', 'savedActivityId',
-  'createdAt', 'updatedAt', 'shareId', 'shareEnabled', 'sharedSetup', 'public',
-];
 
 function isPlainObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -326,8 +322,7 @@ exports.createActivity = onCall(async (request) => {
     }
 
     const now = FieldValue.serverTimestamp();
-    const publicFields = { ...activity };
-    PRIVATE_ONLY_KEYS.forEach((key) => delete publicFields[key]);
+    const publicFields = buildPublicFields(activity);
     const privateDoc = { ...activity, userId: uid, createdAt: now, updatedAt: now };
     if ('ownerUid' in privateDoc) privateDoc.ownerUid = uid;
     if (url) privateDoc.url = url;
@@ -362,7 +357,8 @@ exports.createActivity = onCall(async (request) => {
 // Shares an activity the user ALREADY saved. Uses no credit and is allowed even after the
 // Free credits are used up (saved activities are read-only then, but can still be shared).
 // The public copy is built here from the saved activity, never from client-supplied content,
-// so a read-only account cannot publish changed words/settings through this path.
+// so a read-only account cannot publish changed words/settings through this path. Only an
+// allowlist of fields is published (see public-share.js).
 // firestore.rules denies client creates on sharedActivities, so this and createActivity are
 // the only ways a share link is made.
 const UNSHAREABLE_TOOLS = new Set(['letterbox-lesson']);
@@ -401,8 +397,7 @@ exports.shareActivity = onCall(async (request) => {
       }
     }
 
-    const publicFields = { ...activity };
-    PRIVATE_ONLY_KEYS.forEach((key) => delete publicFields[key]);
+    const publicFields = buildPublicFields(activity);
     const sharedRef = db.collection('sharedActivities').doc();
     const now = FieldValue.serverTimestamp();
     tx.create(sharedRef, { ...publicFields, public: true, ownerUid: uid, createdAt: now, updatedAt: now });

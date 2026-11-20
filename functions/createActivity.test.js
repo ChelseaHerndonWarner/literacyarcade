@@ -99,7 +99,7 @@ const rejects = async (p, code) => { try { await p; } catch (e) { assert.strictE
   assert.strictEqual(activities('retry'), 1);
 
   // Share before Save: one new activity + one public share doc + one credit, linked by shareId.
-  const s = await call('sharer', { requestId: rid(), share: true, activity: act({ shareEnabled: true, sharedSetup: true, shareId: 'forged', createdAt: 'x' }) });
+  const s = await call('sharer', { requestId: rid(), share: true, activity: act({ shareEnabled: true, sharedSetup: true, shareId: 'forged', createdAt: 'x', teacherNotes: 'private', settings: { playerSetup: [{ name: 'Maria', color: 'c' }] } }) });
   assert(s.shareId && s.shareId !== 'forged');
   const priv = store.get(`users/sharer/activities/${s.id}`);
   const pub = store.get(`sharedActivities/${s.shareId}`);
@@ -108,6 +108,7 @@ const rejects = async (p, code) => { try { await p; } catch (e) { assert.strictE
   assert.strictEqual(pub.public, true);
   assert.strictEqual(pub.ownerUid, 'sharer');
   assert(!('url' in pub) && !('shareId' in pub) && !('userId' in pub), 'private fields must not leak to the public doc');
+  assert(!('teacherNotes' in pub) && !JSON.stringify(pub).includes('Maria'), 'unlisted fields and player names must not leak');
   assert.strictEqual(user('sharer').activitiesCreated, 1);
 
   // Blocked share creates no share doc.
@@ -138,7 +139,7 @@ const rejects = async (p, code) => { try { await p; } catch (e) { assert.strictE
   // ---- shareActivity: existing activities can be shared with no credit, even when read-only ----
   const shareCall = (uid, data) => fns.shareActivity({ auth: uid ? { uid } : null, data });
   store.set('users/ro', { plan: 'free', activitiesCreated: 5 });
-  store.set('users/ro/activities/saved1', { title: 'Saved', toolType: 'magic-word-road', activityType: 'magic-word-road', words: ['one', 'two'], settings: { rounds: 3 }, url: 'magic-word-road.html', userId: 'ro' });
+  store.set('users/ro/activities/saved1', { title: 'Saved', toolType: 'magic-word-road', activityType: 'magic-word-road', words: ['one', 'two'], settings: { rounds: 3, playerSetup: [{ name: 'Jaden', color: 'c' }] }, url: 'magic-word-road.html', userId: 'ro', teacherNotes: 'private' });
   await rejects(shareCall(null, { activityId: 'saved1' }), 'unauthenticated');
   await rejects(shareCall('ro', { activityId: 'nope' }), 'not-found');
   await rejects(shareCall('other', { activityId: 'saved1' }), 'not-found'); // someone else's activity id
@@ -150,6 +151,7 @@ const rejects = async (p, code) => { try { await p; } catch (e) { assert.strictE
   assert.strictEqual(sharedDoc.public, true);
   assert.strictEqual(sharedDoc.ownerUid, 'ro');
   assert(!('url' in sharedDoc) && !('userId' in sharedDoc) && !('shareId' in sharedDoc));
+  assert(!('teacherNotes' in sharedDoc) && sharedDoc.settings.playerSetup[0].name === 'Player 1', 'private note / player name must not be published');
   assert.strictEqual(store.get('users/ro/activities/saved1').shareId, sh.shareId);
   assert.strictEqual(user('ro').activitiesCreated, 5);           // no credit used
   // Sharing again returns the same link; a read-only account cannot force a new one.
