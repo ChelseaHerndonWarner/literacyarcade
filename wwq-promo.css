@@ -1,6 +1,5 @@
 /* Announcement for "Build Your Own Word Wizard Quest" (see wwq-promo.js).
-   - Signed-in banner: homepage + Teacher Dashboard (shares one dismissal key).
-   - The signed-out homepage popup reuses plus-popup.css (.plus-popup-*), so it has no styles here.
+   - Banner for every visitor, signed in or out: homepage + Teacher Dashboard (shares one dismissal key).
    Self-contained brand colors so it renders the same on every page, like the other announcement banners. */
 
 .la-wwq-banner {

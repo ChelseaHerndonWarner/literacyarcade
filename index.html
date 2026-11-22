@@ -1425,9 +1425,86 @@
     .program-approval-item:hover { transform: none; }
   }
 
+  /* ══ TEMPORARY: Nov 2026 Parent Q&A promo section ══
+     Remove this block (and the matching HTML section + popup) after the
+     event on November 30, 2026. Scoped to the homepage only. */
+  .event-promo {
+    background: var(--sand);
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+  .event-promo-inner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .event-promo-img {
+    width: 220px;
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+    display: block;
+  }
+  .event-promo-content { flex: 1 1 320px; min-width: 240px; }
+  .event-promo-badge {
+    display: inline-block;
+    font-family: var(--font-head);
+    font-size: .7rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--coral);
+    background: rgba(255,184,48,.16);
+    border: 1.5px solid rgba(255,184,48,.5);
+    border-radius: 999px;
+    padding: 3px 10px;
+    margin: 0 0 8px;
+  }
+  .event-promo-heading {
+    font-family: var(--font-head);
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    font-weight: 900;
+    color: var(--ink);
+    margin: 0 0 4px;
+    line-height: 1.25;
+  }
+  .event-promo-datetime {
+    font-family: var(--font-head);
+    font-size: .92rem;
+    font-weight: 800;
+    color: var(--teal-dk);
+    margin: 0 0 6px;
+  }
+  .event-promo-body {
+    font-size: .9rem;
+    color: var(--ink-soft);
+    margin: 0 0 14px;
+    max-width: 520px;
+  }
+  .event-promo-cta { padding: 11px 22px; font-size: .88rem; }
+  @media (max-width: 720px) {
+    .event-promo-inner { flex-direction: column; text-align: center; }
+    .event-promo-img { width: 100%; max-width: 320px; }
+    .event-promo-body { max-width: none; margin-left: auto; margin-right: auto; }
+  }
+  .event-promo-sparkle {
+    display: inline-block;
+    color: var(--coral);
+    margin-right: 6px;
+    animation: event-promo-sparkle-pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes event-promo-sparkle-pulse {
+    0%, 100% { opacity: .55; transform: scale(.9); }
+    50% { opacity: 1; transform: scale(1.08); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .event-promo-sparkle { animation: none; }
+  }
 </style>
   <link rel="stylesheet" href="plus-popup.css" />
-  <link rel="stylesheet" href="whats-new-banner.css" />
   <link rel="stylesheet" href="wwq-promo.css" />
 </head>
 <body>
@@ -1642,6 +1719,31 @@
         </div>
       </div>
     </section>
+
+    <!-- ══ TEMPORARY: Nov 2026 Parent Q&A promo — remove after the event ══ -->
+    <section class="event-promo" id="eventPromoNov" aria-label="Plus Family Parent Q&amp;A event">
+      <div class="container event-promo-inner">
+        <img class="event-promo-img" src="images/parent-qa-nov-2026.png" alt="Plus Family Parent Q&amp;A, Monday November 30 at 6:30 PM Central Time" width="1672" height="941" decoding="async">
+        <div class="event-promo-content">
+          <span class="event-promo-badge">Plus Family Benefit</span>
+          <h2 class="event-promo-heading"><span class="event-promo-sparkle" aria-hidden="true">✦</span>November Parent Q&amp;A</h2>
+          <p class="event-promo-datetime">Monday, November 30 at 6:30 PM Central Time</p>
+          <p class="event-promo-body">Bring your questions about your child’s reading and get guidance on what may help.</p>
+          <a class="btn btn-primary event-promo-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSf6_DM9b4RVEJ1EYoUNycF2taet-TfR_cqqHKRWjEIo7gl_-w/viewform?usp=publish-editor" target="_blank" rel="noopener">RSVP &amp; Submit a Question</a>
+        </div>
+      </div>
+    </section>
+    <script>
+      // Auto-hide: once Dec 1, 2026 00:00 CST passes, this banner hides
+      // itself immediately (runs inline, right after the markup, to avoid
+      // a flash of the expired banner before any deferred script runs).
+      (function () {
+        if (Date.now() >= new Date('2026-12-01T00:00:00-06:00').getTime()) {
+          var el = document.getElementById('eventPromoNov');
+          if (el) el.hidden = true;
+        }
+      })();
+    </script>
 
     <section class="trust-strip-top" aria-label="Trust and privacy highlights">
       <div class="container trust-strip-top-inner">
@@ -1938,7 +2040,6 @@
   <!-- ══ Plus promo popup logic — shared across pages, see plus-popup.js ══ -->
   <script defer src="plus-popup.js"></script>
 
-  <script defer src="whats-new-banner.js"></script>
   <script defer src="wwq-promo.js" data-la-wwq="home"></script>
 </body>
 </html>
