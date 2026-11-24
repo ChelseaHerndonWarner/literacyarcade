@@ -30,6 +30,7 @@ const fakeDb = {
       set: (ref, data, opts) => writes.push(() => store.set(ref.path, opts && opts.merge ? { ...(store.get(ref.path) || {}), ...data } : data)),
       create: (ref, data) => writes.push(() => { assert(!store.has(ref.path), 'create on existing doc ' + ref.path); store.set(ref.path, data); }),
       update: (ref, data) => writes.push(() => { assert(store.has(ref.path), 'update on missing doc ' + ref.path); store.set(ref.path, { ...store.get(ref.path), ...data }); }),
+      delete: (ref) => writes.push(() => store.delete(ref.path)),
     };
     const result = await fn(tx);
     writes.forEach((w) => w());
@@ -43,7 +44,10 @@ const handlers = {};
 const stubs = {
   'firebase-admin': {
     initializeApp() {},
-    firestore: Object.assign(() => fakeDb, { FieldValue: { serverTimestamp: () => SERVER_TS, delete: () => null } }),
+    firestore: Object.assign(() => fakeDb, {
+      FieldValue: { serverTimestamp: () => SERVER_TS, delete: () => null },
+      Timestamp: { fromMillis: (ms) => ({ toMillis: () => ms }) },
+    }),
   },
   'firebase-functions': { logger: { info() {}, warn() {}, error() {} } },
   'firebase-functions/v2/https': { onCall: (fn) => fn, HttpsError },

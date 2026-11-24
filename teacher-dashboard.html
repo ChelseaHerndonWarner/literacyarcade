@@ -362,6 +362,16 @@ main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
 .classroom-official{display:flex;align-items:center;justify-content:center;min-height:32px}
 .share-note{font-size:12px;line-height:1.45;color:var(--navy-soft)}
 .share-status{min-height:16px;font-size:12px;font-weight:800;color:var(--teal-dark)}
+.share-expiry-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.share-expiry-select{
+  border:1.5px solid #D5DAE4;border-radius:8px;padding:6px 9px;
+  font:700 12px var(--font-body);color:var(--navy);background:#FBFCFE;
+}
+.share-expiry-display{font-size:12px;font-weight:700;color:var(--navy-soft)}
+.share-link-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.share-action.danger{background:#fff;color:#B42318;border:1.5px solid #F3C6BE}
+.share-action.danger:hover{background:#FFF5F3}
+.share-action:disabled{opacity:.55;cursor:default}
 
 /* ── EMPTY STATES ────────────────────────────────────────────────────────── */
 .empty-group{
@@ -882,6 +892,20 @@ main{max-width:1280px;padding:28px 18px 56px;}
             <button class="share-action classroom" type="button" id="shareClassroomFallback">Share to Google Classroom</button>
           </div>
         </div>
+      </div>
+      <div class="share-expiry-row">
+        <label class="share-label" for="shareExpiryDays">Link expires after</label>
+        <select class="share-expiry-select" id="shareExpiryDays">
+          <option value="7">7 days</option>
+          <option value="14" selected>14 days</option>
+          <option value="30">30 days</option>
+        </select>
+      </div>
+      <div class="share-expiry-display" id="shareExpiryDisplay"></div>
+      <div class="share-link-actions">
+        <button class="share-action secondary" type="button" id="renewShareLink">Renew</button>
+        <button class="share-action secondary" type="button" id="generateNewShareLink">Generate New Link</button>
+        <button class="share-action danger" type="button" id="revokeShareLink">Revoke Link</button>
       </div>
       <div class="share-note">Anyone with this link can open the student activity setup. Students do not need to sign in.</div>
       <div class="share-status" id="shareStatus" aria-live="polite"></div>
@@ -1841,19 +1865,32 @@ async function shareActivity(id, activity) {
 
   try {
     let shareId = activity.shareId || '';
+    let expiresAtMillis = null;
     if (!shareId) {
       // The server builds the public copy from the saved activity (no credit; allowed when read-only).
       const { shareExistingActivity } = await import('./activity-save-guard.js');
-      shareId = (await shareExistingActivity(id)).shareId;
+      const days = Number(document.getElementById('shareExpiryDays').value) || 14;
+      const result = await shareExistingActivity(id, { days });
+      shareId = result.shareId;
+      expiresAtMillis = result.expiresAtMillis;
       const idx = allActivities.findIndex(a => a.id === id);
       if (idx !== -1) {
         allActivities[idx].shareId = shareId;
         allActivities[idx].shareEnabled = true;
         allActivities[idx].sharedSetup = true;
       }
+    } else {
+      // Existing link: the expiry lives only on the public doc, not the private activity record.
+      try {
+        const existingSnap = await getDoc(doc(db, 'sharedActivities', shareId));
+        const existingExpiresAt = existingSnap.exists() ? existingSnap.data().expiresAt : null;
+        expiresAtMillis = existingExpiresAt ? existingExpiresAt.toMillis() : null;
+      } catch (readErr) {
+        console.warn('Could not read current link expiry (it may have expired):', readErr);
+      }
     }
 
-    openShareModal(buildStudentLink(type, shareId), activity.title || makeDefaultTitle(activity));
+    openShareModal(buildStudentLink(type, shareId), activity.title || makeDefaultTitle(activity), { activityId: id, type, expiresAtMillis });
   } catch (err) {
     console.error(err);
     await showInfoModal({
@@ -2119,27 +2156,17 @@ async function deleteActivity(id, title) {
   });
   if (!confirmed) return;
 
-  let shareRevokeFailed = false;
-  if (isShared) {
-    try {
-      await deleteDoc(doc(db, 'sharedActivities', activity.shareId));
-    } catch (err) {
-      console.error(err);
-      shareRevokeFailed = true;
-    }
-  }
-
+  // Goes through the deleteActivityAndLinks Cloud Function, not a direct deleteDoc(): it deletes
+  // the activity and every shared link it ever produced in one atomic transaction, so this only
+  // reports "deleted" once access has actually been revoked server-side — not just once the
+  // activity doc is gone and an async cleanup has merely been scheduled. firestore.rules no
+  // longer permits a direct client delete on this collection, so this is the only path left.
   try {
-    await deleteDoc(doc(db, `users/${currentUser.uid}/activities`, id));
+    const { deleteActivityAndLinks } = await import('./activity-save-guard.js');
+    await deleteActivityAndLinks(id);
     allActivities = allActivities.filter(a => a.id !== id);
     await removeDeletedActivityFromCollections(id);
     renderAll();
-    if (isShared && shareRevokeFailed) {
-      await showInfoModal({
-        title: 'Shared Link Notice',
-        message: 'This saved activity was deleted, but the shared link may still work.'
-      });
-    }
   } catch (err) {
     console.error(err);
     await showInfoModal({
@@ -3083,16 +3110,89 @@ function makeDefaultTitle(activity) {
 function formatToolKey(key) {
   return String(key).replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 }
-function openShareModal(link, title) {
+let shareModalState = { activityId: null, type: null };
+function renderShareExpiry(expiresAtMillis) {
+  const el = document.getElementById('shareExpiryDisplay');
+  if (!expiresAtMillis) { el.textContent = ''; return; }
+  const expired = expiresAtMillis <= Date.now();
+  const dateText = new Date(expiresAtMillis).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+  el.textContent = expired ? `This link expired on ${dateText}.` : `Expires ${dateText}.`;
+  el.style.color = expired ? '#B42318' : '';
+}
+function openShareModal(link, title, meta = {}) {
+  shareModalState = { activityId: meta.activityId || null, type: meta.type || null };
   document.getElementById('shareTitle').textContent = `Share ${title || 'Activity'}`;
   document.getElementById('shareLinkInput').value = link;
   document.getElementById('shareStatus').textContent = '';
+  renderShareExpiry(meta.expiresAtMillis || null);
   setupClassroomShare(link);
   document.getElementById('shareOverlay').classList.add('open');
 }
 function closeShareModal() {
   document.getElementById('shareOverlay').classList.remove('open');
 }
+async function renewOrReplaceShareLink(action) {
+  const { activityId, type } = shareModalState;
+  if (!activityId) return;
+  const btn = document.getElementById(action === 'renew' ? 'renewShareLink' : 'generateNewShareLink');
+  const days = Number(document.getElementById('shareExpiryDays').value) || 14;
+  btn.disabled = true;
+  try {
+    const { shareExistingActivity } = await import('./activity-save-guard.js');
+    const result = await shareExistingActivity(activityId, { action, days });
+    const idx = allActivities.findIndex(a => a.id === activityId);
+    if (idx !== -1) {
+      allActivities[idx].shareId = result.shareId;
+      allActivities[idx].shareEnabled = true;
+      allActivities[idx].sharedSetup = true;
+    }
+    if (action === 'new') {
+      document.getElementById('shareLinkInput').value = buildStudentLink(type, result.shareId);
+      setupClassroomShare(document.getElementById('shareLinkInput').value);
+    }
+    renderShareExpiry(result.expiresAtMillis);
+    document.getElementById('shareStatus').textContent = action === 'renew' ? 'Link renewed.' : 'New link generated — the old link no longer works.';
+  } catch (err) {
+    console.error(err);
+    await showInfoModal({
+      title: 'Action Failed',
+      message: action === 'renew'
+        ? 'Could not renew this link. If it was revoked, use Generate New Link instead.'
+        : 'Something went wrong generating a new link. Please try again.'
+    });
+  } finally {
+    btn.disabled = false;
+  }
+}
+document.getElementById('renewShareLink').addEventListener('click', () => renewOrReplaceShareLink('renew'));
+document.getElementById('generateNewShareLink').addEventListener('click', () => renewOrReplaceShareLink('new'));
+document.getElementById('revokeShareLink').addEventListener('click', async () => {
+  const { activityId } = shareModalState;
+  if (!activityId) return;
+  const confirmed = await showConfirmModal({
+    title: 'Revoke This Link?',
+    message: 'The current link will stop working immediately. Students using it will see a message asking them to request a new link.',
+    primaryText: 'Revoke Link',
+    cancelText: 'Cancel',
+    danger: true
+  });
+  if (!confirmed) return;
+  const btn = document.getElementById('revokeShareLink');
+  btn.disabled = true;
+  try {
+    const { revokeSharedLink } = await import('./activity-save-guard.js');
+    await revokeSharedLink(activityId);
+    const idx = allActivities.findIndex(a => a.id === activityId);
+    if (idx !== -1) { allActivities[idx].shareEnabled = false; delete allActivities[idx].shareId; }
+    renderShareExpiry(null);
+    document.getElementById('shareStatus').textContent = 'Link revoked.';
+  } catch (err) {
+    console.error(err);
+    await showInfoModal({ title: 'Action Failed', message: 'Something went wrong revoking this link. Please try again.' });
+  } finally {
+    btn.disabled = false;
+  }
+});
 function ensureClassroomPlatform() {
   window.___gcfg = window.___gcfg || {};
   window.___gcfg.parsetags = 'explicit';

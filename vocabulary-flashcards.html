@@ -1432,6 +1432,7 @@ document.addEventListener('DOMContentLoaded', () => {
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { isNetworkErrorCode } from "./shared-link-status.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
@@ -1756,6 +1757,12 @@ function showSharedUnavailable() {
   document.getElementById('sharedDeckHome').style.display = 'block';
 }
 
+function showSharedNetworkError() {
+  document.getElementById('sharedDeckStatusTitle').textContent = "Couldn't load this activity.";
+  document.getElementById('sharedDeckStatusText').textContent = 'Check your internet connection and try reloading the page.';
+  document.getElementById('sharedDeckHome').style.display = 'block';
+}
+
 async function loadSharedVocabularyDeck() {
   const shareId = safeSavedText(sharedActivityId, 160);
   if (!shareId || shareId.includes('/') || !/^[A-Za-z0-9_-]+$/.test(shareId)) {
@@ -1795,6 +1802,7 @@ async function loadSharedVocabularyDeck() {
     startFlashcards();
   } catch (err) {
     console.error('Shared vocabulary deck load failed:', err);
+    if (isNetworkErrorCode(err)) { showSharedNetworkError(); return; }
     showSharedUnavailable();
   }
 }

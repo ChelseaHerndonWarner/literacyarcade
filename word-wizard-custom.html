@@ -3349,6 +3349,7 @@ if(IS_STUDENT)showScreen('studentScreen');
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { isNetworkErrorCode } from "./shared-link-status.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxgYnqWYGAF8vgKeTfliDY76jRqVYy7_w",
@@ -3527,7 +3528,9 @@ window.wwcFetchShared = async function (shareId) {
     return { version: 1, title: d.title || 'Word Wizard Quest', toolType: d.toolType, words: d.words || [], settings: d.settings || {}, shareId };
   } catch (err) {
     console.error(err);
-    window.wwcStudentError('This game could not be loaded. Please try again.');
+    window.wwcStudentError(isNetworkErrorCode(err)
+      ? "Couldn't load this game. Check your internet connection and try reloading the page."
+      : 'This shared game link could not be found. It may have expired or been removed by its owner.');
     return null;
   }
 };

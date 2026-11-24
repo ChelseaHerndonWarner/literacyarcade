@@ -38,6 +38,15 @@ async function check(name, fn) {
   await seed('noCounter', { plan: 'free' }, 1);
   await env.withSecurityRulesDisabled(async (ctx) => {
     await setDoc(doc(ctx.firestore(), 'sharedActivities/existing'), { title: 'S', toolType: 'read-and-race', words: ['one'], public: true, ownerUid: 'locked' });
+    const { Timestamp } = require('firebase/firestore');
+    await setDoc(doc(ctx.firestore(), 'sharedActivities/notExpired'), {
+      title: 'Still good', toolType: 'read-and-race', words: ['one'], public: true, ownerUid: 'locked',
+      expiresAt: Timestamp.fromMillis(Date.now() + 14 * 24 * 60 * 60 * 1000)
+    });
+    await setDoc(doc(ctx.firestore(), 'sharedActivities/expiredLink'), {
+      title: 'Gone', toolType: 'read-and-race', words: ['one'], public: true, ownerUid: 'locked',
+      expiresAt: Timestamp.fromMillis(Date.now() - 1000)
+    });
   });
 
   const as = (uid) => env.authenticatedContext(uid).firestore();
@@ -48,7 +57,10 @@ async function check(name, fn) {
   await check('locked: CANNOT edit words/settings', () => assertFails(updateDoc(act(as('locked'), 'locked'), { words: ['changed'], 'settings.rounds': 9 })));
   await check('locked: CANNOT rename', () => assertFails(updateDoc(act(as('locked'), 'locked'), { title: 'New' })));
   await check('locked (no plan field): CANNOT edit', () => assertFails(updateDoc(act(as('lockedNoPlan'), 'lockedNoPlan'), { words: ['x'] })));
-  await check('locked: CAN delete an activity', () => assertSucceeds(deleteDoc(act(as('locked'), 'locked', 'a1'))));
+  // Direct client deletion is blocked: deleting must also revoke every shared link atomically,
+  // which only the deleteActivityAndLinks Cloud Function (Admin SDK) can do.
+  await check('locked: CANNOT delete an activity directly (must go through deleteActivityAndLinks)', () => assertFails(deleteDoc(act(as('locked'), 'locked', 'a1'))));
+  await check('an account that CAN edit also CANNOT delete directly', () => assertFails(deleteDoc(act(as('freeOk'), 'freeOk'))));
   await check('locked: CANNOT create an activity directly', () => assertFails(setDoc(act(as('locked'), 'locked', 'new1'), { title: 'x', toolType: 'read-and-race' })));
   await check('locked: CANNOT addDoc an activity', () => assertFails(addDoc(collection(as('locked'), 'users/locked/activities'), { title: 'x' })));
 
@@ -61,6 +73,18 @@ async function check(name, fn) {
   await check('shared doc cannot be edited by its owner', () => assertFails(updateDoc(doc(as('locked'), 'sharedActivities/existing'), { words: ['hack'] })));
   await check('other user cannot delete the shared doc', () => assertFails(deleteDoc(doc(as('plus'), 'sharedActivities/existing'))));
   await check('owner CAN delete (revoke) the shared doc', () => assertSucceeds(deleteDoc(doc(as('locked'), 'sharedActivities/existing'))));
+
+  // ---- expiration: enforced by the rule itself, not just hidden in the frontend ----
+  await check('legacy link with no expiresAt field: still readable (grandfathered)', () =>
+    assertSucceeds(getDoc(doc(env.unauthenticatedContext().firestore(), 'sharedActivities/notExpired'))));
+  await check('non-expired link: signed-out student CAN read it', () =>
+    assertSucceeds(getDoc(doc(env.unauthenticatedContext().firestore(), 'sharedActivities/notExpired'))));
+  await check('expired link: signed-out student CANNOT read it', () =>
+    assertFails(getDoc(doc(env.unauthenticatedContext().firestore(), 'sharedActivities/expiredLink'))));
+  await check('expired link: even the owner CANNOT read it directly (same as anonymous)', () =>
+    assertFails(getDoc(doc(as('locked'), 'sharedActivities/expiredLink'))));
+  await check('owner CANNOT extend expiresAt by a direct client update (must go through the Cloud Function)', () =>
+    assertFails(updateDoc(doc(as('locked'), 'sharedActivities/notExpired'), { expiresAt: require('firebase/firestore').Timestamp.fromMillis(Date.now() + 999 * 24 * 60 * 60 * 1000) })));
 
   // ---- accounts that can still edit ----
   await check('free with credits left: CAN edit', () => assertSucceeds(updateDoc(act(as('freeOk'), 'freeOk'), { words: ['two'] })));

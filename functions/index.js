@@ -266,6 +266,19 @@ exports.recordAssessmentCompletion = onCall(async (request) => {
 // Rules for counting live in activity-credits.js.
 const MAX_ACTIVITY_BYTES = 900 * 1024;
 
+// Shared-link expiration. Teachers pick 7, 14, or 30 days (default 14); anything else falls back
+// to the default rather than erroring, since this is a convenience choice, not a security
+// boundary. A link's expiresAt is fixed at mint/renew time; firestore.rules is what actually
+// enforces it on every read (see sharedActivities rule), not this value by itself.
+const ALLOWED_SHARE_DAYS = new Set([7, 14, 30]);
+const DEFAULT_SHARE_DAYS = 14;
+function resolveShareDays(days) {
+  return ALLOWED_SHARE_DAYS.has(days) ? days : DEFAULT_SHARE_DAYS;
+}
+function computeExpiresAt(days) {
+  return admin.firestore.Timestamp.fromMillis(Date.now() + resolveShareDays(days) * 24 * 60 * 60 * 1000);
+}
+
 function isPlainObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
@@ -329,13 +342,19 @@ exports.createActivity = onCall(async (request) => {
     ['shareId', 'public'].forEach((key) => delete privateDoc[key]);
 
     let shareId = null;
+    let expiresAtMillis = null;
     if (share === true) {
       const sharedRef = db.collection('sharedActivities').doc();
       shareId = sharedRef.id;
-      tx.create(sharedRef, { ...publicFields, public: true, ownerUid: uid, createdAt: now, updatedAt: now });
+      const expiresAt = computeExpiresAt(request.data?.shareDays);
+      expiresAtMillis = expiresAt.toMillis();
+      tx.create(sharedRef, {
+        ...publicFields, public: true, ownerUid: uid, activityId: requestId, expiresAt, createdAt: now, updatedAt: now
+      });
       privateDoc.shareEnabled = true;
       privateDoc.sharedSetup = true;
       privateDoc.shareId = shareId;
+      privateDoc.shareIds = [shareId];
     }
 
     tx.create(activityRef, privateDoc);
@@ -343,7 +362,7 @@ exports.createActivity = onCall(async (request) => {
       tx.set(userRef, { activitiesCreated: decision.nextCounter }, { merge: true });
     }
     tx.set(historyRef, { toolType: toolType.slice(0, 80), counted: decision.counted, shared: share === true, createdAt: now });
-    return { id: requestId, shareId, counted: decision.counted };
+    return { id: requestId, shareId, expiresAtMillis, counted: decision.counted };
   });
 
   logger.info('createActivity', { uid, requestId, toolType, ...result });
@@ -351,7 +370,12 @@ exports.createActivity = onCall(async (request) => {
   if (result.limitReached) {
     throw new HttpsError('resource-exhausted', 'Free activity creation limit reached.', { count: result.count });
   }
-  return { id: result.id, shareId: result.shareId || null, alreadyCreated: Boolean(result.alreadyCreated) };
+  return {
+    id: result.id,
+    shareId: result.shareId || null,
+    expiresAtMillis: result.expiresAtMillis ?? null,
+    alreadyCreated: Boolean(result.alreadyCreated)
+  };
 });
 
 // Shares an activity the user ALREADY saved. Uses no credit and is allowed even after the
@@ -373,9 +397,16 @@ exports.shareActivity = onCall(async (request) => {
     throw new HttpsError('invalid-argument', 'Missing or invalid activity id.');
   }
 
-  // forceNew: publish a fresh link of the (just edited) saved content. Honored only while the
-  // account can still edit; a read-only account always gets its existing link.
-  const forceNew = request.data?.forceNew === true;
+  // action: 'renew' extends the expiration of the existing live link (same URL, so a Google
+  // Classroom assignment never needs updating); 'new' mints a replacement link and invalidates
+  // the old one; anything else (or omitted) just ensures a link exists, reusing the current one
+  // if it's still live. `forceNew` is kept as an alias for 'new' for backward compatibility.
+  // 'new' is honored only while the account can still edit (same gate as content edits); a
+  // read-only account keeps whatever link it already has, same as before this field existed.
+  const action = request.data?.action === 'renew' ? 'renew'
+    : (request.data?.action === 'new' || request.data?.forceNew === true) ? 'new'
+    : 'share';
+  const days = resolveShareDays(request.data?.days);
   const userRef = db.collection('users').doc(uid);
   const activityRef = userRef.collection('activities').doc(activityId);
   const FieldValue = admin.firestore.FieldValue;
@@ -383,32 +414,175 @@ exports.shareActivity = onCall(async (request) => {
   const result = await db.runTransaction(async (tx) => {
     const [snap, userSnap] = await Promise.all([tx.get(activityRef), tx.get(userRef)]);
     if (!snap.exists) return { notFound: true };
-    const wantNew = forceNew && !isEditLocked(userSnap.exists ? userSnap.data() : {});
     const activity = snap.data();
     const toolType = activity.toolType || activity.activityType;
     if (typeof toolType !== 'string' || UNSHAREABLE_TOOLS.has(toolType)) return { unshareable: true };
 
-    // Already shared and the link still exists: return it unchanged.
-    if (!wantNew && typeof activity.shareId === 'string' && activity.shareId) {
-      const existingRef = db.collection('sharedActivities').doc(activity.shareId);
-      const existing = await tx.get(existingRef);
-      if (existing.exists && existing.data().ownerUid === uid) {
-        return { shareId: activity.shareId, alreadyShared: true };
-      }
+    const currentShareId = typeof activity.shareId === 'string' && activity.shareId ? activity.shareId : null;
+    const currentRef = currentShareId ? db.collection('sharedActivities').doc(currentShareId) : null;
+    const currentSnap = currentRef ? await tx.get(currentRef) : null;
+    const currentLive = Boolean(currentSnap && currentSnap.exists && currentSnap.data().ownerUid === uid);
+    const now = FieldValue.serverTimestamp();
+
+    if (action === 'renew') {
+      if (!currentLive) return { noActiveLink: true };
+      const expiresAt = computeExpiresAt(days);
+      tx.update(currentRef, { expiresAt, updatedAt: now });
+      return { shareId: currentShareId, renewed: true, expiresAtMillis: expiresAt.toMillis() };
+    }
+
+    // Reuse the existing live link unless this is a non-locked 'new' request, which always mints
+    // a fresh one and invalidates the old. A locked account's 'new' request behaves like 'share'.
+    const mintFresh = action === 'new' && !isEditLocked(userSnap.exists ? userSnap.data() : {});
+    if (!mintFresh && currentLive) {
+      const existingExpiresAt = currentSnap.data().expiresAt;
+      return {
+        shareId: currentShareId,
+        alreadyShared: true,
+        expiresAtMillis: existingExpiresAt ? existingExpiresAt.toMillis() : null
+      };
     }
 
     const publicFields = buildPublicFields(activity);
     const sharedRef = db.collection('sharedActivities').doc();
-    const now = FieldValue.serverTimestamp();
-    tx.create(sharedRef, { ...publicFields, public: true, ownerUid: uid, createdAt: now, updatedAt: now });
-    tx.update(activityRef, { shareEnabled: true, sharedSetup: true, shareId: sharedRef.id });
-    return { shareId: sharedRef.id };
+    const expiresAt = computeExpiresAt(days);
+    tx.create(sharedRef, {
+      ...publicFields, public: true, ownerUid: uid, activityId, expiresAt, createdAt: now, updatedAt: now
+    });
+    // Old shareId's public doc is invalidated (deleted), not just unreferenced, so a replacement
+    // link actually stops the previous URL from working, as required.
+    if (mintFresh && currentLive) tx.delete(currentRef);
+    const priorShareIds = Array.isArray(activity.shareIds)
+      ? activity.shareIds
+      : (currentShareId ? [currentShareId] : []);
+    tx.update(activityRef, {
+      shareEnabled: true,
+      sharedSetup: true,
+      shareId: sharedRef.id,
+      shareIds: [...new Set([...priorShareIds, sharedRef.id])]
+    });
+    return {
+      shareId: sharedRef.id,
+      replaced: Boolean(mintFresh && currentLive),
+      expiresAtMillis: expiresAt.toMillis()
+    };
   });
 
   if (result.notFound) throw new HttpsError('not-found', 'Activity not found.');
   if (result.unshareable) throw new HttpsError('failed-precondition', 'This activity type cannot be shared.');
-  logger.info('shareActivity', { uid, activityId, ...result });
-  return { shareId: result.shareId, alreadyShared: Boolean(result.alreadyShared) };
+  if (result.noActiveLink) {
+    throw new HttpsError('failed-precondition', 'There is no active link to renew. Generate a new link instead.');
+  }
+  logger.info('shareActivity', { uid, activityId, action, ...result });
+  return {
+    shareId: result.shareId,
+    alreadyShared: Boolean(result.alreadyShared),
+    renewed: Boolean(result.renewed),
+    replaced: Boolean(result.replaced),
+    expiresAtMillis: result.expiresAtMillis ?? null
+  };
+});
+
+// Lets an owner revoke their current shared link immediately, without waiting for expiration.
+// Deliberately not a plain client-side delete of the sharedActivities doc: clearing the owning
+// activity's own shareId/shareEnabled afterward (so a later Renew can't resurrect it, and the
+// dashboard stops offering to copy a dead link) is an update to users/{uid}/activities/{id},
+// which firestore.rules blocks for a read-only (limit-reached) Free account — but revoking must
+// work regardless of plan state, so this goes through the Admin SDK instead. Revoked links must
+// not become active again through the ordinary Renew action: Renew requires a live shareId on
+// the activity doc, and this clears it.
+exports.revokeSharedLink = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (!uid) {
+    throw new HttpsError('unauthenticated', 'Sign in to revoke a shared link.');
+  }
+  const activityId = request.data?.activityId;
+  if (typeof activityId !== 'string' || !activityId || activityId.length > 200 || activityId.includes('/')) {
+    throw new HttpsError('invalid-argument', 'Missing or invalid activity id.');
+  }
+
+  const activityRef = db.collection('users').doc(uid).collection('activities').doc(activityId);
+  const result = await db.runTransaction(async (tx) => {
+    const snap = await tx.get(activityRef);
+    if (!snap.exists) return { notFound: true };
+    const activity = snap.data();
+    const shareId = typeof activity.shareId === 'string' && activity.shareId ? activity.shareId : null;
+    if (!shareId) return { noActiveLink: true };
+
+    const sharedRef = db.collection('sharedActivities').doc(shareId);
+    const sharedSnap = await tx.get(sharedRef);
+    if (sharedSnap.exists && sharedSnap.data().ownerUid === uid) tx.delete(sharedRef);
+
+    tx.update(activityRef, {
+      shareEnabled: false,
+      shareId: admin.firestore.FieldValue.delete(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+    return { revoked: true };
+  });
+
+  if (result.notFound) throw new HttpsError('not-found', 'Activity not found.');
+  logger.info('revokeSharedLink', { uid, activityId, ...result });
+  return { revoked: Boolean(result.revoked), hadNoActiveLink: Boolean(result.noActiveLink) };
+});
+
+// Deletes a saved activity AND every shared link it ever produced, in one transaction, so the
+// dashboard can confirm "deleted" only once access has actually been revoked — not just once the
+// activity doc is gone and an async trigger has merely been scheduled. This is the ONLY code
+// path, client or server, that should ever delete users/{uid}/activities/{id}: firestore.rules no
+// longer grants clients a direct delete on that collection (see the matching rules change), so
+// every deletion funnels through here. cleanupSharedLinksOnActivityDelete (the onDocumentDeleted
+// trigger) is left in place as a defense-in-depth fallback: it re-checks the same shareIds
+// history and is a safe no-op against docs this function already removed, so it costs nothing to
+// keep and still protects against any future code path that deletes the doc another way.
+//
+// Firestore limits: a transaction holds the same ~500-mutation cap as a batch write. This deletes
+// 1 (the activity) + up to N (its shareIds history) documents. N only grows one at a time, from a
+// teacher clicking "Generate New Link," so reaching anywhere near that cap is not a realistic
+// concern at current usage — flagged here, not solved, since solving it (chunking into multiple
+// batches) would cost the all-or-nothing atomicity this function exists to provide.
+exports.deleteActivityAndLinks = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (!uid) {
+    throw new HttpsError('unauthenticated', 'Sign in to delete an activity.');
+  }
+  const activityId = request.data?.activityId;
+  if (typeof activityId !== 'string' || !activityId || activityId.length > 200 || activityId.includes('/')) {
+    throw new HttpsError('invalid-argument', 'Missing or invalid activity id.');
+  }
+
+  const activityRef = db.collection('users').doc(uid).collection('activities').doc(activityId);
+
+  const result = await db.runTransaction(async (tx) => {
+    const snap = await tx.get(activityRef);
+    if (!snap.exists) return { notFound: true };
+    const activity = snap.data();
+
+    const shareIds = new Set(Array.isArray(activity.shareIds) ? activity.shareIds : []);
+    if (typeof activity.shareId === 'string' && activity.shareId) shareIds.add(activity.shareId);
+    const shareRefs = [...shareIds].map((id) => db.collection('sharedActivities').doc(id));
+
+    // All reads in a Firestore transaction must happen before any write; getAll reads every
+    // candidate link in one consistent snapshot alongside the activity read above.
+    const shareSnaps = shareRefs.length ? await tx.getAll(...shareRefs) : [];
+
+    let revokedCount = 0;
+    shareSnaps.forEach((shareSnap, i) => {
+      // Only ever deletes a link this same owner actually owns — defensive, since shareIds is
+      // populated only by this owner's own share/renew/new calls in the first place.
+      if (shareSnap.exists && shareSnap.data().ownerUid === uid) {
+        tx.delete(shareRefs[i]);
+        revokedCount += 1;
+      }
+    });
+
+    tx.delete(activityRef);
+    return { deleted: true, revokedCount, linkCount: shareIds.size };
+  });
+
+  if (result.notFound) throw new HttpsError('not-found', 'Activity not found.');
+  logger.info('deleteActivityAndLinks', { uid, activityId, ...result });
+  return { deleted: true, revokedCount: result.revokedCount };
 });
 
 // Safety net for accounts that have no counter yet: if one deletes an activity
@@ -437,5 +611,40 @@ exports.seedActivityCounterOnDelete = onDocumentDeleted(
     if (seeded !== null) {
       logger.info('Seeded activity-creation counter on delete.', { uid, activityId, seeded });
     }
+  }
+);
+
+// When an owner deletes a saved activity, every shared link it ever produced must stop working
+// too — not just the current one. Clients can't be trusted to enumerate and delete every
+// sharedActivities doc themselves (sharedActivities disallows `list`, by design, so students
+// can't browse it), so this runs server-side on the delete trigger, from the deleted activity's
+// own `shareIds` history (falling back to its single legacy `shareId` for activities saved
+// before that array existed). This can only find links this activity's own document still
+// remembers: a shareId from a much older re-share, made before `shareIds` existed and since
+// overwritten by a later one, was never recorded anywhere and cannot be discovered or cleaned up
+// by this (or any) code — a pre-existing gap in the data model, not something this change can
+// retroactively fix without a backfill, which was out of scope here.
+exports.cleanupSharedLinksOnActivityDelete = onDocumentDeleted(
+  'users/{uid}/activities/{activityId}',
+  async (event) => {
+    const { uid, activityId } = event.params;
+    const deleted = event.data?.data() || {};
+    const shareIds = new Set(Array.isArray(deleted.shareIds) ? deleted.shareIds : []);
+    if (typeof deleted.shareId === 'string' && deleted.shareId) shareIds.add(deleted.shareId);
+    if (shareIds.size === 0) return;
+
+    const batch = db.batch();
+    let count = 0;
+    for (const shareId of shareIds) {
+      const ref = db.collection('sharedActivities').doc(shareId);
+      // eslint-disable-next-line no-await-in-loop
+      const snap = await ref.get();
+      if (snap.exists && snap.data().ownerUid === uid) {
+        batch.delete(ref);
+        count += 1;
+      }
+    }
+    if (count > 0) await batch.commit();
+    logger.info('Cleaned up shared links for deleted activity.', { uid, activityId, count });
   }
 );

@@ -117,11 +117,34 @@ export function showReadOnlyModal() {
 }
 
 // Shares an activity that is already saved (no credit used; allowed even when read-only). The
-// server builds the public copy from the saved activity. Returns { shareId }.
+// server builds the public copy from the saved activity.
+// opts.action: 'renew' extends the existing link's expiration (same URL); 'new' mints a
+// replacement link and invalidates the old one (opts.forceNew is kept as an alias for 'new').
+// Anything else just ensures a link exists. opts.days: 7, 14, or 30 (default 14).
+// Returns { shareId, alreadyShared, renewed, replaced, expiresAtMillis }.
 export async function shareExistingActivity(activityId, opts = {}) {
   const call = httpsCallable(getFunctions(getApp(), 'us-central1'), 'shareActivity');
-  const res = await call({ activityId, forceNew: opts.forceNew === true });
-  return { shareId: res.data.shareId };
+  const action = opts.action === 'renew' ? 'renew' : (opts.action === 'new' || opts.forceNew === true) ? 'new' : undefined;
+  const res = await call({ activityId, action, days: opts.days });
+  return res.data;
+}
+
+// Revokes the activity's current shared link immediately (owner only), regardless of whether
+// the account is read-only. Returns { revoked, hadNoActiveLink }.
+export async function revokeSharedLink(activityId) {
+  const call = httpsCallable(getFunctions(getApp(), 'us-central1'), 'revokeSharedLink');
+  const res = await call({ activityId });
+  return res.data;
+}
+
+// Deletes a saved activity and every shared link it ever produced, atomically. The promise only
+// resolves once that's actually committed server-side, so the caller can safely show "deleted"
+// only after this returns — no separate client-side deleteDoc() of the activity exists anymore;
+// firestore.rules no longer allows one. Returns { deleted, revokedCount }.
+export async function deleteActivityAndLinks(activityId) {
+  const call = httpsCallable(getFunctions(getApp(), 'us-central1'), 'deleteActivityAndLinks');
+  const res = await call({ activityId });
+  return res.data;
 }
 
 const STYLE_ID = 'activity-save-guard-styles';

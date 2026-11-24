@@ -44,12 +44,19 @@ service cloud.firestore {
     // lifetime creation limit is enforced atomically. Share fields are also written server-side
     // (shareActivity / createActivity), so locking edits does not block sharing.
     match /users/{userId}/activities/{activityId} {
-      allow get, list, delete: if request.auth != null
+      allow get, list: if request.auth != null
         && request.auth.uid == userId;
       allow update: if request.auth != null
         && request.auth.uid == userId
         && !isEditLocked(userId);
       allow create: if false;
+      // Deleting here must also revoke every shared link this activity ever produced, atomically,
+      // so the client only learns "deleted" once access is actually gone — a plain client delete
+      // can't guarantee that (an async cleanup trigger is a fallback, not a synchronous guarantee).
+      // deleteActivityAndLinks (Admin SDK, bypasses these rules) is the only deletion path now;
+      // confirmed before this rule changed that teacher-dashboard.html's deleteActivity() was the
+      // only direct client delete anywhere in the codebase, and it now calls that function instead.
+      allow delete: if false;
     }
 
     // Assessment-completion history (assessment type + timestamp only, no
@@ -81,9 +88,19 @@ service cloud.firestore {
       // Share links are created only by the createActivity and shareActivity Cloud Functions, so a
       // direct client write cannot publish a new shared game (e.g. past the Free creation limit).
       // Students keep reading existing links; owners can still delete (revoke) their own.
-      allow get: if resource.data.public == true;
+      //
+      // Expiration (expiresAt) is enforced here, not just hidden in the frontend: a link minted
+      // before this field existed has no expiresAt at all, and the missing-field case below keeps
+      // it working forever, exactly like before this feature shipped (no backfill, no behavior
+      // change for legacy links). A link past its expiresAt denies the read the same way a
+      // deleted/revoked one does (the document may still exist but reads as "not found" to an
+      // anonymous client either way) — by design, so no extra information is leaked about why a
+      // given link stopped working.
+      allow get: if resource.data.public == true
+        && (!('expiresAt' in resource.data) || resource.data.expiresAt > request.time);
       allow list: if false;
       allow create: if false;
+      allow update: if false;
       allow delete: if request.auth != null
         && request.auth.uid == resource.data.ownerUid;
     }

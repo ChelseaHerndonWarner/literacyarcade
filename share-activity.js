@@ -4,6 +4,16 @@
   const PUBLIC_ORIGIN = 'https://literacyarcade.com';
   const REGISTRY = new Map();
 
+  // A genuine connectivity/server problem, as opposed to a link that is simply gone (never
+  // existed, expired, or was deleted/revoked by its owner — firestore.rules denies the read the
+  // same way for all three on purpose, so this can't and doesn't try to tell those apart).
+  const NETWORK_ERROR_CODES = new Set([
+    'unavailable', 'deadline-exceeded', 'internal', 'cancelled', 'unknown', 'resource-exhausted'
+  ]);
+  function isNetworkError(err) {
+    return Boolean(err && NETWORK_ERROR_CODES.has(err.code));
+  }
+
   function trackClarityEvent(name, toolType) {
     if (window.LiteracyArcadeAnalytics) {
       window.LiteracyArcadeAnalytics.track(name, { share_tool: toolType || 'unknown' });
@@ -354,7 +364,22 @@
       const load = async () => {
         let activity = getPayload();
         if (!activity && typeof config.loadSharedActivity === 'function') {
-          activity = await config.loadSharedActivity(rawActivity);
+          try {
+            activity = await config.loadSharedActivity(rawActivity);
+          } catch (err) {
+            // A loader that throws instead of returning null (e.g. an unguarded getDoc()) must
+            // still end in a friendly message, not a blank/broken page.
+            console.error('Shared activity load failed:', err);
+            const status = isNetworkError(err) ? 'network-error' : 'unavailable';
+            if (typeof config.onSharedActivityUnavailable === 'function') {
+              config.onSharedActivityUnavailable(status, err);
+            } else {
+              alert(status === 'network-error'
+                ? "Couldn't load this activity. Check your internet connection and try reloading the page."
+                : 'This shared activity link could not be found. It may have expired or been removed by its owner.');
+            }
+            return;
+          }
         }
         if (activity && activity.toolType === config.toolType) config.loadActivity(activity);
       };
