@@ -17,11 +17,26 @@ service cloud.firestore {
     // A Free account that has used all 5 lifetime creation credits (activitiesCreated >= 5) has
     // read-only saved activities: it can still open, play, share and delete them, but cannot
     // change their content. Plus/Family accounts, and accounts with no counter yet, are never locked.
+    // Mirrors effectivePlan() in functions/entitlements.js: a manual grant that has ended counts
+    // only for what remains after it, even before the server has rewritten the user document.
+    function hasPaidPlan(user) {
+      return user.get('plan', 'free') in ['plus', 'family']
+        && (!('planExpiresAt' in user)
+          || (user.planExpiresAt is timestamp && user.planExpiresAt > request.time)
+          || user.get('planAfterExpiry', 'free') in ['plus', 'family']);
+    }
+
     function isEditLocked(uid) {
       let userPath = /databases/$(database)/documents/users/$(uid);
       return exists(userPath)
-        && !(get(userPath).data.get('plan', 'free') in ['plus', 'family'])
+        && !hasPaidPlan(get(userPath).data)
         && get(userPath).data.get('activitiesCreated', 0) >= 5;
+    }
+
+    // Plan and quota fields on users/{uid} are written only by server code.
+    function serverOnlyUserFields() {
+      return ['plan', 'planSource', 'planUpdatedAt', 'planExpiresAt', 'planAfterExpiry',
+        'stripePriceId', 'stripeSubscriptionId', 'stripeStatus', 'assessmentUses', 'activitiesCreated'];
     }
 
     match /users/{userId} {
@@ -29,13 +44,16 @@ service cloud.firestore {
 
       allow create: if request.auth != null
         && request.auth.uid == userId
-        && !('plan' in request.resource.data)
-        && !('assessmentUses' in request.resource.data)
-        && !('activitiesCreated' in request.resource.data);
+        && !request.resource.data.keys().hasAny(serverOnlyUserFields());
 
       allow update: if request.auth != null
         && request.auth.uid == userId
-        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['plan', 'assessmentUses', 'activitiesCreated']);
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(serverOnlyUserFields());
+    }
+
+    // Manual Plus / Plus Family grants. Administrators only (console or Admin SDK).
+    match /planGrants/{userId} {
+      allow read, write: if false;
     }
 
     // Saved activities. Clients may read and delete their own, and edit them unless the account is

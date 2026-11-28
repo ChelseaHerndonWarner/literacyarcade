@@ -53,6 +53,12 @@ const stubs = {
   'firebase-functions/v2/https': { onCall: (fn) => fn, HttpsError },
   'firebase-functions/v2/firestore': { onDocumentWritten: (_p, fn) => fn, onDocumentDeleted: (_p, fn) => fn },
 };
+// index.js imports FieldValue/Timestamp from the modular entry point and registers a schedule.
+stubs['firebase-admin/firestore'] = {
+  FieldValue: stubs['firebase-admin'].firestore.FieldValue,
+  Timestamp: stubs['firebase-admin'].firestore.Timestamp,
+};
+stubs['firebase-functions/v2/scheduler'] = { onSchedule: (_schedule, fn) => fn };
 const origLoad = Module._load;
 Module._load = function (request, ...rest) { return stubs[request] || origLoad.call(this, request, ...rest); };
 const fns = require('./index.js');

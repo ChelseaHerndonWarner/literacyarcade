@@ -1,8 +1,12 @@
 const { onDocumentWritten, onDocumentDeleted } = require('firebase-functions/v2/firestore');
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
+const { onSchedule } = require('firebase-functions/v2/scheduler');
+const { FieldValue, Timestamp } = require('firebase-admin/firestore');
 const { logger } = require('firebase-functions');
 const { computeCreateDecision, computeDeleteSeed, isEditLocked } = require('./activity-credits');
 const { buildPublicFields } = require('./public-share');
+const { effectivePlan, isPaidPlan } = require('./entitlements');
+const { createPlanSync } = require('./plan-sync');
 const admin = require('firebase-admin');
 
 admin.initializeApp();
@@ -17,136 +21,11 @@ const ASSESSMENT_TYPES = new Set([
   'phonics-knowledge-check',
   'orf-fluency-calculator',
 ]);
-const UNLIMITED_ASSESSMENT_PLANS = new Set(['plus', 'family']);
 const FREE_ASSESSMENT_LIMIT = 5;
 
-const ACTIVE_STATUSES = new Set(['active', 'trialing']);
-const PRICE_TO_PLAN = {
-  // Preserve Plus access for active subscriptions purchased through the
-  // discontinued Founding Teacher offer (live and test prices).
-  price_1TqmEK3PzX3bHrbQEkK6vaes: 'plus',
-  price_1TqY6k4Gz51pZDtQR6oFrYDp: 'plus',
-  price_1TqmEJ3PzX3bHrbQ2cWDevb5: 'plus',
-  price_1TqmEM3PzX3bHrbQh3wylsSF: 'plus',
-  price_1TqY5P4Gz51pZDtQOiymXQZ4: 'plus',
-  price_1TqY444Gz51pZDtQmTMOq3Gv: 'plus',
-  price_1TssAC3PzX3bHrbQg4qIhxOH: 'family',
-};
-const PLAN_PRIORITY = {
-  free: 0,
-  plus: 1,
-  family: 2,
-};
-
-function addPriceId(ids, value) {
-  if (typeof value === 'string' && value.startsWith('price_')) {
-    ids.add(value);
-  }
-}
-
-function collectPriceIds(subscription) {
-  const ids = new Set();
-  if (!subscription || typeof subscription !== 'object') return ids;
-
-  addPriceId(ids, subscription.price);
-  addPriceId(ids, subscription.priceId);
-  addPriceId(ids, subscription.plan?.id);
-  addPriceId(ids, subscription.plan?.price);
-  addPriceId(ids, subscription.items?.data?.[0]?.price?.id);
-  addPriceId(ids, subscription.items?.[0]?.price?.id);
-
-  return ids;
-}
-
-function getBestPlanFromSubscription(subscription) {
-  const status = subscription?.status;
-  if (!ACTIVE_STATUSES.has(status)) return null;
-
-  const explicitPlan = subscription?.literacyArcadePlan || subscription?.metadata?.literacyArcadePlan;
-  if (explicitPlan && PLAN_PRIORITY[explicitPlan] > PLAN_PRIORITY.free) {
-    return explicitPlan;
-  }
-
-  const priceIds = collectPriceIds(subscription);
-  let bestPlan = null;
-
-  priceIds.forEach((priceId) => {
-    const plan = PRICE_TO_PLAN[priceId];
-    if (!plan) return;
-    if (!bestPlan || PLAN_PRIORITY[plan] > PLAN_PRIORITY[bestPlan]) {
-      bestPlan = plan;
-    }
-  });
-
-  return bestPlan;
-}
-
-async function recomputeUserPlan(userId) {
-  const subscriptionsSnap = await db
-    .collection('customers')
-    .doc(userId)
-    .collection('subscriptions')
-    .get();
-
-  let bestPlan = 'free';
-  let bestSubscription = null;
-  let bestPriceId = null;
-  let bestStatus = null;
-
-  subscriptionsSnap.forEach((subscriptionDoc) => {
-    const subscription = subscriptionDoc.data();
-    const plan = getBestPlanFromSubscription(subscription);
-    logger.info('Evaluated Stripe subscription for Literacy Arcade plan.', {
-      userId,
-      subscriptionId: subscriptionDoc.id,
-      status: subscription.status || null,
-      literacyArcadePlan: subscription.literacyArcadePlan || subscription.metadata?.literacyArcadePlan || null,
-      resolvedPlan: plan || null,
-    });
-    if (!plan || PLAN_PRIORITY[plan] <= PLAN_PRIORITY[bestPlan]) return;
-
-    const priceIds = Array.from(collectPriceIds(subscription));
-    bestPlan = plan;
-    bestSubscription = subscriptionDoc.id;
-    bestPriceId = priceIds.find((priceId) => PRICE_TO_PLAN[priceId] === plan) || priceIds[0] || null;
-    bestStatus = subscription.status || null;
-  });
-
-  const planUpdate = {
-    plan: bestPlan,
-    planSource: 'stripe',
-    planUpdatedAt: admin.firestore.FieldValue.serverTimestamp(),
-  };
-
-  if (bestPlan === 'free') {
-    planUpdate.stripePriceId = admin.firestore.FieldValue.delete();
-    planUpdate.stripeSubscriptionId = admin.firestore.FieldValue.delete();
-    planUpdate.stripeStatus = admin.firestore.FieldValue.delete();
-  } else {
-    planUpdate.stripePriceId = bestPriceId;
-    planUpdate.stripeSubscriptionId = bestSubscription;
-    planUpdate.stripeStatus = bestStatus;
-  }
-
-  logger.info('Writing Literacy Arcade plan to user document.', {
-    userId,
-    userPath: `users/${userId}`,
-    plan: bestPlan,
-    stripePriceId: bestPriceId,
-    stripeSubscriptionId: bestSubscription,
-    stripeStatus: bestStatus,
-  });
-
-  await db.collection('users').doc(userId).set(planUpdate, { merge: true });
-
-  logger.info('Synced Literacy Arcade plan from Stripe subscription state.', {
-    userId,
-    plan: bestPlan,
-    stripePriceId: bestPriceId,
-    stripeSubscriptionId: bestSubscription,
-    stripeStatus: bestStatus,
-  });
-}
+// Plans come from Stripe subscriptions and manual grants (planGrants/{uid}); the two are kept
+// independent and combined in plan-sync.js. See entitlements.js for the rules.
+const { recomputeUserPlan, sweepExpiredGrants } = createPlanSync({ db, FieldValue, logger });
 
 exports.syncUserPlanFromStripeSubscription = onDocumentWritten(
   'customers/{userId}/subscriptions/{subscriptionId}',
@@ -162,6 +41,20 @@ exports.syncUserPlanFromStripeSubscription = onDocumentWritten(
     await recomputeUserPlan(userId);
   }
 );
+
+exports.syncUserPlanFromManualGrant = onDocumentWritten('planGrants/{userId}', async (event) => {
+  const { userId } = event.params;
+  if (!userId) return;
+  logger.info('Manual plan grant changed; recomputing user plan.', { userId });
+  await recomputeUserPlan(userId);
+});
+
+// Grants end without any document changing, so look for them on a schedule. Server checks use
+// effectivePlan() and stop at the exact expiry time; this updates what pages and rules read.
+exports.expireManualPlanGrants = onSchedule('every 15 minutes', async () => {
+  const result = await sweepExpiredGrants();
+  logger.info('Checked for expired manual plan grants.', result);
+});
 
 // Records completion of one of the four free-assessment tools and atomically
 // increments the caller's shared assessment-use counter. This is the only
@@ -207,12 +100,12 @@ exports.recordAssessmentCompletion = onCall(async (request) => {
 
   const result = await db.runTransaction(async (tx) => {
     const [userSnap, historySnap] = await Promise.all([tx.get(userRef), tx.get(historyRef)]);
-    const data = userSnap.exists() ? userSnap.data() : {};
-    const plan = data.plan;
+    const data = userSnap.exists ? userSnap.data() : {};
+    const plan = effectivePlan(data);
     const currentUses = typeof data.assessmentUses === 'number' ? data.assessmentUses : 0;
-    const unlimited = UNLIMITED_ASSESSMENT_PLANS.has(plan);
+    const unlimited = isPaidPlan(plan);
 
-    if (historySnap.exists()) {
+    if (historySnap.exists) {
       // Retry of an attempt that was already recorded — return the current
       // state instead of incrementing a second time.
       return {
@@ -232,7 +125,7 @@ exports.recordAssessmentCompletion = onCall(async (request) => {
     tx.set(userRef, { assessmentUses: nextUses }, { merge: true });
     tx.set(historyRef, {
       assessmentType,
-      completedAt: admin.firestore.FieldValue.serverTimestamp(),
+      completedAt: FieldValue.serverTimestamp(),
     });
 
     return { recorded: true, uses: nextUses, plan: plan || 'free', unlimited };
@@ -276,7 +169,7 @@ function resolveShareDays(days) {
   return ALLOWED_SHARE_DAYS.has(days) ? days : DEFAULT_SHARE_DAYS;
 }
 function computeExpiresAt(days) {
-  return admin.firestore.Timestamp.fromMillis(Date.now() + resolveShareDays(days) * 24 * 60 * 60 * 1000);
+  return Timestamp.fromMillis(Date.now() + resolveShareDays(days) * 24 * 60 * 60 * 1000);
 }
 
 function isPlainObject(value) {
@@ -310,7 +203,6 @@ exports.createActivity = onCall(async (request) => {
   const historyRef = userRef.collection('creationHistory').doc(requestId);
   // Only used to seed accounts that have no counter yet.
   const liveCount = (await userRef.collection('activities').count().get()).data().count;
-  const FieldValue = admin.firestore.FieldValue;
 
   const result = await db.runTransaction(async (tx) => {
     const [userSnap, activitySnap] = await Promise.all([tx.get(userRef), tx.get(activityRef)]);
@@ -322,7 +214,7 @@ exports.createActivity = onCall(async (request) => {
 
     const data = userSnap.exists ? userSnap.data() : {};
     const decision = computeCreateDecision({
-      plan: data.plan,
+      plan: effectivePlan(data),
       activitiesCreated: data.activitiesCreated,
       liveCount,
     });
@@ -409,7 +301,6 @@ exports.shareActivity = onCall(async (request) => {
   const days = resolveShareDays(request.data?.days);
   const userRef = db.collection('users').doc(uid);
   const activityRef = userRef.collection('activities').doc(activityId);
-  const FieldValue = admin.firestore.FieldValue;
 
   const result = await db.runTransaction(async (tx) => {
     const [snap, userSnap] = await Promise.all([tx.get(activityRef), tx.get(userRef)]);
@@ -433,7 +324,8 @@ exports.shareActivity = onCall(async (request) => {
 
     // Reuse the existing live link unless this is a non-locked 'new' request, which always mints
     // a fresh one and invalidates the old. A locked account's 'new' request behaves like 'share'.
-    const mintFresh = action === 'new' && !isEditLocked(userSnap.exists ? userSnap.data() : {});
+    const owner = userSnap.exists ? userSnap.data() : {};
+    const mintFresh = action === 'new' && !isEditLocked({ ...owner, plan: effectivePlan(owner) });
     if (!mintFresh && currentLive) {
       const existingExpiresAt = currentSnap.data().expiresAt;
       return {
@@ -515,8 +407,8 @@ exports.revokeSharedLink = onCall(async (request) => {
 
     tx.update(activityRef, {
       shareEnabled: false,
-      shareId: admin.firestore.FieldValue.delete(),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      shareId: FieldValue.delete(),
+      updatedAt: FieldValue.serverTimestamp()
     });
     return { revoked: true };
   });
@@ -599,7 +491,7 @@ exports.seedActivityCounterOnDelete = onDocumentDeleted(
       const userSnap = await tx.get(userRef);
       const data = userSnap.exists ? userSnap.data() : {};
       const seed = computeDeleteSeed({
-        plan: data.plan,
+        plan: effectivePlan(data),
         activitiesCreated: data.activitiesCreated,
         liveCountAfter,
       });
