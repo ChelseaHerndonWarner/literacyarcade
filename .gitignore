@@ -12,6 +12,19 @@ tools/audio-generator/backups/
 # assets/audio/word-audio/, not here.
 robot-word-builder/word-audio/
 
+# ── Private files. This repository is public and serves the website: never commit these. ──
+# Internal business dashboard: generated pages, reports, exports and source.
+business-dashboard/
+# Customer and analytics exports.
+*.csv
+# Printable worksheet sources, finished PDFs, answer proofs and protected download files.
+printable-templates/worksheets/
+functions/printables/
+protected-downloads/
+*.pdf
+*[Aa]nswer[_-][Pp]roof*
+*[Aa]nswer[_-][Kk]ey*
+
 # macOS
 .DS_Store
 
